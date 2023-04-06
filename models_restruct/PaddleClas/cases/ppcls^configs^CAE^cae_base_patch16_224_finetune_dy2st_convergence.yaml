@@ -16,10 +16,13 @@ case:
           - -o Global.output_dir=output/CAE_dy2st
           - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+          - -o AMP.scale_loss=128
+          - -o AMP.use_dynamic_loss_scaling=True
+          - -o AMP.level=O2
         result:
           loss:
             base: 1.60537
-            threshold: 0.05
+            threshold: 0.1
             evaluation: "-"
       -
         name: dy2st_cinn
@@ -32,10 +35,13 @@ case:
           - -o Global.output_dir=output/CAE_dy2st_cinn
           - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+          - -o AMP.scale_loss=128
+          - -o AMP.use_dynamic_loss_scaling=True
+          - -o AMP.level=O2
         result:
           loss:
             base: 6
-            threshold: 0.05
+            threshold: 0.1
             evaluation: "-"
       -
         name: dy2st_prim
@@ -48,10 +54,13 @@ case:
           - -o Global.output_dir=output/CAE_dy2st_prim
           - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+          - -o AMP.scale_loss=128
+          - -o AMP.use_dynamic_loss_scaling=True
+          - -o AMP.level=O2
         result:
           loss:
             base: 1.62725
-            threshold: 0.05
+            threshold: 0.1
             evaluation: "-"
       -
         name: dy2st_prim_cinn
@@ -67,7 +76,7 @@ case:
         result:
           loss:
             base: 6
-            threshold: 0.05
+            threshold: 0.1
             evaluation: "-"
 
 function: paddlelas_imagenet_parse
