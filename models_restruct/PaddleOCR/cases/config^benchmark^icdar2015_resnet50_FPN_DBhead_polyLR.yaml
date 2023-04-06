@@ -61,7 +61,7 @@ case:
               - trainer.epochs=200
               - amp.scale_loss=1024.0
               - amp.use_dynamic_loss_scaling=True
-              - amp.amp_level=O2 
+              - amp.amp_level=O2
             result:
               hmean:
                 base: 0.77
@@ -85,7 +85,7 @@ case:
               - trainer.epochs=200
               - amp.scale_loss=1024.0
               - amp.use_dynamic_loss_scaling=True
-              - amp.amp_level=O2 
+              - amp.amp_level=O2
             result:
               hmean:
                 base: 0.77
