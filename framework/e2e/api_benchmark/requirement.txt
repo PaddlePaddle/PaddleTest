@@ -1,2 +1,5 @@
 pyyaml
 pymysql
+py_cpuinfo
+psutil
+pynvml
