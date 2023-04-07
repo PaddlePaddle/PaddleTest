@@ -129,7 +129,9 @@ class PaddleSeg_Build(Model_Build):
             if exit_code:
                 logger.info("#### link_dataset failed")
         # cpp infer compile
+        logger.info("###step:{}".format(self.step))
         if platform.system() == "Linux" and "api" in self.step:
+            logger.info("#### cpp infer begin")
             os.chdir(path_repo + "/deploy/cpp")
             wget.download(
                 "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos"
