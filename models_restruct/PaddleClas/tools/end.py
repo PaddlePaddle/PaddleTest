@@ -13,6 +13,9 @@ import yaml
 import wget
 import numpy as np
 
+# from picture.analysis import analysis, draw
+from picture.analysis import plt_dy2st
+
 logger = logging.getLogger("ce")
 
 
@@ -26,6 +29,39 @@ class PaddleClas_End(object):
         初试化
         """
         self.reponame = os.environ["reponame"]
+        self.qa_yaml_name = os.environ["qa_yaml_name"]
+
+    def dy2st_plt(self):
+        """
+        绘制动转静图片
+        """
+        path_now = os.getcwd()
+        os.chdir("picture")
+        try:
+            path_list = []
+            for name in os.listdir(os.path.join("../logs", self.reponame, self.qa_yaml_name)):
+                path_list.append(os.path.join("../logs", self.reponame, self.qa_yaml_name, name))
+            plt_dy2st(path_list, self.qa_yaml_name)
+            # with open("dy2st.yaml", "r", encoding="utf-8") as f:
+            #     content = yaml.load(f, Loader=yaml.FullLoader)
+            # self.dy2st_yaml = content[self.qa_yaml_name]
+            # logger.info("self.dy2st_yaml is {}".format(self.dy2st_yaml))
+            # # train
+            # train_log_info_map = analysis(
+            #     os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "train"
+            # )
+            # draw(train_log_info_map, self.dy2st_yaml, "train")
+            # # eval
+            # if "eval" in self.dy2st_yaml.keys():
+            #     train_log_info_map = analysis(
+            #         os.path.join("../logs", self.reponame, self.qa_yaml_name), self.dy2st_yaml, "eval"
+            #     )
+            #     draw(train_log_info_map, self.dy2st_yaml, "eval")
+        except Exception as e:
+            logger.info("draw picture failed")
+            logger.info("error info : {}".format(e))
+        os.chdir(path_now)
+        return 0
 
     def remove_data(self):
         """
@@ -86,6 +122,9 @@ class PaddleClas_End(object):
         if ret:
             logger.info("build remove_data failed")
             return ret
+        if "dy2st_convergence" in self.qa_yaml_name:
+            logger.info("dy2st_convergence star draw picture")
+            self.dy2st_plt()
         logger.info("build remove_data end")
         return ret
 

@@ -5,15 +5,13 @@ case:
             name: multi
             cmd : python -m paddle.distributed.launch tools/train.py
             params:
-              - -c configs/det/det_r50_vd_db.yml
-              - -o Train.loader.batch_size_per_card=8
-              - Optimizer.lr.learning_rate=0.0005
+              - -c configs/rec/rec_mv3_none_bilstm_ctc.yml
             result:
               loss:
                 base: 1
                 threshold: 0
                 evaluation: "="
-              hmean:
+              acc:
                 base: 1
                 threshold: 0
                 evaluation: "="
@@ -21,15 +19,13 @@ case:
             name: single
             cmd : python tools/train.py
             params:
-              - -c configs/det/det_r50_vd_db.yml
-              - -o Train.loader.batch_size_per_card=8
-              - Optimizer.lr.learning_rate=0.0005
+              - -c configs/rec/rec_mv3_none_bilstm_ctc.yml
             result:
               loss:
                 base: 1
                 threshold: 0
                 evaluation: "="
-              hmean:
+              acc:
                 base: 1
                 threshold: 0
                 evaluation: "="
