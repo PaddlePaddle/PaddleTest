@@ -21,7 +21,7 @@ class PaddleDetection_End(object):
     """
     case执行结束后
     """
-    
+
     def __init__(self):
         """
         初始化
@@ -37,9 +37,11 @@ class PaddleDetection_End(object):
         self.prim_log_path = ""
         self.standard_log_path = ""
         if "prim" in self.qa_model_name:
-            self.qa_model_name_base = self.qa_model_name.replace('prim', 'static')
+            self.qa_model_name_base = self.qa_model_name.replace("prim", "static")
             self.prim_log_path = self.log_path
-            self.standard_log_path = os.path.join(os.getcwd(), self.log_dir, self.reponame, self.qa_model_name_base, self.log_name)
+            self.standard_log_path = os.path.join(
+                os.getcwd(), self.log_dir, self.reponame, self.qa_model_name_base, self.log_name
+            )
 
     def get_loss(self, log_path):
         """
@@ -48,14 +50,14 @@ class PaddleDetection_End(object):
         step = []
         loss = []
         num = 0
-        fl = open(log_path, 'r').readlines()
+        fl = open(log_path, "r").readlines()
         for row in fl:
-            if 'epoch:' in row.strip():
-                member = row.strip().split(',')
+            if "epoch:" in row.strip():
+                member = row.strip().split(",")
                 for item in member:
                     if "loss" in item:
                         print("item:{}".format(item))
-                        loss_item = item.strip().split(':')[-1]
+                        loss_item = item.strip().split(":")[-1]
                         print("loss_item:{}".format(loss_item))
                         loss.append(float(loss_item.strip()))
                         step.append(num)
@@ -71,9 +73,9 @@ class PaddleDetection_End(object):
         step2, loss2 = self.get_loss(self.prim_log_path)
         fig = plt.figure()
         ax = fig.add_subplot(1, 1, 1)
-  
-        ax.plot(step1, loss1, label='train_base', color='b', linewidth=2)
-        ax.plot(step2, loss2, label='train_prim', color='r', linewidth=2)
+
+        ax.plot(step1, loss1, label="train_base", color="b", linewidth=2)
+        ax.plot(step2, loss2, label="train_prim", color="r", linewidth=2)
         ax.legend()
         ax.set_xlabel("steps")
         ax.set_ylabel("loss")

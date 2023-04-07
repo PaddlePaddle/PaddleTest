@@ -42,9 +42,12 @@ class PaddleSeg_Build(Model_Build):
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
         self.mount_path = str(os.getenv("mount_path"))
-        logger.info('mount_path:{}'.format(self.mount_path))
-        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(self.mount_path
-        ) or (os.path.exists(self.mount_path) and self.use_data_cfs == "True"):
+        logger.info("mount_path:{}".format(self.mount_path))
+        if (
+            ("Windows" in platform.system() or "Darwin" in platform.system())
+            and os.path.exists(self.mount_path)
+            or (os.path.exists(self.mount_path) and self.use_data_cfs == "True")
+        ):
             logger.info("#### mount_path diy_build is {}".format(self.mount_path))
             if os.listdir(self.mount_path) != []:
                 self.dataset_org = self.mount_path
