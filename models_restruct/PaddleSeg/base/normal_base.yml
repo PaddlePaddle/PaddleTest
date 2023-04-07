@@ -66,8 +66,8 @@ train:
     name: prim_single
     cmd: python tools/train.py
     params:
-      - --config ${rd_yaml_path}
-      - --iters 600
+      - --config configs/segformer/segformer_b0_cityscapes_1024x1024_160k.yml
+      - --iters 60000
       - --save_interval 10000
       - --num_workers 8
       - --opts to_static_training=True
