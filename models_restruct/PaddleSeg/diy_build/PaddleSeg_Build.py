@@ -37,9 +37,8 @@ class PaddleSeg_Build(Model_Build):
         self.set_cuda = args.set_cuda
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
-        logger.info('use_data_cfs:{}'.format(args.use_data_cfs))
         self.use_data_cfs = str(args.use_data_cfs)
-        logger.info('use_data_cfs:{}'.format(self.use_data_cfs))
+        logger.info("use_data_cfs:{}".format(self.use_data_cfs))
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
         self.mount_path = str(os.getenv("mount_path"))
