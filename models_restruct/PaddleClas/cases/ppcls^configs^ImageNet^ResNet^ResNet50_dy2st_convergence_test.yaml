@@ -10,56 +10,56 @@ case:
         params:
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
-          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
           loss:
-            base: 2.16221
-            threshold: 0.1
+            base: 6
+            threshold: 1
             evaluation: "-"
       -
         name: dy2st_cinn
         params:
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
-          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
           loss:
-            base: 2.1
-            threshold: 0.1
+            base: 6
+            threshold: 1
             evaluation: "-"
       -
         name: dy2st_prim
         params:
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_prim
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
-          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
           loss:
-            base: 2.11642
-            threshold: 0.1
+            base: 6
+            threshold: 1
             evaluation: "-"
       -
         name: dy2st_prim_cinn
         params:
           - -o Global.to_static=True
           - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
-          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
           loss:
-            base: 2.1
-            threshold: 0.1
+            base: 6
+            threshold: 1
             evaluation: "-"
 
 function: paddlelas_imagenet_parse

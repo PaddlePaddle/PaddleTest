@@ -78,7 +78,7 @@ def test_lac_trt_fp32():
         precision="trt_fp32",
         dynamic=True,
         tuned=True,
-        min_subgraph_size=1,
+        min_subgraph_size=2,
     )
 
     del test_suite1  # destroy class to save memory
@@ -95,7 +95,7 @@ def test_lac_trt_fp32():
         precision="trt_fp32",
         dynamic=True,
         tuned=False,
-        min_subgraph_size=1,
+        min_subgraph_size=2,
     )
 
     del test_suite2  # destroy class to save memory
