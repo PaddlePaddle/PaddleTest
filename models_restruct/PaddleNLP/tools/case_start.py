@@ -103,7 +103,6 @@ def run():
         model.build_prepare()
         return 0
     else:
-        logger.info("this pipeline not convergence task ")
         return 0
 
 

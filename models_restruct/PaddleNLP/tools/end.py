@@ -126,7 +126,6 @@ def run():
         model.build_end()
         return 0
     else:
-        logger.info("this pipeline not convergence task ")
         return 0
 
 
