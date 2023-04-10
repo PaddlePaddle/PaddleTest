@@ -216,12 +216,11 @@ class PaddleOCR_End(object):
             logger.info("build collect_data_value failed")
             return ret
         logger.info("build collect_data_value end")
-        # report_enviorement_dict
-        # logger.info("config_report_enviorement_variable start")
-        # self.config_report_enviorement_variable()
-        # logger.info("config_report_enviorement_variable end")
-        self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim", "prim")
-        self.get_traning_curve("dygraph2static_amp", "dygraph2static_amp_prim", "amp")
+        # self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim", "prim")
+        if "amp" in self.step:
+            self.get_traning_curve("dygraph2static_amp", "dygraph2static_amp_prim", "amp")
+        else:
+            self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim", "prim")
 
 
 def run():
