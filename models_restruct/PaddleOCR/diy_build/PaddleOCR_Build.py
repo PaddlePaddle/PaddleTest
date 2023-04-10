@@ -181,7 +181,6 @@ class PaddleOCR_Build(Model_Build):
         time.sleep(10)
         os.remove(os.path.join(destination, tar_name))
 
-
     def compile_c_predict_demo(self):
         """
         compile_c_predict_demo
@@ -189,11 +188,11 @@ class PaddleOCR_Build(Model_Build):
         print(os.getcwd())
         os.chdir("PaddleOCR/deploy/cpp_infer")
 
-        OPENCV_DIR = os.environ.get('OPENCV_DIR')
-        LIB_DIR = os.environ.get('paddle_inference_LIB_DIR')
-        CUDA_LIB_DIR = os.environ.get('CUDA_LIB_DI')
-        CUDNN_LIB_DIR = os.environ.get('CUDNN_LIB_DIR')
-        TENSORRT_DIR = os.environ.get('TENSORRT_DIR')
+        OPENCV_DIR = os.environ.get("OPENCV_DIR")
+        LIB_DIR = os.environ.get("paddle_inference_LIB_DIR")
+        CUDA_LIB_DIR = os.environ.get("CUDA_LIB_DI")
+        CUDNN_LIB_DIR = os.environ.get("CUDNN_LIB_DIR")
+        TENSORRT_DIR = os.environ.get("TENSORRT_DIR")
 
         if os.path.exists("build"):
             shutil.rmtree("build")
@@ -224,9 +223,8 @@ class PaddleOCR_Build(Model_Build):
             logger.info("build env dataset failed")
             return ret
 
-        
         sysstr = platform.system()
-        if sysstr == "Linux" and os.environ.get('c_plus_plus_predict') == 'True':
+        if sysstr == "Linux" and os.environ.get("c_plus_plus_predict") == "True":
             self.compile_c_predict_demo()
-        
+
         return ret
