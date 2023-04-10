@@ -92,17 +92,20 @@ class PaddleNLP_Case_Start(object):
             logger.info("export FLAGS_cudnn_deterministic=1")
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
 
-        else:
-            return 0
-
 
 def run():
     """
     执行入口
     """
-    model = PaddleNLP_Case_Start()
-    model.build_prepare()
-    return 0
+    platform = os.environ["system"]
+    if platform == "linux_convergence":
+        model = PaddleNLP_Case_Start()
+        model.build_prepare()
+        return 0
+    else:
+        logger.info("this pipeline not convergence task ")
+        return 0
+
 
 
 if __name__ == "__main__":

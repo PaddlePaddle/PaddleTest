@@ -96,6 +96,8 @@ class PaddleNLP_End(object):
             elif re.compile("dy2st").findall(file):
                 strategy = file.split("train_")[-1].replace(".log", "")
                 strategy_info[strategy] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
+            else:
+                logger.info("this pipeline not convergence task ")
 
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info)
 
@@ -118,9 +120,14 @@ def run():
     """
     执行入口
     """
-    model = PaddleNLP_End()
-    model.build_end()
-    return 0
+    platform = os.environ["system"]
+    if platform == "linux_convergence":
+        model = PaddleNLP_End()
+        model.build_end()
+        return 0
+    else:
+        logger.info("this pipeline not convergence task ")
+        return 0
 
 
 if __name__ == "__main__":
