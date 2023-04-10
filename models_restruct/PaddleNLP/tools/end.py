@@ -4,6 +4,7 @@ post preocessing
 """
 from copyreg import pickle
 import os
+from platform import system
 import pstats
 import sys
 import json
@@ -27,31 +28,35 @@ class PaddleNLP_End(object):
         """
         init
         """
-        self.pipeline_name = os.environ["AGILE_PIPELINE_NAME"]
+        # export qa_yaml_name='model_zoo^bert_convergence_dy2st'
+        # export reponame='PaddleNLP'
+        # export system='linux_convergence'
         self.reponame = os.environ["reponame"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
 
-    def drow_picture(self, model_name, baseline_info, strategy_info):
-        """drowing loss curve"""
+    def drow_picture(self, model_name, baseline_info, strategy_info, metrics):
+        """drowing loss/ips curve"""
         num = 1
+        
         for key, value in strategy_info.items():
-            plt.subplot(1, len(strategy_info.items()), num)
-            plt.plot(
-                [i for i in range(len(baseline_info["baseline"]))],
-                baseline_info["baseline"],
-                color="g",
-                label="baseline",
-            )
-            plt.plot([i for i in range(len(baseline_info["baseline"]))], value, color="r", label=key)
+            if re.compile(metrics).findall(key):
+                plt.subplot(1, len(strategy_info.items()), num)
+                plt.plot(
+                    [i for i in range(len(baseline_info["baseline_" + metrics]))],
+                    baseline_info["baseline_" + metrics],
+                    color="g",
+                    label=metrics,
+                )
+                plt.plot([i for i in range(len(baseline_info["baseline_" + metrics]))], value, color="r", label=key)
 
-            plt.legend()
-            if num == 1:
-                plt.xlabel("step")
-                plt.ylabel("loss")
-                picture_name = model_name.replace("model_zoo^", "").upper()
-                plt.title(picture_name)
-            num = num + 1
+                plt.legend()
+                if num == 1:
+                    plt.xlabel("step")
+                    plt.ylabel(metrics)
+                    picture_name =(model_name.replace("model_zoo^", "") + '_' + metrics).upper()
+                    plt.title(picture_name)
+                num = num + 1
         if not os.path.exists("picture"):
             os.makedirs("picture")
         plt.savefig("./picture/{}.png".format(picture_name))
@@ -59,8 +64,7 @@ class PaddleNLP_End(object):
 
     def get_metrics(self, filename, kpi):
         """
-        get metrics:
-        loss acc ips ...
+        Get metrics such as: loss acc ips ...
         """
         data_list = []
         f = open(filename, encoding="utf-8", errors="ignore")
@@ -78,28 +82,37 @@ class PaddleNLP_End(object):
         """
         Analysis log & save it to ./picture/
 
-        Return: dict-> log_info
+        Return: 
         Examples:
-            log_info={
-            'model_name': 'bert',
-            'baseline': [], # loss
-            'cinn': [], # loss
+            baseline_info={
+            'baseline_loss': [], # loss
+            'baseline_ips': [], # ips
              ...
             }
+            strategy_info={
+            'cinn_loss': [], # loss
+            'cinn_ips': [], # ips
+             ...
+            }
+
         """
         baseline_info = {}
         strategy_info = {}
         for file in os.listdir(self.TRAIN_LOG_PATH):
             logger.info("check log file is {}".format(file))
             if re.compile("baseline").findall(file):
-                baseline_info["baseline"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
+                baseline_info["baseline_loss"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
+                baseline_info["baseline_ips"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
             elif re.compile("dy2st").findall(file):
-                strategy = file.split("train_")[-1].replace(".log", "")
-                strategy_info[strategy] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
+                strategy_loss = file.split("train_")[-1].replace(".log", "") + '_loss'
+                strategy_ips = file.split("train_")[-1].replace(".log", "") + '_ips'
+                strategy_info[strategy_loss] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
+                strategy_info[strategy_ips] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
             else:
                 logger.info("this pipeline not convergence task ")
 
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info)
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics='loss')
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics='ips')
 
     def build_end(self):
         """
