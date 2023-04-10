@@ -181,76 +181,19 @@ class PaddleOCR_Build(Model_Build):
         time.sleep(10)
         os.remove(os.path.join(destination, tar_name))
 
-    def prepare_opencv(self):
-        """
-        prepare_opencv
-        """
-
-        print(os.getcwd())
-        os.chdir("PaddleOCR/deploy/cpp_infer")
-        # os.chdir('deploy/cpp_infer')
-
-        # download opencv source code
-        wget.download("https://paddleocr.bj.bcebos.com/libs/opencv/opencv-3.4.7.tar.gz")
-        tf = tarfile.open("opencv-3.4.7.tar.gz")
-        tf.extractall(os.getcwd())
-
-        os.chdir("opencv-3.4.7")
-        root_path = os.getcwd()
-        install_path = os.path.join(root_path, "opencv3")
-
-        # build
-        if os.path.exists("build"):
-            shutil.rmtree("build")
-        os.makedirs("build")
-        os.chdir("build")
-
-        # cmake
-        print(os.getcwd())
-        cmd = (
-            "cmake .. -DCMAKE_INSTALL_PREFIX=%s \
-    -DCMAKE_BUILD_TYPE=Release -DWITH_IPP=OFF -DBUILD_IPP_IW=OFF-DWITH_LAPACK=OFF \
-    -DWITH_EIGEN=OFF -DCMAKE_INSTALL_LIBDIR=lib64 -DWITH_ZLIB=ON -DBUILD_ZLIB=ON \
-    -DWITH_JPEG=ON -DBUILD_JPEG=ON -DWITH_PNG=ON -DBUILD_PNG=ON -DWITH_TIFF=ON -DBUILD_TIFF=ON"
-            % (install_path)
-        )
-        repo_result = subprocess.getstatusoutput(cmd)
-        # exit_code = repo_result[0]
-        output = repo_result[1]
-        print(output)
-        # make
-        os.system("make -j")
-        # make install
-        os.system("make install")
-        os.chdir(self.test_root_path)
-
-    def prepare_c_predict_library(self):
-        """
-        prepare_c_predict_library
-        """
-        print(os.getcwd())
-        os.chdir("PaddleOCR/deploy/cpp_infer")
-        wget.download(
-            "https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/\
-x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz"
-        )
-        tf = tarfile.open("paddle_inference.tgz")
-        tf.extractall(os.getcwd())
-        os.chdir(self.test_root_path)
-
     def compile_c_predict_demo(self):
         """
         compile_c_predict_demo
         """
         print(os.getcwd())
         os.chdir("PaddleOCR/deploy/cpp_infer")
-        # os.chdir('deploy/cpp_infer')
-        root_path = os.getcwd()
-        OPENCV_DIR = os.path.join(root_path, "opencv-3.4.7/opencv3")
-        LIB_DIR = os.path.join(root_path, "paddle_inference")
-        CUDA_LIB_DIR = "/usr/local/cuda/lib64"
-        CUDNN_LIB_DIR = "/usr/lib/x86_64-linux-gnu/"
-        TENSORRT_DIR = "/usr/local/TensorRT-6.0.1.8/"
+
+        OPENCV_DIR = os.environ.get("OPENCV_DIR")
+        LIB_DIR = os.environ.get("paddle_inference_LIB_DIR")
+        CUDA_LIB_DIR = os.environ.get("CUDA_LIB_DI")
+        CUDNN_LIB_DIR = os.environ.get("CUDNN_LIB_DIR")
+        TENSORRT_DIR = os.environ.get("TENSORRT_DIR")
+
         if os.path.exists("build"):
             shutil.rmtree("build")
         os.makedirs("build")
@@ -280,12 +223,8 @@ x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz"
             logger.info("build env dataset failed")
             return ret
 
-        """
         sysstr = platform.system()
-        if sysstr == "Linux":
-            self.prepare_opencv()
-            self.prepare_c_predict_library()
+        if sysstr == "Linux" and os.environ.get("c_plus_plus_predict") == "True":
             self.compile_c_predict_demo()
-        """
 
         return ret
