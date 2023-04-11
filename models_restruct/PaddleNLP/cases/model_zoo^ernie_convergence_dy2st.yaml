@@ -19,8 +19,10 @@ case:
           - --task_name tnews
           - --to_static
           - --max_steps=50000
-          - --use_amp=False
           - --batch_size=16
+          - --use_amp=True  
+          - --amp_level="O1" 
+          - --num_workers=0
       -
         name: dy2st_prim
         path: tests/
@@ -39,5 +41,7 @@ case:
           - --task_name tnews
           - --to_static
           - --max_steps=50000
-          - --use_amp=False
           - --batch_size=16
+          - --use_amp=True  
+          - --amp_level="O1" 
+          - --num_workers=0
