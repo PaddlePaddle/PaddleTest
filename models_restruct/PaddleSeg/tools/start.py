@@ -22,27 +22,26 @@ class PaddleSeg_Start(object):
         """
         init
         """
+        self.env_dict = {}
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
         logger.info("###self.qa_yaml_name: {}".format(self.qa_yaml_name))
-        if "prim" in self.rd_yaml_name:
-            self.rd_yaml_name = self.rd_yaml_name.split("^", 1)[1]
-            os.environ["FLAGS_prim_all"] = True
-            self.env_dict["FLAGS_prim_all"] = True
-            self.prim = True
-        if "static" in self.rd_yaml_name:
-            self.rd_yaml_name = self.rd_yaml_name.split("^", 1)[1]
-            os.environ["FLAGS_prim_all"] = False
-            self.env_dict["FLAGS_prim_all"] = False
-            self.prim = True
-        logger.info("###self.rd_yaml_name: {}".format(self.rd_yaml_name))
+        logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
+        if "prim" in self.rd_yaml_path:
+            logger.info("###prim mode")
+            os.environ["FLAGS_prim_all"] = "True"
+            self.env_dict["FLAGS_prim_all"] = "True"
+        if "static" in self.rd_yaml_path:
+            logger.info("###no prim mode")
+            os.environ["FLAGS_prim_all"] = "False"
+            self.env_dict["FLAGS_prim_all"] = "False"
+        logger.info("###self.rd_yaml_path: {}".format(self.rd_yaml_path))
         self.reponame = os.environ["reponame"]
         self.system = os.environ["system"]
         self.step = os.environ["step"]
         self.paddle_whl = os.environ["paddle_whl"]
         self.mode = os.environ["mode"]  # function or precision
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)
-        self.env_dict = {}
         self.model = self.qa_yaml_name.split("^")[-1]
         logger.info("###self.model_name: {}".format(self.model))
         self.env_dict["model"] = self.model
@@ -52,12 +51,6 @@ class PaddleSeg_Start(object):
         """
         环境变量设置
         """
-        if self.prim and os.path.exists("PaddleSeg/data/cityscapes"):
-            shutil.rmtree("PaddleSeg/data/cityscapes")
-            cmd1 = "wget -P PaddleSeg/data https://paddle-qa.bj.bcebos.com/PaddleSeg/cityscapes_pri_prim.zip"
-            cmd2 = "unzip -q -d PaddleSeg/data/ PaddleSeg/data/cityscapes_pri_prim.zip"
-            subprocess.run(cmd1, shell=True)
-            subprocess.run(cmd2, shell=True)
         if "cityscapes" in self.model:
             if not os.path.exists("PaddleSeg/data/seg_dynamic_pretrain/{}/model.pdparams".format(self.model)):
                 cmd = (
