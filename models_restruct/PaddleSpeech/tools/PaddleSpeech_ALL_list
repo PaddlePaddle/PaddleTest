@@ -7,6 +7,8 @@ style_melgan.yml
 hifigan.yml
 wavernn.yml
 waveflow.yml
+deepspeech2.yml
+conformer.yml
 paddlespeech_cli_1.yml
 paddlespeech_cli_2.yml
 paddlespeech_cli_3.yml
