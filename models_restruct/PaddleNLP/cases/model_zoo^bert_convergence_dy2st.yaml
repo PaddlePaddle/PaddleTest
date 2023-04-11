@@ -3,7 +3,7 @@ case:
     train:
       -
         name: prepare_datasets_seqlen128
-        path: model_zoo/bert/data
+        path: model_zoo/bert/
         cmd: wget https://bert-data.bj.bcebos.com/benchmark_sample%2Fhdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5.tar.gz && tar -xzvf benchmark_sample%2Fhdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5.tar.gz
       -
         name: dy2st_prim_cinn
@@ -43,7 +43,7 @@ case:
           - --save_steps 10
           - --model_type bert
           - --fuse_transformer false
-          - --input_dir ./data/wikicorpus_en_seqlen128
+          - --input_dir ./hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/training/
           - --model_name_or_path bert-base-uncased
           - --max_step 10
           - --batch_size 128
