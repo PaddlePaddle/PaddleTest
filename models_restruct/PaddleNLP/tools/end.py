@@ -46,7 +46,7 @@ class PaddleNLP_End(object):
                     [i for i in range(len(baseline_info["baseline_" + metrics]))],
                     baseline_info["baseline_" + metrics],
                     color="g",
-                    label=metrics,
+                    label="baseline_" + metrics,
                 )
                 plt.plot([i for i in range(len(baseline_info["baseline_" + metrics]))], value, color="r", label=key)
 
