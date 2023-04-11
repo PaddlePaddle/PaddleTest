@@ -81,22 +81,31 @@ fi
 if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python36" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp36-cp36m-linux_x86_64.whl"}
+        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
+
     else
         export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp36-cp36m-linux_x86_64.whl"}
+        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}  
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python37" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
+        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
+
         #230223 stride test
         # export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/xieyunshen/TempPRBuild/50444/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/latest/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
+        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}  
+     
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python38" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda112-Trtoff-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"}
+        export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda112-Trton-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"}
+        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
@@ -109,6 +118,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
+        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
     fi
 else
     if [[ ${paddle_whl} ]];then
@@ -183,6 +193,7 @@ echo "@@@system: ${system}"
 echo "@@@Python_version: ${Python_version}"
 echo "@@@Image_version: ${Image_version}"
 echo "@@@paddle_whl: ${paddle_whl}"
+echo "@@@paddle_inference: ${paddle_inference}"
 echo "@@@step: ${step}"
 echo "@@@branch: ${branch}"
 echo "@@@mode: ${mode}"
@@ -309,6 +320,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e branch=${branch} \
         -e get_repo=${get_repo} \
         -e paddle_whl=${paddle_whl} \
+        -e paddle_inference=${paddle_inference}
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
@@ -396,7 +408,7 @@ if [[ "${docker_flag}" == "" ]]; then
         git --version;
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False}
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --paddle_inference=${paddle_inference:-None} --c_plus_plus_predict=${c_plus_plus_predict:-False}
     ' &
     wait $!
     exit $?
@@ -474,5 +486,5 @@ else
     git --version;
     python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
     python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --paddle_inference=${paddle_inference:-None} --c_plus_plus_predict=${c_plus_plus_predict:-False}
 fi
