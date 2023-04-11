@@ -29,3 +29,4 @@ configs^mot^pedestrian^fairmot_dla34_30e_1088x608_visdrone_pedestrian.yml
 configs^mot^jde^jde_darknet53_30e_864x480.yml
 configs^mot^jde^jde_darknet53_30e_576x320.yml
 configs^mot^jde^jde_darknet53_30e_1088x608.yml
+configs^mot^ocsort^ocsort_ppyoloe.yml

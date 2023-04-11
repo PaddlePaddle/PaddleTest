@@ -33,16 +33,21 @@ class PaddleSeg_Build(Model_Build):
         self.get_repo = args.get_repo
         self.branch = args.branch
         self.system = args.system
+        self.step = args.step
         self.set_cuda = args.set_cuda
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
-
+        self.use_data_cfs = str(args.use_data_cfs)
+        logger.info("use_data_cfs:{}".format(self.use_data_cfs))
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.reponame = args.reponame
         self.mount_path = str(os.getenv("mount_path"))
-        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(
-            self.mount_path
-        ):  # linux 性能损失使用自动下载的数据,不使用mount数据
+        logger.info("mount_path:{}".format(self.mount_path))
+        if (
+            ("Windows" in platform.system() or "Darwin" in platform.system())
+            and os.path.exists(self.mount_path)
+            or (os.path.exists(self.mount_path) and self.use_data_cfs == "True")
+        ):
             logger.info("#### mount_path diy_build is {}".format(self.mount_path))
             if os.listdir(self.mount_path) != []:
                 self.dataset_org = self.mount_path
@@ -96,7 +101,7 @@ class PaddleSeg_Build(Model_Build):
         else:
             subprocess.run(cmd_voc, shell=True)
         # prepare pretrain model
-        if platform.system() == "Linux":
+        if platform.system() == "Linux" and self.use_data_cfs == "False":
             os.system("mkdir data")
             os.chdir("data")
             os.system("ln -s {}/seg_dynamic_pretrain seg_dynamic_pretrain".format("/ssd2/ce_data/PaddleSeg"))
@@ -126,7 +131,9 @@ class PaddleSeg_Build(Model_Build):
             if exit_code:
                 logger.info("#### link_dataset failed")
         # cpp infer compile
-        if platform.system() == "Linux":
+        logger.info("###step:{}".format(self.step))
+        if platform.system() == "Linux" and "api" in self.step:
+            logger.info("#### cpp infer begin")
             os.chdir(path_repo + "/deploy/cpp")
             wget.download(
                 "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos"

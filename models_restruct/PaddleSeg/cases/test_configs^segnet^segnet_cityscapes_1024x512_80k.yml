@@ -25,10 +25,7 @@ case:
         name: pretrained
         cmd: python tools/export.py
     predict: skipped
-    api:
-      -
-        name: cpp
-        cmd: ./deploy/cpp/build/test_seg
+    api: skipped
   windows:
     base: ./base/normal_base.yml
     train:
