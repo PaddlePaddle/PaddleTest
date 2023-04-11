@@ -116,6 +116,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
+        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"}
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
