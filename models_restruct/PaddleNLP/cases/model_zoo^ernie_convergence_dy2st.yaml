@@ -14,7 +14,7 @@ case:
           - --model_name_or_path ernie-3.0-base-zh
           - --pad_to_max_seq_len
           - --max_seq_len 128
-          - --logging_steps 10
+          - --logging_steps 1
           - --seed 42
           - --task_name tnews
           - --to_static
@@ -36,7 +36,7 @@ case:
           - --model_name_or_path ernie-3.0-base-zh
           - --pad_to_max_seq_len
           - --max_seq_len 128
-          - --logging_steps 10
+          - --logging_steps 1
           - --seed 42
           - --task_name tnews
           - --to_static
