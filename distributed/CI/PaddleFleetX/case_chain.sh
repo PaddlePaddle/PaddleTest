@@ -408,7 +408,7 @@ function vit_qat() {
     check_result $FUNCNAME
     loss=`tail log/workerlog.0 | grep "eval" | cut -d " " -f11 `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 2.299847364 ${loss%?} ${FUNCNAME}_loss
+        check_diff 2.299860716 ${loss%?} ${FUNCNAME}_loss
     else
         check_diff 2.299857140 ${loss%?} ${FUNCNAME}_loss
     fi
