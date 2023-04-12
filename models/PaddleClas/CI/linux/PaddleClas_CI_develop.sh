@@ -302,21 +302,21 @@ if [[ ${model_flag} =~ 'CE' ]] || [[ ${model_flag} =~ 'CI_step1' ]] || [[ ${mode
                 -o DataLoader.Train.sampler.batch_size=1 \
                 -o DataLoader.Eval.sampler.batch_size=1  \
                 -o Global.output_dir=output \
-                > $log_path/train/ResNet50_amp.log 2>&1
+                > $log_path/train/ResNet50_dy2st_amp.log 2>&1
             params_dir=$(ls output)
             echo "######  params_dir"
             echo $params_dir
-            # cat $log_path/train/ResNet50_amp.log | grep "Memory Usage (MB)"
+            # cat $log_path/train/ResNet50_dy2st_amp.log | grep "Memory Usage (MB)"
 
             if ([[ -f "output/$params_dir/latest.pdparams" ]] || [[ -f "output/$params_dir/0/ppcls.pdmodel" ]]) && [[ $? -eq 0 ]] \
                 ;then
-                # && [[ $(grep -c  "Error" $log_path/train/ResNet50_amp.log) -eq 0 ]];then
-                echo -e "\033[33m training static multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
-                echo "training_amp_exit_code: 0.0" >> $log_path/train/ResNet50_amp.log
+                # && [[ $(grep -c  "Error" $log_path/train/ResNet50_dy2st_amp.log) -eq 0 ]];then
+                echo -e "\033[33m training dy2st_amp multi of ResNet50  successfully!\033[0m"|tee -a $log_path/result.log
+                echo "training_dy2st_amp_exit_code: 0.0" >> $log_path/train/ResNet50_dy2st_amp.log
             else
-                cat $log_path/train/ResNet50_amp.log
-                echo -e "\033[31m training static multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
-                echo "training_amp_exit_code: 1.0" >> $log_path/train/ResNet50_amp.log
+                cat $log_path/train/ResNet50_dy2st_amp.log
+                echo -e "\033[31m training dy2st_amp multi of ResNet50 failed!\033[0m"|tee -a $log_path/result.log
+                echo "training_dy2st_amp_exit_code: 1.0" >> $log_path/train/ResNet50_dy2st_amp.log
             fi
         fi
 
