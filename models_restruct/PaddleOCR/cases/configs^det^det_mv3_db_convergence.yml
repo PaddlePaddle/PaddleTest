@@ -6,6 +6,7 @@ case:
             cmd : python -m paddle.distributed.launch tools/train.py
             params:
               - -c configs/det/det_mv3_db.yml
+              - -o Global.eval_batch_step=[0,16]
             result:
               loss:
                 base: 1
@@ -20,6 +21,7 @@ case:
             cmd : python tools/train.py
             params:
               - -c configs/det/det_mv3_db.yml
+              - -o Global.eval_batch_step=[0,16]
             result:
               loss:
                 base: 1

@@ -8,6 +8,7 @@ case:
               - -c configs/det/det_r50_vd_db.yml
               - -o Train.loader.batch_size_per_card=8
               - Optimizer.lr.learning_rate=0.0005
+              - Global.eval_batch_step=[0,32]
             result:
               loss:
                 base: 1
@@ -24,6 +25,7 @@ case:
               - -c configs/det/det_r50_vd_db.yml
               - -o Train.loader.batch_size_per_card=8
               - Optimizer.lr.learning_rate=0.0005
+              - Global.eval_batch_step=[0,32]
             result:
               loss:
                 base: 1
