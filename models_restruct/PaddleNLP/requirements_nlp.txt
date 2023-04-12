@@ -28,4 +28,3 @@ sacremoses
 pythainlp
 kytea
 fast-tokenizer-python
-lac
