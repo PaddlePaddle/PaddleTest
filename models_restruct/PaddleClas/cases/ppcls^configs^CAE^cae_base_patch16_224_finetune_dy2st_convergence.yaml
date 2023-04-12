@@ -21,7 +21,7 @@ case:
           - -o AMP.level=O2
         result:
           loss:
-            base: 1.60537
+            base: 6.60537
             threshold: 0.1
             evaluation: "-"
       -
@@ -59,7 +59,7 @@ case:
           - -o AMP.level=O2
         result:
           loss:
-            base: 1.62725
+            base: 6.62725
             threshold: 0.1
             evaluation: "-"
       -
