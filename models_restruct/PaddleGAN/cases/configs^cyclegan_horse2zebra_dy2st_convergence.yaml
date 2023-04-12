@@ -5,8 +5,8 @@ case:
       -
         name: dy2st
         params:
-          - -o epochs=70
+          - -o epochs=40
       -
         name: dy2st_prim
         params:
-          - -o epochs=70
+          - -o epochs=40
