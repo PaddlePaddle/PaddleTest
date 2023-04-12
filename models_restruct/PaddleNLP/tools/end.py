@@ -41,7 +41,7 @@ class PaddleNLP_End(object):
         
         for key, value in strategy_info.items():
             if re.compile(metrics).findall(key):
-                plt.subplot(1, len(strategy_info.items()), num)
+                plt.subplot(1, len(strategy_info.items())//2, num)
                 plt.plot(
                     [i for i in range(len(baseline_info["baseline_" + metrics]))],
                     baseline_info["baseline_" + metrics],
@@ -54,8 +54,8 @@ class PaddleNLP_End(object):
                 if num == 1:
                     plt.xlabel("step")
                     plt.ylabel(metrics)
-                    picture_name =(model_name.replace("model_zoo^", "") + '_' + metrics).upper()
-                    plt.title(picture_name)
+                picture_name =(model_name.replace("model_zoo^", "") + '_' + metrics).upper()
+                plt.title(picture_name)
                 num = num + 1
         if not os.path.exists("picture"):
             os.makedirs("picture")
