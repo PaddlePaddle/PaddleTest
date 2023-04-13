@@ -4,7 +4,7 @@ case:
       -
         name: add_visualdl_1
         path: examples/machine_translation/transformer/
-        cmd: sed -i '/import yaml/i\from visualdl import LogWriter' train.py 
+        cmd: sed -i '/import yaml/i\from visualdl import LogWriter' train.py
       -
         name: add_visualdl_1
         path: examples/machine_translation/transformer/
