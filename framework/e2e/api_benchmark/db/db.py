@@ -6,13 +6,8 @@
 db object
 """
 
-import os
-import socket
-import platform
 from datetime import datetime
-import json
 import yaml
-import paddle
 import pymysql
 
 # from utils.logger import logger
@@ -52,11 +47,11 @@ class DB(object):
         id = -1
         table = table
         ls = [(k, data[k]) for k in data if data[k] is not None]
-        keys = ",".join(i[0] for i in ls)
+        keys = ",".join(("`" + i[0] + "`") for i in ls)
         values = ",".join("%r" % i[1] for i in ls)
 
         sql = "INSERT INTO {table}({keys}) VALUES ({values})".format(table=table, keys=keys, values=values)
-        # sql = 'insert %s (' % table + ','.join(i[0] for i in ls) + \
+        # sql = 'insert %s (' % table + ','.join(('`' + i[0] + '`') for i in ls) + \
         #       ') values (' + ','.join('%r' % i[1] for i in ls) + ')'
         try:
             self.cursor.execute(sql)
@@ -71,9 +66,9 @@ class DB(object):
         table = table
         sql = (
             "UPDATE %s SET " % table
-            + ",".join("%s=%r" % (k, data[k]) for k in data)
+            + ",".join("%s=%r" % (("`" + k + "`"), data[k]) for k in data)
             + " WHERE "
-            + " AND ".join("%s=%r" % (k, data_condition[k]) for k in data_condition)
+            + " AND ".join("%s=%r" % (("`" + k + "`"), data_condition[k]) for k in data_condition)
         )
 
         try:
@@ -87,7 +82,7 @@ class DB(object):
         table = table
         sql = (
             "UPDATE %s SET " % table
-            + ",".join("%s=%r" % (k, data[k]) for k in data)
+            + ",".join("%s=%r" % (("`" + k + "`"), data[k]) for k in data)
             + " WHERE "
             + "%s=%r" % ("`id`", id)
         )
@@ -130,31 +125,31 @@ if __name__ == "__main__":
 
     # table = 'job'
     # data = {
-    #     '`framework`': 'paddle', '`commit`': 'aaabbbccc',
-    #     '`system`': 'Darwin', '`cuda`': '1121', '`cudnn`': '2233',
-    #     '`update_time`': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #     'framework': 'paddle', 'commit': 'aaabbbccc',
+    #     'system': 'Darwin', 'cuda': '1121', 'cudnn': '2233',
+    #     'update_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # }
     # id = db.insert(table='job', data=data)
     # print('id is: ', id)
 
     # table = 'job'
     # data = {
-    #     '`framework`': 'paddle11', '`commit`': '132aaabbbccc',
-    #     '`system`': 'Darwin', '`cuda`': '1121', '`cudnn`': '2233',
-    #     '`update_time`': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #     'framework': 'paddle11', 'commit': '132aaabbbccc',
+    #     'system': 'Darwin', 'cuda': '1121', 'cudnn': '2233',
+    #     'update_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # }
     # data_condition = {
-    #     '`id`': '58'
+    #     'id': '60'
     # }
     # db.update(table='job', data=data, data_condition=data_condition)
 
     # table = 'job'
     # data = {
-    #     '`framework`': 'paddle11', '`commit`': '132aaabbbccc',
-    #     '`system`': 'Darwin', '`cuda`': '1121', '`cudnn`': '2233',
-    #     '`update_time`': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #     'framework': 'paddle22', 'commit': '33323aaabbbccc',
+    #     'system': 'Darwin', 'cuda': '1121', 'cudnn': '2233',
+    #     'update_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # }
-    # id = 59
+    # id = 60
     # db.update_by_id(table='job', data=data, id=id)
 
     # table = 'job'
