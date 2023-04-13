@@ -14,13 +14,16 @@ case:
           - --model_name_or_path ernie-3.0-base-zh
           - --pad_to_max_seq_len
           - --max_seq_len 128
-          - --logging_steps 10
+          - --logging_steps 1
           - --seed 42
           - --task_name tnews
           - --to_static
-          - --max_steps=333500
-          - --use_amp=False
+          - --max_steps=50000
           - --batch_size=16
+          - --use_amp=True
+          - --amp_level="O1"
+          - --num_workers=0
+
       -
         name: dy2st_prim
         path: tests/
@@ -34,10 +37,12 @@ case:
           - --model_name_or_path ernie-3.0-base-zh
           - --pad_to_max_seq_len
           - --max_seq_len 128
-          - --logging_steps 10
+          - --logging_steps 1
           - --seed 42
           - --task_name tnews
           - --to_static
-          - --max_steps=333500
-          - --use_amp=False
+          - --max_steps=50000
           - --batch_size=16
+          - --use_amp=True
+          - --amp_level="O1"
+          - --num_workers=0

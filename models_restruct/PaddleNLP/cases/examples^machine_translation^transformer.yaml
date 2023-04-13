@@ -1,0 +1,19 @@
+case:
+  linux_convergence:
+    train:
+      -
+        name: add_visualdl_1
+        path: examples/machine_translation/transformer/
+        cmd: sed -i '/import yaml/i\from visualdl import LogWriter' train.py
+      -
+        name: add_visualdl_1
+        path: examples/machine_translation/transformer/
+        cmd: sed -i '/step_idx = 0/i\    log_writer = LogWriter(os.path.join(os.getenv("VDL_LOG_PATH"),"transfromer_bs_{}_card_{}".format(args.batch_size,rank)))' train.py
+      -
+        name: add_visualdl_1
+        path: examples/machine_translation/transformer/
+        cmd: sed -i '/reader_cost_avg.reset()/i\                log_writer.add_scalar(tag="transformer/loss",step = step_idx,value = total_avg_cost)' train.py
+      -
+        name: pretrain
+        path: examples/machine_translation/transformer/
+        cmd: python -m paddle.distributed.launch train.py --config ./configs/transformer.base.yaml
