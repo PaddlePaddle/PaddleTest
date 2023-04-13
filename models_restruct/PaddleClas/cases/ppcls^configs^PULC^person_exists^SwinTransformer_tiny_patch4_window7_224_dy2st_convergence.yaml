@@ -21,7 +21,7 @@ case:
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st
         result:
           loss:
-            base: 6
+            base: 0.1
             threshold: 1
             evaluation: "-"
       -
@@ -41,7 +41,7 @@ case:
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_cinn
         result:
           loss:
-            base: 6
+            base: 0.1
             threshold: 1
             evaluation: "-"
       -
@@ -61,7 +61,7 @@ case:
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_prim
         result:
           loss:
-            base: 6
+            base: 0.1
             threshold: 1
             evaluation: "-"
       -
@@ -81,7 +81,7 @@ case:
           - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_prim_cinn
         result:
           loss:
-            base: 6
+            base: 0.1
             threshold: 1
             evaluation: "-"
 
