@@ -48,10 +48,10 @@ case:
           - -o Global.output_dir=output/ResNet50_dy2st_prim
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
-          - -o DataLoader.Train.sampler.batch_size=256
-          - -o DataLoader.Eval.sampler.batch_size=256
-          - -o DataLoader.Train.loader.num_workers=16
-          - -o DataLoader.Eval.loader.num_workers=16
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o DataLoader.Eval.sampler.batch_size=128
+          - -o DataLoader.Train.loader.num_workers=8
+          - -o DataLoader.Eval.loader.num_workers=8
           - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
