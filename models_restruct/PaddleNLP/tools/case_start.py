@@ -41,6 +41,10 @@ class PaddleNLP_Case_Start(object):
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
             logger.info("export NVIDIA_TF32_OVERRIDE=1")
 
+            if "bert_convergence_daily" in self.qa_yaml_name:
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                logger.info("export FLAGS_cudnn_deterministic=1")
+
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_use_reduce_split_pass"] = "1"
