@@ -18,7 +18,6 @@ case:
           - --grad_clip 1.0
           - --max_steps 150000
           - --save_steps 100000
-          - --logging_steps 1
           - --decay_steps 320000
           - --warmup_rate 0.01
           - --micro_batch_size 2
@@ -38,7 +37,6 @@ case:
           - --grad_clip 1.0
           - --max_steps 150000
           - --save_steps 100000
-          - --logging_steps 1
           - --decay_steps 320000
           - --warmup_rate 0.01
           - --micro_batch_size 2
