@@ -85,7 +85,7 @@ case:
           - --adam_epsilon 1e-6
           - --warmup_steps 10000
           - --output_dir ./primcinn/
-          - --logging_steps 10
+          - --logging_steps 1
           - --save_steps 20
           - --model_type bert
           - --fuse_transformer false
