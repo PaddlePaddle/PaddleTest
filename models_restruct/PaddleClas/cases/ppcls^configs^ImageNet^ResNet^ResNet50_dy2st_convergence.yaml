@@ -90,8 +90,9 @@ case:
           - -o DataLoader.Eval.sampler.batch_size=256
           - -o DataLoader.Train.loader.num_workers=16
           - -o DataLoader.Eval.loader.num_workers=16
-          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+          - -o DataLoader.Train.sampler.shuffle=delete
+          - -o Global.seed=delete
+          - -o Optimizer.lr.learning_rate=0.025
         result:
           loss:
             base: 1
@@ -110,8 +111,9 @@ case:
           - -o DataLoader.Eval.sampler.batch_size=256
           - -o DataLoader.Train.loader.num_workers=16
           - -o DataLoader.Eval.loader.num_workers=16
-          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
-          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+          - -o DataLoader.Train.sampler.shuffle=delete
+          - -o Global.seed=delete
+          - -o Optimizer.lr.learning_rate=0.025
         result:
           loss:
             base: 1
