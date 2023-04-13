@@ -23,6 +23,7 @@ case:
           - --use_amp=True
           - --amp_level="O1"
           - --num_workers=0
+
       -
         name: dy2st_prim
         path: tests/

@@ -41,7 +41,14 @@ class PaddleNLP_Case_Start(object):
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
             logger.info("export NVIDIA_TF32_OVERRIDE=1")
 
-            if self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
+            if self.case_name.split("train_")[-1] == "dy2st_cinn":
+                os.environ["FLAGS_use_cinn"] = "1"
+                os.environ["FLAGS_use_reduce_split_pass"] = "1"
+                os.environ["FLAGS_deny_cinn_ops"] = "dropout"
+                os.environ["FLAGS_nvrtc_compile_to_cubin"] = "1"
+            elif self.case_name.split("train_")[-1] == "dy2st_prim":
+                os.environ["FLAGS_prim_all"] = "true"
+            elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_use_reduce_split_pass"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"

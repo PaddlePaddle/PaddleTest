@@ -14,6 +14,8 @@ case:
         name: static_multi
       -
         name: prim_single
+        params:
+        - --config configs/segformer/segformer_b0_cityscapes_1024x1024_160k.yml
     eval:
       -
         name: pretrained

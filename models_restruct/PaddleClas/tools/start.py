@@ -247,8 +247,10 @@ class PaddleClas_Start(object):
                 or "PULC^language_classification" in self.qa_yaml_name
                 or "PULC^textline_orientation" in self.qa_yaml_name
                 or "PULC^text_image_orientation" in self.qa_yaml_name
-                or "ImageNet^VGG^VGG11" in self.qa_yaml_name
-            ):
+                or "ImageNet^Inception^GoogLeNet" in self.qa_yaml_name
+                or "ImageNet^RedNet^RedNet38" in self.qa_yaml_name
+                or "ImageNet^RedNet^RedNet50" in self.qa_yaml_name
+            ):  # 因训练不足 评估出nan或者 bn报错
 
                 # 准备预训练评估路径模型
                 self.env_dict["eval_pretrained_model"] = self.eval_pretrained_params + "_pretrained"
@@ -259,6 +261,9 @@ class PaddleClas_Start(object):
                     or "PULC^textline_orientation" in self.qa_yaml_name
                     or "PULC^text_image_orientation" in self.qa_yaml_name
                     or "ImageNet^VGG^VGG11" in self.qa_yaml_name
+                    or "ImageNet^Inception^GoogLeNet" in self.qa_yaml_name
+                    or "ImageNet^RedNet^RedNet38" in self.qa_yaml_name
+                    or "ImageNet^RedNet^RedNet50" in self.qa_yaml_name
                 ):
                     # 因为训练不足会导致报 batch_norm2d_0.w_2 问题
                     self.env_dict["eval_trained_model"] = self.env_dict["eval_pretrained_model"]
