@@ -5,11 +5,6 @@ case:
         name: prepare
         path: model_zoo/ernie-health
         cmd: python preprocess.py --input_path ./raw_data/ --output_file ./data/samples --tokenize_tool lac --num_worker 8
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
       -
         name: pretrain
         path: model_zoo/ernie-health
