@@ -54,8 +54,8 @@ class PaddleNLP_End(object):
                 if num == 1:
                     plt.xlabel("step")
                     plt.ylabel(metrics)
-                picture_name = (model_name.replace("model_zoo^", "") + "_" + metrics).upper()
-                plt.title(picture_name)
+                    picture_name = (model_name.replace("model_zoo^", "") + "_" + metrics).upper()
+                    plt.title(picture_name)
                 num = num + 1
         if not os.path.exists("picture"):
             os.makedirs("picture")
