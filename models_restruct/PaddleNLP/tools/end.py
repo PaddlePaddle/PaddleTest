@@ -101,6 +101,7 @@ class PaddleNLP_End(object):
         for file in os.listdir(self.TRAIN_LOG_PATH):
             logger.info("check log file is {}".format(file))
             if re.compile("baseline").findall(file):
+                logger.info("test!!!")
                 baseline_info["baseline_loss"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
                 baseline_info["baseline_ips"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
             elif re.compile("dy2st").findall(file):
