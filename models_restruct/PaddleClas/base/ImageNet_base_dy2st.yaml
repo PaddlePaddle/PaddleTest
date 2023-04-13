@@ -7,13 +7,10 @@ train:
       - -o Global.print_batch_step=10
       - -o Global.epochs=20
       - -o DataLoader.Train.sampler.batch_size=64
-      - -o DataLoader.Train.dataset.image_root=big_dataset/ILSVRC2012
-      - -o DataLoader.Train.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_train_list.txt
-      - -o DataLoader.Eval.dataset.image_root=big_dataset/ILSVRC2012
-      - -o DataLoader.Eval.dataset.cls_label_path=big_dataset/ILSVRC2012/partial_shuf_val_list.txt
       - -o Global.save_interval=10
-      - -o Global.eval_interval=1000
+      - -o Global.eval_interval=1
       - -o Global.eval_during_train=True
+      - -o DataLoader.Train.sampler.shuffle=False
       - -o Global.seed=1234
       - -o Optimizer.lr.learning_rate=0.2
     result:

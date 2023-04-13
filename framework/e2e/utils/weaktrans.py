@@ -28,7 +28,7 @@ class WeakTrans(object):
     transfrom yaml base
     """
 
-    def __init__(self, case, default_type=np.float32, seed=None):
+    def __init__(self, case, default_type=np.float32, seed=None, logger=logger):
         """
         initialize
         """
@@ -137,6 +137,8 @@ class WeakTrans(object):
             return low + (high - low) * np.random.random(shape).astype("float32")
         elif dtype == "float64":
             return low + (high - low) * np.random.random(shape).astype("float64")
+        elif dtype == "bfloat16":
+            return low + (high - low) * np.random.random(shape).astype("bfloat16")
         elif dtype in ["complex", "complex64", "complex128"]:
             data = low + (high - low) * np.random.random(shape) + (low + (high - low) * np.random.random(shape)) * 1j
             return data if dtype == "complex" or "complex128" else data.astype(np.complex64)
@@ -159,7 +161,6 @@ class WeakTrans(object):
         for key, value in info.items():
             kwargs[key] = self._params_transform(key, value)
             kwargs_for_log[key] = kwargs[key]
-
         return kwargs
 
     def _params_transform(self, key, value):

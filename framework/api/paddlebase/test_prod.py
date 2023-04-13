@@ -157,7 +157,7 @@ def test_prod10():
     x = np.array([[-0.8, -0.4], [0.7, 0.9]])
     axis = 1
     res = np.prod(x, axis=axis)
-    exp = paddle.prod(paddle.to_tensor(x), axis=paddle.to_tensor(axis))
+    exp = paddle.prod(paddle.to_tensor(x), axis=paddle.to_tensor([axis]))
     assert np.allclose(exp.numpy(), res)
 
 

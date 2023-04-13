@@ -43,6 +43,9 @@ class PaddleOCR_Build(Model_Build):
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.test_model_list = []
+        self.mount_path = str(os.getenv("mount_path"))
+        self.use_data_cfs = str(args.use_data_cfs)
+
         if str(self.models_list) != "None":
             for line in self.models_list.split(","):
                 if ".yaml" or ".yml" in line:
@@ -67,10 +70,13 @@ class PaddleOCR_Build(Model_Build):
 
             sysstr = platform.system()
             if sysstr == "Linux":
-                if os.path.exists("/ssd2/ce_data/PaddleOCR"):
-                    src_path = "/ssd2/ce_data/PaddleOCR"
+                if os.path.exists(self.mount_path) and self.use_data_cfs == "True":
+                    src_path = self.mount_path
                 else:
-                    src_path = "/home/data/cfs/models_ce/PaddleOCR"
+                    if os.path.exists("/ssd2/ce_data/PaddleOCR"):
+                        src_path = "/ssd2/ce_data/PaddleOCR"
+                    else:
+                        src_path = "/home/data/cfs/models_ce/PaddleOCR"
             elif sysstr == "Windows":
                 # src_path = "F:\\PaddleOCR"
                 # os.system("mklink /d train_data F:\\PaddleOCR\\train_data")
@@ -143,15 +149,16 @@ class PaddleOCR_Build(Model_Build):
                     else:
                         cmd = """sed -i "s/batch_size: 14/batch_size: 1/g" %s""" % filename
                     os.system(cmd)
-            # dygraph2static_dataset
-            os.chdir("benchmark/PaddleOCR_DBNet")
-            self.download_data("https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/benchmark_train/datasets.tar")
-            os.system("python -m pip install -r requirement.txt")
-            for filename in self.test_model_list:
-                print("filename:{}".format(filename))
-                if "benchmark" in filename:
-                    os.system("python -m pip install -U numpy==1.23.5")
-                    os.system("python -m pip install Polygon3")
+            if sysstr == "Linux":
+                # dygraph2static_dataset
+                os.chdir("benchmark/PaddleOCR_DBNet")
+                self.download_data("https://paddleocr.bj.bcebos.com/dygraph_v2.0/test/benchmark_train/datasets.tar")
+                os.system("python -m pip install -r requirement.txt")
+                for filename in self.test_model_list:
+                    print("filename:{}".format(filename))
+                    if "benchmark" in filename:
+                        os.system("python -m pip install -U numpy==1.23.5")
+                        os.system("python -m pip install Polygon3")
 
             os.chdir(self.test_root_path)
             print("build dataset!")
@@ -174,76 +181,19 @@ class PaddleOCR_Build(Model_Build):
         time.sleep(10)
         os.remove(os.path.join(destination, tar_name))
 
-    def prepare_opencv(self):
-        """
-        prepare_opencv
-        """
-
-        print(os.getcwd())
-        os.chdir("PaddleOCR/deploy/cpp_infer")
-        # os.chdir('deploy/cpp_infer')
-
-        # download opencv source code
-        wget.download("https://paddleocr.bj.bcebos.com/libs/opencv/opencv-3.4.7.tar.gz")
-        tf = tarfile.open("opencv-3.4.7.tar.gz")
-        tf.extractall(os.getcwd())
-
-        os.chdir("opencv-3.4.7")
-        root_path = os.getcwd()
-        install_path = os.path.join(root_path, "opencv3")
-
-        # build
-        if os.path.exists("build"):
-            shutil.rmtree("build")
-        os.makedirs("build")
-        os.chdir("build")
-
-        # cmake
-        print(os.getcwd())
-        cmd = (
-            "cmake .. -DCMAKE_INSTALL_PREFIX=%s \
-    -DCMAKE_BUILD_TYPE=Release -DWITH_IPP=OFF -DBUILD_IPP_IW=OFF-DWITH_LAPACK=OFF \
-    -DWITH_EIGEN=OFF -DCMAKE_INSTALL_LIBDIR=lib64 -DWITH_ZLIB=ON -DBUILD_ZLIB=ON \
-    -DWITH_JPEG=ON -DBUILD_JPEG=ON -DWITH_PNG=ON -DBUILD_PNG=ON -DWITH_TIFF=ON -DBUILD_TIFF=ON"
-            % (install_path)
-        )
-        repo_result = subprocess.getstatusoutput(cmd)
-        # exit_code = repo_result[0]
-        output = repo_result[1]
-        print(output)
-        # make
-        os.system("make -j")
-        # make install
-        os.system("make install")
-        os.chdir(self.test_root_path)
-
-    def prepare_c_predict_library(self):
-        """
-        prepare_c_predict_library
-        """
-        print(os.getcwd())
-        os.chdir("PaddleOCR/deploy/cpp_infer")
-        wget.download(
-            "https://paddle-inference-lib.bj.bcebos.com/2.3.2/cxx_c/Linux/GPU/\
-x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz"
-        )
-        tf = tarfile.open("paddle_inference.tgz")
-        tf.extractall(os.getcwd())
-        os.chdir(self.test_root_path)
-
     def compile_c_predict_demo(self):
         """
         compile_c_predict_demo
         """
         print(os.getcwd())
         os.chdir("PaddleOCR/deploy/cpp_infer")
-        # os.chdir('deploy/cpp_infer')
-        root_path = os.getcwd()
-        OPENCV_DIR = os.path.join(root_path, "opencv-3.4.7/opencv3")
-        LIB_DIR = os.path.join(root_path, "paddle_inference")
-        CUDA_LIB_DIR = "/usr/local/cuda/lib64"
-        CUDNN_LIB_DIR = "/usr/lib/x86_64-linux-gnu/"
-        TENSORRT_DIR = "/usr/local/TensorRT-6.0.1.8/"
+
+        OPENCV_DIR = os.environ.get("OPENCV_DIR")
+        LIB_DIR = os.environ.get("paddle_inference_LIB_DIR")
+        CUDA_LIB_DIR = os.environ.get("CUDA_LIB_DI")
+        CUDNN_LIB_DIR = os.environ.get("CUDNN_LIB_DIR")
+        TENSORRT_DIR = os.environ.get("TENSORRT_DIR")
+
         if os.path.exists("build"):
             shutil.rmtree("build")
         os.makedirs("build")
@@ -273,12 +223,8 @@ x86-64_gcc8.2_avx_mkl_cuda10.2_cudnn8.1.1_trt7.2.3.4/paddle_inference.tgz"
             logger.info("build env dataset failed")
             return ret
 
-        """
         sysstr = platform.system()
-        if sysstr == "Linux":
-            self.prepare_opencv()
-            self.prepare_c_predict_library()
+        if sysstr == "Linux" and os.environ.get("c_plus_plus_predict") == "True":
             self.compile_c_predict_demo()
-        """
 
         return ret

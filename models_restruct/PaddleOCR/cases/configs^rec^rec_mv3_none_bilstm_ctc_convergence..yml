@@ -1,0 +1,31 @@
+case:
+    linux:
+          train:
+          -
+            name: multi
+            cmd : python -m paddle.distributed.launch tools/train.py
+            params:
+              - -c configs/rec/rec_mv3_none_bilstm_ctc.yml
+            result:
+              loss:
+                base: 1
+                threshold: 0
+                evaluation: "="
+              acc:
+                base: 1
+                threshold: 0
+                evaluation: "="
+          -
+            name: single
+            cmd : python tools/train.py
+            params:
+              - -c configs/rec/rec_mv3_none_bilstm_ctc.yml
+            result:
+              loss:
+                base: 1
+                threshold: 0
+                evaluation: "="
+              acc:
+                base: 1
+                threshold: 0
+                evaluation: "="
