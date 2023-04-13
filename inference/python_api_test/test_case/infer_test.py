@@ -913,6 +913,10 @@ class InferenceTest(object):
             record_thread.start()
             record_thread.join()
 
+        while not self.errors.empty():
+            print("errors queue not empty!!!")
+            raise self.errors.get()
+
     def run_multi_thread_test_predictor(
         self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5
     ):
