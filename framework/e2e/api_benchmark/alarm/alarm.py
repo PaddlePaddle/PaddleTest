@@ -28,7 +28,8 @@ class Alarm(object):
         if sender is None:
             sender = self.sender
         message = MIMEText(content, 'html', 'utf-8')
-        message["To"] = Header(receiver)
+        print(receiver)
+        message["To"] = Header(", ".join(receiver))
         message['Subject'] = Header(subject, 'utf-8')
         try:
             smtpObj = smtplib.SMTP(self.smtp)
@@ -40,4 +41,5 @@ class Alarm(object):
 
 if __name__ == '__main__':
     alarm = Alarm("storage.yaml")
-    alarm.email_send("xxx@xxx.com", "hello", "hello world")
+    r = ["xxx@bxxxa.com", "xxx@xxx.com"]
+    alarm.email_send(r, "hello", "hello world")
