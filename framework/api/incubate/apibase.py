@@ -501,7 +501,7 @@ class APIBase(object):
                     shape = v.numpy().shape
                     for i in range(len(v.numpy().flatten())):
                         g = self._get_sigle_grad(v, i, k)
-                        grad.append(g[0])
+                        grad.append(g.item())
                         self.kwargs[k] = v
                     numeric_grad[k] = np.array(grad).reshape(shape)
                 elif isinstance(v, (list, tuple)) and isinstance(v[0], paddle.Tensor):
@@ -512,7 +512,7 @@ class APIBase(object):
                         shape = v[n].shape
                         for i in range(len(v[n].flatten())):
                             g = self._get_sigle_grad(v[n], i, k, n)
-                            grad.append(g[0])
+                            grad.append(g.item())
                             self.kwargs[k][n] = v[n]
                         tmp.append(np.array(grad).reshape(shape))
                     numeric_grad[k] = tmp
@@ -532,7 +532,7 @@ class APIBase(object):
                     self.data.stop_gradient = False
                 loss_delta = self._numeric_grad()
                 g = (loss_delta - loss) / self.gap
-                grad.append(g[0])
+                grad.append(g.item())
                 # recover v to self.kwargs
                 self.data = data
             numeric_grad["data"] = np.array(grad).reshape(shape)
