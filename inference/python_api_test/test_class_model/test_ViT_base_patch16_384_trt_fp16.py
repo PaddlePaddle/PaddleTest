@@ -83,6 +83,7 @@ def test_trt_fp16_more_bz():
             input_data_dict,
             output_data_dict,
             max_batch_size=max_batch_size,
+            min_subgraph_size=1,
             precision="trt_fp16",
             delta=0.005,
             dynamic=True,
@@ -142,6 +143,7 @@ def test_jetson_trt_fp16_more_bz():
             input_data_dict,
             output_data_dict,
             max_batch_size=max_batch_size,
+            min_subgraph_size=1,
             precision="trt_fp16",
             delta=0.005,
             dynamic=True,
@@ -196,6 +198,7 @@ def test_trt_fp16_bz1_multi_thread():
     test_suite2.trt_bz1_multi_thread_test(
         input_data_dict,
         output_data_dict,
+        min_subgraph_size=1,
         delta=0.005,
         precision="trt_fp16",
     )
