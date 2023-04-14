@@ -63,7 +63,6 @@ class PaddleNLP_Build(Model_Build):
         print(os.environ["no_proxy"])
 
         if platform == "linux" or platform == "linux_convergence":
-            print("linux")
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")

@@ -1,4 +1,3 @@
-applications^information_extraction^document.yaml
 applications^information_extraction^text.yaml
 applications^question_answering^unsupervised_qa.yaml
 applications^sentiment_analysis^ASO_analysis.yaml
@@ -25,7 +24,14 @@ model_zoo^ernie-health.yaml
 model_zoo^ernie-health_cblue.yaml
 model_zoo^ernie-layout.yaml
 model_zoo^ernie-m.yaml
-model_zoo^gpt.yaml
-model_zoo^gpt_static.yaml
 model_zoo^tinybert.yaml
 model_zoo^uie.yaml
+examples^code_generation^codegen.yaml
+examples^dependency_parsing^ddparsing.yaml
+examples^multimodal^layoutlm.yaml
+examples^multimodal^layoutxlm.yaml
+examples^question_generation^t5.yaml
+examples^question_generation^unimo-text.yaml
+examples^text_generation^ctrl.yaml
+examples^text_generation^opt.yaml
+examples^text_generation^reformer.yaml

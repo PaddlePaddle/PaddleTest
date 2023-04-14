@@ -7,6 +7,7 @@ import time
 import os
 import sys
 import logging
+import queue
 import threading
 from multiprocessing import Process
 
@@ -40,7 +41,7 @@ class InferenceTest(object):
         """
         __init__
         """
-        pass
+        self.errors = queue.Queue()
 
     def load_config(self, **kwargs):
         """
@@ -770,7 +771,7 @@ class InferenceTest(object):
         gpu_mem=1000,
         min_subgraph_size=10,
         precision="trt_fp32",
-        use_static=False,
+        use_static=True,
         use_calib_mode=False,
         delete_pass_list=None,
         dynamic=False,
@@ -838,6 +839,10 @@ class InferenceTest(object):
             )
             record_thread.start()
             record_thread.join()
+
+        while not self.errors.empty():
+            print("errors queue not empty!!!")
+            raise self.errors.get()
 
     def trt_dynamic_multi_thread_test(
         self,
@@ -908,6 +913,10 @@ class InferenceTest(object):
             record_thread.start()
             record_thread.join()
 
+        while not self.errors.empty():
+            print("errors queue not empty!!!")
+            raise self.errors.get()
+
     def run_multi_thread_test_predictor(
         self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5
     ):
@@ -939,7 +948,10 @@ class InferenceTest(object):
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
-            diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            try:
+                diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            except Exception as e:
+                self.errors.put(e)
 
 
 def get_gpu_mem(gpu_id=0):

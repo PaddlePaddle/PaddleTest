@@ -319,10 +319,13 @@ class PaddleGAN_Build(Model_Build):
         if ret:
             logger.info("build env whl failed")
             return ret
-        ret = self.build_yaml()
-        if ret:
-            logger.info("build env yaml failed")
-            return ret
+
+        logger.info("self.system  is {}".format(self.system))
+        if "convergence" not in self.system:
+            ret = self.build_yaml()
+            if ret:
+                logger.info("build env yaml failed")
+                return ret
 
         ret = self.build_infer_dataset()
         if ret:
