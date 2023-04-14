@@ -61,12 +61,12 @@ class PaddleClas_Case_Start(object):
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
                 if "^CAE^" in self.qa_yaml_name:
-                    os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_deny_cinn_ops"] = "conv2d;conv2d_grad;uniform_random"
             elif self.case_name.split("train_")[-1] == "dy2st_cinn_all":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
                 if "^CAE^" in self.qa_yaml_name:
-                    os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_deny_cinn_ops"] = "conv2d;conv2d_grad;uniform_random"
             elif self.case_name.split("train_")[-1] == "dy2st_prim":
                 os.environ["FLAGS_prim_all"] = "true"
             elif self.case_name.split("train_")[-1] == "dy2st_prim_all":
