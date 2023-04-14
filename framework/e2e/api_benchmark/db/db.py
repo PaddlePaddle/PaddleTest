@@ -45,7 +45,7 @@ class DB(object):
     def insert(self, table, data):
         """插入数据"""
         id = -1
-        table = table
+        table = "`" + table + "`"
         ls = [(k, data[k]) for k in data if data[k] is not None]
         keys = ",".join(("`" + i[0] + "`") for i in ls)
         values = ",".join("%r" % i[1] for i in ls)
@@ -63,7 +63,7 @@ class DB(object):
 
     def update(self, table, data, data_condition):
         """按照data_condition 更新数据"""
-        table = table
+        table = "`" + table + "`"
         sql = (
             "UPDATE %s SET " % table
             + ",".join("%s=%r" % (("`" + k + "`"), data[k]) for k in data)
@@ -79,7 +79,7 @@ class DB(object):
 
     def update_by_id(self, table, data, id):
         """按照id 更新数据"""
-        table = table
+        table = "`" + table + "`"
         sql = (
             "UPDATE %s SET " % table
             + ",".join("%s=%r" % (("`" + k + "`"), data[k]) for k in data)
@@ -96,7 +96,7 @@ class DB(object):
     def select(self, table, condition_list):
         """按照condition_list 查询数据"""
         results = []
-        table = table
+        table = "`" + table + "`"
         sql = "SELECT * FROM %s " % table + " WHERE " + " AND ".join("%s" % k for k in condition_list)
 
         try:
@@ -109,7 +109,7 @@ class DB(object):
     def select_by_id(self, table, id):
         """按照id 查询数据"""
         results = []
-        table = table
+        table = "`" + table + "`"
         sql = "SELECT * FROM %s " % table + " WHERE " + "%s=%r" % ("`id`", id)
 
         try:
