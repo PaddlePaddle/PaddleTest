@@ -9,9 +9,11 @@ import shutil
 import logging
 import tarfile
 import argparse
+from sklearn import pipeline
 import yaml
 import wget
 import numpy as np
+import re
 
 logger = logging.getLogger("ce")
 
@@ -99,7 +101,8 @@ def run():
     执行入口
     """
     platform = os.environ["system"]
-    if platform == "linux_convergence":
+    all = re.compile("ALL").findall(os.environ["AGILE_PIPELINE_BUILD_ID"])
+    if platform == "linux_convergence" and not all:
         model = PaddleNLP_Case_Start()
         model.build_prepare()
         return 0
