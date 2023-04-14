@@ -169,7 +169,7 @@ def test_multi_dot2():
     types = ["float32", "float64"]
     x1 = np.random.rand(4)
     x2 = np.random.rand(4)
-    res = np.dot(x1, x2).reshape([1])
+    res = np.dot(x1, x2)
     for d in types:
         api_res, api_grad = cal_multi_dot(d, x1=x1, x2=x2)
         assert api_res.shape == res.shape
@@ -189,7 +189,7 @@ def test_multi_dot3():
     x2 = np.random.rand(4, 5)
     x3 = np.random.rand(5, 2)
     x4 = np.random.rand(2)
-    res = np.dot(np.dot(x1, x2), np.dot(x3, x4)).reshape([1])
+    res = np.dot(np.dot(x1, x2), np.dot(x3, x4))
     for d in types:
         api_res, api_grad = cal_multi_dot(d, x1=x1, x2=x2, x3=x3, x4=x4)
         assert api_res.shape == res.shape
