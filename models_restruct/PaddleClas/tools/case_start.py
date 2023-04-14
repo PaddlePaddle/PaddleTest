@@ -52,7 +52,7 @@ class PaddleClas_Case_Start(object):
             logger.info("set FLAGS_deny_cinn_ops {}".format(os.getenv("FLAGS_deny_cinn_ops")))
             os.environ["FLAGS_conv_workspace_size_limit"] = "400"
             logger.info("set FLAGS_conv_workspace_size_limit {}".format(os.getenv("FLAGS_conv_workspace_size_limit")))
-            os.environ["FLAGS_cudnn_exhaustive_search"] = "None"
+            os.environ["FLAGS_cudnn_exhaustive_search"] = ""
             # os.environ["FLAGS_cudnn_exhaustive_search"] = "1" #设置后无法固定随机量
             os.environ["FLAGS_cudnn_deterministic"] = "1"
             logger.info("set FLAGS_cudnn_exhaustive_search as {}".format(os.getenv("FLAGS_cudnn_exhaustive_search")))
