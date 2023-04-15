@@ -504,7 +504,7 @@ class APIBase(object):
                         loss_delta = self._numeric_grad()
                         g = (loss_delta - loss) / self.gap
                         # print("-----> {}".format(g))
-                        grad.append(g[0])
+                        grad.append(g.item())
                         # recover v to self.kwargs
                         self.kwargs[k] = v
                     numeric_grad[k] = np.array(grad).reshape(shape)
@@ -523,7 +523,7 @@ class APIBase(object):
                     self.data.stop_gradient = False
                 loss_delta = self._numeric_grad()
                 g = (loss_delta - loss) / self.gap
-                grad.append(g[0])
+                grad.append(g.item())
                 # recover v to self.kwargs
                 self.data = data
             numeric_grad["data"] = np.array(grad).reshape(shape)
