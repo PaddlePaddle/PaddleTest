@@ -20,6 +20,7 @@ find ppcls/configs/ImageNet/ -name '*.yaml' -exec ls -l {} \;| awk '{print $NF;}
     |grep -v 'EfficientNetB7' \
     |grep -v 'ViT_large_patch16_384' \
     |grep -v 'PVT_V2_B5' \
+    |grep -v 'mv3_large_x1_0_distill_mv3_small_x1_0' \
     |grep -v 'ResNeXt101_32x32d_wsl' \
     |grep -v 'amp_' \
     > models_list
@@ -46,7 +47,7 @@ find ppcls/configs/reid/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  
 #282个模型总量
 #11个类型
 #新增了1个类型TODO添加
-
+# ppcls^configs^ImageNet^Distillation^mv3_large_x1_0_distill_mv3_small_x1_0.yaml
 #P优先级删除all中没有的
 cat models_list_cls_test_P0 |while read line; do if [[ ! `grep -c "${line}" models_list_cls_test_all` -ne '0' ]] ;then
     index=`grep -n ${line} models_list_cls_test_P0 | awk -F ":" '{print $1}'`

@@ -55,8 +55,7 @@ case:
               - arch.backbone.pretrained=False
               - trainer.to_static=true
               - trainer.use_gpu=True
-              - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_baseline
-              - amp=None
+              - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_amp
               - dataset.train.loader.batch_size=8
               - trainer.epochs=200
               - amp.scale_loss=1024.0
@@ -79,8 +78,7 @@ case:
               - arch.backbone.pretrained=False
               - trainer.to_static=true
               - trainer.use_gpu=True
-              - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_baseline
-              - amp=None
+              - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_amp_prim
               - dataset.train.loader.batch_size=8
               - trainer.epochs=200
               - amp.scale_loss=1024.0

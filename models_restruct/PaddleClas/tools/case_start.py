@@ -68,6 +68,7 @@ class PaddleClas_Case_Start(object):
                 os.environ["FLAGS_prim_all"] = "true"
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
             elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
+                os.environ["FLAGS_nvrtc_compile_to_cubin"] = "1"
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
             elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn_all":

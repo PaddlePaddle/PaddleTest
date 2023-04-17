@@ -39,10 +39,11 @@ class PaddleNLP_Case_Start(object):
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
-            os.environ["FLAGS_cudnn_deterministic"] = "1"
-
             logger.info("export NVIDIA_TF32_OVERRIDE=1")
-            logger.info("export FLAGS_cudnn_deterministic=1")
+
+            if "bert_convergence_daily" in self.qa_yaml_name:
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                logger.info("export FLAGS_cudnn_deterministic=1")
 
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
@@ -92,17 +93,18 @@ class PaddleNLP_Case_Start(object):
             logger.info("export FLAGS_cudnn_deterministic=1")
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
 
-        else:
-            return 0
-
 
 def run():
     """
     执行入口
     """
-    model = PaddleNLP_Case_Start()
-    model.build_prepare()
-    return 0
+    platform = os.environ["system"]
+    if platform == "linux_convergence":
+        model = PaddleNLP_Case_Start()
+        model.build_prepare()
+        return 0
+    else:
+        return 0
 
 
 if __name__ == "__main__":
