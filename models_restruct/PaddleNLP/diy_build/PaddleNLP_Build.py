@@ -60,6 +60,7 @@ class PaddleNLP_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
+        print("timeout:",os.environ["timeout"])
         print(os.environ["no_proxy"])
 
         if platform == "linux" or platform == "linux_convergence":
