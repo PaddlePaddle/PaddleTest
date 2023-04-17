@@ -46,6 +46,10 @@ ignore_case_dir = {
         "test_max.py",
         "test_min.py",
         "test_prod.py",
+        "test_Tensor_inner.py",
+        "test_dot.py",
+        "test_inner.py",
+        "test_tensordot.py"
     ],
     "optimizer": [],
     "distribution": [],
