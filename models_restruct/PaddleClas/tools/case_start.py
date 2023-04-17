@@ -62,6 +62,7 @@ class PaddleClas_Case_Start(object):
                 os.environ["FLAGS_use_cinn"] = "1"
                 if "^CAE^" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_nvrtc_compile_to_cubin"] = "0"
                 if "^ResNet^" in self.qa_yaml_name:
                     os.environ["FLAGS_cinn_use_cuda_vectorize"] = "1"
                     os.environ["FLAGS_enhance_vertical_fusion_with_recompute"] = "1"
@@ -70,6 +71,7 @@ class PaddleClas_Case_Start(object):
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
                 if "^CAE^" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_nvrtc_compile_to_cubin"] = "0"
                 if "^ResNet^" in self.qa_yaml_name:
                     os.environ["FLAGS_cinn_use_cuda_vectorize"] = "1"
                     os.environ["FLAGS_enhance_vertical_fusion_with_recompute"] = "1"
@@ -84,6 +86,7 @@ class PaddleClas_Case_Start(object):
                 os.environ["FLAGS_prim_all"] = "true"
                 if "^CAE^" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_nvrtc_compile_to_cubin"] = "0"
                 if "^ResNet^" in self.qa_yaml_name:
                     os.environ["FLAGS_cinn_use_cuda_vectorize"] = "1"
                     os.environ["FLAGS_enhance_vertical_fusion_with_recompute"] = "1"
@@ -94,6 +97,7 @@ class PaddleClas_Case_Start(object):
                 os.environ["FLAGS_nvrtc_compile_to_cubin"] = "1"
                 if "^CAE^" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_nvrtc_compile_to_cubin"] = "0"
                 if "^ResNet^" in self.qa_yaml_name:
                     os.environ["FLAGS_cinn_use_cuda_vectorize"] = "1"
                     os.environ["FLAGS_enhance_vertical_fusion_with_recompute"] = "1"
