@@ -107,9 +107,6 @@ class PaddleNLP_Build(Model_Build):
         os.chdir(path_now)
 
         os.system("python -m pip list")
-        import paddle
-
-        print("paddle-commit:", paddle.version.commit)
 
         return 0
 

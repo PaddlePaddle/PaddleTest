@@ -12,7 +12,7 @@ case:
         params:
           - --model_type bert
           - --model_name_or_path bert-base-uncased
-          - --batch_size 16
+          - --batch_size 4
           - --input_dir bert/
           - --output_dir pretrained_models/
           - --logging_steps 1
