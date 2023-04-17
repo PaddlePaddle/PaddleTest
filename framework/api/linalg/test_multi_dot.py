@@ -98,7 +98,7 @@ def numerical_grad(**kwargs):
             kwargs[k] = tmp
             loss_delta = cal_loss(**kwargs)
             g = (loss_delta - loss) / gap
-            grad.append(g[0])
+            grad.append(g.item())
             # recover v to self.kwargs
             kwargs[k] = v
         numeric_grad[k] = np.array(grad).reshape(shape)
