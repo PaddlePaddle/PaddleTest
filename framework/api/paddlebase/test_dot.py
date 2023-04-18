@@ -37,7 +37,7 @@ def test_dot_base():
     """
     x_data = np.arange(1, 7).reshape((6,)).astype(np.float32)
     y_data = np.arange(1, 7).reshape((6,)).astype(np.float32)
-    res = np.array([91.0])
+    res = np.array(91.0)
     obj.base(res=res, x=x_data, y=y_data)
 
 
@@ -48,7 +48,7 @@ def test_dot_1D_tensor():
     """
     x_data = np.arange(1, 7).reshape((6,)).astype(np.float32)
     y_data = np.arange(1, 7).reshape((6,)).astype(np.float32)
-    res = np.array([91.0])
+    res = np.array(91.0)
     obj.run(res=res, x=x_data, y=y_data)
 
 
@@ -59,5 +59,5 @@ def test_dot_2D_tensor():
     """
     x_data = np.arange(1, 7).reshape((2, 3)).astype(np.float32)
     y_data = np.arange(1, 7).reshape((2, 3)).astype(np.float32)
-    res = np.array([[14.0], [77.0]])
+    res = np.array([14.0, 77.0])
     obj.run(res=res, x=x_data, y=y_data)

@@ -34,7 +34,10 @@ class Runner(object):
             self.optimizer.clear_grad()
             if self.debug:
                 print(loss)
-            self.result.append(loss.numpy()[0])
+            if loss.size == 1:
+                self.result.append(loss.numpy().item())
+            else:
+                self.result.append(loss.numpy()[0])
 
     def check(self, expect=None, rtol=1e-05, atol=1e-08):
         """
