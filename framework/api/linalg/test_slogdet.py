@@ -37,7 +37,7 @@ def test_slogdet_base():
     base
     """
     x = np.random.rand(14, 14) * 100
-    res = np.array(np.linalg.slogdet(x)).reshape(2, 1)
+    res = np.array(np.linalg.slogdet(x))
     obj.base(res=res, x=x)
 
 
@@ -47,7 +47,7 @@ def test_slogdet0():
     default
     """
     x = np.random.rand(4, 4)
-    res = np.array(np.linalg.slogdet(x)).reshape(2, 1)
+    res = np.array(np.linalg.slogdet(x))
     obj.run(res=res, x=x)
 
 
