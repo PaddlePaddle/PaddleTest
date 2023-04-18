@@ -72,7 +72,7 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
             kpi_value = float(kpi_value_all[-1])  # 使用最终的loss值  230208修改
     # check 逻辑
     # logger.info("###kpi_value: {}".format(kpi_value))
-    print("###kpi_value: {}".format(kpi_value))
+    # print("###kpi_value: {}".format(kpi_value))
     # logger.info("###kpi_value: {}".format(type(kpi_value)))
     return kpi_value
 
