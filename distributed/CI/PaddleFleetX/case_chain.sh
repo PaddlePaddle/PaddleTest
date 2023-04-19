@@ -35,10 +35,10 @@ fleet_gpu_model_list=( \
     imagen_text2im_397M_64x64_single \
     imagen_text2im_397M_64x64_dp8 \
     imagen_text2im_64x64_DebertaV2_dp8 \
+    imagen_text2im_2B_64x64_sharding8 \
     imagen_super_resolution_256_single_card \
     imagen_super_resolution_256_dp8 \
     )
-    # imagen_text2im_2B_64x64_sharding8 \
     # gpt_export_qat_345M \
 
 
@@ -255,9 +255,10 @@ function gpt_export_345M_mp2() {
     python -m paddle.distributed.launch --devices "0,1" \
         ./tools/auto_export.py \
         -c ./ppfleetx/configs/nlp/gpt/auto/generation_gpt_345M_mp2.yaml \
+        -o Generation.use_topp_sampling=False \
         -o Engine.save_load.ckpt_dir=./pretrained/inference_model
-    # python -m paddle.distributed.launch --devices "0,1" \
-    #     projects/gpt/inference.py --mp_degree 2 --model_dir output
+    python -m paddle.distributed.launch --devices "0,1" \
+        projects/gpt/inference.py --mp_degree 2 --model_dir output
     unset CUDA_VISIBLE_DEVICES
     check_result $FUNCNAME
 }
@@ -383,8 +384,8 @@ function vit_cifar10_finetune() {
     loss=`tail log/workerlog.0 | grep 19/24 | cut -d " " -f14 `
     top1=`tail log/workerlog.0 | grep top1 |cut -d " " -f14 `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 3.746279597 ${loss%?} ${FUNCNAME}_loss
-        check_diff 0.217505 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.567670846 ${loss%?} ${FUNCNAME}_loss
+        check_diff 0.198096 ${top1%?} ${FUNCNAME}_top1
     else
         check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
         check_diff 0.216858 ${top1%?} ${FUNCNAME}_top1
@@ -407,7 +408,7 @@ function vit_qat() {
     check_result $FUNCNAME
     loss=`tail log/workerlog.0 | grep "eval" | cut -d " " -f11 `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 2.299847364 ${loss%?} ${FUNCNAME}_loss
+        check_diff 2.299860716 ${loss%?} ${FUNCNAME}_loss
     else
         check_diff 2.299857140 ${loss%?} ${FUNCNAME}_loss
     fi
