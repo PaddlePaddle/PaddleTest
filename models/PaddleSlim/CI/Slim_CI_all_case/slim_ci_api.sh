@@ -99,7 +99,7 @@ fi
 check_code_style(){
 python -m pip install -U pip 
 pip install cpplint pylint pytest astroid isort
-python -m pip install pre-commit==2.21.0
+python -m pip install pre-commit==2.20.0
 
 pre-commit install
 commit_files=on
