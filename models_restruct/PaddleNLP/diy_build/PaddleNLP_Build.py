@@ -59,9 +59,9 @@ class PaddleNLP_Build(Model_Build):
         """
         path_now = os.getcwd()
         platform = self.system
-        os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com"
-        print("timeout:",os.environ["timeout"])
-        print(os.environ["no_proxy"])
+        os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com,baidu-int.com"
+        print("set timeout as:",os.environ["timeout"])
+        print("set no_proxy as:",os.environ["no_proxy"])
 
         if platform == "linux" or platform == "linux_convergence":
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
