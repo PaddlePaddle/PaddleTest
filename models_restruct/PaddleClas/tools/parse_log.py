@@ -24,6 +24,8 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
             if "class_ids" in line and ": [" in line:
                 # 增加对nan的处理
                 line = line.replace("nan ", "'nan '")
+                if "INFO: " in line:
+                    line = line.split("INFO: ", 1)[1]
                 if line.count("class_ids") > 1:  # 存在多个标签时
                     kpi_value_all.append(
                         ast.literal_eval(line.replace("[{", "{").replace("}]", "}").strip())[0]["class_ids"]

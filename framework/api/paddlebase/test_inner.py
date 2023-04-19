@@ -66,7 +66,7 @@ def test_inner0():
     """
     x = randtool("float", -4, 4, (4,))
     y = randtool("float", -2, 2, (4,))
-    res = np.array([cal_inner(x, y)])
+    res = np.array(cal_inner(x, y))
     obj.run(res=res, x=x, y=y)
 
 

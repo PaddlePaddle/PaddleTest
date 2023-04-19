@@ -10,8 +10,6 @@ from datetime import datetime
 import yaml
 import pymysql
 
-# from utils.logger import logger
-
 
 class DB(object):
     """DB class"""
