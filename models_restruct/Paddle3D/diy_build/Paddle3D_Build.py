@@ -7,6 +7,7 @@ import sys
 import logging
 import tarfile
 import argparse
+import shutil
 import subprocess
 import platform
 import numpy as np
@@ -26,17 +27,18 @@ class Paddle3D_Build(Model_Build):
         """
         初始化变量
         """
-        self.paddle_whl = args.paddle_whl
-
-        self.branch = args.branch
-        self.system = args.system
-        self.set_cuda = args.set_cuda
-        self.dataset_org = args.dataset_org
-        self.dataset_target = args.dataset_target
+        super(Paddle3D_Build, self).__init__(args)
+        # self.paddle_whl = args.paddle_whl
+        # self.branch = args.branch
+        # self.system = args.system
+        # self.set_cuda = args.set_cuda
+        # self.dataset_org = args.dataset_org
+        # self.dataset_target = args.dataset_target
+        # self.reponame = args.reponame
+        # self.get_repo = args.get_repo
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
-        self.reponame = args.reponame
-        self.get_repo = args.get_repo
+
         print("self.reponame:{}".format(self.reponame))
         self.models_list = args.models_list
         self.models_file = args.models_file
@@ -129,6 +131,134 @@ class Paddle3D_Build(Model_Build):
             print("change iters number!")
             os.chdir(path_now)
 
+    def compile_c_predict_demo(self):
+        """
+        compile_c_predict_demo
+        """
+        print(os.getcwd())
+
+
+        OPENCV_DIR = os.environ.get("OPENCV_DIR")
+        LIB_DIR = os.environ.get("paddle_inference_LIB_DIR")
+        CUDA_LIB_DIR = os.environ.get("CUDA_LIB_DI")
+        CUDNN_LIB_DIR = os.environ.get("CUDNN_LIB_DIR")
+        TENSORRT_DIR = os.environ.get("TENSORRT_DIR")
+
+
+        os.chdir("Paddle3D/deploy/smoke/cpp")
+        # paddle_inference
+        os.chdir("lib")
+        if os.path.exists("paddle_inference"):
+            os.unlink("paddle_inference")
+        os.symlink(LIB_DIR, "paddle_inference")
+        os.chdir("..")
+        # smoke compile
+        if os.path.exists("build"):
+            shutil.rmtree("build")
+        os.makedirs("build")
+        os.chdir("build")
+        print(os.getcwd())
+        
+        cmd = (
+            "export OpenCV_DIR=%s; cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=infer -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF \
+    -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s"
+            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+        )
+        print(cmd)
+        repo_result = subprocess.getstatusoutput(cmd)
+        # exit_code = repo_result[0]
+        output = repo_result[1]
+        print(output)
+        os.system("make -j")
+
+
+        # pointpillars compile
+        os.chdir(self.test_root_path)
+        os.chdir("Paddle3D/deploy/pointpillars/cpp")
+        if os.path.exists("build"):
+            shutil.rmtree("build")
+        os.makedirs("build")
+        os.chdir("build")
+        print(os.getcwd())
+        
+        cmd = (
+            "cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF \
+    -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s -DCUSTOM_OPERATOR_FILES='custom_ops/iou3d_cpu.cpp;custom_ops/iou3d_nms_api.cpp;custom_ops/iou3d_nms.cpp;custom_ops/iou3d_nms_kernel.cu'"
+            % (LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+        )
+        print(cmd)
+        repo_result = subprocess.getstatusoutput(cmd)
+        # exit_code = repo_result[0]
+        output = repo_result[1]
+        print(output)
+        os.system("make -j")
+        os.chdir(self.test_root_path)
+
+        # centerpoint compile
+        os.chdir(self.test_root_path)
+        os.chdir("Paddle3D/deploy/centerpoint/cpp")
+        if os.path.exists("build"):
+            shutil.rmtree("build")
+        os.makedirs("build")
+        os.chdir("build")
+        print(os.getcwd())
+        
+        cmd = (
+            "cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF \
+    -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s -DCUSTOM_OPERATOR_FILES='custom_ops/voxelize_op.cu;custom_ops/voxelize_op.cc;custom_ops/iou3d_nms_kernel.cu;custom_ops/postprocess.cc;custom_ops/postprocess.cu'"
+            % (LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+        )
+        print(cmd)
+        repo_result = subprocess.getstatusoutput(cmd)
+        # exit_code = repo_result[0]
+        output = repo_result[1]
+        print(output)
+        os.system("make -j")
+        os.chdir(self.test_root_path)
+
+        # petr compile
+        os.chdir("Paddle3D/deploy/petr/cpp")
+        if os.path.exists("build"):
+            shutil.rmtree("build")
+        os.makedirs("build")
+        os.chdir("build")
+        print(os.getcwd())
+        
+        cmd = (
+            "cmake .. -DOPENCV_DIR=%s -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF \
+    -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s -DCUSTOM_OPERATOR_FILES=''"
+            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+        )
+        print(cmd)
+        repo_result = subprocess.getstatusoutput(cmd)
+        # exit_code = repo_result[0]
+        output = repo_result[1]
+        print(output)
+        os.system("make -j")
+        os.chdir(self.test_root_path)
+
+        # caddn compile
+        os.chdir("Paddle3D/deploy/caddn/cpp")
+        if os.path.exists("build"):
+            shutil.rmtree("build")
+        os.makedirs("build")
+        os.chdir("build")
+        print(os.getcwd())
+        
+        cmd = (
+            "cmake .. -DOPENCV_DIR=%s -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF \
+    -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s -DCUSTOM_OPERATOR_FILES='custom_ops/iou3d_nms.cpp;custom_ops/iou3d_nms_api.cpp;custom_ops/iou3d_nms_kernel.cu'"
+            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+        )
+        print(cmd)
+        repo_result = subprocess.getstatusoutput(cmd)
+        # exit_code = repo_result[0]
+        output = repo_result[1]
+        print(output)
+        os.system("make -j")
+        os.chdir(self.test_root_path)
+
+
     def build_env(self):
         """
         使用父类实现好的能力
@@ -139,4 +269,7 @@ class Paddle3D_Build(Model_Build):
         if ret:
             logger.info("build env dataset failed")
             return ret
+        sysstr = platform.system()
+        if sysstr == "Linux" and os.environ.get("c_plus_plus_predict") == "True":
+            self.compile_c_predict_demo()
         return ret
