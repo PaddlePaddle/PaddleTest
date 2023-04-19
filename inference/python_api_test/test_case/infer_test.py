@@ -517,7 +517,7 @@ class InferenceTest(object):
                     use_static=use_static,
                     use_calib_mode=use_calib_mode,
                 )
-                self.pd_config.enable_tuned_tensorrt_dynamic_shape(shape_range_file, True)
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape()
         else:
             self.pd_config.enable_tensorrt_engine(
                 workspace_size=1 << 30,
@@ -640,7 +640,7 @@ class InferenceTest(object):
                     use_static=use_static,
                     use_calib_mode=use_calib_mode,
                 )
-                self.pd_config.enable_tuned_tensorrt_dynamic_shape(shape_range_file, True)
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape()
         else:
             self.pd_config.enable_tensorrt_engine(
                 workspace_size=1 << 30,
@@ -816,7 +816,7 @@ class InferenceTest(object):
                     use_static=use_static,
                     use_calib_mode=use_calib_mode,
                 )
-                self.pd_config.enable_tuned_tensorrt_dynamic_shape(shape_range_file, True)
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape()
         else:
             self.pd_config.enable_tensorrt_engine(
                 workspace_size=1 << 30,
