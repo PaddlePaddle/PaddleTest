@@ -6,12 +6,12 @@ case:
         path: examples/code_generation/codegen
         cmd: wget https://paddle-qa.bj.bcebos.com/paddlenlp/codegen.tar.gz && tar -xzvf codegen.tar.gz
       -
-        name: single
+        name: multi
         path: examples/code_generation/codegen
         cmd:   python -m paddle.distributed.launch run_clm.py
         params:
           - --model_name_or_path Salesforce/codegen-350M-mono
-          - --block_size 1024
+          - --block_size 512
           - --output_dir output
           - --train_file ./codegen/train.json
           - --validation_file ./codegen/test.json
@@ -37,7 +37,7 @@ case:
         cmd: python -m paddle.distributed.launch run_clm.py
         params:
           - --model_name_or_path Salesforce/codegen-350M-mono
-          - --block_size 1024
+          - --block_size 32
           - --output_dir output
           - --train_file ./codegen/train.json
           - --validation_file ./codegen/test.json
