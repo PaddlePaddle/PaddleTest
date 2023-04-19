@@ -1,0 +1,12 @@
+case:
+  linux_convergence:
+    base: ./base/base_dy2st.yaml
+    train:
+      -
+        name: dy2st
+        params:
+          - -o epochs=70
+      -
+        name: dy2st_prim
+        params:
+          - -o epochs=70

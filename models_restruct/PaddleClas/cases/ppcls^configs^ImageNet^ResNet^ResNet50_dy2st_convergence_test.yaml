@@ -14,6 +14,10 @@ case:
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
+          - -o DataLoader.Train.sampler.batch_size=256
+          - -o DataLoader.Eval.sampler.batch_size=256
+          - -o DataLoader.Train.loader.num_workers=16
+          - -o DataLoader.Eval.loader.num_workers=16
         result:
           loss:
             base: 6
@@ -28,6 +32,10 @@ case:
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
+          - -o DataLoader.Train.sampler.batch_size=256
+          - -o DataLoader.Eval.sampler.batch_size=256
+          - -o DataLoader.Train.loader.num_workers=16
+          - -o DataLoader.Eval.loader.num_workers=16
         result:
           loss:
             base: 6
@@ -42,6 +50,11 @@ case:
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
+          - -o DataLoader.Train.sampler.batch_size=256
+          - -o DataLoader.Eval.sampler.batch_size=256
+          - -o DataLoader.Train.loader.num_workers=16
+          - -o DataLoader.Eval.loader.num_workers=16
+          - -o Global.eval_during_train=False
         result:
           loss:
             base: 6
@@ -56,6 +69,10 @@ case:
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
           - -o Optimizer.lr.name=Cosine
           - -o Global.use_dali=True
+          - -o DataLoader.Train.sampler.batch_size=256
+          - -o DataLoader.Eval.sampler.batch_size=256
+          - -o DataLoader.Train.loader.num_workers=16
+          - -o DataLoader.Eval.loader.num_workers=16
         result:
           loss:
             base: 6
