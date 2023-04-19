@@ -13,7 +13,6 @@ import six
 import wget
 import pytest
 import numpy as np
-import paddle.inference as paddle_infer
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
@@ -97,17 +96,12 @@ def test_trt_fp16_more_bz():
             params_file="./TNT_small/inference.pdiparams",
         )
 
-        # fix the error in DLTP-69329 temporarily
-        ver = paddle_infer.get_trt_compile_version()
-        if ver[0] * 1000 + ver[1] * 100 + ver[2] * 10 > 8200:
-            test_suite2.pd_config.exp_disable_tensorrt_ops(["set_value"])
-
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
             delta=1e-2,
             max_batch_size=10,
-            min_subgraph_size=30,
+            min_subgraph_size=5,
             precision="trt_fp16",
             dynamic=True,
             shape_range_file=file_path + "/shape_range.pbtxt",
@@ -159,17 +153,12 @@ def test_jetson_trt_fp16_more_bz():
             params_file="./TNT_small/inference.pdiparams",
         )
 
-        # fix the error in DLTP-69329 temporarily
-        ver = paddle_infer.get_trt_compile_version()
-        if ver[0] * 1000 + ver[1] * 100 + ver[2] * 10 > 8200:
-            test_suite2.pd_config.exp_disable_tensorrt_ops(["set_value"])
-
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
             delta=1e-2,
             max_batch_size=10,
-            min_subgraph_size=30,
+            min_subgraph_size=5,
             precision="trt_fp16",
             dynamic=True,
             shape_range_file=file_path + "/shape_range.pbtxt",
@@ -221,15 +210,11 @@ def test_trt_fp16_bz1_multi_thread():
         params_file="./TNT_small/inference.pdiparams",
     )
 
-    # fix the error in DLTP-69329 temporarily
-    ver = paddle_infer.get_trt_compile_version()
-    if ver[0] * 1000 + ver[1] * 100 + ver[2] * 10 > 8200:
-        test_suite2.pd_config.exp_disable_tensorrt_ops(["set_value"])
-
     test_suite2.trt_bz1_multi_thread_test(
         input_data_dict,
         output_data_dict,
-        min_subgraph_size=30,
+        delta=1e-2,
+        min_subgraph_size=5,
         precision="trt_fp16",
         dynamic=True,
         shape_range_file="./TNT_small/shape_range.pbtxt",
