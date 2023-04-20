@@ -119,7 +119,7 @@ done
 #     echo -e "\033[31m ---- check code style fail  \033[0m"
 #     check_sty_EXCODE=2
 # fi
-# }
+}
 check_code_style || true
 ####################################
 echo -e "\033[35m ---- result: \033[0m"
