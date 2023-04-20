@@ -104,6 +104,9 @@ class PaddleNLP_Build(Model_Build):
 
             logger.info("installing develop ppdiffusers")
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
+
+        if re.compile("CUDA11").findall(self.models_file):
+            os.system("python -m pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html")
         os.chdir(path_now)
 
         os.system("python -m pip list")

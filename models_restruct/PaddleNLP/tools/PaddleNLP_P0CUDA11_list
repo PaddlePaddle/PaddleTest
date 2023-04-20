@@ -12,6 +12,7 @@ examples^few_shot^RGL.yaml
 examples^lexical_analysis.yaml
 fast_generation^samples.yaml
 model_zoo^bert.yaml
+model_zoo^bert-fastdepoly.yaml
 model_zoo^bert_static.yaml
 model_zoo^electra.yaml
 model_zoo^ernie-1.0.yaml
