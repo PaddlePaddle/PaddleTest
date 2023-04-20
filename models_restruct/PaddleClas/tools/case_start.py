@@ -60,7 +60,10 @@ class PaddleClas_Case_Start(object):
 
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
-                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name or "^CAE^" in self.qa_yaml_name:
+                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name:
+                    os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_enable_cinn_auto_tune"] = "false"
+                if "^CAE^" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
                 if "^ResNet^" in self.qa_yaml_name:
                     os.environ["FLAGS_cinn_use_cuda_vectorize"] = "1"
@@ -69,7 +72,10 @@ class PaddleClas_Case_Start(object):
             elif self.case_name.split("train_")[-1] == "dy2st_cinn_all":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
-                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name or "^CAE^" in self.qa_yaml_name:
+                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name:
+                    os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_enable_cinn_auto_tune"] = "false"
+                if "^CAE^" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
                 if "^ResNet^" in self.qa_yaml_name:
                     os.environ["FLAGS_cinn_use_cuda_vectorize"] = "1"
@@ -85,7 +91,10 @@ class PaddleClas_Case_Start(object):
             elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
-                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name or "^CAE^" in self.qa_yaml_name:
+                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name:
+                    os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_enable_cinn_auto_tune"] = "false"
+                if "^CAE^" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
                 if "^ResNet^" in self.qa_yaml_name:
                     os.environ["FLAGS_nvrtc_compile_to_cubin"] = "1"
@@ -96,7 +105,10 @@ class PaddleClas_Case_Start(object):
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
-                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name or "^CAE^" in self.qa_yaml_name:
+                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name:
+                    os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
+                    os.environ["FLAGS_enable_cinn_auto_tune"] = "false"
+                if "^CAE^" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
                 if "^ResNet^" in self.qa_yaml_name:
                     os.environ["FLAGS_nvrtc_compile_to_cubin"] = "1"
@@ -117,6 +129,7 @@ class PaddleClas_Case_Start(object):
                     os.getenv("FLAGS_enhance_vertical_fusion_with_recompute")
                 )
             )
+            logger.info("set FLAGS_enable_cinn_auto_tune as {}".format(os.getenv("FLAGS_enable_cinn_auto_tune")))
 
         else:
             return 0
