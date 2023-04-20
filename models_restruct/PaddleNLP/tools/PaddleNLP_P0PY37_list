@@ -30,7 +30,6 @@ examples^text_generation^ctrl.yaml
 examples^text_generation^opt.yaml
 examples^text_generation^reformer.yaml
 examples^text_graph^erniesage.yaml
-examples^text_matching^diffcse.yaml
 examples^text_matching^sentence_transformers.yaml
 examples^text_matching^simnet.yaml
 examples^text_summarization^bart.yaml
