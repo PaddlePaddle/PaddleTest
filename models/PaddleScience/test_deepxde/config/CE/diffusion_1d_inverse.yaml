@@ -1,5 +1,0 @@
-- test: 0
-  Dir: '../../deepxde/examples/pinn_inverse/diffusion_1d_inverse.py'
-  Post-processing:
-    solution_metric_dir: "../standard_data/diffusion_1d_inverse_metric.npy"
-    solution_loss_dir: "../standard_data/diffusion_1d_inverse_loss.npy"
