@@ -60,7 +60,7 @@ class PaddleClas_Case_Start(object):
 
             if self.case_name.split("train_")[-1] == "dy2st_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
-                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name: 
+                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
                     os.environ["FLAGS_enable_cinn_auto_tune"] = "false"
                 if "^CAE^" in self.qa_yaml_name:
@@ -72,7 +72,7 @@ class PaddleClas_Case_Start(object):
             elif self.case_name.split("train_")[-1] == "dy2st_cinn_all":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
-                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name: 
+                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
                     os.environ["FLAGS_enable_cinn_auto_tune"] = "false"
                 if "^CAE^" in self.qa_yaml_name:
@@ -91,7 +91,7 @@ class PaddleClas_Case_Start(object):
             elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
-                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name: 
+                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
                     os.environ["FLAGS_enable_cinn_auto_tune"] = "false"
                 if "^CAE^" in self.qa_yaml_name:
@@ -105,7 +105,7 @@ class PaddleClas_Case_Start(object):
                 os.environ["FLAGS_use_cinn"] = "1"
                 os.environ["FLAGS_prim_all"] = "true"
                 os.environ["FLAGS_cudnn_deterministic"] = "False"
-                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name: 
+                if "^SwinTransformer_tiny_patch4" in self.qa_yaml_name:
                     os.environ["FLAGS_deny_cinn_ops"] = "uniform_random"
                     os.environ["FLAGS_enable_cinn_auto_tune"] = "false"
                 if "^CAE^" in self.qa_yaml_name:
