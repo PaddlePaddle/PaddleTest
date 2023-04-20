@@ -327,48 +327,48 @@ class PaddleClas_Build(Model_Build):
             if exit_code_slim:
                 logger.info("repo {} python -m pip install nvidia_dali_cuda110 failed".format(self.reponame))
 
-            # if os.path.exists("PaddleSlim") is False:
-            #     try:
-            #         wget.download("https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim/PaddleSlim-develop.tar.gz")
-            #         tf = tarfile.open("PaddleSlim-develop.tar.gz")
-            #         tf.extractall(os.getcwd())
-            #         if os.path.exists("PaddleSlim-develop"):
-            #             os.rename("PaddleSlim-develop", "PaddleSlim")
-            #     except:
-            #         logger.info("#### prepare download failed {} failed".format("PaddleSlim.tar.gz"))
-            # if os.path.exists("PaddleSlim") and (
-            #     "develop" in str(self.paddle_whl) or "Develop" in str(self.paddle_whl) or "None" in str(self.paddle_whl)
-            # ):
-            #     logger.info("#### install devlop paddleslim")
-            #     path_now = os.getcwd()
-            #     os.chdir("PaddleSlim")
-            #     os.system("git checkout develop")
-            #     os.system("git pull")
-            #     exit_code_paddleslim = os.system(
-            #         "python -m pip install -r requirements.txt \
-            #         -i https://mirror.baidu.com/pypi/simple"
-            #     )
-            #     if exit_code_paddleslim and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
-            #         exit_code_paddleslim = os.system(
-            #             "python -m pip install --user -r requirements.txt \
-            #         -i https://mirror.baidu.com/pypi/simple"
-            #         )
-            #     os.system("python -m pip uninstall paddleslim -y")
-            #     cmd_return = os.system("python setup.py install > paddleslim_install.log 2>&1 ")
-            #     os.chdir(path_now)
-            # else:
-            #     logger.info("#### install release paddleslim")
-            #     exit_code_paddleslim = os.system(
-            #         "python -m pip install -U paddleslim \
-            #         -i https://mirror.baidu.com/pypi/simple"
-            #     )
-            # if exit_code_paddleslim and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
-            #     exit_code_paddleslim = os.system(
-            #         "python -m pip install --user -U paddleslim \
-            #         -i https://mirror.baidu.com/pypi/simple"
-            #     )
-            #     logger.info("repo {} python -m pip install paddleslim failed".format(self.reponame))
-            #     # return 1
+        # if os.path.exists("PaddleSlim") is False:
+        #     try:
+        #         wget.download("https://xly-devops.bj.bcebos.com/PaddleTest/PaddleSlim/PaddleSlim-develop.tar.gz")
+        #         tf = tarfile.open("PaddleSlim-develop.tar.gz")
+        #         tf.extractall(os.getcwd())
+        #         if os.path.exists("PaddleSlim-develop"):
+        #             os.rename("PaddleSlim-develop", "PaddleSlim")
+        #     except:
+        #         logger.info("#### prepare download failed {} failed".format("PaddleSlim.tar.gz"))
+        # if os.path.exists("PaddleSlim") and (
+        #     "develop" in str(self.paddle_whl) or "Develop" in str(self.paddle_whl) or "None" in str(self.paddle_whl)
+        # ):
+        #     logger.info("#### install devlop paddleslim")
+        #     path_now = os.getcwd()
+        #     os.chdir("PaddleSlim")
+        #     os.system("git checkout develop")
+        #     os.system("git pull")
+        #     exit_code_paddleslim = os.system(
+        #         "python -m pip install -r requirements.txt \
+        #         -i https://mirror.baidu.com/pypi/simple"
+        #     )
+        #     if exit_code_paddleslim and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
+        #         exit_code_paddleslim = os.system(
+        #             "python -m pip install --user -r requirements.txt \
+        #         -i https://mirror.baidu.com/pypi/simple"
+        #         )
+        #     os.system("python -m pip uninstall paddleslim -y")
+        #     cmd_return = os.system("python setup.py install > paddleslim_install.log 2>&1 ")
+        #     os.chdir(path_now)
+        # else:
+        #     logger.info("#### install release paddleslim")
+        #     exit_code_paddleslim = os.system(
+        #         "python -m pip install -U paddleslim \
+        #         -i https://mirror.baidu.com/pypi/simple"
+        #     )
+        # if exit_code_paddleslim and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
+        #     exit_code_paddleslim = os.system(
+        #         "python -m pip install --user -U paddleslim \
+        #         -i https://mirror.baidu.com/pypi/simple"
+        #     )
+        #     logger.info("repo {} python -m pip install paddleslim failed".format(self.reponame))
+        #     # return 1
 
         if self.value_in_modellist(value="face") and self.value_in_modellist(value="metric_learning"):
             logger.info("#### face and metric_learning install")

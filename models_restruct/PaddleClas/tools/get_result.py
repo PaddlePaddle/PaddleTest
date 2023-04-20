@@ -433,7 +433,7 @@ def run():
     # update_name = {
     #     "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "22253813/result.tar",
     # }
-    
+
     update_name = {
         "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "22512568/result.tar",
         "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "22512579/result.tar",
