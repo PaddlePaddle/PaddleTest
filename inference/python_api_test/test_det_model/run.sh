@@ -1,9 +1,13 @@
 [[ -n $1 ]] && export CUDA_VISIBLE_DEVICES=$1
 export FLAGS_call_stack_level=2
-#TODO:待PR52814合入后，前面CI任务消化完revert fast_rcnn和solov2 case
-cases="./test_ppyolo_gpu.py \
+cases="./test_fast_rcnn_mkldnn.py \
+       ./test_fast_rcnn_gpu.py \
+       ./test_fast_rcnn_trt_fp32.py \
+       ./test_ppyolo_gpu.py \
        ./test_ppyolo_mkldnn.py \
        ./test_ppyolov2_mkldnn.py \
+       ./test_solov2_gpu.py \
+       ./test_solov2_mkldnn.py \
        ./test_yolov3_gpu.py \
        ./test_yolov3_mkldnn.py \
        ../test_class_model/test_ViT_base_patch16_224_trt_fp32.py \
