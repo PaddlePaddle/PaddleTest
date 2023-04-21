@@ -94,7 +94,7 @@ class PaddleInferenceEngine(object):
             if use_dynamic_shape:
                 dynamic_shape_file = os.path.join(model_dir, "dynamic_shape.txt")
                 if os.path.exists(dynamic_shape_file):
-                    config.enable_tuned_tensorrt_dynamic_shape(dynamic_shape_file, True)
+                    config.enable_tuned_tensorrt_dynamic_shape()
                     print("trt set dynamic shape done!")
                 else:
                     # In order to avoid memory overflow when collecting dynamic shapes, it is changed to use CPU.

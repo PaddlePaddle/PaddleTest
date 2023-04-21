@@ -1,5 +1,0 @@
-- test: 0
-  Dir: '../../deepxde/examples/pinn_forward/Helmholtz_Sound_hard_ABC_2d.py'
-  Post-processing:
-    solution_metric_dir: "../standard_data/Helmholtz_Sound_hard_ABC_2d_metric.npy"
-    solution_loss_dir: "../standard_data/Helmholtz_Sound_hard_ABC_2d_loss.npy"

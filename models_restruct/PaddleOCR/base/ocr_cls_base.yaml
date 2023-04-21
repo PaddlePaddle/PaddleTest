@@ -131,7 +131,7 @@ predict:
       - --use_gpu=False
       - --use_tensorrt=False
       - --enable_mkldnn=True
-    -
+  -
     name: trained_tensorRT
     cmd:  python tools/infer/predict_cls.py
     params:
