@@ -16,7 +16,8 @@ from inspect import isclass
 import torch
 import numpy as np
 from paddle import to_tensor
-from utils.logger import logger
+
+# from utils.logger import logger
 from reload_config import OPERATOR_RELOAD
 
 
@@ -34,12 +35,14 @@ class Jelly_v2_torch(object):
         self,
         api,
         logger,
-        framework="paddle",
+        # framework="paddle",
         default_dtype="float32",
         place=None,
         card=None,
         title=None,
-        enable_backward=True,
+        # enable_backward=True,
+        loops=50,
+        base_times=1000,
     ):
         """
 
@@ -50,22 +53,22 @@ class Jelly_v2_torch(object):
         :param explain: case的说明 会打印在日志中
         """
         self.seed = 33
-        self.enable_backward = enable_backward
+        # self.enable_backward = enable_backward
         self.debug = True
-        self.framework = framework
+        # self.framework = framework
 
         torch.set_default_dtype(TORCH_DTYPE[default_dtype])
 
         # 循环次数
-        self.loops = 50
+        self.loops = loops
         # timeit 基础运行时间
-        self.base_times = 1000
+        self.base_times = base_times
         # 设置logger
-        self.logger = logger
+        self.logger = logger.get_log()
 
-        self.forward_time = []
-        self.backward_time = []
-        self.total_time = []
+        # self.forward_time = []
+        # self.backward_time = []
+        # self.total_time = []
 
         self.dump_data = []
         self.result = {}
@@ -343,74 +346,75 @@ class Jelly_v2_torch(object):
         else:
             raise AttributeError
 
-    def run(self):
-        """
-        主执行函数，本地调试用
-        """
-        # 前反向时间
-        self._run_forward()
-        if self.enable_backward:
-            self._run_total()
-        # 数据处理
-        self._compute()
-        # 数据对比打印
-        self._show()
-
-    def run_schedule(self):
-        """
-        例行执行，会写文件
-        """
-        # 前反向时间
-        self._run_forward()
-        if self.enable_backward:
-            self._run_total()
-        # 数据处理
-        self._compute()
-        # 写文件
-        self._save(self.result)
-
-    def _run_forward(self):
-        """
-        测试前向时间
-        """
-        if self.framework == "torch":
-            self.torch_forward()
-
-    def _run_total(self):
-        """
-        测试总时间
-        """
-        if self.framework == "torch":
-            self.torch_total()
-
-    def _compute(self):
-        """
-        数据处理
-        """
-        head = int(self.loops / 5)
-        tail = int(self.loops - self.loops / 5)
-        self.result["forward"] = ACCURACY % (sum(sorted(self.forward_time)[head:tail]) / (tail - head))
-        if self.enable_backward:
-            self.result["total"] = ACCURACY % (sum(sorted(self.total_time)[head:tail]) / (tail - head))
-            self.result["backward"] = ACCURACY % (float(self.result["total"]) - float(self.result["forward"]))
-            self.result["best_total"] = ACCURACY % min(self.total_time)
-        else:
-            self.result["total"] = self.result["forward"]
-            self.result["backward"] = 0
-            self.result["best_total"] = ACCURACY % min(self.forward_time)
-
-    def _show(self):
-        """
-        logger 打印
-        """
-        self.logger.info("{} {} times forward cost {}s".format(self.framework, self.base_times, self.result["forward"]))
-        self.logger.info(
-            "{} {} times backward cost {}s".format(self.framework, self.base_times, self.result["backward"])
-        )
-        self.logger.info("{} {} times total cost {}s".format(self.framework, self.base_times, self.result["total"]))
-        self.logger.info(
-            "{} {} times best_total cost {}s".format(self.framework, self.base_times, self.result["best_total"])
-        )
+    # def run(self):
+    #     """
+    #     主执行函数，本地调试用
+    #     """
+    #     # 前反向时间
+    #     self._run_forward()
+    #     if self.enable_backward:
+    #         self._run_total()
+    #     # 数据处理
+    #     self._compute()
+    #     # 数据对比打印
+    #     self._show()
+    #
+    # def run_schedule(self):
+    #     """
+    #     例行执行，会写文件
+    #     """
+    #     # 前反向时间
+    #     self._run_forward()
+    #     if self.enable_backward:
+    #         self._run_total()
+    #     # 数据处理
+    #     self._compute()
+    #     # 写文件
+    #     self._save(self.result)
+    #
+    # def _run_forward(self):
+    #     """
+    #     测试前向时间
+    #     """
+    #     if self.framework == "torch":
+    #         self.torch_forward()
+    #
+    # def _run_total(self):
+    #     """
+    #     测试总时间
+    #     """
+    #     if self.framework == "torch":
+    #         self.torch_total()
+    #
+    # def _compute(self):
+    #     """
+    #     数据处理
+    #     """
+    #     head = int(self.loops / 5)
+    #     tail = int(self.loops - self.loops / 5)
+    #     self.result["forward"] = ACCURACY % (sum(sorted(self.forward_time)[head:tail]) / (tail - head))
+    #     if self.enable_backward:
+    #         self.result["total"] = ACCURACY % (sum(sorted(self.total_time)[head:tail]) / (tail - head))
+    #         self.result["backward"] = ACCURACY % (float(self.result["total"]) - float(self.result["forward"]))
+    #         self.result["best_total"] = ACCURACY % min(self.total_time)
+    #     else:
+    #         self.result["total"] = self.result["forward"]
+    #         self.result["backward"] = 0
+    #         self.result["best_total"] = ACCURACY % min(self.forward_time)
+    #
+    # def _show(self):
+    #     """
+    #     logger 打印
+    #     """
+    #     self.logger.info("{} {} times forward cost {}s".
+    # format(self.framework, self.base_times, self.result["forward"]))
+    #     self.logger.info(
+    #         "{} {} times backward cost {}s".format(self.framework, self.base_times, self.result["backward"])
+    #     )
+    #     self.logger.info("{} {} times total cost {}s".format(self.framework, self.base_times, self.result["total"]))
+    #     self.logger.info(
+    #         "{} {} times best_total cost {}s".format(self.framework, self.base_times, self.result["best_total"])
+    #     )
 
     def _save(self, data):
         """
