@@ -51,7 +51,7 @@ ignore_case_dir = {
         "test_inner.py",
         "test_tensordot.py",
         "test_dist.py",
-        "test_trace.py"
+        "test_trace.py",
     ],
     "optimizer": [],
     "distribution": [],
