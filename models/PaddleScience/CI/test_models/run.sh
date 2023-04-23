@@ -33,7 +33,7 @@ echo serial ${file} test
 if [[ ${ignore} =~ ${file##*/} ]]; then
     echo "skip"
 else
-    python3.7 ${file}
+    python${py_version} ${file}
     if [ $? -ne 0 ]; then
         echo ${file} >> result.txt
         bug=`expr ${bug} + 1`
