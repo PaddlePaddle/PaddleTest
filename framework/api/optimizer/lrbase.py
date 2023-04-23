@@ -72,7 +72,7 @@ class Runner(object):
         # self.optimizer.clear_grad()
         # if self.debug:
         #     print(loss)
-        # self.result.append(loss.numpy()[0])
+        # self.result.append(loss.numpy().item())
 
     def check(self, result=None, expect=None, delta=1e-6, rtol=1e-7):
         """

@@ -29,8 +29,8 @@ failed_ce_case_list = []
 ignore_case_dir = {
     "device": [],
     "fft": [],
-    "incubate": [],
-    "linalg": ["test_cond.py", "test_norm.py"],
+    "incubate": ["test_minimize_lbfgs.py"],
+    "linalg": ["test_cond.py", "test_norm.py", "test_matrix_rank.py", "test_multi_dot.py", "test_det.py"],
     "loss": [],
     "nn": [
         "test_functional_celu.py",
@@ -46,6 +46,12 @@ ignore_case_dir = {
         "test_max.py",
         "test_min.py",
         "test_prod.py",
+        "test_Tensor_inner.py",
+        "test_dot.py",
+        "test_inner.py",
+        "test_tensordot.py",
+        "test_dist.py",
+        "test_trace.py",
     ],
     "optimizer": [],
     "distribution": [],

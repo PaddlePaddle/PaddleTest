@@ -54,6 +54,7 @@ case:
           - -o DataLoader.Eval.sampler.batch_size=256
           - -o DataLoader.Train.loader.num_workers=16
           - -o DataLoader.Eval.loader.num_workers=16
+          - -o Global.eval_during_train=False
         result:
           loss:
             base: 6
