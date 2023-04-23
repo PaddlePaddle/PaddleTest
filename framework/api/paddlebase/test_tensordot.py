@@ -38,7 +38,7 @@ def test_tensordot_base():
     """
     x = randtool("float", -10, 10, [3, 3])
     y = randtool("float", 4, 14, [3, 3])
-    res = np.tensordot(x, y, axes=2).reshape(1)
+    res = np.tensordot(x, y, axes=2)
     obj.base(res=res, x=x, y=y, axes=2)
 
 

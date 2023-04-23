@@ -80,7 +80,10 @@ class Runner(object):
                     # logging.info('at {}, res is: {}'.format(i, loss))
                     if self.debug:
                         print(loss)
-                    self.result.append(loss.numpy()[0])
+                    if loss.size == 1:
+                        self.result.append(loss.numpy().item())
+                    else:
+                        self.result.append(loss.numpy()[0])
                 # logging.info('at {}, result is: {}'.format(i, self.result))
                 self.check(result=self.result, expect=expect)
 
@@ -172,7 +175,10 @@ class Runner(object):
                     # logging.info('at {}, res is: {}'.format(i, loss))
                     if self.debug:
                         print(loss)
-                    self.result.append(loss.numpy()[0])
+                    if loss.size == 1:
+                        self.result.append(loss.numpy().item())
+                    else:
+                        self.result.append(loss.numpy()[0])
                 # logging.info('at {}, result is: {}'.format(i, self.result))
                 self.check(result=self.result, expect=expect)
 
@@ -242,7 +248,7 @@ class Runner(object):
             raise Exception("Model result is None， check your code")
         for i, v in enumerate(result):
             if isinstance(v, np.ndarray):
-                result[i] = result[i][0]
+                result[i] = result[i].item()
         if self.debug:
             print(result)
         try:
