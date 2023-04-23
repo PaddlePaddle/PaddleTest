@@ -6,11 +6,15 @@
 db object
 """
 
+import json
+import traceback
 from datetime import datetime
 import yaml
 import pymysql
 
 # from utils.logger import logger
+
+ACCURACY = "%.6g"
 
 
 class DB(object):
@@ -133,6 +137,30 @@ class DB(object):
         except Exception as e:
             print(e)
         return results
+
+    def insert_case(self, jid, data_dict, create_time):
+        """向case表中录入数据"""
+        try:
+            data_dict["result"]["forward"] = ACCURACY % data_dict["result"]["forward"]
+            data_dict["result"]["total"] = ACCURACY % data_dict["result"]["total"]
+            data_dict["result"]["backward"] = ACCURACY % data_dict["result"]["backward"]
+            data_dict["result"]["best_total"] = ACCURACY % data_dict["result"]["best_total"]
+            data = {
+                "jid": jid,
+                "case_name": data_dict["case_name"],
+                "api": data_dict["result"]["api"],
+                "result": json.dumps(data_dict["result"]),
+                "create_time": create_time,
+            }
+            case_id = self.insert(table="case", data=data)
+            # self.insert_case(jid=job_id, data_dict=case, create_time=create_time)
+
+        except Exception as e:
+            # self.ci_update_job(id=job_id, status="error", update_time=time_now)
+            print(traceback.format_exc())
+            print(e)
+
+        return case_id
 
     def show_list(self, table):
         """返回table中的列list"""
