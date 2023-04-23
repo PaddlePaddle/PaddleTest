@@ -1,4 +1,0 @@
-===== examples bug list =====
-serial bug list:
-serial bugs: 0
-total bugs: 0
