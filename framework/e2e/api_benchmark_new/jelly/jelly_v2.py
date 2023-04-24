@@ -38,7 +38,9 @@ class Jelly_v2(object):
         place=None,
         card=None,
         title=None,
-        enable_backward=True,
+        # enable_backward=True,
+        loops=50,
+        base_times=1000,
     ):
         """
 
@@ -55,9 +57,9 @@ class Jelly_v2(object):
         paddle.set_default_dtype(PADDLE_DTYPE[default_dtype])
 
         # 循环次数
-        self.loops = 50
+        self.loops = loops
         # timeit 基础运行时间
-        self.base_times = 1000
+        self.base_times = base_times
         # 设置logger
         # self.logger = logger
         self.logger = logger.get_log()
@@ -383,15 +385,15 @@ class Jelly_v2(object):
     #         self.result["total"] = self.result["forward"]
     #         self.result["backward"] = 0
     #         self.result["best_total"] = ACCURACY % min(self.forward_time)
-
-    def _show(self, forward_time, backward_time, total_time, best_total_time):
-        """
-        logger 打印
-        """
-        self.logger.info("{} {} times forward cost {}s".format(self.framework, self.base_times, forward_time))
-        self.logger.info("{} {} times backward cost {}s".format(self.framework, self.base_times, backward_time))
-        self.logger.info("{} {} times total cost {}s".format(self.framework, self.base_times, total_time))
-        self.logger.info("{} {} times best_total cost {}s".format(self.framework, self.base_times, best_total_time))
+    #
+    # def _show(self, forward_time, backward_time, total_time, best_total_time):
+    #     """
+    #     logger 打印
+    #     """
+    #     self.logger.info("{} {} times forward cost {}s".format(self.framework, self.base_times, forward_time))
+    #     self.logger.info("{} {} times backward cost {}s".format(self.framework, self.base_times, backward_time))
+    #     self.logger.info("{} {} times total cost {}s".format(self.framework, self.base_times, total_time))
+    #     self.logger.info("{} {} times best_total cost {}s".format(self.framework, self.base_times, best_total_time))
 
     def _save(self, data):
         """
