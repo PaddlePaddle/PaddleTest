@@ -17,8 +17,8 @@ case:
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
           loss:
-            base: 2
-            threshold: 1
+            base: 2.2
+            threshold: 0.1
             evaluation: "-"
       -
         name: dy2st_cinn
@@ -32,8 +32,8 @@ case:
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
           loss:
-            base: 2
-            threshold: 1
+            base: 2.2
+            threshold: 0.1
             evaluation: "-"
       -
         name: dy2st_prim
@@ -47,8 +47,8 @@ case:
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
           loss:
-            base: 2
-            threshold: 1
+            base: 2.2
+            threshold: 0.1
             evaluation: "-"
       -
         name: dy2st_prim_cinn
@@ -62,8 +62,8 @@ case:
           - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
         result:
           loss:
-            base: 2
-            threshold: 1
+            base: 2.2
+            threshold: 0.1
             evaluation: "-"
 
 function: paddlelas_imagenet_parse
