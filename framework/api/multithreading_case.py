@@ -29,7 +29,7 @@ failed_ce_case_list = []
 ignore_case_dir = {
     "device": [],
     "fft": [],
-    "incubate": ["test_minimize_lbfgs.py"],
+    "incubate": ["test_minimize_lbfgs.py", "test_jvp.py"],
     "linalg": ["test_cond.py", "test_norm.py", "test_matrix_rank.py", "test_multi_dot.py", "test_det.py"],
     "loss": [],
     "nn": [
