@@ -1,9 +1,13 @@
 [[ -n $1 ]] && export CUDA_VISIBLE_DEVICES=$1
 export FLAGS_call_stack_level=2
-#TODO:待https://github.com/PaddlePaddle/Paddle/pull/52814 合入后，消化完之前的任务，再revert
-cases="./test_ppyolo_gpu.py \
+cases="./test_fast_rcnn_mkldnn.py \
+       ./test_fast_rcnn_gpu.py \
+       ./test_fast_rcnn_trt_fp32.py \
+       ./test_ppyolo_gpu.py \
        ./test_ppyolo_mkldnn.py \
        ./test_ppyolov2_mkldnn.py \
+       ./test_solov2_gpu.py \
+       ./test_solov2_mkldnn.py \
        ./test_yolov3_gpu.py \
        ./test_yolov3_mkldnn.py \
        ../test_class_model/test_ViT_base_patch16_224_trt_fp32.py \
