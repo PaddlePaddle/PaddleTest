@@ -142,11 +142,16 @@ class PaddleSpeech_Build(Model_Build):
 
                 # asr librispeech
                 if os.path.exists("librispeech"):
-                    if os.path.islink("librispeech") is False:
-                        shutil.rmtree("librispeech")
+                    os.chdir("librispeech")
+                    if os.path.islink("dev-clean") is False:
+                        shutil.rmtree("dev-clean")
+                        shutil.rmtree("test-clean")
                     else:
-                        os.unlink("librispeech")
-                    os.symlink(os.path.join(src_path, "librispeech"), "librispeech")
+                        os.unlink("dev-clean")
+                        os.unlink("test-clean")
+                    os.symlink(os.path.join(src_path, "librispeech/dev-clean"), "dev-clean")
+                    os.symlink(os.path.join(src_path, "librispeech/test-clean"), "test-clean")
+
                 # asr tal_cs
                 os.chdir("tal_cs")
                 if os.path.exists("TALCS_corpus"):
