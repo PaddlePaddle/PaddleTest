@@ -1,5 +1,6 @@
 [[ -n $1 ]] && export CUDA_VISIBLE_DEVICES=$1
 export FLAGS_call_stack_level=2
+# V100 total:690.25s
 cases="./test_pcpvt_base_gpu.py \
        ./test_pcpvt_base_mkldnn.py \
        ./test_resnet50_gpu.py \
