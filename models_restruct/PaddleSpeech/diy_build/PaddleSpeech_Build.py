@@ -149,8 +149,8 @@ class PaddleSpeech_Build(Model_Build):
                     else:
                         os.unlink("dev-clean")
                         os.unlink("test-clean")
-                    os.symlink(os.path.join(src_path, "librispeech/dev-clean"), , "dev-clean")
-                    os.symlink(os.path.join(src_path, "librispeech/test-clean"), , "test-clean")
+                    os.symlink(os.path.join(src_path, "librispeech/dev-clean"), "dev-clean")
+                    os.symlink(os.path.join(src_path, "librispeech/test-clean"), "test-clean")
 
                 # asr tal_cs
                 os.chdir("tal_cs")
