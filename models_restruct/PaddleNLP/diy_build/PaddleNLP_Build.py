@@ -60,8 +60,8 @@ class PaddleNLP_Build(Model_Build):
         """
         path_now = os.getcwd()
         platform = self.system
-        # paddle_whl = self.paddle_whl
-        paddle_whl = 'https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/e123b98e7b2fd65796052a26c08b62bde1d6e23e/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl'
+        paddle_whl = self.paddle_whl
+        # paddle_whl = 'https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/e123b98e7b2fd65796052a26c08b62bde1d6e23e/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl'
         os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com,baidu-int.com,org.cn"
         print("set timeout as:", os.environ["timeout"])
         print("set no_proxy as:", os.environ["no_proxy"])
