@@ -113,6 +113,7 @@ class PaddleNLP_End(object):
 
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics="loss")
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics="ips")
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics="to")
 
     def build_end(self):
         """
