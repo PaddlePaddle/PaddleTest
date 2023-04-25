@@ -113,8 +113,7 @@ class PaddleNLP_Build(Model_Build):
         os.chdir(path_now)
 
         import paddle
-        if paddle.version.commit:
-            logger.info("paddle final commit: {} ").format(paddle.version.commit)
+        print("paddle final commit",paddle.version.commit)
         os.system("python -m pip list")
 
         return 0
