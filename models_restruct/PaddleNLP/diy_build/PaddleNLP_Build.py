@@ -12,7 +12,6 @@ import argparse
 import numpy as np
 import yaml
 import wget
-import paddle
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
@@ -89,7 +88,6 @@ class PaddleNLP_Build(Model_Build):
             )
 
         import nltk
-
         nltk.download("punkt")
         from visualdl import LogWriter
 
@@ -112,6 +110,7 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html")
         os.chdir(path_now)
 
+        import paddle
         logger.info("paddle final commit: {} ").format(paddle.version.commit)
         os.system("python -m pip list")
 
