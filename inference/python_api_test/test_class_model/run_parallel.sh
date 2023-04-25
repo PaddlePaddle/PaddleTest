@@ -19,6 +19,8 @@ cases="./test_pcpvt_base_gpu.py \
 ignore=""
 bug=0
 
+now=`date +'%Y-%m-%d %H:%M:%S'`
+start_time=$(date --date="$now" +%s);
 echo "============ failed cases =============" >> result.txt
 for file in ${cases}
 do
@@ -33,6 +35,10 @@ do
         fi
     fi
 done
+
+now=`date +'%Y-%m-%d %H:%M:%S'`
+end_time=$(date --date="$now" +%s);
+echo "card0 used time:"$((end_time-start_time))"s"
 
 echo "total bugs: "${bug} >> result.txt
 exit ${bug}

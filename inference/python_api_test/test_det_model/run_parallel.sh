@@ -13,7 +13,7 @@ cases="./test_fast_rcnn_mkldnn.py \
        ./test_yolov3_mkldnn.py \
        ../test_nlp_model/test_bert_gpu.py \
        ../test_nlp_model/test_bert_mkldnn.py \
-       ../test_nlp_model/test_bert_trt_fp32.py.py \
+       ../test_nlp_model/test_bert_trt_fp32.py \
        ../test_nlp_model/test_ernie_gpu.py \
        ../test_nlp_model/test_ernie_mkldnn.py \
        ../test_nlp_model/test_ernie_trt_fp32.py \
@@ -23,6 +23,8 @@ cases="./test_fast_rcnn_mkldnn.py \
       "
 bug=0
 
+now=`date +'%Y-%m-%d %H:%M:%S'`
+start_time=$(date --date="$now" +%s);
 echo "============ failed cases =============" >> result.txt
 for file in ${cases}
 do
@@ -37,6 +39,10 @@ do
         fi
     fi
 done
+
+now=`date +'%Y-%m-%d %H:%M:%S'`
+end_time=$(date --date="$now" +%s);
+echo "card1 used time:"$((end_time-start_time))"s"
 
 echo "total bugs: "${bug} >> result.txt
 exit ${bug}
