@@ -143,10 +143,7 @@ class PaddleSpeech_Build(Model_Build):
                 # asr librispeech
                 if os.path.exists("librispeech"):
                     os.chdir("librispeech")
-                    if os.path.islink("dev-clean") is False:
-                        shutil.rmtree("dev-clean")
-                        shutil.rmtree("test-clean")
-                    else:
+                    if os.path.exists("dev-clean"):
                         os.unlink("dev-clean")
                         os.unlink("test-clean")
                     os.symlink(os.path.join(src_path, "librispeech/dev-clean"), "dev-clean")
