@@ -59,6 +59,8 @@ class PaddleNLP_Build(Model_Build):
         """
         path_now = os.getcwd()
         platform = self.system
+        # paddle_whl = self.paddle_whl
+        paddle_whl = 'https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/e123b98e7b2fd65796052a26c08b62bde1d6e23e/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl'
         os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com,baidu-int.com,org.cn"
         print("set timeout as:", os.environ["timeout"])
         print("set no_proxy as:", os.environ["no_proxy"])
@@ -68,16 +70,16 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")
             os.system(
-                "python -m pip install -U {}".format(self.paddle_whl)
+                "python -m pip install -U {}".format(paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
         else:
             os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")
             os.system(
-                "python -m pip install -U {}".format(self.paddle_whl)
+                "python -m pip install -U {}".format(paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
 
-        if re.compile("elease").findall(self.paddle_whl):
+        if re.compile("elease").findall(paddle_whl):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
         else:
             os.system(
@@ -90,7 +92,7 @@ class PaddleNLP_Build(Model_Build):
         nltk.download("punkt")
         from visualdl import LogWriter
 
-        if re.compile("37").findall(self.paddle_whl) or re.compile("38").findall(self.paddle_whl):
+        if re.compile("37").findall(paddle_whl) or re.compile("38").findall(paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
         if os.path.exists(self.reponame):
