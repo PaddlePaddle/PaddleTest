@@ -28,6 +28,7 @@ class TestJvp(APIBase):
         # self.enable_backward = False
         # self.delta = 1e-3
 
+
 class TestJvpNoStatc(APIBase):
     """
     test
@@ -207,11 +208,11 @@ def test_jvp8():
     y = np.random.rand(3, 3)
     paddle.disable_static()
     from paddle.fluid import core
+
     core._set_prim_backward_enabled(True)
     res = ans.jvp_with_jac(func3, [paddle.to_tensor(x), paddle.to_tensor(y)])
     obj.run(res=res.numpy(), func=func3, xs=[x, y])
     core._set_prim_backward_enabled(False)
-
 
 
 @pytest.mark.api_incubate_jvp_parameters
