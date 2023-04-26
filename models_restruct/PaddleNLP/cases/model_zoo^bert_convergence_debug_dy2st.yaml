@@ -22,7 +22,7 @@ case:
           - --fuse_transformer false
           - --input_dir ./data/wikicorpus_en_seqlen128
           - --model_name_or_path bert-base-uncased
-          - --max_step 1500
+          - --max_step 2000
           - --batch_siz 128
           - --seed 42
           - --to_static True
