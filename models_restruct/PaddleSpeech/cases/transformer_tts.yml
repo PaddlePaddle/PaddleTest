@@ -1,4 +1,3 @@
 case:
     linux:
         base: ./base/speech_am_base.yaml
-        predict: skipped

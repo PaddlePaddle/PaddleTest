@@ -1,5 +1,0 @@
-- test: 0
-  Dir: '../../deepxde/examples/pinn_forward/ode_system.py'
-  Post-processing:
-    solution_metric_dir: "../standard_data/ode_system_metric.npy"
-    solution_loss_dir: "../standard_data/ode_system_loss.npy"
