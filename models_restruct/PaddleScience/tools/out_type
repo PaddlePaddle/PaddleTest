@@ -1,0 +1,34 @@
+[{'class_ids': [8, 7, 86, 82, 476], 'scores': [0.89495, 0.05005, 0.00179, 0.00092, 0.00045], 'file_name': 'docs/images/inference_deployment/whl_demo.jpg', 'label_names': ['hen', 'cock', 'partridge', 'ruffed grouse, partridge, Bonasa umbellus', 'carousel, carrousel, merry-go-round, roundabout, whirligig']}]
+
+imagnet
+wangzai.jpg:	class id(s): [773, 710, 719, 641, 981], score(s): [0.41, 0.17, 0.07, 0.02, 0.01], label_name(s): ['saltshaker, salt shaker', 'pencil sharpener', 'piggy bank, penny bank', 'maraca', 'ballplayer, baseball player']
+
+slim
+wangzai.jpg:	class id(s): [773, 504, 692, 746, 855], score(s): [0.12, 0.09, 0.08, 0.06, 0.05], label_name(s): ['saltshaker, salt shaker', 'coffee mug', 'packet', 'puck, hockey puck', 'thimble']
+
+Cartoonface
+[{'bbox': [443, 84, 808, 511], 'rec_docs': 'Chulan', 'rec_scores': 0.9992994}]
+
+Logo
+[{'bbox': [96, 52, 177, 130], 'rec_docs': 'PetroChina', 'rec_scores': 0.8671492}]
+
+Products
+[{'bbox': [287, 128, 497, 326], 'rec_docs': 'Daoxaingcun', 'rec_scores': 0.8278527}, {'bbox': [99, 242, 313, 426], 'rec_docs': 'Daoxaingcun', 'rec_scores': 0.7245655}]
+
+Vehicle
+[{'bbox': [0, 0, 650, 365], 'rec_docs': 'Porsche', 'rec_scores': 0.5982533}]
+
+GeneralRecognition
+[{'bbox': [437, 71, 660, 728], 'rec_docs': '元气森林', 'rec_scores': 0.7740249}, {'bbox': [221, 72, 449, 701], 'rec_docs': '元气森林', 'rec_scores': 0.6950992}, {'bbox': [794, 104, 979, 652], 'rec_docs': '元气森林', 'rec_scores': 0.6305153}]
+
+DeepHash
+wangzai.jpg:	class id(s): [28, 23, 39, 47, 26], score(s): [1.39, 1.11, 1.11, 1.07, 1.07], label_name(s): ['spotted salamander, Ambystoma maculatum', 'vulture', 'common iguana, iguana, Iguana iguana', 'African chameleon, Chamaeleo chamaeleon', 'common newt, Triturus vulgaris']
+
+PULC-language
+word_35404.png:	class id(s): [5, 0], score(s): [0.30, 0.19], label_name(s): ['ka', 'arabic']
+
+PULC-textline_orientation
+textline_orientation_test_0_0.png:	class id(s): [0], score(s): [0.70], label_name(s): ['0_degree']
+
+# 多个标签
+[{'bbox': [437, 71, 660, 728], 'rec_docs': '元气森林', 'rec_scores': 0.7740249}, {'bbox': [221, 72, 449, 701], 'rec_docs': '元气森林', 'rec_scores': 0.6950992}, {'bbox': [794, 104, 979, 652], 'rec_docs': '元气森林', 'rec_scores': 0.6305153}]
