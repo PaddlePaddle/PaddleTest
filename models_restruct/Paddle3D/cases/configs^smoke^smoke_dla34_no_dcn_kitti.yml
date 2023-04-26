@@ -10,7 +10,7 @@ case:
           -
             name: pretrained
             params:
-              - --image datasets/KITTI/training/image_2/000000.png
+              - --image datasets/KITTI/training/image_2/000000.png --use_gpu
           -
             name: pretrained_C
             cmd: ./deploy/${category}/cpp/build/infer
