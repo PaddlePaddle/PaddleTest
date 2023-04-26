@@ -59,10 +59,7 @@ class PaddleNLP_Build(Model_Build):
         """
         path_now = os.getcwd()
         platform = self.system
-        if re.compile("Debug").findall(os.environ["AGILE_PIPELINE_NAME"]):
-            paddle_whl = 'https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/83c2e68207c7689684fd46453d0f3e8dacd4e7cc/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl'
-        else:
-            paddle_whl = self.paddle_whl
+        paddle_whl = self.paddle_whl
         os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com,baidu-int.com,org.cn"
         print("set timeout as:", os.environ["timeout"])
         print("set no_proxy as:", os.environ["no_proxy"])
@@ -71,6 +68,8 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")
+            if re.compile("Debug").findall(os.environ["AGILE_PIPELINE_NAME"]):
+                paddle_whl = 'https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda102-Trtoff-Py37-Compile/83c2e68207c7689684fd46453d0f3e8dacd4e7cc/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl'
             os.system(
                 "python -m pip install -U {}".format(paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
