@@ -1,0 +1,12 @@
+case:
+  linux:
+    base: ./base/ldc2d_unsteady_Re10_base.yaml
+    train:
+      -
+        name: single
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse
