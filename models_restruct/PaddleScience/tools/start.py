@@ -542,6 +542,7 @@ class PaddleClas_Start(object):
         old_pythonpath = os.environ.get("PYTHONPATH", "")
         new_pythonpath = f"{paddle_path}:{old_pythonpath}"
         os.environ["PYTHONPATH"] = new_pythonpath
+        os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
 
         return 0
 
