@@ -533,6 +533,18 @@ class PaddleClas_Start(object):
             logger.info("do not update yaml value !!!!")
             logger.info("error info : {}".format(e))
 
+    def add_paddlescience_to_pythonpath(self):
+        """
+        paddlescience 打包路径添加到python的路径中 
+        """
+        cwd = os.getcwd()
+        paddle_path = os.path.join(cwd, "PaddleScience")
+        old_pythonpath = os.environ.get("PYTHONPATH", "")
+        new_pythonpath = f"{paddle_path}:{old_pythonpath}"
+        os.environ["PYTHONPATH"] = new_pythonpath
+
+        return 0
+
     def build_prepare(self):
         """
         执行准备过程
@@ -577,7 +589,9 @@ def run():
     执行入口
     """
     model = PaddleClas_Start()
+    
     model.build_prepare()
+    model.add_paddlescience_to_pythonpath()
     return 0
 
 
