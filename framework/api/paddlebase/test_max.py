@@ -37,7 +37,7 @@ def test_max_base():
     max_base
     """
     x_data = np.arange(6).reshape(2, 3).astype(np.float32)
-    res = np.array([5])
+    res = np.max(x_data)
     obj.base(res=res, x=x_data)
 
 
@@ -47,7 +47,7 @@ def test_max_2D_tensor():
     max_2D_tensor
     """
     x_data = np.arange(6).reshape(2, 3).astype(np.float32)
-    res = np.array([5])
+    res = np.max(x_data)
     obj.run(res=res, x=x_data)
 
 
@@ -112,5 +112,6 @@ def test_max_1():
     special input
     """
     x_data = np.array([[-1.00595951, -0.20009832], [-0.35623679, -0.95880121]])
-    res = np.array([-0.20009832])
+    res = np.max(x_data)
+    np.array(-0.20009832)
     obj.run(res=res, x=x_data, axis=[-2, 1], keepdim=False)

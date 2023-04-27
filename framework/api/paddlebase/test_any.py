@@ -37,7 +37,7 @@ def test_any0():
     default
     """
     x = np.random.randint(-4, 4, (10,))
-    res = np.array([np.any(x)])
+    res = np.any(x)
     obj.base(res=res, x=x)
 
 
@@ -47,7 +47,7 @@ def test_any1():
     x: 2d-tensor
     """
     x = np.random.randint(-4, 4, (10, 10))
-    res = np.array([np.any(x)])
+    res = np.any(x)
     obj.base(res=res, x=x)
 
 
@@ -57,7 +57,7 @@ def test_any2():
     x: 3d-tensor
     """
     x = np.random.randint(-4, 4, (3, 4, 2))
-    res = np.array([np.any(x)])
+    res = np.any(x)
     obj.base(res=res, x=x)
 
 
@@ -67,7 +67,7 @@ def test_any3():
     x: 4d-tensor
     """
     x = np.random.randint(-4, 4, (2, 4, 4, 2))
-    res = np.array([np.any(x)])
+    res = np.any(x)
     obj.base(res=res, x=x)
 
 
