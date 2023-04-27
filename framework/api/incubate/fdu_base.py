@@ -15,10 +15,7 @@ def _product(t):
     """
     product
     """
-    if isinstance(t, int):
-        return t
-    else:
-        return np.product(t)
+    return int(np.product(t))
 
 
 def _get_item(t, idx):
