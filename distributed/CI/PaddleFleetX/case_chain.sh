@@ -381,8 +381,8 @@ function vit_cifar10_finetune() {
     python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" tools/train.py \
         -c  ppfleetx/configs/vis/vit/ViT_tiny_patch16_224_ci_cifar10_1n8c_dp_fp16o2.yaml
     check_result $FUNCNAME
-    loss=`tail log/workerlog.0 | grep 19/24 | cut -d " " -f14 `
-    top1=`tail log/workerlog.0 | grep top1 |cut -d " " -f14 `
+    loss=`cat log/workerlog.0 | grep 19/24 | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}'`
+    top1=`cat log/workerlog.0 | grep top1 | awk -F 'top1 = ' '{print $2}' | awk -F ',' '{print $1}'`
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
         check_diff 3.567670846 ${loss%?} ${FUNCNAME}_loss
         check_diff 0.198096 ${top1%?} ${FUNCNAME}_top1
@@ -406,7 +406,7 @@ function vit_qat() {
         -o Engine.save_load.save_steps=100 \
         -o Model.model.pretrained.prefix_path=./ckpt/model
     check_result $FUNCNAME
-    loss=`tail log/workerlog.0 | grep "eval" | cut -d " " -f11 `
+    loss=`cat log/workerlog.0 | grep "1/20" | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}' `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
         check_diff 2.299860716 ${loss%?} ${FUNCNAME}_loss
     else
