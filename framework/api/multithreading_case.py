@@ -52,7 +52,9 @@ ignore_case_dir = {
         "test_trace.py",
     ],
     "optimizer": [],
-    "distribution": [],
+    "distribution": [
+        "test_StickBreakingTransform.py",
+    ],
     "utils": [],
 }
 
