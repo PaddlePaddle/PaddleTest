@@ -2,7 +2,7 @@
 
 # 定义 ppsci 文件夹的路径
 path_to_ppsci="../../ppsci"
- 
+
 # 设置要跳过的文件名
 skip_files=("inflation.py")
 
