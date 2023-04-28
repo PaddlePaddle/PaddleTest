@@ -94,7 +94,7 @@ class RnnBase(object):
             tmp0, tmp1 = paddle.to_tensor(tmp0), paddle.to_tensor(tmp1)
             r1, r2 = self.solve_loss(tmp0), self.solve_loss(tmp1)
             g = (r1 - r2) / (2 * self.gap)
-            gradients.append(g[0])
+            gradients.append(g.item())
         return np.array(gradients).reshape(shape)
 
     def solve_loss(self, inputs):
