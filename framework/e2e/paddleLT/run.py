@@ -16,7 +16,7 @@ class Run(object):
     最终执行接口
     """
 
-    def __init__(self, yaml_dir, testing):
+    def __init__(self, py_cmd, yaml_dir, testing):
         """
 
         :param yaml_dir: 所有layer.yml文件夹路径
@@ -28,7 +28,7 @@ class Run(object):
 
         self.testing = testing
 
-        self.py_cmd = "python"
+        self.py_cmd = py_cmd
         self.report_dir = os.path.join(os.getcwd(), "report")
 
     def _test_run(self):
@@ -51,6 +51,6 @@ class Run(object):
 
 
 if __name__ == "__main__":
-    test_yml = "yaml/dy2st_train.yml"
-    tes = Run(yaml_dir="yaml/demo_yml", testing=test_yml)
+    test_yml = "yaml/demo_det_testing.yml"
+    tes = Run(py_cmd="python3.8", yaml_dir="yaml/demo_det", testing=test_yml)
     tes._test_run()
