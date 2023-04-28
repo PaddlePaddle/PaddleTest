@@ -384,11 +384,11 @@ function vit_cifar10_finetune() {
     loss=`cat log/workerlog.0 | grep 19/24 | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}'`
     top1=`cat log/workerlog.0 | grep top1 | awk -F 'top1 = ' '{print $2}' | awk -F ',' '{print $1}'`
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 3.567670846 ${loss%?} ${FUNCNAME}_loss
-        check_diff 0.198096 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.567670846 ${loss} ${FUNCNAME}_loss
+        check_diff 0.198096 ${top1} ${FUNCNAME}_top1
     else
-        check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
-        check_diff 0.216858 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.744726562 ${loss} ${FUNCNAME}_loss
+        check_diff 0.216858 ${top1} ${FUNCNAME}_top1
     fi
 }
 
@@ -408,9 +408,9 @@ function vit_qat() {
     check_result $FUNCNAME
     loss=`cat log/workerlog.0 | grep "1/20" | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}' `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 2.299860716 ${loss%?} ${FUNCNAME}_loss
+        check_diff 2.299860716 ${loss} ${FUNCNAME}_loss
     else
-        check_diff 2.299857140 ${loss%?} ${FUNCNAME}_loss
+        check_diff 2.299857140 ${loss} ${FUNCNAME}_loss
     fi
 }
 
