@@ -58,9 +58,9 @@ def func1(x, y):
 
 def func2(x):
     """
-    func1
+    func2
     """
-    return paddle.sum(paddle.nn.functional.sigmoid(x))
+    return paddle.sum(paddle.nn.functional.sigmoid(x), axis=list(range(x.ndim))[1:])
 
 
 obj = TestHessian(cal_hessian)
