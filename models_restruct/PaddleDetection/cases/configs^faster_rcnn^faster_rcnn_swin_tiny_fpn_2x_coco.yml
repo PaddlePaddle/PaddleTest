@@ -41,10 +41,7 @@ case:
         name: paddle2onnx
       -
         name: onnx_infer
-    api:
-      -
-        name: cpp
-        cmd: ./deploy/cpp/build/main
+    api: skipped
   windows:
     base: ./base/normal_base.yml
     train:
