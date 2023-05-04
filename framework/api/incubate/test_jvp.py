@@ -29,6 +29,23 @@ class TestJvp(APIBase):
         # self.delta = 1e-3
 
 
+class TestJvpNoStatc(APIBase):
+    """
+    test
+    """
+
+    def hook(self):
+        """
+        implement
+        """
+        self.types = [np.float32, np.float64]
+        # self.debug = True
+        self.static = False
+        # enable check grad
+        # self.enable_backward = False
+        # self.delta = 1e-3
+
+
 def cal_jvp(func, xs, v=None):
     """
     jvp API
@@ -69,6 +86,7 @@ def func3(x, y):
 
 
 obj = TestJvp(cal_jvp)
+obj_nostatic = TestJvpNoStatc(cal_jvp)
 ans = FiniteDifferenceUtils()
 
 
@@ -189,8 +207,12 @@ def test_jvp8():
     x = np.random.rand(3, 3)
     y = np.random.rand(3, 3)
     paddle.disable_static()
+    from paddle.fluid import core
+
+    core._set_prim_backward_enabled(True)
     res = ans.jvp_with_jac(func3, [paddle.to_tensor(x), paddle.to_tensor(y)])
     obj.run(res=res.numpy(), func=func3, xs=[x, y])
+    core._set_prim_backward_enabled(False)
 
 
 @pytest.mark.api_incubate_jvp_parameters
@@ -206,4 +228,4 @@ def test_jvp9():
     res = ans.jvp_with_jac(
         func3, [paddle.to_tensor(x), paddle.to_tensor(x)], v=[paddle.to_tensor(v1), paddle.to_tensor(v1)]
     )
-    obj.run(res=res.numpy(), func=func3, xs=[x, x], v=[v1, v1])
+    obj_nostatic.run(res=res.numpy(), func=func3, xs=[x, x], v=[v1, v1])
