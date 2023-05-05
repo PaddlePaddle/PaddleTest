@@ -535,7 +535,7 @@ class PaddleClas_Start(object):
 
     def add_paddlescience_to_pythonpath(self):
         """
-        paddlescience 打包路径添加到python的路径中 
+        paddlescience 打包路径添加到python的路径中
         """
         cwd = os.getcwd()
         paddle_path = os.path.join(cwd, "PaddleScience")
@@ -590,7 +590,7 @@ def run():
     执行入口
     """
     model = PaddleClas_Start()
-    
+
     model.build_prepare()
     model.add_paddlescience_to_pythonpath()
     return 0
