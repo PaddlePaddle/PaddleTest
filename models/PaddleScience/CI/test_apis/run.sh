@@ -15,7 +15,7 @@ while IFS= read -r -d '' file; do
         echo "Skipping ${file} ..."
     else
         echo "Running doctest on ${file} ..."
-        python3.7 -m doctest "${file}"
+        python${py_version} -m doctest "${file}"
         if [ $? -ne 0 ]; then
             error_files+=("${file}")
             error_num=$((error_num + 1))

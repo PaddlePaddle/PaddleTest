@@ -2,11 +2,18 @@
 home=$PWD
 
 # 运行 api 测试脚本，并获取退出码
-cd $home/test_apis && bash ./run.sh && api=$?
+cd test_apis
+bash ./run.sh
+api=$?
+echo ${api}
+cd $home
 
 # 运行 examples 测试脚本，并获取退出码
-cd $home/test_models && bash ./run.sh && example=$?
-
+cd test_models
+bash ./run.sh
+example=$?
+echo ${example}
+cd $home
 # 输出测试结果
 echo "=============== result ================="
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -28,5 +35,6 @@ else
       echo "--------------------------"
     done
   echo "error!"
-  exit `expr ${api} + ${example}`
 fi
+echo `expr ${api} + ${example}`
+exit `expr ${api} + ${example}`

@@ -10,7 +10,8 @@ export no_proxy=bcebos.com
 python -m pip install pip==20.2.4 --ignore-installed
 python -m pip install Cython --ignore-installed
 pip install -r requirements.txt --ignore-installed
-python -m pip  install ${paddle_whl} --no-cache-dir
+python -m pip uninstall paddlepaddle-gpu -y
+python -m pip  install ${paddle_whl} --no-cache-dir --ignore-installed
 echo -e '*****************paddle_version*****'
 python -c 'import paddle;print(paddle.version.commit)'
 echo -e '*****************video_version****'
