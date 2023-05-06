@@ -12,6 +12,9 @@ logger = logging.getLogger("ce")
 
 
 def plot_loss_from_log_files(log_file_names, image_file_name):
+    """
+    用于绘制loss对比图
+    """
     # 初始化列表
     losses_list = []  # 用于存储每个 log 文件中的训练损失
     labels = []  # 用于存储每个 log 文件的名称
