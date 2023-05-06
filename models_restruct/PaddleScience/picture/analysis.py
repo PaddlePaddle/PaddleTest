@@ -3,6 +3,7 @@
 分析对比绘图
 """
 import re
+import os
 import logging
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,75 +11,46 @@ import matplotlib.pyplot as plt
 logger = logging.getLogger("ce")
 
 
-def plt_dy2st(log_list, model_name):
+def plot_loss_from_log_files(log_file_names, image_file_name):
     """
-    分析对比绘图
+    用于绘制loss对比图
     """
-    plt.figure(figsize=(16, 9))
-    i = 1
-    show_type = ["train avg loss", "eval avg loss", "eval metric(top1 acc)", "avg ips"]
-    # show_type = ['train avg loss','eval metric(top1 acc)','eval avg loss','lr','avg ips']
-    # show_type = ['train avg loss']
-    for show in show_type:
-        plt.subplot(1, len(show_type), i)  # 表示第i张图片，下标只能从1开始，不能从0，
-        task_type = log_list
-        # task_type=['train_dy2st_prim.log', 'train_dy2st.log', 'train_dy2st_prim_cinn.log', 'train_dy2st_cinn.log']
-        for task in task_type:
-            fp = open(task)
-            temp = []
-            for line in fp.readlines():
-                if show == "train avg loss":
-                    if "Eval" not in line and "Avg" in line and "Epoch" in line and "logger" not in line:
-                        try:
-                            temp.append(float(re.compile(r"(?<=loss: )\d+\.?\d*").findall(line)[0]))
-                        except:
-                            temp.append(0)
-                if show == "lr":
-                    if "lr" in line and "Epoch" in line and "logger" not in line:
-                        temp.append(float(re.compile(r"(?<=lr: )\d+\.?\d*").findall(line)[0]))
-                # if show == 'eval loss':
-                #     if 'loss: ' in line and 'Train' not in line and 'Avg' not in line and 'Epoch'  in line:
-                #         temp.append(float(re.findall(r"loss: (.+?),",line)[0]))
-                if show == "eval metric(top1 acc)":
-                    if "metric:" in line and "final" not in line and "Epoch" in line and "logger" not in line:
-                        temp.append(float(re.compile(r"(?<=metric: )\d+\.?\d*").findall(line)[0]))
-                if show == "eval avg loss":
-                    if "Avg" in line and "Train" not in line and "Epoch" in line and "logger" not in line:
-                        temp.append(float(re.findall(r"loss: (.+?),", line)[0]))
-                if show == "avg ips":
-                    if "ips" in line and "Epoch" in line and "logger" not in line:
-                        temp.append(float(re.compile(r"(?<=ips: )\d+\.?\d*").findall(line)[0]))
-            fp.close()
-            if show == "avg ips":
-                try:
-                    tmp = np.mean(np.array(temp[:]))
-                except:
-                    logger.info("avg ips err")
-                for j, val in enumerate(temp):
-                    temp[j] = tmp
-                logger.info("####  task is {}".format(task))
-                logger.info("####  avg ips is {}".format(tmp))
-            if show == "eval metric(top1 acc)":
-                logger.info("####  task is {}".format(task))
-                try:
-                    tmp = np.max(np.array(temp[:]))
-                    logger.info("####  eval metric(top1 acc) is {}".format(tmp))
-                except:
-                    logger.info("eval metric(top1 acc) err")
+    # 初始化列表
+    losses_list = []  # 用于存储每个 log 文件中的训练损失
+    labels = []  # 用于存储每个 log 文件的名称
 
-            plt.plot(temp[:], label=task.split("/")[-1])
-            plt.legend()  # 显示图例
-            if show == "lr" or show == "avg ips":
-                plt.xlabel("iter")
-            else:
-                plt.xlabel("epoch")
-            plt.title(show)
-        i += 1
-    # plt.show()
-    plt.suptitle(model_name)
-    plt.savefig(model_name)
+    # 遍历每个 log 文件
+    for log_file_name in log_file_names:
+        # 读取 log 文件的内容
+        with open(log_file_name, "r") as f:
+            lines = f.read().splitlines()
+            losses = []
+
+        # 解析 log 文件中的每一行
+        for line in lines:
+            if "[Train][Epoch" in line and "[Avg]" in line:
+                # 如果是带有损失值的行，则提取损失值并添加到列表中
+                items = line.split()
+                for i, arg in enumerate(items):
+                    if arg == "loss:":
+                        loss = items[i + 1][:-1]  # 提取损失值（去掉最后的逗号）
+                        losses.append(float(loss))
+
+        # 将每个 log 文件中的损失值列表和文件名保存到相应的列表中
+        losses_list.append(losses)
+        labels.append(os.path.basename(log_file_name))
+
+    # 绘制损失随 epoch 变化的曲线
+    for i, losses in enumerate(losses_list):
+        plt.plot(losses, label=labels[i])
+
+    # 添加图例
+    plt.legend()
+
+    # 保存图像文件
+    plt.savefig(os.path.join(".", f"{image_file_name}.png"))
 
 
 if __name__ == "__main__":
     # plt_dy2st(log_list, model_name)
-    plt_dy2st(["./train_dy2st_prim.log", "./train_dy2st.log"], "CAE")
+    plot_loss_from_log_files(["test_ldc2d_unsteady_Re10_cuda11.6.log", "train_single.log"], "test")
