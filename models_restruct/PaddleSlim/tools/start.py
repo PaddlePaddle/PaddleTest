@@ -103,8 +103,12 @@ def run():
     set_cuda_single_card = paddleslim_start.set_cuda.split(",")[0]
 
     if qa_yaml.split("^")[0] != "case":
-        with open(rd_yaml, "r", encoding="utf-8") as f:
-            content = yaml.load(f, Loader=yaml.FullLoader)
+        try:
+            with open(rd_yaml, "r", encoding="utf-8") as f:
+                content = yaml.load(f, Loader=yaml.FullLoader)
+        except Exception as e:
+            logger.info("open rd {} got error {} ".format(rd_yaml, e))
+            content = {}
 
         if qa_yaml == "example^auto_compression^detection^configs^ppyoloe_l_qat_dis":
             paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar")
@@ -206,11 +210,15 @@ def run():
             paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
             content["model_dir"] = current_path + "/yolov6s.onnx"
             content["dataset_dir"] = current_path + "/coco"
+        elif qa_yaml == "example^reparameterization^mobilenet_v1":
+            paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
         else:
             logger.info("### no exists {} ".format(qa_yaml))
-
-        with open(rd_yaml, "w", encoding="utf-8") as f:
-            yaml.dump(content, f)
+        try:
+            with open(rd_yaml, "w", encoding="utf-8") as f:
+                yaml.dump(content, f)
+        except Exception as e:
+            logger.info("rewrite rd {} got error {} ".format(rd_yaml, e))
 
         # auto_compression/semantic_segmentation demo 修改数据路径
         semantic_segmentation_reader = (
