@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt
 logger = logging.getLogger("ce")
 
 
-
-
 def plot_loss_from_log_files(log_file_names, image_file_name):
     # 初始化列表
     losses_list = []  # 用于存储每个 log 文件中的训练损失

@@ -9,10 +9,11 @@ import glob
 import shutil
 import argparse
 import logging
+import urllib.request
 import yaml
 import wget
 import numpy as np
-import urllib.request
+
 # from picture.analysis import analysis, draw
 from picture.analysis import plot_loss_from_log_files
 
@@ -48,7 +49,6 @@ class PaddleScience_End(object):
         os.chdir(path_now)
         return 0
 
-
     def build_end(self):
         """
         执行准备过程
@@ -64,8 +64,8 @@ class PaddleScience_End(object):
             url = "https://paddle-qa.bj.bcebos.com/suijiaxin/base_log/ldc2d_unsteady_Re10_base.log"
             file_name = "ldc2d_unsteady_Re10_base.log"
             urllib.request.urlretrieve(url, file_name)
-            shutil.copy(file_name, "./logs/{}/{}/".format(self.reponame,self.qa_yaml_name))
-            logger.info("plot start！")
+            shutil.copy(file_name, "./logs/{}/{}/".format(self.reponame, self.qa_yaml_name))
+            logger.info("plot start!")
             self.plot_loss()
         logger.info("build remove_data end")
         return ret

@@ -56,7 +56,7 @@ class PaddleScience_Start(object):
         new_pythonpath = f"{paddle_path}:{old_pythonpath}"
         os.environ["PYTHONPATH"] = new_pythonpath
         os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
-        return 0    
+        return 0
 
     def add_paddlescience_to_pythonpath(self):
         """
@@ -68,7 +68,6 @@ class PaddleScience_Start(object):
         new_pythonpath = f"{paddle_path}:{old_pythonpath}"
         os.environ["PYTHONPATH"] = new_pythonpath
         os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
-
         return 0
 
     def build_prepare(self):
