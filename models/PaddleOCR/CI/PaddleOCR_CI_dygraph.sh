@@ -83,6 +83,7 @@ python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.c
 python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
 
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+python -m pip install -U urllib3==1.26.15 -i https://mirror.baidu.com/pypi/simple
 num=`python -m pip list | grep fasttext | wc -l`
 if [ "${num}" -eq "0" ]; then
    python -m pip install --ignore-installed pybind11 -i https://mirror.baidu.com/pypi/simple

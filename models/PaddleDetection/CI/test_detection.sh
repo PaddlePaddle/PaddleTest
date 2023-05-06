@@ -14,6 +14,7 @@ python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
 pip install Cython --ignore-installed;
 pip install cython_bbox --ignore-installed;
 pip install -r requirements.txt --ignore-installed;
+python -m pip install requests==2.28.2 --ignore-installed --no-cache-dir
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
 python -m pip install ${paddle_dev_wheel} --no-cache-dir
