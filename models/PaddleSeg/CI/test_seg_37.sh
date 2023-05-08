@@ -6,6 +6,7 @@ ln -s $(which pip3.7) run_env_py37/pip;
 export PATH=$(pwd)/run_env_py37:${PATH};
 
 python -m pip install pip==20.2.4 --ignore-installed;
+python -m pip install requests==2.28.2 --ignore-installed --no-cache-dir
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
 echo "checkout develop !"
