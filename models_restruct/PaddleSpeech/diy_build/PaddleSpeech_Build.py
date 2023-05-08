@@ -104,7 +104,7 @@ class PaddleSpeech_Build(Model_Build):
             # windows install add --user
             os.system("python -m pip install -U setuptools")
             os.system("python -m pip install .  -i https://mirror.baidu.com/pypi/simple")
-            # mac intel from numba.np.ufunc import _internal 
+            # mac intel from numba.np.ufunc import _internal
             if sysstr == "Darwin" and platform.machine() == "x86_64":
                 os.system("python -m pip install -U numpy<1.24.0")
             # bug: bce-python-sdk==0.8.79
