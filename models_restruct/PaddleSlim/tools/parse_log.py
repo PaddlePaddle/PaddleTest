@@ -21,7 +21,7 @@ def paddleslim_quat_ptq_parse(log_content, kpi_name):
             try:
                 values = line.split("=")[-1]
                 values = values.strip()
-                values = values.split('/')
+                values = values.split("/")
                 if kpi_name + "/" in line:
                     kpi_value = values[0].strip("%")
                 elif "/" + kpi_name + " =" in line:
