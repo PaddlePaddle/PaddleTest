@@ -109,6 +109,8 @@ class PaddleSpeech_Build(Model_Build):
             # bug: bce-python-sdk==0.8.79
             os.system("python -m pip install  bce-python-sdk==0.8.74")
             os.system("python -m pip install -U protobuf==3.20.0")
+            # librosa
+            os.system("python -m pip install -U librosa")
             os.chdir(path_now)
             print("build paddlespeech wheel!")
 
