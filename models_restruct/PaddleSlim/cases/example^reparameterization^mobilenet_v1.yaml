@@ -12,7 +12,7 @@ case:
       -
         name: multi
         path: example/reparameterization/
-        cmd: python train.py
+        cmd: python -m paddle.distributed.launch train.py
         params:
           - --num_epochs=2
           - --data_dir=ILSVRC2012/
