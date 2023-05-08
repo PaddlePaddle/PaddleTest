@@ -212,14 +212,18 @@ def run():
             paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
             content["model_dir"] = current_path + "/yolov6s.onnx"
             content["dataset_dir"] = current_path + "/coco"
-        elif qa_yaml in ["example^reparameterization^mobilenet_v1", 
-                         "example^quantization^ptq^classification^mobilenet_v1",
-                         "example^quantization^ptq^classification^resnet50",
-                         "example^quantization^qat^classification^mobilenet_v1",
-                         "example^quantization^qat^classification^resnet50"]:
+        elif qa_yaml in [
+            "example^reparameterization^mobilenet_v1",
+            "example^quantization^ptq^classification^mobilenet_v1",
+            "example^quantization^ptq^classification^resnet50",
+            "example^quantization^qat^classification^mobilenet_v1",
+            "example^quantization^qat^classification^resnet50",
+        ]:
             paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
-            if qa_yaml in ["example^quantization^qat^classification^mobilenet_v1",
-                            "example^quantization^qat^classification^resnet50"]:
+            if qa_yaml in [
+                "example^quantization^qat^classification^mobilenet_v1",
+                "example^quantization^qat^classification^resnet50",
+            ]:
                 # 将数据集挪到data下
                 try:
                     source_path = os.path.join(current_path + "/ILSVRC2012")
@@ -230,8 +234,8 @@ def run():
                         shutil.rmtree(data_path)
                     shutil.move(source_path, data_path)
                 except Exception as e:
-                    print('copy data got error!')
-                
+                    print("copy data got error!")
+
         else:
             logger.info("### no exists {} ".format(qa_yaml))
         try:

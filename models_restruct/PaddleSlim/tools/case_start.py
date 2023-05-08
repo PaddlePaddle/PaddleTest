@@ -80,8 +80,9 @@ def run():
 
         with open(rd_yaml, "w") as f:
             yaml.dump(content, f)
-    else:    
+    else:
         logger.info("******* yaml：{} no exists".format(rd_yaml))
+
 
 if __name__ == "__main__":
     run()
