@@ -105,7 +105,7 @@ class PaddleSpeech_Build(Model_Build):
             os.system("python -m pip install -U setuptools")
             os.system("python -m pip install .  -i https://mirror.baidu.com/pypi/simple")
             # mac from numba.np.ufunc import _internal
-            # os.system("python -m pip install -U numpy<1.24.0")
+            os.system("python -m pip install -U numpy<1.24.0")
             # bug: bce-python-sdk==0.8.79
             os.system("python -m pip install  bce-python-sdk==0.8.74")
             os.system("python -m pip install -U protobuf==3.20.0")
