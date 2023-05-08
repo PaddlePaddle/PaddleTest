@@ -95,7 +95,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         # 项目配置信息
         self.place = "cpu"
-        self.python = "python37"
+        self.python = "python3.7"
         self.enable_backward = 0
         self.yaml_info = "case_0"
         self.card = 0
