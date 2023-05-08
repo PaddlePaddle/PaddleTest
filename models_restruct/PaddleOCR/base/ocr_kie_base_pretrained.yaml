@@ -68,12 +68,12 @@ eval:
     - -c ${rd_yaml_path}
     - -o Architecture.Backbone.checkpoints=${model}/best_accuracy
     - Global.use_gpu=${use_gpu}
-
   result:
     hmean:
       base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
+      
 infer:
   name: trained
   cmd:  python tools/infer_${kie_token}.py
@@ -92,7 +92,6 @@ infer:
     - Architecture.Backbone.checkpoints=${model}/best_accuracy
     - Global.infer_img=./train_data/XFUND/zh_val/val.json
     - Global.infer_mode=False
-
   result:
     exit_code:
       base: 0
@@ -115,11 +114,11 @@ export:
       - -o Architecture.Backbone.checkpoints=./${model}/best_accuracy
       - Global.save_inference_dir=./models_inference/${model}
       - Global.use_gpu=${use_gpu}
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
 predict:
   -
     name: trained
