@@ -370,7 +370,7 @@ if __name__ == "__main__":
     parser.add_argument("--yaml", type=str, help="input the yaml path")
     args = parser.parse_args()
 
-    # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
-    api_bm = ApiBenchmarkCI(yaml_path="./../yaml/test1.yml")
-    # api_bm._run_ci()
-    api_bm._baseline_insert()
+    api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
+    # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/test1.yml")
+    api_bm._run_ci()
+    # api_bm._baseline_insert()
