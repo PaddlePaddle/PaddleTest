@@ -73,7 +73,7 @@ eval:
       base: ${eval_base_acc}
       threshold: 0
       evaluation: "="
-      
+
 infer:
   name: trained
   cmd:  python tools/infer_${kie_token}.py
