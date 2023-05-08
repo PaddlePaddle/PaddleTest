@@ -234,7 +234,7 @@ def run():
                         shutil.rmtree(data_path)
                     shutil.move(source_path, data_path)
                 except Exception as e:
-                    print("copy data got error!")
+                    print("copy data got error: {}!".format(e))
 
         else:
             logger.info("### no exists {} ".format(qa_yaml))
