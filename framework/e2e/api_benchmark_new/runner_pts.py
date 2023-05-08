@@ -43,8 +43,8 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
         :param baseline: 性能baseline键值对, key为case名, value为性能float
         """
         # 测试控制项
-        self.loops = 1000  # 循环次数
-        self.base_times = 50  # timeit 基础运行时间
+        self.loops = 50  # 循环次数
+        self.base_times = 1000  # timeit 基础运行时间
         self.default_dtype = "float32"
         self.if_showtime = True
         self.double_check = True
@@ -235,18 +235,28 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--yaml", type=str, help="input the yaml path")
+    parser.add_argument("--id", type=int, default=0, help="job id")
+    # parser.add_argument("--routine", type=int, default=1, help="if 1, daily routine mission")
+    parser.add_argument("--comment", type=str, default=None, help="your comment")
+    parser.add_argument("--framework", type=str, default="paddle", help="[paddle] | [torch]")
+    parser.add_argument("--enable_backward", type=int, default=1, help="if 1, enable backward test")
+    parser.add_argument(
+        "--python", type=str, default="python3.8", help="python version like python3.7 | python3.8 etc."
+    )
+    parser.add_argument("--place", type=str, default="cpu", help="[cpu] or [gpu]")
+    parser.add_argument("--yaml_info", type=str, default="case_0", help="[case_0] or [case_1] or [case_2]")
+    parser.add_argument("--wheel_link", type=str, default=None, help="paddle wheel link")
     args = parser.parse_args()
 
     api_bm = ApiBenchmarkPTS(
-        yaml_path="./../yaml/test0.yml",
-        latest_id=41,
-        comment="fake_run_pts",
-        framework="paddle",
-        enable_backward=1,
-        python="python38",
-        place="cpu",
-        yaml_info="case_0",
-        wheel_link="fake_link",
+        yaml_path=args.yaml,
+        latest_id=args.id,
+        comment=args.comment,
+        framework=args.framework,
+        enable_backward=args.enable_backward,
+        python=args.python,
+        place=args.place,
+        yaml_info=args.yaml_info,
+        wheel_link=args.wheel_link,
     )
     api_bm._run_pts()
-    # api_bm.baseline_insert()
