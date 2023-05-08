@@ -31,9 +31,9 @@ class Logger:
         logname = log_path + "out_{}.log".format(
             str(datetime.now()).replace(" ", "_").replace(".", "_").replace(":", "_").replace("-", "_")
         )  # 指定输出的日志文件名
-        # 定义handler的输出格式
-        formatter = logging.Formatter("%(asctime)s-%(name)s-[%(levelname)s] ===> %(message)s")
 
+        # 定义handler的输出格式
+        # formatter = logging.Formatter("%(asctime)s-%(name)s-[%(levelname)s] ===> %(message)s")
         # # 给logger添加handler
         # if save_level not in self.SAVE_LEVEL:
         #     save_level = "both"
