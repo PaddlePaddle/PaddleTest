@@ -126,6 +126,25 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
             backward_res_list = []
             best_total_res_list = []
 
+            if case_name in SKIP_DICT[platform.system()]:
+                self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+                continue
+            if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
+                self.logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
+                continue
+            if self.yaml_info == "case_0":
+                if not case_name.endswith("_0"):
+                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
+            if self.yaml_info == "case_1":
+                if case_name.endswith("_2"):
+                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
+            if self.yaml_info == "case_2":
+                if not case_name.endswith("_2"):
+                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
+
             forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
 
             if isinstance(forward_time_list, str):

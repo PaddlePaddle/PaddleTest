@@ -32,8 +32,8 @@ class DB(object):
         """
         with open(self.storage, "r") as f:
             data = yaml.safe_load(f)
-        # tmp_dict = data.get("Config").get("api_benchmark").get("MYSQL")
-        tmp_dict = data.get("Config").get("api_benchmark").get("DEV")
+        tmp_dict = data.get("Config").get("api_benchmark").get("MYSQL")
+        # tmp_dict = data.get("Config").get("api_benchmark").get("DEV")
         host = tmp_dict.get("host")
         port = tmp_dict.get("port")
         user = tmp_dict.get("user")
@@ -63,6 +63,7 @@ class DB(object):
             id = self.db.insert_id()
             self.db.commit()
         except Exception as e:
+            print(traceback.format_exc())
             print(e)
         return id
 
@@ -80,6 +81,7 @@ class DB(object):
             self.cursor.execute(sql)
             self.db.commit()
         except Exception as e:
+            print(traceback.format_exc())
             print(e)
 
     def update_by_id(self, table, data, id):
@@ -96,6 +98,7 @@ class DB(object):
             self.cursor.execute(sql)
             self.db.commit()
         except Exception as e:
+            print(traceback.format_exc())
             print(e)
 
     def select(self, table, condition_list):
@@ -115,6 +118,7 @@ class DB(object):
                     tmp[index_list[i]] = row[i]
                 results.append(tmp)
         except Exception as e:
+            print(traceback.format_exc())
             print(e)
         return results
 
@@ -135,32 +139,42 @@ class DB(object):
                     tmp[index_list[i]] = row[i]
                 results.append(tmp)
         except Exception as e:
+            print(traceback.format_exc())
             print(e)
         return results
 
     def insert_case(self, jid, data_dict, create_time):
         """向case表中录入数据"""
-        try:
-            data_dict["result"]["forward"] = ACCURACY % data_dict["result"]["forward"]
-            data_dict["result"]["total"] = ACCURACY % data_dict["result"]["total"]
-            data_dict["result"]["backward"] = ACCURACY % data_dict["result"]["backward"]
-            data_dict["result"]["best_total"] = ACCURACY % data_dict["result"]["best_total"]
-            data = {
-                "jid": jid,
-                "case_name": data_dict["case_name"],
-                "api": data_dict["result"]["api"],
-                "result": json.dumps(data_dict["result"]),
-                "create_time": create_time,
-            }
+        data_dict["result"]["forward"] = ACCURACY % data_dict["result"]["forward"]
+        data_dict["result"]["total"] = ACCURACY % data_dict["result"]["total"]
+        data_dict["result"]["backward"] = ACCURACY % data_dict["result"]["backward"]
+        data_dict["result"]["best_total"] = ACCURACY % data_dict["result"]["best_total"]
+        data = {
+            "jid": jid,
+            "case_name": data_dict["case_name"],
+            "api": data_dict["result"]["api"],
+            "result": json.dumps(data_dict["result"]),
+            "create_time": create_time,
+        }
+        retry = 3
+        # case_id = 0
+        for i in range(retry):
             case_id = self.insert(table="case", data=data)
             # self.insert_case(jid=job_id, data_dict=case, create_time=create_time)
+            if case_id == -1:
+                print('db ping again~~~')
+                self.db.ping(True)
+                continue
+            else:
+                break
+            # # self.ci_update_job(id=job_id, status="error", update_time=time_now)
+            # print(traceback.format_exc())
+            # print(e)
+            # # 防止超时失联
+            # self.db.ping(True)
+            # continue
 
-        except Exception as e:
-            # self.ci_update_job(id=job_id, status="error", update_time=time_now)
-            print(traceback.format_exc())
-            print(e)
-
-        return case_id
+        # return case_id
 
     def show_list(self, table):
         """返回table中的列list"""
@@ -171,6 +185,7 @@ class DB(object):
             self.cursor.execute(sql)
             results = [column[0] for column in self.cursor.fetchall()]
         except Exception as e:
+            print(traceback.format_exc())
             print(e)
         return results
 
