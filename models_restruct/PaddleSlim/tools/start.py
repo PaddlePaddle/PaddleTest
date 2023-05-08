@@ -100,7 +100,6 @@ def run():
     rd_yaml = os.path.join(paddleslim_start.REPO_PATH, paddleslim_start.rd_yaml_path)
     qa_yaml = paddleslim_start.qa_yaml_name
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_start.set_cuda
-    os.environ["FLAGS_use_stride_kernel"] = 1
     set_cuda_single_card = paddleslim_start.set_cuda.split(",")[0]
 
     if qa_yaml.split("^")[0] != "case":
