@@ -47,3 +47,4 @@ case^demo^unstructured_prune^threshold.yaml
 case^ce_tests^dygraph^quant^ptq^vgg16.yaml
 example^auto_compression^image_classification^configs^ResNet50_vd^qat_dis.yaml
 case^demo^dygraph^unstructured_pruning^threshold.yaml
+example^reparameterization^mobilenet_v1.yaml

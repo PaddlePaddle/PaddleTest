@@ -1,7 +1,13 @@
 set -m
 home=$PWD
 EXIT_CODE=0
-run_dirs=(test_class_model test_det_model test_ocr_model test_nlp_model)
+run_dirs=(card0_test card1_test)
+if [[ ! -d card0_test ]];then
+    mv test_class_model card0_test
+fi
+if [[ ! -d card1_test ]];then
+    mv test_det_model card1_test
+fi
 if [[ -z $1 ]];then
     card_number=1
 else
@@ -31,7 +37,7 @@ do
             break
         else
            echo "${run_dirs[i+j]}"
-           cd $home/${run_dirs[i+j]}/ && bash run.sh $j 2>&1 &
+           cd $home/${run_dirs[i+j]}/ && bash run_parallel.sh $j 2>&1 &
         fi
     done
     wait

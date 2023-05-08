@@ -48,3 +48,4 @@ example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_spa
 example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis.yaml
 example^full_quantization^picodet^configs^picodet_npu_with_postprocess.yaml
 example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune.yaml
+example^reparameterization^mobilenet_v1.yaml

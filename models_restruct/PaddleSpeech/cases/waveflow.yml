@@ -8,6 +8,3 @@ case:
              path: ${model_path}
              name: synthesize
              cmd: pwd; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/t2s/exps/${model}; ln -s /ssd2/ce_data/PaddleSpeech_t2s/mel_test/ ./; input_mel_path=mel_test; ckpt_name=step-10; sed -i "s/python3/python/g" ./local/synthesize.sh; ./local/synthesize.sh ${input_mel_path} ${train_output_path} ${ckpt_name}
-        infer: skipped
-        export: skipped
-        predict: skipped

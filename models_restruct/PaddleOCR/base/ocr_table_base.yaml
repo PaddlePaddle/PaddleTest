@@ -65,31 +65,33 @@ train:
         evaluation: "="
 
 eval:
-  name: trained
-  cmd:  python tools/eval.py
-  params:
-    - -c ${rd_yaml_path}
-    - -o Global.use_gpu=${use_gpu}
-    - Global.pretrained_model=output/${qa_yaml_name}/latest
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+  -
+    name: trained
+    cmd:  python tools/eval.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.use_gpu=${use_gpu}
+      - Global.pretrained_model=output/${qa_yaml_name}/latest
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
 infer:
-  name: trained
-  cmd:  python tools/infer_table.py
-  params:
-    - -c ${rd_yaml_path}
-    - -o Global.use_gpu=${use_gpu}
-    - Global.pretrained_model=output/${qa_yaml_name}/latest
-    - Global.infer_img="ppstructure/docs/table/table.jpg"
-    - Global.test_batch_size_per_card=1
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+  -
+    name: trained
+    cmd:  python tools/infer_table.py
+    params:
+      - -c ${rd_yaml_path}
+      - -o Global.use_gpu=${use_gpu}
+      - Global.pretrained_model=output/${qa_yaml_name}/latest
+      - Global.infer_img="ppstructure/docs/table/table.jpg"
+      - Global.test_batch_size_per_card=1
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
 export:
   -
     name: trained
@@ -141,9 +143,8 @@ predict:
       - --use_gpu=True
       - --use_tensorrt=True
       - --enable_mkldnn=False
-
-  result:
-    exit_code:
-      base: 0
-      threshold: 0
-      evaluation: "="
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

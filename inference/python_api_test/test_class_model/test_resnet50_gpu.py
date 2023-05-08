@@ -12,6 +12,7 @@ import six
 import wget
 import pytest
 import numpy as np
+import paddle
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
@@ -104,9 +105,17 @@ def test_gpu_more_bz():
         del test_suite2  # destroy class to save memory
 
 
+# skip the resnet50 gpu_mixed_precision_case
+if paddle.version.cuda() == "10.2":
+    cuda_skip = pytest.mark.skip(reason="unsupported CUDA version")
+else:
+    cuda_skip = pytest.mark.none
+
+
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
+@cuda_skip
 def test_gpu_mixed_precision_bz1():
     """
     compared gpu batch_size=1 resnet50 mixed_precision outputs with true val

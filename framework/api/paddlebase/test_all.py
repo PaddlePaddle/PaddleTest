@@ -37,7 +37,7 @@ def test_all0():
     default
     """
     x = np.random.randint(-4, 4, (10,))
-    res = np.array([np.all(x)])
+    res = np.all(x)
     obj.base(res=res, x=x)
 
 
@@ -47,7 +47,7 @@ def test_all1():
     x: 2d-tensor
     """
     x = np.random.randint(-4, 4, (10, 10))
-    res = np.array([np.all(x)])
+    res = np.all(x)
     obj.base(res=res, x=x)
 
 
@@ -57,7 +57,7 @@ def test_all2():
     x: 3d-tensor
     """
     x = np.random.randint(-4, 4, (3, 4, 2))
-    res = np.array([np.all(x)])
+    res = np.all(x)
     obj.base(res=res, x=x)
 
 
@@ -67,7 +67,7 @@ def test_all3():
     x: 4d-tensor
     """
     x = np.random.randint(-4, 4, (2, 4, 4, 2))
-    res = np.array([np.all(x)])
+    res = np.all(x)
     obj.base(res=res, x=x)
 
 
