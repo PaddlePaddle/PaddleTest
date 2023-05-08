@@ -107,72 +107,91 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
         # 邮件报警
         # self.email = Alarm(storage=self.storage)
 
-    def _run_main(self, all_cases, latest_id):
-        """
-        对指定case运行测试
-        :param all_cases: list of cases
-        :param latest_id: 任务jid
-        :param iters: 迭代次数
-        :return:
-        """
-        error_dict = {}
-
-        for case_name in all_cases:
-            error = {}
-            latest_case = {}
-
-            forward_res_list = []
-            total_res_list = []
-            backward_res_list = []
-            best_total_res_list = []
-
-            forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
-
-            if isinstance(forward_time_list, str):
-                error["api"] = api
-                error["exception"] = forward_time_list
-                error_dict[case_name] = error
-            elif isinstance(forward_time_list, list):
-                forward_res_list, backward_res_list, total_res_list, best_total_res_list = self._base_statistics(
-                    forward_res_list=forward_res_list,
-                    backward_res_list=backward_res_list,
-                    total_res_list=total_res_list,
-                    best_total_res_list=best_total_res_list,
-                    forward_time_list=forward_time_list,
-                    backward_time_list=backward_time_list,
-                    total_time_list=total_time_list,
-                )
-
-                forward = self.statistics.best(data_list=forward_res_list)
-                backward = self.statistics.best(data_list=backward_res_list)
-                total = self.statistics.best(data_list=total_res_list)
-                best_total = self.statistics.best(data_list=best_total_res_list)
-
-                if self.if_showtime:
-                    self._show(
-                        forward_time=forward,
-                        backward_time=backward,
-                        total_time=total,
-                        best_total_time=best_total,
-                    )
-
-                latest_case["jid"] = latest_id
-                latest_case["case_name"] = case_name
-                latest_case["api"] = api
-                latest_case["result"] = {
-                    "api": api,
-                    "yaml": case_name,
-                    "forward": forward,
-                    "total": total,
-                    "backward": backward,
-                    "best_total": best_total,
-                }
-
-                self.db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)
-            else:
-                raise Exception("when ApiBenchmarkPTS.run(), something wrong with case: {}".format(case_name))
-
-        return error_dict
+    # def _run_main(self, all_cases, latest_id):
+    #     """
+    #     对指定case运行测试
+    #     :param all_cases: list of cases
+    #     :param latest_id: 任务jid
+    #     :param iters: 迭代次数
+    #     :return:
+    #     """
+    #     error_dict = {}
+    #
+    #     for case_name in all_cases:
+    #         error = {}
+    #         latest_case = {}
+    #
+    #         forward_res_list = []
+    #         total_res_list = []
+    #         backward_res_list = []
+    #         best_total_res_list = []
+    #
+    #         if case_name in SKIP_DICT[platform.system()]:
+    #             self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+    #             continue
+    #         if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
+    #             self.logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
+    #             continue
+    #         if self.yaml_info == "case_0":
+    #             if not case_name.endswith("_0"):
+    #                 self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+    #                 continue
+    #         if self.yaml_info == "case_1":
+    #             if case_name.endswith("_2"):
+    #                 self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+    #                 continue
+    #         if self.yaml_info == "case_2":
+    #             if not case_name.endswith("_2"):
+    #                 self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+    #                 continue
+    #
+    #         forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
+    #
+    #         if isinstance(forward_time_list, str):
+    #             error["api"] = api
+    #             error["exception"] = forward_time_list
+    #             error_dict[case_name] = error
+    #         elif isinstance(forward_time_list, list):
+    #             forward_res_list, backward_res_list, total_res_list, best_total_res_list = self._base_statistics(
+    #                 forward_res_list=forward_res_list,
+    #                 backward_res_list=backward_res_list,
+    #                 total_res_list=total_res_list,
+    #                 best_total_res_list=best_total_res_list,
+    #                 forward_time_list=forward_time_list,
+    #                 backward_time_list=backward_time_list,
+    #                 total_time_list=total_time_list,
+    #             )
+    #
+    #             forward = self.statistics.best(data_list=forward_res_list)
+    #             backward = self.statistics.best(data_list=backward_res_list)
+    #             total = self.statistics.best(data_list=total_res_list)
+    #             best_total = self.statistics.best(data_list=best_total_res_list)
+    #
+    #             if self.if_showtime:
+    #                 self._show(
+    #                     forward_time=forward,
+    #                     backward_time=backward,
+    #                     total_time=total,
+    #                     best_total_time=best_total,
+    #                 )
+    #
+    #             latest_case["jid"] = latest_id
+    #             latest_case["case_name"] = case_name
+    #             latest_case["api"] = api
+    #             latest_case["result"] = {
+    #                 "api": api,
+    #                 "yaml": case_name,
+    #                 "forward": forward,
+    #                 "total": total,
+    #                 "backward": backward,
+    #                 "best_total": best_total,
+    #             }
+    #
+    #             self.db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)
+    #         else:
+    #             raise Exception("when ApiBenchmarkPTS.run(), something wrong with case: {}".format(case_name))
+    #
+    #     return error_dict
 
     def _run_pts(self):
         """
