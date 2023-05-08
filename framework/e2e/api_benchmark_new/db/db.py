@@ -162,7 +162,7 @@ class DB(object):
             case_id = self.insert(table="case", data=data)
             # self.insert_case(jid=job_id, data_dict=case, create_time=create_time)
             if case_id == -1:
-                print('db ping again~~~')
+                print("db ping again~~~")
                 self.db.ping(True)
                 continue
             else:
