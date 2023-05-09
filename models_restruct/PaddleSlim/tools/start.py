@@ -2,6 +2,7 @@
 start.py run:
 """
 import os
+import shutil
 import tarfile
 import zipfile
 import logging
@@ -101,10 +102,15 @@ def run():
     qa_yaml = paddleslim_start.qa_yaml_name
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_start.set_cuda
     set_cuda_single_card = paddleslim_start.set_cuda.split(",")[0]
+    os.environ["FLAGS_use_stride_kernel"] = "1"
 
     if qa_yaml.split("^")[0] != "case":
-        with open(rd_yaml, "r", encoding="utf-8") as f:
-            content = yaml.load(f, Loader=yaml.FullLoader)
+        try:
+            with open(rd_yaml, "r", encoding="utf-8") as f:
+                content = yaml.load(f, Loader=yaml.FullLoader)
+        except Exception as e:
+            logger.info("open rd {} got error {} ".format(rd_yaml, e))
+            content = {}
 
         if qa_yaml == "example^auto_compression^detection^configs^ppyoloe_l_qat_dis":
             paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar")
@@ -206,11 +212,37 @@ def run():
             paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
             content["model_dir"] = current_path + "/yolov6s.onnx"
             content["dataset_dir"] = current_path + "/coco"
+        elif qa_yaml in [
+            "example^reparameterization^mobilenet_v1",
+            "example^quantization^ptq^classification^mobilenet_v1",
+            "example^quantization^ptq^classification^resnet50",
+            "example^quantization^qat^classification^mobilenet_v1",
+            "example^quantization^qat^classification^resnet50",
+        ]:
+            paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
+            if qa_yaml in [
+                "example^quantization^qat^classification^mobilenet_v1",
+                "example^quantization^qat^classification^resnet50",
+            ]:
+                # 将数据集挪到data下
+                try:
+                    source_path = os.path.join(current_path + "/ILSVRC2012")
+                    data_path = os.path.join(current_path + "/data/ILSVRC2012")
+                    if not os.path.exists(data_path):
+                        os.makedirs(data_path)
+                    else:
+                        shutil.rmtree(data_path)
+                    shutil.move(source_path, data_path)
+                except Exception as e:
+                    print("copy data got error: {}!".format(e))
+
         else:
             logger.info("### no exists {} ".format(qa_yaml))
-
-        with open(rd_yaml, "w", encoding="utf-8") as f:
-            yaml.dump(content, f)
+        try:
+            with open(rd_yaml, "w", encoding="utf-8") as f:
+                yaml.dump(content, f)
+        except Exception as e:
+            logger.info("rewrite rd {} got error {} ".format(rd_yaml, e))
 
         # auto_compression/semantic_segmentation demo 修改数据路径
         semantic_segmentation_reader = (

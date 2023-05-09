@@ -37,7 +37,7 @@ def test_det_base():
     base
     """
     x = np.random.rand(4, 4) * 10
-    res = np.linalg.det(x).reshape(1)
+    res = np.linalg.det(x)
     obj.base(res=res, x=x)
 
 
@@ -47,7 +47,7 @@ def test_det0():
     default
     """
     x = np.random.rand(4, 4)
-    res = np.linalg.det(x).reshape(1)
+    res = np.linalg.det(x)
     obj.run(res=res, x=x)
 
 

@@ -3,9 +3,9 @@ train:
     name: single
     cmd: python examples/ldc/ldc2d_unsteady_Re10.py
     params:
-      - --epochs=10
+      - --epochs=20000
     result:
       loss:
-        base: 1218.78577
+        base: 22.80152
         threshold: 0
         evaluation: "="

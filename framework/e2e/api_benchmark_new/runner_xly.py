@@ -43,8 +43,8 @@ class ApiBenchmarkXLY(ApiBenchmarkBASE):
         :param baseline: 性能baseline键值对, key为case名, value为性能float
         """
         # 测试控制项
-        self.loops = 1000  # 循环次数
-        self.base_times = 50  # timeit 基础运行时间
+        self.loops = 50  # 循环次数
+        self.base_times = 1000  # timeit 基础运行时间
         self.default_dtype = "float32"
         self.if_showtime = True
         self.double_check = True
@@ -113,74 +113,93 @@ class ApiBenchmarkXLY(ApiBenchmarkBASE):
         # 邮件报警
         # self.email = Alarm(storage=self.storage)
 
-    def _run_main(self, all_cases, latest_id):
-        """
-        对指定case运行测试
-        :param all_cases: list of cases
-        :param latest_id: 任务jid
-        :param iters: 迭代次数
-        :return:
-        """
-        error_dict = {}
+    # def _run_main(self, all_cases, latest_id):
+    #     """
+    #     对指定case运行测试
+    #     :param all_cases: list of cases
+    #     :param latest_id: 任务jid
+    #     :param iters: 迭代次数
+    #     :return:
+    #     """
+    #     error_dict = {}
+    #
+    #     for case_name in all_cases:
+    #         error = {}
+    #         latest_case = {}
+    #
+    #         forward_res_list = []
+    #         total_res_list = []
+    #         backward_res_list = []
+    #         best_total_res_list = []
+    #
+    #         if case_name in SKIP_DICT[platform.system()]:
+    #             self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+    #             continue
+    #         if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
+    #             self.logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
+    #             continue
+    #         if self.yaml_info == "case_0":
+    #             if not case_name.endswith("_0"):
+    #                 self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+    #                 continue
+    #         if self.yaml_info == "case_1":
+    #             if case_name.endswith("_2"):
+    #                 self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+    #                 continue
+    #         if self.yaml_info == "case_2":
+    #             if not case_name.endswith("_2"):
+    #                 self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+    #                 continue
+    #
+    #         forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
+    #
+    #         if isinstance(forward_time_list, str):
+    #             error["api"] = api
+    #             error["exception"] = forward_time_list
+    #             error_dict[case_name] = error
+    #         elif isinstance(forward_time_list, list):
+    #             forward_res_list, backward_res_list, total_res_list, best_total_res_list = self._base_statistics(
+    #                 forward_res_list=forward_res_list,
+    #                 backward_res_list=backward_res_list,
+    #                 total_res_list=total_res_list,
+    #                 best_total_res_list=best_total_res_list,
+    #                 forward_time_list=forward_time_list,
+    #                 backward_time_list=backward_time_list,
+    #                 total_time_list=total_time_list,
+    #             )
+    #
+    #             forward = self.statistics.best(data_list=forward_res_list)
+    #             backward = self.statistics.best(data_list=backward_res_list)
+    #             total = self.statistics.best(data_list=total_res_list)
+    #             best_total = self.statistics.best(data_list=best_total_res_list)
+    #
+    #             if self.if_showtime:
+    #                 self._show(
+    #                     forward_time=forward,
+    #                     backward_time=backward,
+    #                     total_time=total,
+    #                     best_total_time=best_total,
+    #                 )
+    #
+    #             latest_case["jid"] = latest_id
+    #             latest_case["case_name"] = case_name
+    #             latest_case["api"] = api
+    #             latest_case["result"] = {
+    #                 "api": api,
+    #                 "yaml": case_name,
+    #                 "forward": forward,
+    #                 "total": total,
+    #                 "backward": backward,
+    #                 "best_total": best_total,
+    #             }
+    #
+    #             self.db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)
+    #         else:
+    #             raise Exception("when ApiBenchmarkPTS.run(), something wrong with case: {}".format(case_name))
+    #
+    #     return error_dict
 
-        for case_name in all_cases:
-            error = {}
-            latest_case = {}
-
-            forward_res_list = []
-            total_res_list = []
-            backward_res_list = []
-            best_total_res_list = []
-
-            forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
-
-            if isinstance(forward_time_list, str):
-                error["api"] = api
-                error["exception"] = forward_time_list
-                error_dict[case_name] = error
-            elif isinstance(forward_time_list, list):
-                forward_res_list, backward_res_list, total_res_list, best_total_res_list = self._base_statistics(
-                    forward_res_list=forward_res_list,
-                    backward_res_list=backward_res_list,
-                    total_res_list=total_res_list,
-                    best_total_res_list=best_total_res_list,
-                    forward_time_list=forward_time_list,
-                    backward_time_list=backward_time_list,
-                    total_time_list=total_time_list,
-                )
-
-                forward = self.statistics.best(data_list=forward_res_list)
-                backward = self.statistics.best(data_list=backward_res_list)
-                total = self.statistics.best(data_list=total_res_list)
-                best_total = self.statistics.best(data_list=best_total_res_list)
-
-                if self.if_showtime:
-                    self._show(
-                        forward_time=forward,
-                        backward_time=backward,
-                        total_time=total,
-                        best_total_time=best_total,
-                    )
-
-                latest_case["jid"] = latest_id
-                latest_case["case_name"] = case_name
-                latest_case["api"] = api
-                latest_case["result"] = {
-                    "api": api,
-                    "yaml": case_name,
-                    "forward": forward,
-                    "total": total,
-                    "backward": backward,
-                    "best_total": best_total,
-                }
-
-                self.db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)
-            else:
-                raise Exception("when ApiBenchmarkPTS.run(), something wrong with case: {}".format(case_name))
-
-        return error_dict
-
-    def _run_pts(self):
+    def _run_xly(self):
         """
 
         :return:
@@ -221,20 +240,30 @@ class ApiBenchmarkXLY(ApiBenchmarkBASE):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
+    # yaml_path, routine, comment, framework, enable_backward, python, place, yaml_info, wheel_link
     parser.add_argument("--yaml", type=str, help="input the yaml path")
+    parser.add_argument("--routine", type=int, default=1, help="if 1, daily routine mission")
+    parser.add_argument("--comment", type=str, default=None, help="your comment")
+    parser.add_argument("--framework", type=str, default="paddle", help="[paddle] | [torch]")
+    parser.add_argument("--enable_backward", type=int, default=1, help="if 1, enable backward test")
+    parser.add_argument(
+        "--python", type=str, default="python3.8", help="python version like python3.7 | python3.8 etc."
+    )
+    parser.add_argument("--place", type=str, default="cpu", help="[cpu] or [gpu]")
+    parser.add_argument("--yaml_info", type=str, default="case_0", help="[case_0] or [case_1] or [case_2]")
+    parser.add_argument("--wheel_link", type=str, default=None, help="paddle wheel link")
     args = parser.parse_args()
 
     api_bm = ApiBenchmarkXLY(
-        yaml_path="./../yaml/test0.yml",
+        yaml_path=args.yaml,
         # latest_id=41,
-        routine=0,
-        comment="fake_run_pts",
-        framework="paddle",
-        enable_backward=1,
-        python="python38",
-        place="cpu",
-        yaml_info="case_0",
-        wheel_link="fake_link",
+        routine=args.routine,
+        comment=args.comment,
+        framework=args.framework,
+        enable_backward=args.enable_backward,
+        python=args.python,
+        place=args.place,
+        yaml_info=args.yaml_info,
+        wheel_link=args.wheel_link,
     )
-    api_bm._run_pts()
-    # api_bm.baseline_insert()
+    api_bm._run_xly()
