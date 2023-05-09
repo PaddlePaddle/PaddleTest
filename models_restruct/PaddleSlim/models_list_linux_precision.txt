@@ -10,3 +10,7 @@ case^demo^quant^quant_aware^MobileNet_precision.yaml
 case^demo^quant^quant_post^MobileNetV1_precision.yaml
 case^demo^unstructured_prune^ratio_precision.yaml
 case^demo^unstructured_prune^threshold_precision.yaml
+example^quantization^ptq^classification^mobilenet_v1
+example^quantization^ptq^classification^resnet50
+example^quantization^qat^classification^mobilenet_v1
+example^quantization^qat^classification^resnet50

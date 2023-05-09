@@ -38,7 +38,7 @@ def test_matrix_rank_base():
     x = np.array(
         [[-2.0, 2.0, 1.0, 2.0, 2.0], [-2.0, 2.0, 1.0, 2.0, 2.0], [1.0, 3.0, 4.0, 1.0, 7.0], [-4.0, 4.0, 2.0, 4.0, 4.0]]
     )
-    res = [np.linalg.matrix_rank(x, tol=tol, hermitian=hermitian)]
+    res = np.linalg.matrix_rank(x, tol=tol, hermitian=hermitian)
     obj.base(res=res, x=x, tol=tol, hermitian=hermitian)
 
 
@@ -54,7 +54,7 @@ def test_matrix_rank_1():
     x = np.array(
         [[-2.0, 2.0, 1.0, 2.0, 2.0], [-2.0, 2.0, 1.0, 2.0, 2.0], [1.0, 3.0, 4.0, 1.0, 7.0], [-4.0, 4.0, 2.0, 4.0, 4.0]]
     )
-    res = [np.linalg.matrix_rank(x, tol=tol, hermitian=hermitian)]
+    res = np.linalg.matrix_rank(x, tol=tol, hermitian=hermitian)
     obj.run(res=res, x=x, tol=tol, hermitian=hermitian)
 
 
@@ -68,7 +68,7 @@ def test_matrix_rank_2():
     tol = 4.4
     hermitian = True
     x = np.array([[-2.0, 2.0, 1.0, 2.0], [-2.0, 2.0, 1.0, 2.0], [1.0, 3.0, 4.0, 1.0], [-4.0, 4.0, 2.0, 4.0]])
-    res = [np.linalg.matrix_rank(x, tol=tol, hermitian=hermitian)]
+    res = np.linalg.matrix_rank(x, tol=tol, hermitian=hermitian)
     obj.run(res=res, x=x, tol=tol, hermitian=hermitian)
 
 

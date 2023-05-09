@@ -30,6 +30,9 @@ python -m pip install pyparsing==2.4.7 --ignore-installed
 #pip install -e .
 pip install .
 
+# urllib3
+python -m pip install -U urllib3==1.26.15
+
 # fix protobuf upgrade
 python -m pip uninstall protobuf -y
 python -m pip install protobuf==3.20.1

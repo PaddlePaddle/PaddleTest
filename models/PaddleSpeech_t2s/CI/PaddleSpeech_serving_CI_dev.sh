@@ -88,6 +88,9 @@ echo $(($num%$max+$min))
 python -m pip uninstall -y paddlespeech
 python -m pip install .
 
+# urllib3
+python -m pip install -U urllib3==1.26.15
+
 
 unset http_proxy
 unset https_proxy
