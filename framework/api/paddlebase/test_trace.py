@@ -36,7 +36,7 @@ def test_trace_offset1():
     offset=0, axis1=0, axis2=1
     """
     x_data = np.arange(12).reshape((3, 4)).astype(np.float32)
-    res = np.array([15.0])
+    res = np.array(15.0)
     obj2.run(res=res, x=x_data, offset=0, axis1=0, axis2=1)
 
 
@@ -46,7 +46,7 @@ def test_trace_offset2():
     offset=-1, axis1=0, axis2=1
     """
     x_data = np.arange(12).reshape((3, 4)).astype(np.float32)
-    res = np.array([13.0])
+    res = np.array(13.0)
     obj2.run(res=res, x=x_data, offset=-1, axis1=0, axis2=1)
 
 
@@ -56,7 +56,7 @@ def test_trace_offset3():
     offset=1, axis1=0, axis2=1
     """
     x_data = np.arange(12).reshape((3, 4)).astype(np.float32)
-    res = np.array([18.0])
+    res = np.array(18.0)
     obj2.run(res=res, x=x_data, offset=1, axis1=0, axis2=1)
 
 

@@ -30,7 +30,7 @@ ignore_case_dir = {
     "device": [],
     "fft": [],
     "incubate": ["test_jvp.py"],
-    "linalg": ["test_cond.py", "test_norm.py", "test_matrix_rank.py", "test_multi_dot.py", "test_det.py"],
+    "linalg": ["test_cond.py", "test_norm.py"],
     "loss": ["test_HingeEmbeddingLoss.py"],
     "nn": [
         "test_functional_celu.py",
@@ -48,8 +48,6 @@ ignore_case_dir = {
         "test_Tensor_nansum.py",
         "test_var.py",
         "test_std.py",
-        "test_dist.py",
-        "test_trace.py",
     ],
     "optimizer": [],
     "distribution": [

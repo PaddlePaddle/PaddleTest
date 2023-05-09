@@ -6,13 +6,17 @@ ln -s $(which pip3.7) run_env_py37/pip;
 export PATH=$(pwd)/run_env_py37:${PATH};
 
 python -m pip install pip==20.2.4 --ignore-installed;
+python -m pip install -r requirements.txt --ignore-installed
+# install paddleseg
+pip install -v -e .
+python -m pip install requests==2.28.2 --ignore-installed --no-cache-dir
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
 echo "checkout develop !"
-python -m pip install ${paddle_dev} --no-cache-dir --ignore-installed
+python -m pip install ${paddle_dev} --no-cache-dir
 else
 echo "checkout release !"
-python -m pip install ${paddle_release} --no-cache-dir --ignore-installed
+python -m pip install ${paddle_release} --no-cache-dir
 fi
 
 echo -e '*****************paddle_version*****'
@@ -75,10 +79,6 @@ print_result(){
     fi
 }
 
-# run dynamic models
-pip install -r requirements.txt --ignore-installed
-#install paddleseg
-pip install -v -e .
 log_dir=.
 model_type_path=
 dynamic_config_num=`cat dynamic_config_list_temp | wc -l`
