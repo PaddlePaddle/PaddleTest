@@ -22,7 +22,7 @@ def test_nansum0():
     x[:, 1, :] = float("-nan")
     x = x.astype("float32")
     res = paddle.to_tensor(x).nansum()
-    exp = [np.nansum(x)]
+    exp = np.nansum(x)
     compare(res.numpy(), exp)
 
 
@@ -38,7 +38,7 @@ def test_nansum():
     x[:, 1, :] = float("-nan")
     x = x.astype("float64")
     res = paddle.to_tensor(x).nansum()
-    exp = [np.nansum(x)]
+    exp = np.nansum(x)
     compare(res.numpy(), exp)
 
 
