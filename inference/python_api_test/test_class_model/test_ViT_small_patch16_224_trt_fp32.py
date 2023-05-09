@@ -84,6 +84,7 @@ def test_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             precision="trt_fp32",
+            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
             tuned=True,
         )
@@ -100,6 +101,7 @@ def test_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             precision="trt_fp32",
+            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
         )
 
@@ -141,6 +143,7 @@ def test_jetson_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             precision="trt_fp32",
+            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
             tuned=True,
         )
@@ -157,6 +160,7 @@ def test_jetson_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             precision="trt_fp32",
+            delete_pass_list=["preln_residual_bias_fuse_pass"],
             dynamic=True,
         )
 
@@ -194,6 +198,7 @@ def test_trt_fp32_bz1_multi_thread():
         input_data_dict,
         output_data_dict,
         precision="trt_fp32",
+        delete_pass_list=["preln_residual_bias_fuse_pass"],
     )
 
     del test_suite2  # destroy class to save memory
