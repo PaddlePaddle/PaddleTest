@@ -18,5 +18,5 @@ case:
         result:
           auc:
             base: 0.7968
-            threshold: 0.0003
+            threshold: 0.0005
             evaluation: "+"

@@ -82,7 +82,6 @@ class PaddleRec_Build(Model_Build):
         """
         安装依赖包
         """
-        os.environ["FLAGS_use_stride_kernel"] = "True"
         path_now = os.getcwd()
         os.chdir("PaddleRec") 
         os.system("python -m pip install -r requirements.txt")
