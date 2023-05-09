@@ -10,10 +10,10 @@ python -m pip install requests==2.28.2 --ignore-installed --no-cache-dir
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
 echo "checkout develop !"
-python -m pip install ${paddle_dev} --no-cache-dir --ignore-installed
+python -m pip install ${paddle_dev} --no-cache-dir
 else
 echo "checkout release !"
-python -m pip install ${paddle_release} --no-cache-dir --ignore-installed
+python -m pip install ${paddle_release} --no-cache-dir
 fi
 
 echo -e '*****************paddle_version*****'
