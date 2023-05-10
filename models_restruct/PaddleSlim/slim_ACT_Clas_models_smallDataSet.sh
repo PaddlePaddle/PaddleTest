@@ -48,7 +48,7 @@ echo ---infer models downloaded-----
 
 wget_infer_models
 
-# $1 模型名称、 $2 本次回归精度、$3 精度base值、 $4 精度允许diff范围 
+# $1 模型名称、 $2 本次回归精度、$3 精度base值、 $4 精度允许diff范围
 computer_diff_precision(){
 #本次回归实际精度diff
 diff=`echo $3-$2 | bc`
@@ -86,7 +86,7 @@ for model in $(echo ${!dic[*]});do
     print_info $? ${model}_act_qat
     model_log="${log_path}/SUCCESS_${model}_act_qat.log"
     if [ -f "${model_log}" ];then
-        grep -i 'The metric of final model is ' ${model_log} | awk -F 'is ' '{print $2}' | awk -F ' samples/s' '{print $1}' > test.log &&  quota=`tail -1 test.log` 
+        grep -i 'The metric of final model is ' ${model_log} | awk -F 'is ' '{print $2}' | awk -F ' samples/s' '{print $1}' > test.log &&  quota=`tail -1 test.log`
         echo ----model_name:${model}
         echo ----quota:${quota}
         echo ----base_value:${base_value}
