@@ -326,7 +326,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         api_grade = ci_level_reveal(compare_dict)
         print(api_grade)
 
-    def _baseline_insert(self):
+    def _baseline_insert(self, wheel_link):
         """
 
         :return:
@@ -348,7 +348,8 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             enable_backward=self.enable_backward,
             python=self.python,
             yaml_info=self.yaml_info,
-            wheel_link=self.wheel_link,
+            # wheel_link=self.wheel_link,
+            wheel_link=wheel_link,
             description=json.dumps(self.description),
             create_time=self.now_time,
             update_time=self.now_time,
@@ -368,9 +369,12 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--yaml", type=str, help="input the yaml path")
+    parser.add_argument("--baseline_whl_link", type=str, default=None, help="only be used to insert baseline data")
     args = parser.parse_args()
 
-    api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
-    # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/test1.yml")
-    api_bm._run_ci()
-    # api_bm._baseline_insert()
+    # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
+    api_bm = ApiBenchmarkCI(yaml_path=args.yaml)
+    if bool(args.baseline_whl_link):
+        api_bm._run_ci()
+    else:
+        api_bm._baseline_insert(wheel_link=args.baseline_whl_link)
