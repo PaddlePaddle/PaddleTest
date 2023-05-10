@@ -30,7 +30,7 @@ ignore_case_dir = {
     "device": [],
     "fft": [],
     "incubate": ["test_jvp.py"],
-    "linalg": ["test_cond.py", "test_norm.py"],
+    "linalg": [],
     "loss": [],
     "nn": [
         "test_functional_celu.py",
