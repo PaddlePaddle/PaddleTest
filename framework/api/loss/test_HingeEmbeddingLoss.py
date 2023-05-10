@@ -29,11 +29,11 @@ def cal_np(input, labels, margin=1.0, reduction="mean"):
     x[labels == -1] = np.where(margin - x[labels == -1] > 0, margin - x[labels == -1], 0)
     # print(x)
     if reduction == "mean":
-        return np.mean(x).reshape(1)
+        return np.mean(x)
     elif reduction == "none":
         return x
     elif reduction == "sum":
-        return np.sum(x).reshape(1)
+        return np.sum(x)
 
 
 class TestHingeEmbeddingLoss(APIBase):
