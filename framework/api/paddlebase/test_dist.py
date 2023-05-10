@@ -45,7 +45,7 @@ def test_dist_base():
     x = randtool("float", 1, 2, [4, 4])
     y = randtool("float", -1, 1, [4, 4])
     z = x - y
-    res = np.linalg.norm(z).reshape([1])
+    res = np.linalg.norm(z)
     obj.base(res=res, x=x, y=y)
 
 
@@ -62,7 +62,7 @@ def test_dist0():
     y = np.array([[3, 3], [3, 1]])
     # z = x - y
     # res = np.linalg.norm(z, ord=0).reshape([1])
-    res = np.array([2])
+    res = np.array(2)
     obj.run(res=res, x=x, y=y, p=0)
 
 
@@ -79,7 +79,7 @@ def test_dist1():
     y = np.array([[3, 0], [3, 1]])
     # z = x - y
     # res = np.linalg.norm(z, ord=0).reshape([1])
-    res = np.array([100])
+    res = np.array(100)
     obj.run(res=res, x=x, y=y, p=float("inf"))
 
 
@@ -94,7 +94,7 @@ def test_dist2():
     y = np.array([[3, 0], [3, 5]])
     # z = x - y
     # res = np.linalg.norm(z, ord=0).reshape([1])
-    res = np.array([0])
+    res = np.array(0)
     obj.run(res=res, x=x, y=y, p=float("-inf"))
 
 
@@ -109,7 +109,7 @@ def test_dist3():
     x = randtool("float", 1, 2, [4, 4])
     y = randtool("float", -1, 1, [4, 4])
     z = x - y
-    res = np.sum(np.abs(z)).reshape([1])
+    res = np.sum(np.abs(z))
     obj.run(res=res, x=x, y=y, p=1)
 
 
@@ -123,7 +123,7 @@ def test_dist4():
     x = randtool("float", 1, 2, [2, 1, 4, 4])
     y = randtool("float", -1, 1, [7, 1, 4])
     z = x - y
-    res = np.linalg.norm(z).reshape([1])
+    res = np.linalg.norm(z)
     obj.run(res=res, x=x, y=y)
 
 
@@ -137,7 +137,7 @@ def test_dist5():
     x = randtool("float", 1, 2, [2, 1, 1, 4, 4])
     y = randtool("float", -1, 1, [2, 8, 7, 1, 4])
     z = x - y
-    res = np.linalg.norm(z).reshape([1])
+    res = np.linalg.norm(z)
     obj.run(res=res, x=x, y=y)
 
 
@@ -151,7 +151,7 @@ def test_dist6():
     x = np.random.rand(10)
     y = np.random.randint(-1, 1, (10,))
     z = x - y
-    res = np.linalg.norm(z).reshape([1])
+    res = np.linalg.norm(z)
     obj.run(res=res, x=x, y=y)
 
 
@@ -165,7 +165,7 @@ def test_dist7():
     x = np.random.rand(10)
     y = np.random.rand(4, 10)
     z = x - y
-    res = np.linalg.norm(z).reshape([1])
+    res = np.linalg.norm(z)
     obj.run(res=res, x=x, y=y)
 
 
@@ -184,7 +184,7 @@ def test_dist8():
     for i in z.flatten():
         res += i**4
     res = res**0.25
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y, p=4)
 
 
@@ -203,7 +203,7 @@ def test_dist9():
     for i in z.flatten():
         res += i**7
     res = res ** (1 / 7)
-    res = np.array([res])
+    res = np.array(res)
     obj.run(res=res, x=x, y=y, p=7)
 
 

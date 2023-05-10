@@ -34,7 +34,7 @@ def test_sum_base():
     axis=None
     """
     x = np.array([[0.8, 0.4], [0.7, 0.9]])
-    res = [np.sum(x)]
+    res = np.sum(x)
     print("res:{}".format(res))
     obj.base(res=res, x=x)
 
@@ -77,9 +77,8 @@ def test_sum4():
     axis=list
     """
     x = np.array([[0.8, 0.4], [0.7, 0.9]])
-    axis = [0, 1]
-    res = [2.8]
-    obj.run(res=res, x=x, axis=axis)
+    res = np.sum(x, axis=(0, 1))
+    obj.run(res=res, x=x, axis=[0, 1])
 
 
 @pytest.mark.api_base_sum_parameters
@@ -88,9 +87,8 @@ def test_sum5():
     axis=tuple
     """
     x = np.array([[0.8, 0.4], [0.7, 0.9]])
-    axis = (0, 1)
-    res = [2.8]
-    obj.run(res=res, x=x, axis=axis)
+    res = np.sum(x, axis=(0, 1))
+    obj.run(res=res, x=x, axis=[0, 1])
 
 
 @pytest.mark.api_base_sum_parameters
@@ -99,7 +97,7 @@ def test_sum6():
     dtype=float64
     """
     x = np.array([[0.8, 0.4], [0.7, 0.9]])
-    res = [np.sum(x)]
+    res = np.sum(x)
     obj.base(res=res, x=x, dtype="float64")
 
 
@@ -160,7 +158,7 @@ def test_sum10():
     input is int32, int64
     """
     x = np.array([[3, 5], [6, 2]])
-    res = [np.sum(x)]
+    res = np.sum(x)
     obj1.run(res=res, x=x)
 
 
@@ -172,7 +170,7 @@ def test_sum11():
     paddle.disable_static()
     x = np.array([[0.8, 0.4], [0.7, 0.9]])
     axis = np.array([0, 1])
-    res = np.array([2.8])
+    res = np.array(2.8)
     exp = paddle.sum(paddle.to_tensor(x), axis=paddle.to_tensor(axis))
     assert np.allclose(exp.numpy(), res)
 
