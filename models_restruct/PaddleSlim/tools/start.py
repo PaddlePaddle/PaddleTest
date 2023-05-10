@@ -223,10 +223,9 @@ def run():
                 # 从current_path下软链一份过去
                 data_path = paddleslim_start.REPO_PATH + "/example/quantization/qat/classification/data"
                 source_path = os.path.join(current_path + "/ILSVRC2012")
-                if not os.path.exists(data_path):
-                    os.makedirs(data_path)
-                else:
+                if os.path.exists(data_path):
                     shutil.rmtree(data_path)
+                os.makedirs(data_path)
                 # 软链，因为程序写死了数据集路径
                 os.system("ln -s {} {}".format(source_path, data_path))
             except Exception as e:
