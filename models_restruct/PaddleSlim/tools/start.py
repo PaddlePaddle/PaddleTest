@@ -104,7 +104,7 @@ def run():
     qa_yaml = paddleslim_start.qa_yaml_name
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_start.set_cuda
     set_cuda_single_card = paddleslim_start.set_cuda.split(",")[0]
-    
+
     if qa_yaml.split("^")[0] != "case":
         try:
             with open(rd_yaml, "r", encoding="utf-8") as f:
@@ -228,7 +228,7 @@ def run():
                 else:
                     shutil.rmtree(data_path)
                 # 软链，因为程序写死了数据集路径
-                os.system('ln -s {} {}'.format(source_path, data_path))
+                os.system("ln -s {} {}".format(source_path, data_path))
             except Exception as e:
                 print("copy data got error: {}!".format(e))
         else:
@@ -302,5 +302,7 @@ def run():
             os.chdir(current_path)
     # 将env设置好
     os.environ[paddleslim_start.reponame] = json.dumps(paddleslim_start.env_dict)
+
+
 if __name__ == "__main__":
     run()
