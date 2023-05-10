@@ -9,3 +9,13 @@ train:
         base: 0
         threshold: 0
         evaluation: "="
+  -
+    name: multi
+    cmd: python -m paddle.distributed.launch examples/cylinder/3d_steady/cylinder3d_steady.py -c ${rd_yaml_path}
+    params:
+      - -o Global.epochs=10
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
