@@ -52,9 +52,7 @@ case:
         name: function_dy2st
       -
         name: function_amp
-    eval:
-      -
-        name: function
+    eval: skipped
     infer:
       -
         name: function

@@ -61,10 +61,19 @@ case:
     train:
       -
         name: function
+        params:
+          - -o DataLoader.Train.sampler.batch_size=16
+          - -o DataLoader.Eval.sampler.batch_size=16
       -
         name: function_dy2st
+        params:
+          - -o DataLoader.Train.sampler.batch_size=16
+          - -o DataLoader.Eval.sampler.batch_size=16
       -
         name: function_amp
+        params:
+          - -o DataLoader.Train.sampler.batch_size=16
+          - -o DataLoader.Eval.sampler.batch_size=16
     eval:
       -
         name: function
