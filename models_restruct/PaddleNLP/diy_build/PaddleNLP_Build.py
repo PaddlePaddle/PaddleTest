@@ -13,7 +13,6 @@ import numpy as np
 import yaml
 import wget
 from Model_Build import Model_Build
-import google.protobuf
 
 logger = logging.getLogger("ce")
 
@@ -111,11 +110,15 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html")
         os.chdir(path_now)
 
+        os.system("python -m pip uninstall protobuf -y")
+        os.system("python -m pip uninstall protobuf -y")
+        os.system("python -m pip install protobuf==3.20.2")
+        
+
         import paddle
-        print(os.system(f'which python'))
         print("paddle final commit",paddle.version.commit)
         os.system("python -m pip list")
-        print("protobuf_version", google.protobuf.__version__)
+
 
         return 0
 
