@@ -4,6 +4,8 @@ case:
     train:
       -
         name: single
+      -
+        name: multi
     eval: skipped
     infer: skipped
     export: skipped

@@ -13,8 +13,8 @@ import pytest
 
 class TestStickBreakingTransform(APIBase):
     """
-        test
-        """
+    test
+    """
 
     def hook(self):
         """
@@ -81,8 +81,8 @@ def test_StickBreakingTransform0():
     x = np.array([1.0, 2.0, 3.0])
     res0 = cal_forward(x)
     res1 = x
-    res2 = np.array([-9.10835171])
-    res3 = np.array([9.10835075])
+    res2 = np.array(-9.10835171)
+    res3 = np.array(9.10835075)
     obj0.base(res=res0, x=x)
     obj1.base(res=res1, x=res0)
     obj2.base(res=res2, x=x)

@@ -76,7 +76,7 @@ ppcls^configs^ImageNet^ResNet^ResNet18.yaml
 ppcls^configs^ImageNet^ResNet^ResNet34.yaml
 ppcls^configs^ImageNet^ResNet^ResNet18_vd.yaml
 ppcls^configs^ImageNet^ResNet^ResNet200_vd.yaml
-ppcls^configs^ImageNet^VAN^VAN_tiny.yaml
+ppcls^configs^ImageNet^VAN^VAN_B0.yaml
 ppcls^configs^ImageNet^DPN^DPN98.yaml
 ppcls^configs^ImageNet^DPN^DPN92.yaml
 ppcls^configs^ImageNet^DPN^DPN107.yaml
@@ -150,7 +150,6 @@ ppcls^configs^ImageNet^SENet^SE_ResNet34_vd.yaml
 ppcls^configs^ImageNet^ResNeXt^ResNeXt101_32x4d.yaml
 ppcls^configs^ImageNet^ResNeXt^ResNeXt101_64x4d.yaml
 ppcls^configs^ImageNet^ResNeXt^ResNeXt101_vd_64x4d.yaml
-ppcls^configs^ImageNet^ResNeXt^ResNeXt50_vd_32x4d.yaml
 ppcls^configs^ImageNet^ResNeXt^ResNeXt152_64x4d.yaml
 ppcls^configs^ImageNet^ResNeXt^ResNeXt152_vd_32x4d.yaml
 ppcls^configs^ImageNet^ResNeXt^ResNeXt50_64x4d.yaml
