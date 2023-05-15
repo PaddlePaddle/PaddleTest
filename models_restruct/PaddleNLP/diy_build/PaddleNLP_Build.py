@@ -112,6 +112,7 @@ class PaddleNLP_Build(Model_Build):
         os.chdir(path_now)
 
         import paddle
+        print(os.system(f'which python'))
         print("paddle final commit",paddle.version.commit)
         os.system("python -m pip list")
         print("protobuf_version", google.protobuf.__version__)
