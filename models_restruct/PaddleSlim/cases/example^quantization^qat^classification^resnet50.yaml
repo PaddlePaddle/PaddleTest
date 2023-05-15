@@ -1,0 +1,33 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/quantization/qat/classification/
+        cmd: python train.py
+        params:
+          - --model=resnet50
+        result:
+          acc_top1:
+            base: 76.00
+            threshold: 0.005
+            evaluation: "+"
+          acc_top5:
+            base: 93.60
+            threshold: 0.005
+            evaluation: "+"
+      -
+        name: multi
+        path: example/quantization/qat/classification/
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --model=resnet50
+        result:
+          acc_top1:
+            base: 76.00
+            threshold: 0.005
+            evaluation: "+"
+          acc_top5:
+            base: 93.60
+            threshold: 0.005
+            evaluation: "+"

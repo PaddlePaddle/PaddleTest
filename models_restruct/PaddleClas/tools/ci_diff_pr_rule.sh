@@ -49,29 +49,29 @@ find ppcls/configs/reid/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'  
 #新增了1个类型TODO添加
 # ppcls^configs^ImageNet^Distillation^mv3_large_x1_0_distill_mv3_small_x1_0.yaml
 #P优先级删除all中没有的
-cat models_list_cls_test_P0 |while read line; do if [[ ! `grep -c "${line}" models_list_cls_test_all` -ne '0' ]] ;then
-    index=`grep -n ${line} models_list_cls_test_P0 | awk -F ":" '{print $1}'`
-    sed -i "" "${index}d" models_list_cls_test_P0 ; fi; done  #注意linux 不要 ""
+cat PaddleClas_P0_list |while read line; do if [[ ! `grep -c "${line}" PaddleClas_ALL_list` -ne '0' ]] ;then
+    index=`grep -n ${line} PaddleClas_P0_list | awk -F ":" '{print $1}'`
+    sed -i "" "${index}d" PaddleClas_P0_list ; fi; done  #注意linux 不要 ""
     # echo ${index} ; fi; done
-cat models_list_cls_test_P1 |while read line; do if [[ ! `grep -c "${line}" models_list_cls_test_all` -ne '0' ]] ;then
-    index=`grep -n ${line} models_list_cls_test_P1 | awk -F ":" '{print $1}'`
-    sed -i "" "${index}d" models_list_cls_test_P1 ; fi; done  #注意linux 不要 ""
+cat PaddleClas_P1_list |while read line; do if [[ ! `grep -c "${line}" PaddleClas_ALL_list` -ne '0' ]] ;then
+    index=`grep -n ${line} PaddleClas_P1_list | awk -F ":" '{print $1}'`
+    sed -i "" "${index}d" PaddleClas_P1_list ; fi; done  #注意linux 不要 ""
     # echo ${index} ; fi; done
-cat models_list_cls_test_P2 |while read line; do if [[ ! `grep -c "${line}" models_list_cls_test_all` -ne '0' ]] ;then
-    index=`grep -n ${line} models_list_cls_test_P2 | awk -F ":" '{print $1}'`
-    sed -i "" "${index}d" models_list_cls_test_P2 ; fi; done  #注意linux 不要 ""
+cat PaddleClas_P12_list  |while read line; do if [[ ! `grep -c "${line}" PaddleClas_ALL_list` -ne '0' ]] ;then
+    index=`grep -n ${line} PaddleClas_P12_list  | awk -F ":" '{print $1}'`
+    sed -i "" "${index}d" PaddleClas_P12_list  ; fi; done  #注意linux 不要 ""
     # echo ${index} ; fi; done
-cat models_list_cls_test_P3 |while read line; do if [[ ! `grep -c "${line}" models_list_cls_test_all` -ne '0' ]] ;then
-    index=`grep -n ${line} models_list_cls_test_P3 | awk -F ":" '{print $1}'`
-    sed -i "" "${index}d" models_list_cls_test_P3 ; fi; done  #注意linux 不要 ""
+cat PaddleClas_P11_list  |while read line; do if [[ ! `grep -c "${line}" PaddleClas_ALL_list` -ne '0' ]] ;then
+    index=`grep -n ${line} PaddleClas_P11_list  | awk -F ":" '{print $1}'`
+    sed -i "" "${index}d" PaddleClas_P11_list  ; fi; done  #注意linux 不要 ""
     # echo ${index} ; fi; done
 
 
 #P优先级插入all中新增的
-cat models_list_cls_test_all |while read line; do if [[ ! `grep -c "${line}" models_list_cls_test_P0` -ne '0' ]] \
-    && [[ ! `grep -c "${line}" models_list_cls_test_P1` -ne '0' ]] \
-    && [[ ! `grep -c "${line}" models_list_cls_test_P2` -ne '0' ]] \
-    && [[ ! `grep -c "${line}" models_list_cls_test_P3` -ne '0' ]]  ;then echo $line; fi; done
+cat PaddleClas_ALL_list |while read line; do if [[ ! `grep -c "${line}" PaddleClas_P0_list` -ne '0' ]] \
+    && [[ ! `grep -c "${line}" PaddleClas_P1_list ` -ne '0' ]] \
+    && [[ ! `grep -c "${line}" PaddleClas_P11_list ` -ne '0' ]] \
+    && [[ ! `grep -c "${line}" PaddleClas_P12_list ` -ne '0' ]]  ;then echo $line; fi; done
 
 
 # cat models_list | sort | uniq > models_list_run_tmp  #去重复

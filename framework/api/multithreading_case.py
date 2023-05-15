@@ -30,11 +30,10 @@ ignore_case_dir = {
     "device": [],
     "fft": [],
     "incubate": ["test_jvp.py"],
-    "linalg": ["test_cond.py", "test_norm.py", "test_matrix_rank.py", "test_multi_dot.py", "test_det.py"],
-    "loss": ["test_HingeEmbeddingLoss.py"],
+    "linalg": [],
+    "loss": [],
     "nn": [
         "test_functional_celu.py",
-        "test_HingeEmbeddingLoss.py",
         "test_CELU.py",
         "test_initializer_truncated_normal_new.py",
         "test_initializer_truncated_normal.py",
@@ -42,19 +41,9 @@ ignore_case_dir = {
     "paddlebase": [
         "test_fill_diagonal_tensor.py",
         "test_multiplex.py",
-        "test_sum.py",
-        "test_mean.py",
-        "test_nansum.py",
-        "test_Tensor_nansum.py",
-        "test_var.py",
-        "test_std.py",
-        "test_dist.py",
-        "test_trace.py",
     ],
     "optimizer": [],
-    "distribution": [
-        "test_StickBreakingTransform.py",
-    ],
+    "distribution": [],
     "utils": [],
 }
 
