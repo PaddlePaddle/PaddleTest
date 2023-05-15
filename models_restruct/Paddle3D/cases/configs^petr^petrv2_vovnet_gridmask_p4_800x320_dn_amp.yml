@@ -13,7 +13,7 @@ case:
               - --learning_rate 0.0001
               - --log_interval 10
               - --to_static False
-              - --num_workers 0 
+              - --num_workers 0
               - --iters 40001
               - --do_eval
               - --save_dir "./petrv2_dn_amp"
@@ -34,7 +34,7 @@ case:
               - --learning_rate 0.0001
               - --log_interval 10
               - --to_static True
-              - --num_workers 0 
+              - --num_workers 0
               - --iters 40001
               - --do_eval
               - --save_dir "./petrv2_dn_to_static_amp"
@@ -55,7 +55,7 @@ case:
               - --learning_rate 0.0001
               - --log_interval 10
               - --to_static True
-              - --num_workers 0 
+              - --num_workers 0
               - --iters 40001
               - --do_eval
               - --save_dir "./petrv2_dn_to_static_amp_prim"
@@ -76,7 +76,7 @@ case:
               - --learning_rate 0.0001
               - --log_interval 10
               - --to_static True
-              - --num_workers 0 
+              - --num_workers 0
               - --iters 40001
               - --do_eval
               - --save_dir "./petrv2_dn_to_static_amp_prim_cinn"

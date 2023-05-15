@@ -8,11 +8,15 @@ import re
 import json
 import glob
 import shutil
+import math
 import argparse
 import logging
 import yaml
 import wget
+import paddle
+import allure
 import numpy as np
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger("ce")
 
@@ -139,7 +143,7 @@ class Paddle3D_End(object):
         xdata2 = list(range(0, len(ydata2)))
 
         ydata3 = data3
-        xdata4 = list(range(0, len(ydata3)))
+        xdata3 = list(range(0, len(ydata3)))
         ydata4 = data4
         xdata4 = list(range(0, len(ydata4)))
 
@@ -148,10 +152,10 @@ class Paddle3D_End(object):
         ax = fig.add_subplot(1, 1, 1)
         ax.plot(xdata1, ydata1, label="paddle_amp_" + value, color="b", linewidth=2)
         ax.plot(xdata2, ydata2, label="paddle_dygraph2static_amp_" + value, color="r", linewidth=2)
-        ax.plot(xdata1, ydata1, label="paddle_dygraph2static_amp_prim" + value, color="b", linewidth=2, linestyle = ':')
-        ax.plot(xdata2, ydata2, label="paddle_dygraph2static_amp_prim_cinn" + value, color="r",\
-linewidth=2, linestyle = ':')
-
+        ax.plot(xdata3, ydata3, label="paddle_dygraph2static_amp_prim" + value, color="b", linewidth=2, linestyle=":")
+        ax.plot(
+            xdata4, ydata4, label="paddle_dygraph2static_amp_prim_cinn" + value, color="r", linewidth=2, linestyle=":"
+        )
 
         # set the legend
         ax.legend()
@@ -203,27 +207,32 @@ linewidth=2, linestyle = ':')
                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
                 "train_amp.log",
             )
-            filepath_dygraph_to_static_amp = os.path.join(
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/", \
-"train_dygraph_to_static_amp.log"
+            filepath_dygraph2static_amp = os.path.join(
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/", "train_dygraph2static_amp.log"
             )
-            filepath_dygraph_to_static_amp_prim = os.path.join(
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/", \
-"train_dygraph_to_static_amp_prim.log"
+            filepath_dygraph2static_amp_prim = os.path.join(
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "train_dygraph2static_amp_prim.log",
             )
-            filepath_dygraph_to_static_amp_cinn = os.path.join(
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/", \
-"train_dygraph_to_static_amp_prim_cinn.log"
+            filepath_dygraph2static_amp_cinn = os.path.join(
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "train_dygraph2static_amp_prim_cinn.log",
             )
 
             # total_loss
-            data_amp = self.get_paddle_data(filepath_baseline, "total_loss")
-            data_dygraph2static_amp= self.get_paddle_data(filepath_baseline, "total_loss")
-            data_dygraph2static_amp_prim= self.get_paddle_data(filepath_baseline, "total_loss")
-            data_dygraph2static_amp_prim_cinn= self.get_paddle_data(filepath_baseline, "total_loss")
+            data_amp = self.get_paddle_data(filepath_amp, "total_loss")
+            data_dygraph2static_amp = self.get_paddle_data(filepath_dygraph2static_amp, "total_loss")
+            data_dygraph2static_amp_prim = self.get_paddle_data(filepath_dygraph2static_amp_prim, "total_loss")
+            data_dygraph2static_amp_prim_cinn = self.get_paddle_data(filepath_dygraph2static_amp_cinn, "total_loss")
             logger.info("Get data successfully!")
-            self.plot_paddle_compare_value(data_amp, data_dygraph2static_amp,\
-data_dygraph2static_amp_prim, data_dygraph2static_amp_prim_cinn, "train_loss", keyworld)
+            self.plot_paddle_compare_value(
+                data_amp,
+                data_dygraph2static_amp,
+                data_dygraph2static_amp_prim,
+                data_dygraph2static_amp_prim_cinn,
+                "train_loss",
+                keyworld,
+            )
             logger.info("Plot figure successfully!")
 
             # # hmeans

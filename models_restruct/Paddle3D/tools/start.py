@@ -119,12 +119,10 @@ centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
 centerpoint_pillars_02voxel_nuscenes_10_sweep/model.pdparams"
                     )
                 elif self.model == "petrv2_vovnet_gridmask_p4_800x320_dn_amp":
-                    print(
-                        "https://paddle3d.bj.bcebos.com/pretrained/fcos3d_vovnet_imgbackbone-remapped.pdparams"
-                    )
+                    print("https://paddle3d.bj.bcebos.com/pretrained/fcos3d_vovnet_imgbackbone-remapped.pdparams")
                     wget.download(
                         "https://paddle3d.bj.bcebos.com/pretrained/fcos3d_vovnet_imgbackbone-remapped.pdparams"
-                    )               
+                    )
                 else:
                     print(
                         "https://bj.bcebos.com/paddle3d/models/{}/{}/model.pdparams".format(self.category, self.model)
