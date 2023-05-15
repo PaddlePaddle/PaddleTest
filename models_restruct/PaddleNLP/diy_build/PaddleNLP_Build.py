@@ -17,7 +17,6 @@ import google.protobuf
 
 logger = logging.getLogger("ce")
 
-print("protobuf_version", google.protobuf.__version__)
 class PaddleNLP_Build(Model_Build):
     """
     自定义环境准备
@@ -115,6 +114,7 @@ class PaddleNLP_Build(Model_Build):
         import paddle
         print("paddle final commit",paddle.version.commit)
         os.system("python -m pip list")
+        print("protobuf_version", google.protobuf.__version__)
 
         return 0
 
