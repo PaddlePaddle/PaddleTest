@@ -13,10 +13,11 @@ import numpy as np
 import yaml
 import wget
 from Model_Build import Model_Build
+import google.protobuf
 
 logger = logging.getLogger("ce")
 
-
+print("protobuf_version", google.protobuf.__version__)
 class PaddleNLP_Build(Model_Build):
     """
     自定义环境准备
