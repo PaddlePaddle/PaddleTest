@@ -48,7 +48,7 @@ def test_std_base():
     base
     """
     x = np.array([[1.0, 2.0, 3.0], [1.0, 4.0, 5.0]])
-    res = np.array([1.63299316])
+    res = np.array(1.63299316)
     obj.base(res=res, x=x)
 
 
@@ -58,7 +58,7 @@ def test_std():
     default
     """
     x = np.array([[1.0, 2.0, 3.0], [1.0, 4.0, 5.0]])
-    res = [ref_std(x=x)]
+    res = ref_std(x=x)
     obj.run(res=res, x=x)
 
 
@@ -68,7 +68,7 @@ def test_std1():
     default x rand
     """
     x = randtool("float", -10, 10, [3, 3, 3])
-    res = [ref_std(x=x)]
+    res = ref_std(x=x)
     obj.run(res=res, x=x)
 
 

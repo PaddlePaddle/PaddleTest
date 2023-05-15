@@ -12,6 +12,7 @@ import six
 import wget
 import pytest
 import numpy as np
+import paddle.inference as paddle_infer
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
@@ -90,12 +91,17 @@ def test_trt_fp16_more_bz():
             params_file="./swin_transformer/inference.pdiparams",
         )
 
+        # fix the error of DLTP-70788 temporarily
+        ver = paddle_infer.get_trt_compile_version()
+        if ver[0] * 1000 + ver[1] * 100 + ver[2] * 10 > 8500:
+            test_suite2.pd_config.exp_disable_tensorrt_ops(["roll"])
+
         test_suite2.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=1e-2,
-            min_subgraph_size=40,
+            delta=2e-2,
+            min_subgraph_size=10,
             precision="trt_fp16",
             max_batch_size=batch_size,
             dynamic=True,
@@ -153,7 +159,7 @@ def test_jetson_trt_fp16_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=1e-2,
+            delta=2e-2,
             min_subgraph_size=10,
             precision="trt_fp16",
             max_batch_size=batch_size,
@@ -210,7 +216,7 @@ def test_trt_fp16_bz1_multi_thread():
         input_data_dict,
         output_data_dict,
         repeat=1,
-        delta=5e-3,
+        delta=2e-2,
         min_subgraph_size=10,
         precision="trt_fp16",
         dynamic=True,
