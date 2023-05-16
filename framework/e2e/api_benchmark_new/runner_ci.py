@@ -375,6 +375,6 @@ if __name__ == "__main__":
     # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
     api_bm = ApiBenchmarkCI(yaml_path=args.yaml)
     if bool(args.baseline_whl_link):
-        api_bm._run_ci()
-    else:
         api_bm._baseline_insert(wheel_link=args.baseline_whl_link)
+    else:
+        api_bm._run_ci()

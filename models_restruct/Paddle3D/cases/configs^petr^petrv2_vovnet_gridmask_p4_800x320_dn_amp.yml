@@ -1,0 +1,87 @@
+case:
+    linux:
+        train:
+          -
+            name: amp
+            cmd : python tools/train.py
+            params:
+              - --config configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml
+              - --model petrv2_vovnet_gridmask_p4_800x320_dn_amp/fcos3d_vovnet_imgbackbone-remapped.pdparams
+              - --save_interval 40000
+              - --batch_size 1
+              - --seed 1234
+              - --learning_rate 0.0001
+              - --log_interval 10
+              - --to_static False
+              - --num_workers 0
+              - --iters 40001
+              - --do_eval
+              - --save_dir "./petrv2_dn_amp"
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: dygraph2static_amp
+            cmd : python tools/train.py
+            params:
+              - --config configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml
+              - --model petrv2_vovnet_gridmask_p4_800x320_dn_amp/fcos3d_vovnet_imgbackbone-remapped.pdparams
+              - --save_interval 40000
+              - --batch_size 1
+              - --seed 1234
+              - --learning_rate 0.0001
+              - --log_interval 10
+              - --to_static True
+              - --num_workers 0
+              - --iters 40001
+              - --do_eval
+              - --save_dir "./petrv2_dn_to_static_amp"
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: dygraph2static_amp_prim
+            cmd : export FLAGS_prim_all=True; python tools/train.py
+            params:
+              - --config configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml
+              - --model petrv2_vovnet_gridmask_p4_800x320_dn_amp/fcos3d_vovnet_imgbackbone-remapped.pdparams
+              - --save_interval 40000
+              - --batch_size 1
+              - --seed 1234
+              - --learning_rate 0.0001
+              - --log_interval 10
+              - --to_static True
+              - --num_workers 0
+              - --iters 40001
+              - --do_eval
+              - --save_dir "./petrv2_dn_to_static_amp_prim"
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: dygraph2static_amp_prim_cinn
+            cmd : export FLAGS_prim_all=True; export FLAGS_use_cinn=1; export FLAGS_cinn_use_op_fusion=0; python tools/train.py
+            params:
+              - --config configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml
+              - --model petrv2_vovnet_gridmask_p4_800x320_dn_amp/fcos3d_vovnet_imgbackbone-remapped.pdparams
+              - --save_interval 40000
+              - --batch_size 1
+              - --seed 1234
+              - --learning_rate 0.0001
+              - --log_interval 10
+              - --to_static True
+              - --num_workers 0
+              - --iters 40001
+              - --do_eval
+              - --save_dir "./petrv2_dn_to_static_amp_prim_cinn"
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
