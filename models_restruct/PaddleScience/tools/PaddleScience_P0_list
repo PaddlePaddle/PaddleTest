@@ -1,1 +1,2 @@
 examples^ldc^ldc2d_unsteady_Re10.yaml
+examples^darcy^darcy2d.yaml
