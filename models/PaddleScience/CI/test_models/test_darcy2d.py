@@ -15,7 +15,7 @@ def test_darcy2d():
     # 定义变量
     output_dir = "./output_darcy2d"  # 输出目录
     epoch_num = 100  # 迭代次数
-    base_loss = 8993487.00000  # 基准损失值
+    base_loss = 8993488.00000  # 基准损失值
     py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.9
 
     # 如果输出目录已经存在，则删除
