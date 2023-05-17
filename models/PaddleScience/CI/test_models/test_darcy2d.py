@@ -23,7 +23,7 @@ def test_darcy2d():
         subprocess.run(f"rm -rf {output_dir}", shell=True, check=True)
 
     # 执行命令行命令，运行 ldc2d_unsteady_Re10.py 脚本
-    command = (f"python{py_version} ../../examples/darcy/darcy2d.py --epochs={epoch_num} --output_dir={output_dir}")
+    command = f"python{py_version} ../../examples/darcy/darcy2d.py --epochs={epoch_num} --output_dir={output_dir}"
     subprocess.run(command, shell=True, check=True)
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
