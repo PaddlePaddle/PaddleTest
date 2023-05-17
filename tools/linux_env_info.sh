@@ -19,9 +19,10 @@
 function DockerImages () {
     docker_type=$1
     cuda_version=$2
+    echo ${docker_type}
     DOCKER_EXIT_CODE=0
 
-    if [[ ${docker_type} == "Centos" ]];then
+    if [[ "${docker_type}" == "Centos" ]];then
         case ${cuda_version} in
         "Cuda102")
             echo "Selected Centos: Cuda102"
@@ -29,19 +30,19 @@ function DockerImages () {
             ;;
         "Cuda112")
             echo "Selected Centos: Cuda112"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.2-trt8.0-gcc82"
             ;;
         "Cuda116")
             echo "Selected Centos: Cuda116"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6-cudnn8.4-trt8.4-gcc82"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82"
             ;;
         "Cuda117")
             echo "Selected Centos: Cuda117"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2-v1"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"
             ;;
         "Cuda118")
             echo "Selected Centos: Cuda118"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.8-cudnn8.6-trt8.5-gcc82"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.8-cudnn8.6-trt8.5-gcc8.2"
             ;;
         *)
             DOCKER_EXIT_CODE=101
@@ -52,23 +53,23 @@ function DockerImages () {
         case ${cuda_version} in
         "Cuda102")
             echo "Selected Ubuntu: Cuda102"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
             ;;
         "Cuda112")
             echo "Selected Ubuntu: Cuda112"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.2-trt8.0-gcc82"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8.2-trt8.0-gcc82"
             ;;
         "Cuda116")
             echo "Selected Ubuntu: Cuda116"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6-cudnn8.4-trt8.4-gcc82"
             ;;
         "Cuda117")
             echo "Selected Ubuntu: Cuda117"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2-v1"
             ;;
         "Cuda118")
             echo "Selected Ubuntu: Cuda118"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.8-cudnn8.6-trt8.5-gcc8.2"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.8-cudnn8.6-trt8.5-gcc82"
             ;;
         *)
             DOCKER_EXIT_CODE=101
@@ -315,7 +316,7 @@ function WheelUrlInfo(){
     python_version=$2
     # branch信息默认为Develop分支
     branch_info=${3:-"Develop"}
-    infer_package=${4:-"N"}
+    infer_package=${4:-"OFF"}
 
     WHELLINFO_EXITCODE=0
 
@@ -331,37 +332,37 @@ function WheelUrlInfo(){
     case ${cuda_version} in
         "Cpu")
             CpuPackageUrlInfo ${branch_info} ${python_version}
-            if [[ "${infer_package}" != "N" ]];then
+            if [[ "${infer_package}" != "OFF" ]];then
                 CpuPackageUrlInfo ${branch_info} Inference
             fi
             ;;
         "Cuda102")
             Cu102PackageUrlInfo ${branch_info} ${python_version}
-            if [[ "${infer_package}" != "N" ]];then
+            if [[ "${infer_package}" != "OFF" ]];then
                 Cu102PackageUrlInfo ${branch_info} Inference
             fi
             ;;
         "Cuda112")
             Cu112PackageUrlInfo ${branch_info} ${python_version}
-            if [[ "${infer_package}" != "N" ]];then
+            if [[ "${infer_package}" != "OFF" ]];then
                 Cu112PackageUrlInfo ${branch_info} Inference
             fi
             ;;
         "Cuda116")
             Cu116PackageUrlInfo ${branch_info} ${python_version}
-            if [[ "${infer_package}" != "N" ]];then
+            if [[ "${infer_package}" != "OFF" ]];then
                 Cu116PackageUrlInfo ${branch_info} Inference
             fi
             ;;
         "Cuda117")
             Cu117PackageUrlInfo ${branch_info} ${python_version}
-            if [[ "${infer_package}" != "N" ]];then
+            if [[ "${infer_package}" != "OFF" ]];then
                 Cu117PackageUrlInfo ${branch_info} Inference
             fi
             ;;
         "Cuda118")
             Cu118PackageUrlInfo ${branch_info} ${python_version}
-            if [[ "${infer_package}" != "N" ]];then
+            if [[ "${infer_package}" != "OFF" ]];then
                 Cu118PackageUrlInfo ${branch_info} Inference
             fi
             ;;
@@ -394,3 +395,45 @@ function WheelUrlInfo(){
     fi
     echo "EXITCODE:${WHELLINFO_EXITCODE}"
 }
+
+function print_usage(){
+    echo -e "\n${RED}Usage${NONE}:
+    ${BOLD}${SCRIPT_NAME}${NONE} [OPTION]"
+
+    echo -e "\n${RED}Options${NONE}:
+    ${BLUE}get_docker_images${NONE}: Get Docker Images, You can use get_docker_images as follows command\n
+    1. Get Centos Images: \n
+        'source linux_env_info.sh' \n
+        'bash linux_env_info_main get_docker_images Centos Cuda117'\n
+    2. Get Ubuntu Images: \n
+        'source linux_env_info.sh' \n
+        'bash linux_env_info_main get_docker_images Ubuntu Cuda117' \n
+    ${BLUE}get_wheel_url${NONE}: Get Packages Url,You can use get_wheel_url as follows command\n
+    1. Only for Python Wheel Url: \n
+        'source linux_env_info.sh' \n
+        'bash linux_env_info_main get_wheel_url Cuda112 Python310 Develop' \n
+    2. Get Python Wheel And Inference Packages: \n
+        'source linux_env_info.sh' \n
+        'bash linux_env_info_main get_wheel_url Cuda112 Python39 Develop ON' \n
+    "
+}
+
+
+function linux_env_info_main() {
+    local CMD=$1
+    local args=("$@")
+    case $CMD in
+        get_docker_images)
+            DockerImages "${args[@]:1}"
+            ;;
+        get_wheel_url)
+            VersionExitJudgment "${args[@]:1}"
+            WheelUrlInfo "${args[@]:1}"
+            ;;
+        *)
+            print_usage
+            ;;
+        esac
+}
+
+linux_env_info_main
