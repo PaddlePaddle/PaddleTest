@@ -404,17 +404,17 @@ function print_usage(){
     ${BLUE}get_docker_images${NONE}: Get Docker Images, You can use get_docker_images as follows command\n
     1. Get Centos Images: \n
         'source linux_env_info.sh' \n
-        'bash linux_env_info_main get_docker_images Centos Cuda117'\n
+        'linux_env_info_main get_docker_images Centos Cuda117'\n
     2. Get Ubuntu Images: \n
         'source linux_env_info.sh' \n
-        'bash linux_env_info_main get_docker_images Ubuntu Cuda117' \n
+        'linux_env_info_main get_docker_images Ubuntu Cuda117' \n
     ${BLUE}get_wheel_url${NONE}: Get Packages Url,You can use get_wheel_url as follows command\n
     1. Only for Python Wheel Url: \n
         'source linux_env_info.sh' \n
-        'bash linux_env_info_main get_wheel_url Cuda112 Python310 Develop' \n
+        'linux_env_info_main get_wheel_url Cuda112 Python310 Develop' \n
     2. Get Python Wheel And Inference Packages: \n
         'source linux_env_info.sh' \n
-        'bash linux_env_info_main get_wheel_url Cuda112 Python39 Develop ON' \n
+        'linux_env_info_main get_wheel_url Cuda112 Python39 Develop ON' \n
     "
 }
 
