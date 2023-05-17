@@ -388,7 +388,7 @@ function WheelUrlInfo(){
     else
         echo "====InstallPackage Info is:===="
         echo "paddle_whl:${paddle_whl}"
-        if [[ "${infer_package}" != "N" ]];then
+        if [[ "${infer_package}" != "OFF" ]];then
             echo "paddle_inference:${paddle_inference}"
             echo "paddle_inference_c:${paddle_inference_c}"
         fi
