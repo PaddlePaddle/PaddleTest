@@ -28,6 +28,7 @@ case:
           - --to_static True
           - --use_amp True
           - --amp_level O2
+          - --cinn True
       -
         name: dy2st_baseline
         path: model_zoo/bert

@@ -116,6 +116,7 @@ class PaddleNLP_Build(Model_Build):
         
 
         import paddle
+        
         print("paddle final commit",paddle.version.commit)
         os.system("python -m pip list")
 
