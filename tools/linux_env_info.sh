@@ -86,7 +86,50 @@ function DockerImages () {
 }
 
 # 版本退场判断
+function VersionExitJudgment () {
+    cuda_version=$1
+    python_version=$2
+    branch_info=$3
+    if [[ "${branch_info}" == "Develop" ]];then
+        case ${cuda_version} in
+            "Cpu")
+                ;;
+            "Cuda102")
+                ;;
+            "Cuda112")
+                ;;
+            "Cuda116")
+                ;;
+            "Cuda117")
+                ;;
+            "Cuda118")
+                ;;
+            *)
+            echo "Cuda Version is incorrect!!!"
+            ;;
+        esac
 
+        case ${package_version} in
+            "Python37")
+                echo "###############################"
+                echo "###         WARNING         ###"
+                echo "###############################"
+                echo "# Python37 is no longer supported in the develop branch. Please choose Python 3.8 or higher versions. #"
+                echo "###############################"
+                ;;
+            "Python38")
+                ;;
+            "Python39")
+                ;;
+            "Python310")
+                ;;
+            *)
+                echo "Python Version is incorrect!!!"
+                ;;
+        esac
+    fi
+
+}
 
 # CPU安装包链接信息
 function CpuPackageUrlInfo(){
