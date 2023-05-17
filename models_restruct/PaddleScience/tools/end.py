@@ -61,8 +61,8 @@ class PaddleScience_End(object):
         #     logger.info("build remove_data failed")
         #     return ret
         if "examples" in self.qa_yaml_name:
-            url = "https://paddle-qa.bj.bcebos.com/suijiaxin/base_log/ldc2d_unsteady_Re10_base.log"
-            file_name = "ldc2d_unsteady_Re10_base.log"
+            url = "https://paddle-qa.bj.bcebos.com/suijiaxin/base_log/{}_base.log".format(self.qa_yaml_name)
+            file_name = "{}_base.log".format(self.qa_yaml_name)
             urllib.request.urlretrieve(url, file_name)
             shutil.copy(file_name, "./logs/{}/{}/".format(self.reponame, self.qa_yaml_name))
             logger.info("plot start!")
