@@ -1,7 +1,6 @@
 # 两种使用场景，
 # 一、是根据pipeline名称进行cuda版本以及python版本的判断，并根据字段判断是否需要打印相关warning，或者报错
-# 二、根据输入的参数进行cuda版本以及python版本的判断
-# 考虑预测库安装包地址的获取方式
+# 二、根据输入的参数进行cuda版本以及python版本/预测库的判断
 # 
 # 将两种编译产出的包分开处理，一种是CE编译任务产出的安装包，另一种是Nightly编译任务的安装包，区别是：Nightly安装包没有失败重试，但覆盖的python和cuda版本更全
 ## 或者是这样处理：
@@ -11,11 +10,12 @@
 # 1. 镜像相关退出码为10x
 #   - 101 : 找不到指定版本的镜像名称
 # 2. 安装包相关退出码为11x
-#   - 115： 找不到符合cuda版本的安装包
-    - 116
+#   - 114: 分支信息有误
+#   - 115：找不到符合cuda版本的安装包
+#   - 116: 找不到某个python版本或者inference的包
+
 
 # 镜像信息
-
 function DockerImages () {
     docker_type=$1
     cuda_version=$2
@@ -116,11 +116,11 @@ function CpuPackageUrlInfo(){
                 export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-LinuxCentos-Gcc82-OnInfer-Py38-Compile/latest/paddle_inference.tgz"
                 export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-LinuxCentos-Gcc82-OnInfer-Py38-Compile/latest/paddle_inference_c.tgz"
             else
-                export WHELLINFO_EXITCODE=109
+                export WHELLINFO_EXITCODE=116
             fi
             ;;
         *)
-            export WHELLINFO_EXITCODE=107
+            export WHELLINFO_EXITCODE=115
             ;;
     esac
 }
@@ -149,7 +149,7 @@ function Cu102PackageUrlInfo(){
             export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference_c.tgz"
             ;;
         *)
-            export WHELLINFO_EXITCODE=117
+            export WHELLINFO_EXITCODE=115
             ;;
     esac
 }
@@ -179,7 +179,7 @@ function Cu112PackageUrlInfo(){
             export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference_c.tgz"
             ;;
         *)
-            export WHELLINFO_EXITCODE=117
+            export WHELLINFO_EXITCODE=115
             ;;
     esac
 }
@@ -202,8 +202,11 @@ function Cu116PackageUrlInfo(){
         "Python310")
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.6-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post116-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Inference")
+            export WHELLINFO_EXITCODE=116
+            ;;
         *)
-            export WHELLINFO_EXITCODE=117
+            export WHELLINFO_EXITCODE=115
             ;;
     esac
 }
@@ -226,8 +229,11 @@ function Cu117PackageUrlInfo(){
         "Python310")
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Inference")
+            export WHELLINFO_EXITCODE=116
+            ;;
         *)
-            export WHELLINFO_EXITCODE=117
+            export WHELLINFO_EXITCODE=115
             ;;
     esac
 }
@@ -250,8 +256,11 @@ function Cu118PackageUrlInfo(){
         "Python310")
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.8-Cudnn8.6-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post118-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Inference")
+            export WHELLINFO_EXITCODE=116
+            ;;
         *)
-            export WHELLINFO_EXITCODE=117
+            export WHELLINFO_EXITCODE=115
             ;;
     esac
 }
@@ -259,23 +268,21 @@ function Cu118PackageUrlInfo(){
 
 # 安装包链接
 function WheelUrlInfo(){
-    branch_info=${1:-"Develop"}
-    cuda_version=$2
-    python_version=$3
-    infer_package=${4:-"N"}
+    cuda_version=$1
+    python_version=$2
     # branch信息默认为Develop分支
     branch_info=${3:-"Develop"}
+    infer_package=${4:-"N"}
 
     WHELLINFO_EXITCODE=0
 
     if [[ "${branch_info}" == "Release" ]];then
-        echo "The branch information you selected is ${branch_info};"
-    elif [[ "${branch_info}" == "Develop" ]]
-        echo "The branch information you selected is ${branch_info};"
+        echo "The branch information you selected is [${branch_info}];"
+    elif [[ "${branch_info}" == "Develop" ]];then
+        echo "The branch information you selected is [${branch_info}];"
     else
         echo "The branch information input is wrong, you can choose to enter 'Develop' or 'Release';"
-        WHELLINFO_EXITCODE=102
-        exit ${WHELLINFO_EXITCODE}
+        WHELLINFO_EXITCODE=114
     fi
 
     case ${cuda_version} in
@@ -316,16 +323,31 @@ function WheelUrlInfo(){
             fi
             ;;
         *)
-            DOCKER_EXIT_CODE=115
+            WHELLINFO_EXITCODE=115
             ;;
         esac
 
-    if [[ "${WHELLINFO_EXITCODE}" == "107" ]];then
-        echo "Could not find packages that satisfy the requirement as follows:"
-        echo "- Cuda Version: ${cuda_version}"
-        echo "- Python Version: ${package_version}"
-        echo "- Branch Info:${branch_info}"
+    # 安装包选择的条件信息
+    echo "==========================="
+    echo "Select Options as follows:"
+    echo "- Branch Info: ${branch_info}"
+    echo "- Cuda Version: ${cuda_version}"
+    echo "- Python Version: ${package_version}"
+
+    if [[ "${WHELLINFO_EXITCODE}" == "114" ]];then
+        echo "Branch Info is incorrect,please choose one from Develop or Release!!!"
+        echo "EXITCODE:${WHELLINFO_EXITCODE}"
+    elif [[ "${WHELLINFO_EXITCODE}" == "115" ]];then
+        echo "Cuda Version is incorrect!!!"
+    elif [[ "${WHELLINFO_EXITCODE}" == "115" ]];then
+        echo "Python Version is incorrect,please choose from (Python37 Python38 Python39 Python310 Inference)"
     else
-        echo " ${Image_version}"
+        echo "====InstallPackage Info is:===="
+        echo "paddle_whl:${paddle_whl}"
+        if [[ "${infer_package}" != "N" ]];then
+            echo "paddle_inference:${paddle_inference}"
+            echo "paddle_inference_c:${paddle_inference_c}"
+        fi
     fi
+    echo "EXITCODE:${WHELLINFO_EXITCODE}"
 }
