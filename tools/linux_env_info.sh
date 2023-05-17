@@ -11,7 +11,8 @@
 # 1. 镜像相关退出码为10x
 #   - 101 : 找不到指定版本的镜像名称
 # 2. 安装包相关退出码为11x
-#   - 
+#   - 115： 找不到符合cuda版本的安装包
+    - 116
 
 # 镜像信息
 
@@ -148,7 +149,7 @@ function Cu102PackageUrlInfo(){
             export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference_c.tgz"
             ;;
         *)
-            export WHELLINFO_EXITCODE=107
+            export WHELLINFO_EXITCODE=117
             ;;
     esac
 }
@@ -315,7 +316,7 @@ function WheelUrlInfo(){
             fi
             ;;
         *)
-            DOCKER_EXIT_CODE=101
+            DOCKER_EXIT_CODE=115
             ;;
         esac
 
