@@ -11,6 +11,10 @@ examples^dependency_parsing^ddparsing.yaml
 examples^few_shot^RGL.yaml
 examples^lexical_analysis.yaml
 fast_generation^samples.yaml
+examples^language_model^bloom.yaml
+examples^language_model^chatglm.yaml
+examples^language_model^glm.yaml
+examples^language_model^llama.yaml
 model_zoo^bert.yaml
 model_zoo^bert_static.yaml
 model_zoo^electra.yaml
