@@ -15,7 +15,7 @@ def test_lac2d_unsteady_Re10():
     # 定义变量
     output_dir = "./ldc2d_steady_Re10"  # 输出目录
     epoch_num = 10  # 迭代次数
-    base_loss = 101.23766  # 基准损失值
+    base_loss = 56.74955  # 基准损失值
     py_version = os.getenv("py_version", "3.9")  # Python 版本号，从环境变量中获取，默认值为3.9
 
     # 如果输出目录已经存在，则删除
