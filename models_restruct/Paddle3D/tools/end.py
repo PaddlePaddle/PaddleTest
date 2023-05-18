@@ -245,7 +245,7 @@ configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_p
             logger.info("Plot figure successfully!")
         else:
             log_name = os.listdir("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")[0]
-            log_path = os.path.join('logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp', log_path)
+            log_path = os.path.join('logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp', log_name)
             cmd='python BosClient.py %s paddle-qa/' % (log_path)
             os.system(cmd)
 
