@@ -35,6 +35,7 @@ def test_lac2d_unsteady_Re10():
     # 断言最后一轮迭代的损失值是否等于基准损失值
     assert float(last_loss) == base_loss
 
+
 if __name__ == "__main__":
     # 使用 pytest 模块运行测试函数
     code = pytest.main([sys.argv[0]])
