@@ -1,6 +1,10 @@
 set +x;
 pwd;
 
+### 加载tools/linux_env_info.sh文件
+pwd
+source ../../tools/linux_env_info.sh
+
 ####ce框架根目录
 rm -rf ce && mkdir ce;
 cd ce;
@@ -41,8 +45,6 @@ fi
 #指定python版本
 export Python_version=${Python_version:-"`(echo ${AGILE_PIPELINE_NAME}|awk -F 'Python' '{print $2}'|awk -F '-' '{print $1}')`"}
 
-# 加载tools/linux_env_info.sh文件
-source ../../tools/linux_env_info.sh
 
 #指定docker镜像
 if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]];then
@@ -94,7 +96,7 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Py
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python37" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        linux_env_info_main get_wheel_url Cuda112 Python37 Develop
+        linux_env_info_main get_wheel_url Cuda102 Python37 Develop
         # cudnn7用的是cudnn8的预测库的包
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.1.3.4"}
@@ -102,7 +104,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         #230223 stride test
         # export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/xieyunshen/TempPRBuild/50444/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
     else
-        linux_env_info_main get_wheel_url Cuda112 Python37 Release
+        linux_env_info_main get_wheel_url Cuda102 Python37 Release
         # cudnn7用的是cudnn8的预测库的包
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.1.3.4"}
