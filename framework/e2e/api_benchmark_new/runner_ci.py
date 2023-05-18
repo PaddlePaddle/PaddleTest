@@ -379,7 +379,6 @@ if __name__ == "__main__":
     parser.add_argument("--yaml", type=str, help="input the yaml path")
     parser.add_argument("--baseline_whl_link", type=str, default=None, help="only be used to insert baseline data")
     args = parser.parse_args()
-
     # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
     api_bm = ApiBenchmarkCI(yaml_path=args.yaml)
     if bool(args.baseline_whl_link):
