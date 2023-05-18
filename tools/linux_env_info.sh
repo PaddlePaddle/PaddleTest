@@ -136,8 +136,7 @@ function VersionExitJudgment () {
             "Python310")
                 echo "everything works fine."
                 ;;
-            *)  
-                echo "here"
+            *)
                 echo "Python Version is incorrect!!!"
                 ;;
         esac
