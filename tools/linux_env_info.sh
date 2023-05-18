@@ -14,12 +14,13 @@
 #   - 115：找不到符合cuda版本的安装包
 #   - 116: 找不到某个python版本或者inference的包
 
+set +x
+set -e
 
 # 镜像信息
 function DockerImages () {
     docker_type=$1
     cuda_version=$2
-    echo ${docker_type}
     DOCKER_EXIT_CODE=0
 
     if [[ "${docker_type}" == "Centos" ]];then
@@ -81,8 +82,10 @@ function DockerImages () {
         echo "- Cuda Version: ${cuda_version}"
         echo "- Linux Type: ${docker_type}"
         echo "DOCKER_EXIT_CODE:${DOCKER_EXIT_CODE}"
+        exit ${DOCKER_EXIT_CODE}
     else
         echo "Image Name is ${Image_version}"
+        echo 'Ps. You can get this image through "${Image_version}";'
     fi
 }
 
@@ -94,23 +97,29 @@ function VersionExitJudgment () {
     if [[ "${branch_info}" == "Develop" ]];then
         case ${cuda_version} in
             "Cpu")
+                echo "everything works fine."
                 ;;
             "Cuda102")
+                echo "everything works fine."
                 ;;
             "Cuda112")
+                echo "everything works fine."
                 ;;
             "Cuda116")
+                echo "everything works fine."
                 ;;
             "Cuda117")
+                echo "everything works fine."
                 ;;
             "Cuda118")
+                echo "everything works fine."
                 ;;
             *)
             echo "Cuda Version is incorrect!!!"
             ;;
         esac
 
-        case ${package_version} in
+        case ${python_version} in
             "Python37")
                 echo "###############################"
                 echo "###         WARNING         ###"
@@ -119,12 +128,16 @@ function VersionExitJudgment () {
                 echo "###############################"
                 ;;
             "Python38")
+                echo "everything works fine."
                 ;;
             "Python39")
+                echo "everything works fine."
                 ;;
             "Python310")
+                echo "everything works fine."
                 ;;
-            *)
+            *)  
+                echo "here"
                 echo "Python Version is incorrect!!!"
                 ;;
         esac
@@ -373,10 +386,11 @@ function WheelUrlInfo(){
 
     # 安装包选择的条件信息
     echo "==========================="
-    echo "Select Options as follows:"
+    echo "Install Packages Select Options as follows:"
     echo "- Branch Info: ${branch_info}"
     echo "- Cuda Version: ${cuda_version}"
     echo "- Python Version: ${package_version}"
+    echo "- Inference Packages: ${infer_package}"
 
     if [[ "${WHELLINFO_EXITCODE}" == "114" ]];then
         echo "Branch Info is incorrect,please choose one from Develop or Release!!!"
@@ -387,13 +401,20 @@ function WheelUrlInfo(){
         echo "Python Version is incorrect,please choose from (Python37 Python38 Python39 Python310 Inference)"
     else
         echo "====InstallPackage Info is:===="
-        echo "paddle_whl:${paddle_whl}"
+        echo "- paddle_whl:${paddle_whl}"
+        echo 'Ps. You can get this wheel_url through "${paddle_whl}";'
+
         if [[ "${infer_package}" != "OFF" ]];then
-            echo "paddle_inference:${paddle_inference}"
-            echo "paddle_inference_c:${paddle_inference_c}"
+            echo "- paddle_inference:${paddle_inference}"
+            echo "- paddle_inference_c:${paddle_inference_c}"
+            echo 'Ps. You can get this wheel_url through "${paddle_inference}" or "${paddle_inference_c}"'
         fi
     fi
-    echo "EXITCODE:${WHELLINFO_EXITCODE}"
+
+    if [[ "${WHELLINFO_EXITCODE}" != "0" ]];then
+        echo "EXITCODE:${WHELLINFO_EXITCODE}"
+        exit ${WHELLINFO_EXITCODE}
+    fi
 }
 
 function print_usage(){
