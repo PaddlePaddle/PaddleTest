@@ -124,10 +124,7 @@ class Paddle3D_Build(Model_Build):
                 print("filename:{}".format(filename))
                 if filename == 'configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml':
                     os.makedirs("data")
-                    if os.path.exists("/ssd2/ce_data/Paddle3D/nuscenes_petrv2"):
-                        os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petrv2", "data/nuscenes")
-                    else:
-                        os.symlink("/home/jiaxiao01/Paddle3D/nuscenes", "data/nuscenes")
+                    os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petrv2", "data/nuscenes")
                 else:
                     cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
                     subprocess.getstatusoutput(cmd)
