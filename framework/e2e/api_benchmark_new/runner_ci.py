@@ -231,6 +231,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
                     if self.double_check and double_check(res=compare_res[case_name]):
                         for i in range(iters - 1):
+                            self.logger.get_log().warning("start double check {} time.".format(i))
                             forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
 
                             (
@@ -324,7 +325,14 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         # print("compare_dict is: ", compare_dict)
         api_grade = ci_level_reveal(compare_dict)
+        del api_grade["equal"]
+        del api_grade["better"]
         print(api_grade)
+        print(
+            "详情差异请点击以下链接查询: http://paddletest.baidu-int.com:8081/#/paddle/benchmark/apiBenchmark/report/{}&{}".format(
+                latest_id, self.baseline_id
+            )
+        )
 
     def _baseline_insert(self, wheel_link):
         """
