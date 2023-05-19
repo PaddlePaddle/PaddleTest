@@ -126,7 +126,10 @@ class Paddle3D_Build(Model_Build):
                     if os.path.exists("data"):
                         shutil.rmtree("data")
                     os.makedirs("data")
-                    os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petrv2", "data/nuscenes")
+                    if os.path.exists("/ssd2/ce_data"):
+                        os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petrv2", "data/nuscenes")
+                    else:
+                        os.symlink("/home/jiaxiao01/Paddle3D/nuscenes_petrv2", "data/nuscenes")
                 else:
                     cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
                     subprocess.getstatusoutput(cmd)
