@@ -291,7 +291,6 @@ if [[ "${docker_flag}" == "" ]]; then
         -v /mnt:/mnt  \
         -v /ssd3/dy2st_data/:/ssd3/dy2st_data/  \
         -v /ssd2:/ssd2  \
-        -v /home:/home  \
         -e AK=${AK} \
         -e SK=${SK} \
         -e bce_whl_url=${bce_whl_url} \
