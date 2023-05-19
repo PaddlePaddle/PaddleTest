@@ -123,6 +123,7 @@ class Paddle3D_Build(Model_Build):
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 if filename == 'configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml':
+                    os.remove("data")
                     os.makedirs("data")
                     os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petrv2", "data/nuscenes")
                 else:
