@@ -2,6 +2,9 @@ set +x;
 pwd;
 
 ### 加载tools/linux_env_info.sh文件
+if [ -e linux_env_info.sh ];then
+    rm -rf linux_env_info.sh
+fi
 wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
 source ./linux_env_info.sh
 set +e
