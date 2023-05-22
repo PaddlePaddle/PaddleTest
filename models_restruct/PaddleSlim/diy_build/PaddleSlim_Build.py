@@ -96,7 +96,7 @@ class PaddleSlim_Build(Model_Build):
         os.system("python -m pip install --user sklearn==0.0")
         os.system("python -m pip install --user numpy==1.23.1")
         os.system("python -m pip install --user -U paddleclas")
-        os.system("python -m pip install --user -U paddleseg==2.5.0")
+        # os.system("python -m pip install --user -U paddleseg==2.5.0")
         os.system("python -m pip install --user -U paddledet")
         # os.system("python -m pip install --user -U paddlenlp")
         os.system("python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
@@ -116,6 +116,11 @@ class PaddleSlim_Build(Model_Build):
             cmd_setup = os.system("python setup.py install")
             if cmd_setup:
                 logger.info("repo {} python -m pip install paddleslim failed with setup".format(self.reponame))
+        os.chdir(path_now)
+        # 克隆seg库并安装
+        os.system("git clone -b develop https://github.com/PaddlePaddle/PaddleSeg.git")
+        os.chdir("PaddleSeg")
+        os.system("python -m pip install -v -e .")
         os.chdir(path_now)
         return 0
 

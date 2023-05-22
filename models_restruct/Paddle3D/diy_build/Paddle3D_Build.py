@@ -112,7 +112,7 @@ class Paddle3D_Build(Model_Build):
             print("build wheel!")
 
             # petr
-            if not os.path.exists("data"):
+            if not os.path.exists("data") and "petrv2_vovnet_gridmask_p4_800x320_dn_amp" not in self.test_model_list:
                 os.makedirs("data")
                 os.symlink(os.path.join(src_path, "nuscenes_petr"), "data/nuscenes")
                 os.makedirs("/workspace/datset/nuScenes/", exist_ok=True)
@@ -122,13 +122,22 @@ class Paddle3D_Build(Model_Build):
 
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
-                cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
-                subprocess.getstatusoutput(cmd)
-                # cmd = "cat %s" % (filename)
-                # subprocess.getstatusoutput(cmd)
-                # cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
-                # subprocess.getstatusoutput(cmd)
-            print("change iters number!")
+                if filename == "configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml":
+                    if os.path.exists("data"):
+                        shutil.rmtree("data")
+                    os.makedirs("data")
+                    if os.path.exists("/ssd2/ce_data"):
+                        os.symlink("/ssd2/ce_data/Paddle3D/nuscenes_petrv2", "data/nuscenes")
+                    else:
+                        os.symlink("/home/jiaxiao01/Paddle3D/nuscenes_petrv2", "data/nuscenes")
+                else:
+                    cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
+                    subprocess.getstatusoutput(cmd)
+                    # cmd = "cat %s" % (filename)
+                    # subprocess.getstatusoutput(cmd)
+                    # cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
+                    # subprocess.getstatusoutput(cmd)
+                    print("change iters number!")
             os.chdir(path_now)
 
     def compile_c_predict_demo(self):

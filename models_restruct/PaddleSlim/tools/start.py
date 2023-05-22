@@ -1,6 +1,7 @@
 """
 start.py run:
 """
+import json
 import os
 import shutil
 import tarfile
@@ -23,6 +24,7 @@ class PaddleSlimStart(object):
         self.reponame = os.environ["reponame"]
         self.REPO_PATH = os.path.join(os.getcwd(), self.reponame)
         self.set_cuda = os.environ["set_cuda"]
+        self.env_dict = {}
 
     def wget_and_zip(self, wget_url):
         """
@@ -102,7 +104,6 @@ def run():
     qa_yaml = paddleslim_start.qa_yaml_name
     os.environ["CUDA_VISIBLE_DEVICES"] = paddleslim_start.set_cuda
     set_cuda_single_card = paddleslim_start.set_cuda.split(",")[0]
-    os.environ["FLAGS_use_stride_kernel"] = "1"
 
     if qa_yaml.split("^")[0] != "case":
         try:
@@ -111,10 +112,15 @@ def run():
         except Exception as e:
             logger.info("open rd {} got error {} ".format(rd_yaml, e))
             content = {}
+        # 每个yaml执行之前都会被下载一遍
+        paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
+        paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
+        # 将用到的数据集设置专有的环境变量，后面的case可以通过环境变量来使用
+        paddleslim_start.env_dict["coco_data_path"] = current_path + "/coco/"
+        paddleslim_start.env_dict["ilsvrc2012_data_path"] = current_path + "/ILSVRC2012/"
 
         if qa_yaml == "example^auto_compression^detection^configs^ppyoloe_l_qat_dis":
             paddleslim_start.wget_and_tar("https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar")
-            paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
             content["TrainConfig"]["train_iter"] = 50
             content["TrainConfig"]["eval_iter"] = 10
             content["Global"]["model_dir"] = current_path + "/ppyoloe_crn_l_300e_coco"
@@ -125,7 +131,6 @@ def run():
             paddleslim_start.update_yaml_config(ppyoloe_l_qat_dis_reader, "dataset/coco/", current_path + "/coco")
         elif qa_yaml == "example^auto_compression^pytorch_yolo_series^configs^yolov5s_qat_dis":
             paddleslim_start.wget_and_files("https://paddle-slim-models.bj.bcebos.com/act/yolov5s.onnx")
-            paddleslim_start.wget_and_zip("https://paddle-qa.bj.bcebos.com/PaddleDetection/coco.zip")
             content["TrainConfig"]["train_iter"] = 50
             content["TrainConfig"]["eval_iter"] = 10
             content["Global"]["model_dir"] = current_path + "/yolov5s.onnx"
@@ -140,7 +145,6 @@ def run():
             paddleslim_start.wget_and_tar(
                 "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV1_infer.tar"
             )
-            paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
             content["Global"]["data_dir"] = current_path + "/ILSVRC2012"
             content["Global"]["model_dir"] = current_path + "/MobileNetV1_infer"
             content["TrainConfig"]["epochs"] = 2
@@ -149,7 +153,6 @@ def run():
             paddleslim_start.wget_and_tar(
                 "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/ResNet50_vd_infer.tar"
             )
-            paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
             content["Global"]["data_dir"] = current_path + "/ILSVRC2012"
             content["Global"]["model_dir"] = current_path + "/ResNet50_vd_infer"
             content["TrainConfig"]["epochs"] = 2
@@ -188,7 +191,6 @@ def run():
             paddleslim_start.wget_and_tar(
                 "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/inference/MobileNetV3_large_x1_0_infer.tar"
             )
-            paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
             content["Global"]["model_dir"] = current_path + "/MobileNetV3_large_x1_0_infer"
             content["Global"]["data_dir"] = current_path + "/ILSVRC2012"
             content["TrainConfig"]["epochs"] = 2
@@ -213,29 +215,21 @@ def run():
             content["model_dir"] = current_path + "/yolov6s.onnx"
             content["dataset_dir"] = current_path + "/coco"
         elif qa_yaml in [
-            "example^reparameterization^mobilenet_v1",
-            "example^quantization^ptq^classification^mobilenet_v1",
-            "example^quantization^ptq^classification^resnet50",
             "example^quantization^qat^classification^mobilenet_v1",
             "example^quantization^qat^classification^resnet50",
         ]:
-            paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
-            if qa_yaml in [
-                "example^quantization^qat^classification^mobilenet_v1",
-                "example^quantization^qat^classification^resnet50",
-            ]:
-                # 将数据集挪到data下
-                try:
-                    source_path = os.path.join(current_path + "/ILSVRC2012")
-                    data_path = os.path.join(current_path + "/data/ILSVRC2012")
-                    if not os.path.exists(data_path):
-                        os.makedirs(data_path)
-                    else:
-                        shutil.rmtree(data_path)
-                    shutil.move(source_path, data_path)
-                except Exception as e:
-                    print("copy data got error: {}!".format(e))
-
+            # 将数据集挪到data下；因为这里代码写死了，所以没办法只能copy
+            try:
+                # 从current_path下软链一份过去
+                data_path = paddleslim_start.REPO_PATH + "/example/quantization/qat/classification/data"
+                source_path = os.path.join(current_path + "/ILSVRC2012")
+                if os.path.exists(data_path):
+                    shutil.rmtree(data_path)
+                os.makedirs(data_path)
+                # 软链，因为程序写死了数据集路径
+                os.system("ln -s {} {}".format(source_path, data_path))
+            except Exception as e:
+                print("copy data got error: {}!".format(e))
         else:
             logger.info("### no exists {} ".format(qa_yaml))
         try:
@@ -305,6 +299,8 @@ def run():
             paddleslim_start.wget_and_tar("https://paddle-qa.bj.bcebos.com/PaddleSlim_datasets/ILSVRC2012.tar")
             update_count += 1
             os.chdir(current_path)
+    # 将env设置好
+    os.environ[paddleslim_start.reponame] = json.dumps(paddleslim_start.env_dict)
 
 
 if __name__ == "__main__":

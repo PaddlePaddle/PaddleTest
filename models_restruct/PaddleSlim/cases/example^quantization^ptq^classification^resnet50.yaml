@@ -6,7 +6,7 @@ case:
         path: example/quantization/ptq/classification/
         cmd: python ptq.py
         params:
-          - --data=ILSVRC2012/
+          - --data=${ilsvrc2012_data_path}
           - --model=resnet50
           - --activation_observer='mse'
           - --weight_observer='mse_channel_wise'
