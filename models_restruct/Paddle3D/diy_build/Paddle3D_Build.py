@@ -112,7 +112,7 @@ class Paddle3D_Build(Model_Build):
             print("build wheel!")
 
             # petr
-            if not os.path.exists("data") and 'petrv2_vovnet_gridmask_p4_800x320_dn_amp' not in self.test_model_list:
+            if not os.path.exists("data") and "petrv2_vovnet_gridmask_p4_800x320_dn_amp" not in self.test_model_list:
                 os.makedirs("data")
                 os.symlink(os.path.join(src_path, "nuscenes_petr"), "data/nuscenes")
                 os.makedirs("/workspace/datset/nuScenes/", exist_ok=True)
@@ -122,7 +122,7 @@ class Paddle3D_Build(Model_Build):
 
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
-                if filename == 'configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml':
+                if filename == "configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml":
                     if os.path.exists("data"):
                         shutil.rmtree("data")
                     os.makedirs("data")
@@ -133,10 +133,10 @@ class Paddle3D_Build(Model_Build):
                 else:
                     cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
                     subprocess.getstatusoutput(cmd)
-                # cmd = "cat %s" % (filename)
-                # subprocess.getstatusoutput(cmd)
-                # cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
-                # subprocess.getstatusoutput(cmd)
+                    # cmd = "cat %s" % (filename)
+                    # subprocess.getstatusoutput(cmd)
+                    # cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
+                    # subprocess.getstatusoutput(cmd)
                     print("change iters number!")
             os.chdir(path_now)
 

@@ -203,15 +203,21 @@ class Paddle3D_End(object):
         """
         if "dygraph2static_amp_prim_cinn" in self.step:
             print("self.step:{}".format(self.step))
-            wget.download('https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
-configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_amp.log',\
-'logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/')
-            wget.download('https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
-configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim.log',\
-'logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/')
-            wget.download('https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
-configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim.log',\
-'logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/')
+            wget.download(
+                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_amp.log",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+            )
+            wget.download(
+                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim.log",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+            )
+            wget.download(
+                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim.log",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+            )
 
             filepath_amp = os.path.join(
                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
@@ -240,13 +246,13 @@ configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_p
                 data_dygraph2static_amp,
                 data_dygraph2static_amp_prim,
                 data_dygraph2static_amp_prim_cinn,
-                "train_loss"
+                "train_loss",
             )
             logger.info("Plot figure successfully!")
         else:
             log_name = os.listdir("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")[0]
-            log_path = os.path.join('logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp', log_name)
-            cmd='python BosClient.py %s paddle-qa/' % (log_path)
+            log_path = os.path.join("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp", log_name)
+            cmd = "python BosClient.py %s paddle-qa/" % (log_path)
             os.system(cmd)
 
             # # hmeans
