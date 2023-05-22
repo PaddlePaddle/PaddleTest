@@ -49,7 +49,7 @@ def test_var_base():
     base
     """
     x = np.array([[1.0, 2.0, 3.0], [1.0, 4.0, 5.0]])
-    res = np.array([2.66666667])
+    res = np.array(2.66666667)
     obj.base(res=res, x=x)
 
 
@@ -59,7 +59,7 @@ def test_var():
     default
     """
     x = np.array([[1.0, 2.0, 3.0], [1.0, 4.0, 5.0]])
-    res = np.array([2.66666667])
+    res = np.array(2.66666667)
     obj.run(res=res, x=x)
 
 
@@ -69,7 +69,7 @@ def test_var1():
     default x rand
     """
     x = randtool("float", -10, 10, [3, 3, 3])
-    res = [ref_var(x=x)]
+    res = ref_var(x=x)
     obj.run(res=res, x=x)
 
 

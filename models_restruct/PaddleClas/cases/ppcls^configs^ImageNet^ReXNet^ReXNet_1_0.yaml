@@ -86,8 +86,6 @@ case:
       -
         name: function_mkldnn
       -
-        name: function_trt
-      -
         name: pretrained
 
   windows_cpu:

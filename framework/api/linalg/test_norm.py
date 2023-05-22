@@ -91,7 +91,7 @@ def test_norm_base():
     base
     """
     x = randtool("float", -10, 10, [2, 3, 4])
-    res = [28.43878906]
+    res = np.array(28.43878906)
     obj.base(res=res, x=x)
 
 
@@ -102,7 +102,7 @@ def test_norm():
     """
     np.random.seed(33)
     x = randtool("float", -10, 10, [3, 3, 3])
-    res = [31.5736]
+    res = np.array(31.5736)
     obj.run(res=res, x=x, axis=None)
 
 
@@ -222,7 +222,7 @@ def test_norm10():
     x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
     pord = "fro"
     axis = None
-    res = [16.8819]
+    res = np.array(16.8819)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
@@ -234,7 +234,7 @@ def test_norm11():
     x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9]).reshape(3, 3)
     pord = "fro"
     axis = None
-    res = [16.8819]
+    res = np.array(16.8819)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 

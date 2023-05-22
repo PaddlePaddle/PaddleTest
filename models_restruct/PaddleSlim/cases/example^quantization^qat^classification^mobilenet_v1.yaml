@@ -6,7 +6,6 @@ case:
         path: example/quantization/qat/classification/
         cmd: python train.py
         params:
-          - --data=ILSVRC2012
           - --model=mobilenet_v1
         result:
           acc_top1:
@@ -22,7 +21,6 @@ case:
         path: example/quantization/qat/classification/
         cmd: python -m paddle.distributed.launch train.py
         params:
-          - --data=ILSVRC2012
           - --model=mobilenet_v1
         result:
           acc_top1:

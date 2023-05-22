@@ -4,23 +4,23 @@ find ../PaddleGAN/configs/ -name '*.yaml' -exec ls -l {} \; | awk '{print $NF;}'
     | grep -v 'edvr_l_blur_w_tsa' \
     | grep -v 'mprnet_deblurring' \
     | grep -v 'msvsr_l_reds' \
-    > models_list_gan_test_all
+    > PaddleGAN_ALL_list
     #OOM
 
-# #P优先级删除all中没有的
-# cat models_list_gan_test_P0 |while read line; do if [[ ! `grep -c "${line}" models_list_gan_test_all` -ne '0' ]] ;then
-#     index=`grep -n ${line} models_list_gan_test_P0 | awk -F ":" '{print $1}'`
-#     sed -i "" "${index}d" models_list_gan_test_P0 ; fi; done  #注意linux 不要 ""
-#     # echo ${index} ; fi; done
-# cat models_list_gan_test_P1 |while read line; do if [[ ! `grep -c "${line}" models_list_gan_test_all` -ne '0' ]] ;then
-#     index=`grep -n ${line} models_list_gan_test_P1 | awk -F ":" '{print $1}'`
-#     sed -i "" "${index}d" models_list_gan_test_P1 ; fi; done  #注意linux 不要 ""
-#     # echo ${index} ; fi; done
+#P优先级删除all中没有的
+cat PaddleGAN_P0_list |while read line; do if [[ ! `grep -c "${line}" PaddleGAN_ALL_list` -ne '0' ]] ;then
+    index=`grep -n ${line} PaddleGAN_P0_list | awk -F ":" '{print $1}'`
+    sed -i "" "${index}d" PaddleGAN_P0_list ; fi; done  #注意linux 不要 ""
+    # echo ${index} ; fi; done
+cat PaddleGAN_P1_list |while read line; do if [[ ! `grep -c "${line}" PaddleGAN_ALL_list` -ne '0' ]] ;then
+    index=`grep -n ${line} PaddleGAN_P1_list | awk -F ":" '{print $1}'`
+    sed -i "" "${index}d" PaddleGAN_P1_list ; fi; done  #注意linux 不要 ""
+    # echo ${index} ; fi; done
 
 
-# #P优先级插入all中新增的
-# cat models_list_gan_test_all |while read line; do if [[ ! `grep -c "${line}" models_list_gan_test_P0` -ne '0' ]] \
-#     && [[ ! `grep -c "${line}" models_list_gan_test_P1` -ne '0' ]]  ;then echo $line; fi; done
+#P优先级插入all中新增的
+cat PaddleGAN_ALL_list |while read line; do if [[ ! `grep -c "${line}" PaddleGAN_P0_list` -ne '0' ]] \
+    && [[ ! `grep -c "${line}" PaddleGAN_P1_list` -ne '0' ]]  ;then echo $line; fi; done
 
 
 # cat models_list | sort | uniq > models_list_run_tmp  #去重复

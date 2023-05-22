@@ -38,7 +38,7 @@ def test_nansum_base():
     x[-1, :, :] = float("nan")
     x[:, 1, :] = float("-nan")
     x = x.astype("float32")
-    res = [np.nansum(x)]
+    res = np.nansum(x)
     obj.run(res=res, x=x)
 
 

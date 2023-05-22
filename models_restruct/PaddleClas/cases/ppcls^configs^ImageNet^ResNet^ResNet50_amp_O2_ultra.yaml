@@ -14,11 +14,11 @@ case:
         params:
           - -o DataLoader.Train.loader.num_workers=1
       -
-        name: multi_amp
+        name: multi_dy2st
         params:
           - -o DataLoader.Train.loader.num_workers=1
       -
-        name: multi_dy2st
+        name: multi_amp
         params:
           - -o DataLoader.Train.loader.num_workers=1
       -

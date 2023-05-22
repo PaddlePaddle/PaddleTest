@@ -14,7 +14,7 @@ import numpy as np
 sys.path.append("../..")
 from utils.interceptor import skip_platform_not_linux, skip_not_compile_gpu
 
-is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
+is_in_eager = True
 
 
 class TestRandperm(APIBase):

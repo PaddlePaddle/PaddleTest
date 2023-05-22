@@ -35,7 +35,7 @@ def test_mean_base():
     """
     x = np.array([[1, 2, 5, 4]])
     res = np.mean(x)
-    obj.base(res=[res], x=x)
+    obj.base(res=res, x=x)
 
 
 @pytest.mark.api_base_mean_parameters
@@ -79,7 +79,7 @@ def test_mean4():
     """
     x = np.array([[[2.0, 3.0, 4.0]], [[4.0, 3.0, 4.0]]]).astype("float32")
     res = np.mean(x, axis=(0, 1, 2))
-    obj.run(res=[res], x=x, axis=[0, 1, 2])
+    obj.run(res=res, x=x, axis=[0, 1, 2])
 
 
 @pytest.mark.api_base_mean_parameters
@@ -125,7 +125,7 @@ def test_mean8():
     """
     x = np.array([[[2.0, 3.0, 4.0]], [[4.0, 3.0, 4.0]]]).astype("float32")
     res = np.mean(x, axis=(0, 1, 2), keepdims=False)
-    obj.run(res=[res], x=x, axis=[0, 1, 2], keepdim=False)
+    obj.run(res=res, x=x, axis=[0, 1, 2], keepdim=False)
 
 
 @pytest.mark.api_base_mean_parameters
@@ -147,7 +147,7 @@ def test_mean10():
     """
     x = np.array([[[2.0, 3.0, 4.0]], [[4.0, 3.0, 4.0]]]).astype("float32")
     res = np.mean(x, axis=(0, 1, 2), keepdims=False)
-    obj.run(res=[res], x=x, axis=(0, 1, 2), keepdim=False)
+    obj.run(res=res, x=x, axis=(0, 1, 2), keepdim=False)
 
 
 @pytest.mark.api_base_mean_parameters
@@ -159,7 +159,7 @@ def test_mean11():
     """
     x = np.array([[[2.0, 3.0, 4.0]], [[4.0, 3.0, 4.0]]]).astype("float32")
     res = np.mean(x, axis=(-3, 1, 2), keepdims=False)
-    obj.run(res=[res], x=x, axis=(0, 1, 2), keepdim=False)
+    obj.run(res=res, x=x, axis=(0, 1, 2), keepdim=False)
 
 
 @pytest.mark.api_base_mean_parameters
