@@ -1,4 +1,5 @@
-source ../../tools/linux_env_info.sh
+wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+source ./linux_env_info.sh
 #指定docker镜像
 if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
