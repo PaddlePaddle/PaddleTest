@@ -67,7 +67,8 @@ class PaddleScience_Start(object):
         old_pythonpath = os.environ.get("PYTHONPATH", "")
         new_pythonpath = f"{paddle_path}:{old_pythonpath}"
         os.environ["PYTHONPATH"] = new_pythonpath
-        os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
+        if "tests^config^cylinder3d_steady" in self.qa_yaml_name:  # 是否为cylinder3d_steady
+            os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
         return 0
 
     def build_prepare(self):
