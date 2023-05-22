@@ -457,3 +457,4 @@ function linux_env_info_main() {
 }
 
 linux_env_info_main
+set +e
