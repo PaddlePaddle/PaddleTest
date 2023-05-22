@@ -123,6 +123,7 @@ class Paddle3D_Build(Model_Build):
             for filename in self.test_model_list:
                 print("filename:{}".format(filename))
                 if filename == "configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml":
+                    print("filename_petrv2:{}".format(filename))
                     if os.path.exists("data"):
                         shutil.rmtree("data")
                     os.makedirs("data")
@@ -131,12 +132,14 @@ class Paddle3D_Build(Model_Build):
                     else:
                         os.symlink("/home/jiaxiao01/Paddle3D/nuscenes_petrv2", "data/nuscenes")
                 else:
+                    print("filename_sed:{}".format(filename))
                     cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
                     subprocess.getstatusoutput(cmd)
                     # cmd = "cat %s" % (filename)
                     # subprocess.getstatusoutput(cmd)
                     # cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
                     # subprocess.getstatusoutput(cmd)
+                    print(cmd)
                     print("change iters number!")
             os.chdir(path_now)
 

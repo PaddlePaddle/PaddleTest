@@ -109,7 +109,7 @@ export:
 predict:
   -
     name: trained
-    cmd:  python tools/infer/predict_structure.py
+    cmd:  python ppstructure/table/predict_structure.py
     params:
       - --image_dir="ppstructure/docs/table/table.jpg"
       - --table_model_dir="./models_inference/"${qa_yaml_name}
@@ -121,7 +121,7 @@ predict:
       - --enable_mkldnn=False
   -
     name: trained_mkldnn
-    cmd:  python tools/infer/predict_structure.py
+    cmd:  python ppstructure/table/predict_structure.py
     params:
       - --image_dir="ppstructure/docs/table/table.jpg"
       - --table_model_dir="./models_inference/"${qa_yaml_name}
@@ -133,7 +133,7 @@ predict:
       - --enable_mkldnn=True
   -
     name: trained_tensorRT
-    cmd:  python tools/infer/predict_structure.py
+    cmd:  python ppstructure/table/predict_structure.py
     params:
       - --image_dir="ppstructure/docs/table/table.jpg"
       - --table_model_dir="./models_inference/"${qa_yaml_name}
