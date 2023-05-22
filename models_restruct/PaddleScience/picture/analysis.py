@@ -18,7 +18,7 @@ def plot_loss_from_log_files(log_file_names, image_file_name):
     # 初始化列表
     losses_list = []  # 用于存储每个 log 文件中的训练损失
     labels = []  # 用于存储每个 log 文件的名称
-
+    plt.clf()
     # 遍历每个 log 文件
     for log_file_name in log_file_names:
         # 读取 log 文件的内容

@@ -8,24 +8,22 @@ import pytest
 from tools.log_analysis import get_last_epoch_loss
 
 
-def test_lac2d_unsteady_Re10():
+def test_darcy2d():
     """
-    测试函数：测试 ldc2d_unsteady_Re10.py 脚本
+    测试函数：测试 darcy2d.py 脚本
     """
     # 定义变量
-    output_dir = "./ldc2d_unsteady_Re10"  # 输出目录
-    epoch_num = 10  # 迭代次数
-    base_loss = 1218.78577  # 基准损失值
-    py_version = os.getenv("py_version", "3.9")  # Python 版本号，从环境变量中获取，默认值为3.9
+    output_dir = "./output_darcy2d"  # 输出目录
+    epoch_num = 100  # 迭代次数
+    base_loss = 8993488.00000  # 基准损失值
+    py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.9
 
     # 如果输出目录已经存在，则删除
     if os.path.exists(output_dir):
         subprocess.run(f"rm -rf {output_dir}", shell=True, check=True)
 
     # 执行命令行命令，运行 ldc2d_unsteady_Re10.py 脚本
-    command = (
-        f"python{py_version} ../../examples/ldc/ldc2d_unsteady_Re10.py --epochs={epoch_num} --output_dir={output_dir}"
-    )
+    command = f"python{py_version} ../../examples/darcy/darcy2d.py --epochs={epoch_num} --output_dir={output_dir}"
     subprocess.run(command, shell=True, check=True)
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
