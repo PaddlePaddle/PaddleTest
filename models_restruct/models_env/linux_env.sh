@@ -4,6 +4,7 @@ pwd;
 ### 加载tools/linux_env_info.sh文件
 wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
 source ./linux_env_info.sh
+set +e
 
 ####ce框架根目录
 rm -rf ce && mkdir ce;
