@@ -19,35 +19,59 @@ import subprocess
 
 import pytest
 
-from tools.log_analysis import get_last_epoch_loss
+from tools.log_analysis import get_last_epoch_loss,get_last_eval_metric
 
 
-def test_lac2d_unsteady_Re10():
+def test_ldc2d_steady_Re10_exit_code():
     """
-    测试函数：测试 ldc2d_steady_Re10.py 脚本
+    测试函数：测试 ldc2d_steady_Re10.py 脚本的退出码是否为 0 以保证可视化文件的正常保存
     """
     # 定义变量
     output_dir = "./ldc2d_steady_Re10"  # 输出目录
     epoch_num = 10  # 迭代次数
-    base_loss = 56.74955  # 基准损失值
-    py_version = os.getenv("py_version", "3.9")  # Python 版本号，从环境变量中获取，默认值为3.9
-
-    # 如果输出目录已经存在，则删除
-    if os.path.exists(output_dir):
-        subprocess.run(f"rm -rf {output_dir}", shell=True, check=True)
+    py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.8
 
     # 执行命令行命令，运行 ldc2d_unsteady_Re10.py 脚本
     command = (
         f"python{py_version} ../../examples/ldc/ldc2d_steady_Re10.py --epochs={epoch_num} --output_dir={output_dir}"
     )
-    subprocess.run(command, shell=True, check=True)
+    process = subprocess.Popen(command, shell=True)
+
+    # 等待脚本执行完成，并返回退出码
+    exit_code = process.wait()
+
+    # 断言退出码为 0
+    assert exit_code == 0
+
+def test_ldc2d_steady_Re10_loss():
+    """
+    测试函数：测试 ldc2d_steady_Re10.py 的损失 
+    """
+    epoch_num = 10  # 迭代次数
+    output_dir = "./ldc2d_steady_Re10"  # 输出目录
+    base_loss = 56.74955  # 基准损失值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
     log_file = os.path.join(output_dir, "train.log")
     last_loss = get_last_epoch_loss(log_file, epoch_num)
 
-    # 断言最后一轮迭代的损失值是否等于基准损失值
+    # 断言最后一轮迭代的损失值与基准
     assert float(last_loss) == base_loss
+
+def test_ldc2d_steady_Re10_metric():
+    """
+    测试函数：测试 ldc2d_steady_Re10.py 的评估值
+    """
+    output_dir = "./ldc2d_steady_Re10"  # 输出目录
+    loss_function = "Residual"  # 损失函数``
+    base_metric = 2347.78721 # 基准评估值
+
+    # 获取训练过程的日志文件并计算最后一轮迭代的评估值
+    log_file = os.path.join(output_dir, "train.log")
+    last_metric = get_last_eval_metric(log_file, loss_function)
+
+    # 断言最后一轮迭代的评估值与基准
+    assert float(last_metric) == base_metric    
 
 
 if __name__ == "__main__":
