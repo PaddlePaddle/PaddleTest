@@ -10,12 +10,12 @@ from tools.log_analysis import get_last_epoch_loss
 
 def test_lac2d_unsteady_Re10():
     """
-    测试函数：测试 ldc2d_unsteady_Re10.py 脚本
+    测试函数：测试 ldc2d_steady_Re10.py 脚本
     """
     # 定义变量
-    output_dir = "./ldc2d_unsteady_Re10"  # 输出目录
+    output_dir = "./ldc2d_steady_Re10"  # 输出目录
     epoch_num = 10  # 迭代次数
-    base_loss = 1218.78577  # 基准损失值
+    base_loss = 56.74955  # 基准损失值
     py_version = os.getenv("py_version", "3.9")  # Python 版本号，从环境变量中获取，默认值为3.9
 
     # 如果输出目录已经存在，则删除
@@ -24,7 +24,7 @@ def test_lac2d_unsteady_Re10():
 
     # 执行命令行命令，运行 ldc2d_unsteady_Re10.py 脚本
     command = (
-        f"python{py_version} ../../examples/ldc/ldc2d_unsteady_Re10.py --epochs={epoch_num} --output_dir={output_dir}"
+        f"python{py_version} ../../examples/ldc/ldc2d_steady_Re10.py --epochs={epoch_num} --output_dir={output_dir}"
     )
     subprocess.run(command, shell=True, check=True)
 
