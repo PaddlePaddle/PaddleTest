@@ -109,6 +109,10 @@ class PaddleClas_End(object):
                     logger.info("#### clean data face: {}".format("dataset"))
 
         os.chdir(path_now)
+
+        # kill遗留程序
+        cmd_kill = os.system("ps aux| grep '{self.qa_yaml_name}' | awk '{print $2}'| xargs kill -9")
+        logger.info("cmd_kill is {}".format(cmd_kill))
         return 0
 
     def build_end(self):
