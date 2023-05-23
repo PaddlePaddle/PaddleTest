@@ -96,7 +96,7 @@ class PaddleRec_Build(Model_Build):
         os.system("python -m pip install llvmlite")
         os.system("python -m pip install opencv-python==4.6.0.66")
         os.system("python -m pip install scipy")
-        os.system("python -m pip install pandas")
+        os.system("python -m pip install pandas==1.5.3")
         os.chdir(path_now)
         
         os.system("python -m pip install https://paddle-qa.bj.bcebos.com/PaddleRec/auto_log-1.2.0-py3-none-any.whl")
