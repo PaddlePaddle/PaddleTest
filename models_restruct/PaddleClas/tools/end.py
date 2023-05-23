@@ -111,7 +111,9 @@ class PaddleClas_End(object):
         os.chdir(path_now)
 
         # kill遗留程序
+        logger.info("PID before is {}".format(os.system("ps aux| grep '{self.qa_yaml_name}'")))
         cmd_kill = os.system("ps aux| grep '{self.qa_yaml_name}' | awk '{print $2}'| xargs kill -9")
+        logger.info("PID after is {}".format(os.system("ps aux| grep '{self.qa_yaml_name}'")))
         logger.info("cmd_kill is {}".format(cmd_kill))
         return 0
 

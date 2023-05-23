@@ -456,7 +456,7 @@ class PaddleClas_Start(object):
                                                     data_json[key][i]["result"] = name_["result"]
                                                 except:
                                                     pass
-                                                    print("###key {} val1 {} do not have result".format(key, val1))
+                                                    # print("###key {} val1 {} do not have result".format(key, val1))
                                                 # print('###data_json[key]', data_json[key])
                                                 # input()
                         # print('###name11111', name)
