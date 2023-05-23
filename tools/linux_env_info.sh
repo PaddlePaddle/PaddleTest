@@ -22,8 +22,14 @@ function DockerImages () {
     docker_type=$1
     cuda_version=$2
     DOCKER_EXIT_CODE=0
+    # 增加Manual模式，如果已经手动设置了安装包链接，不执行后续逻辑
+    if [[ "${Image_version}" != "" ]];then
+        docker_type="Manual"
+    fi
 
-    if [[ "${docker_type}" == "Centos" ]];then
+    if [[ "${docker_type}" == "Manual" ]];then
+        echo "Select Manual Mode!!!"
+    elif [[ "${docker_type}" == "Centos" ]];then
         case ${cuda_version} in
         "Cuda102")
             echo "Selected Centos: Cuda102"
@@ -330,6 +336,10 @@ function WheelUrlInfo(){
     branch_info=${3:-"Develop"}
     infer_package=${4:-"OFF"}
 
+    # 增加Manual模式，如果已经手动设置了安装包链接，不执行后续逻辑
+    if [[ "${paddle_whl}" != "" ]];then
+        cuda_version="Manual"
+    fi
     WHELLINFO_EXITCODE=0
 
     if [[ "${branch_info}" == "Release" ]];then
@@ -342,6 +352,9 @@ function WheelUrlInfo(){
     fi
 
     case ${cuda_version} in
+        "Manual")
+            echo "Select Manual Mode!!!"
+            ;;
         "Cpu")
             CpuPackageUrlInfo ${branch_info} ${python_version}
             if [[ "${infer_package}" != "OFF" ]];then
@@ -382,37 +395,42 @@ function WheelUrlInfo(){
             WHELLINFO_EXITCODE=115
             ;;
         esac
+    if [[ "$cuda_version" != "Manual" ]];then
+        # 安装包选择的条件信息
+        echo "==========================="
+        echo "Install Packages Select Options as follows:"
+        echo "- Branch Info: ${branch_info}"
+        echo "- Cuda Version: ${cuda_version}"
+        echo "- Python Version: ${package_version}"
+        echo "- Inference Packages: ${infer_package}"
 
-    # 安装包选择的条件信息
-    echo "==========================="
-    echo "Install Packages Select Options as follows:"
-    echo "- Branch Info: ${branch_info}"
-    echo "- Cuda Version: ${cuda_version}"
-    echo "- Python Version: ${package_version}"
-    echo "- Inference Packages: ${infer_package}"
+        if [[ "${WHELLINFO_EXITCODE}" == "114" ]];then
+            echo "Branch Info is incorrect,please choose one from Develop or Release!!!"
+            echo "EXITCODE:${WHELLINFO_EXITCODE}"
+        elif [[ "${WHELLINFO_EXITCODE}" == "115" ]];then
+            echo "Cuda Version is incorrect!!!"
+        elif [[ "${WHELLINFO_EXITCODE}" == "115" ]];then
+            echo "Python Version is incorrect,please choose from (Python37 Python38 Python39 Python310 Inference)"
+        else
+            echo "====InstallPackage Info is:===="
+            echo "- paddle_whl:${paddle_whl}"
+            echo 'Ps. You can get this wheel_url through "${paddle_whl}";'
 
-    if [[ "${WHELLINFO_EXITCODE}" == "114" ]];then
-        echo "Branch Info is incorrect,please choose one from Develop or Release!!!"
-        echo "EXITCODE:${WHELLINFO_EXITCODE}"
-    elif [[ "${WHELLINFO_EXITCODE}" == "115" ]];then
-        echo "Cuda Version is incorrect!!!"
-    elif [[ "${WHELLINFO_EXITCODE}" == "115" ]];then
-        echo "Python Version is incorrect,please choose from (Python37 Python38 Python39 Python310 Inference)"
+            if [[ "${infer_package}" != "OFF" ]];then
+                echo "- paddle_inference:${paddle_inference}"
+                echo "- paddle_inference_c:${paddle_inference_c}"
+                echo 'Ps. You can get this wheel_url through "${paddle_inference}" or "${paddle_inference_c}"'
+            fi
+        fi
+
+        if [[ "${WHELLINFO_EXITCODE}" != "0" ]];then
+            echo "EXITCODE:${WHELLINFO_EXITCODE}"
+            exit ${WHELLINFO_EXITCODE}
+        fi
     else
         echo "====InstallPackage Info is:===="
         echo "- paddle_whl:${paddle_whl}"
         echo 'Ps. You can get this wheel_url through "${paddle_whl}";'
-
-        if [[ "${infer_package}" != "OFF" ]];then
-            echo "- paddle_inference:${paddle_inference}"
-            echo "- paddle_inference_c:${paddle_inference_c}"
-            echo 'Ps. You can get this wheel_url through "${paddle_inference}" or "${paddle_inference_c}"'
-        fi
-    fi
-
-    if [[ "${WHELLINFO_EXITCODE}" != "0" ]];then
-        echo "EXITCODE:${WHELLINFO_EXITCODE}"
-        exit ${WHELLINFO_EXITCODE}
     fi
 }
 
@@ -457,3 +475,4 @@ function linux_env_info_main() {
 }
 
 linux_env_info_main
+set +e
