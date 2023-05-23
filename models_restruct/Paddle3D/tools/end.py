@@ -138,14 +138,18 @@ class Paddle3D_End(object):
         """
 
         ydata1 = data1
-        xdata1 = list(range(0, len(ydata1)))
+        xdata1 = list(range(0, len(ydata1)))  
+      
         ydata2 = data2
         xdata2 = list(range(0, len(ydata2)))
+       
 
         ydata3 = data3
         xdata3 = list(range(0, len(ydata3)))
+    
         ydata4 = data4
         xdata4 = list(range(0, len(ydata4)))
+        
 
         # plot the data
         fig = plt.figure()
@@ -165,7 +169,7 @@ class Paddle3D_End(object):
         else:
             ax.set_ylim([0, math.ceil(max(ydata1))])
         if "loss" in value:
-            ax.set_xlabel("100 iteration")
+            ax.set_xlabel("step/100 iters")
         else:
             ax.set_xlabel("epoch")
         ax.set_ylabel(value)
@@ -183,7 +187,6 @@ class Paddle3D_End(object):
         get_paddle_data(
         """
         data_list = []
-        print("os.getwcd:{}".format(os.getcwd()))
         f = open(filepath, encoding="utf-8", errors="ignore")
         i=0
         for line in f.readlines():
@@ -207,7 +210,7 @@ class Paddle3D_End(object):
             print("self.step:{}".format(self.step))
             if not os.path.exists("Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp"):
                 os.makedirs("Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")
-            print("os.getcwd():{}".format(os.getcwd()))
+            
             wget.download(
                 "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
 configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_amp.log",
@@ -244,13 +247,13 @@ configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_p
 
             # total_loss
             data_amp = self.get_paddle_data(filepath_amp, "total_loss")
-            print("data_amp:{}".format(data_amp))
+           
             data_dygraph2static_amp = self.get_paddle_data(filepath_dygraph2static_amp, "total_loss")
-            print("data_dygraph2static_amp:{}".format(data_dygraph2static_amp))
+           
             data_dygraph2static_amp_prim = self.get_paddle_data(filepath_dygraph2static_amp_prim, "total_loss")
-            print("data_dygraph2static_amp_prim:{}".format(data_dygraph2static_amp_prim))
+           
             data_dygraph2static_amp_prim_cinn = self.get_paddle_data(filepath_dygraph2static_amp_cinn, "total_loss")
-            print("data_dygraph2static_amp_prim_cinn:{}".format(data_dygraph2static_amp_prim_cinn))
+            
             logger.info("Get data successfully!")
             self.plot_paddle_compare_value(
                 data_amp,
