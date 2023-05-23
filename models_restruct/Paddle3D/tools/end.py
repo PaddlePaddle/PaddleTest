@@ -154,8 +154,8 @@ class Paddle3D_End(object):
         ax = fig.add_subplot(1, 1, 1)
         ax.plot(xdata1, ydata1, label="paddle_amp_" + value, color="b", linewidth=1)
         ax.plot(xdata2, ydata2, label="paddle_dygraph2static_amp_" + value, color="r", linewidth=1)
-        ax.plot(xdata3, ydata3, label="paddle_dygraph2static_amp_prim" + value, color="g", linewidth=1)
-        ax.plot(xdata4, ydata4, label="paddle_dygraph2static_amp_prim_cinn" + value, color="y", linewidth=1)
+        ax.plot(xdata3, ydata3, label="paddle_dygraph2static_amp_prim_" + value, color="g", linewidth=1)
+        ax.plot(xdata4, ydata4, label="paddle_dygraph2static_amp_prim_cinn_" + value, color="y", linewidth=1)
 
         # set the legend
         ax.legend()
@@ -177,7 +177,7 @@ class Paddle3D_End(object):
         # plt.show()
         if not os.path.exists("picture"):
             os.makedirs("picture")
-        plt.savefig("picture/" + "_dygraph2static_" + value + ".png")
+        plt.savefig("picture/" + "Paddle3D_PETRV2_" + value + ".png")
 
     def get_paddle_data(self, filepath, kpi):
         """
