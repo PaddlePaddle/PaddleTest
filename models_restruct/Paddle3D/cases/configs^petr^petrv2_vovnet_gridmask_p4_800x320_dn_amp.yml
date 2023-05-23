@@ -88,4 +88,3 @@ case:
           -
             name: dygraph2static_amp_prim_cinn_test
             cmd : echo "This is a dygraph2static_amp_prim_cinn_test!"
-
