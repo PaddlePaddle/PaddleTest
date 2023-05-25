@@ -11,7 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""
+test_darcy2d
+"""
 # 导入模块
 import os
 import sys
@@ -31,7 +33,10 @@ def test_darcy2d_exit_code():
     py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.8
 
     # 执行命令行命令，运行 darcy2d.py 脚本
-    command = f"python{py_version} ../../examples/darcy/darcy2d.py --epochs={epoch_num} --output_dir={output_dir}"
+    command = f"python{py_version} ../../examples/darcy/darcy2d.py \
+               --epochs={epoch_num} \
+               --output_dir={output_dir}"
+
     process = subprocess.Popen(command, shell=True)
 
     # 等待脚本执行完成，并返回退出码
@@ -47,7 +52,6 @@ def test_darcy2d_loss():
     """
     epoch_num = 100  # 迭代次数
     output_dir = "./output_darcy2d"  # 输出目录
-    loss_function = "Residual"  # 损失函数``
     base_loss = 8993488.00000  # 基准损失值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值

@@ -11,7 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""
+test_laplace
+"""
 # 导入模块
 import os
 import sys
@@ -32,7 +34,9 @@ def test_laplace2d_exit_code():
     py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.8
 
     # 执行命令行命令，运行 laplace2d.py 脚本
-    command = f"python{py_version} ../../examples/laplace/laplace2d.py --epochs={epoch_num} --output_dir={output_dir}"
+    command = f"python{py_version} ../../examples/laplace/laplace2d.py \
+                --epochs={epoch_num} \
+                --output_dir={output_dir}"
     process = subprocess.Popen(command, shell=True)
     # 等待脚本执行完成，并返回退出码
     exit_code = process.wait()
