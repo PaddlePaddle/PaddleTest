@@ -34,11 +34,9 @@ def test_ldc2d_steady_re10_exit_code():
     py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.8
 
     # 执行命令行命令，运行 ldc2d_unsteady_Re10.py 脚本
-    command = (
-        f"python{py_version} ../../examples/ldc/ldc2d_steady_Re10.py \
+    command = f"python{py_version} ../../examples/ldc/ldc2d_steady_Re10.py \
           --epochs={epoch_num} \
           --output_dir={output_dir}"
-    )
     process = subprocess.Popen(command, shell=True)
 
     # 等待脚本执行完成，并返回退出码
