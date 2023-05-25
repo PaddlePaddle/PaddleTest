@@ -19,7 +19,7 @@ import subprocess
 
 import pytest
 
-from tools.log_analysis import get_last_epoch_loss,get_last_eval_metric
+from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric
 
 
 def test_ldc2d_steady_Re10_exit_code():
@@ -43,6 +43,7 @@ def test_ldc2d_steady_Re10_exit_code():
     # 断言退出码为 0
     assert exit_code == 0
 
+
 def test_ldc2d_steady_Re10_loss():
     """
     测试函数：测试 ldc2d_steady_Re10.py 的损失 
@@ -64,7 +65,7 @@ def test_ldc2d_steady_Re10_metric():
     """
     output_dir = "./ldc2d_steady_Re10"  # 输出目录
     loss_function = "Residual"  # 损失函数``
-    base_metric = 2347.78722 # 基准评估值
+    base_metric = 2347.78722  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")

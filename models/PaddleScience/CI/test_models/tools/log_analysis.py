@@ -1,5 +1,6 @@
-
 import re
+
+
 def get_last_epoch_loss(log_file, epoch_num):
     """
     解析训练日志文件，获取最后一个epoch的loss值
@@ -20,6 +21,7 @@ def get_last_epoch_loss(log_file, epoch_num):
                 break  # 解析到最后一个 epoch 的 loss 值后退出循环
 
     return last_loss  # 返回最后一个 epoch 的 loss 值，如果没有找到，则返回空字符串
+
 
 def get_last_eval_metric(log_file, loss_function):
     """
@@ -44,6 +46,7 @@ def get_last_eval_metric(log_file, loss_function):
                 break
 
     return last_metric
+
 
 if __name__ == "__main__":
     log_file_path = "examples^darcy^darcy2d_base.log"

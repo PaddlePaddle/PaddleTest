@@ -19,7 +19,7 @@ import subprocess
 
 import pytest
 
-from tools.log_analysis import get_last_epoch_loss,get_last_eval_metric
+from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric
 
 
 def test_laplace2d_exit_code():
@@ -40,6 +40,7 @@ def test_laplace2d_exit_code():
     # 断言退出码为 0
     assert exit_code == 0
 
+
 def test_laplace2d_loss():
     """
     测试函数：测试 laplace2d.py 损失值 
@@ -55,13 +56,14 @@ def test_laplace2d_loss():
     # 断言最后一轮迭代的损失值与基准
     assert float(last_loss) == base_loss
 
+
 def test_laplace2d_metric():
     """
     测试函数：测试 laplace2d.py 评估指值
     """
     output_dir = "./output_laplace2d"  # 输出目录
     loss_function = "MSE_Metric"  # 损失函数
-    base_metric = 0.01920 # 基准评估值
+    base_metric = 0.01920  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")

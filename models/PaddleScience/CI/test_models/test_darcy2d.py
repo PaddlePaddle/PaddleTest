@@ -19,7 +19,7 @@ import subprocess
 
 import pytest
 
-from tools.log_analysis import get_last_epoch_loss,get_last_eval_metric
+from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric
 
 
 def test_darcy2d_exit_code():
@@ -40,6 +40,7 @@ def test_darcy2d_exit_code():
     # 断言退出码为 0
     assert exit_code == 0
 
+
 def test_darcy2d_loss():
     """
     测试函数：测试 darcy2d.py 脚本的损失值
@@ -55,6 +56,7 @@ def test_darcy2d_loss():
 
     # 断言最后一轮迭代的损失值与基准
     assert float(last_loss) == base_loss
+
 
 def test_darcy2d_metric():
     """
