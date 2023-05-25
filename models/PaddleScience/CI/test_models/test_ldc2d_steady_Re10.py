@@ -46,7 +46,7 @@ def test_ldc2d_steady_Re10_exit_code():
 
 def test_ldc2d_steady_Re10_loss():
     """
-    测试函数：测试 ldc2d_steady_Re10.py 的损失 
+    test loss
     """
     epoch_num = 10  # 迭代次数
     output_dir = "./ldc2d_steady_Re10"  # 输出目录
@@ -58,6 +58,7 @@ def test_ldc2d_steady_Re10_loss():
 
     # 断言最后一轮迭代的损失值与基准
     assert float(last_loss) == base_loss
+
 
 def test_ldc2d_steady_Re10_metric():
     """
@@ -71,8 +72,7 @@ def test_ldc2d_steady_Re10_metric():
     log_file = os.path.join(output_dir, "train.log")
     last_metric = get_last_eval_metric(log_file, loss_function)
 
-    # 断言最后一轮迭代的评估值与基准
-    assert float(last_metric) == base_metric    
+    assert float(last_metric) == base_metric
 
 
 if __name__ == "__main__":

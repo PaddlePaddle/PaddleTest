@@ -43,7 +43,7 @@ def test_laplace2d_exit_code():
 
 def test_laplace2d_loss():
     """
-    测试函数：测试 laplace2d.py 损失值 
+    test loss
     """
     epoch_num = 100  # 迭代次数
     output_dir = "./output_laplace2d"  # 输出目录
