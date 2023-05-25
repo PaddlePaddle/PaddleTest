@@ -1,6 +1,6 @@
-import re
-
-
+"""
+tools
+"""
 def get_last_epoch_loss(log_file, epoch_num):
     """
     解析训练日志文件，获取最后一个epoch的loss值
