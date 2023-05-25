@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-test_darcy2d
+test_laplace
 """
 # 导入模块
 import os
@@ -24,21 +24,20 @@ import pytest
 from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric
 
 
-def test_darcy2d_exit_code():
+def test_laplace2d_exit_code():
     """
-    测试函数：测试 darcy2d.py 脚本的退出码是否为 0 以保证可视化文件的正常保存
+    测试函数：测试 laplace2d.py 脚本的退出码是否为0 以保证可视化文件的正常保存
     """
+    # 定义变量
     epoch_num = 100  # 迭代次数
-    output_dir = "./output_darcy2d"  # 输出目录
+    output_dir = "./output_laplace2d"  # 输出目录
     py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.8
 
-    # 执行命令行命令，运行 darcy2d.py 脚本
-    command = f"python{py_version} ../../examples/darcy/darcy2d.py \
-               --epochs={epoch_num} \
-               --output_dir={output_dir}"
-
+    # 执行命令行命令，运行 laplace2d.py 脚本
+    command = f"python{py_version} ../../examples/laplace/laplace2d.py \
+                --epochs={epoch_num} \
+                --output_dir={output_dir}"
     process = subprocess.Popen(command, shell=True)
-
     # 等待脚本执行完成，并返回退出码
     exit_code = process.wait()
 
@@ -46,13 +45,13 @@ def test_darcy2d_exit_code():
     assert exit_code == 0
 
 
-def test_darcy2d_loss():
+def test_laplace2d_loss():
     """
-    测试函数：测试 darcy2d.py 脚本的损失值
+    test loss
     """
     epoch_num = 100  # 迭代次数
-    output_dir = "./output_darcy2d"  # 输出目录
-    base_loss = 8993488.00000  # 基准损失值
+    output_dir = "./output_laplace2d"  # 输出目录
+    base_loss = 21.56964  # 基准损失值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
     log_file = os.path.join(output_dir, "train.log")
@@ -62,13 +61,13 @@ def test_darcy2d_loss():
     assert float(last_loss) == base_loss
 
 
-def test_darcy2d_metric():
+def test_laplace2d_metric():
     """
-    测试函数：测试 darcy2d.py 脚本的评估值
+    测试函数：测试 laplace2d.py 评估指值
     """
-    output_dir = "./output_darcy2d"  # 输出目录
-    loss_function = "Residual"  # 损失函数``
-    base_metric = 6917204.74981  # 基准评估值
+    output_dir = "./output_laplace2d"  # 输出目录
+    loss_function = "MSE_Metric"  # 损失函数
+    base_metric = 0.01920  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")
