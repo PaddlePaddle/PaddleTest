@@ -85,3 +85,6 @@ case:
                 base: 0.77
                 threshold: 0.01
                 evaluation: "+"
+          -
+            name: dygraph2static_amp_prim_cinn_test
+            cmd : echo "This is a dygraph2static_amp_prim_cinn_test!"
