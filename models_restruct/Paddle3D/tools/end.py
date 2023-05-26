@@ -224,11 +224,11 @@ configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp.l
 configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim.log",
                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
             )
-            wget.download(
-                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
-configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim_cinn.log",
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
-            )
+#             wget.download(
+#                 "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+# configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim_cinn.log",
+#                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+#             )
 
             filepath_amp = os.path.join(
                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
