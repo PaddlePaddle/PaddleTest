@@ -298,7 +298,7 @@ def run():
     """
     执行入口
     """
-    logger.info("This is Paddle3D_End start!")
+    print("This is Paddle3D_End start!")
     model = Paddle3D_End()
     model.build_end()
     return 0
