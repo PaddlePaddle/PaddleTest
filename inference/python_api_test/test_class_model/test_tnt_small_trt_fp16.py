@@ -101,10 +101,11 @@ def test_trt_fp16_more_bz():
             output_data_dict,
             delta=1e-2,
             max_batch_size=10,
-            min_subgraph_size=5,
+            min_subgraph_size=0,
             precision="trt_fp16",
             dynamic=True,
             shape_range_file=file_path + "/shape_range.pbtxt",
+            delete_pass_list=["trt_skip_layernorm_fuse_pass"],
         )
 
         del test_suite2  # destroy class to save memory
@@ -158,10 +159,11 @@ def test_jetson_trt_fp16_more_bz():
             output_data_dict,
             delta=1e-2,
             max_batch_size=10,
-            min_subgraph_size=5,
+            min_subgraph_size=0,
             precision="trt_fp16",
             dynamic=True,
             shape_range_file=file_path + "/shape_range.pbtxt",
+            delete_pass_list=["trt_skip_layernorm_fuse_pass"],
         )
 
         del test_suite2  # destroy class to save memory
@@ -214,10 +216,11 @@ def test_trt_fp16_bz1_multi_thread():
         input_data_dict,
         output_data_dict,
         delta=1e-2,
-        min_subgraph_size=5,
+        min_subgraph_size=0,
         precision="trt_fp16",
         dynamic=True,
         shape_range_file="./TNT_small/shape_range.pbtxt",
+        delete_pass_list=["trt_skip_layernorm_fuse_pass"],
     )
 
     del test_suite2  # destroy class to save memory
