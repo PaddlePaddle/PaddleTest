@@ -29,7 +29,7 @@ class Run(object):
         self.testing = testing
 
         self.py_cmd = py_cmd
-        self.report_dir = os.path.join(os.getcwd(), "report11")
+        self.report_dir = os.path.join(os.getcwd(), "report")
 
     def _test_run(self):
         """run some test"""
