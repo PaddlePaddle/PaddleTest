@@ -41,9 +41,13 @@ ignore_case_dir = {
     "paddlebase": [
         "test_fill_diagonal_tensor.py",
         "test_multiplex.py",
+        "test_mm.py",
+        "test_matmul.py",
     ],
     "optimizer": [],
-    "distribution": [],
+    "distribution": [
+        "test_ReshapeTransform.py",
+    ],
     "utils": [],
 }
 

@@ -132,30 +132,30 @@ class Paddle3D_End(object):
             logger.info("#### eval_acc: {}".format(eval_acc))
             self.update_json("tools/eval.json", eval_acc)
 
-    def plot_paddle_compare_value(self, data1, data2, data3, data4, value, keyworld="prim"):
+    def plot_paddle_compare_value(self, data1, data2, data3, data4, value):
         """
         plot_paddle_compare_value
         """
 
         ydata1 = data1
         xdata1 = list(range(0, len(ydata1)))
+
         ydata2 = data2
         xdata2 = list(range(0, len(ydata2)))
 
         ydata3 = data3
         xdata3 = list(range(0, len(ydata3)))
+
         ydata4 = data4
         xdata4 = list(range(0, len(ydata4)))
 
         # plot the data
         fig = plt.figure()
         ax = fig.add_subplot(1, 1, 1)
-        ax.plot(xdata1, ydata1, label="paddle_amp_" + value, color="b", linewidth=2)
-        ax.plot(xdata2, ydata2, label="paddle_dygraph2static_amp_" + value, color="r", linewidth=2)
-        ax.plot(xdata3, ydata3, label="paddle_dygraph2static_amp_prim" + value, color="b", linewidth=2, linestyle=":")
-        ax.plot(
-            xdata4, ydata4, label="paddle_dygraph2static_amp_prim_cinn" + value, color="r", linewidth=2, linestyle=":"
-        )
+        ax.plot(xdata1, ydata1, label="paddle_amp_" + value, color="b", linewidth=1)
+        ax.plot(xdata2, ydata2, label="paddle_dygraph2static_amp_" + value, color="r", linewidth=1)
+        ax.plot(xdata3, ydata3, label="paddle_dygraph2static_amp_prim_" + value, color="g", linewidth=1)
+        ax.plot(xdata4, ydata4, label="paddle_dygraph2static_amp_prim_cinn_" + value, color="y", linewidth=1)
 
         # set the legend
         ax.legend()
@@ -166,18 +166,18 @@ class Paddle3D_End(object):
         else:
             ax.set_ylim([0, math.ceil(max(ydata1))])
         if "loss" in value:
-            ax.set_xlabel("iteration")
+            ax.set_xlabel("step/100 iters")
         else:
             ax.set_xlabel("epoch")
         ax.set_ylabel(value)
         ax.grid()
-        ax.set_title("PaddleOCR_DB")
+        ax.set_title("Paddle3D_PETRV2")
 
         # display the plot
         # plt.show()
         if not os.path.exists("picture"):
             os.makedirs("picture")
-        plt.savefig("picture/" + keyworld + "_dygraph2static_" + value + ".png")
+        plt.savefig("picture/" + "Paddle3D_PETRV2_" + value + ".png")
 
     def get_paddle_data(self, filepath, kpi):
         """
@@ -185,45 +185,76 @@ class Paddle3D_End(object):
         """
         data_list = []
         f = open(filepath, encoding="utf-8", errors="ignore")
+        i = 0
         for line in f.readlines():
-            if kpi + ":" in line and line.startswith("20"):
+            if kpi + "=" in line and line.startswith("20") and i % 10 == 0:
                 if "current" in line:
                     pass
                 else:
-                    regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
+                    regexp = r"%s=(\s*\d+(?:\.\d+)?)" % kpi
                     r = re.findall(regexp, line)
                     # 如果解析不到符合格式到指标，默认值设置为-1
                     kpi_value = float(r[0].strip()) if len(r) > 0 else -1
                     data_list.append(kpi_value)
+            i = i + 1
         return data_list
 
-    def get_traning_curve(self, tag1, tag2, keyworld="prim"):
+    def get_traning_curve(self):
         """
         get_traning_curve
         """
-        if "dygraph2static" in self.step:
+        if "dygraph2static_amp_prim_cinn" in self.step:
             print("self.step:{}".format(self.step))
+            if not os.path.exists("Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp"):
+                os.makedirs("Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")
+
+            wget.download(
+                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_amp.log",
+                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+            )
+            wget.download(
+                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp.log",
+                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+            )
+            wget.download(
+                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim.log",
+                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+            )
+            wget.download(
+                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim_cinn.log",
+                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+            )
+
             filepath_amp = os.path.join(
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
                 "train_amp.log",
             )
             filepath_dygraph2static_amp = os.path.join(
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/", "train_dygraph2static_amp.log"
+                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "train_dygraph2static_amp.log",
             )
             filepath_dygraph2static_amp_prim = os.path.join(
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
                 "train_dygraph2static_amp_prim.log",
             )
             filepath_dygraph2static_amp_cinn = os.path.join(
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
                 "train_dygraph2static_amp_prim_cinn.log",
             )
 
             # total_loss
             data_amp = self.get_paddle_data(filepath_amp, "total_loss")
+
             data_dygraph2static_amp = self.get_paddle_data(filepath_dygraph2static_amp, "total_loss")
+
             data_dygraph2static_amp_prim = self.get_paddle_data(filepath_dygraph2static_amp_prim, "total_loss")
+
             data_dygraph2static_amp_prim_cinn = self.get_paddle_data(filepath_dygraph2static_amp_cinn, "total_loss")
+
             logger.info("Get data successfully!")
             self.plot_paddle_compare_value(
                 data_amp,
@@ -231,9 +262,13 @@ class Paddle3D_End(object):
                 data_dygraph2static_amp_prim,
                 data_dygraph2static_amp_prim_cinn,
                 "train_loss",
-                keyworld,
             )
             logger.info("Plot figure successfully!")
+        else:
+            log_name = os.listdir("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")[0]
+            log_path = os.path.join("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp", log_name)
+            cmd = "python BosClient.py %s paddle-qa/" % (log_path)
+            os.system(cmd)
 
             # # hmeans
             # data_baseline_hmeans = self.get_paddle_data(filepath_baseline, "hmean")
@@ -254,7 +289,8 @@ class Paddle3D_End(object):
             logger.info("build collect_data_value failed")
             return ret
         logger.info("build collect_data_value end")
-        self.get_traning_curve("dygraph2static_baseline", "dygraph2static_prim", "prim")
+        if "amp" in self.step:
+            self.get_traning_curve()
 
 
 def run():
