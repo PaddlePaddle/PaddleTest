@@ -49,7 +49,7 @@ class Paddle3D_End(object):
         """
         # 进入repo中
         logger.info("This is case_end!")
-        print("os.getcwd():{}".format(os.getcwd()))
+        logger.info("os.getcwd():{}", os.getcwd())
         os.system("python tools/end.py")
         os.system("python -m pytest -sv test_plot.py  --alluredir=./result")   
 
