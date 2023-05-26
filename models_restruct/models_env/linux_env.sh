@@ -194,6 +194,9 @@ export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 export plot=${plot:-False}  #False表示不自动绘图
 export c_plus_plus_predict=${c_plus_plus_predict:-False}  #False表示不配置 C++预测库
 
+#cinn编译器
+export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
+export FLAGS_prim_all=${FLAGS_prim_all:-false}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -228,6 +231,9 @@ echo "@@@plot: ${plot}"
 echo "@@@c_plus_plus_predict: ${c_plus_plus_predict}"
 echo "@@@paddle_inference: ${paddle_inference}"
 echo "@@@TENSORRT_DIR: ${TENSORRT_DIR}"
+
+echo "@@@FLAGS_use_cinn: ${FLAGS_use_cinn}"
+echo "@@@FLAGS_prim_all: ${FLAGS_prim_all}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -350,6 +356,8 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
+        -e FLAGS_prim_all=${FLAGS_prim_all} \
+        -e FLAGS_use_cinn=${FLAGS_use_cinn} \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
