@@ -20,16 +20,6 @@ case:
         params:
           - -o AMP.level=O1
           - -o DataLoader.Train.loader.num_workers=1
-      -
-        name: multi_amp
-        params:
-          - -o AMP.level=O1
-          - -o DataLoader.Train.loader.num_workers=1
-      -
-        name: multi_amp_dy2st
-        params:
-          - -o AMP.level=O1
-          - -o DataLoader.Train.loader.num_workers=1
     eval:
       -
         name: trained
