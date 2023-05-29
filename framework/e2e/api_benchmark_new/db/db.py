@@ -63,7 +63,7 @@ class DB(object):
             id = self.db.insert_id()
             self.db.commit()
         except Exception as e:
-            print(traceback.format_exc())
+            # print(traceback.format_exc())
             print(e)
         return id
 

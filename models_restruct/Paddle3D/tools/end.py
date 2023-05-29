@@ -205,44 +205,45 @@ class Paddle3D_End(object):
         """
         if "dygraph2static_amp_prim_cinn" in self.step:
             print("self.step:{}".format(self.step))
-            if not os.path.exists("Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp"):
-                os.makedirs("Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")
+            print("os.getcwd():{}".format(os.getcwd()))
+            if not os.path.exists("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp"):
+                os.makedirs("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")
 
             wget.download(
                 "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
 configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_amp.log",
-                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
             )
             wget.download(
                 "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
 configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp.log",
-                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
             )
             wget.download(
                 "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
 configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim.log",
-                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
             )
             wget.download(
                 "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
 configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim_cinn.log",
-                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
             )
 
             filepath_amp = os.path.join(
-                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
                 "train_amp.log",
             )
             filepath_dygraph2static_amp = os.path.join(
-                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
                 "train_dygraph2static_amp.log",
             )
             filepath_dygraph2static_amp_prim = os.path.join(
-                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
                 "train_dygraph2static_amp_prim.log",
             )
             filepath_dygraph2static_amp_cinn = os.path.join(
-                "Paddle3D/logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
                 "train_dygraph2static_amp_prim_cinn.log",
             )
 

@@ -66,7 +66,7 @@ case:
                 evaluation: "+"
           -
             name: dygraph2static_amp_prim_cinn
-            cmd : export FLAGS_prim_all=True; export FLAGS_use_cinn=1; export FLAGS_cinn_use_op_fusion=0; python tools/train.py
+            cmd : export FLAGS_prim_all=True; export FLAGS_use_cinn=1; python tools/train.py
             params:
               - --config configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml
               - --model petrv2_vovnet_gridmask_p4_800x320_dn_amp/fcos3d_vovnet_imgbackbone-remapped.pdparams
