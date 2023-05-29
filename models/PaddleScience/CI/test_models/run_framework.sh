@@ -19,6 +19,7 @@ ignore=""
 serial_bug=0
 distributed_bug=0
 bug=0
+export CUDA_VISIBLE_DEVICES=0,1
 echo "===== examples bug list =====" >  result.txt
 echo "serial bug list:" >>  result.txt
 for file in ${cases}

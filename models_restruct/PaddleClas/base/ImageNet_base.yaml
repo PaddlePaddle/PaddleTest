@@ -271,7 +271,7 @@ infer:
       - -o Global.output_dir=output/${qa_yaml_name}_infer_trained
     result:
       class_ids:
-        base: "[22, 22, 22, 22, 22]"
+        base: "[11, 11, 11, 11]"
         threshold: 0
         evaluation: "="
   -
@@ -282,7 +282,7 @@ infer:
       - -o Global.output_dir=output/${qa_yaml_name}_infer_pretrained
     result:
       class_ids:
-        base: "[8, 7, 86, 82, 476]"
+        base: "[11, 11, 11, 11]"
         threshold: 0
         evaluation: "="
 export:
@@ -391,6 +391,6 @@ predict:
       - -o Global.output_dir=output/${qa_yaml_name}_predict_pretrained
     result:
       class_ids:
-        base: "[443, 84, 808, 511]"
+        base: "[11, 11, 11, 11]"
         threshold: 0
         evaluation: "="
