@@ -18,6 +18,10 @@ echo ${cudaid1}
 echo ${cudaid2}
 echo ${paddle_compile}
 
+wget https://paddle-qa.bj.bcebos.com/PaddleScience/datasets/datasets.tar.gz
+tar -zxvf datasets.tar.gz
+rm -rf datasets.tar.gz
+
 cases=`find . -maxdepth 1 -name "test_*.py" | sort `
 ignore=""
 serial_bug=0
