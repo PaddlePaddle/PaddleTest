@@ -35,6 +35,11 @@ class Run(object):
         """run some test"""
         for yaml in self.yaml_list:
             for case in YamlLoader(yml=yaml).get_all_case_name():
+                last_dir = os.path.basename(self.yaml_dir)
+                base_dir = self.yaml_dir.replace(last_dir, "")
+                title = (
+                    yaml.replace(base_dir, "").replace(".yml", ".{}".format(case)).replace("/", "^").replace(".", "^")
+                )
                 if platform.system() == "Windows":
                     os.system(
                         "{}.exe -m pytest PaddleLT.py --all_dir"
@@ -44,8 +49,9 @@ class Run(object):
                     )
                 else:
                     os.system(
-                        "{} -m pytest PaddleLT.py --all_dir={} --yaml={} --case={} --testing={} --alluredir={}".format(
-                            self.py_cmd, self.yaml_dir, yaml, case, self.testing, self.report_dir
+                        "cp -r PaddleLT.py {}.py && "
+                        "{} -m pytest {}.py --all_dir={} --yaml={} --case={} --testing={} --alluredir={}".format(
+                            title, self.py_cmd, title, self.yaml_dir, yaml, case, self.testing, self.report_dir
                         )
                     )
 
