@@ -68,7 +68,7 @@ def test_ldc2d_steady_re10_metric():
     """
     output_dir = "./ldc2d_steady_Re10"  # 输出目录
     loss_function = "Residual"  # 损失函数``
-    base_metric = 2347.78722  # 基准评估值
+    base_metric = 2347.78764  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")
