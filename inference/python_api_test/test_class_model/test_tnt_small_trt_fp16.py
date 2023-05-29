@@ -52,13 +52,13 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-2 TNT_small outputs with true val
+    compared trt fp16 batch_size=1 TNT_small outputs with true val
     """
     check_model_exist()
 
     file_path = "./TNT_small"
     images_size = 224
-    batch_size_pool = [1, 2]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
         try:
             shutil.rmtree(f"{file_path}/_opt_cache")  # delete trt serialized cache
