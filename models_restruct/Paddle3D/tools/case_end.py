@@ -42,7 +42,6 @@ class Paddle3D_End(object):
         self.model = os.path.splitext(os.path.basename(self.rd_yaml_path))[0]
         self.category = re.search("/(.*?)/", self.rd_yaml_path).group(1)
 
-
     def build_end(self):
         """
         执行准备过程
@@ -52,7 +51,8 @@ class Paddle3D_End(object):
         logger.info("os.getcwd():{}".format(os.getcwd()))
         os.chdir("..")
         os.system("python tools/end.py")
-        os.system("python -m pytest -sv test_plot.py  --alluredir=./result")   
+        os.system("python -m pytest -sv test_plot.py  --alluredir=./result")
+
 
 def run():
     """
