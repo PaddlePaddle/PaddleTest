@@ -327,6 +327,11 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         api_grade = ci_level_reveal(compare_dict)
         del api_grade["equal"]
         del api_grade["better"]
+        print(
+            "以下为pr{}引入之后，api调度性能相对于baseline的变化。worse表示性能下降超过30%的api，doubt表示性能下降为15%~30%之间的api".format(
+                self.AGILE_PULL_ID
+            )
+        )
         print(api_grade)
         print(
             "详情差异请点击以下链接查询: http://paddletest.baidu-int.com:8081/#/paddle/benchmark/apiBenchmark/report/{}&{}".format(
