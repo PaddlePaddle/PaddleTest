@@ -18,7 +18,8 @@ echo ${cudaid1}
 echo ${cudaid2}
 echo ${paddle_compile}
 
-wget https://paddle-qa.bj.bcebos.com/PaddleScience/datasets/datasets.tar.gz
+
+wget -q https://paddle-qa.bj.bcebos.com/PaddleScience/datasets/datasets.tar.gz
 tar -zxvf datasets.tar.gz
 rm -rf datasets.tar.gz
 
