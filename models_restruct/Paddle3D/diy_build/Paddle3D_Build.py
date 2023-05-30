@@ -134,7 +134,7 @@ class Paddle3D_Build(Model_Build):
                         os.symlink("/home/jiaxiao01/Paddle3D/nuscenes_petrv2", "data/nuscenes")
                 else:
                     print("filename_sed:{}".format(filename))
-                    cmd = 'sed -i "/iters/d;1i\\c" %s' % (filename)
+                    cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
                     subprocess.getstatusoutput(cmd)
                     # cmd = "cat %s" % (filename)
                     # subprocess.getstatusoutput(cmd)
