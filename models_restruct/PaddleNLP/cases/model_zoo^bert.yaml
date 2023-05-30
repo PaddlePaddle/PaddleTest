@@ -20,6 +20,7 @@ case:
           - --max_steps 2
           - --device gpu
           - --use_amp True
+          - --to_static True
         result:
           loss:
             base: 6.28685
