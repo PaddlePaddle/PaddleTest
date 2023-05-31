@@ -18,7 +18,7 @@ execute_pp_minilm(){
     cd ${dir}
     wget https://bj.bcebos.com/v1/paddle-slim-models/act/afqmc.tar && tar -xf afqmc.tar
     python run.py --config_path='./configs/pp-minilm/auto/afqmc.yaml' --save_dir='./save_ppminilm_afqmc_new_calib'
-    
+
 }
 
 execute_Bert_base_cased(){

@@ -53,7 +53,7 @@ execute_picodet(){
     # 软链数据集
     copy_coco_data ${des}
     wget https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar && tar -xvf picodet_s_416_coco_npu.tar
-    python run.py --config_path=./configs/picodet_npu_with_postprocess.yaml --save_dir='./picodet_s_416_coco_npu_quant/' 
+    python run.py --config_path=./configs/picodet_npu_with_postprocess.yaml --save_dir='./picodet_s_416_coco_npu_quant/'
 }
 
 
