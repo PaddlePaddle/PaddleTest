@@ -11,14 +11,14 @@ case:
           loss:
             base: 3.05
             threshold: 0.5
-            evaluation: "-" 
+            evaluation: "-"
       -
         name: single
         cmd : python tools/train.py
         params:
           - TrainReader.batch_size=1
         result:
-          loss: 
+          loss:
             base: 2.91
             threshold: 0.5
             evaluation: "-"
