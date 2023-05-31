@@ -75,6 +75,3 @@ case:
       -
         name: python
         cmd: python deploy/pptracking/python/mot_jde_infer.py
-
-
-function: paddlelas_imagenet_parse

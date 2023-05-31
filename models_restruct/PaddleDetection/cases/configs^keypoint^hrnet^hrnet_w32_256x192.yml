@@ -75,6 +75,3 @@ case:
       -
         name: python
         cmd: python deploy/python/keypoint_infer.py
-
-
-function: paddlelas_imagenet_parse
