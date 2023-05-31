@@ -265,6 +265,8 @@ configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_p
                 "train_loss",
             )
             logger.info("Plot figure successfully!")
+            # log
+            shutil.copytree("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp", "picture")
         else:
             log_name = os.listdir("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")[0]
             log_path = os.path.join("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp", log_name)
@@ -298,6 +300,7 @@ def run():
     """
     执行入口
     """
+    print("This is Paddle3D_End start!")
     model = Paddle3D_End()
     model.build_end()
     return 0

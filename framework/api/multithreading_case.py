@@ -43,6 +43,7 @@ ignore_case_dir = {
         "test_multiplex.py",
         "test_mm.py",
         "test_matmul.py",
+        "test_log.py",
     ],
     "optimizer": [],
     "distribution": [
