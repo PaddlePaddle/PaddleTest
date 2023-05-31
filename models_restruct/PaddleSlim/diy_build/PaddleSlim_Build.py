@@ -105,10 +105,14 @@ class PaddleSlim_Build(Model_Build):
         if cmd_return:
             logger.info("repo {} python -m pip install paddle failed".format(self.reponame))
         os.system("python -m pip install -r requirements.txt")
+        # 固定distributed版本
+        os.system("python -m pip install distributed==2023.5.0")
         os.system("python -m pip install faiss")
         os.system("python -m pip install wheel")
         os.system("python -m pip install twine")
         os.system("python setup.py bdist_wheel")
+        # 固定distributed版本
+        os.system("python -m pip install --user -U distributed==2023.5.0")
         os.system("python -m pip uninstall paddleslim -y")
         cmd_return = os.system("python -m pip install -U dist/paddleslim*.whl")
         if cmd_return:
