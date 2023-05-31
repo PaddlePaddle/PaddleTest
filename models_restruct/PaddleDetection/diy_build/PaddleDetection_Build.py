@@ -251,6 +251,5 @@ if __name__ == "__main__":
 
     args = parse_args()
     print("args:{}".format(args))
-    # logger.info('###args {}'.format(args.models_file))
     model = PaddleDetection_Build(args)
     model.build_paddledetection()

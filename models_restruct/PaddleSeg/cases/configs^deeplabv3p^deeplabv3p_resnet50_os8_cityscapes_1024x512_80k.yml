@@ -87,6 +87,3 @@ case:
         cmd: python deploy/python/infer.py
         params:
           - --device cpu
-
-
-function: paddlelas_imagenet_parse

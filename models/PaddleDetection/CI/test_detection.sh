@@ -178,11 +178,19 @@ EVAL_MOT_bs2(){
 INFER(){
     export CUDA_VISIBLE_DEVICES=$cudaid1
     mode=infer
-    python tools/infer.py \
-           -c ${config} \
-           --infer_img=${image} \
-           --output_dir=infer_output/${model}/ \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    if [[ ${model} =~ 'clrnet' ]];then
+        python tools/infer_culane.py \
+            -c ${config} \
+            --infer_img=${image} \
+            --output_dir=infer_output/${model}/ \
+            -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    else
+        python tools/infer.py \
+            -c ${config} \
+            --infer_img=${image} \
+            --output_dir=infer_output/${model}/ \
+            -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    fi
     print_result
 }
 INFER_MOT(){

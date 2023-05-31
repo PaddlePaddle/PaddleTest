@@ -7,11 +7,21 @@ case:
         cmd : python -m paddle.distributed.launch tools/train.py
         params:
           - TrainReader.batch_size=1
+        result:
+          loss:
+            base: 3.59
+            threshold: 0.5
+            evaluation: "-"
       -
         name: single
         cmd : python tools/train.py
         params:
           - TrainReader.batch_size=1
+        result:
+          loss:
+            base: 3.48
+            threshold: 0.5
+            evaluation: "-"
       -
         name: amp_multi
       -
@@ -102,6 +112,3 @@ case:
         cmd: python deploy/python/infer.py
         params:
           - --device=CPU
-
-
-function: paddlelas_imagenet_parse
