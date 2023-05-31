@@ -108,6 +108,7 @@ class Paddle3D_Build(Model_Build):
                 )
 
             os.system("python -m pip install . ")
+            os.system("python -m pip install -U pillow")
 
             print("build wheel!")
 
