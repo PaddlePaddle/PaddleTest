@@ -41,7 +41,7 @@ function DockerImages () {
             ;;
         "Cuda116")
             echo "Selected Centos: Cuda116"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4-trt8.4-gcc82"
             ;;
         "Cuda117")
             echo "Selected Centos: Cuda117"
