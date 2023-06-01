@@ -24,7 +24,7 @@ import yaml
 
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
+from backend import TensorRTEngine, Monitor
 from paddle.io import DataLoader
 from utils.imagenet_reader import ImageNetDataset
 
