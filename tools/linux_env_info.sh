@@ -60,7 +60,7 @@ function DockerImages () {
         case ${cuda_version} in
         "Cuda102")
             echo "Selected Ubuntu: Cuda102"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
             ;;
         "Cuda112")
             echo "Selected Ubuntu: Cuda112"
@@ -72,11 +72,15 @@ function DockerImages () {
             ;;
         "Cuda117")
             echo "Selected Ubuntu: Cuda117"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2-v1"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc82"
             ;;
         "Cuda118")
             echo "Selected Ubuntu: Cuda118"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.8-cudnn8.6-trt8.5-gcc82"
+            ;;
+        "Cuda120")
+            echo "Selected Ubuntu: Cuda120"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.0-cudnn8.9-trt8.6-gcc12.2"
             ;;
         *)
             DOCKER_EXIT_CODE=101
