@@ -20,11 +20,11 @@ apt-get install -y libsndfile1
 # if [[ $5 == 'all' ]];then
 #    apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
 # fi
-pushd tools; make virtualenv.done; popd
-if [ $? -ne 0 ];then
-    exit 1
-fi
-source tools/venv/bin/activate
+# pushd tools; make virtualenv.done; popd
+# if [ $? -ne 0 ];then
+#     exit 1
+# fi
+# source tools/venv/bin/activate
 python -m pip install --upgrade pip;
 python -m pip install $4 --no-cache-dir
 python -c "import sys; print('python version:',sys.version_info[:])";
