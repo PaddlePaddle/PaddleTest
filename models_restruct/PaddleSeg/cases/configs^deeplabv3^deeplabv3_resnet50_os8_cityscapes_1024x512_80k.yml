@@ -5,9 +5,19 @@ case:
       -
         name: multi
         cmd : python -m paddle.distributed.launch tools/train.py
+        result:
+          loss:
+            base: 2.42
+            threshold: 0.5
+            evaluation: "-"
       -
         name: single
         cmd : python tools/train.py
+        result:
+          loss:
+            base: 2.21
+            threshold: 0.5
+            evaluation: "-"
       -
         name: amp_multi
       -

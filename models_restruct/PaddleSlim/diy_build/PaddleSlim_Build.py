@@ -111,6 +111,8 @@ class PaddleSlim_Build(Model_Build):
         os.system("python -m pip install wheel")
         os.system("python -m pip install twine")
         os.system("python setup.py bdist_wheel")
+        # 固定distributed版本
+        os.system("python -m pip install --user -U distributed==2023.5.0")
         os.system("python -m pip uninstall paddleslim -y")
         cmd_return = os.system("python -m pip install -U dist/paddleslim*.whl")
         if cmd_return:

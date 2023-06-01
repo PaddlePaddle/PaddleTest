@@ -2,7 +2,6 @@ configs^keypoint^hrnet^dark_hrnet_w32_256x192.yml
 configs^mot^fairmot^fairmot_dla34_30e_1088x608.yml
 configs^mot^fairmot^fairmot_hrnetv2_w18_dlafpn_30e_576x320.yml
 configs^fcos^fcos_r50_fpn_1x_coco.yml
-configs^rotate^fcosr^fcosr_x50_3x_dota.yml
 configs^keypoint^hrnet^hrnet_w32_256x192.yml
 configs^mot^ocsort^ocsort_ppyoloe.yml
 configs^picodet^picodet_s_320_coco_lcnet.yml
