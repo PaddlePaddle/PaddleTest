@@ -6,10 +6,10 @@ echo ${Data_path}
 echo ${paddle_compile}
 echo ${model_flag}
 
-mkdir run_env_py37;
-ln -s $(which python3.7) run_env_py37/python;
-ln -s $(which pip3.7) run_env_py37/pip;
-export PATH=$(pwd)/run_env_py37:${PATH};
+mkdir run_env_py38;
+ln -s $(which python3.8) run_env_py38/python;
+ln -s $(which pip3.8) run_env_py38/pip;
+export PATH=$(pwd)/run_env_py38:${PATH};
 export http_proxy=${http_proxy}
 export https_proxy=${https_proxy}
 export no_proxy=bcebos.com;
