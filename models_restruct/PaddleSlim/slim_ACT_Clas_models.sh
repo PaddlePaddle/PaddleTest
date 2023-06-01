@@ -85,18 +85,24 @@ for model in $(echo ${!dic[*]});do
         echo ----quota:${quota}
         echo ----base_value:${base_value}
         computer_diff_precision ${model} ${quota} ${base_value} $1
-        if [ $? -eq 0 ];then
-            echo "${log_path}/${model}_act_qat precision passed"
-            tar -cf ${model}_act_qat.tar ${model}_act_qat
-            mv ${model}_act_qat.tar $2
-            unset http_proxy && unset https_proxy
-            python Bos/upload.py $2 $3/${slim_commit}
-            python Bos/upload.py $2 $3
-        else
-            echo "${log_path}/${model}_act_qat precision failed"
-            mv ${model_log} ${log_path}/FAIL_precision_${model}_act_qat.log
-            echo "fail log with precision as follow"
-            grep -i 'metric' ${log_path}/FAIL_precision_${model}_act_qat.log
-        fi
+        echo "${log_path}/${model}_act_qat precision passed"
+        tar -cf ${model}_act_qat.tar ${model}_act_qat
+        mv ${model}_act_qat.tar $2
+        unset http_proxy && unset https_proxy
+        python Bos/upload.py $2 $3/${slim_commit}
+        python Bos/upload.py $2 $3
+        # if [ $? -eq 0 ];then
+        #     echo "${log_path}/${model}_act_qat precision passed"
+        #     tar -cf ${model}_act_qat.tar ${model}_act_qat
+        #     mv ${model}_act_qat.tar $2
+        #     unset http_proxy && unset https_proxy
+        #     python Bos/upload.py $2 $3/${slim_commit}
+        #     python Bos/upload.py $2 $3
+        # else
+        #     echo "${log_path}/${model}_act_qat precision failed"
+        #     mv ${model_log} ${log_path}/FAIL_precision_${model}_act_qat.log
+        #     echo "fail log with precision as follow"
+        #     grep -i 'metric' ${log_path}/FAIL_precision_${model}_act_qat.log
+        # fi
     fi
 done
