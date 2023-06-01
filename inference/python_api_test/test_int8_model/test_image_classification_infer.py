@@ -72,7 +72,7 @@ def argsparser():
     parser.add_argument(
         "--small_data",
         action="store_true",
-        default=False,
+        default=True,
         help="whether val on full data, if not we will only val on 1000 samples",
     )
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
