@@ -222,8 +222,6 @@ function gpt_generation_345M_hybrid() {
         -c ppfleetx/configs/nlp/gpt/generation_gpt_345M_dp8.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
     check_result $FUNCNAME
-    # tail -12 log/workerlog.0 > ./generation_345M_dp8.txt
-    # check_generation_txt $FUNCNAME ./generation_345M_dp8.txt
 }
 
 function gpt_export_345M_mp1() {
