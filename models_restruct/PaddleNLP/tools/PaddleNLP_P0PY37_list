@@ -43,3 +43,4 @@ model_zoo^gpt.yaml
 model_zoo^gpt_static.yaml
 model_zoo^tinybert.yaml
 model_zoo^uie.yaml
+model_zoo^ernie-vil2.0.yaml
