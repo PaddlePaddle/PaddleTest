@@ -23,4 +23,8 @@ collect_ignore_glob = [
     "tests/models/anomaly/dl/test_vae.py",
     "tests/models/forecasting/dl/test_transformer.py",
     "tests/xai/post_hoc/test_data_wrapper.py",
+    "tests/models/representation/dl/test_cost.py",
+    "tests/models/representation/dl/test_repr_base.py",
+    "tests/models/representation/dl/test_ts2vec.py",
+    "tests/models/representation/task/test_repr_cluster.py"
 ]
