@@ -1,15 +1,15 @@
 #!/bin/bash
-mkdir run_env_py37;
-ln -s $(which python3.7) run_env_py37/python;
-ln -s $(which pip3.7) run_env_py37/pip;
-export PATH=$(pwd)/run_env_py37:${PATH};
+# mkdir run_env_py37;
+# ln -s $(which python3.7) run_env_py37/python;
+# ln -s $(which pip3.7) run_env_py37/pip;
+# export PATH=$(pwd)/run_env_py37:${PATH};
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 export no_proxy=bcebos.com;
 export PYTHONPATH=`pwd`:$PYTHONPATH;
-apt-get update
-apt-get install ffmpeg -y
-python -m pip install pip==20.2.4 --ignore-installed;
+# apt-get update
+# apt-get install ffmpeg -y
+# python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
 pip install Cython --ignore-installed;
 pip install cython_bbox --ignore-installed;
