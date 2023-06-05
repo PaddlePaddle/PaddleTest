@@ -20,7 +20,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
 
-   echo "######  ---py37  env -----"
+   echo "######  ---py38  env -----"
    rm -rf /usr/local/python2.7.15/bin/python
    rm -rf /usr/local/bin/python
    export PATH=/usr/local/bin/python:${PATH}
@@ -80,6 +80,7 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install --upgrade pip
 python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
 
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
