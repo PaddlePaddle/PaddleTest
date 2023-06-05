@@ -64,6 +64,7 @@ class PaddleScience_Start(object):
         file_name = "datasets.tar.gz"
         urllib.request.urlretrieve(url, file_name)
         os.system("tar -zxvf " + file_name)
+        logger.info("dowload datasets done!!!!")
 
     def build_prepare(self):
         """
