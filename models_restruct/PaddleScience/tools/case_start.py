@@ -42,12 +42,11 @@ class PaddleScience_Case_Start(object):
             # logger.info("set org FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
             os.environ["FLAGS_use_cinn"] = "0"
             logger.info("set org FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
-            if "cinn" in  self.case_name:
+            if "cinn" in self.case_name:
                 os.environ["FLAGS_use_cinn"] = "1"
-                logger.info ("set org FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
+                logger.info("set org FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
         else:
             return 0
-        
 
 
 def run():
