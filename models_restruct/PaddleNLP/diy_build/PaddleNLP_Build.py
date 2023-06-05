@@ -66,7 +66,10 @@ class PaddleNLP_Build(Model_Build):
         if platform == "linux" or platform == "linux_convergence":
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
-            os.system("python -m pip uninstall paddlepaddle -y")
+            os.system("python -m pip uninstall protobuf -y")
+            os.system("python -m pip uninstall protobuf -y")
+            os.system("python -m pip uninstall protobuf -y")
+            os.system("python -m pip install protobuf==3.20.2")
             os.system(
                 "python -m pip install {}".format(paddle_whl)
             )  # install paddle for lac requirement paddle>=1.6
