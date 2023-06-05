@@ -19,7 +19,8 @@ collect_ignore_glob = [
     "tests/utils/test_utils.py",
     "tests/xai/post_hoc/test_deep_paddle.py",
     "tests/xai/post_hoc/test_shap_explainer.py",
-    "models/classify/dl/test_inception_time.py",
-    "models/anomaly/dl/test_vae.py",
-    "models/forecasting/dl/test_transformer.py",
+    "tests/models/classify/dl/test_inception_time.py",
+    "tests/models/anomaly/dl/test_vae.py",
+    "tests/models/forecasting/dl/test_transformer.py",
+    "tests/xai/post_hoc/test_data_wrapper.py",
 ]
