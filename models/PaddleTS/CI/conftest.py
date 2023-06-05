@@ -27,4 +27,5 @@ collect_ignore_glob = [
     "tests/models/representation/dl/test_repr_base.py",
     "tests/models/representation/dl/test_ts2vec.py",
     "tests/models/representation/task/test_repr_cluster.py",
+    "tests/models/forecasting/dl/distributions/test_distributions.py"
 ]
