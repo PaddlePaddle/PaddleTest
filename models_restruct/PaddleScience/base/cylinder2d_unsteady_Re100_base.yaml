@@ -1,9 +1,9 @@
 train:
   -
     name: single
-    cmd: python examples/darcy/darcy2d.py
+    cmd: python examples/cylinder/2d_unsteady/cylinder2d_unsteady_Re100.py
     params:
-      - --epochs=10000
+      - --epochs=40000
     result:
       loss:
         base: 227.95947
