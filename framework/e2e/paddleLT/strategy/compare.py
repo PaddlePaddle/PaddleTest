@@ -30,20 +30,23 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
             result = result.numpy()
         if isinstance(expect, paddle.Tensor):
             expect = expect.numpy()
-        res = np.allclose(result, expect, atol=delta, rtol=rtol, equal_nan=True)
-        # 出错打印错误数据
-        if res is False:
-            diff = abs(result - expect)
-            logger.error("{} is: {}".format(exp_name, expect))
-            logger.error("{} is: {}".format(res_name, result))
-            logger.error("{} and {} has diff! max diff: {}".format(exp_name, res_name, np.amax(diff)))
+        # res = np.allclose(result, expect, atol=delta, rtol=rtol, equal_nan=True)
+        # # 出错打印错误数据
+        # if res is False:
+        #     diff = abs(result - expect)
+        #     # logger.error("{} is: {}".format(exp_name, expect))
+        #     # logger.error("{} is: {}".format(res_name, result))
+        #     logger.error("{} and {} has diff! max diff: {}".format(exp_name, res_name, np.amax(diff)))
+
+        np.testing.assert_allclose(actual=result, desired=expect, atol=delta, rtol=rtol, equal_nan=True)
+
         if result.dtype != expect.dtype:
             logger.error(
                 "Different output data types! res type is: {}, and expect type is: {}".format(
                     result.dtype, expect.dtype
                 )
             )
-        assert res
+        # assert res
         assert result.shape == expect.shape
         assert result.dtype == expect.dtype
     elif isinstance(expect, list) or isinstance(expect, tuple):
