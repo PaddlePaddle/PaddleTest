@@ -20,24 +20,27 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
 
-   echo "######  ---py38  env -----"
-   rm -rf /usr/local/python2.7.15/bin/python
-   rm -rf /usr/local/bin/python
-   export PATH=/usr/local/bin/python:${PATH}
-   case $3 in #python
-   36)
-   ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-   ;;
-   37)
-   ln -s /usr/local/bin/python3.7 /usr/local/bin/python
-   ;;
-   38)
-   ln -s /usr/local/bin/python3.8 /usr/local/bin/python
-   ;;
-   39)
-   ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-   ;;
-   esac
+   # echo "######  ---py38  env -----"
+   # rm -rf /usr/local/python2.7.15/bin/python
+   # rm -rf /usr/local/bin/python
+   # export PATH=/usr/local/bin/python:${PATH}
+   # case $3 in #python
+   # 36)
+   # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   # ;;
+   # 37)
+   # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   # ;;
+   # 38)
+   # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   # ;;
+   # 39)
+   # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   # ;;
+   # esac
+
+   rm -rf /usr/bin/python
+   ln -s /usr/bin/python3.8 /usr/bin/python
    python -c "import sys; print('python version:',sys.version_info[:])";
 
 
