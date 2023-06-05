@@ -11,8 +11,8 @@ import shutil
 import math
 import argparse
 import logging
-import yaml
 import tarfile
+import yaml
 import wget
 import paddle
 import allure
@@ -271,9 +271,9 @@ configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_p
                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp", "picture", dirs_exist_ok=True
             )
         else:
-            if os.path.exists("bos_new.tar.gz") is False and os.getenv("bce_whl_url"): 
+            if os.path.exists("bos_new.tar.gz") is False and os.getenv("bce_whl_url"):
                 bce_whl_url = os.getenv("bce_whl_url")
-                bce_file = wget.download(bce_whl_url)
+                wget.download(bce_whl_url)
                 tf = tarfile.open("bos_new.tar.gz")
                 tf.extractall(os.getcwd())
             log_name = os.listdir("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")[0]
