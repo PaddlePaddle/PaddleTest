@@ -40,10 +40,10 @@ function case_list_chain(){
     gpt_345M_mp8_qat
     gpt_export_345M_mp1
     gpt_export_345M_mp2
-    # gpt_export_qat_345M
+    # gpt_export_qat_345M  # bug@hongxiang
     gpt_inference_345M_single
     gpt_inference_345M_dp8
-    # gpt_345M_single_finetune
+    # gpt_345M_single_finetune  # bug@hongxiang
     gpt_eval_WikiText
     gpt_eval_LAMBADA
 }
@@ -59,8 +59,8 @@ function case_list_auto() {
     gpt_auto_dp2mp2sharding2
     gpt_auto_dp2pp2sharding2
     gpt_auto_dp2mp2pp2sharding2
-    # gpt_auto_pass_o1_stage1
-    # gpt_auto_pass_o1_stage2
+    # gpt_auto_pass_o1_stage1  # bug@yingli
+    # gpt_auto_pass_o1_stage2  # bug@yingli
     gpt_auto_pass_o2_stage1
     gpt_auto_pass_o2_stage2
     gpt_auto_pass_o3_stage1
