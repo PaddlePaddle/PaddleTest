@@ -604,6 +604,7 @@ class InferenceTest(object):
         need_sort=False,
         det_top_bbox_threshold=0.75,
         delete_pass_list=None,
+        delete_op_list=None,
     ):
         """
         test enable_tensorrt_engine()
@@ -653,7 +654,8 @@ class InferenceTest(object):
         if delete_pass_list:
             for ir_pass in delete_pass_list:
                 self.pd_config.delete_pass(ir_pass)
-
+        if delete_op_list:
+            self.pd_config.exp_disable_tensorrt_ops(delete_op_list)
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
