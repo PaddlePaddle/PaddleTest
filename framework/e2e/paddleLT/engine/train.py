@@ -139,6 +139,29 @@ class LayerTrain(object):
                 opt.clear_grad()
         return logit
 
+    def dy2st_train_cinn(self):
+        """dy2st train"""
+        reset(self.seed)
+
+        # net = self.layer_info.get_layer()
+        net = self.net.get_layer()
+        net = paddle.jit.to_static(net, backend="CINN")
+        net.train()
+        # 构建optimizer用于训练
+        opt = self.optimizer.get_opt(net=net)
+
+        for epoch in range(self.step):
+            # data_module_type == 'Dataset'
+            data_dict = self.data[epoch]
+            logit = net(**data_dict)
+            # 构建loss用于训练
+            # logit = self.loss_info.get_loss(logit)
+            loss = self.loss.get_loss(logit)
+            loss.backward()
+            opt.step()
+            opt.clear_grad()
+        return logit
+
     # def dy_train_dl(self, to_static=False):
     #     """dygraph or static train"""
     #     paddle.enable_static()
