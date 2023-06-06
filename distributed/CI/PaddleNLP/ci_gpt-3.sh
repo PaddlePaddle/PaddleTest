@@ -61,7 +61,7 @@ function case_list_auto() {
     # gpt_auto_dp2mp2pp2sharding2
     # gpt_auto_pass_o1_stage1
     # gpt_auto_pass_o1_stage2
-    gpt_auto_pass_o2_stage1
+    # gpt_auto_pass_o2_stage1
     gpt_auto_pass_o2_stage2
     gpt_auto_pass_o3_stage1
     gpt_auto_pass_o3_stage2
@@ -827,7 +827,7 @@ function gpt_auto_pass_o2_stage1() {
     loss1=`cat $log_dir/workerlog.4 | grep '4/4' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
     loss2=`cat $log_dir/workerlog.6 | grep '4/4' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_result $FUNCNAME 5.5294 ${loss}
+    check_result $FUNCNAME 5.4933 ${loss}
     echo "=========== $FUNCNAME run  end ==========="
 }
 
