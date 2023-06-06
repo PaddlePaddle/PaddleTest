@@ -49,7 +49,7 @@ function case_list_chain(){
 }
 
 function case_list_auto() {
-    # gpt_save_ckpt
+    gpt_save_ckpt
     # gpt_auto_serial
     # gpt_auto_dp2mp2
     # gpt_auto_dp2pp2
