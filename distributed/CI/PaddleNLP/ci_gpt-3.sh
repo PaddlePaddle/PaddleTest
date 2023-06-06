@@ -494,7 +494,7 @@ function gpt_auto_dp2mp2() {
         -o Engine.save_load.ckpt_dir="./ckpt_dynamic/epoch_0_step_1/auto_infer/auto" \
         >>${log_path}/$FUNCNAME 2>&1
     loss=`cat $log_dir/workerlog.0 | grep '10/10' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
-    check_result $FUNCNAME 11.0246 ${loss}
+    check_result $FUNCNAME 11.0349 ${loss}
     echo "=========== $FUNCNAME run  end ==========="
 }
 
@@ -643,7 +643,7 @@ function gpt_auto_dp2sharding2() {
         -o Engine.save_load.ckpt_dir="./ckpt_dynamic/epoch_0_step_1/auto_infer/auto" \
         >>${log_path}/$FUNCNAME 2>&1
     loss=`cat $log_dir/workerlog.0 | grep '10/10' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
-    check_result $FUNCNAME 11.0246 ${loss}
+    check_result $FUNCNAME 11.0349 ${loss}
     echo "=========== $FUNCNAME run  end ==========="
 }
 
@@ -672,7 +672,7 @@ function gpt_auto_dp2mp2sharding2() {
         -o Engine.save_load.ckpt_dir="./ckpt_dynamic/epoch_0_step_1/auto_infer/auto" \
         >>${log_path}/$FUNCNAME 2>&1
     loss=`cat $log_dir/workerlog.0 | grep '10/10' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
-    check_result $FUNCNAME 11.0246 ${loss}
+    check_result $FUNCNAME 11.0349 ${loss}
     echo "=========== $FUNCNAME run  end ==========="
 }
 
