@@ -16,7 +16,7 @@ ln -s /usr/bin/python3.8 /usr/bin/python
 export http_proxy=${http_proxy}
 export https_proxy=${https_proxy}
 export no_proxy=bcebos.com;
-python -m pip install pip==20.2.4 --ignore-installed;
+# python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install $4 --no-cache-dir --ignore-installed;
 apt-get update
 # if [[ $5 == 'all' ]];then
