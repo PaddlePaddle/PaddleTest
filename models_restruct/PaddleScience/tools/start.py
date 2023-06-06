@@ -61,15 +61,18 @@ class PaddleScience_Start(object):
 
     def download_datasets(self):
         cwd = os.getcwd()
+        logger.info("++++++++++++++++++++++++++++++++")
         os.system("pwd")
         os.system("ls")
         os.chdir("./PaddleScience")
+        logger.info("++++++++++++++++++++++++++++++++")
         url = "https://paddle-qa.bj.bcebos.com/PaddleScience/datasets/datasets.tar.gz"
         file_name = "datasets.tar.gz"
         urllib.request.urlretrieve(url, file_name)
         os.system("tar -zxvf " + file_name)
         os.system("pwd")
         os.chdir("cwd")
+        logger.info("++++++++++++++++++++++++++++++++")
         logger.info("dowload datasets done!!!!")
 
     def build_prepare(self):
