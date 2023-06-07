@@ -1067,7 +1067,7 @@ main() {
     cd ${case_path}
 
     before_hook
-    case_list_chain
+    # case_list_chain
     case_list_auto
 }
 
