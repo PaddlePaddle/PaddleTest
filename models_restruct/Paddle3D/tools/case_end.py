@@ -51,7 +51,8 @@ class Paddle3D_End(object):
         logger.info("os.getcwd():{}".format(os.getcwd()))
         os.chdir("..")
         os.system("python tools/end.py")
-        os.system("python -m pytest -sv test_plot.py  --alluredir=./result")
+        if os.path.exists("picture"):
+            os.system("python -m pytest -sv test_plot.py  --alluredir=./result")
 
 
 def run():
