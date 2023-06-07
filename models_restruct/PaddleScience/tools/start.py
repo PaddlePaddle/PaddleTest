@@ -59,14 +59,12 @@ class PaddleScience_Start(object):
         os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
         return 0
 
-
     def download_datasets(self):
         url = "https://paddle-qa.bj.bcebos.com/PaddleScience/datasets/datasets.tar.gz"
         file_name = "datasets.tar.gz"
         urllib.request.urlretrieve(url, file_name)
         os.system("tar -zxvf " + file_name + " -C PaddleScience/")
         logger.info("download datasets done!!!!")
-
 
     def build_prepare(self):
         """
