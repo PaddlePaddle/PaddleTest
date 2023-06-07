@@ -38,7 +38,7 @@ def test_matmul_base():
     np.random.seed(0)
     x_data = np.random.random([10]).astype(np.float32)
     y_data = np.random.random([10]).astype(np.float32)
-    res = np.array([3.58071361])
+    res = np.matmul(x_data, y_data)
     obj.base(res=res, x=x_data, y=y_data)
 
 
@@ -50,7 +50,7 @@ def test_matmul_vector_vector():
     np.random.seed(0)
     x_data = np.random.random([10]).astype(np.float32)
     y_data = np.random.random([10]).astype(np.float32)
-    res = np.array([3.58071361])
+    res = np.matmul(x_data, y_data)
     obj.run(res=res, x=x_data, y=y_data)
 
 
