@@ -1,0 +1,22 @@
+case:
+  linux:
+    base: ./base/euler_beam_base.yaml
+    train:
+      -
+        name: single
+      -
+        name: dy2st
+        cmd: python examples/euler_beam/euler_beam.py --to_static
+        params:
+          - --epochs=10000
+        result:
+          loss:
+            base: 0.00006
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse
