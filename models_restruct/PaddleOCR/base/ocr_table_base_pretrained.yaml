@@ -63,8 +63,7 @@ train:
       - Eval.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
       - Train.loader.shuffle=False
       - Train.loader.num_workers=False
-      - Train.loader.num_workers=False Train.dataset.label_file_list=[train_data/table/pubtabnet/PubTabNet_2.0.0_val.jsonl]
-      - Train.dataset.data_dir=train_data/table/pubtabnet/val
+      - Train.loader.num_workers=False
     result:
       loss:
         base: ${train_base_loss}
