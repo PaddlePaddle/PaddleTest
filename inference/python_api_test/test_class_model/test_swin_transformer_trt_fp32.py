@@ -12,6 +12,7 @@ import six
 import wget
 import pytest
 import numpy as np
+import paddle.inference as paddle_infer
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")

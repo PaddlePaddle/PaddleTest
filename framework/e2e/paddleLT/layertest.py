@@ -96,7 +96,18 @@ class LayerTest(object):
                     self.logger.get_log().warn("精度对比异常结果: {}".format(bug_trace))
                     tmp["precision"] = "failed"
                     compare_dict.append(tmp)
-
         self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_dict))
         if exc > 0:
-            raise Exception("layer测试失败！！！")
+            raise Exception("layer测试失败项目汇总: {}".format(compare_dict))
+
+
+if __name__ == "__main__":
+    all_dir = "yaml/Det/modeling/backbones/"
+    last_dir = os.path.basename(all_dir)
+    base_dir = all_dir.replace(last_dir, "")
+    yaml = "yaml/Det/modeling/backbones/resnet.yml"
+    case = "resnet_ConvNormLayer_0"
+    testing = "yaml/demo_det_testing.yml"
+    title = yaml.replace(base_dir, "").replace(".yml", ".{}".format(case)).replace("/", ".")
+    single_test = LayerTest(title=title, yaml=yaml, case=case, testing=testing)
+    single_test._case_run()

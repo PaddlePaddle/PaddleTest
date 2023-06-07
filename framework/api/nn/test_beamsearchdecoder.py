@@ -13,7 +13,7 @@ import numpy as np
 from paddle.nn import BeamSearchDecoder, dynamic_decode
 from paddle.nn import GRUCell, Linear, Embedding, LSTMCell, SimpleRNNCell, Softmax
 
-is_in_eager = paddle.fluid.framework._in_eager_without_dygraph_check()
+is_in_eager = True
 
 
 np.random.seed(2)

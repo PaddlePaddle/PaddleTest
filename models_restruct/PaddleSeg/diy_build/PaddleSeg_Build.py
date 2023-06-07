@@ -100,7 +100,7 @@ class PaddleSeg_Build(Model_Build):
             subprocess.run(cmd_voc)
         else:
             subprocess.run(cmd_voc, shell=True)
-        # prepare pretrain model
+        # prepare data
         if platform.system() == "Linux" and self.use_data_cfs == "False":
             os.system("mkdir data")
             os.chdir("data")

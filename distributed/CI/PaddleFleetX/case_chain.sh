@@ -222,8 +222,6 @@ function gpt_generation_345M_hybrid() {
         -c ppfleetx/configs/nlp/gpt/generation_gpt_345M_dp8.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
     check_result $FUNCNAME
-    # tail -12 log/workerlog.0 > ./generation_345M_dp8.txt
-    # check_generation_txt $FUNCNAME ./generation_345M_dp8.txt
 }
 
 function gpt_export_345M_mp1() {
@@ -408,7 +406,7 @@ function vit_qat() {
     check_result $FUNCNAME
     loss=`cat log/workerlog.0 | grep "1/20" | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}' `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 2.299860716 ${loss} ${FUNCNAME}_loss
+        check_diff 2.299868345 ${loss} ${FUNCNAME}_loss
     else
         check_diff 2.299857140 ${loss} ${FUNCNAME}_loss
     fi

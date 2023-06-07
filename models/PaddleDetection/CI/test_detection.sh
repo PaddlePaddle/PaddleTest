@@ -1,15 +1,15 @@
 #!/bin/bash
-mkdir run_env_py37;
-ln -s $(which python3.7) run_env_py37/python;
-ln -s $(which pip3.7) run_env_py37/pip;
-export PATH=$(pwd)/run_env_py37:${PATH};
+# mkdir run_env_py37;
+# ln -s $(which python3.7) run_env_py37/python;
+# ln -s $(which pip3.7) run_env_py37/pip;
+# export PATH=$(pwd)/run_env_py37:${PATH};
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 export no_proxy=bcebos.com;
 export PYTHONPATH=`pwd`:$PYTHONPATH;
-apt-get update
-apt-get install ffmpeg -y
-python -m pip install pip==20.2.4 --ignore-installed;
+# apt-get update
+# apt-get install ffmpeg -y
+# python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
 pip install Cython --ignore-installed;
 pip install cython_bbox --ignore-installed;
@@ -178,11 +178,19 @@ EVAL_MOT_bs2(){
 INFER(){
     export CUDA_VISIBLE_DEVICES=$cudaid1
     mode=infer
-    python tools/infer.py \
-           -c ${config} \
-           --infer_img=${image} \
-           --output_dir=infer_output/${model}/ \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    if [[ ${model} =~ 'clrnet' ]];then
+        python tools/infer_culane.py \
+            -c ${config} \
+            --infer_img=${image} \
+            --output_dir=infer_output/${model}/ \
+            -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    else
+        python tools/infer.py \
+            -c ${config} \
+            --infer_img=${image} \
+            --output_dir=infer_output/${model}/ \
+            -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    fi
     print_result
 }
 INFER_MOT(){

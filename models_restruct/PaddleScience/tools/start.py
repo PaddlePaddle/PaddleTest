@@ -5,6 +5,7 @@ import os
 import sys
 import json
 import shutil
+import urllib
 import logging
 import wget
 
@@ -58,17 +59,11 @@ class PaddleScience_Start(object):
         os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
         return 0
 
-    def add_paddlescience_to_pythonpath(self):
-        """
-        paddlescience 打包路径添加到python的路径中
-        """
-        cwd = os.getcwd()
-        paddle_path = os.path.join(cwd, "PaddleScience")
-        old_pythonpath = os.environ.get("PYTHONPATH", "")
-        new_pythonpath = f"{paddle_path}:{old_pythonpath}"
-        os.environ["PYTHONPATH"] = new_pythonpath
-        os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
-        return 0
+    def download_datasets(self):
+        url = "https://paddle-qa.bj.bcebos.com/PaddleScience/datasets/datasets.tar.gz"
+        file_name = "datasets.tar.gz"
+        urllib.request.urlretrieve(url, file_name)
+        os.system("tar -zxvf " + file_name)
 
     def build_prepare(self):
         """
@@ -90,6 +85,7 @@ def run():
     model = PaddleScience_Start()
     model.build_prepare()
     model.add_paddlescience_to_pythonpath()
+    model.download_datasets()
     return 0
 
 

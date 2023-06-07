@@ -1,0 +1,11 @@
+train:
+  -
+    name: single
+    cmd: python examples/laplace/laplace2d.py
+    params:
+      - --epochs=20000
+    result:
+      loss:
+        base: 0.02854
+        threshold: 0
+        evaluation: "="

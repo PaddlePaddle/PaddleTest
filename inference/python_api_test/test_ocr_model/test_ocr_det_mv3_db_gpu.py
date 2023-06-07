@@ -165,6 +165,7 @@ def test_gpu_mixed_precision_bz1():
 
 
 @pytest.mark.jetson
+@pytest.mark.gpu
 @pytest.mark.gpu_more
 def test_jetson_gpu_more_bz():
     """

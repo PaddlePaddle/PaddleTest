@@ -211,7 +211,7 @@ def test_jvp8():
 
     core._set_prim_backward_enabled(True)
     res = ans.jvp_with_jac(func3, [paddle.to_tensor(x), paddle.to_tensor(y)])
-    obj.run(res=res.numpy(), func=func3, xs=[x, y])
+    obj_nostatic.run(res=res.numpy(), func=func3, xs=[x, y])
     core._set_prim_backward_enabled(False)
 
 

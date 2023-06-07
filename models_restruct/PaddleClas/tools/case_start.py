@@ -25,11 +25,11 @@ class PaddleClas_Case_Start(object):
         """
         初始化变量
         """
-        self.reponame = os.environ["reponame"]
-        self.mode = os.environ["mode"]
-        self.case_step = os.environ["case_step"]
-        self.case_name = os.environ["case_name"]
-        self.qa_yaml_name = os.environ["qa_yaml_name"]
+        self.reponame = os.getenv("reponame")
+        self.mode = os.getenv("mode")
+        self.case_step = os.getenv("case_step")
+        self.case_name = os.getenv("case_name")
+        self.qa_yaml_name = os.getenv("qa_yaml_name")
 
     def build_prepare(self):
         """
