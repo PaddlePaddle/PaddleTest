@@ -1,6 +1,6 @@
 case:
   linux:
-    base: ./base/darcy2d_base.yaml
+    base: ./base/lorenz_base.yaml
     train:
       -
         name: train_enn
