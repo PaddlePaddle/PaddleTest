@@ -60,6 +60,9 @@ class PaddleScience_Start(object):
         return 0
 
     def download_datasets(self):
+        """
+        download dataset 
+        """
         url = "https://paddle-qa.bj.bcebos.com/PaddleScience/datasets/datasets.tar.gz"
         file_name = "datasets.tar.gz"
         urllib.request.urlretrieve(url, file_name)
