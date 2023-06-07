@@ -40,10 +40,10 @@ function case_list_chain(){
     gpt_345M_mp8_qat
     gpt_export_345M_mp1
     gpt_export_345M_mp2
-    # gpt_export_qat_345M  # bug@hongxiang
+    # gpt_export_qat_345M   # bug@hongxiang
     gpt_inference_345M_single
     gpt_inference_345M_dp8
-    # gpt_345M_single_finetune  # bug@hongxiang
+    # gpt_345M_single_finetune   # bug@hongxiang
     gpt_eval_WikiText
     gpt_eval_LAMBADA
 }
