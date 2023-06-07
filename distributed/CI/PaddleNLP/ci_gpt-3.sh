@@ -59,8 +59,8 @@ function case_list_auto() {
     gpt_auto_dp2mp2sharding2
     gpt_auto_dp2pp2sharding2
     gpt_auto_dp2mp2pp2sharding2
-    # gpt_auto_pass_o1_stage1  # bug@yingli
-    # gpt_auto_pass_o1_stage2  # bug@yingli
+    gpt_auto_pass_o1_stage1
+    gpt_auto_pass_o1_stage2
     gpt_auto_pass_o2_stage1
     gpt_auto_pass_o2_stage2
     gpt_auto_pass_o3_stage1
