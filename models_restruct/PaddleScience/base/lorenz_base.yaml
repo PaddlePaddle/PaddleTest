@@ -1,0 +1,22 @@
+train:
+  -
+    name: train_enn
+    cmd: python examples/lorenz/train_enn.py
+    params:
+      - --epochs=300
+    result:
+      loss:
+        base: 65.70139
+        threshold: 0
+        evaluation: "="
+  -
+    name: train_transformer
+    cmd: python examples/lorenz/train_transformer.py
+    params:
+      - --epochs=200
+    result:
+      loss:
+        base: 0.00001
+        threshold: 0
+        evaluation: "="
+
