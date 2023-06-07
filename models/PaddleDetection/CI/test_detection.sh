@@ -1,7 +1,6 @@
 !/bin/bash
 mkdir run_env_py38;
 ln -s $(which python3.8) run_env_py38/python;
-ln -s $(which pip3.8) run_env_py38/pip;
 export PATH=$(pwd)/run_env_py38:${PATH};
 python -m pip install --upgrade pip
 export http_proxy=${proxy};
@@ -12,9 +11,9 @@ export PYTHONPATH=`pwd`:$PYTHONPATH;
 # apt-get install ffmpeg -y
 # python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
-pip install Cython --ignore-installed;
-pip install cython_bbox --ignore-installed;
-pip install -r requirements.txt --ignore-installed;
+python -m pip install Cython --ignore-installed;
+python -m pip install cython_bbox --ignore-installed;
+python -m pip install -r requirements.txt --ignore-installed;
 python -m pip install requests==2.28.2 --ignore-installed --no-cache-dir
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
