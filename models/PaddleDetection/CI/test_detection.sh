@@ -1,8 +1,9 @@
-#!/bin/bash
-# mkdir run_env_py37;
-# ln -s $(which python3.7) run_env_py37/python;
-# ln -s $(which pip3.7) run_env_py37/pip;
-# export PATH=$(pwd)/run_env_py37:${PATH};
+!/bin/bash
+mkdir run_env_py38;
+ln -s $(which python3.8) run_env_py38/python;
+ln -s $(which pip3.8) run_env_py38/pip;
+export PATH=$(pwd)/run_env_py38:${PATH};
+python -m pip install --upgrade pip
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 export no_proxy=bcebos.com;
