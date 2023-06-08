@@ -3,8 +3,9 @@ unset GREP_OPTIONS
 mkdir run_env_py38;
 ln -s $(which python3.8) run_env_py38/python;
 export PATH=$(pwd)/run_env_py38:${PATH};
-
-python -m pip install pip==20.2.4 --ignore-installed;
+python -m pip install --upgrade pip
+python -m pip install --upgrade setuptools
+# python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install -r requirements.txt --ignore-installed
 python -m pip install requests==2.28.2 --ignore-installed --no-cache-dir
 python -m pip uninstall paddlepaddle-gpu -y
