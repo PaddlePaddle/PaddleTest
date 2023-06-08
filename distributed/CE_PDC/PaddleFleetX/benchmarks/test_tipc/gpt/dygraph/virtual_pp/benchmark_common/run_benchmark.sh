@@ -72,20 +72,9 @@ function _train(){
         log_file=${train_log_file}
     fi
 
-    local_batch_size=`expr ${global_batch_size} / ${dp_degree} / ${sharding_degree}`
+    local_batch_size=`expr ${global_batch_size} / ${dp_degree} `
     use_pure_fp16=False
     if [ "fp16" = ${fp_item} ]; then use_pure_fp16=True; fi
-
-    # python -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" tools/train.py\
-        # -c ppfleetx/configs/nlp/gpt/pretrain_gpt_175B_mp8_pp16.yaml \
-        # -o Model.hidden_size=1024 -o Model.num_layers=32 -o Model.num_attention_heads=16 \
-        # -o Engine.max_steps=100 -o Engine.eval_freq=25 \
-        # -o Engine.eval_iters=5 -o Engine.save_load.save_steps=50 \
-        # -o Global.local_batch_size=16 -o Global.micro_batch_size=1 \
-        # -o Distributed.mp_degree=1 -o Distributed.pp_degree=8 \
-        # -o Model.virtual_pp_degree=2 -o Distributed.pp_recompute_interval=2 \
-        # -o Model.fused_linear=True -o Model.use_recompute=True \
-        # -o Model.sequence_parallel=False
 
     train_cmd="-o Global.local_batch_size=${local_batch_size} \
                -o Global.micro_batch_size=${micro_batch_size} \
