@@ -101,7 +101,7 @@ function _train(){
                -o Model.sequence_parallel=False \
                -o Distributed.dp_degree=${dp_degree} \
                -o Distributed.mp_degree=${mp_degree} \
-               -o Distributed.pp_degree=${pp_degree}
+               -o Distributed.pp_degree=${pp_degree} \
                -o Model.virtual_pp_degree=${virtual_pp_degree} \
                -o Distributed.pp_recompute_interval=2 "
 
