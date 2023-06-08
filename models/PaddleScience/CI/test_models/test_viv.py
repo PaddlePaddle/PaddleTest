@@ -63,6 +63,7 @@ def test_viv_loss():
     # 断言最后一轮迭代的损失值与基准
     assert np.allclose(float(last_loss), base_loss, rtol=1e-6)
 
+
 def test_viv_metric():
     """
     测试函数：测试 viv.py 脚本的评估值

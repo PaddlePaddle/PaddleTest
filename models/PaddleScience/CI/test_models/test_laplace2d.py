@@ -61,6 +61,7 @@ def test_laplace2d_loss():
     # 断言最后一轮迭代的损失值与基准
     assert np.allclose(float(last_loss), base_loss, rtol=1e-6)
 
+
 def test_laplace2d_metric():
     """
     测试函数：测试 laplace2d.py 评估指值

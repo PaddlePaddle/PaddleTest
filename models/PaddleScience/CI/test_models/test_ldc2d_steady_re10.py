@@ -62,6 +62,7 @@ def test_ldc2d_steady_re10_loss():
     # 断言最后一轮迭代的损失值与基准
     assert np.allclose(float(last_loss), base_loss, rtol=1e-6)
 
+
 def test_ldc2d_steady_re10_metric():
     """
     测试函数：测试 ldc2d_steady_Re10.py 的评估值

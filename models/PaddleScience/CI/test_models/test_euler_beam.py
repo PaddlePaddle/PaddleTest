@@ -62,6 +62,7 @@ def test_euler_beam_loss():
     # 断言最后一轮迭代的损失值与基准
     assert np.allclose(float(last_loss), base_loss, rtol=1e-6)
 
+
 def test_euler_beam_metric():
     """
     测试函数：测试 euler_beam.py 脚本的评估值
@@ -76,6 +77,7 @@ def test_euler_beam_metric():
 
     # 断言最后一轮迭代的评估值与基准
     assert np.allclose(float(last_metric), base_metric, rtol=1e-6)
+
 
 if __name__ == "__main__":
     # 使用 pytest 模块运行测试函数
