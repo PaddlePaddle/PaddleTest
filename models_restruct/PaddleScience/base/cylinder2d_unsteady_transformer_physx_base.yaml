@@ -1,0 +1,20 @@
+train:
+  -
+    name: train_enn
+    cmd: python examples/cylinder/2d_unsteady/transformer_physx/train_enn.py
+    params:
+      - --epochs=300
+    result:
+      loss:
+        base: 0.16322
+        threshold: 1
+        evaluation: "-"
+  -
+    name: train_transformer
+    cmd: python examples/cylinder/2d_unsteady/transformer_physx/train_transformer.py
+      - --epochs=200
+    result:
+      loss:
+        base: 0.00007
+        threshold: 1
+        evaluation: "-"
