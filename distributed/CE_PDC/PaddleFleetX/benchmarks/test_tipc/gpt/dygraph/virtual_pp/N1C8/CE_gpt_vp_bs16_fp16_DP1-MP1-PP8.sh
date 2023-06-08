@@ -27,7 +27,7 @@ model=gpt
 micro_bs=1
 
 cd ./benchmarks
-bash ./test_tipc/gpt/dygraph/hybrid_parallel/benchmark_common/prepare.sh
+bash ./test_tipc/gpt/dygraph/virtual_pp/benchmark_common/prepare.sh
 # run
-bash ./test_tipc/gpt/dygraph/hybrid_parallel/benchmark_common/run_benchmark.sh ${model_item} ${fp_item} ${dp_degree} ${mp_degree} ${pp_degree} ${micro_bs} ${bs_item} ${run_mode} ${device_num} \
+bash ./test_tipc/gpt/dygraph/virtual_pp/benchmark_common/run_benchmark.sh ${model_item} ${fp_item} ${dp_degree} ${mp_degree} ${pp_degree} ${micro_bs} ${bs_item} ${run_mode} ${device_num} \
 ${max_iter} ${virtual_pp_degree} 2>&1;
