@@ -1,9 +1,8 @@
 #!/bin/bash
 unset GREP_OPTIONS
-mkdir run_env_py37;
-ln -s $(which python3.7) run_env_py37/python;
-ln -s $(which pip3.7) run_env_py37/pip;
-export PATH=$(pwd)/run_env_py37:${PATH};
+mkdir run_env_py38;
+ln -s $(which python3.8) run_env_py38/python;
+export PATH=$(pwd)/run_env_py38:${PATH};
 
 python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install -r requirements.txt --ignore-installed
