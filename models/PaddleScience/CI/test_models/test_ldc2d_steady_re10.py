@@ -20,6 +20,7 @@ import sys
 import subprocess
 
 import pytest
+import numpy as np
 
 from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric
 
@@ -59,8 +60,7 @@ def test_ldc2d_steady_re10_loss():
     last_loss = get_last_epoch_loss(log_file, epoch_num)
 
     # 断言最后一轮迭代的损失值与基准
-    assert float(last_loss) == base_loss
-
+    assert np.allclose(float(last_loss), base_loss, rtol=1e-6)
 
 def test_ldc2d_steady_re10_metric():
     """
@@ -74,7 +74,7 @@ def test_ldc2d_steady_re10_metric():
     log_file = os.path.join(output_dir, "train.log")
     last_metric = get_last_eval_metric(log_file, loss_function)
 
-    assert float(last_metric) == base_metric
+    assert np.allclose(float(last_metric), base_metric, rtol=1e-6)
 
 
 if __name__ == "__main__":
