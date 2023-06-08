@@ -53,7 +53,10 @@ sh scripts/build.sh
 cd ../..
 #compile op
 cd ppdet/ext_op
-python setup.py install
+python setup.py bdist_wheel
+cd dist/
+python -m pip install ext_op*.whl
+cd ..
 cd ../..
 # prepare dynamic data
 sed -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
