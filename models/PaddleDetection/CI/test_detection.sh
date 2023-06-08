@@ -3,6 +3,7 @@ mkdir run_env_py38;
 ln -s $(which python3.8) run_env_py38/python;
 export PATH=$(pwd)/run_env_py38:${PATH};
 python -m pip install --upgrade pip
+python -m pip install --upgrade setuptools
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 export no_proxy=bcebos.com;
