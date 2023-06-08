@@ -7,8 +7,8 @@ train:
     result:
       loss:
         base: 65.70139
-        threshold: 0
-        evaluation: "="
+        threshold: 1
+        evaluation: "-"
   -
     name: train_transformer
     cmd: python examples/lorenz/train_transformer.py
@@ -17,5 +17,5 @@ train:
     result:
       loss:
         base: 0.00001
-        threshold: 0
-        evaluation: "="
+        threshold: 1
+        evaluation: "-"

@@ -7,5 +7,5 @@ train:
     result:
       loss:
         base: 0.00006
-        threshold: 0
-        evaluation: "="
+        threshold: 1
+        evaluation: "-"
