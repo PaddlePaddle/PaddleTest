@@ -17,7 +17,7 @@ echo "checkout release !"
 python -m pip install ${paddle_release} --no-cache-dir
 fi
 # install paddleseg
-pip install -v -e .
+python -m pip install -v -e .
 
 echo -e '*****************paddle_version*****'
 python -c 'import paddle;print(paddle.version.commit)'
