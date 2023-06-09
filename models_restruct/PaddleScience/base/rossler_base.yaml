@@ -12,6 +12,7 @@ train:
   -
     name: train_transformer
     cmd: python examples/rossler/train_transformer.py
+    params:
       - --epochs=200
     result:
       loss:
