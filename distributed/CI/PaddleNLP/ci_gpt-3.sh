@@ -40,10 +40,10 @@ function case_list_chain(){
     gpt_345M_mp8_qat
     gpt_export_345M_mp1
     gpt_export_345M_mp2
-    # gpt_export_qat_345M  # bug@hongxiang
+    # gpt_export_qat_345M   # bug@hongxiang
     gpt_inference_345M_single
     gpt_inference_345M_dp8
-    # gpt_345M_single_finetune  # bug@hongxiang
+    # gpt_345M_single_finetune   # bug@hongxiang
     gpt_eval_WikiText
     gpt_eval_LAMBADA
 }
@@ -59,8 +59,8 @@ function case_list_auto() {
     gpt_auto_dp2mp2sharding2
     gpt_auto_dp2pp2sharding2
     gpt_auto_dp2mp2pp2sharding2
-    # gpt_auto_pass_o1_stage1  # bug@yingli
-    # gpt_auto_pass_o1_stage2  # bug@yingli
+    gpt_auto_pass_o1_stage1
+    gpt_auto_pass_o1_stage2
     gpt_auto_pass_o2_stage1
     gpt_auto_pass_o2_stage2
     gpt_auto_pass_o3_stage1
@@ -765,7 +765,7 @@ function gpt_auto_pass_o1_stage1() {
     loss1=`cat $log_dir/workerlog.4 | grep '4/4' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
     loss2=`cat $log_dir/workerlog.6 | grep '4/4' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_result $FUNCNAME 5.4933 ${loss}
+    check_result $FUNCNAME 5.4914 ${loss}
     echo "=========== $FUNCNAME run  end ==========="
 }
 
@@ -796,7 +796,7 @@ function gpt_auto_pass_o1_stage2() {
     loss1=`cat $log_dir/workerlog.4 | grep '4/4' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
     loss2=`cat $log_dir/workerlog.6 | grep '4/4' | grep "lr:" | awk -F 'loss: ' '{print $2}' | awk -F ' ' '{print $1}'`
     loss=$(echo $loss1 $loss2 | awk '{printf("%.4f",($1+$2)/2)}')
-    check_result $FUNCNAME 5.4933 ${loss}
+    check_result $FUNCNAME 5.4914 ${loss}
     echo "=========== $FUNCNAME run  end ==========="
 }
 
