@@ -1,0 +1,78 @@
+all_gather:
+  all_gather_legacy_sync:
+    desc: "paddle.distributed.all_gather(tensor_list, data, sync_op=True)"
+    is_legacy: True
+    sync_op: True # 默认配置
+    use_calc_stream: False # 该模式下无用
+    is_tensor: False # 该模式下无用
+
+  all_gather_legacy:
+    desc: "paddle.distributed.all_gather(tensor_list, data, sync_op=False)"
+    is_legacy: True
+    sync_op: False
+    use_calc_stream: False # 该模式下无用
+    is_tensor: False # 该模式下无用
+
+  all_gather_stream_sync_tensor:
+    desc: "paddle.distributed.stream.all_gather(Tensor, data, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: False # 默认配置
+    is_tensor: True
+
+  # all_gather_stream_sync_tensorlist:
+  #   # 与all_gather_legacy_sync配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.all_gather(TensorList, data, sync_op=True, use_calc_stream=False)"
+  #   is_legacy: False
+  #   sync_op: True
+  #   use_calc_stream: False
+  #   is_tensor: False
+
+  all_gather_stream_sync_calc_tensor:
+    desc: "paddle.distributed.stream.all_gather(Tensor, data, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_tensor: True
+
+  all_gather_stream_sync_calc_tensorlist:
+    desc: "paddle.distributed.stream.all_gather(TensorList, data, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_tensor: False
+
+  # all_gather_stream_calc_tensor:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.all_gather(Tensor, data, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_tensor: True
+
+  # all_gather_stream_calc_tensorlist:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.all_gather(TensorList, data, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_tensor: False
+
+
+  all_gather_stream_tensor:
+    desc: "paddle.distributed.stream.all_gather(Tensor, data, sync_op=False, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: False
+    use_calc_stream: False
+    is_tensor: True
+
+  # all_gather_stream_tensorlist:
+  #   # 与all_gather_legacy配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.all_gather(TensorList, data, sync_op=False, use_calc_stream=False)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: False
+  #   is_tensor: False
+
+
+
