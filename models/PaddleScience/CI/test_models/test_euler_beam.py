@@ -60,7 +60,7 @@ def test_euler_beam_loss():
     last_loss = get_last_epoch_loss(log_file, epoch_num)
 
     # 断言最后一轮迭代的损失值与基准
-    assert np.allclose(float(last_loss), base_loss, rtol=1e-2) or float(last_loss) - base_loss < 3e-5
+    assert np.allclose(float(last_loss), base_loss, rtol=1e-6) or float(last_loss) - base_loss < 3e-5
 
 
 def test_euler_beam_metric():
@@ -76,7 +76,7 @@ def test_euler_beam_metric():
     last_metric = get_last_eval_metric(log_file, loss_function)
 
     # 断言最后一轮迭代的评估值与基准
-    assert np.allclose(float(last_metric), base_metric, rtol=1e-2) or float(last_metric) - base_metric < 3e-5
+    assert np.allclose(float(last_metric), base_metric, rtol=1e-6) or float(last_metric) - base_metric < 3e-5
 
 
 if __name__ == "__main__":
