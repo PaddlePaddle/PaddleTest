@@ -69,7 +69,7 @@ def test_euler_beam_metric():
     """
     output_dir = "./output/euler_beam"  # 输出目录
     loss_function = "L2Rel_Metric"  # 损失函数``
-    base_metric = 0.00005 # 基准评估值
+    base_metric = 0.00005  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")
