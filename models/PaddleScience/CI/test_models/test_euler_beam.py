@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-test_cylinder2d_unsteady_Re100
+test_euler_beam
 """
 # 导入模块
 import os
@@ -25,19 +25,19 @@ import numpy as np
 from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric
 
 
-def test_cylinder2d_unsteady_re100_exit_code():
+def test_euler_beam_exit_code():
     """
-    测试函数：测试 cylinder2d_unsteady_Re100.py 脚本的退出码是否为 0 以保证可视化文件的正常保存
+    测试函数：测试 euler_beam.py 脚本的退出码是否为 0 以保证可视化文件的正常保存
     """
-    # 定义变量
-    output_dir = "./output_cylinder2d_unsteady"  # 输出目录
-    epoch_num = 10  # 迭代次数
+    epoch_num = 1000  # 迭代次数
+    output_dir = "./output/euler_beam"  # 输出目录
     py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.8
 
-    # 执行命令行命令，运行 ldc2d_unsteady_Re10.py 脚本
-    command = f"python{py_version} ../../examples/cylinder/2d_unsteady/cylinder2d_unsteady_Re100.py \
-          --epochs={epoch_num} \
-          --output_dir={output_dir}"
+    # 执行命令行命令，运行 darcy2d.py 脚本
+    command = f"python{py_version} ../../examples/euler_beam/euler_beam.py \
+               --epochs={epoch_num} \
+               --output_dir={output_dir}"
+
     process = subprocess.Popen(command, shell=True)
 
     # 等待脚本执行完成，并返回退出码
@@ -47,13 +47,13 @@ def test_cylinder2d_unsteady_re100_exit_code():
     assert exit_code == 0
 
 
-def test_cylinder2d_unsteady_re100_loss():
+def test_euler_beam_loss():
     """
-    测试函数：测试 cylinder2d_unsteady_Re100.py 脚本的损失值
+    测试函数：测试 euler_beam.py 脚本的损失值
     """
-    epoch_num = 10  # 迭代次数
-    output_dir = "./output_cylinder2d_unsteady"  # 输出目录
-    base_loss = 10.45911  # 基准损失值
+    epoch_num = 1000  # 迭代次数
+    output_dir = "./output/euler_beam"  # 输出目录
+    base_loss = 0.00166  # 基准损失值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
     log_file = os.path.join(output_dir, "train.log")
@@ -63,13 +63,13 @@ def test_cylinder2d_unsteady_re100_loss():
     assert np.allclose(float(last_loss), base_loss, rtol=1e-6)
 
 
-def test_cylinder2d_unsteady_re100_metric():
+def test_euler_beam_metric():
     """
-    测试函数：测试 cylinder2d_unsteady_Re100.py 脚本的评估值
+    测试函数：测试 euler_beam.py 脚本的评估值
     """
-    output_dir = "./output_cylinder2d_unsteady"  # 输出目录
-    loss_function = "Residual"  # 损失函数``
-    base_metric = 0.00563  # 基准评估值
+    output_dir = "./output/euler_beam"  # 输出目录
+    loss_function = "L2Rel_Metric"  # 损失函数``
+    base_metric = 0.00007  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")
