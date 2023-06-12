@@ -17,11 +17,10 @@ import tools.np_tool as tool
 class BuildData(object):
     """BuildData"""
 
-    def __init__(self, data_info, data_type="float32"):
+    def __init__(self, data_info):
         """init"""
         self.data_module = data_info["DataGenerator_name"]
         self.data = data_info["data"]
-        self.dtype = data_type
 
     def get_single_data(self):
         """get data"""
@@ -33,13 +32,13 @@ class BuildData(object):
                         if v["generate_way"] == "random":
                             if v["type"] == "numpy":
                                 value = tool._randtool(
-                                    dtype=self.dtype, low=v["range"][0], high=v["range"][1], shape=v["shape"]
+                                    dtype=v["dtype"], low=v["range"][0], high=v["range"][1], shape=v["shape"]
                                 )
                                 paddle_data_dict[k] = value
                             elif v["type"] == "Tensor":
                                 value = paddle.to_tensor(
                                     tool._randtool(
-                                        dtype=self.dtype, low=v["range"][0], high=v["range"][1], shape=v["shape"]
+                                        dtype=v["dtype"], low=v["range"][0], high=v["range"][1], shape=v["shape"]
                                     )
                                 )
                                 paddle_data_dict[k] = value
@@ -48,10 +47,10 @@ class BuildData(object):
                         elif v["generate_way"] == "solid":
                             value = v["value"]
                             if v["type"] == "numpy":
-                                value = np.array(value).astype(self.dtype)
+                                value = np.array(value).astype(v["dtype"])
                                 paddle_data_dict[k] = value
                             elif v["type"] == "Tensor":
-                                value = paddle.to_tensor(value, dtype=self.dtype)
+                                value = paddle.to_tensor(value, dtype=v["dtype"])
                                 paddle_data_dict[k] = value
                             elif v["type"] == "int" or v["type"] == "float":
                                 paddle_data_dict[k] = value
@@ -66,7 +65,7 @@ class BuildData(object):
                                     if u["generate_way"] == "random":
                                         if u["type"] == "numpy":
                                             value = tool._randtool(
-                                                dtype=self.dtype,
+                                                dtype=u["dtype"],
                                                 low=u["range"][0],
                                                 high=u["range"][1],
                                                 shape=u["shape"],
@@ -75,7 +74,7 @@ class BuildData(object):
                                         elif u["type"] == "Tensor":
                                             value = paddle.to_tensor(
                                                 tool._randtool(
-                                                    dtype=self.dtype,
+                                                    dtype=u["dtype"],
                                                     low=u["range"][0],
                                                     high=u["range"][1],
                                                     shape=u["shape"],
@@ -89,10 +88,10 @@ class BuildData(object):
                                     elif u["generate_way"] == "solid":
                                         value = u["value"]
                                         if u["type"] == "numpy":
-                                            value = np.array(value).astype(self.dtype)
+                                            value = np.array(value).astype(u["dtype"])
                                             paddle_data_dict[k][j].append(value)
                                         elif u["type"] == "Tensor":
-                                            value = paddle.to_tensor(value, dtype=self.dtype)
+                                            value = paddle.to_tensor(value, dtype=u["dtype"])
                                             paddle_data_dict[k][j].append(value)
                                         elif u["type"] == "int" or u["type"] == "float":
                                             paddle_data_dict[k][j].append(value)
@@ -102,13 +101,13 @@ class BuildData(object):
                                 if w["generate_way"] == "random":
                                     if w["type"] == "numpy":
                                         value = tool._randtool(
-                                            dtype=self.dtype, low=w["range"][0], high=w["range"][1], shape=w["shape"]
+                                            dtype=w["dtype"], low=w["range"][0], high=w["range"][1], shape=w["shape"]
                                         )
                                         paddle_data_dict[k][j] = value
                                     elif w["type"] == "Tensor":
                                         value = paddle.to_tensor(
                                             tool._randtool(
-                                                dtype=self.dtype,
+                                                dtype=w["dtype"],
                                                 low=w["range"][0],
                                                 high=w["range"][1],
                                                 shape=w["shape"],
@@ -122,10 +121,10 @@ class BuildData(object):
                                 elif w["generate_way"] == "solid":
                                     value = w["value"]
                                     if w["type"] == "numpy":
-                                        value = np.array(value).astype(self.dtype)
+                                        value = np.array(value).astype(w["dtype"])
                                         paddle_data_dict[k][j] = value
                                     elif w["type"] == "Tensor":
-                                        value = paddle.to_tensor(value, dtype=self.dtype)
+                                        value = paddle.to_tensor(value, dtype=w["dtype"])
                                         paddle_data_dict[k][j] = value
                                     elif w["type"] == "int" or w["type"] == "float":
                                         paddle_data_dict[k][j] = value
@@ -138,13 +137,13 @@ class BuildData(object):
                         if i["generate_way"] == "random":
                             if i["type"] == "numpy":
                                 value = tool._randtool(
-                                    dtype=self.dtype, low=i["range"][0], high=i["range"][1], shape=i["shape"]
+                                    dtype=i["dtype"], low=i["range"][0], high=i["range"][1], shape=i["shape"]
                                 )
                                 paddle_data_dict[k].append(value)
                             elif i["type"] == "Tensor":
                                 value = paddle.to_tensor(
                                     tool._randtool(
-                                        dtype=self.dtype, low=i["range"][0], high=i["range"][1], shape=i["shape"]
+                                        dtype=i["dtype"], low=i["range"][0], high=i["range"][1], shape=i["shape"]
                                     )
                                 )
                                 paddle_data_dict[k].append(value)
@@ -153,10 +152,10 @@ class BuildData(object):
                         elif i["generate_way"] == "solid":
                             value = i["value"]
                             if i["type"] == "numpy":
-                                value = np.array(value).astype(self.dtype)
+                                value = np.array(value).astype(i["dtype"])
                                 paddle_data_dict[k].append(value)
                             elif i["type"] == "Tensor":
-                                value = paddle.to_tensor(value, dtype=self.dtype)
+                                value = paddle.to_tensor(value, dtype=i["dtype"])
                                 paddle_data_dict[k].append(value)
                             elif i["type"] == "int" or i["type"] == "float" or i["type"] == "list":
                                 paddle_data_dict[k].append(value)

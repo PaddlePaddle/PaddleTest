@@ -1,8 +1,9 @@
-#!/bin/bash
-# mkdir run_env_py37;
-# ln -s $(which python3.7) run_env_py37/python;
-# ln -s $(which pip3.7) run_env_py37/pip;
-# export PATH=$(pwd)/run_env_py37:${PATH};
+!/bin/bash
+mkdir run_env_py38;
+ln -s $(which python3.8) run_env_py38/python;
+export PATH=$(pwd)/run_env_py38:${PATH};
+python -m pip install --upgrade pip
+python -m pip install --upgrade setuptools
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 export no_proxy=bcebos.com;
@@ -11,9 +12,9 @@ export PYTHONPATH=`pwd`:$PYTHONPATH;
 # apt-get install ffmpeg -y
 # python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
-pip install Cython --ignore-installed;
-pip install cython_bbox --ignore-installed;
-pip install -r requirements.txt --ignore-installed;
+python -m pip install Cython --ignore-installed;
+python -m pip install cython_bbox --ignore-installed;
+python -m pip install -r requirements.txt --ignore-installed;
 python -m pip install requests==2.28.2 --ignore-installed --no-cache-dir
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
@@ -52,7 +53,10 @@ sh scripts/build.sh
 cd ../..
 #compile op
 cd ppdet/ext_op
-python setup.py install
+python setup.py bdist_wheel
+cd dist/
+python -m pip install ext_op*.whl
+cd ..
 cd ../..
 # prepare dynamic data
 sed -i "s/trainval.txt/test.txt/g" configs/datasets/voc.yml
