@@ -36,6 +36,7 @@ python -m pip install .
 
 # urllib3
 python -m pip install -U urllib3==1.26.15
+python -m pip install -U librosa==0.10.0
 
 python -c "import sys; print('python version:',sys.version_info[:])";
 
