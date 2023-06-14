@@ -146,6 +146,7 @@ def test_eigh4():
 
 
 @pytest.mark.api_base_eigh_parameters
+@pytest.mark.skip(reason="cuda bug if cuda version > 11.3")
 def test_eigh5():
     """
     validation eigenvector
