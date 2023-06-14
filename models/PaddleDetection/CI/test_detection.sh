@@ -1,7 +1,4 @@
 !/bin/bash
-mkdir run_env_py38;
-ln -s $(which python3.8) run_env_py38/python;
-export PATH=$(pwd)/run_env_py38:${PATH};
 python -m pip install --upgrade pip
 python -m pip install --upgrade setuptools
 export http_proxy=${proxy};
@@ -47,7 +44,7 @@ tar xvf paddle_inference.tgz
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
 sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
 sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh
-sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib64|g" scripts/build.sh
+sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
 # sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
 # sed -i "s|WITH_KEYPOINT=OFF|WITH_KEYPOINT=ON|g" scripts/build.sh
 # sed -i "s|WITH_MOT=OFF|WITH_MOT=ON|g" scripts/build.sh
