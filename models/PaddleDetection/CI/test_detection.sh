@@ -418,13 +418,14 @@ elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
 else
     PYTHON_INFER
 fi
-if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
-    echo -e "The model ${model} not support cpp_infer!"
-elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
-    CPP_INFER_KEYPOINT
-else
-    CPP_INFER
-fi
+# 注视掉cpp预测
+# if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
+#     echo -e "The model ${model} not support cpp_infer!"
+# elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
+#     CPP_INFER_KEYPOINT
+# else
+#     CPP_INFER
+# fi
 done
 model='pphuman'
 cd log && mkdir ${model} && cd ..
