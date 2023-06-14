@@ -5,9 +5,6 @@ export http_proxy=${proxy};
 export https_proxy=${proxy};
 export no_proxy=bcebos.com;
 export PYTHONPATH=`pwd`:$PYTHONPATH;
-# apt-get update
-# apt-get install ffmpeg -y
-# python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
 python -m pip install Cython --ignore-installed;
 python -m pip install cython_bbox --ignore-installed;
