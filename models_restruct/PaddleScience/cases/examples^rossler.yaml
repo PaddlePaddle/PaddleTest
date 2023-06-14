@@ -1,0 +1,14 @@
+case:
+  linux:
+    base: ./base/rossler_base.yaml
+    train:
+      -
+        name: train_enn
+      -
+        name: train_transformer
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse
