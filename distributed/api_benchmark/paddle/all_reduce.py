@@ -13,16 +13,16 @@ parser.add_argument("--case_name", default="all_reduce_legacy_sync")
 args = parser.parse_args()
 case_name = args.case_name
 
-f = open('config.yaml','rb')
-yaml_config = yaml.load(f, Loader=yaml.FullLoader)['all_reduce']
+f = open("config.yaml", "rb")
+yaml_config = yaml.load(f, Loader=yaml.FullLoader)["all_reduce"]
 
 
 def get_res(case, config):
 
-    is_legacy = yaml_config[case_name]['is_legacy']
-    sync_op = yaml_config[case_name]['sync_op']
-    use_calc_stream = yaml_config[case_name]['use_calc_stream']
-    op = yaml_config[case_name]['op']
+    is_legacy = yaml_config[case_name]["is_legacy"]
+    sync_op = yaml_config[case_name]["sync_op"]
+    use_calc_stream = yaml_config[case_name]["use_calc_stream"]
+    op = yaml_config[case_name]["op"]
 
     # args
     warms = 5
@@ -39,21 +39,21 @@ def get_res(case, config):
         b *= 2
 
     time_list = {case_name: {}}
-    for b in byte_to_test:    
+    for b in byte_to_test:
         n_ele = b // 4 // devices
 
         if dist.get_rank() == 0:
-            data = paddle.to_tensor([0] * n_ele, 'float32')
+            data = paddle.to_tensor([0] * n_ele, "float32")
         else:
-            data = paddle.to_tensor([1] * n_ele, 'float32')
+            data = paddle.to_tensor([1] * n_ele, "float32")
 
         if is_legacy == True:
             # warmup
             for i in range(warms):
                 dist.all_reduce(data, op=op)
-            paddle.device.cuda.synchronize() # 等待给定的 CUDA 设备上的计算完成
+            paddle.device.cuda.synchronize()  # 等待给定的 CUDA 设备上的计算完成
             # stats
-            start = time.perf_counter() # 返回当前的计算机系统时间
+            start = time.perf_counter()  # 返回当前的计算机系统时间
             for i in range(epochs):
                 dist.all_reduce(data, op=op)
             paddle.device.cuda.synchronize()
@@ -61,33 +61,24 @@ def get_res(case, config):
         else:
             # warmup
             for i in range(warms):
-                dist.stream.all_reduce(
-                                    data,
-                                    op=op,
-                                    sync_op=sync_op,
-                                    use_calc_stream=use_calc_stream)
+                dist.stream.all_reduce(data, op=op, sync_op=sync_op, use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()
             # stats
             start = time.perf_counter()
             for i in range(epochs):
-                dist.stream.all_reduce(
-                                    data,
-                                    op=op,
-                                    sync_op=sync_op,
-                                    use_calc_stream=use_calc_stream)
+                dist.stream.all_reduce(data, op=op, sync_op=sync_op, use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
-                
+
         # print(f'data: {b} B, time: {cost} s, algbw: {b/1_000_000_000/cost} GB/s')
         time_list[case_name][b] = {}
-        time_list[case_name][b]['time'] = cost
-        time_list[case_name][b]['algbw'] = b/1_000_000_000/cost
+        time_list[case_name][b]["time"] = cost
+        time_list[case_name][b]["algbw"] = b / 1_000_000_000 / cost
     # print(time_list)
     return time_list
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(yaml_config[case_name])
     res = get_res(case_name, yaml_config)
     print(res)
-    

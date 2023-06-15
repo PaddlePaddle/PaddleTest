@@ -39,9 +39,9 @@ def get_res(case, config):
         b *= 2
 
     time_list = {case_name: {}}
-    for b in byte_to_test:    
+    for b in byte_to_test:
         n_ele = b // 4 // devices
-        
+
         if is_legacy == True:
             tensor_list = [
                 paddle.to_tensor([0] * n_ele, 'float32') for i in range(devices),
@@ -100,7 +100,7 @@ def get_res(case, config):
                                         use_calc_stream=use_calc_stream)
                 paddle.device.cuda.synchronize()
                 cost = (time.perf_counter() - start) / epochs
-                
+
         # print(f'data: {b} B, time: {cost} s, algbw: {b/1_000_000_000/cost} GB/s')
         time_list[case_name][b] = {}
         time_list[case_name][b]['time'] = cost
@@ -113,4 +113,4 @@ if __name__ == '__main__':
     print(yaml_config[case_name])
     res = get_res(case_name, yaml_config)
     print(res)
-    
+
