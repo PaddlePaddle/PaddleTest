@@ -1,8 +1,8 @@
 import yaml
 import subprocess
 
-api_list = ["all_gather", "all_reduce_", "barrier", "broadcast", "broadcast_to", "cat", "confusion_matrix", "count_up_to"]
-loops=2
+api_list = ["all_gather", "all_reduce", "alltoall", "alltoall_single", "broadcast", "send_recv", "reduce", "reduce_scatter", "scatter"]
+loops=50
 
 def get_average(file_loops, case):
     counters = {}
