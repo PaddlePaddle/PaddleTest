@@ -32,6 +32,7 @@ obj = TestEigvalsh(paddle.linalg.eigvalsh)
 
 
 @pytest.mark.api_linalg_eigvalsh_vartype
+#@pytest.mark.skip(reason="cuda bug if cuda version > 11.3")
 def test_eigvalsh_base():
     """
     base

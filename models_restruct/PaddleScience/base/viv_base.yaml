@@ -1,0 +1,11 @@
+train:
+  -
+    name: single
+    cmd: python examples/fsi/viv.py
+    params:
+      - --epochs=100000
+    result:
+      loss:
+        base: 0.00023
+        threshold: 1
+        evaluation: "-"

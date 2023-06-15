@@ -11,6 +11,7 @@ import shutil
 import math
 import argparse
 import logging
+import tarfile
 import yaml
 import wget
 import paddle
@@ -224,11 +225,11 @@ configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp.l
 configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim.log",
                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
             )
-            wget.download(
-                "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
-configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim_cinn.log",
-                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
-            )
+            #             wget.download(
+            #                 "https://paddle-qa.bj.bcebos.com/logs/Paddle3D/\
+            # configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_prim_cinn.log",
+            #                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp",
+            #             )
 
             filepath_amp = os.path.join(
                 "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/",
@@ -266,8 +267,15 @@ configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp/train_dygraph2static_amp_p
             )
             logger.info("Plot figure successfully!")
             # log
-            shutil.copytree("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp", "picture")
+            shutil.copytree(
+                "logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp", "picture", dirs_exist_ok=True
+            )
         else:
+            if os.path.exists("bos_new.tar.gz") is False and os.getenv("bce_whl_url"):
+                bce_whl_url = os.getenv("bce_whl_url")
+                wget.download(bce_whl_url)
+                tf = tarfile.open("bos_new.tar.gz")
+                tf.extractall(os.getcwd())
             log_name = os.listdir("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp")[0]
             log_path = os.path.join("logs/Paddle3D/configs^petr^petrv2_vovnet_gridmask_p4_800x320_dn_amp", log_name)
             cmd = "python BosClient.py %s paddle-qa/" % (log_path)

@@ -123,5 +123,5 @@ def test_mm5():
     """
     x = randtool("float", -10, 10, [7])
     mat2 = randtool("float", -10, 10, [7])
-    res = np.array([-102.47202965])
+    res = np.matmul(x, mat2)
     obj.run(res=res, input=x, mat2=mat2)
