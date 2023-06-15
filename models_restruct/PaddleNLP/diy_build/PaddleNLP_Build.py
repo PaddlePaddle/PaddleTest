@@ -15,6 +15,7 @@ from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
 
+
 class PaddleNLP_Build(Model_Build):
     """
     自定义环境准备
@@ -69,15 +70,11 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip uninstall protobuf -y")
             os.system("python -m pip uninstall protobuf -y")
             os.system("python -m pip install protobuf==3.20.2")
-            os.system(
-                "python -m pip install {}".format(paddle_whl)
-            )  # install paddle for lac requirement paddle>=1.6
+            os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
         else:
             os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")
-            os.system(
-                "python -m pip install {}".format(paddle_whl)
-            )  # install paddle for lac requirement paddle>=1.6
+            os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
 
         if re.compile("elease").findall(paddle_whl):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
@@ -88,6 +85,7 @@ class PaddleNLP_Build(Model_Build):
             )
 
         import nltk
+
         nltk.download("punkt")
 
         if re.compile("37").findall(paddle_whl) or re.compile("38").findall(paddle_whl):
@@ -106,19 +104,19 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
 
         if re.compile("CUDA11").findall(self.models_file):
-            os.system("python -m pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html")
+            os.system(
+                "python -m pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html"
+            )
         os.chdir(path_now)
 
         os.system("python -m pip uninstall protobuf -y")
         os.system("python -m pip uninstall protobuf -y")
         os.system("python -m pip install protobuf==3.20.2")
 
-
         import paddle
 
-        print("paddle final commit",paddle.version.commit)
+        print("paddle final commit", paddle.version.commit)
         os.system("python -m pip list")
-
 
         return 0
 
