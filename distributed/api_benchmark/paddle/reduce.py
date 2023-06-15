@@ -9,12 +9,12 @@ import paddle.distributed as dist
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--case_name", default="all_reduce_legacy_sync")
+parser.add_argument("--case_name", default="reduce_legacy_sync")
 args = parser.parse_args()
 case_name = args.case_name
 
 f = open('config.yaml','rb')
-yaml_config = yaml.load(f, Loader=yaml.FullLoader)['all_reduce']
+yaml_config = yaml.load(f, Loader=yaml.FullLoader)['reduce']
 
 
 def get_res(case, config):
@@ -50,19 +50,20 @@ def get_res(case, config):
         if is_legacy == True:
             # warmup
             for i in range(warms):
-                dist.all_reduce(data, op=op)
+                dist.reduce(data, dst=0, op=op)
             paddle.device.cuda.synchronize() # 等待给定的 CUDA 设备上的计算完成
             # stats
             start = time.perf_counter() # 返回当前的计算机系统时间
             for i in range(epochs):
-                dist.all_reduce(data, op=op)
+                dist.reduce(data, dst=0, op=op)
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
         else:
             # warmup
             for i in range(warms):
-                dist.stream.all_reduce(
+                dist.stream.reduce(
                                     data,
+                                    dst=0, 
                                     op=op,
                                     sync_op=sync_op,
                                     use_calc_stream=use_calc_stream)
@@ -70,9 +71,10 @@ def get_res(case, config):
             # stats
             start = time.perf_counter()
             for i in range(epochs):
-                dist.stream.all_reduce(
+                dist.stream.reduce(
                                     data,
                                     op=op,
+                                    dst=0, 
                                     sync_op=sync_op,
                                     use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()

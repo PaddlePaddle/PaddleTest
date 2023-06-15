@@ -74,5 +74,533 @@ all_gather:
   #   use_calc_stream: False
   #   is_tensor: False
 
+all_reduce:
+  all_reduce_legacy_SUM:
+    desc: "paddle.distributed.all_reduce(data, op=ReduceOp.SUM)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    op: ReduceOp.SUM # 默认配置
 
+  all_reduce_legacy_MAX:
+    desc: "paddle.distributed.all_reduce(data, op=ReduceOp.MAX)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    op: ReduceOp.MAX
+
+  all_reduce_legacy_MIN:
+    desc: "paddle.distributed.all_reduce(data, op=ReduceOp.MIN)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    op: ReduceOp.MIN
+
+  all_reduce_legacy_PROD:
+    desc: "paddle.distributed.all_reduce(data, op=ReduceOp.PROD)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    op: ReduceOp.PROD
+
+  all_reduce_stream_sync_SUM:
+    desc: "paddle.distributed.stream.all_reduce(data, op=ReduceOp.SUM, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: False # 默认配置
+    op: ReduceOp.SUM # 默认配置
+
+    all_reduce_stream_sync_calc_SUM:
+      desc: "paddle.distributed.stream.all_reduce(data, op=ReduceOp.SUM, sync_op=True, use_calc_stream=True)"
+      is_legacy: False
+      sync_op: True
+      use_calc_stream: True
+      op: ReduceOp.SUM # 默认配置
+
+  # all_reduce_stream_SUM:
+  #   # 与all_reduce_legacy_SUM配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.all_reduce(data, op=ReduceOp.SUM, sync_op=False, use_calc_stream=False)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: False # 默认配置
+  #   op: ReduceOp.SUM # 默认配置
+
+  # all_reduce_stream_calc_SUM:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.all_reduce(data, op=ReduceOp.SUM, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   op: ReduceOp.SUM # 默认配置
+
+alltoall:
+  alltoall_legacy_sync:
+    desc: "paddle.distributed.alltoall(in_tensor_list, out_tensor_list, sync_op=True)"
+    is_legacy: True
+    sync_op: True # 默认配置
+    use_calc_stream: False # 该模式下无用
+    is_tensor: False # 该模式下无用
+
+  alltoall_legacy:
+    desc: "paddle.distributed.alltoall(in_tensor_list, out_tensor_list, sync_op=False)"
+    is_legacy: True
+    sync_op: False
+    use_calc_stream: False # 该模式下无用
+    is_tensor: False # 该模式下无用
+
+  alltoall_stream_sync_tensor:
+    desc: "paddle.distributed.stream.alltoall(out_tensor, in_tensor, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: False # 默认配置
+    is_tensor: True
+
+  # alltoall_stream_sync_tensorlist:
+  #   # 与alltoall_legacy_sync配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.alltoall(out_tensor_list, in_tensor_list, sync_op=True, use_calc_stream=False)"
+  #   is_legacy: False
+  #   sync_op: True
+  #   use_calc_stream: False # 默认配置
+  #   is_tensor: False
+
+  alltoall_stream_sync_calc_tensor:
+    desc: "paddle.distributed.stream.alltoall(out_tensor, in_tensor, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_tensor: True
+
+  alltoall_stream_sync_calc_tensorlist:
+    desc: "paddle.distributed.stream.alltoall(out_tensor_list, in_tensor_list, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_tensor: False
+
+  # alltoall_stream_calc_tensor:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.alltoall(out_tensor, in_tensor, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_tensor: True
+
+  # alltoall_stream_calc_tensorlist:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.alltoall(out_tensor_list, in_tensor_list, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_tensor: False
+
+
+  alltoall_stream_tensor:
+    desc: "paddle.distributed.stream.alltoall(out_tensor, in_tensor, sync_op=False, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: False
+    use_calc_stream: False
+    is_tensor: True
+
+  # alltoall_stream_tensorlist:
+  #   # 与alltoall_legacy配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.alltoall(out_tensor_list, in_tensor_list, sync_op=False, use_calc_stream=False)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: False
+  #   is_tensor: False
+
+alltoall_single:
+  alltoall_single_legacy_sync:
+    desc: "paddle.distributed.alltoall_single(data, ouput, sync_op=True)"
+    is_legacy: True
+    sync_op: True # 默认配置
+    use_calc_stream: False # 该模式下无用
+    is_split: False # 默认配置
+
+  alltoall_single_legacy:
+    desc: "paddle.distributed.alltoall_single(data, output, sync_op=False)"
+    is_legacy: True
+    sync_op: False
+    use_calc_stream: False # 该模式下无用
+    is_split: False # 默认配置
+  
+  alltoall_single_legacy_sync_split:
+    desc: "paddle.distributed.alltoall_single(data, ouput, in_split_sizes, out_split_sizes, sync_op=True)"
+    is_legacy: True
+    sync_op: True # 默认配置
+    use_calc_stream: False # 该模式下无用
+    is_split: True
+
+  alltoall_single_legacy_split:
+    desc: "paddle.distributed.alltoall_single(data, output, in_split_sizes, out_split_sizes, sync_op=False)"
+    is_legacy: True
+    sync_op: False
+    use_calc_stream: False # 该模式下无用
+    is_split: True
+  
+  # alltoall_single_stream_sync:
+  #   # 与alltoall_single_legacy配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.all_gather(data, ouput, sync_op=True)"
+  #   is_legacy: False
+  #   sync_op: True
+  #   use_calc_stream: False
+  #   is_split: False
+
+  # alltoall_single_stream_sync_split:
+  #   # 与alltoall_single_legacy_sync_split配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.alltoall_single(data, ouput, in_split_sizes, out_split_sizes, sync_op=True)"
+  #   is_legacy: False
+  #   sync_op: True # 默认配置
+  #   use_calc_stream: False # 默认配置
+  #   is_split: True
+
+  alltoall_single_stream_sync_calc:
+    desc: "paddle.distributed.stream.alltoall_single(data, ouput, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_split: False
+
+  alltoall_single_stream_sync_calc_split:
+    desc: "paddle.distributed.stream.alltoall_single(data, ouput, in_split_sizes, out_split_sizes, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_split: True
+
+  # alltoall_single_stream_calc:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.alltoall_single(data, ouput, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_split: False
+
+  # alltoall_single_stream_calc_split:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.alltoall_single(data, ouput, in_split_sizes, out_split_sizes, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_split: True
+
+
+  # alltoall_single_stream:
+  #   # 与alltoall_single_legacy_sync_split配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.alltoall_single(data, ouput, sync_op=False, use_calc_stream=False)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: False
+  #   is_split: False
+
+  # alltoall_single_stream_split:
+  #   # 与alltoall_single_legacy_split配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.alltoall_single(data, ouput, in_split_sizes, out_split_sizes, sync_op=False, use_calc_stream=False)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: False
+  #   is_split: True
+
+broadcast:
+  broadcast_legacy:
+    desc: "paddle.distributed.broadcast(tensor, src)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+  
+  broadcast_stream_sync:
+    desc: "paddle.distributed.stream.broadcast(tensor, src, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: False # 默认配置
+
+  broadcast_stream_sync_calc:
+    desc: "paddle.distributed.stream.broadcast(tensor, src, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: True
+  
+  broadcast_stream:
+    desc: "paddle.distributed.stream.broadcast(tensor, src, sync_op=False, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: False
+    use_calc_stream: False
+
+  # broadcast_stream_calc:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.broadcast(tensor, src, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+
+send_recv:
+  send_recv_legacy_calc:
+    desc: "paddle.distributed.send(tensor, dst, use_calc_stream=True)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: True # 默认配置
+  
+  send_recv_legacy:
+    desc: "paddle.distributed.send(tensor, dst, use_calc_stream=False)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 默认配置
+  
+  send_recv_stream_sync:
+    desc: "paddle.distributed.stream.send(tensor, dst,  sync_op=True, use_calc_stream=False))"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: False # 默认配置
+
+  send_recv_stream_sync_calc:
+    desc: "paddle.distributed.stream.send(tensor, dst,  sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: True
+  
+  send_recv_stream:
+    desc: "paddle.distributed.stream.send(tensor, dst,  sync_op=False, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: False
+    use_calc_stream: False
+
+  # send_recv_stream_calc:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.send(tensor, dst,  sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+
+reduce:
+  reduce_legacy_SUM:
+    desc: "paddle.distributed.reduce(data, dst, op=ReduceOp.SUM)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    op: ReduceOp.SUM # 默认配置
+
+  reduce_legacy_MAX:
+    desc: "paddle.distributed.reduce(data, dst, op=ReduceOp.MAX)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    op: ReduceOp.MAX
+
+  reduce_legacy_MIN:
+    desc: "paddle.distributed.reduce(data, dst, op=ReduceOp.MIN)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    op: ReduceOp.MIN
+
+  reduce_legacy_PROD:
+    desc: "paddle.distributed.reduce(data, dst, op=ReduceOp.PROD)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    op: ReduceOp.PROD
+
+  reduce_stream_sync_SUM:
+    desc: "paddle.distributed.stream.reduce(data, dst, op=ReduceOp.SUM, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: False # 默认配置
+    op: ReduceOp.SUM # 默认配置
+
+    reduce_stream_sync_calc_SUM:
+      desc: "paddle.distributed.stream.reduce(data, dst, op=ReduceOp.SUM, sync_op=True, use_calc_stream=True)"
+      is_legacy: False
+      sync_op: True
+      use_calc_stream: True
+      op: ReduceOp.SUM # 默认配置
+
+  # reduce_stream_SUM:
+  #   # 与reduce_legacy_SUM配置相同，无需重复执行
+  #   desc: "paddle.distributed.stream.reduce(data, dst, op=ReduceOp.SUM, sync_op=False, use_calc_stream=False)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: False # 默认配置
+  #   op: ReduceOp.SUM # 默认配置
+
+  # reduce_stream_calc_SUM:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.reduce(data, dst, op=ReduceOp.SUM, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   op: ReduceOp.SUM # 默认配置
+
+reduce_scatter:
+  reduce_scatter_legacy_calc_SUM:
+    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, use_calc_stream=True)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: True # 默认配置
+    is_tensor: False # 该模式下无用
+    op: ReduceOp.SUM # 默认配置
+
+  reduce_scatter_legacy_calc_MAX:
+    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.MAX, use_calc_stream=True)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: True # 默认配置
+    is_tensor: False # 该模式下无用
+    op: ReduceOp.MAX
+
+  reduce_scatter_legacy_calc_Min:
+    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.Min, use_calc_stream=True)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: True # 默认配置
+    is_tensor: False # 该模式下无用
+    op: ReduceOp.Min
+
+  reduce_scatter_legacy_calc_PROD:
+    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.PROD, use_calc_stream=True)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: True # 默认配置
+    is_tensor: False # 该模式下无用
+    op: ReduceOp.PROD
+
+  reduce_scatter_legacy_SUM:
+    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, use_calc_stream=False)"
+    is_legacy: True
+    sync_op: False # 该模式下无用
+    use_calc_stream: False
+    is_tensor: False # 该模式下无用
+    op: ReduceOp.SUM # 默认配置    
+
+  reduce_scatter_stream_sync_tensor_SUM:
+    desc: "paddle.distributed.stream.reduce_scatter(data, tensor, op=ReduceOp.SUM, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: False # 默认配置
+    is_tensor: True
+    op: ReduceOp.SUM # 默认配置    
+
+  reduce_scatter_stream_sync_tensorlist_SUM:
+    desc: "paddle.distributed.stream.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: False
+    is_tensor: False
+    op: ReduceOp.SUM # 默认配置
+
+  reduce_scatter_stream_sync_calc_tensor_SUM:
+    desc: "paddle.distributed.stream.reduce_scatter(data, tensor, op=ReduceOp.SUM, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_tensor: True
+    op: ReduceOp.SUM # 默认配置
+
+  reduce_scatter_stream_sync_calc_tensorlist_SUM:
+    desc: "paddle.distributed.stream.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_tensor: False
+    op: ReduceOp.SUM # 默认配置
+
+  # reduce_scatter_stream_calc_tensor_SUM:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.reduce_scatter(data, tensor, op=ReduceOp.SUM, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_tensor: True
+  #   op: ReduceOp.SUM # 默认配置
+
+  # reduce_scatter_stream_calc_tensorlist_SUM:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_tensor: False
+  #   op: ReduceOp.SUM # 默认配置
+
+  reduce_scatter_stream_tensor_SUM:
+    desc: "paddle.distributed.stream.reduce_scatter(data, tensor, op=ReduceOp.SUM, sync_op=False, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: False
+    use_calc_stream: False
+    is_tensor: True
+    op: ReduceOp.SUM # 默认配置
+
+  reduce_scatter_stream_tensorlist_SUM:
+    desc: "paddle.distributed.stream.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, sync_op=False, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: False
+    use_calc_stream: False
+    is_tensor: False
+    op: ReduceOp.SUM # 默认配置
+
+scatter:
+  scatter_legacy:
+    desc: "paddle.distributed.scatter(data, tensor_list, src=1)"
+    is_legacy: True
+    sync_op: True # 该模式下无用
+    use_calc_stream: False # 该模式下无用
+    is_tensor: False # 该模式下无用
+
+  scatter_stream_sync_tensor:
+    desc: "paddle.distributed.stream.scatter(data, tensor, src=1, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: False # 默认配置
+    is_tensor: True
+
+  scatter_stream_sync_tensorlist:
+    desc: "paddle.distributed.stream.scatter(data, tensor_list, src=1, sync_op=True, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: True # 默认配置
+    use_calc_stream: False # 默认配置
+    is_tensor: False
+
+  scatter_stream_sync_calc_tensor:
+    desc: "paddle.distributed.stream.scatter(data, tensor, src=1, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_tensor: True
+
+  scatter_stream_sync_calc_tensorlist:
+    desc: "paddle.distributed.stream.scatter(data, tensor_list, src=1, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
+    is_tensor: False
+
+  # scatter_stream_calc_tensor:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.scatter(data, tensor, src=1, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_tensor: True
+
+  # scatter_stream_calc_tensorlist:
+  #   # use_calc_stream can only be true in sync op behavior.
+  #   desc: "paddle.distributed.stream.scatter(data, tensor_list, src=1, sync_op=False, use_calc_stream=True)"
+  #   is_legacy: False
+  #   sync_op: False
+  #   use_calc_stream: True
+  #   is_tensor: False
+
+
+  scatter_stream_tensor:
+    desc: "paddle.distributed.stream.scatter(data, tensor, src=1, sync_op=False, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: False
+    use_calc_stream: False
+    is_tensor: True
+
+  scatter_stream_tensorlist:
+    desc: "paddle.distributed.stream.scatter(data, tensor_list, src=1, sync_op=False, use_calc_stream=False)"
+    is_legacy: False
+    sync_op: False
+    use_calc_stream: False
+    is_tensor: False
 
