@@ -222,8 +222,6 @@ function gpt_generation_345M_hybrid() {
         -c ppfleetx/configs/nlp/gpt/generation_gpt_345M_dp8.yaml \
         -o Engine.save_load.ckpt_dir=./ckpt/PaddleFleetX_GPT_345M_220826/
     check_result $FUNCNAME
-    # tail -12 log/workerlog.0 > ./generation_345M_dp8.txt
-    # check_generation_txt $FUNCNAME ./generation_345M_dp8.txt
 }
 
 function gpt_export_345M_mp1() {
@@ -381,14 +379,14 @@ function vit_cifar10_finetune() {
     python -m paddle.distributed.launch --gpus="0,1,2,3,4,5,6,7" tools/train.py \
         -c  ppfleetx/configs/vis/vit/ViT_tiny_patch16_224_ci_cifar10_1n8c_dp_fp16o2.yaml
     check_result $FUNCNAME
-    loss=`tail log/workerlog.0 | grep 19/24 | cut -d " " -f14 `
-    top1=`tail log/workerlog.0 | grep top1 |cut -d " " -f14 `
+    loss=`cat log/workerlog.0 | grep 19/24 | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}'`
+    top1=`cat log/workerlog.0 | grep top1 | awk -F 'top1 = ' '{print $2}' | awk -F ',' '{print $1}'`
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 3.567670846 ${loss%?} ${FUNCNAME}_loss
-        check_diff 0.198096 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.567670846 ${loss} ${FUNCNAME}_loss
+        check_diff 0.198096 ${top1} ${FUNCNAME}_top1
     else
-        check_diff 3.744726562 ${loss%?} ${FUNCNAME}_loss
-        check_diff 0.216858 ${top1%?} ${FUNCNAME}_top1
+        check_diff 3.744726562 ${loss} ${FUNCNAME}_loss
+        check_diff 0.216858 ${top1} ${FUNCNAME}_top1
     fi
 }
 
@@ -406,11 +404,11 @@ function vit_qat() {
         -o Engine.save_load.save_steps=100 \
         -o Model.model.pretrained.prefix_path=./ckpt/model
     check_result $FUNCNAME
-    loss=`tail log/workerlog.0 | grep "eval" | cut -d " " -f11 `
+    loss=`cat log/workerlog.0 | grep "1/20" | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}' `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 2.299860716 ${loss%?} ${FUNCNAME}_loss
+        check_diff 2.299868345 ${loss} ${FUNCNAME}_loss
     else
-        check_diff 2.299857140 ${loss%?} ${FUNCNAME}_loss
+        check_diff 2.299857140 ${loss} ${FUNCNAME}_loss
     fi
 }
 

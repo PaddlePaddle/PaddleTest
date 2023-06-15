@@ -104,11 +104,14 @@ class PaddleSpeech_Build(Model_Build):
             # windows install add --user
             os.system("python -m pip install -U setuptools")
             os.system("python -m pip install .  -i https://mirror.baidu.com/pypi/simple")
-            # mac from numba.np.ufunc import _internal
-            # os.system("python -m pip install -U numpy<1.24.0")
+            # mac intel from numba.np.ufunc import _internal
+            if sysstr == "Darwin" and platform.machine() == "x86_64":
+                os.system("python -m pip install -U numpy<1.24.0")
             # bug: bce-python-sdk==0.8.79
             os.system("python -m pip install  bce-python-sdk==0.8.74")
             os.system("python -m pip install -U protobuf==3.20.0")
+            # librosa
+            os.system("python -m pip install -U librosa")
             os.chdir(path_now)
             print("build paddlespeech wheel!")
 
@@ -143,14 +146,12 @@ class PaddleSpeech_Build(Model_Build):
                 # asr librispeech
                 if os.path.exists("librispeech"):
                     os.chdir("librispeech")
-                    if os.path.islink("dev-clean") is False:
-                        shutil.rmtree("dev-clean")
-                        shutil.rmtree("test-clean")
-                    else:
+                    if os.path.exists("dev-clean"):
                         os.unlink("dev-clean")
                         os.unlink("test-clean")
                     os.symlink(os.path.join(src_path, "librispeech/dev-clean"), "dev-clean")
                     os.symlink(os.path.join(src_path, "librispeech/test-clean"), "test-clean")
+                    os.chdir("..")
 
                 # asr tal_cs
                 os.chdir("tal_cs")

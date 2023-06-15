@@ -20,24 +20,27 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    echo "######  model_flag pr"
    export CUDA_VISIBLE_DEVICES=$4 #cudaid
 
-   echo "######  ---py37  env -----"
-   rm -rf /usr/local/python2.7.15/bin/python
-   rm -rf /usr/local/bin/python
-   export PATH=/usr/local/bin/python:${PATH}
-   case $3 in #python
-   36)
-   ln -s /usr/local/bin/python3.6 /usr/local/bin/python
-   ;;
-   37)
-   ln -s /usr/local/bin/python3.7 /usr/local/bin/python
-   ;;
-   38)
-   ln -s /usr/local/bin/python3.8 /usr/local/bin/python
-   ;;
-   39)
-   ln -s /usr/local/bin/python3.9 /usr/local/bin/python
-   ;;
-   esac
+   # echo "######  ---py38  env -----"
+   # rm -rf /usr/local/python2.7.15/bin/python
+   # rm -rf /usr/local/bin/python
+   # export PATH=/usr/local/bin/python:${PATH}
+   # case $3 in #python
+   # 36)
+   # ln -s /usr/local/bin/python3.6 /usr/local/bin/python
+   # ;;
+   # 37)
+   # ln -s /usr/local/bin/python3.7 /usr/local/bin/python
+   # ;;
+   # 38)
+   # ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+   # ;;
+   # 39)
+   # ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+   # ;;
+   # esac
+
+   rm -rf /usr/bin/python
+   ln -s /usr/bin/python3.8 /usr/bin/python
    python -c "import sys; print('python version:',sys.version_info[:])";
 
 
@@ -80,9 +83,11 @@ unset https_proxy
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
 python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install --upgrade pip
 python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
 
 python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+python -m pip install -U urllib3==1.26.15 -i https://mirror.baidu.com/pypi/simple
 num=`python -m pip list | grep fasttext | wc -l`
 if [ "${num}" -eq "0" ]; then
    python -m pip install --ignore-installed pybind11 -i https://mirror.baidu.com/pypi/simple

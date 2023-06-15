@@ -77,8 +77,8 @@ class PaddleDetection_Build(Model_Build):
         os.system("python -m pip install --upgrade pip")
         os.system("python -m pip install Cython")
         logger.info("***start setuptools update")
-        os.system("python -m pip uninstall setuptools -y")
-        os.system("python -m pip install setuptools")
+        # os.system("python -m pip uninstall setuptools -y")
+        # os.system("python -m pip install setuptools")
         os.system("python -m pip install -r requirements.txt")
         os.system("python -m pip install zip --ignore-installed")
         os.system("python -m pip uninstall paddleslim -y")
@@ -251,6 +251,5 @@ if __name__ == "__main__":
 
     args = parse_args()
     print("args:{}".format(args))
-    # logger.info('###args {}'.format(args.models_file))
     model = PaddleDetection_Build(args)
     model.build_paddledetection()

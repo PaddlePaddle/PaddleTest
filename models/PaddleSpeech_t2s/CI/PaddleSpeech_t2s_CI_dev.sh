@@ -5,35 +5,39 @@ echo ${Data_path}
 echo ${paddle_compile}
 echo ${model_flag}
 
-mkdir run_env_py37;
-ln -s $(which python3.7) run_env_py37/python;
-ln -s $(which pip3.7) run_env_py37/pip;
-export PATH=$(pwd)/run_env_py37:${PATH};
+# mkdir run_env_py37;
+# ln -s $(which python3.7) run_env_py37/python;
+# ln -s $(which pip3.7) run_env_py37/pip;
+# export PATH=$(pwd)/run_env_py37:${PATH};
+
+rm -rf /usr/bin/python
+ln -s /usr/bin/python3.8 /usr/bin/python
+
 export http_proxy=${http_proxy}
 export https_proxy=${https_proxy}
 export no_proxy=bcebos.com;
-python -m pip install pip==20.2.4 --ignore-installed;
+
 python -m pip install $4 --no-cache-dir --ignore-installed;
 apt-get update
-if [[ $5 == 'all' ]];then
-   apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
-fi
-pushd tools; make virtualenv.done; popd
-if [ $? -ne 0 ];then
-    exit 1
-fi
-source tools/venv/bin/activate
-python -m pip install pip==20.2.4 --ignore-installed;
+# if [[ $5 == 'all' ]];then
+#    apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
+# fi
+# pushd tools; make virtualenv.done; popd
+# if [ $? -ne 0 ];then
+#     exit 1
+# fi
+# source tools/venv/bin/activate
+
 python -m pip install $4 --no-cache-dir
 python -m pip install numpy==1.20.1 --ignore-installed
 python -m pip install pyparsing==2.4.7 --ignore-installed
 #pip install -e .
-pip install .
+python -m pip install .
 
-# fix protobuf upgrade
-python -m pip uninstall protobuf -y
-python -m pip install protobuf==3.20.1
-python -m pip list | grep protobuf
+# urllib3
+python -m pip install -U urllib3==1.26.15
+python -m pip install -U librosa==0.10.0
+
 python -c "import sys; print('python version:',sys.version_info[:])";
 
 #system

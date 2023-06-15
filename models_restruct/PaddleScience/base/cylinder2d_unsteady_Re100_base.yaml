@@ -1,0 +1,11 @@
+train:
+  -
+    name: single
+    cmd: python examples/cylinder/2d_unsteady/cylinder2d_unsteady_Re100.py
+    params:
+      - --epochs=40000
+    result:
+      loss:
+        base: 0.01407
+        threshold: 1
+        evaluation: "-"

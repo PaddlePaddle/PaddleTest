@@ -12,6 +12,7 @@ import six
 import wget
 import pytest
 import numpy as np
+import paddle
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
@@ -106,10 +107,18 @@ def test_gpu_more_bz():
         del test_suite2  # destroy class to save memory
 
 
+# skip the ocr_det_mv3_db gpu_mixed_precision_case
+if paddle.version.cuda() == "10.2":
+    cuda_skip = pytest.mark.skip(reason="unsupported CUDA version")
+else:
+    cuda_skip = pytest.mark.none
+
+
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
 @pytest.mark.gpu_more
+@cuda_skip
 def test_gpu_mixed_precision_bz1():
     """
     compared trt fp32 batch_size=1 ocr_det_mv3_db outputs with true val
@@ -156,6 +165,7 @@ def test_gpu_mixed_precision_bz1():
 
 
 @pytest.mark.jetson
+@pytest.mark.gpu
 @pytest.mark.gpu_more
 def test_jetson_gpu_more_bz():
     """

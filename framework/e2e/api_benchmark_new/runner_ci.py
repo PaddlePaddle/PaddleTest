@@ -72,13 +72,13 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         self.ci = 1
         self.uid = -1
 
-        # 查询数据库构建baseline
-        self.baseline_id = self.db.ci_select_baseline_job(
-            comment=self.baseline_comment, routine=1, ci=self.ci, md5_id=self.md5_id
-        )
-        # self.baseline_id = 123
-        self.baseline_list = self.db.select(table="case", condition_list=["jid = {}".format(self.baseline_id)])
-        self.baseline_dict = data_list_to_dict(self.baseline_list)
+        # # 查询数据库构建baseline
+        # self.baseline_id = self.db.ci_select_baseline_job(
+        #     comment=self.baseline_comment, routine=1, ci=self.ci, md5_id=self.md5_id
+        # )
+        # # self.baseline_id = 123
+        # self.baseline_list = self.db.select(table="case", condition_list=["jid = {}".format(self.baseline_id)])
+        # self.baseline_dict = data_list_to_dict(self.baseline_list)
 
         # 框架信息
         self.framework = "paddle"
@@ -95,7 +95,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         # 项目配置信息
         self.place = "cpu"
-        self.python = "python37"
+        self.python = "python3.7"
         self.enable_backward = 0
         self.yaml_info = "case_0"
         self.card = 0
@@ -120,7 +120,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # 邮件报警
         # self.email = Alarm(storage=self.storage)
 
-    def _run_main(self, all_cases, latest_id, iters):
+    def _run_main(self, all_cases, latest_id, iters, compare_switch):
         """
         对指定case运行测试
         :param all_cases: list of cases
@@ -139,6 +139,25 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             total_res_list = []
             backward_res_list = []
             best_total_res_list = []
+
+            if case_name in SKIP_DICT[platform.system()]:
+                self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+                continue
+            if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
+                self.logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
+                continue
+            if self.yaml_info == "case_0":
+                if not case_name.endswith("_0"):
+                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
+            if self.yaml_info == "case_1":
+                if case_name.endswith("_2"):
+                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
+            if self.yaml_info == "case_2":
+                if not case_name.endswith("_2"):
+                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
+                    continue
 
             forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
 
@@ -159,13 +178,14 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                         best_total_time=best_total,
                     )
 
-                compare_dict[case_name] = {
-                    "baseline_api": self.baseline_dict[case_name]["api"],
-                    "latest_api": api,
-                    "forward": forward,
-                    "backward": backward,
-                    "total": total,
-                }
+                if compare_switch:
+                    compare_dict[case_name] = {
+                        "baseline_api": self.baseline_dict[case_name]["api"],
+                        "latest_api": api,
+                        "forward": forward,
+                        "backward": backward,
+                        "total": total,
+                    }
 
             elif isinstance(forward_time_list, list):
                 forward_res_list, backward_res_list, total_res_list, best_total_res_list = self._base_statistics(
@@ -202,51 +222,54 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                     "backward": backward,
                     "best_total": best_total,
                 }
-                compare_res = data_compare(
-                    baseline_case=self.baseline_dict[case_name], latest_case=latest_case, case_name=case_name
-                )
-                compare_dict[case_name] = compare_res[case_name]
 
-                if self.double_check and double_check(res=compare_res[case_name]):
-                    for i in range(iters - 1):
-                        forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
-
-                        (
-                            forward_res_list,
-                            backward_res_list,
-                            total_res_list,
-                            best_total_res_list,
-                        ) = self._base_statistics(
-                            forward_res_list=forward_res_list,
-                            backward_res_list=backward_res_list,
-                            total_res_list=total_res_list,
-                            best_total_res_list=best_total_res_list,
-                            forward_time_list=forward_time_list,
-                            backward_time_list=backward_time_list,
-                            total_time_list=total_time_list,
-                        )
-
-                    # if bool(forward_res_list) and bool(backward_res_list) and bool(total_res_list):
-                    forward = self.statistics.best(data_list=forward_res_list)
-                    backward = self.statistics.best(data_list=backward_res_list)
-                    total = self.statistics.best(data_list=total_res_list)
-                    best_total = self.statistics.best(data_list=best_total_res_list)
-
-                    latest_case["jid"] = latest_id
-                    latest_case["case_name"] = case_name
-                    latest_case["api"] = api
-                    latest_case["result"] = {
-                        "api": api,
-                        "yaml": case_name,
-                        "forward": forward,
-                        "total": total,
-                        "backward": backward,
-                        "best_total": best_total,
-                    }
+                if compare_switch:
                     compare_res = data_compare(
                         baseline_case=self.baseline_dict[case_name], latest_case=latest_case, case_name=case_name
                     )
                     compare_dict[case_name] = compare_res[case_name]
+
+                    if self.double_check and double_check(res=compare_res[case_name]):
+                        for i in range(iters - 1):
+                            self.logger.get_log().warning("start double check {} time.".format(i))
+                            forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
+
+                            (
+                                forward_res_list,
+                                backward_res_list,
+                                total_res_list,
+                                best_total_res_list,
+                            ) = self._base_statistics(
+                                forward_res_list=forward_res_list,
+                                backward_res_list=backward_res_list,
+                                total_res_list=total_res_list,
+                                best_total_res_list=best_total_res_list,
+                                forward_time_list=forward_time_list,
+                                backward_time_list=backward_time_list,
+                                total_time_list=total_time_list,
+                            )
+
+                        # if bool(forward_res_list) and bool(backward_res_list) and bool(total_res_list):
+                        forward = self.statistics.best(data_list=forward_res_list)
+                        backward = self.statistics.best(data_list=backward_res_list)
+                        total = self.statistics.best(data_list=total_res_list)
+                        best_total = self.statistics.best(data_list=best_total_res_list)
+
+                        latest_case["jid"] = latest_id
+                        latest_case["case_name"] = case_name
+                        latest_case["api"] = api
+                        latest_case["result"] = {
+                            "api": api,
+                            "yaml": case_name,
+                            "forward": forward,
+                            "total": total,
+                            "backward": backward,
+                            "best_total": best_total,
+                        }
+                        compare_res = data_compare(
+                            baseline_case=self.baseline_dict[case_name], latest_case=latest_case, case_name=case_name
+                        )
+                        compare_dict[case_name] = compare_res[case_name]
 
                 self.db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)
             else:
@@ -259,6 +282,14 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
+        # 查询数据库构建baseline
+        self.baseline_id = self.db.ci_select_baseline_job(
+            comment=self.baseline_comment, routine=1, ci=self.ci, md5_id=self.md5_id
+        )
+        # self.baseline_id = 123
+        self.baseline_list = self.db.select(table="case", condition_list=["jid = {}".format(self.baseline_id)])
+        self.baseline_dict = data_list_to_dict(self.baseline_list)
+
         latest_id = self.db.ci_insert_job(
             commit=self.commit,
             version=self.version,
@@ -282,7 +313,9 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             update_time=self.now_time,
         )
 
-        compare_dict, error_dict = self._run_main(all_cases=self.all_cases, latest_id=latest_id, iters=self.check_iters)
+        compare_dict, error_dict = self._run_main(
+            all_cases=self.all_cases, latest_id=latest_id, iters=self.check_iters, compare_switch=True
+        )
 
         if bool(error_dict):
             self.db.ci_update_job(id=latest_id, status="error", update_time=self.now_time)
@@ -292,9 +325,21 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         # print("compare_dict is: ", compare_dict)
         api_grade = ci_level_reveal(compare_dict)
+        del api_grade["equal"]
+        del api_grade["better"]
+        print(
+            "以下为pr{}引入之后，api调度性能相对于baseline的变化。worse表示性能下降超过30%的api，doubt表示性能下降为15%~30%之间的api".format(
+                self.AGILE_PULL_ID
+            )
+        )
         print(api_grade)
+        print(
+            "详情差异请点击以下链接查询: http://paddletest.baidu-int.com:8081/#/paddle/benchmark/apiBenchmark/report/{}&{}".format(
+                latest_id, self.baseline_id
+            )
+        )
 
-    def _baseline_insert(self):
+    def _baseline_insert(self, wheel_link):
         """
 
         :return:
@@ -316,13 +361,16 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             enable_backward=self.enable_backward,
             python=self.python,
             yaml_info=self.yaml_info,
-            wheel_link=self.wheel_link,
+            # wheel_link=self.wheel_link,
+            wheel_link=wheel_link,
             description=json.dumps(self.description),
             create_time=self.now_time,
             update_time=self.now_time,
         )
 
-        cases_dict, error_dict = self._run_main(all_cases=self.all_cases, latest_id=job_id, iters=1)
+        cases_dict, error_dict = self._run_main(
+            all_cases=self.all_cases, latest_id=job_id, iters=1, compare_switch=False
+        )
 
         if bool(error_dict):
             self.db.ci_update_job(id=job_id, status="error", update_time=self.now_time)
@@ -334,8 +382,11 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--yaml", type=str, help="input the yaml path")
+    parser.add_argument("--baseline_whl_link", type=str, default=None, help="only be used to insert baseline data")
     args = parser.parse_args()
-
-    api_bm = ApiBenchmarkCI(yaml_path="./../yaml/test0.yml")
-    api_bm._run_ci()
-    # api_bm._baseline_insert()
+    # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
+    api_bm = ApiBenchmarkCI(yaml_path=args.yaml)
+    if bool(args.baseline_whl_link):
+        api_bm._baseline_insert(wheel_link=args.baseline_whl_link)
+    else:
+        api_bm._run_ci()

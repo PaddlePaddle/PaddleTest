@@ -53,18 +53,21 @@ class PaddleSlim_Build(Model_Build):
             for file_name in os.listdir("cases"):
                 if ".yaml" in file_name:
                     self.clas_model_list.append(file_name.strip().replace(":", "/"))
-        
+
         # 数据原存储路径
         self.dataset_org = str(args.dataset_org)
         # 数据软链的路径
         self.dataset_target = str(args.dataset_target)
         # 使用数据服务时，将被用于更新dataset_org参数
         self.mount_path = str(os.getenv("mount_path"))
-        #linux 环境通过use_data_cfs控制是否使用数据服务（True：使用）
+        # linux 环境通过use_data_cfs控制是否使用数据服务（True：使用）
         self.use_data_cfs = str(args.use_data_cfs)
         # windows、mac、liunx系统下使用数据服务
-        if ("Windows" in platform.system() or "Darwin" in platform.system()) and os.path.exists(self.mount_path) \
-            or (os.path.exists(self.mount_path) and self.use_data_cfs == "True"):
+        if (
+            ("Windows" in platform.system() or "Darwin" in platform.system())
+            and os.path.exists(self.mount_path)
+            or (os.path.exists(self.mount_path) and self.use_data_cfs == "True")
+        ):
             logger.info("#### mount_path diy_build is {}".format(self.mount_path))
             # 设置dataset_org为mount_path
             if os.listdir(self.mount_path) != []:
@@ -73,7 +76,7 @@ class PaddleSlim_Build(Model_Build):
                 self.dataset_target = os.path.join(os.getcwd(), self.reponame, self.data_path_endswith)
                 os.environ["dataset_target"] = self.dataset_target
 
-        # 将dataset_org 软链到dataset_targ
+            # 将dataset_org 软链到dataset_targ
             exit_code = os.symlink(self.dataset_org, os.path.join(self.reponame, self.dataset_target))
             if exit_code:
                 logger.info("#### link_dataset failed")
@@ -83,7 +86,7 @@ class PaddleSlim_Build(Model_Build):
         安装依赖包
         """
         path_now = os.getcwd()
-        os.chdir("PaddleSlim") 
+        os.chdir("PaddleSlim")
         logger.info("install required whl")
         os.system("python -m pip uninstall paddleslim -y")
         os.system("python -m pip uninstall paddlepaddle -y")
@@ -93,15 +96,17 @@ class PaddleSlim_Build(Model_Build):
         os.system("python -m pip install --user sklearn==0.0")
         os.system("python -m pip install --user numpy==1.23.1")
         os.system("python -m pip install --user -U paddleclas")
-        os.system("python -m pip install --user -U paddleseg==2.5.0")
+        # os.system("python -m pip install --user -U paddleseg==2.5.0")
         os.system("python -m pip install --user -U paddledet")
-        #os.system("python -m pip install --user -U paddlenlp")
+        # os.system("python -m pip install --user -U paddlenlp")
         os.system("python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
         os.system("python -m pip install --user -U x2paddle==1.3.9")
         cmd_return = os.system("python -m pip install {}".format(self.paddle_whl))
         if cmd_return:
             logger.info("repo {} python -m pip install paddle failed".format(self.reponame))
         os.system("python -m pip install -r requirements.txt")
+        # 固定distributed版本
+        os.system("python -m pip install distributed==2023.5.0")
         os.system("python -m pip install faiss")
         os.system("python -m pip install wheel")
         os.system("python -m pip install twine")
@@ -113,6 +118,11 @@ class PaddleSlim_Build(Model_Build):
             cmd_setup = os.system("python setup.py install")
             if cmd_setup:
                 logger.info("repo {} python -m pip install paddleslim failed with setup".format(self.reponame))
+        os.chdir(path_now)
+        # 克隆seg库并安装
+        os.system("git clone -b develop https://github.com/PaddlePaddle/PaddleSeg.git")
+        os.chdir("PaddleSeg")
+        os.system("python -m pip install -v -e .")
         os.chdir(path_now)
         return 0
 

@@ -1,3 +1,4 @@
+# 其它 yaml要严格保证train的顺序, 否则会出现参数倒置的现象
 case:
   linux:
     base: ./base/ImageNet_base.yaml

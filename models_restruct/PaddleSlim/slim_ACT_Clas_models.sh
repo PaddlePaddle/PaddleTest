@@ -1,14 +1,14 @@
 # $1 精度允许diff范围 $2 本地待上传目录 $3 上传到bos路径 $4 slim commit
 print_info(){
 if [ $1 -ne 0 ];then
-    mv ${log_path}/$2 ${log_path}/FAIL_$2.log
+    mv ${log_path}/$2 ${log_path}/$2.log
     echo ---${log_path}/FAIL_$2---
     echo "fail log as follow"
-    cat  ${log_path}/FAIL_$2.log
+    cat  ${log_path}/$2.log
 else
-    mv ${log_path}/$2 ${log_path}/SUCCESS_$2.log
+    mv ${log_path}/$2 ${log_path}/$2.log
     echo ---${log_path}/SUCCESS_$2---
-    grep -i 'Memory Usage' ${log_path}/SUCCESS_$2.log
+    grep -i 'Memory Usage' ${log_path}/$2.log
 fi
 }
 
@@ -45,7 +45,7 @@ echo ---infer models downloaded-----
 
 wget_infer_models
 
-# $1 模型名称、 $2 本次回归精度、$3 精度base值、 $4 精度允许diff范围 
+# $1 模型名称、 $2 本次回归精度、$3 精度base值、 $4 精度允许diff范围
 computer_diff_precision(){
 #本次回归实际精度diff
 diff=`echo $3-$2 | bc`
@@ -78,9 +78,9 @@ for model in $(echo ${!dic[*]});do
         --save_dir=./${model}_act_qat/ \
         --config_path=./configs/${model}/qat_dis.yaml > ${log_path}/${model}_act_qat 2>&1 )
     print_info $? ${model}_act_qat
-    model_log="${log_path}/SUCCESS_${model}_act_qat.log"
+    model_log="${log_path}/${model}_act_qat.log"
     if [ -f "${model_log}" ];then
-        grep -i 'The metric of final model is ' ${model_log} | awk -F 'is ' '{print $2}' | awk -F ' samples/s' '{print $1}' > test.log &&  quota=`tail -1 test.log` 
+        grep -i 'The metric of final model is ' ${model_log} | awk -F 'is ' '{print $2}' | awk -F ' samples/s' '{print $1}' > test.log &&  quota=`tail -1 test.log`
         echo ----model_name:${model}
         echo ----quota:${quota}
         echo ----base_value:${base_value}
