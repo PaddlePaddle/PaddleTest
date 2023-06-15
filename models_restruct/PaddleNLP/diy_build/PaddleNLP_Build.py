@@ -114,7 +114,7 @@ class PaddleNLP_Build(Model_Build):
         os.system("python -m pip uninstall protobuf -y")
         os.system("python -m pip uninstall protobuf -y")
         os.system("python -m pip install protobuf==3.20.2")
-        
+
 
         import paddle
 

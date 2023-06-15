@@ -32,7 +32,7 @@ case:
           - --fp16_opt_level O2 \
           - --recompute \
           - --tensor_parallel_degree 2
-    eval: 
+    eval:
       -
         name: eval
         path: examples/language_model/bloom
@@ -41,15 +41,15 @@ case:
           - --model_name_or_path checkpoints/bloom-560m/checkpoint-20
           - --save_onepiece_model_path ./save
     infer: skipped
-    export: 
+    export:
       -
         name: export
         path: examples/language_model/bloom
         cmd: export_generation_model.py
         params:
-        - --model_name_or_path ./save  
+        - --model_name_or_path ./save
         - --output_path inference/bloom
-    predict: 
+    predict:
       -
         name: predict
         path: examples/language_model/bloom

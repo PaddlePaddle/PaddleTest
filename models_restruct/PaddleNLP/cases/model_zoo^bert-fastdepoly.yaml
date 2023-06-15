@@ -4,20 +4,20 @@ case:
     eval: skipped
     infer: skipped
     export: skipped
-    predict: 
+    predict:
       -
         name: fastdepoly-cpu
         path: model_zoo/bert/deploy/python
-        cmd: python seq_cls_infer.py 
+        cmd: python seq_cls_infer.py
         params:
-          - --model_dir ../../infer_model/ 
+          - --model_dir ../../infer_model/
           - --device cpu --backend paddle
       -
         name: fastdepoly-gpu
         path: model_zoo/bert/deploy/python
-        cmd: python seq_cls_infer.py 
+        cmd: python seq_cls_infer.py
         params:
-          - --model_dir ../../infer_model/ 
+          - --model_dir ../../infer_model/
           - --device gpu --backend paddle
   windows:
     train: skipped
@@ -25,7 +25,7 @@ case:
     infer: skipped
     export: skipped
     predict: skipped
-    
+
   windows_cpu:
     train: skipped
     eval: skipped

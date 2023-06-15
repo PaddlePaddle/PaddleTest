@@ -4,18 +4,18 @@ case:
       -
         name: FD-GPU
         path: model_zoo/ernie-m/deploy/python
-        cmd: python seq_cls_infer.py 
+        cmd: python seq_cls_infer.py
         params:
-          - --model_dir ../../finetuned_models/export/model 
-          - --device gpu 
+          - --model_dir ../../finetuned_models/export/model
+          - --device gpu
           - --backend paddle
       -
         name: FD-CPU
         path: model_zoo/ernie-m/deploy/python
-        cmd: python seq_cls_infer.py 
+        cmd: python seq_cls_infer.py
         params:
-          - --model_dir ../../finetuned_models/export/ 
-          - --device cpu 
+          - --model_dir ../../finetuned_models/export/
+          - --device cpu
           - --backend paddle
     eval: skipped
     infer: skipped
