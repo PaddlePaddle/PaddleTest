@@ -11,7 +11,6 @@ import tarfile
 import argparse
 import numpy as np
 import yaml
-import wget
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
