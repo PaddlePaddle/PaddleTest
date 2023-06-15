@@ -111,7 +111,7 @@ class PaddleSpeech_Start(object):
             path_now = os.getcwd()
             os.chdir(self.reponame)
             os.chdir(self.model_path)
-            if self.category == "am":
+            if self.category == "am" and "convergence" not in self.model:
                 # am newTacotron2 speedyspeech
                 os.system(
                     'sed -i "s/max_epoch: 200/max_epoch: 1/g;s/batch_size: 64/batch_size: 32/g" ./conf/default.yaml'
@@ -123,7 +123,7 @@ class PaddleSpeech_Start(object):
                 os.system(
                     'sed -i "s/max_epoch: 500/max_epoch: 1/g;s/batch_size: 16/batch_size: 4/g"  ./conf/default.yaml'
                 )
-            elif self.model != "waveflow":
+            elif self.model != "waveflow" and "convergence" not in self.model:
                 # voc parallelwavegan
                 os.system(
                     'sed -i "s/train_max_steps: 400000/train_max_steps: 10/g; \
@@ -157,6 +157,14 @@ class PaddleSpeech_Start(object):
                      s/eval_interval_steps: 1000/eval_interval_steps: 10/g; \
                      s/batch_size: 64/batch_size: 32/g"  ./conf/default.yaml'
                 )
+            elif  "convergence" in self.model:
+                if "fastspeech2" in self.model:
+                    #fastspeech2: 2cards
+                    os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
+                else:
+                    # speedyspeech: 1cards
+                    os.system('sed -i "s/python3/python/g;s/ngpu=2/ngpu=1/g" ./local/train.sh')
+
 
             # delete exp
             if os.path.exists("exp"):
