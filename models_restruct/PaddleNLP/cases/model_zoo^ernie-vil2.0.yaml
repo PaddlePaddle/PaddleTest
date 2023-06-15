@@ -44,6 +44,7 @@ case:
           - --text-batch-size=32
           - --context-length=52
     infer:
+      -
         name: infer_make_topk
         path: model_zoo/ernie-vil2.0
         cmd: python -u extract_features.py
@@ -53,12 +54,14 @@ case:
           - --top-k=10
           - --eval-batch-size=32768
           - --output="$Flickr30k-CN/valid_predictions.jsonl"
+      -
         name: infer_transform_ir_annotation_to_tr
         path: model_zoo/ernie-vil2.0
         cmd: python utils/transform_ir_annotation_to_tr.py
         params:
           - --input Flickr30k-CN/valid_texts.jsonl
     export:
+      -
         name: export
         path: model_zoo/ernie-vil2.0
         cmd: export_model.py --model_path=output_pd/checkpoint-2/

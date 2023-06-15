@@ -7,7 +7,8 @@ case:
         cmd: python run_seq_cls.py
         params:
           - --model_name_or_path ernie-3.0-medium-zh
-          - --dataset afqmc --output_dir ./best_models
+          - --dataset afqmc 
+          - --output_dir ./best_models
           - --export_model_dir best_models/
           - --do_train
           - --do_eval
