@@ -51,6 +51,10 @@ function DockerImages () {
             echo "Selected Centos: Cuda118"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.8-cudnn8.6-trt8.5-gcc8.2"
             ;;
+        "Cuda120")
+            echo "Selected Centos: Cuda118"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.0-cudnn8.9-trt8.6-gcc12.2"
+            ;;
         *)
             DOCKER_EXIT_CODE=101
             ;;
