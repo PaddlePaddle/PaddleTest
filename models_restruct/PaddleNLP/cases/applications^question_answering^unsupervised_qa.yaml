@@ -244,7 +244,7 @@ case:
           - --batch_size=4
           - --max_seq_len=512
           - --limit=0.01
-        name: filtration_evaluate
+        name: filtration_evaluate_win
         path: applications/question_answering/unsupervised_qa
         cmd: python finetune/answer_extraction_and_roundtrip_filtration/evaluate.py
         params:
