@@ -106,7 +106,7 @@ case:
           - --device=gpu
     eval:
       -
-        name: answer_extraction_evaluate
+        name: answer_extraction
         path: applications/question_answering/unsupervised_qa
         cmd: python finetune/answer_extraction_and_roundtrip_filtration/evaluate.py
         params:
@@ -115,7 +115,7 @@ case:
           - --batch_size=16
           - --max_seq_len=512
           - --limit=0.01
-        name: filtration_evaluate
+        name: filtration
         path: applications/question_answering/unsupervised_qa
         cmd: python finetune/answer_extraction_and_roundtrip_filtration/evaluate.py
         params:
