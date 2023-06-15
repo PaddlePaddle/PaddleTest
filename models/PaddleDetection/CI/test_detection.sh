@@ -1,16 +1,10 @@
 !/bin/bash
-mkdir run_env_py38;
-ln -s $(which python3.8) run_env_py38/python;
-export PATH=$(pwd)/run_env_py38:${PATH};
 python -m pip install --upgrade pip
 python -m pip install --upgrade setuptools
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 export no_proxy=bcebos.com;
 export PYTHONPATH=`pwd`:$PYTHONPATH;
-# apt-get update
-# apt-get install ffmpeg -y
-# python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
 python -m pip install Cython --ignore-installed;
 python -m pip install cython_bbox --ignore-installed;
@@ -45,15 +39,11 @@ wget ${paddle_inference}
 tar xvf paddle_inference.tgz
 # 跟镜像有关
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
+sed -i "s|WITH_KEYPOINT=OFF|WITH_KEYPOINT=ON|g" scripts/build.sh
+sed -i "s|WITH_MOT=OFF|WITH_MOT=ON|g" scripts/build.sh
 sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
 sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh
-sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib64|g" scripts/build.sh
-# sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
-# sed -i "s|WITH_KEYPOINT=OFF|WITH_KEYPOINT=ON|g" scripts/build.sh
-# sed -i "s|WITH_MOT=OFF|WITH_MOT=ON|g" scripts/build.sh
-# sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
-# sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh
-# sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
+sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
 sh scripts/build.sh
 cd ../..
 #compile op
