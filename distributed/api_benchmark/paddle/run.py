@@ -57,7 +57,7 @@ def compare(case, res_dict):
     f = open("./base_value", encoding="utf-8")
     lines = f.readlines()
     for line in lines:
-        if line.find("\"" + case + "\"") != -1:
+        if line.find("'" + case + "'") != -1:
             base_dict = eval(line.strip("\n"))
 
     diff_dict = {}
@@ -85,7 +85,7 @@ def gather_dict(case):
         f = open(value, encoding="utf-8")
         lines = f.readlines()
         for line in lines:
-            if line.find("\"" + case + "\"") != -1:
+            if line.find("'" + case + "'") != -1:
                 all_dict[key] = eval(line.strip("\n"))[case]
                 for num, item in all_dict[key].items():
                     all_dict[key][num]["time_" + key] = all_dict[key][num].pop("time")
@@ -129,6 +129,7 @@ def main():
                 for i in range(loops):
                     pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                     out, err = pro.communicate()
+                    print(out)
                     pro.wait()
                     pro.returncode == 0
                 # 求均值，写入文件log_avg
