@@ -4,7 +4,7 @@ cases=`find ../config/$1 -name "*.yaml" | sort`
 echo $cases
 ignoe=""
 bug=0
-#python${py_version} change_model.py
+python${py_version} change_model.py
 echo "============ failed cases =============" > result.txt
 for file_dir in ${cases}
 do
