@@ -1,4 +1,5 @@
 import yaml
+import os
 import subprocess
 
 api_list = [
@@ -47,6 +48,8 @@ def get_average(file_loops, case):
     with open("log_avg", "a", encoding="utf8") as f:
         f.write(str(avg_res) + "\n")
         f.flush()
+
+    os.system("rm -rf ./log")
     return avg_res
 
 
@@ -125,16 +128,15 @@ def main():
                 print(cmd)
                 for i in range(loops):
                     pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                    # out = pro.stdout.read()
-                    # with open('log_temp', 'a', encoding='utf8') as f:
-                    #     f.write(out+"\n")
+                    out, err = pro.communicate()
+                    pro.wait()
+                    pro.returncode == 0
                 # 求均值，写入文件log_avg
                 avg_res = get_average("./log/workerlog.0", case)
                 # 求diff，写入文件log_diff
                 # diff = compare(case, avg_res)
                 # 得出汇总结果，写入log_result
                 # result = gather_dict(case)
-                os.system("rm -rf ./log")
 
 
 if __name__ == "__main__":
