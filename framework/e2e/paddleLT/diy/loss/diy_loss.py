@@ -16,12 +16,16 @@ def naive_loss_list(logit, loss_list):
 
 def mean_loss(logit):
     """base mean loss"""
-    if isinstance(logit, list):
+    if isinstance(logit, (list, tuple)):
         tmp = 0.0
+        count = 0
         for l in logit:
-            mean = paddle.mean(l)
-            tmp += mean
-        loss = tmp / len(logit)
+            if isinstance(l, paddle.Tensor):
+                mean = paddle.mean(l)
+                tmp += mean
+                count += 1
+        # loss = tmp / len(logit)
+        loss = tmp / count
         return loss
     elif isinstance(logit, paddle.Tensor):
         loss = paddle.mean(logit)
