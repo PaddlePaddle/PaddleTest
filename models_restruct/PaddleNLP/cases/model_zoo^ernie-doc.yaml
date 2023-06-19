@@ -71,7 +71,7 @@ case:
         params:
           - --model_name_or_path ernie-doc-base-zh
           - --dataset dureader_robust
-          - --batch_size 4
+          - --batch_size 2
           - --save_steps 2
           - --max_steps 2
           - --logging_steps 1
@@ -178,7 +178,7 @@ case:
         params:
           - --model_name_or_path ernie-doc-base-zh
           - --dataset dureader_robust
-          - --batch_size 4
+          - --batch_size 2
           - --save_steps 2
           - --max_steps 2
           - --logging_steps 1

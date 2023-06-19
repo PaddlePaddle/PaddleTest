@@ -38,7 +38,7 @@ class PaddleNLP_End(object):
     def drow_picture(self, model_name, baseline_info, strategy_info, metrics):
         """drowing loss/ips curve"""
         num = 1
-
+        picture_name = (model_name.replace("model_zoo^", "") + "_" + metrics).upper()
         for key, value in strategy_info.items():
             if re.compile(metrics).findall(key):
                 plt.subplot(1, len(strategy_info.items()) // 2, num)
@@ -54,7 +54,6 @@ class PaddleNLP_End(object):
                 if num == 1:
                     plt.xlabel("step")
                     plt.ylabel(metrics)
-                    picture_name = (model_name.replace("model_zoo^", "") + "_" + metrics).upper()
                     plt.title(picture_name)
                 num = num + 1
         if not os.path.exists("picture"):
@@ -109,7 +108,7 @@ class PaddleNLP_End(object):
                 strategy_info[strategy_loss] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
                 strategy_info[strategy_ips] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
             else:
-                logger.info("this pipeline not convergence task ")
+                logger.info("this log file not convergence task ")
 
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics="loss")
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics="ips")
@@ -134,7 +133,8 @@ def run():
     执行入口
     """
     platform = os.environ["system"]
-    if platform == "linux_convergence":
+    all = re.compile("All").findall(os.environ["AGILE_PIPELINE_NAME"])
+    if platform == "linux_convergence" and not all:
         model = PaddleNLP_End()
         model.build_end()
         return 0

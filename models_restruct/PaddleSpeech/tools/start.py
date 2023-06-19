@@ -111,7 +111,7 @@ class PaddleSpeech_Start(object):
             path_now = os.getcwd()
             os.chdir(self.reponame)
             os.chdir(self.model_path)
-            if self.category == "am":
+            if self.category == "am" and "convergence" not in self.model:
                 # am newTacotron2 speedyspeech
                 os.system(
                     'sed -i "s/max_epoch: 200/max_epoch: 1/g;s/batch_size: 64/batch_size: 32/g" ./conf/default.yaml'
@@ -123,7 +123,7 @@ class PaddleSpeech_Start(object):
                 os.system(
                     'sed -i "s/max_epoch: 500/max_epoch: 1/g;s/batch_size: 16/batch_size: 4/g"  ./conf/default.yaml'
                 )
-            elif self.model != "waveflow":
+            elif self.model != "waveflow" and "convergence" not in self.model:
                 # voc parallelwavegan
                 os.system(
                     'sed -i "s/train_max_steps: 400000/train_max_steps: 10/g; \
@@ -157,6 +157,13 @@ class PaddleSpeech_Start(object):
                      s/eval_interval_steps: 1000/eval_interval_steps: 10/g; \
                      s/batch_size: 64/batch_size: 32/g"  ./conf/default.yaml'
                 )
+            elif "convergence" in self.model:
+                if "fastspeech2" in self.model:
+                    # fastspeech2: 2cards
+                    os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
+                else:
+                    # speedyspeech: 1cards
+                    os.system('sed -i "s/python3/python/g;s/ngpu=2/ngpu=1/g" ./local/train.sh')
 
             # delete exp
             if os.path.exists("exp"):
@@ -301,12 +308,29 @@ waveflow_ljspeech_ckpt_0.3.zip"
             logger.info("start gengrate_asr_test_case")
             self.gengrate_test_case_asr()
         else:
-            logger.info("start prepare_data")
-            self.prepare_data()
-            logger.info("start prepare_config_params")
-            self.prepare_config_params()
-            logger.info("start gengrate_test_case")
-            self.gengrate_test_case()
+            if "convergence" not in self.model:
+                logger.info("start prepare_data")
+                self.prepare_data()
+                logger.info("start prepare_config_params")
+                self.prepare_config_params()
+                logger.info("start gengrate_test_case")
+                self.gengrate_test_case()
+            else:
+                # fastspeech2: 2cards
+                os.system('sed -i "s/python3/python/g;s/ngpu=1/ngpu=2/g" ./local/train.sh')
+                # speedyspeech: 1cards
+                os.system('sed -i "s/python3/python/g;s/ngpu=2/ngpu=1/g" ./local/train.sh')
+                # data
+                if os.path.exists("/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"):
+                    src_path = "/ssd2/ce_data/PaddleSpeech_t2s/preprocess_data"
+                else:
+                    src_path = "/home/data/cfs/models_ce/PaddleSpeech_t2s/preprocess_data"
+
+                # fastspeech2  speedyspeech
+                self.data_path = self.model.split("_")[0]
+                if not os.path.exists("dump") and (self.model != "waveflow"):
+                    os.symlink(os.path.join(src_path, self.data_path, "dump"), "dump")
+
         os.environ[self.reponame] = json.dumps(self.env_dict)
         for k, v in self.env_dict.items():
             os.environ[k] = v

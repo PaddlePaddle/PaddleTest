@@ -1,0 +1,72 @@
+case:
+  linux:
+    train:
+      -
+        name: multi
+        path: examples/language_model/glm
+        cmd: python finetune_generation.py
+        params:
+          - --model_name_or_path THUDM/glm-large-chinese
+          - --num_train_epochs 4
+          - --learning_rate 3e-5
+          - --warmup_ratio 0.06
+          - --weight_decay 0.1
+          - --label_smoothing 0.1
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
+          - --eval_steps 2
+          - --output_dir ./checkpoints/glm-large-chinese
+          - --src_length 608
+          - --tgt_length 160
+          - --min_tgt_length 55
+          - --length_penalty 0.7
+          - --no_repeat_ngram_size 3
+          - --num_beams 5
+          - --select_topk True
+          - --per_device_eval_batch_size 2
+          - --per_device_train_batch_size 2
+          - --max_grad_norm 1.0
+          - --lr_scheduler_type linear
+          - --fp16
+          - --fp16_opt_level O2
+          - --recompute
+          - --do_train
+          - --do_eval
+    eval:
+      -
+        name: eval
+        path: examples/language_model/glm
+        cmd: python predict_generation.py
+        params:
+          -  --model_name_or_path  ./checkpoints/glm-large-chinesee
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/language_model/glm
+        cmd: export_generation_model.py
+        params:
+          - --model_name_or_path ./checkpoints/glm-large-chinese
+          - --output_path ./checkpoints/infer/glm
+    predict: skipped
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

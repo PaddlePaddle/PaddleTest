@@ -1,0 +1,75 @@
+case:
+  linux_convergence:
+    train:
+      -
+        name: bert_prepare
+        path: model_zoo/bert/data
+        cmd: wget -q https://bj.bcebos.com/paddlenlp/datasets/benchmark_wikicorpus_en_seqlen128.tar && tar -xf benchmark_wikicorpus_en_seqlen128.tar
+      -
+        name: bert_pretrain
+        path: model_zoo/bert
+        cmd: python run_pretrain.py
+        params:
+          - --max_predictions_per_seq 20
+          - --learning_rate 1e-4
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --output_dir ./dy2st/
+          - --logging_steps 1
+          - --save_steps 20000
+          - --model_type bert
+          - --fuse_transformer false
+          - --input_dir ./data/wikicorpus_en_seqlen128
+          - --model_name_or_path bert-base-uncased
+          - --max_step 25000
+          - --batch_size 128
+          - --seed 42
+          - --to_static True
+          - --use_amp True
+          - --amp_level O2
+      -
+        name: ernie_pretrain
+        path: tests/
+        cmd: python test_tipc/train.py
+        params:
+          - --model ernie3_for_sequence_classification
+          - --optimizer adamw
+          - --lr_scheduler linear_decay_with_warmup
+          - --learning_rate 2e-5
+          - --max_grad_norm 1.0
+          - --model_name_or_path ernie-3.0-base-zh
+          - --pad_to_max_seq_len
+          - --max_seq_len 128
+          - --logging_steps 1
+          - --seed 42
+          - --task_name tnews
+          - --to_static
+          - --max_steps=50000
+          - --batch_size=16
+          - --use_amp=True
+          - --amp_level="O1"
+          - --num_workers=0
+      -
+        name: gpt_prepare
+        path: model_zoo/gpt
+        cmd: mkdir data && cd data && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
+      -
+        name: gpt_pretrain
+        path: model_zoo/gpt
+        cmd: python run_pretrain.py
+        params:
+          - --model_type gpt
+          - --model_name_or_path gpt2-en
+          - --input_dir "./data"
+          - --output_dir "output_base"
+          - --weight_decay 0.01
+          - --grad_clip 1.0
+          - --max_steps 150000
+          - --save_steps 100000
+          - --decay_steps 320000
+          - --warmup_rate 0.01
+          - --micro_batch_size 2
+          - --device gpu
+          - --to_static
+          - --seed 100
