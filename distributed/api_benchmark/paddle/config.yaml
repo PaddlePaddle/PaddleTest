@@ -87,11 +87,11 @@ all_reduce:
     sync_op: True # 默认配置
     use_calc_stream: False # 默认配置
 
-    all_reduce_stream_sync_calc:
-      desc: "paddle.distributed.stream.all_reduce(data, op=ReduceOp.SUM, sync_op=True, use_calc_stream=True)"
-      is_legacy: False
-      sync_op: True
-      use_calc_stream: True
+  all_reduce_stream_sync_calc:
+    desc: "paddle.distributed.stream.all_reduce(data, op=ReduceOp.SUM, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
 
   # all_reduce_stream:
   #   # 与all_reduce_legacy配置相同，无需重复执行
@@ -308,26 +308,26 @@ broadcast:
   #   use_calc_stream: True
 
 send_recv:
-  send_recv_legacy_calc:
-    desc: "paddle.distributed.send(tensor, dst, use_calc_stream=True)"
+  send_recv_legacy_sync:
+    desc: "paddle.distributed.send(tensor, dst, sync_op=True)"
     is_legacy: True
-    sync_op: True # 该模式下无用
-    use_calc_stream: True # 默认配置
+    sync_op: True # 默认配置
+    use_calc_stream: False # 该模式下无用
   
   send_recv_legacy:
-    desc: "paddle.distributed.send(tensor, dst, use_calc_stream=False)"
+    desc: "paddle.distributed.send(tensor, dst, sync_op=False)"
     is_legacy: True
-    sync_op: True # 该模式下无用
-    use_calc_stream: False # 默认配置
+    sync_op: False
+    use_calc_stream: False # 该模式下无用
   
   send_recv_stream_sync:
-    desc: "paddle.distributed.stream.send(tensor, dst,  sync_op=True, use_calc_stream=False))"
+    desc: "paddle.distributed.stream.send(tensor, dst, sync_op=True, use_calc_stream=False))"
     is_legacy: False
     sync_op: True # 默认配置
     use_calc_stream: False # 默认配置
 
   send_recv_stream_sync_calc:
-    desc: "paddle.distributed.stream.send(tensor, dst,  sync_op=True, use_calc_stream=True)"
+    desc: "paddle.distributed.stream.send(tensor, dst, sync_op=True, use_calc_stream=True)"
     is_legacy: False
     sync_op: True # 默认配置
     use_calc_stream: True

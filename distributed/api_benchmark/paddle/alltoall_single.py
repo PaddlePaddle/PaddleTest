@@ -64,10 +64,10 @@ def get_res(case, config):
                 paddle.device.cuda.synchronize()
                 cost = (time.perf_counter() - start) / epochs
             else:
-                in_split_sizes = [i + 1 for i in range(n_ele)]
-                out_split_sizes = [rank + 1 for i in range(n_ele)]
-                data = paddle.ones([sum(in_split_sizes), n_ele], dtype="float32") * rank
-                output = paddle.empty([(rank + 1) * n_ele, n_ele], dtype="float32")
+                in_split_sizes = [i + 1 for i in range(devices)]
+                out_split_sizes = [rank + 1 for i in range(devices)]
+                data = paddle.ones([sum(in_split_sizes), n_ele], dtype='float32') * rank
+                output = paddle.empty([(rank + 1) * devices, n_ele], dtype='float32')
 
                 # warmup
                 for i in range(warms):
@@ -94,10 +94,10 @@ def get_res(case, config):
                 paddle.device.cuda.synchronize()
                 cost = (time.perf_counter() - start) / epochs
             else:
-                in_split_sizes = [i + 1 for i in range(n_ele)]
-                out_split_sizes = [rank + 1 for i in range(n_ele)]
-                data = paddle.ones([sum(in_split_sizes), n_ele], dtype="float32") * rank
-                output = paddle.empty([(rank + 1) * n_ele, n_ele], dtype="float32")
+                in_split_sizes = [i + 1 for i in range(devices)]
+                out_split_sizes = [rank + 1 for i in range(devices)]
+                data = paddle.ones([sum(in_split_sizes), n_ele], dtype='float32') * rank
+                output = paddle.empty([(rank + 1) * devices, n_ele], dtype='float32')
 
                 # warmup
                 for i in range(warms):
@@ -109,7 +109,7 @@ def get_res(case, config):
                 start = time.perf_counter()
                 for i in range(epochs):
                     dist.stream.alltoall_single(
-                        out_tensor_list, tensor_list, sync_op=sync_op, use_calc_stream=use_calc_stream
+                        output, data, out_split_sizes, in_split_sizes, sync_op=sync_op, use_calc_stream=use_calc_stream
                     )
                 paddle.device.cuda.synchronize()
                 cost = (time.perf_counter() - start) / epochs

@@ -44,9 +44,9 @@ def get_res(case, config):
 
         if is_legacy == True:
             tensor_list = [
-                paddle.to_tensor([0] * n_ele, 'float32') for i in range(devices),
-                paddle.to_tensor([1] * n_ele, 'float32') for i in range(devices)
-            ]
+                    paddle.to_tensor([0] * n_ele, 'float32')
+                    for i in range(devices)
+                ]
             out_tensor_list = []
             # warmup
             for i in range(warms):
@@ -61,7 +61,7 @@ def get_res(case, config):
         else:
             if is_tensor == True:
                 tensor = paddle.to_tensor([0] * n_ele * devices, 'float32')
-                out_tensor = paddle.empty([2], dtype='float32')
+                out_tensor = paddle.empty([n_ele * devices], dtype='float32')
                 # warmup
                 for i in range(warms):
                     dist.stream.alltoall(out_tensor,

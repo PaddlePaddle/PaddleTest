@@ -51,20 +51,20 @@ def get_res(case, config):
             for i in range(warms):
                 if dist.get_rank() == 0:
                     data = paddle.to_tensor([0] * n_ele, "float32")
-                    dist.send(data, dst=1, use_calc_stream=use_calc_stream)
+                    dist.send(data, dst=1, sync_op=sync_op)
                 else:
                     data = paddle.to_tensor([1] * n_ele, "float32")
-                    dist.recv(data, src=0, use_calc_stream=use_calc_stream)
+                    dist.recv(data, src=0, sync_op=sync_op)
             paddle.device.cuda.synchronize()  # 等待给定的 CUDA 设备上的计算完成
             # stats
             start = time.perf_counter()  # 返回当前的计算机系统时间
             for i in range(epochs):
                 if dist.get_rank() == 0:
                     data = paddle.to_tensor([0] * n_ele, "float32")
-                    dist.send(data, dst=1, use_calc_stream=use_calc_stream)
+                    dist.send(data, dst=1, sync_op=sync_op)
                 else:
                     data = paddle.to_tensor([1] * n_ele, "float32")
-                    dist.recv(data, src=0, use_calc_stream=use_calc_stream)
+                    dist.recv(data, src=0, sync_op=sync_op)
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
         else:
