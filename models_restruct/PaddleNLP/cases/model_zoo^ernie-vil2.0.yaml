@@ -1,0 +1,90 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: model_zoo/ernie-vil2.0
+        cmd: wget https://paddlenlp.bj.bcebos.com/tests/Flickr30k-CN-small.zip && unzip Flickr30k-CN-small.zip
+      -
+        name: multi
+        path: model_zoo/ernie-vil2.0
+        cmd:  python -u -m paddle.distributed.launc --log_dir train_log run_finetune.py
+        params:
+          - --output_dir output_pd
+          - --train_data=Flickr30k-CN/lmdb/train
+          - --val_data=Flickr30k-CN/lmdb/valid
+          - --do_train
+          - --learning_rate 5e-5
+          - --warmup_steps 100
+          - --logging_steps 1
+          - --per_device_train_batch_size 128
+          - --dataloader_num_workers 8
+          - --max_steps 2
+          - --save_steps 2
+          - --num_train_epochs 5
+          - --weight_decay 0.001
+          - --save_total_limit 50
+          - --seed 1
+          - --label_names index
+          - --data_root ./data
+          - --lr_scheduler_type cosine
+          - --recompute
+    eval:
+      -
+        name: eval
+        path: model_zoo/ernie-vil2.0
+        cmd: python -u extract_features.py
+        params:
+          - --extract-image-feats
+          - --extract-text-feats
+          - --image-data="Flickr30k-CN/lmdb/valid/imgs"
+          - --text-data="Flickr30k-CN/valid_texts.jsonl"
+          - --resume output_pd/checkpoint-2
+          - --img-batch-size=32
+          - --text-batch-size=32
+          - --context-length=52
+    infer:
+      -
+        name: infer_make_topk
+        path: model_zoo/ernie-vil2.0
+        cmd: python -u extract_features.py
+        params:
+          - --image-feats="Flickr30k-CN/valid_imgs.img_feat.jsonl"
+          - --text-feats="Flickr30k-CN/valid_texts.txt_feat.jsonl"
+          - --top-k=10
+          - --eval-batch-size=32768
+          - --output="$Flickr30k-CN/valid_predictions.jsonl"
+      -
+        name: infer_transform_ir_annotation_to_tr
+        path: model_zoo/ernie-vil2.0
+        cmd: python utils/transform_ir_annotation_to_tr.py
+        params:
+          - --input Flickr30k-CN/valid_texts.jsonl
+    export:
+      -
+        name: export
+        path: model_zoo/ernie-vil2.0
+        cmd: export_model.py --model_path=output_pd/checkpoint-2/
+        params:
+          - --output_path=./infer_model/
+    predict: skipped
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
