@@ -10,6 +10,8 @@ case:
         name: train
         path: applications/text_summarization/finetune
         cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --do_train
     eval: skipped
     infer:
       -

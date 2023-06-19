@@ -27,4 +27,6 @@ evaluate==0.2.2
 sacremoses
 pythainlp
 kytea
+lac
 fast-tokenizer-python
+fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html

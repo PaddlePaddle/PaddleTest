@@ -2,10 +2,6 @@ case:
   linux:
     train:
       -
-        name: download
-        path: model_zoo/ernie-tiny/data
-        cmd: wget http://tcci.ccf.org.cn/conference/2018/dldoc/trainingdata04.zip && unzip trainingdata04.zip && cp -r task-slu-tencent.dingdang-v1.1/* ./
-      -
         name: prepare
         path: model_zoo/ernie-tiny/data
         cmd: wget https://paddle-qa.bj.bcebos.com/paddlenlp/ernie-tiny.tar.gz && tar -xzvf ernie-tiny.tar.gz && cp -r ernie-tiny/* ./
