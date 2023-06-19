@@ -22,7 +22,6 @@ def get_res(case, config):
     is_legacy = yaml_config[case_name]["is_legacy"]
     sync_op = yaml_config[case_name]["sync_op"]
     use_calc_stream = yaml_config[case_name]["use_calc_stream"]
-    op = yaml_config[case_name]["op"]
 
     # args
     warms = 5
@@ -50,23 +49,23 @@ def get_res(case, config):
         if is_legacy == True:
             # warmup
             for i in range(warms):
-                dist.all_reduce(data, op=op)
+                dist.all_reduce(data)
             paddle.device.cuda.synchronize()  # 等待给定的 CUDA 设备上的计算完成
             # stats
             start = time.perf_counter()  # 返回当前的计算机系统时间
             for i in range(epochs):
-                dist.all_reduce(data, op=op)
+                dist.all_reduce(data)
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
         else:
             # warmup
             for i in range(warms):
-                dist.stream.all_reduce(data, op=op, sync_op=sync_op, use_calc_stream=use_calc_stream)
+                dist.stream.all_reduce(data, sync_op=sync_op, use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()
             # stats
             start = time.perf_counter()
             for i in range(epochs):
-                dist.stream.all_reduce(data, op=op, sync_op=sync_op, use_calc_stream=use_calc_stream)
+                dist.stream.all_reduce(data, sync_op=sync_op, use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
 

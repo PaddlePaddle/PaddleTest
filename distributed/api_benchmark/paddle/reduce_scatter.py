@@ -23,7 +23,6 @@ def get_res(case, config):
     sync_op = yaml_config[case_name]["sync_op"]
     use_calc_stream = yaml_config[case_name]["use_calc_stream"]
     is_tensor = yaml_config[case_name]["is_tensor"]
-    op = yaml_config[case_name]["op"]
 
     # args
     warms = 5
@@ -52,12 +51,12 @@ def get_res(case, config):
             tensor_list = [paddle.to_tensor([0] * n_ele, "float32") for i in range(devices)]
             # warmup
             for i in range(warms):
-                dist.reduce_scatter(data, tensor_list, op=op, use_calc_stream=use_calc_stream)
+                dist.reduce_scatter(data, tensor_list, use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()  # 等待给定的 CUDA 设备上的计算完成
             # stats
             start = time.perf_counter()  # 返回当前的计算机系统时间
             for i in range(epochs):
-                dist.reduce_scatter(data, tensor_list, op=op, use_calc_stream=use_calc_stream)
+                dist.reduce_scatter(data, tensor_list, use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
         else:
@@ -65,12 +64,12 @@ def get_res(case, config):
                 tensor = paddle.to_tensor([0] * n_ele * devices, "float32")
                 # warmup
                 for i in range(warms):
-                    dist.stream.reduce_scatter(data, tensor, op=op, sync_op=sync_op, use_calc_stream=use_calc_stream)
+                    dist.stream.reduce_scatter(data, tensor, sync_op=sync_op, use_calc_stream=use_calc_stream)
                 paddle.device.cuda.synchronize()
                 # stats
                 start = time.perf_counter()
                 for i in range(epochs):
-                    dist.stream.reduce_scatter(data, tensor, op=op, sync_op=sync_op, use_calc_stream=use_calc_stream)
+                    dist.stream.reduce_scatter(data, tensor, sync_op=sync_op, use_calc_stream=use_calc_stream)
                 paddle.device.cuda.synchronize()
                 cost = (time.perf_counter() - start) / epochs
             else:
@@ -78,14 +77,14 @@ def get_res(case, config):
                 # warmup
                 for i in range(warms):
                     dist.stream.reduce_scatter(
-                        data, tensor_list, op=op, sync_op=sync_op, use_calc_stream=use_calc_stream
+                        data, tensor_list, sync_op=sync_op, use_calc_stream=use_calc_stream
                     )
                 paddle.device.cuda.synchronize()
                 # stats
                 start = time.perf_counter()
                 for i in range(epochs):
                     dist.stream.reduce_scatter(
-                        data, tensor_list, op=op, sync_op=sync_op, use_calc_stream=use_calc_stream
+                        data, tensor_list, sync_op=sync_op, use_calc_stream=use_calc_stream
                     )
                 paddle.device.cuda.synchronize()
                 cost = (time.perf_counter() - start) / epochs
