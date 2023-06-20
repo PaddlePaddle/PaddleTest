@@ -203,6 +203,8 @@ class PaddleDetection_Build(Model_Build):
         wget.download(paddle_inference)
         os.system("tar -xf paddle_inference.tgz")
         os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
+        os.system('sed -i "s|TENSORRT_LIB_DIR=/path/to/tensorrt/lib|TENSORRT_LIB_DIR=/usr/local/TensorRT-7.0.0.11/lib|g" scripts/build.sh')
+        os.system('sed -i "s|TENSORRT_INC_DIR=/path/to/tensorrt/include|TENSORRT_INC_DIR=/usr/local/TensorRT-7.0.0.11/include|g" scripts/build.sh')
         os.system('sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh')
         os.system('sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh')
         os.system('sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh')
