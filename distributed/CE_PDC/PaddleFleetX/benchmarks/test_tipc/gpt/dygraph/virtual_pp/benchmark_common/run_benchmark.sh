@@ -112,6 +112,11 @@ function _train(){
     esac
     cd ../
     echo "train_cmd: ${train_cmd}  log_file: ${log_file}"
+    if [[ ${run_mode} =~ "DP1-MP1-PP8" || ${run_mode} =~ "DP1-MP2-PP4" ]]; then
+        # TDDO:nccl to 2.15
+        echo "export PADDLE_USE_FOUR_DIRECTIONS_P2P=True"
+        export PADDLE_USE_FOUR_DIRECTIONS_P2P=True
+    fi
     if [[ ${model_item} =~ "CE" ]];then # CE精度-不限制执行时间
         ${train_cmd} > ${log_file} 2>&1
     else
@@ -130,11 +135,7 @@ function _train(){
 }
 
 export PYTHONPATH=$(dirname "$PWD"):$PYTHONPATH
-if [[ "DP1-MP1-PP8" =~ ${run_mode}  || "DP1-MP2-PP4" =~ ${run_mode} ]]; then
-    # TDDO:nccl to 2.15
-    echo "export PADDLE_USE_FOUR_DIRECTIONS_P2P=True"
-    export PADDLE_USE_FOUR_DIRECTIONS_P2P=True
-fi
+
 source ${BENCHMARK_ROOT}/scripts/run_model.sh   # 在该脚本中会对符合benchmark规范的log使用analysis.py 脚本进行性能数据解析;如果不联调只想要产出训练log可以注掉本行,提交时需打开
 _set_params $@
 #_train       # 如果只产出训练log,不解析,可取消注释
