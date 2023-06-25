@@ -41,7 +41,7 @@ def get_res(case, config):
     for b in byte_to_test:
         n_ele = b // 4 // devices
 
-        if dist.get_rank() == 0:
+        if dist.get_rank() % 2 == 0:
             data = paddle.to_tensor([0] * n_ele, "float32")
         else:
             data = paddle.to_tensor([1] * n_ele, "float32")
@@ -49,43 +49,43 @@ def get_res(case, config):
         if is_legacy == True:
             # warmup
             for i in range(warms):
-                if dist.get_rank() == 0:
+                if dist.get_rank() % 2 == 0:
                     data = paddle.to_tensor([0] * n_ele, "float32")
-                    dist.send(data, dst=1, sync_op=sync_op)
+                    dist.send(data, dst=dist.get_rank() + 1, sync_op=sync_op)
                 else:
                     data = paddle.to_tensor([1] * n_ele, "float32")
-                    dist.recv(data, src=0, sync_op=sync_op)
+                    dist.recv(data, src=dist.get_rank() - 1, sync_op=sync_op)
             paddle.device.cuda.synchronize()  # 等待给定的 CUDA 设备上的计算完成
             # stats
             start = time.perf_counter()  # 返回当前的计算机系统时间
             for i in range(epochs):
-                if dist.get_rank() == 0:
+                if dist.get_rank() % 2 == 0:
                     data = paddle.to_tensor([0] * n_ele, "float32")
-                    dist.send(data, dst=1, sync_op=sync_op)
+                    dist.send(data, dst=dist.get_rank() + 1, sync_op=sync_op)
                 else:
                     data = paddle.to_tensor([1] * n_ele, "float32")
-                    dist.recv(data, src=0, sync_op=sync_op)
+                    dist.recv(data, src=dist.get_rank() - 1, sync_op=sync_op)
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
         else:
             # warmup
             for i in range(warms):
-                if dist.get_rank() == 0:
+                if dist.get_rank() % 2 == 0:
                     data = paddle.to_tensor([0] * n_ele, "float32")
-                    dist.stream.send(data, dst=1, sync_op=sync_op, use_calc_stream=use_calc_stream)
+                    dist.stream.send(data, dst=dist.get_rank() + 1, sync_op=sync_op, use_calc_stream=use_calc_stream)
                 else:
                     data = paddle.to_tensor([1] * n_ele, "float32")
-                    dist.stream.recv(data, src=0, sync_op=sync_op, use_calc_stream=use_calc_stream)
+                    dist.stream.recv(data, src=dist.get_rank() - 1, sync_op=sync_op, use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()
             # stats
             start = time.perf_counter()
             for i in range(epochs):
-                if dist.get_rank() == 0:
+                if dist.get_rank() % 2 == 0:
                     data = paddle.to_tensor([0] * n_ele, "float32")
-                    dist.stream.send(data, dst=1, sync_op=sync_op, use_calc_stream=use_calc_stream)
+                    dist.stream.send(data, dst=dist.get_rank() + 1, sync_op=sync_op, use_calc_stream=use_calc_stream)
                 else:
                     data = paddle.to_tensor([1] * n_ele, "float32")
-                    dist.stream.recv(data, src=0, sync_op=sync_op, use_calc_stream=use_calc_stream)
+                    dist.stream.recv(data, src=dist.get_rank() - 1, sync_op=sync_op, use_calc_stream=use_calc_stream)
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
 

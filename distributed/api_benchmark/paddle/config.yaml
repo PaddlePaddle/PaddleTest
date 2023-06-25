@@ -358,11 +358,11 @@ reduce:
     sync_op: True # 默认配置
     use_calc_stream: False # 默认配置
 
-    reduce_stream_sync_calc:
-      desc: "paddle.distributed.stream.reduce(data, dst, op=ReduceOp.SUM, sync_op=True, use_calc_stream=True)"
-      is_legacy: False
-      sync_op: True
-      use_calc_stream: True
+  reduce_stream_sync_calc:
+    desc: "paddle.distributed.stream.reduce(data, dst, op=ReduceOp.SUM, sync_op=True, use_calc_stream=True)"
+    is_legacy: False
+    sync_op: True
+    use_calc_stream: True
 
   # reduce_stream:
   #   # 与reduce_legacy配置相同，无需重复执行
@@ -379,18 +379,18 @@ reduce:
   #   use_calc_stream: True
 
 reduce_scatter:
-  reduce_scatter_legacy_calc:
-    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, use_calc_stream=True)"
+  reduce_scatter_legacy_sync:
+    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, sync_op=True)"
     is_legacy: True
-    sync_op: True # 该模式下无用
-    use_calc_stream: True # 默认配置
+    sync_op: True # 默认配置
+    use_calc_stream: True # 该模式下无用
     is_tensor: False # 该模式下无用
 
   reduce_scatter_legacy:
-    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, use_calc_stream=False)"
+    desc: "paddle.distributed.reduce_scatter(data, tensor_list, op=ReduceOp.SUM, sync_op=False)"
     is_legacy: True
-    sync_op: False # 该模式下无用
-    use_calc_stream: False
+    sync_op: False
+    use_calc_stream: False # 该模式下无用
     is_tensor: False # 该模式下无用
 
   reduce_scatter_stream_sync_tensor:
