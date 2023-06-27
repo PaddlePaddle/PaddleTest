@@ -41,7 +41,7 @@ function DockerImages () {
             ;;
         "Cuda116")
             echo "Selected Centos: Cuda116"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4-trt8.4-gcc82"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4-trt8.4-gcc8.2"
             ;;
         "Cuda117")
             echo "Selected Centos: Cuda117"
@@ -52,7 +52,7 @@ function DockerImages () {
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.8-cudnn8.6-trt8.5-gcc8.2"
             ;;
         "Cuda120")
-            echo "Selected Centos: Cuda118"
+            echo "Selected Centos: Cuda120"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.0-cudnn8.9-trt8.6-gcc12.2"
             ;;
         *)
@@ -126,6 +126,9 @@ function VersionExitJudgment () {
                 echo "everything works fine."
                 ;;
             "Cuda118")
+                echo "everything works fine."
+                ;;
+            "Cuda120")
                 echo "everything works fine."
                 ;;
             *)
