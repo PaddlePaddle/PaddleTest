@@ -13,7 +13,7 @@ api_list = [
     "reduce_scatter",
     "scatter",
 ]
-loops = 50
+loops = 10
 
 
 def get_average(file_loops, case):
@@ -135,11 +135,11 @@ def main():
                 # 求均值，写入文件log_avg
                 avg_res = get_average("./log/workerlog.0", case)
                 # 求diff，写入文件log_diff
-                # diff = compare(case, avg_res)
+                diff = compare(case, avg_res)
                 # 得出汇总结果，写入log_result
-                # result = gather_dict(case)
+                result = gather_dict(case)
 
 
 if __name__ == "__main__":
     main()
-    os.system("cat log_avg")
+    os.system("cat log_result")
