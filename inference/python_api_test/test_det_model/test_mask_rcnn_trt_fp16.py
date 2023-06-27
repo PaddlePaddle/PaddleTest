@@ -97,6 +97,7 @@ def test_trt_fp16_more_bz():
             repeat=1,
             delta=1e-5,
             precision="trt_fp16",
+            min_subgraph_size=1,
             dynamic=True,
             tuned=True,
         )
@@ -115,6 +116,6 @@ def test_trt_fp16_more_bz():
             precision="trt_fp16",
             dynamic=True,
             tuned=False,
-            min_subgraph_size=35,
+            min_subgraph_size=1,
             det_top_bbox=True,
         )

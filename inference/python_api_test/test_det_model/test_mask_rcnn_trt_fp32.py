@@ -97,6 +97,7 @@ def test_trt_fp32_more_bz():
             repeat=1,
             delta=3e-5,
             precision="trt_fp32",
+            min_subgraph_size=1,
             dynamic=True,
             tuned=True,
         )
@@ -115,5 +116,5 @@ def test_trt_fp32_more_bz():
             precision="trt_fp32",
             dynamic=True,
             tuned=False,
-            min_subgraph_size=35,
+            min_subgraph_size=1,
         )
