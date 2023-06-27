@@ -135,10 +135,9 @@ class PaddleSeg_Build(Model_Build):
         if platform.system() == "Linux" and "api" in self.step:
             logger.info("#### cpp infer begin")
             os.chdir(path_repo + "/deploy/cpp")
-            wget.download(
-                "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos"
-                "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
-            )
+            # 根据环境变量来获取
+            paddle_inference = os.getenv("paddle_inference")
+            wget.download(paddle_inference)
             os.system("tar -xf paddle_inference.tgz")
             wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cpp_infer.sh")
             os.system("bash cpp_infer.sh")
