@@ -191,7 +191,7 @@ export models_name=${models_name:-models_restruct}  #后面复制使用，和模
 #### 二分定位使用
 export binary_search_flag=${binary_search_flag:-False}  #True表示在使用二分定位, main中一些跳出方法不生效
 # 使用大模型分析模型日志
-export is_analysis_logs=${is_analysis_logs:-False} 
+export is_analysis_logs=${is_analysis_logs:-False}
 export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 export plot=${plot:-False}  #False表示不自动绘图
 export c_plus_plus_predict=${c_plus_plus_predict:-False}  #False表示不配置 C++预测库
