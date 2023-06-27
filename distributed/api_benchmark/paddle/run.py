@@ -45,7 +45,7 @@ def get_average(file_loops, case):
     avg_res = {case: averages}
 
     # 写入文件，存档
-    with open("log_avg", "a", encoding="utf8") as f:
+    with open("mylog/log_avg", "a", encoding="utf8") as f:
         f.write(str(avg_res) + "\n")
         f.flush()
 
@@ -61,17 +61,24 @@ def compare(case, res_dict):
             base_dict = eval(line.strip("\n"))
 
     diff_dict = {}
+    diff_exp = {}
     for key, value in res_dict.items():
         for num, item in value.items():
-            time_diff = (item["time"] - base_dict[key][num]["time"]) / base_dict[key][num]["time"] * 100
-            algbw_diff = (item["algbw"] - base_dict[key][num]["algbw"]) / base_dict[key][num]["algbw"] * 100
-            diff_dict[num] = {"time": time_diff, "algbw": algbw_diff}
+            time_diff = round((item["time"] - base_dict[key][num]["time"]) / base_dict[key][num]["time"] * 100, 2)
+            algbw_diff =  round((item["algbw"] - base_dict[key][num]["algbw"]) / base_dict[key][num]["algbw"] * 100, 2)
+            diff_dict[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}
+            if (time_diff > 5 or time_diff < -5) or (algbw_diff > 5 or algbw_diff < -5):
+                diff_exp[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}            
 
     diff_res = {case: diff_dict}
+    diff_exp_res = {case: diff_exp}
 
     # 写入文件，存档
-    with open("log_diff", "a", encoding="utf8") as f:
+    with open("mylog/log_diff", "a", encoding="utf8") as f:
         f.write(str(diff_res) + "\n")
+        f.flush()
+    with open("mylog/log_exp", "a", encoding="utf8") as f:
+        f.write(str(diff_exp_res) + "\n")
         f.flush()
 
     return diff_res
@@ -79,7 +86,7 @@ def compare(case, res_dict):
 
 def gather_dict(case):
     all_dict = {}
-    f_dict = {"base": "./base_value", "avg": "./log_avg", "diff": "./log_diff"}
+    f_dict = {"base": "./base_value", "avg": "./mylog/log_avg", "diff": "./mylog/log_diff"}
 
     for key, value in f_dict.items():
         f = open(value, encoding="utf-8")
@@ -110,7 +117,7 @@ def gather_dict(case):
     result = {case: res_dict}
 
     # 写入文件，存档
-    with open("log_result", "a", encoding="utf8") as f:
+    with open("mylog/log_result", "a", encoding="utf8") as f:
         f.write(str(result) + "\n")
         f.flush()
 
@@ -132,14 +139,15 @@ def main():
                     print(out)
                     pro.wait()
                     pro.returncode == 0
-                # 求均值，写入文件log_avg
+                # 求均值，写入文件mylog/log_avg
                 avg_res = get_average("./log/workerlog.0", case)
-                # 求diff，写入文件log_diff
+                # 求diff，写入文件mylog/log_diff
                 diff = compare(case, avg_res)
-                # 得出汇总结果，写入log_result
+                # 得出汇总结果，写入mylog/log_result
                 result = gather_dict(case)
 
 
 if __name__ == "__main__":
+    os.system("rm -rf mylog && mkdir -p mylog")
     main()
-    os.system("cat log_result")
+    os.system("cat mylog/log_exp")
