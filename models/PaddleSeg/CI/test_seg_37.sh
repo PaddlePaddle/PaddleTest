@@ -1,8 +1,5 @@
 #!/bin/bash
 unset GREP_OPTIONS
-mkdir run_env_py38;
-ln -s $(which python3.8) run_env_py38/python;
-export PATH=$(pwd)/run_env_py38:${PATH};
 python -m pip install --upgrade pip
 python -m pip install --upgrade setuptools
 # python -m pip install pip==20.2.4 --ignore-installed;
@@ -17,7 +14,9 @@ echo "checkout release !"
 python -m pip install ${paddle_release} --no-cache-dir
 fi
 # install paddleseg
-python -m pip install -v -e .
+python setup.py bdist_wheel
+python -m pip install ./dist/paddleseg*.whl
+#python -m pip install -v -e .
 
 echo -e '*****************paddle_version*****'
 python -c 'import paddle;print(paddle.version.commit)'

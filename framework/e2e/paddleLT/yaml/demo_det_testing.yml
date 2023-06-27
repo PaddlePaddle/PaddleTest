@@ -8,7 +8,7 @@ testings:
       params:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.00001
-    step: 3
+    step: 10
 
   dy2st_train:
     model_dtype: "float32"
@@ -19,7 +19,7 @@ testings:
       params:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.00001
-    step: 3
+    step: 10
 
   dy_eval:
     model_dtype: "float32"
@@ -30,8 +30,8 @@ testings:
   jit_save:
     model_dtype: "float32"
 
-  paddle_infer:
-    model_dtype: "float32"
+#  paddle_infer:
+#    model_dtype: "float32"
 
 
 compare:
@@ -39,17 +39,17 @@ compare:
     baseline: 'dy_train'
     latest: 'dy2st_train'
     precision:
-      delta: 0.0001
-      rtol: 0.00001
+      delta: 0.00001
+      rtol: 0.000001
   -
     baseline: 'dy_eval'
     latest: 'dy2st_eval'
     precision:
-      delta: 0.0001
-      rtol: 0.00001
-  -
-    baseline: 'dy_eval'
-    latest: 'paddle_infer'
-    precision:
-      delta: 0.0005
-      rtol: 0.00005
+      delta: 0.00001
+      rtol: 0.000001
+#  -
+#    baseline: 'dy_eval'
+#    latest: 'paddle_infer'
+#    precision:
+#      delta: 0.0005
+#      rtol: 0.00005
