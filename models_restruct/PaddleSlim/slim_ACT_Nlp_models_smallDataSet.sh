@@ -1,6 +1,5 @@
 #!/bin/bash
 current_path=$(pwd)
-export CUDA_VISIBLE_DEVICES=0
 echo "当前路径是：$current_path"
 
 upload_data() {

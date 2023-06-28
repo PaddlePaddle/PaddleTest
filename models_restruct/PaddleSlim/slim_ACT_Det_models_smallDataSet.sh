@@ -1,8 +1,6 @@
 #!/bin/bash
 # $1 本地待上传目录 $2 上传到bos路径 $3 slim commit
 current_path=$(pwd)
-export CUDA_VISIBLE_DEVICES=0
-export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/:$LD_LIBRARY_PATH
 
 wget_coco_data(){
     # 判断下如果没有coco
