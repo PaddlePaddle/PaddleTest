@@ -90,9 +90,13 @@ def get_res(case, config):
             cost = (time.perf_counter() - start) / epochs
 
         # print(f'data: {b} B, time: {cost} s, algbw: {b/1_000_000_000/cost} GB/s')
-        time_list[case_name][b] = {}
-        time_list[case_name][b]["time"] = cost
-        time_list[case_name][b]["algbw"] = b / 1_000_000_000 / cost
+        if b < 1048576: # 1MB
+            num = str(b // 1024) + "KB"
+        else:
+            num = str(b // 1024 // 1024) + "MB"
+        time_list[case_name][num] = {}
+        time_list[case_name][num]["time"] = cost
+        time_list[case_name][num]["algbw"] = b / 1_000_000_000 / cost
     # print(time_list)
     return time_list
 

@@ -71,14 +71,15 @@ def compare(case, res_dict):
                 diff_exp[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}            
 
     diff_res = {case: diff_dict}
-    diff_exp_res = {case: diff_exp}
+    if diff_exp is not {}:
+        diff_exp_res = {case: diff_exp}
+        with open("mylog/log_exp", "a", encoding="utf8") as f:
+            f.write(str(diff_exp_res) + "\n")
+            f.flush()
 
     # 写入文件，存档
     with open("mylog/log_diff", "a", encoding="utf8") as f:
         f.write(str(diff_res) + "\n")
-        f.flush()
-    with open("mylog/log_exp", "a", encoding="utf8") as f:
-        f.write(str(diff_exp_res) + "\n")
         f.flush()
 
     return diff_res
@@ -150,4 +151,5 @@ def main():
 if __name__ == "__main__":
     os.system("rm -rf mylog && mkdir -p mylog")
     main()
+    os.system("echo ====================================")
     os.system("cat mylog/log_exp")
