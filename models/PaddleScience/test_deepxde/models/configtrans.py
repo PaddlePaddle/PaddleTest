@@ -14,7 +14,7 @@
 
 import yaml
 import numpy as np
-
+import os
 
 class YamlLoader(object):
     """
@@ -116,7 +116,8 @@ class GenerateOrder(object):
 
     def get_order(self, py, case_num):
         """get order"""
-        order = "python3.7 {}".format(py)
+        py_version = os.getenv('py_version')
+        order = "python{} {}".format(py_version,py)
         return order
 
     def __call__(self, py, case_num):
