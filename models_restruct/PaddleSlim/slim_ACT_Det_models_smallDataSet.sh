@@ -1,8 +1,6 @@
 #!/bin/bash
 # $1 本地待上传目录 $2 上传到bos路径 $3 slim commit
 current_path=$(pwd)
-export CUDA_VISIBLE_DEVICES=0
-export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/:$LD_LIBRARY_PATH
 
 wget_coco_data(){
     # 判断下如果没有coco
@@ -18,8 +16,8 @@ upload_data() {
     # 将结果上传到bos上
     now_path=$(pwd)
     model=$1
-    tar -cf ${model}_quant.tar ${model}_quant
-    mv ${model}_quant.tar ${current_path}/${model_path}
+    tar -cf ${model}_qat.tar ${model}_qat
+    mv ${model}_qat.tar ${current_path}/${model_path}
     cd ${current_path}
     unset http_proxy && unset https_proxy
     python Bos/upload.py ${current_path}/${model_path} ${bos_path}/${slim_commit}
@@ -39,7 +37,7 @@ execute_yolov_modes(){
         # 下载数据集和预训练模型
         echo ${model}
         wget https://paddle-slim-models.bj.bcebos.com/act/${model}.onnx
-        python run.py --config_path=./configs/${model}_qat_dis.yaml --save_dir=./${model}_quant/
+        python run.py --config_path=./configs/${model}_qat_dis.yaml --save_dir=./${model}_qat/
         # 上传执行结果
         upload_data ${model}
     done
@@ -54,7 +52,7 @@ execute_ppyoloe(){
     # 软链数据集
     copy_coco_data ${des}
     wget https://bj.bcebos.com/v1/paddle-slim-models/act/ppyoloe_crn_l_300e_coco.tar && tar -xvf ppyoloe_crn_l_300e_coco.tar
-    python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir=ppyoloe_crn_l_300e_coco_quant
+    python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir=ppyoloe_crn_l_300e_coco_qat
     # 上传执行结果
     upload_data ppyoloe_crn_l_300e_coco
 }
@@ -67,7 +65,7 @@ execute_picodet(){
     # 软链数据集
     copy_coco_data ${des}
     wget https://bj.bcebos.com/v1/paddle-slim-models/act/picodet_s_416_coco_npu.tar && tar -xvf picodet_s_416_coco_npu.tar
-    python run.py --config_path=./configs/picodet_npu_with_postprocess.yaml --save_dir='./picodet_s_416_coco_npu_quant/'
+    python run.py --config_path=./configs/picodet_npu_with_postprocess.yaml --save_dir='./picodet_s_416_coco_npu_qat/'
     # 上传执行结果
     upload_data picodet_s_416_coco_npu
 }
