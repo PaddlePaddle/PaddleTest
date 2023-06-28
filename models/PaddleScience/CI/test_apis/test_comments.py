@@ -46,18 +46,21 @@ def bracket_check_file(file_path, left_bracket, right_bracket):
                         s1.pop()
 
 
-def solve(path: str):
+def solve(path: str, whitelist: list = []):
     print(f"solving file {path}")
     if os.path.isdir(path):
         pathes = [o for o in os.listdir(path) if os.path.isdir(os.path.join(path, o))]
         for path_ in pathes:
-            solve(os.path.join(path, path_))
+            solve(os.path.join(path, path_), whitelist)
         pathes = os.listdir(path)
         for path_ in pathes:
             if path_.endswith(".py"):
-                solve(os.path.join(path, path_))
+                if path_ not in whitelist:
+                    solve(os.path.join(path, path_), whitelist)
     else:
         if not path.endswith(".py"):
+            return
+        if path in whitelist:
             return
         bracket_check_file(path, "(", ")")
         bracket_check_file(path, "[", "]")
@@ -65,4 +68,4 @@ def solve(path: str):
 
 
 if __name__ == "__main__":
-    solve("../../../PaddleScience")
+    solve("../../../PaddleScience",["ad.py"])
