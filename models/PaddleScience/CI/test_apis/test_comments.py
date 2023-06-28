@@ -68,4 +68,4 @@ def solve(path: str, whitelist: list = []):
 
 
 if __name__ == "__main__":
-    solve("../../../PaddleScience",["ad.py"])
+    solve("../../../PaddleScience", ["ad.py"])
