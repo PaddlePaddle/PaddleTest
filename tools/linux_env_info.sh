@@ -356,7 +356,7 @@ function Cu118PackageUrlInfo(){
     esac
 }
 
-# Cuda118安装包链接信息
+# Cuda120安装包链接信息
 function Cu120PackageUrlInfo(){
     local branch_info=$1
     local package_version=$2
