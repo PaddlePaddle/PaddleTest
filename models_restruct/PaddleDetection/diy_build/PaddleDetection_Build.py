@@ -201,6 +201,7 @@ class PaddleDetection_Build(Model_Build):
         # 根据环境变量获取
         paddle_inference = os.getenv("paddle_inference")
         # 增加判断，兼容PaddleMT
+        print("env paddle_inference is", paddle_inference)
         if paddle_inference and paddle_inference != "None":
             wget.download(paddle_inference)
             os.system("tar -xf paddle_inference.tgz")
