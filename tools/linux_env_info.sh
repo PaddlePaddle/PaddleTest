@@ -186,6 +186,9 @@ function CpuPackageUrlInfo(){
         "Python310")
                 export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Cpu-Mkl-Avx-Gcc82/latest/paddlepaddle-0.0.0-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Python311")
+                export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Cpu-Mkl-Avx-Gcc82/latest/paddlepaddle-0.0.0-cp311-cp311-linux_x86_64.whl"
+            ;;
         "Inference")
             # 预测库安装包的地址
             if [[ "${branch_info}" == "Develop" ]];then
