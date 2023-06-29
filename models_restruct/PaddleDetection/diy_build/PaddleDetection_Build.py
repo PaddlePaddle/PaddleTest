@@ -200,6 +200,7 @@ class PaddleDetection_Build(Model_Build):
         os.chdir(path_repo + "/deploy/cpp")
         # 根据环境变量获取
         paddle_inference = os.getenv("paddle_inference")
+        # 增加判断，兼容PaddleMT
         if paddle_inference and paddle_inference != "None":
             wget.download(paddle_inference)
             os.system("tar -xf paddle_inference.tgz")
