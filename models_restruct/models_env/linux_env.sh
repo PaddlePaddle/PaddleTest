@@ -307,6 +307,10 @@ if [[ "${docker_flag}" == "" ]]; then
 
     ####创建docker
     set +x;
+
+    # 拉取更新镜像
+    docker pull ${Image_version}
+
     docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
