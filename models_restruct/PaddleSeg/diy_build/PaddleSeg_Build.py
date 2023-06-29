@@ -137,7 +137,7 @@ class PaddleSeg_Build(Model_Build):
             os.chdir(path_repo + "/deploy/cpp")
             # 根据环境变量来获取
             paddle_inference = os.getenv("paddle_inference")
-            if paddle_inference:
+            if paddle_inference and paddle_inference != "None":
                 wget.download(paddle_inference)
                 os.system("tar -xf paddle_inference.tgz")
                 wget.download("https://paddle-qa.bj.bcebos.com/PaddleSeg/cpp_infer.sh")
