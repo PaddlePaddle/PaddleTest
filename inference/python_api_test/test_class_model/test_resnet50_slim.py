@@ -88,6 +88,7 @@ def test_int8_more_bz():
             output_data_dict,
             delta=5e-1,
             max_batch_size=max_batch_size,
+            min_subgraph_size=1,
             precision="trt_int8",
             use_calib_mode=True,
             dynamic=True,

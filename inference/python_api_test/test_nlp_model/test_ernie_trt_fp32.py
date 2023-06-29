@@ -81,6 +81,7 @@ def test_trt_fp32_bz1():
         output_data_dict,
         delta=0.0002,
         max_batch_size=1,
+        min_subgraph_size=1,
         precision="trt_fp32",
         dynamic=True,
         tuned=True,
@@ -97,6 +98,7 @@ def test_trt_fp32_bz1():
         output_data_dict,
         delta=0.0002,
         max_batch_size=1,
+        min_subgraph_size=1,
         precision="trt_fp32",
         dynamic=True,
     )
