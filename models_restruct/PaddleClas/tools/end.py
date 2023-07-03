@@ -121,8 +121,11 @@ class PaddleClas_End(object):
 
         # kill遗留程序
         logger.info("PID before is {}".format(os.system(f"ps aux| grep '{self.qa_yaml_name}'| grep -v 'main.py'")))
-        cmd_kill = os.system(f"pkill -f {self.qa_yaml_name}| grep -v 'main.py'")
-        logger.info("PID after is {}".format(os.system(f"ps aux| grep '{self.qa_yaml_name}'| grep -v 'main.py''")))
+        cmd_kill = os.system(
+            f"ps aux | grep '{self.qa_yaml_name}' | grep -v 'main.py' | awk '{{print $2}}' | xargs kill -9"
+        )
+        # cmd_kill = os.system(f"pkill -f '{self.qa_yaml_name}'| grep -v 'main.py'") #这样会先执行kill再执行grep没有生效
+        logger.info("PID after is {}".format(os.system(f"ps aux| grep '{self.qa_yaml_name}'| grep -v 'main.py'")))
         # 异常256
         logger.info("cmd_kill is {}".format(cmd_kill))
         return 0
