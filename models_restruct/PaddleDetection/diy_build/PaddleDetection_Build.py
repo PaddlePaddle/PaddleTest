@@ -93,6 +93,10 @@ class PaddleDetection_Build(Model_Build):
         os.system("yum install ffmpeg ffmpeg-devel -y")
         os.system("apt-get update")
         os.system("apt-get install ffmpeg -y")
+        # 显示暗转
+        os.system("python -m pip install imgaug")
+        # pillow升级会有python预测问题
+        os.system("python -m pip install Pillow==9.5.0")
         os.system("python -m pip uninstall bce-python-sdk -y")
         os.system("python -m pip install bce-python-sdk==0.8.74 --ignore-installed")
         # set sed
