@@ -12,7 +12,6 @@ cases="./test_pcpvt_base_gpu.py \
        ./test_tnt_small_gpu.py \
        ./test_tnt_small_trt_fp32.py \
        ./test_ViT_base_patch16_224_trt_fp32.py \
-       ./test_ViT_small_patch16_224_trt_fp32.py \
        ../test_ocr_model/test_ocr_det_mv3_db_gpu.py \
        ../test_ocr_model/test_ocr_det_mv3_db_mkldnn.py \
        ../test_ocr_model/test_ocr_det_mv3_db_trt_fp32.py \

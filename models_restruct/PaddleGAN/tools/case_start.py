@@ -53,7 +53,7 @@ class PaddleClas_Case_Start(object):
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
             logger.info("set NVIDIA_TF32_OVERRIDE as {}".format(os.getenv("NVIDIA_TF32_OVERRIDE")))
             logger.info("before set FLAGS_cudnn_deterministic as {}".format(os.getenv("FLAGS_cudnn_deterministic")))
-            os.environ["FLAGS_use_reduce_split_pass"] = "1"
+            # os.environ["FLAGS_use_reduce_split_pass"] = "1" #230607 chenzhuo remove
             logger.info("set FLAGS_use_reduce_split_pass {}".format(os.getenv("FLAGS_use_reduce_split_pass")))
             os.environ["FLAGS_deny_cinn_ops"] = "conv2d;conv2d_grad"
             logger.info("set FLAGS_deny_cinn_ops {}".format(os.getenv("FLAGS_deny_cinn_ops")))
