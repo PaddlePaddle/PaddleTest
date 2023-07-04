@@ -2,3 +2,4 @@ examples^lorenz.yaml
 examples^rossler.yaml
 examples^cylinder^2d_unsteady^transformer_physx.yaml
 examples^pipe^poiseuille_flow.yaml
+examples^aneurysm^aneurysm_flow.yaml
