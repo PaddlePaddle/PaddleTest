@@ -1,0 +1,64 @@
+case:
+  linux:
+    train:
+      -
+        name: pretrain
+        path: examples/machine_reading_comprehension/SQuAD/
+        cmd: python -m paddle.distributed.launch run_squad.py
+        params:
+          - --model_type bert 
+          - --model_name_or_path bert-base-uncased 
+          - --max_seq_length 384 
+          - --batch_size 12 
+          - --learning_rate 3e-5 
+          - --num_train_epochs 1 
+          - --max_steps 1 
+          - --logging_steps 1 
+          - --save_steps 1 
+          - --warmup_proportion 0.1 
+          - --weight_decay 0.01 
+          - --output_dir ./tmp/squad/ 
+          - --device gpu 
+          - --do_train 
+          - --do_predict 
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/machine_reading_comprehension/SQuAD/
+        cmd:  python -u ./export_model.py
+        params:
+          - --model_type bert
+          - --model_path ./tmp/squad/model_1/ 
+          - --output_path ./infer_model/model
+    predict: 
+      -
+        name: export
+        path: examples/machine_reading_comprehension/SQuAD/
+        cmd:  python -u deploy/python/predict.py
+        params:
+          - --model_type bert
+          - --model_name_or_path ./infer_model/model 
+          - --batch_size 2 
+          - --max_seq_length 384
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

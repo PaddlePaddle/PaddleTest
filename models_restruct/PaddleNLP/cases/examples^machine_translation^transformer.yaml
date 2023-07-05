@@ -1,19 +1,59 @@
 case:
-  linux_convergence:
+  linux:
     train:
       -
-        name: add_visualdl_1
-        path: examples/machine_translation/transformer/
-        cmd: sed -i '/import yaml/i\from visualdl import LogWriter' train.py
-      -
-        name: add_visualdl_1
-        path: examples/machine_translation/transformer/
-        cmd: sed -i '/step_idx = 0/i\    log_writer = LogWriter(os.path.join(os.getenv("VDL_LOG_PATH"),"transfromer_bs_{}_card_{}".format(args.batch_size,rank)))' train.py
-      -
-        name: add_visualdl_1
-        path: examples/machine_translation/transformer/
-        cmd: sed -i '/reader_cost_avg.reset()/i\                log_writer.add_scalar(tag="transformer/loss",step = step_idx,value = total_avg_cost)' train.py
+        name: download
+        path: examples/machine_translation/transformer
+        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/WMT14.en-de.partial.tar.gz && tar -xzvf WMT14.en-de.partial.tar.gz
       -
         name: pretrain
-        path: examples/machine_translation/transformer/
-        cmd: python -m paddle.distributed.launch train.py --config ./configs/transformer.base.yaml
+        path: examples/machine_translation/transformer
+        cmd: python train.py 
+        params:
+          - --config ./configs/transformer.base.yaml
+          - --train_file ./WMT14.en-de.partial/train.tok.clean.bpe.en ./WMT14.en-de.partial/train.tok.clean.bpe.de 
+          - --dev_file ./WMT14.en-de.partial/dev.tok.bpe.en ./WMT14.en-de.partial/dev.tok.bpe.de 
+          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 
+          - --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/machine_translation/transformer
+        cmd:  python export_model.py 
+        params:
+          - --config ./configs/transformer.base.yaml
+          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708
+          - --bos_token "<s>" --eos_token "<e>"
+    predict: 
+      -
+        name: predict
+        path: examples/machine_translation/transformer
+        cmd:  python predict.py 
+        params:
+          - --config ./configs/transformer.base.yaml
+          - --profile 
+          - --test_file ./WMT14.en-de.partial/test.tok.bpe.en ./WMT14.en-de.partial/test.tok.bpe.de 
+          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 
+          - --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"  
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

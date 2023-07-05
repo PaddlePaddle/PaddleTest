@@ -6,9 +6,8 @@ case:
         path: examples/language_model/llama
         cmd: python -u  -m paddle.distributed.fleet.launch finetune_generation.py
         params:
-          - --model_name_or_path facebook/llama-7b
+          - --model_name_or_path facebook/tiny-random-llama
           - --do_train
-          - --do_eval
           - --num_train_epochs 1
           - --per_device_train_batch_size 2
           - --per_device_eval_batch_size 2

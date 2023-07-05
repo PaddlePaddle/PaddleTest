@@ -30,3 +30,8 @@ model_zoo^gpt.yaml
 model_zoo^gpt_static.yaml
 model_zoo^tinybert.yaml
 model_zoo^uie.yaml
+examples^machine_translation^transformer.yaml
+examples^machine_reading_comprehension^SQuAD.yaml
+examples^machine_translation^seq2seq.yaml
+examples^language_model^text_correction^ernie-csc.yaml
+examples^language_model^sentiment_analysis^textcnn.yaml

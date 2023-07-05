@@ -1,0 +1,61 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare-dowdnload-data
+        path: examples/text_correction/ernie-csc
+        cmd: python download.py --data_dir ./extra_train_ds/ --url https://github.com/wdimmy/Automatic-Corpus-Generation/raw/master/corpus/train.sgml
+      -
+        name: trans-xml-txt
+        path: examples/text_correction/ernie-csc
+        cmd: python change_sgml_to_txt.py -i extra_train_ds/train.sgml -o extra_train_ds/train.txt
+      -
+        name: pretrain
+        path: examples/text_correction/ernie-csc
+        cmd: python -m paddle.distributed.launch  train.py
+        params:
+          - --batch_size 32 
+          - --logging_steps 100 
+          - --epochs 1
+          - --learning_rate 5e-5 
+          - --model_name_or_path ernie-1.0-base-zh 
+          - --output_dir ./checkpoints/ 
+          - --extra_train_ds_dir ./extra_train_ds/
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/text_correction/ernie-csc
+        cmd: python export_model.py 
+        params:
+          - --params_path ./checkpoints/best_model.pdparams 
+          - --output_path ./infer_model/static_graph_params
+    predict: 
+        -
+        name: predict
+        path: examples/text_correction/ernie-csc
+        cmd: python export_model.py 
+        params:
+          - --model_file infer_model/static_graph_params.pdmodel 
+          - --params_file infer_model/static_graph_params.pdiparams 
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
