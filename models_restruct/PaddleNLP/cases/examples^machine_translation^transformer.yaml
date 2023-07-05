@@ -30,7 +30,7 @@ case:
       -
         name: predict
         path: examples/machine_translation/transformer
-        cmd:  python predict.py 
+        cmd:  python ./deploy/python/inference.py
         params:
           - --config ./configs/transformer.base.yaml
           - --profile 
