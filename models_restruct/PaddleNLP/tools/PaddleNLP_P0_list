@@ -36,5 +36,5 @@ model_zoo^ernie-vil2.0.yaml
 examples^machine_translation^transformer.yaml
 examples^machine_reading_comprehension^SQuAD.yaml
 examples^machine_translation^seq2seq.yaml
-examples^language_model^text_correction^ernie-csc.yaml
-examples^language_model^sentiment_analysis^textcnn.yaml
+examples^text_correction^ernie-csc.yaml
+examples^sentiment_analysis^textcnn.yaml
