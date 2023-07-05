@@ -4,7 +4,10 @@ case:
       -
         name: prepare-dowdnload-data
         path: examples/text_correction/ernie-csc
-        cmd: python download.py --data_dir ./extra_train_ds/ --url https://github.com/wdimmy/Automatic-Corpus-Generation/raw/master/corpus/train.sgml
+        cmd: python download.py 
+        params:
+          - --data_dir ./extra_train_ds/ 
+          - --url https://github.com/wdimmy/Automatic-Corpus-Generation/raw/master/corpus/train.sgml
       -
         name: trans-xml-txt
         path: examples/text_correction/ernie-csc
@@ -32,7 +35,7 @@ case:
           - --params_path ./checkpoints/best_model.pdparams 
           - --output_path ./infer_model/static_graph_params
     predict: 
-        -
+      -
         name: predict
         path: examples/text_correction/ernie-csc
         cmd: python export_model.py 
