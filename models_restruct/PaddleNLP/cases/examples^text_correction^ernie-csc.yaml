@@ -2,14 +2,14 @@ case:
   linux:
     train:
       -
-        name: prepare-dowdnload-data
+        name: prepare_dowdnload_data
         path: examples/text_correction/ernie-csc
         cmd: python download.py 
         params:
           - --data_dir ./extra_train_ds/ 
           - --url https://github.com/wdimmy/Automatic-Corpus-Generation/raw/master/corpus/train.sgml
       -
-        name: trans-xml-txt
+        name: trans_xml_txt
         path: examples/text_correction/ernie-csc
         cmd: python change_sgml_to_txt.py -i extra_train_ds/train.sgml -o extra_train_ds/train.txt
       -
@@ -17,8 +17,9 @@ case:
         path: examples/text_correction/ernie-csc
         cmd: python -m paddle.distributed.launch  train.py
         params:
-          - --batch_size 32 
+          - --batch_size 8
           - --logging_steps 100 
+          - --save_steps 100
           - --epochs 1
           - --learning_rate 5e-5 
           - --model_name_or_path ernie-1.0-base-zh 

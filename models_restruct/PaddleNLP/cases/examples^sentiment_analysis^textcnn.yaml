@@ -2,11 +2,11 @@ case:
   linux:
     train:
       -
-        name: prepare-data
+        name: prepare_data
         path: examples/sentiment_analysis/textcnn
         cmd: wget https://bj.bcebos.com/paddlenlp/datasets/RobotChat.tar.gz && tar xvf RobotChat.tar.gz
       -
-        name: prepare-models
+        name: prepare_models
         path: examples/sentiment_analysis/textcnn
         cmd: wget https://bj.bcebos.com/paddlenlp/robot_chat_word_dict.txt && wget https://bj.bcebos.com/paddlenlp/models/textcnn.pdparams
       -
