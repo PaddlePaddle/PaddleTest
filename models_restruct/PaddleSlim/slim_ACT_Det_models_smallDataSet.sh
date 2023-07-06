@@ -43,6 +43,9 @@ execute_yolov_modes(){
         wget https://paddle-slim-models.bj.bcebos.com/act/${model}.onnx
         python run.py --config_path=./configs/${model}_qat_dis.yaml --save_dir=./${model}_act_qat/
         # 上传执行结果
+        # 将原始模型重新命名
+        mv ${model}.onnx  ${model}_origin.onnx
+        mv ${model}_origin.onnx ./${model}_act_qat/
         upload_data ${model}
     done
 }
@@ -59,6 +62,8 @@ execute_ppyoloe(){
     sed -i "s|onnx_format: true|onnx_format: false|g" configs/ppyoloe_l_qat_dis.yaml
     python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir=ppyoloe_crn_l_300e_coco_act_qat
     # 上传执行结果
+    mv ppyoloe_crn_l_300e_coco  ppyoloe_crn_l_300e_coco_origin
+    mv ppyoloe_crn_l_300e_coco_origin ./ppyoloe_crn_l_300e_coco_act_qat/
     upload_data ppyoloe_crn_l_300e_coco
 }
 
@@ -73,6 +78,8 @@ execute_picodet(){
     sed -i "s|onnx_format: true|onnx_format: false|g" configs/picodet_npu_with_postprocess.yaml
     python run.py --config_path=./configs/picodet_npu_with_postprocess.yaml --save_dir='./picodet_s_416_coco_npu_act_qat/'
     # 上传执行结果
+    mv picodet_s_416_coco_npu  picodet_s_416_coco_npu_origin
+    mv picodet_s_416_coco_npu_origin ./picodet_s_416_coco_npu_act_qat/
     upload_data picodet_s_416_coco_npu
 }
 
