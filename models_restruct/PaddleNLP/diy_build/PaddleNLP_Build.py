@@ -60,7 +60,7 @@ class PaddleNLP_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         paddle_whl = self.paddle_whl
-        os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com,baidu-int.com,org.cn"
+        os.environ["no_proxy"] = "bcebos.com,baidu.com,baidu-int.com,org.cn"
         print("set timeout as:", os.environ["timeout"])
         print("set no_proxy as:", os.environ["no_proxy"])
 
@@ -111,7 +111,7 @@ class PaddleNLP_Build(Model_Build):
             os.system('sed -i "s/batch_size: 4096/batch_size: 1000/g" examples/machine_translation/transformer/configs/transformer.base.yaml')
             
             from datasets import load_dataset
-            
+
             train_examples = load_dataset("squad", split="train")
             train_examples = load_dataset("glue", "SST2", split="train")
 
