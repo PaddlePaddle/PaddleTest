@@ -12,6 +12,8 @@ import argparse
 import numpy as np
 import yaml
 from Model_Build import Model_Build
+from datasets import load_dataset
+
 
 logger = logging.getLogger("ce")
 
@@ -108,6 +110,8 @@ class PaddleNLP_Build(Model_Build):
             os.system('sed -i "s/epoch: 30/epoch: 1/g" examples/machine_translation/transformer/configs/transformer.base.yaml')
             os.system('sed -i "s/max_iter: None/max_iter: 2/g" examples/machine_translation/transformer/configs/transformer.base.yaml')
             os.system('sed -i "s/batch_size: 4096/batch_size: 1000/g" examples/machine_translation/transformer/configs/transformer.base.yaml')
+            train_examples = load_dataset("squad", split="train")
+            train_examples = load_dataset("glue", "SST2", split="train")
 
         if re.compile("CUDA11").findall(self.models_file):
             os.system(
