@@ -88,6 +88,7 @@ def test_trt_fp16_more_bz():
             output_data_dict,
             delta=2e-2,
             max_batch_size=max_batch_size,
+            min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
             tuned=True,
@@ -105,6 +106,7 @@ def test_trt_fp16_more_bz():
             output_data_dict,
             delta=2e-2,
             max_batch_size=max_batch_size,
+            min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
         )
@@ -147,6 +149,7 @@ def test_jetson_trt_fp16_more_bz():
             output_data_dict,
             delta=2e-2,
             max_batch_size=max_batch_size,
+            min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
             tuned=True,
@@ -163,6 +166,7 @@ def test_jetson_trt_fp16_more_bz():
             output_data_dict,
             delta=2e-2,
             max_batch_size=max_batch_size,
+            min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
         )

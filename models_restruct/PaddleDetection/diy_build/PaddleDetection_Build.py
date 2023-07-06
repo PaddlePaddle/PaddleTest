@@ -93,6 +93,10 @@ class PaddleDetection_Build(Model_Build):
         os.system("yum install ffmpeg ffmpeg-devel -y")
         os.system("apt-get update")
         os.system("apt-get install ffmpeg -y")
+        # 显示暗转
+        os.system("python -m pip install imgaug")
+        # pillow升级会有python预测问题
+        os.system("python -m pip install Pillow==9.5.0")
         os.system("python -m pip uninstall bce-python-sdk -y")
         os.system("python -m pip install bce-python-sdk==0.8.74 --ignore-installed")
         # set sed
@@ -200,7 +204,9 @@ class PaddleDetection_Build(Model_Build):
         os.chdir(path_repo + "/deploy/cpp")
         # 根据环境变量获取
         paddle_inference = os.getenv("paddle_inference")
-        if paddle_inference:
+        # 增加判断，兼容PaddleMT
+        print("env paddle_inference is", paddle_inference)
+        if paddle_inference and paddle_inference != "None":
             wget.download(paddle_inference)
             os.system("tar -xf paddle_inference.tgz")
             os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
