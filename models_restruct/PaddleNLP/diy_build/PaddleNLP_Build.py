@@ -112,8 +112,8 @@ class PaddleNLP_Build(Model_Build):
             
             from datasets import load_dataset
 
-            train_examples = load_dataset("squad", split="train")
-            train_examples = load_dataset("glue", "SST2", split="train")
+            train_squad = load_dataset("squad", split="train", cache_dir="/root/.cache/huggingface/datasets")
+            train_sst2 = load_dataset("glue", "SST2", split="train", cache_dir="/root/.cache/huggingface/datasets")
 
         if re.compile("CUDA11").findall(self.models_file):
             os.system(

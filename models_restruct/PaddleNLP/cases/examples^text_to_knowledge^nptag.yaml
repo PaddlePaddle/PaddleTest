@@ -1,0 +1,63 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: examples/text_to_knowledge/nptag/
+        cmd: wget -q https://paddlenlp.bj.bcebos.com/paddlenlp/datasets/nptag_dataset.tar.gz && tar -zxvf nptag_dataset.tar.gz
+      -
+        name: pretrain
+        path: examples/text_to_knowledge/nptag/
+        cmd: python -m paddle.distributed.launch  train.py
+        params:
+          - --batch_size 64 
+          - --learning_rate 1e-6 
+          - --num_train_epochs 1 
+          - --logging_steps 10 
+          - --save_steps 100 
+          - --output_dir ./output 
+          - --device "gpu"
+    eval: 
+      -
+        name: eval
+        path: examples/text_to_knowledge/nptag/
+        cmd: python -m paddle.distributed.launch  predict.py 
+        params:
+          - --device=gpu 
+          - --params_path ./output/model_100/model_state.pdparams
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/text_to_knowledge/nptag/
+        cmd: python export_model.py 
+        params:
+          - --params_path=./output/model_100/model_state.pdparams 
+          - --output_path=./export 
+    predict: 
+      -
+        name: predict
+        path: examples/text_to_knowledge/nptag/
+        cmd: python deploy/python/predict.py 
+        params:
+          - --model_dir=./export
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
