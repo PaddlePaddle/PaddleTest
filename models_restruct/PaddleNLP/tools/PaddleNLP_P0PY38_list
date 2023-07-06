@@ -37,3 +37,4 @@ examples^machine_reading_comprehension^SQuAD.yaml
 examples^machine_translation^seq2seq.yaml
 examples^text_correction^ernie-csc.yaml
 examples^sentiment_analysis^textcnn.yaml
+examples^text_to_knowledge^nptag.yaml
