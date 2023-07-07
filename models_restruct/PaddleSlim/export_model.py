@@ -17,9 +17,9 @@ import logging
 import os
 import shutil
 import sys
+import argparse
 import pkg_resources as pkg
 import paddle
-import argparse
 
 _logger = logging.getLogger(__name__)
 
@@ -27,6 +27,9 @@ __all__ = ["load_inference_model", "get_model_dir", "load_onnx_model", "export_o
 
 
 def load_inference_model(path_prefix, executor, model_filename=None, params_filename=None):
+    """
+    load_inference_model
+    """
     # Load onnx model to Inference model.
     if path_prefix.endswith(".onnx"):
         inference_program, feed_target_names, fetch_targets = load_onnx_model(path_prefix)
@@ -69,17 +72,20 @@ def load_inference_model(path_prefix, executor, model_filename=None, params_file
 
 
 def get_model_dir(model_dir, model_filename, params_filename):
+    """
+    get_model_dir
+    """
     if model_dir.endswith(".onnx"):
         updated_model_dir = model_dir.rstrip().rstrip(".onnx") + "_infer"
     else:
         updated_model_dir = model_dir.rstrip("/")
 
-    if model_filename == None:
+    if model_filename is None:
         updated_model_filename = "model.pdmodel"
     else:
         updated_model_filename = model_filename
 
-    if params_filename == None:
+    if params_filename is None:
         updated_params_filename = "model.pdiparams"
     else:
         updated_params_filename = params_filename
@@ -92,6 +98,9 @@ def get_model_dir(model_dir, model_filename, params_filename):
 
 
 def load_onnx_model(model_path, disable_feedback=False, enable_onnx_checker=True):
+    """
+    load_onnx_model
+    """
     assert model_path.endswith(".onnx"), "{} does not end with .onnx suffix and cannot be loaded.".format(model_path)
     inference_model_path = model_path.rstrip().rstrip(".onnx") + "_infer"
     exe = paddle.static.Executor(paddle.CPUPlace())
