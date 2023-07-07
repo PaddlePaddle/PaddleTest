@@ -5,6 +5,7 @@ import os
 
 
 def bracket_check_file(file_path, left_bracket, right_bracket):
+    """test"""
     # 正向检查
     s1 = []
     with open(file_path, "r") as f:
@@ -47,6 +48,9 @@ def bracket_check_file(file_path, left_bracket, right_bracket):
 
 
 def solve(path: str, whitelist: list = []):
+
+    """test"""
+
     print(f"solving file {path}")
     if os.path.isdir(path):
         pathes = [o for o in os.listdir(path) if os.path.isdir(os.path.join(path, o))]
@@ -68,4 +72,4 @@ def solve(path: str, whitelist: list = []):
 
 
 if __name__ == "__main__":
-    solve("../../../PaddleScience",["ad.py"])
+    solve("../../../PaddleScience", ["ad.py"])
