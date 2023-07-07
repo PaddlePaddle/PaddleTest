@@ -6,6 +6,7 @@ import os
 
 logger = logging.getLogger("ce")
 
+
 class PaddleDetection_End(object):
     """
     case执行结束后
