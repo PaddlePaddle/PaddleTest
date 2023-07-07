@@ -3,9 +3,9 @@
 执行case后执行的文件
 """
 import os
+import logging
 
 logger = logging.getLogger("ce")
-
 
 class PaddleDetection_End(object):
     """
