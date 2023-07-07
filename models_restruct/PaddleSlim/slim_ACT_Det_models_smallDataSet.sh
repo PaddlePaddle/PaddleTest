@@ -31,6 +31,7 @@ execute_yolov_modes(){
     copy_coco_data ${des}
     # 讲run中的转onnx关闭
     sed -i "s|ac.export_onnx()|#ac.export_onnx()|g" run.py
+    cp ${current_path}/export_model.py .
     for model in ${models_list}
     do
         # 下载数据集和预训练模型
@@ -40,7 +41,7 @@ execute_yolov_modes(){
         wget https://paddle-slim-models.bj.bcebos.com/act/${model}.onnx
         python run.py --config_path=./configs/${model}_qat_dis.yaml --save_dir=./${model}_act_qat/
         # 将原始模型转换格式
-        python export.py  --model_path=./${model}.onnx
+        python export_model.py  --model_path=./${model}.onnx
         mkdir ${model}_models
         mv ${model}_act_qat ./${model}_models
         mv ${model}_infer ${model}
