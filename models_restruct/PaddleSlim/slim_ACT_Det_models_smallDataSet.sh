@@ -68,7 +68,7 @@ execute_ppyoloe(){
     mv ppyoloe_crn_l_300e_coco_act_qat ./ppyoloe_crn_l_300e_coco_models
     tar -cf ppyoloe_crn_l_300e_coco_models.tar ppyoloe_crn_l_300e_coco_models
     mv ppyoloe_crn_l_300e_coco_models.tar  ${current_path}/${model_path}
-    upload_data 
+    upload_data
 }
 
 execute_picodet(){
