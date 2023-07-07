@@ -15,9 +15,6 @@ copy_coco_data(){
 upload_data() {
     # 将结果上传到bos上
     now_path=$(pwd)
-    model=$1
-    tar -cf ${model}_act_qat.tar ${model}_act_qat
-    mv ${model}_act_qat.tar ${current_path}/${model_path}
     cd ${current_path}
     unset http_proxy && unset https_proxy
     python Bos/upload.py ${current_path}/${model_path} ${bos_path}/${slim_commit}
@@ -42,11 +39,15 @@ execute_yolov_modes(){
         sed -i "s|onnx_format: true|onnx_format: false|g" configs/${model}_qat_dis.yaml
         wget https://paddle-slim-models.bj.bcebos.com/act/${model}.onnx
         python run.py --config_path=./configs/${model}_qat_dis.yaml --save_dir=./${model}_act_qat/
-        # 上传执行结果
-        # 将原始模型重新命名
-        mv ${model}.onnx  ${model}_origin.onnx
-        mv ${model}_origin.onnx ./${model}_act_qat/
-        upload_data ${model}
+        # 将原始模型转换格式
+        python export.py  --model_path=./${model}.onnx
+        mkdir ${model}_models
+        mv ${model}_act_qat ./${model}_models
+        mv ${model}_infer ${model}
+        mv ${model} ./${model}_models
+        tar -cf ${model}_models.tar ${model}_models
+        mv ${model}_models.tar  ${current_path}/${model_path}
+        upload_data
     done
 }
 
@@ -62,9 +63,12 @@ execute_ppyoloe(){
     sed -i "s|onnx_format: true|onnx_format: false|g" configs/ppyoloe_l_qat_dis.yaml
     python run.py --config_path=./configs/ppyoloe_l_qat_dis.yaml --save_dir=ppyoloe_crn_l_300e_coco_act_qat
     # 上传执行结果
-    mv ppyoloe_crn_l_300e_coco  ppyoloe_crn_l_300e_coco_origin
-    mv ppyoloe_crn_l_300e_coco_origin ./ppyoloe_crn_l_300e_coco_act_qat/
-    upload_data ppyoloe_crn_l_300e_coco
+    mkdir ppyoloe_crn_l_300e_coco_models
+    mv ppyoloe_crn_l_300e_coco ./ppyoloe_crn_l_300e_coco_models
+    mv ppyoloe_crn_l_300e_coco_act_qat ./ppyoloe_crn_l_300e_coco_models
+    tar -cf ppyoloe_crn_l_300e_coco_models.tar ppyoloe_crn_l_300e_coco_models
+    mv ppyoloe_crn_l_300e_coco_models.tar  ${current_path}/${model_path}
+    upload_data 
 }
 
 execute_picodet(){
@@ -78,9 +82,13 @@ execute_picodet(){
     sed -i "s|onnx_format: true|onnx_format: false|g" configs/picodet_npu_with_postprocess.yaml
     python run.py --config_path=./configs/picodet_npu_with_postprocess.yaml --save_dir='./picodet_s_416_coco_npu_act_qat/'
     # 上传执行结果
-    mv picodet_s_416_coco_npu  picodet_s_416_coco_npu_origin
-    mv picodet_s_416_coco_npu_origin ./picodet_s_416_coco_npu_act_qat/
-    upload_data picodet_s_416_coco_npu
+    # 上传执行结果
+    mkdir picodet_s_416_coco_npu_models
+    mv picodet_s_416_coco_npu ./picodet_s_416_coco_npu_models
+    mv picodet_s_416_coco_npu_act_qat ./picodet_s_416_coco_npu_models
+    tar -cf picodet_s_416_coco_npu_models.tar picodet_s_416_coco_npu_models
+    mv picodet_s_416_coco_npu_models.tar  ${current_path}/${model_path}
+    upload_data
 }
 
 
