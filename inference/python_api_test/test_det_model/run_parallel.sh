@@ -11,6 +11,12 @@ cases="./test_fast_rcnn_mkldnn.py \
        ./test_solov2_mkldnn.py \
        ./test_yolov3_gpu.py \
        ./test_yolov3_mkldnn.py \
+       ../test_nlp_model/test_bert_gpu.py \
+       ../test_nlp_model/test_bert_mkldnn.py \
+       ../test_nlp_model/test_bert_trt_fp32.py \
+       ../test_nlp_model/test_ernie_gpu.py \
+       ../test_nlp_model/test_ernie_mkldnn.py \
+       ../test_nlp_model/test_ernie_trt_fp32.py \
        ../test_nlp_model/test_lac_gpu.py \
        ../test_nlp_model/test_lac_trt_fp32.py \
        ../test_nlp_model/test_lac_trt_fp16.py \
