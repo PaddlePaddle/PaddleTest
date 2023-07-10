@@ -285,7 +285,7 @@ waveflow_ljspeech_ckpt_0.3.zip"
                     (
                         "case:" + os.linesep,
                         "    linux:" + os.linesep,
-                        "        base: ./base/speech_asr_base_all.yaml" + os.linesep,
+                        "        base: ./base/speech_asr_base.yaml" + os.linesep,
                     )
                 )
 
