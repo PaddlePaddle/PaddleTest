@@ -470,6 +470,7 @@ if [[ "${docker_flag}" == "" ]]; then
             ln -s $(which python3.10) run_env_py310/python;
             ln -s $(which pip3.10) run_env_py310/pip;
             export PATH=$(pwd)/run_env_py310:${PATH};
+            ;;
             311)
             mkdir run_env_py311;
             ln -s $(which python3.11) run_env_py311/python;
