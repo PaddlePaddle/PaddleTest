@@ -1,0 +1,75 @@
+case:
+  linux:
+    train:
+      -
+        name: multi
+        path: examples/language_model/llama
+        cmd: python -u  -m paddle.distributed.fleet.launch finetune_generation.py
+        params:
+          - --model_name_or_path facebook/llama-7b
+          - --do_train
+          - --do_eval
+          - --num_train_epochs 1
+          - --per_device_train_batch_size 2
+          - --per_device_eval_batch_size 2
+          - --tensor_parallel_degree 2
+          - --overwrite_output_dir
+          - --output_dir ./checkpoints/
+          - --logging_steps 1
+          - --fp16
+          - --fp16_opt_level O2
+          - --gradient_accumulation_steps 32
+          - --recompute
+          - --learning_rate 3e-5
+          - --lr_scheduler_type linear
+          - --max_grad_norm 1.0
+          - --warmup_steps 20
+          - --max_steps 2
+          - --eval_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --lora True
+    eval:
+      -
+        name: eval
+        path: examples/language_model/llama
+        cmd: python predict_generation.py
+        params:
+          -  --model_name_or_path ./checkpoints/
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/language_model/llama
+        cmd: export_generation_model.py
+        params:
+          - --model_path checkpoints/
+          - --output_path inference/llama
+    predict:
+    -
+        name: export
+        path: examples/language_model/llama
+        cmd: python infer_generation.py
+        params:
+          - --model_dir inference
+          - --model_prefix llama
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
