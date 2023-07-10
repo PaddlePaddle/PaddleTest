@@ -5,8 +5,7 @@ pwd;
 if [ -e linux_env_info.sh ];then
     rm -rf linux_env_info.sh
 fi
-cp ../../tools/linux_env_info.sh ./
-# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
 source ./linux_env_info.sh
 set +e
 
