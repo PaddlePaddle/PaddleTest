@@ -212,7 +212,7 @@ predict:
       - --vis_font_path=./doc/fonts/simfang.ttf
       - --use_gpu=True
       - --use_tensorrt=True
-      - --enable_mkldnn=False    
+      - --enable_mkldnn=False
   -
     name: pretrained_C_plus_plus_GPU
     path: deploy/cpp_infer
