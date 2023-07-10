@@ -173,7 +173,7 @@ def test_jetson_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             min_subgraph_size=1,
-            delta=delta,
+            delta=1e-4,
             precision="trt_fp32",
             dynamic=True,
         )
