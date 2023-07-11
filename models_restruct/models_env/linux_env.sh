@@ -172,7 +172,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
     else
-        linux_env_info_main get_wheel_url Cuda120 Python311 Develop ON
+        linux_env_info_main get_wheel_url Cuda120 Python311 Release ON
         # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
     fi
@@ -427,6 +427,14 @@ if [[ "${docker_flag}" == "" ]]; then
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
             export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
             ;;
+            311)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.11.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.11.0/bin/:${PATH}
+            ;;
+            312)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.12.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.12.0/bin/:${PATH}
+            ;;
             esac
         else
             echo "ubuntu"
@@ -462,6 +470,18 @@ if [[ "${docker_flag}" == "" ]]; then
             ln -s $(which python3.10) run_env_py310/python;
             ln -s $(which pip3.10) run_env_py310/pip;
             export PATH=$(pwd)/run_env_py310:${PATH};
+            ;;
+            311)
+            mkdir run_env_py311;
+            ln -s $(which python3.11) run_env_py311/python;
+            ln -s $(which pip3.11) run_env_py311/pip;
+            export PATH=$(pwd)/run_env_py311:${PATH};
+            ;;
+            312)
+            mkdir run_env_py312;
+            ln -s $(which python3.12) run_env_py312/python;
+            ln -s $(which pip3.12) run_env_py312/pip;
+            export PATH=$(pwd)/run_env_py312:${PATH};
             ;;
             esac
         fi
@@ -513,6 +533,14 @@ else
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
         export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
         ;;
+        311)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.11.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.11.0/bin/:${PATH}
+        ;;
+        312)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.12.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.12.0/bin/:${PATH}
+        ;;
         esac
     else
         echo "ubuntu"
@@ -552,6 +580,12 @@ else
         ln -s $(which python3.11) run_env_py311/python;
         ln -s $(which pip3.11) run_env_py311/pip;
         export PATH=$(pwd)/run_env_py311:${PATH};
+        ;;
+        312)
+        mkdir run_env_py312;
+        ln -s $(which python3.12) run_env_py312/python;
+        ln -s $(which pip3.12) run_env_py312/pip;
+        export PATH=$(pwd)/run_env_py312:${PATH};
         ;;
         esac
     fi
