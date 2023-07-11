@@ -60,7 +60,8 @@ class PaddleScience_End(object):
         # if ret:
         #     logger.info("build remove_data failed")
         #     return ret
-        if "examples" in self.qa_yaml_name:
+        mode = os.getenv("mode")
+        if mode == "precision":
             url = "https://paddle-qa.bj.bcebos.com/suijiaxin/base_log/{}_base.log".format(self.qa_yaml_name)
             file_name = "{}_base.log".format(self.qa_yaml_name)
             try:
