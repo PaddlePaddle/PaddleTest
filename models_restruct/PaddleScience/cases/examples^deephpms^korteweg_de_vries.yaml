@@ -1,0 +1,11 @@
+case:
+  linux:
+    base: ./base/korteweg_de_vries_base.yaml
+      -
+        name: single
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse

@@ -1,0 +1,11 @@
+case:
+  linux:
+    base: ./base/navier_stokes_base.yaml
+      -
+        name: single
+    eval: skipped
+    infer: skipped 
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse
