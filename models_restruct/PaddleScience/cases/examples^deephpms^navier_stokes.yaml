@@ -4,7 +4,7 @@ case:
       -
         name: single
     eval: skipped
-    infer: skipped 
+    infer: skipped
     export: skipped
     predict: skipped
 
