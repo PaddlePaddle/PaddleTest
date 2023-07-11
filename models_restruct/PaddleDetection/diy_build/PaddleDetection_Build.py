@@ -77,8 +77,8 @@ class PaddleDetection_Build(Model_Build):
         os.system("python -m pip install --upgrade pip")
         os.system("python -m pip install Cython")
         logger.info("***start setuptools update")
-        os.system("python -m pip uninstall setuptools -y")
-        os.system("python -m pip install setuptools")
+        # os.system("python -m pip uninstall setuptools -y")
+        # os.system("python -m pip install setuptools")
         os.system("python -m pip install -r requirements.txt")
         os.system("python -m pip install zip --ignore-installed")
         os.system("python -m pip uninstall paddleslim -y")
@@ -93,6 +93,10 @@ class PaddleDetection_Build(Model_Build):
         os.system("yum install ffmpeg ffmpeg-devel -y")
         os.system("apt-get update")
         os.system("apt-get install ffmpeg -y")
+        # 显示暗转
+        os.system("python -m pip install imgaug")
+        # pillow升级会有python预测问题
+        os.system("python -m pip install Pillow==9.5.0")
         os.system("python -m pip uninstall bce-python-sdk -y")
         os.system("python -m pip install bce-python-sdk==0.8.74 --ignore-installed")
         # set sed
@@ -198,16 +202,20 @@ class PaddleDetection_Build(Model_Build):
                 logger.info("#### link_dataset failed")
         # compile cpp
         os.chdir(path_repo + "/deploy/cpp")
-        wget.download(
-            "https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos"
-            "-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddle_inference.tgz"
-        )
-        os.system("tar -xf paddle_inference.tgz")
-        os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
-        os.system('sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh')
-        os.system('sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh')
-        os.system('sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh')
-        os.system("sh scripts/build.sh")
+        # 根据环境变量获取
+        paddle_inference = os.getenv("paddle_inference")
+        # 增加判断，兼容PaddleMT
+        print("env paddle_inference is", paddle_inference)
+        if paddle_inference and paddle_inference != "None":
+            wget.download(paddle_inference)
+            os.system("tar -xf paddle_inference.tgz")
+            os.system('sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh')
+            os.system('sed -i "s|/path/to/tensorrt/lib|/usr/local/TensorRT-7.0.0.11/lib|g" scripts/build.sh')
+            os.system('sed -i "s|/path/to/tensorrt/include|/usr/local/TensorRT-7.0.0.11/include|g" scripts/build.sh')
+            os.system('sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh')
+            os.system('sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh')
+            os.system('sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh')
+            os.system("sh scripts/build.sh")
         os.chdir(path_now)
         return 0
 
@@ -251,6 +259,5 @@ if __name__ == "__main__":
 
     args = parse_args()
     print("args:{}".format(args))
-    # logger.info('###args {}'.format(args.models_file))
     model = PaddleDetection_Build(args)
     model.build_paddledetection()

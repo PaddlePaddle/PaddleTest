@@ -17,8 +17,11 @@ from engine.infer import LayerInfer
 engine_map = {
     "dy_train": LayerTrain,
     "dy2st_train": LayerTrain,
+    "dy2st_train_cinn": LayerTrain,
     "dy_eval": LayerEval,
     "dy2st_eval": LayerEval,
     "jit_save": LayerExport,
     "paddle_infer": LayerInfer,
+    "paddle_infer_mkldnn": LayerInfer,
+    "paddle_infer_ort": LayerInfer,
 }

@@ -18,11 +18,13 @@ import sys
 from datetime import datetime
 
 from statistics.statistics import Statistics
-from db.ci_db import CIdb
+
+# from db.ci_db import CIdb
 from info.snapshot import Snapshot
-from strategy.compare import data_dict_compare, double_check, ci_level_reveal
-from strategy.transdata import data_list_to_dict
-from alarm.alarm import Alarm
+
+# from strategy.compare import data_dict_compare, double_check, ci_level_reveal
+# from strategy.transdata import data_list_to_dict
+# from alarm.alarm import Alarm
 
 import paddle
 
@@ -158,10 +160,10 @@ class ApiBenchmarkPTS(object):
 
         case_info = self.yaml_loader.get_case_info(case_name)
         bt = BenchTrans(case=case_info, logger=self.logger)
-        if self.enable_backward == 0:
-            enable_backward_trigger = False
-        else:
-            enable_backward_trigger = bt.enable_backward()
+        # if self.enable_backward == 0:
+        #     enable_backward_trigger = False
+        # else:
+        #     enable_backward_trigger = bt.enable_backward()
         api = bt.get_paddle_api()
 
         try:
@@ -173,7 +175,7 @@ class ApiBenchmarkPTS(object):
                     place=self.place,
                     card=self.card,
                     default_dtype=self.default_dtype,
-                    enable_backward=enable_backward_trigger,
+                    # enable_backward=enable_backward_trigger,
                     loops=self.loops,
                     base_times=self.base_times,
                 )
@@ -185,14 +187,14 @@ class ApiBenchmarkPTS(object):
                     place=self.place,
                     card=self.card,
                     default_dtype=self.default_dtype,
-                    enable_backward=enable_backward_trigger,
+                    # enable_backward=enable_backward_trigger,
                     loops=self.loops,
                     base_times=self.base_times,
                 )
             jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
             jelly.set_paddle_method(bt.get_paddle_method())
 
-            if enable_backward_trigger:
+            if self.enable_backward == 1:
                 forward_time_list = jelly.paddle_forward()
                 total_time_list = jelly.paddle_total()
                 backward_time_list = list(map(lambda x: x[0] - x[1], zip(total_time_list, forward_time_list)))
@@ -337,8 +339,11 @@ class ApiBenchmarkPTS(object):
         latest_dict, error_dict, forward_time_list = self.run(
             all_cases=self.all_cases, latest_id=self.latest_id, iters=1
         )
-
-        self.statistics.littlefish(data_list=forward_time_list)
+        # print('forward_time_list is: ', forward_time_list)
+        print("test is over~~")
+        # self.statistics.littlefish(data_list=forward_time_list)
+        res = self.statistics.distribution_fit(data_list=forward_time_list)
+        print("res is: ", res)
 
     def _show(self, forward_time, backward_time, total_time, best_total_time):
         """

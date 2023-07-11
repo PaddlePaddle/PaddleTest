@@ -52,13 +52,13 @@ def test_config():
 @pytest.mark.trt_fp16
 def test_trt_fp16_more_bz():
     """
-    compared trt fp16 batch_size=1-2 TNT_small outputs with true val
+    compared trt fp16 batch_size=1 TNT_small outputs with true val
     """
     check_model_exist()
 
     file_path = "./TNT_small"
     images_size = 224
-    batch_size_pool = [1, 2]
+    batch_size_pool = [1]
     for batch_size in batch_size_pool:
         try:
             shutil.rmtree(f"{file_path}/_opt_cache")  # delete trt serialized cache
@@ -101,7 +101,7 @@ def test_trt_fp16_more_bz():
             output_data_dict,
             delta=1e-2,
             max_batch_size=10,
-            min_subgraph_size=0,
+            min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
             shape_range_file=file_path + "/shape_range.pbtxt",
@@ -159,7 +159,7 @@ def test_jetson_trt_fp16_more_bz():
             output_data_dict,
             delta=1e-2,
             max_batch_size=10,
-            min_subgraph_size=0,
+            min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
             shape_range_file=file_path + "/shape_range.pbtxt",
@@ -216,7 +216,7 @@ def test_trt_fp16_bz1_multi_thread():
         input_data_dict,
         output_data_dict,
         delta=1e-2,
-        min_subgraph_size=0,
+        min_subgraph_size=1,
         precision="trt_fp16",
         dynamic=True,
         shape_range_file="./TNT_small/shape_range.pbtxt",

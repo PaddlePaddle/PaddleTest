@@ -78,7 +78,11 @@ def test_lac_trt_fp32():
         precision="trt_fp32",
         dynamic=True,
         tuned=True,
-        min_subgraph_size=2,
+        min_subgraph_size=1,
+        # transpose_2.tmp_0_slice_0 is a slice op's output name, forbid this slice op into paddle-trt
+        # because it's EndsTensorList is max_0.tmp_0, there is
+        # another tensorrt_engine who has a input called max_0.tmp_0 too.
+        delete_op_list=["transpose_2.tmp_0_slice_0"],
     )
 
     del test_suite1  # destroy class to save memory
@@ -95,7 +99,9 @@ def test_lac_trt_fp32():
         precision="trt_fp32",
         dynamic=True,
         tuned=False,
-        min_subgraph_size=2,
+        min_subgraph_size=1,
+        # see below comments
+        delete_op_list=["transpose_2.tmp_0_slice_0"],
     )
 
     del test_suite2  # destroy class to save memory

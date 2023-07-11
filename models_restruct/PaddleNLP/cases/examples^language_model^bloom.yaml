@@ -1,0 +1,78 @@
+case:
+  linux:
+    train:
+      -
+        name: multi
+        path: examples/language_model/bloom
+        cmd: python -m paddle.distributed.launch --log_dir our_log finetune_generation.py
+        params:
+          - --model_name_or_path bigscience/bloom-560m \
+          - --num_train_epochs 4 \
+          - --learning_rate 1e-6 \
+          - --warmup_ratio 0.06 \
+          - --weight_decay 0.1 \
+          - --label_smoothing 0.1 \
+          - --max_steps 2 \
+          - --save_steps 2 \
+          - --logging_steps 1 \
+          - --eval_steps 2 \
+          - --output_dir ./checkpoints/bloom-560m \
+          - --src_length 500 \
+          - --tgt_length 100 \
+          - --min_tgt_length 0 \
+          - --per_device_eval_batch_size 4 \
+          - --per_device_train_batch_size 2 \
+          - --gradient_accumulation_steps 8 \
+          - --max_grad_norm 1.0 \
+          - --scale_loss 32768 \
+          - --lr_scheduler_type linear \
+          - --do_train \
+          - --do_eval \
+          - --fp16 \
+          - --fp16_opt_level O2 \
+          - --recompute \
+          - --tensor_parallel_degree 2
+    eval:
+      -
+        name: eval
+        path: examples/language_model/bloom
+        cmd: python -m paddle.distributed.launch predict_generation.py
+        params:
+          - --model_name_or_path checkpoints/bloom-560m/checkpoint-20
+          - --save_onepiece_model_path ./save
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/language_model/bloom
+        cmd: export_generation_model.py
+        params:
+        - --model_name_or_path ./save
+        - --output_path inference/bloom
+    predict:
+      -
+        name: predict
+        path: examples/language_model/bloom
+        cmd: infer_generation.py
+        params:
+        - --model_dir inference/ --model_prefix bloom
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -19,8 +19,8 @@ set -e
 
 # 镜像信息
 function DockerImages () {
-    docker_type=$1
-    cuda_version=$2
+    local docker_type=$1
+    local cuda_version=$2
     DOCKER_EXIT_CODE=0
     # 增加Manual模式，如果已经手动设置了安装包链接，不执行后续逻辑
     if [[ "${Image_version}" != "" ]];then
@@ -41,7 +41,7 @@ function DockerImages () {
             ;;
         "Cuda116")
             echo "Selected Centos: Cuda116"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4.0-trt8.4.0.6-gcc82"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4-trt8.4-gcc8.2"
             ;;
         "Cuda117")
             echo "Selected Centos: Cuda117"
@@ -50,6 +50,10 @@ function DockerImages () {
         "Cuda118")
             echo "Selected Centos: Cuda118"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.8-cudnn8.6-trt8.5-gcc8.2"
+            ;;
+        "Cuda120")
+            echo "Selected Centos: Cuda120"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.0-cudnn8.9-trt8.6-gcc12.2"
             ;;
         *)
             DOCKER_EXIT_CODE=101
@@ -60,7 +64,7 @@ function DockerImages () {
         case ${cuda_version} in
         "Cuda102")
             echo "Selected Ubuntu: Cuda102"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
             ;;
         "Cuda112")
             echo "Selected Ubuntu: Cuda112"
@@ -72,11 +76,15 @@ function DockerImages () {
             ;;
         "Cuda117")
             echo "Selected Ubuntu: Cuda117"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc8.2-v1"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc82"
             ;;
         "Cuda118")
             echo "Selected Ubuntu: Cuda118"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.8-cudnn8.6-trt8.5-gcc82"
+            ;;
+        "Cuda120")
+            echo "Selected Ubuntu: Cuda120"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.0-cudnn8.9-trt8.6-gcc12.2"
             ;;
         *)
             DOCKER_EXIT_CODE=101
@@ -97,9 +105,9 @@ function DockerImages () {
 
 # 版本退场判断
 function VersionExitJudgment () {
-    cuda_version=$1
-    python_version=$2
-    branch_info=$3
+    local cuda_version=$1
+    local python_version=$2
+    local branch_info=$3
     if [[ "${branch_info}" == "Develop" ]];then
         case ${cuda_version} in
             "Cpu")
@@ -113,11 +121,20 @@ function VersionExitJudgment () {
                 ;;
             "Cuda116")
                 echo "everything works fine."
+                echo "###############################"
+                echo "###         Error         ###"
+                echo "###############################"
+                echo "# It is recommended to upgrade cuda11.6 to cuda12.0, and python version 3.11 is recommended. #"
+                echo "###############################"
+                exit 118
                 ;;
             "Cuda117")
                 echo "everything works fine."
                 ;;
             "Cuda118")
+                echo "everything works fine."
+                ;;
+            "Cuda120")
                 echo "everything works fine."
                 ;;
             *)
@@ -142,6 +159,9 @@ function VersionExitJudgment () {
             "Python310")
                 echo "everything works fine."
                 ;;
+            "Python311")
+                echo "everything works fine."
+                ;;
             *)
                 echo "Python Version is incorrect!!!"
                 ;;
@@ -152,8 +172,8 @@ function VersionExitJudgment () {
 
 # CPU安装包链接信息
 function CpuPackageUrlInfo(){
-    branch_info=$1
-    package_version=$2
+    local branch_info=$1
+    local package_version=$2
 
     case ${package_version} in
         "Python37")
@@ -172,14 +192,12 @@ function CpuPackageUrlInfo(){
         "Python310")
                 export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Cpu-Mkl-Avx-Gcc82/latest/paddlepaddle-0.0.0-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Python311")
+                export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Cpu-Mkl-Avx-Gcc82/latest/paddlepaddle-0.0.0-cp311-cp311-linux_x86_64.whl"
+            ;;
         "Inference")
-            # 预测库安装包的地址
-            if [[ "${branch_info}" == "Develop" ]];then
-                export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-LinuxCentos-Gcc82-OnInfer-Py38-Compile/latest/paddle_inference.tgz"
-                export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Cpu-LinuxCentos-Gcc82-OnInfer-Py38-Compile/latest/paddle_inference_c.tgz"
-            else
-                export WHELLINFO_EXITCODE=116
-            fi
+            export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Cpu-Mkl-Avx-Gcc82/latest/paddle_inference.tgz"
+            export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Cpu-Mkl-Avx-Gcc82/latest/paddle_inference_c.tgz"
             ;;
         *)
             export WHELLINFO_EXITCODE=115
@@ -189,8 +207,8 @@ function CpuPackageUrlInfo(){
 
 # CUDA10.2安装包链接信息
 function Cu102PackageUrlInfo(){
-    branch_info=$1
-    package_version=$2
+    local branch_info=$1
+    local package_version=$2
 
     case ${package_version} in
         "Python37")
@@ -200,10 +218,13 @@ function Cu102PackageUrlInfo(){
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-GpuAll-Centos-Gcc82-Cuda102-Cudnn76-Trt6018-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl"
             ;;
         "Python39")
-            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda10.2-Cudnn7-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post102.post102-cp39-cp39-linux_x86_64.whl"
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda10.2-Cudnn7-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post102-cp39-cp39-linux_x86_64.whl"
             ;;
         "Python310")
-            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda10.2-Cudnn7-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post102.post102-cp310-cp310-linux_x86_64.whl"
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda10.2-Cudnn7-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post102-cp310-cp310-linux_x86_64.whl"
+            ;;
+        "Python311")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda10.2-Cudnn7-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post102-cp311-cp311-linux_x86_64.whl"
             ;;
         "Inference")
             # 预测库安装包的地址
@@ -218,8 +239,8 @@ function Cu102PackageUrlInfo(){
 
 # Cuda112安装包链接信息
 function Cu112PackageUrlInfo(){
-    branch_info=$1
-    package_version=$2
+    local branch_info=$1
+    local package_version=$2
 
     case ${package_version} in
         "Python37")
@@ -235,6 +256,9 @@ function Cu112PackageUrlInfo(){
         "Python310")
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Python311")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.2-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post112-cp311-cp311-linux_x86_64.whl"
+            ;;
         "Inference")
             # 预测库安装包的地址
             export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"
@@ -247,9 +271,9 @@ function Cu112PackageUrlInfo(){
 }
 
 # Cuda116安装包链接信息
-function Cu116PackageUrlInfo(){
-    branch_info=$1
-    package_version=$2
+function Cu116PackageUrlInfoAll(){
+    local branch_info=$1
+    local package_version=$2
 
     case ${package_version} in
         "Python37")
@@ -264,8 +288,12 @@ function Cu116PackageUrlInfo(){
         "Python310")
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.6-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post116-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Python311")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.6-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post116-cp311-cp311-linux_x86_64.whl"
+            ;;
         "Inference")
-            export WHELLINFO_EXITCODE=116
+            export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda11.6-Cudnn8-Trt8-Mkl-Avx-Gcc8.2/latest/paddle_inference.tgz"
+            export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda11.6-Cudnn8-Trt8-Mkl-Avx-Gcc8.2/latest/paddle_inference_c.tgz"
             ;;
         *)
             export WHELLINFO_EXITCODE=115
@@ -275,8 +303,8 @@ function Cu116PackageUrlInfo(){
 
 # Cuda117安装包链接信息
 function Cu117PackageUrlInfo(){
-    branch_info=$1
-    package_version=$2
+    local branch_info=$1
+    local package_version=$2
 
     case ${package_version} in
         "Python37")
@@ -291,8 +319,12 @@ function Cu117PackageUrlInfo(){
         "Python310")
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Python311")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp311-cp311-linux_x86_64.whl"
+            ;;
         "Inference")
-            export WHELLINFO_EXITCODE=116
+            export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda11.7-Cudnn8-Trt8-Mkl-Avx-Gcc8.2/latest/paddle_inference.tgz"
+            export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda11.7-Cudnn8-Trt8-Mkl-Avx-Gcc8.2/latest/paddle_inference_c.tgz"
             ;;
         *)
             export WHELLINFO_EXITCODE=115
@@ -302,8 +334,8 @@ function Cu117PackageUrlInfo(){
 
 # Cuda118安装包链接信息
 function Cu118PackageUrlInfo(){
-    branch_info=$1
-    package_version=$2
+    local branch_info=$1
+    local package_version=$2
 
     case ${package_version} in
         "Python37")
@@ -318,8 +350,59 @@ function Cu118PackageUrlInfo(){
         "Python310")
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.8-Cudnn8.6-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post118-cp310-cp310-linux_x86_64.whl"
             ;;
+        "Python311")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.8-Cudnn8.6-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post118-cp311-cp311-linux_x86_64.whl"
+            ;;
         "Inference")
-            export WHELLINFO_EXITCODE=116
+            export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda11.8-Cudnn8.6-Trt8.5-Mkl-Avx-Gcc8.2/latest/paddle_inference.tgz"
+            export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda11.8-Cudnn8.6-Trt8.5-Mkl-Avx-Gcc8.2/latest/paddle_inference_c.tgz"
+            ;;
+        *)
+            export WHELLINFO_EXITCODE=115
+            ;;
+    esac
+}
+
+# Cuda120安装包链接信息
+function Cu120PackageUrlInfoAll(){
+    local branch_info=$1
+    local package_version=$2
+
+    case ${package_version} in
+        "Python38")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda12.0-Cudnn8.9-Trt8.6-Mkl-Avx-Gcc12.2/latest/paddlepaddle_gpu-0.0.0.post120-cp38-cp38-linux_x86_64.whl"
+            ;;
+        "Python39")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda12.0-Cudnn8.9-Trt8.6-Mkl-Avx-Gcc12.2/latest/paddlepaddle_gpu-0.0.0.post120-cp39-cp39-linux_x86_64.whl"
+            ;;
+        "Python310")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda12.0-Cudnn8.9-Trt8.6-Mkl-Avx-Gcc12.2/latest/paddlepaddle_gpu-0.0.0.post120-cp310-cp310-linux_x86_64.whl"
+            ;;
+        "Python311")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda12.0-Cudnn8.9-Trt8.6-Mkl-Avx-Gcc12.2/latest/paddlepaddle_gpu-0.0.0.post120-cp311-cp311-linux_x86_64.whl"
+            ;;
+        "Inference")
+            export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda120-Cudnn89-Trt86-Mkl-Avx-Gcc122/latest/paddle_inference.tgz"
+            export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda120-Cudnn89-Trt86-Mkl-Avx-Gcc122/latest/paddle_inference_c.tgz"
+            ;;
+        *)
+            export WHELLINFO_EXITCODE=115
+            ;;
+    esac
+}
+
+# Cuda120安装包链接信息
+function Cu120PackageUrlInfoRecommand(){
+    local branch_info=$1
+    local package_version=$2
+
+    case ${package_version} in
+        "Python311")
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-GpuAll-LinuxCentos-Gcc82-Cuda120-Cudnn89-Trt86-Py311-Compile/latest/paddlepaddle_gpu-0.0.0-cp311-cp311-linux_x86_64.whl"
+            ;;
+        "Inference")
+            export paddle_inference="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda120-Cudnn89-Trt86-Mkl-Avx-Gcc122/latest/paddle_inference.tgz"
+            export paddle_inference_c="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Infer-Linux-Gpu-Cuda120-Cudnn89-Trt86-Mkl-Avx-Gcc122/latest/paddle_inference_c.tgz"
             ;;
         *)
             export WHELLINFO_EXITCODE=115
@@ -330,8 +413,8 @@ function Cu118PackageUrlInfo(){
 
 # 安装包链接
 function WheelUrlInfo(){
-    cuda_version=$1
-    python_version=$2
+    local cuda_version=$1
+    local python_version=$2
     # branch信息默认为Develop分支
     branch_info=${3:-"Develop"}
     infer_package=${4:-"OFF"}
@@ -389,6 +472,124 @@ function WheelUrlInfo(){
             Cu118PackageUrlInfo ${branch_info} ${python_version}
             if [[ "${infer_package}" != "OFF" ]];then
                 Cu118PackageUrlInfo ${branch_info} Inference
+            fi
+            ;;
+        "Cuda120")
+            Cu120PackageUrlInfoRecommand ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                Cu120PackageUrlInfoRecommand ${branch_info} Inference
+            fi
+            ;;
+        *)
+            WHELLINFO_EXITCODE=115
+            ;;
+        esac
+    if [[ "$cuda_version" != "Manual" ]];then
+        # 安装包选择的条件信息
+        echo "==========================="
+        echo "Install Packages Select Options as follows:"
+        echo "- Branch Info: ${branch_info}"
+        echo "- Cuda Version: ${cuda_version}"
+        echo "- Python Version: ${package_version}"
+        echo "- Inference Packages: ${infer_package}"
+
+        if [[ "${WHELLINFO_EXITCODE}" == "114" ]];then
+            echo "Branch Info is incorrect,please choose one from Develop or Release!!!"
+            echo "EXITCODE:${WHELLINFO_EXITCODE}"
+        elif [[ "${WHELLINFO_EXITCODE}" == "115" ]];then
+            echo "Cuda Version is incorrect!!!"
+        elif [[ "${WHELLINFO_EXITCODE}" == "115" ]];then
+            echo "Python Version is incorrect,please choose from (Python37 Python38 Python39 Python310 Inference)"
+        else
+            echo "====InstallPackage Info is:===="
+            echo "- paddle_whl:${paddle_whl}"
+            echo 'Ps. You can get this wheel_url through "${paddle_whl}";'
+
+            if [[ "${infer_package}" != "OFF" ]];then
+                echo "- paddle_inference:${paddle_inference}"
+                echo "- paddle_inference_c:${paddle_inference_c}"
+                echo 'Ps. You can get this wheel_url through "${paddle_inference}" or "${paddle_inference_c}"'
+            fi
+        fi
+
+        if [[ "${WHELLINFO_EXITCODE}" != "0" ]];then
+            echo "EXITCODE:${WHELLINFO_EXITCODE}"
+            exit ${WHELLINFO_EXITCODE}
+        fi
+    else
+        echo "====InstallPackage Info is:===="
+        echo "- paddle_whl:${paddle_whl}"
+        echo 'Ps. You can get this wheel_url through "${paddle_whl}";'
+    fi
+}
+
+# 安装包链接全覆盖
+function WheelUrlInfoAll(){
+    local cuda_version=$1
+    local python_version=$2
+    # branch信息默认为Develop分支
+    branch_info=${3:-"Develop"}
+    infer_package=${4:-"OFF"}
+
+    # 增加Manual模式，如果已经手动设置了安装包链接，不执行后续逻辑
+    if [[ "${paddle_whl}" != "" ]];then
+        cuda_version="Manual"
+    fi
+    WHELLINFO_EXITCODE=0
+
+    if [[ "${branch_info}" == "Release" ]];then
+        echo "The branch information you selected is [${branch_info}];"
+    elif [[ "${branch_info}" == "Develop" ]];then
+        echo "The branch information you selected is [${branch_info}];"
+    else
+        echo "The branch information input is wrong, you can choose to enter 'Develop' or 'Release';"
+        WHELLINFO_EXITCODE=114
+    fi
+
+    case ${cuda_version} in
+        "Manual")
+            echo "Select Manual Mode!!!"
+            ;;
+        "Cpu")
+            CpuPackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                CpuPackageUrlInfo ${branch_info} Inference
+            fi
+            ;;
+        "Cuda102")
+            Cu102PackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                Cu102PackageUrlInfo ${branch_info} Inference
+            fi
+            ;;
+        "Cuda112")
+            Cu112PackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                Cu112PackageUrlInfo ${branch_info} Inference
+            fi
+            ;;
+        "Cuda116")
+            Cu116PackageUrlInfoAll ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                Cu116PackageUrlInfoAll ${branch_info} Inference
+            fi
+            ;;
+        "Cuda117")
+            Cu117PackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                Cu117PackageUrlInfo ${branch_info} Inference
+            fi
+            ;;
+        "Cuda118")
+            Cu118PackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                Cu118PackageUrlInfo ${branch_info} Inference
+            fi
+            ;;
+        "Cuda120")
+            Cu120PackageUrlInfoAll ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                Cu120PackageUrlInfoAll ${branch_info} Inference
             fi
             ;;
         *)
@@ -467,6 +668,10 @@ function linux_env_info_main() {
         get_wheel_url)
             VersionExitJudgment "${args[@]:1}"
             WheelUrlInfo "${args[@]:1}"
+            ;;
+        get_wheel_url_covall)
+            # VersionExitJudgment "${args[@]:1}"
+            WheelUrlInfoAll "${args[@]:1}"
             ;;
         *)
             print_usage
