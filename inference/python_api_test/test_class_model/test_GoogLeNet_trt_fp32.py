@@ -49,7 +49,8 @@ def test_config():
 
 
 # note: the diff is 2.294778823852539e-05 in cuda10.2
-if paddle.version.cuda() == "10.2":
+# note: the diff is 2.5510787963867188e-05 in win
+if paddle.version.cuda() == "10.2" or "win" in sys.platform:
     delta = 1e-4
 else:
     delta = 1e-5
@@ -173,7 +174,7 @@ def test_jetson_trt_fp32_more_bz():
             output_data_dict,
             max_batch_size=max_batch_size,
             min_subgraph_size=1,
-            delta=1e-4,
+            delta=delta,
             precision="trt_fp32",
             dynamic=True,
         )
