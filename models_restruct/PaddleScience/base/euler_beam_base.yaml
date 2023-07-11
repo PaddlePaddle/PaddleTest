@@ -11,7 +11,7 @@ train:
         evaluation: "-"
   -
     name: dy2st
-    cmd: python examples/euler_beam/euler_beam.py 
+    cmd: python examples/euler_beam/euler_beam.py
     params:
       - --to_static
       - --epochs=10000
