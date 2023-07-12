@@ -11,6 +11,11 @@ case:
           - -o AMP.level=O1
           - -o DataLoader.Train.loader.num_workers=1
       -
+        name: single_dy2st
+        params:
+          - -o AMP.level=O1
+          - -o DataLoader.Train.loader.num_workers=1
+      -
         name: multi
         params:
           - -o AMP.level=O1

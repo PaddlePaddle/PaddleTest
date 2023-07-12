@@ -7,6 +7,10 @@ case:
         params:
           - -o DataLoader.Train.sampler.first_bs=32
       -
+        name: single_dy2st
+        params:
+          - -o DataLoader.Train.sampler.first_bs=32
+      -
         name: multi
         params:
           - -o DataLoader.Train.sampler.first_bs=32
