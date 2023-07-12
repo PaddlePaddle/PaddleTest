@@ -5,6 +5,10 @@ case:
       -
         name: single
       -
+        name: single_dy2st
+          - -o DataLoader.Train.sampler.batch_size=32
+          - -o DataLoader.Eval.sampler.batch_size=32
+      -
         name: multi
       -
         name: multi_dy2st
