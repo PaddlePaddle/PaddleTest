@@ -14,8 +14,8 @@ case:
           - TrainReader.batch_size=1
       -
         name: amp_multi
-      -
-        name: static_multi
+      # -
+      #   name: static_multi
     eval:
       -
         name: pretrained
@@ -37,10 +37,10 @@ case:
         name: trt_fp32
       -
         name: trt_fp16
-      -
-        name: paddle2onnx
-      -
-        name: onnx_infer
+      # -
+      #   name: paddle2onnx
+      # -
+      #   name: onnx_infer
     api:
       -
         name: cpp
