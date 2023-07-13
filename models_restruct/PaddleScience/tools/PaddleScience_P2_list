@@ -1,0 +1,7 @@
+examples^bracket^bracket.yaml
+examples^aneurysm^aneurysm.yaml
+examples^deephpms^burgers.yaml
+examples^deephpms^korteweg_de_vries.yaml
+examples^deephpms^kuramoto_sivashinsky.yaml
+examples^deephpms^navier_stokes.yaml
+examples^deephpms^schrodinger.yaml

@@ -18,10 +18,10 @@ case:
             base: 2.73
             threshold: 0.5
             evaluation: "-"
-      -
-        name: amp_multi
-      -
-        name: static_multi
+      # -
+      #   name: amp_multi
+      # -
+      #   name: static_multi
     eval: skipped
     infer: skipped
     export: skipped

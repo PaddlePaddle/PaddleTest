@@ -6,6 +6,8 @@ case:
       -
         name: single
       -
+        name: single_dy2st
+      -
         name: multi
       -
         name: multi_dy2st

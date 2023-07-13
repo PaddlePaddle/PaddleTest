@@ -300,7 +300,7 @@ def test_trt_fp32_bz1():
     test_suite2.trt_more_bz_test(
         input_data_dict,
         output_data_dict,
-        min_subgraph_size=5,
+        min_subgraph_size=1,
         delta=1e-5,
         max_batch_size=40,
         use_static=False,
@@ -565,7 +565,7 @@ def test_trt_fp32_bz1_multi_thread():
     test_suite2.trt_bz1_multi_thread_test(
         input_data_dict,
         output_data_dict,
-        min_subgraph_size=5,
+        min_subgraph_size=1,
         delta=1e-5,
         use_static=False,
         precision="trt_fp32",
