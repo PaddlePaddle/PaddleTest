@@ -12,7 +12,7 @@ case:
     #     name: amp_multi
     #   -
     #     name: static_multi
-    # eval:
+    eval:
       -
         name: pretrained
         cmd: python -m paddle.distributed.launch tools/val.py
