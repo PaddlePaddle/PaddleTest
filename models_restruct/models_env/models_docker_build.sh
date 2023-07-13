@@ -30,6 +30,18 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
     else
         linux_env_info_main get_docker_images Ubuntu Cuda117
     fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda118" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        linux_env_info_main get_docker_images Centos Cuda118
+    else
+        linux_env_info_main get_docker_images Ubuntu Cuda118
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        linux_env_info_main get_docker_images Centos Cuda120
+    else
+        linux_env_info_main get_docker_images Ubuntu Cuda120
+    fi
 else
     Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
 fi

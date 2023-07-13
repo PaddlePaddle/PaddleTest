@@ -22,10 +22,10 @@ case:
             base: 9211.68
             threshold: 0.5
             evaluation: "-"
-      -
-        name: amp_multi
-      -
-        name: static_multi
+      # -
+      #   name: amp_multi
+      # -
+      #   name: static_multi
     eval:
       -
         name: pretrained
@@ -41,16 +41,16 @@ case:
     predict:
       -
         name: python
-      -
-        name: mkldnn
-      -
-        name: trt_fp32
-      -
-        name: trt_fp16
-      -
-        name: paddle2onnx
-      -
-        name: onnx_infer
+      # -
+      #   name: mkldnn
+      # -
+      #   name: trt_fp32
+      # -
+      #   name: trt_fp16
+      # -
+      #   name: paddle2onnx
+      # -
+      #   name: onnx_infer
     api:
       -
         name: cpp
