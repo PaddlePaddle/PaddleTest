@@ -77,7 +77,7 @@ class PaddleDetection_Build(Model_Build):
         os.system("python -m pip install --upgrade pip")
         os.system("python -m pip install Cython")
         logger.info("***start setuptools update")
-        # 源码编译lap
+        # 源码编译lap; 为了适配python3.11
         os.system("git clone https://github.com/gatagat/lap.git")
         os.chdir("lap")
         os.system("python setup.py build")
