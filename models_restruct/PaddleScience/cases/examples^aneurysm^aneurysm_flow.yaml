@@ -1,11 +1,9 @@
 case:
   linux:
-    base: ./base/euler_beam_base.yaml
+    base: ./base/aneurysm_flow_base.yaml
     train:
       -
         name: single
-      -
-        name: dy2st
     eval: skipped
     infer: skipped
     export: skipped
