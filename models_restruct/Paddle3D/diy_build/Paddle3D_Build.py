@@ -106,6 +106,15 @@ class Paddle3D_Build(Model_Build):
                 wget.download(
                     "https://bj.bcebos.com/paddle3d/pretrained/dla34.pdparams", out="/root/.paddle3d/pretrained/dla34/"
                 )
+            
+            if  sys.version == '3.11.3':
+                os.system("python -m pip install -U pip")
+                os.system("python -m pip install \
+https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_64.whl")
+                os.system("sed -i '/pillow/d'  requirements.txt")
+                os.system("python -m pip install -U pillow")
+                os.system("python -m pip install -r requirements.txt")
+          
 
             os.system("python -m pip install . ")
             os.system("python -m pip install -U pillow")
