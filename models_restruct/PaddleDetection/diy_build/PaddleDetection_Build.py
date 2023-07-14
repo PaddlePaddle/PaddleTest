@@ -79,12 +79,8 @@ class PaddleDetection_Build(Model_Build):
         logger.info("***start setuptools update")
         # 源码编译lap; 为了适配python3.11
         if sys.version_info.minor == 11:
-            os.system("git clone https://github.com/gatagat/lap.git")
-            os.chdir("lap")
-            os.system("python setup.py build")
-            os.system("python setup.py install")
-            # 返回到repo下
-            os.chdir(path_repo)
+            wget.download("https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_64.whl")
+            os.system("python -m pip install lap*.whl")
             os.system("python -m pip list | grep lap")
             os.system('sed -i "s|lap|#lap|g" requirements.txt')
         os.system("python -m pip install -r requirements.txt")
