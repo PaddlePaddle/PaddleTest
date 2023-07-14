@@ -97,6 +97,11 @@ class PaddleSlim_Build(Model_Build):
         os.system("python -m pip install --user numpy==1.23.1")
         os.system("python -m pip install --user -U paddleclas")
         # os.system("python -m pip install --user -U paddleseg==2.5.0")
+        # 源码编译lap; 为了适配python3.11
+        if sys.version_info.minor == 11:
+            wget.download("https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_64.whl")
+            os.system("python -m pip install lap*.whl")
+            os.system("python -m pip list | grep lap")
         os.system("python -m pip install --user -U paddledet")
         # os.system("python -m pip install --user -U paddlenlp")
         os.system("python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
