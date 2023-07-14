@@ -10,6 +10,12 @@ case:
           - -o Global.save_interval=2
           - -o Global.eval_interval=2
       -
+        name: single_dy2st
+        params:
+          - -o Global.epochs=2
+          - -o Global.save_interval=2
+          - -o Global.eval_interval=2
+      -
         name: multi
         params:
           - -o Global.epochs=5
