@@ -11,7 +11,7 @@ train:
       - Global.save_model_dir=output/${qa_yaml_name}
       - Train.loader.batch_size_per_card=10
       - Global.print_batch_step=1
-      - Train.loader.batch_size_per_card=2
+      - Train.loader.batch_size_per_card=1
       - Train.dataset.data_dir=train_data/table/pubtabnet/val
       - Train.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
       - Eval.dataset.data_dir=train_data/table/pubtabnet/val
@@ -32,7 +32,7 @@ train:
       - Global.save_model_dir=output/${qa_yaml_name}
       - Train.loader.batch_size_per_card=10
       - Global.print_batch_step=1
-      - Train.loader.batch_size_per_card=2
+      - Train.loader.batch_size_per_card=1
       - Train.dataset.data_dir=train_data/table/pubtabnet/val
       - Train.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
       - Eval.dataset.data_dir=train_data/table/pubtabnet/val
@@ -55,7 +55,7 @@ train:
       - Global.save_model_dir=output/${qa_yaml_name}
       - Train.loader.batch_size_per_card=10
       - Global.print_batch_step=1
-      - Train.loader.batch_size_per_card=2
+      - Train.loader.batch_size_per_card=1
       - Train.dataset.data_dir=train_data/table/pubtabnet/val
       - Train.dataset.label_file_list=[train_data/table/pubtabnet/val_500.jsonl]
       - Eval.dataset.data_dir=train_data/table/pubtabnet/val
