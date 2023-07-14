@@ -83,7 +83,8 @@ class PaddleDetection_Build(Model_Build):
             os.chdir("lap")
             os.system("python setup.py build")
             os.system("python setup.py install")
-            os.chdir(path_now)
+            # 返回到repo下
+            os.chdir(path_repo)
             os.system("python -m pip list | grep lap")
             os.system('sed -i "s|lap|#lap|g" requirements.txt')
         os.system("python -m pip install -r requirements.txt")
