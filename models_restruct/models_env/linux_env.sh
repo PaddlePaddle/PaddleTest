@@ -243,6 +243,7 @@ export https_proxy=${http_proxy}
 export no_proxy=${no_proxy}
 export AK=${AK} #使用bos_new上传需要
 export SK=${SK}
+export api_key=${api_key}
 export bce_whl_url=${bce_whl_url}
 set -x;
 
@@ -398,6 +399,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e set_cuda=${set_cuda} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
+	-e api_key=${api_key} \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
