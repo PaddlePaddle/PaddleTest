@@ -21,9 +21,9 @@ case:
       #   params:
       #     - --slim_config configs/slim/prune/ppyolo_mbv3_large_prune_fpgm.yml
       -
-        name: amp_multi
+        name: multi_amp
       -
-        name: static_multi
+        name: multi_dy2st
     eval:
       -
         name: pretrained
