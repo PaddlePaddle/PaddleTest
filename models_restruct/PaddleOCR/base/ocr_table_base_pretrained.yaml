@@ -1,6 +1,6 @@
 train:
   -
-    name: static
+    name: multi_dy2st
     cmd : python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}
