@@ -22,7 +22,7 @@ import subprocess
 import pytest
 import numpy as np
 
-from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric
+from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric_for_darcy
 
 
 def test_darcy2d_exit_code():
@@ -73,7 +73,7 @@ def test_darcy2d_metric():
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")
-    last_metric = get_last_eval_metric(log_file, loss_function)
+    last_metric = get_last_eval_metric_for_darcy(log_file, loss_function)
 
     # 断言最后一轮迭代的评估值与基准
     assert np.allclose(float(last_metric), base_metric, rtol=1e-6)
