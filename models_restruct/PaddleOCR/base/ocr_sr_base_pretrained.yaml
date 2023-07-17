@@ -1,6 +1,6 @@
 train:
   -
-    name: amp
+    name: multi_amp
     cmd : python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}

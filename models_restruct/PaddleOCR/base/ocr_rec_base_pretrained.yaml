@@ -1,6 +1,6 @@
 train:
   -
-    name: static
+    name: multi_dy2st
     cmd : python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}
@@ -16,7 +16,7 @@ train:
       - Train.loader.num_workers=False
       - Global.to_static=True
   -
-    name: amp
+    name: multi_amp
     cmd : python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}
