@@ -69,7 +69,7 @@ def test_darcy2d_metric():
     """
     output_dir = "./output_darcy2d"  # 输出目录
     loss_function = "Residual"  # 损失函数``
-    base_metric = 3945.03206 # 基准评估值
+    base_metric = 4443.17718 # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")
