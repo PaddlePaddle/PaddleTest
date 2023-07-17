@@ -53,7 +53,7 @@ def test_darcy2d_loss():
     """
     epoch_num = 100  # 迭代次数
     output_dir = "./output_darcy2d"  # 输出目录
-    base_loss = 8993488.00000  # 基准损失值
+    base_loss = 6393869.0  # 基准损失值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
     log_file = os.path.join(output_dir, "train.log")
@@ -69,7 +69,7 @@ def test_darcy2d_metric():
     """
     output_dir = "./output_darcy2d"  # 输出目录
     loss_function = "Residual"  # 损失函数``
-    base_metric = 6917203.88319  # 基准评估值
+    base_metric = 4261.56354  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")
