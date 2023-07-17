@@ -114,7 +114,9 @@ class Paddle3D_Build(Model_Build):
 https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_64.whl"
                 )
                 os.system("sed -i '/pillow/d'  requirements.txt")
+                os.system("sed -i '/ortools/d'  requirements.txt") 
                 os.system("python -m pip install -U pillow")
+                os.system("python -m pip install -U ortools")
                 os.system("python -m pip install -r requirements.txt")
 
             os.system("python -m pip install . ")
