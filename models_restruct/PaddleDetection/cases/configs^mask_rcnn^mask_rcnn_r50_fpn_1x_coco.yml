@@ -13,9 +13,9 @@ case:
         params:
           - TrainReader.batch_size=1
       -
-        name: amp_multi
-      # -
-      #   name: static_multi
+        name: multi_amp
+      -
+        name: multi_dy2st
     eval:
       -
         name: pretrained

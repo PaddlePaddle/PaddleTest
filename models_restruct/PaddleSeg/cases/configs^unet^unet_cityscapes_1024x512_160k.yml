@@ -18,10 +18,10 @@ case:
             base: 2.48
             threshold: 0.5
             evaluation: "-"
-      # -
-      #   name: amp_multi
-      # -
-      #   name: static_multi
+      -
+        name: multi_amp
+      -
+        name: multi_dy2st
     eval:
       -
         name: pretrained

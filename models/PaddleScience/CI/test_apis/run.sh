@@ -1,14 +1,7 @@
 #!/bin/bash
 
-# 定义 ppsci 文件夹的路径
-path_to_ppsci="../../ppsci"
-
-# 设置要跳过的文件名
-skip_files=("inflation.py")
-
-# 遍历 ppsci 文件夹下所有的 Python 文件，统计退出码不为零的文件名
-error_files=()
 error_num=0
+
 echo "===== doctest bug list =====" >  result.txt
 while IFS= read -r -d '' file; do
     if [[ "${skip_files[@]}" =~ "${file##*/}" ]]; then
@@ -54,10 +47,14 @@ else
     echo "All files passed ."
 fi
 
-python${py_version} test_comments.py
-if [ $? != 0 ];then
-  echo "test_commments failed! please check your code"
-  error_num=$((error_num+1))
+# 运行 run_test_comments.sh
+bash ./run_test_comments.sh
+exit_code=$?
+error_num=$((error_num + exit_code))
 
+# 判断退出码之和是否为零
+if [ $error_num -ne 0 ]; then
+    echo "One or more scripts failed with non-zero exit code"
+    echo "error_num: $error_num"
 fi
 exit ${error_num}
