@@ -475,7 +475,7 @@ function WheelUrlInfo(){
             fi
             ;;
         "Cuda120")
-            Cu120PackageUrlInfoRecommand ${branch_info} ${python_version}
+            Cu120PackageUrlInfoAll ${branch_info} ${python_version}
             if [[ "${infer_package}" != "OFF" ]];then
                 Cu120PackageUrlInfoRecommand ${branch_info} Inference
             fi
