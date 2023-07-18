@@ -12,8 +12,8 @@ case:
         cmd : python tools/train.py
         params:
           - TrainReader.batch_size=1
-      # -
-      #   name: multi_amp
+      -
+        name: multi_amp
       -
         name: multi_dy2st
     eval:
