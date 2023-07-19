@@ -8,7 +8,7 @@ case:
       -
         name: multi
         path: model_zoo/ernie-vil2.0
-        cmd:  python -u -m paddle.distributed.launc --log_dir train_log run_finetune.py
+        cmd:  python -u -m paddle.distributed.launch --log_dir train_log run_finetune.py
         params:
           - --output_dir output_pd
           - --train_data=Flickr30k-CN/lmdb/train
@@ -64,8 +64,9 @@ case:
       -
         name: export
         path: model_zoo/ernie-vil2.0
-        cmd: export_model.py --model_path=output_pd/checkpoint-2/
+        cmd: export_model.py 
         params:
+          - --model_path=output_pd/checkpoint-2/
           - --output_path=./infer_model/
     predict: skipped
   windows:
