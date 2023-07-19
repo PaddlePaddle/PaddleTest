@@ -2,9 +2,13 @@ case:
   linux:
     train:
       -
+        name: prepare
+        path: examples/language_model/chatglm
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/examples/AdvertiseGen.tar.gz && tar -xzvf AdvertiseGen.tar.gz
+      -
         name: multi
         path: examples/language_model/chatglm
-        cmd: python -m paddle.distributed.launch --gpus "0,1" finetune_generation.py
+        cmd: python -m paddle.distributed.launch --gpus finetune_generation.py
         params:
           - --model_name_or_path THUDM/chatglm-6b
           - --task_name_or_path './AdvertiseGen/'
