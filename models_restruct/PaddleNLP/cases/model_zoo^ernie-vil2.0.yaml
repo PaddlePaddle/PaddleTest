@@ -64,7 +64,7 @@ case:
       -
         name: export
         path: model_zoo/ernie-vil2.0
-        cmd: export_model.py 
+        cmd: export_model.py
         params:
           - --model_path=output_pd/checkpoint-2/
           - --output_path=./infer_model/

@@ -4,9 +4,9 @@ case:
       -
         name: prepare_dowdnload_data
         path: examples/text_correction/ernie-csc
-        cmd: python download.py 
+        cmd: python download.py
         params:
-          - --data_dir ./extra_train_ds/ 
+          - --data_dir ./extra_train_ds/
           - --url https://github.com/wdimmy/Automatic-Corpus-Generation/raw/master/corpus/train.sgml
       -
         name: trans_xml_txt
@@ -18,12 +18,12 @@ case:
         cmd: python -m paddle.distributed.launch  train.py
         params:
           - --batch_size 8
-          - --logging_steps 100 
+          - --logging_steps 100
           - --save_steps 100
           - --epochs 1
-          - --learning_rate 5e-5 
-          - --model_name_or_path ernie-1.0-base-zh 
-          - --output_dir ./checkpoints/ 
+          - --learning_rate 5e-5
+          - --model_name_or_path ernie-1.0-base-zh
+          - --output_dir ./checkpoints/
           - --extra_train_ds_dir ./extra_train_ds/
     eval: skipped
     infer: skipped
@@ -31,18 +31,18 @@ case:
       -
         name: export
         path: examples/text_correction/ernie-csc
-        cmd: python export_model.py 
+        cmd: python export_model.py
         params:
-          - --params_path ./checkpoints/best_model.pdparams 
+          - --params_path ./checkpoints/best_model.pdparams
           - --output_path ./infer_model/static_graph_params
-    predict: 
+    predict:
       -
         name: predict
         path: examples/text_correction/ernie-csc
-        cmd: python export_model.py 
+        cmd: python export_model.py
         params:
-          - --model_file infer_model/static_graph_params.pdmodel 
-          - --params_file infer_model/static_graph_params.pdiparams 
+          - --model_file infer_model/static_graph_params.pdmodel
+          - --params_file infer_model/static_graph_params.pdiparams
 
   windows:
     train: skipped

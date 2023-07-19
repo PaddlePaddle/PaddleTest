@@ -14,14 +14,14 @@ case:
         path: examples/sentiment_analysis/textcnn
         cmd: python -m paddle.distributed.launch train.py
         params:
-          - --vocab_path=./robot_chat_word_dict.txt 
-          - --init_from_ckpt=./textcnn.pdparams 
-          - --device=gpu 
-          - --lr=5e-5 
-          - --batch_size=64 
-          - --epochs=1 
-          - --save_dir=./checkpoints 
-          - --data_path=./RobotChat 
+          - --vocab_path=./robot_chat_word_dict.txt
+          - --init_from_ckpt=./textcnn.pdparams
+          - --device=gpu
+          - --lr=5e-5
+          - --batch_size=64
+          - --epochs=1
+          - --save_dir=./checkpoints
+          - --data_path=./RobotChat
     eval: skipped
     infer: skipped
     export:
@@ -30,10 +30,10 @@ case:
         path: examples/sentiment_analysis/textcnn
         cmd:  python export_model.py
         params:
-          - --vocab_path=./robot_chat_word_dict.txt 
+          - --vocab_path=./robot_chat_word_dict.txt
           - --params_path=./checkpoints/final.pdparams
           - --output_path=./static_graph_params
-    predict: 
+    predict:
       -
         name: predict
         path: examples/sentiment_analysis/textcnn

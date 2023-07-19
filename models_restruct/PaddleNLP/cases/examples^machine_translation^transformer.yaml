@@ -8,12 +8,12 @@ case:
       -
         name: pretrain
         path: examples/machine_translation/transformer
-        cmd: python train.py 
+        cmd: python train.py
         params:
           - --config ./configs/transformer.base.yaml
-          - --train_file ./WMT14.en-de.partial/train.tok.clean.bpe.en ./WMT14.en-de.partial/train.tok.clean.bpe.de 
-          - --dev_file ./WMT14.en-de.partial/dev.tok.bpe.en ./WMT14.en-de.partial/dev.tok.bpe.de 
-          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 
+          - --train_file ./WMT14.en-de.partial/train.tok.clean.bpe.en ./WMT14.en-de.partial/train.tok.clean.bpe.de
+          - --dev_file ./WMT14.en-de.partial/dev.tok.bpe.en ./WMT14.en-de.partial/dev.tok.bpe.de
+          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708
           - --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"
     eval: skipped
     infer: skipped
@@ -21,22 +21,22 @@ case:
       -
         name: export
         path: examples/machine_translation/transformer
-        cmd:  python export_model.py 
+        cmd:  python export_model.py
         params:
           - --config ./configs/transformer.base.yaml
           - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708
           - --bos_token "<s>" --eos_token "<e>"
-    predict: 
+    predict:
       -
         name: predict
         path: examples/machine_translation/transformer
         cmd:  python ./deploy/python/inference.py
         params:
           - --config ./configs/transformer.base.yaml
-          - --profile 
-          - --test_file ./WMT14.en-de.partial/test.tok.bpe.en ./WMT14.en-de.partial/test.tok.bpe.de 
-          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708 
-          - --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"  
+          - --profile
+          - --test_file ./WMT14.en-de.partial/test.tok.bpe.en ./WMT14.en-de.partial/test.tok.bpe.de
+          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708
+          - --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"
 
   windows:
     train: skipped
