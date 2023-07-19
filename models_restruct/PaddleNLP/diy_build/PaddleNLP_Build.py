@@ -117,7 +117,8 @@ class PaddleNLP_Build(Model_Build):
                     transformer.base.yaml'
             )
             os.system(
-                'sed -i "s/max_iter: None/max_iter: 2/g" examples/machine_translation/transformer/configs/transformer.base.yaml'
+                'sed -i "s/max_iter: None/max_iter: 2/g" examples/machine_translation/transformer/ \
+                    configs/transformer.base.yaml'
             )
             os.system(
                 'sed -i "s/batch_size: 4096/batch_size: 1000/g" examples/machine_translation/transformer/ \
