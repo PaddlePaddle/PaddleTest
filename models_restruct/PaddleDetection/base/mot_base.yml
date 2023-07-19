@@ -11,7 +11,7 @@ train:
         threshold: 0
         evaluation: "="
   -
-    name: amp_multi
+    name: multi_amp
     cmd: python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}
@@ -25,7 +25,7 @@ train:
         threshold: 0
         evaluation: "="
   -
-    name: static_multi
+    name: multi_dy2st
     cmd: python -m paddle.distributed.launch tools/train.py
     params:
       - -c ${rd_yaml_path}

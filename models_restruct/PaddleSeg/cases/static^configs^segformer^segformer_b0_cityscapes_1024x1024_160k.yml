@@ -9,13 +9,13 @@ case:
         name: single
         cmd : python tools/train.py
       -
-        name: amp_multi
+        name: multi_amp
       -
-        name: static_multi
-      -
-        name: prim_single
-        params:
-        - --config configs/segformer/segformer_b0_cityscapes_1024x1024_160k.yml
+        name: multi_dy2st
+      # -
+      #   name: prim_single
+      #   params:
+      #   - --config configs/segformer/segformer_b0_cityscapes_1024x1024_160k.yml
     eval:
       -
         name: pretrained
