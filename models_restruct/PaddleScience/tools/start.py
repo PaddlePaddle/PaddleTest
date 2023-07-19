@@ -87,8 +87,16 @@ class PaddleScience_Start(object):
         mode = os.getenv("mode")
         if mode == "function":
             os.system("apt-get install curl")
-            os.system("wget https://paddle-org.bj.bcebos.com/paddlescience/datasets/bracket/bracket_dataset.tar")
-            os.system("tar -xvf bracket_dataset.tar")
+            model_list=["examples/aneurysm/","examples/bracket/","examples/deephpms/",]
+            for model_name in model_list:
+                current_dir = os.getcwd()
+                print("当前工作目录：", current_dir)
+                # 切换到指定目录
+                new_dir = model_name
+                os.chdir(new_dir)
+                os.system("wget -q https://paddle-org.bj.bcebos.com/paddlescience/datasets/bracket/bracket_dataset.tar")
+                os.system("tar -xvf bracket_dataset.tar")
+                os.chdir(current_dir)
 
 
 def run():
