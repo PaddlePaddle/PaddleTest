@@ -23,7 +23,11 @@ case:
             threshold: 0.5
             evaluation: "-"
       -
+        name: single_amp
+      -
         name: multi_amp
+      -
+        name: single_dy2st
       -
         name: multi_dy2st
     eval:
