@@ -87,6 +87,8 @@ class PaddleScience_Start(object):
         mode = os.getenv("mode")
         if mode == "function":
             os.system("apt-get install curl")
+            os.system("wget https://paddle-org.bj.bcebos.com/paddlescience/datasets/bracket/bracket_dataset.tar")
+            os.system("tar -xvf bracket_dataset.tar")
 
 
 def run():
