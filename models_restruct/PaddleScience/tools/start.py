@@ -95,6 +95,8 @@ class PaddleScience_Start(object):
             os.system("wget -q https://paddle-org.bj.bcebos.com/paddlescience/datasets/bracket/bracket_dataset.tar")
             for model_name in model_list:
                 os.system("tar -xvf bracket_dataset.tar -C {}".format(model_name))
+                os.system("===============调试=====================")
+                os.system("ls ./PaddleScience/examples/aneurysm/")
 
 
 def run():
