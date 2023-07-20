@@ -85,10 +85,6 @@ class PaddleNLP_Build(Model_Build):
                  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
             )
 
-        import nltk
-
-        nltk.download("punkt")
-
         if re.compile("37").findall(paddle_whl) or re.compile("38").findall(paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
