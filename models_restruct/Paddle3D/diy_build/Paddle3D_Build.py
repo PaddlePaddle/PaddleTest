@@ -15,7 +15,7 @@ import yaml
 import wget
 from Model_Build import Model_Build
 
-logger = logging.info.getLogger("ce")
+logger = logger.info.getLogger("ce")
 
 
 class Paddle3D_Build(Model_Build):
@@ -39,7 +39,7 @@ class Paddle3D_Build(Model_Build):
 
         self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
 
-        logging.info("self.reponame:{}".format(self.reponame))
+        logger.info("self.reponame:{}".format(self.reponame))
         self.models_list = args.models_list
         self.models_file = args.models_file
         self.test_model_list = []
@@ -50,7 +50,7 @@ class Paddle3D_Build(Model_Build):
             for line in self.models_list.split(","):
                 if ".yaml" or ".yml" in line:
                     self.test_model_list.append(line.strip().replace("^", "/"))
-                    logging.info("self.test_model_list:{}".format(self.test_model_list))
+                    logger.info("self.test_model_list:{}".format(self.test_model_list))
         elif str(self.models_file) != "None":  # 获取要执行的yaml文件列表
             for file_name in self.models_file.split(","):
                 for line in open(file_name):
@@ -85,7 +85,7 @@ class Paddle3D_Build(Model_Build):
 
             if not os.path.exists("datasets"):
                 os.symlink(src_path, "datasets")
-            logging.info("build dataset!")
+            logger.info("build dataset!")
             # os.system("apt-get update")
             # os.system("apt-get install -y python3-setuptools")
             os.system("python -m pip install -U scikit-learn")
@@ -108,8 +108,8 @@ class Paddle3D_Build(Model_Build):
                 )
 
             if sys.version == "3.11.3":
-                logging.info("sys.version:{}".format(sys.version))
-                logging.info("python3.11 result:")
+                logger.info("sys.version:{}".format(sys.version))
+                logger.info("python3.11 result:")
                 os.system("python -m pip install -U pip")
                 os.system(
                     "python -m pip install \
@@ -124,7 +124,7 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
             os.system("python -m pip install . ")
             os.system("python -m pip install -U pillow")
 
-            logging.info("build wheel!")
+            logger.info("build wheel!")
 
             # petr
             if not os.path.exists("data") and "petrv2_vovnet_gridmask_p4_800x320_dn_amp" not in self.test_model_list:
@@ -136,9 +136,9 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
                 os.symlink(os.path.join(src_path, "kitti"), "data/kitti")
 
             for filename in self.test_model_list:
-                logging.info("filename:{}".format(filename))
+                logger.info("filename:{}".format(filename))
                 if filename == "configs/petr/petrv2_vovnet_gridmask_p4_800x320_dn_amp.yml":
-                    logging.info("filename_petrv2:{}".format(filename))
+                    logger.info("filename_petrv2:{}".format(filename))
                     if os.path.exists("data"):
                         shutil.rmtree("data")
                     os.makedirs("data")
@@ -147,22 +147,22 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
                     else:
                         os.symlink("/home/jiaxiao01/Paddle3D/nuscenes_petrv2", "data/nuscenes")
                 else:
-                    logging.info("filename_sed:{}".format(filename))
+                    logger.info("filename_sed:{}".format(filename))
                     cmd = 'sed -i "/iters/d;1i\\iters: 200" %s' % (filename)
                     subprocess.getstatusoutput(cmd)
                     # cmd = "cat %s" % (filename)
                     # subprocess.getstatusoutput(cmd)
                     # cmd = 'sed -i "s!data/kitti!datasets/kitti!g" %s' % (filename)
                     # subprocess.getstatusoutput(cmd)
-                    logging.info(cmd)
-                    logging.info("change iters number!")
+                    logger.info(cmd)
+                    logger.info("change iters number!")
             os.chdir(path_now)
 
     def compile_c_predict_demo(self):
         """
         compile_c_predict_demo
         """
-        logging.info(os.getcwd())
+        logger.info(os.getcwd())
 
         OPENCV_DIR = os.environ.get("OPENCV_DIR")
         LIB_DIR = os.environ.get("paddle_inference_LIB_DIR")
@@ -182,7 +182,7 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
             shutil.rmtree("build")
         os.makedirs("build")
         os.chdir("build")
-        logging.info(os.getcwd())
+        logger.info(os.getcwd())
 
         cmd = (
             "export OpenCV_DIR=%s; cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=infer -DWITH_GPU=OFF \
@@ -190,11 +190,11 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
     -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s"
             % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
         )
-        logging.info(cmd)
+        logger.info(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
         # exit_code = repo_result[0]
         output = repo_result[1]
-        logging.info(output)
+        logger.info(output)
         os.system("make -j")
 
         # pointpillars compile
@@ -204,7 +204,7 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
             shutil.rmtree("build")
         os.makedirs("build")
         os.chdir("build")
-        logging.info(os.getcwd())
+        logger.info(os.getcwd())
 
         cmd = (
             "cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main -DWITH_GPU=OFF \
@@ -214,11 +214,11 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
     iou3d_nms_api.cpp;custom_ops/iou3d_nms.cpp;custom_ops/iou3d_nms_kernel.cu'"
             % (LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
         )
-        logging.info(cmd)
+        logger.info(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
         # exit_code = repo_result[0]
         output = repo_result[1]
-        logging.info(output)
+        logger.info(output)
         os.system("make -j")
         os.chdir(self.test_root_path)
 
@@ -229,7 +229,7 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
             shutil.rmtree("build")
         os.makedirs("build")
         os.chdir("build")
-        logging.info(os.getcwd())
+        logger.info(os.getcwd())
 
         cmd = (
             "cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main -DWITH_GPU=OFF  -DWITH_STATIC_LIB=OFF \
@@ -238,11 +238,11 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
     custom_ops/iou3d_nms_kernel.cu;custom_ops/postprocess.cc;custom_ops/postprocess.cu'"
             % (LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
         )
-        logging.info(cmd)
+        logger.info(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
         # exit_code = repo_result[0]
         output = repo_result[1]
-        logging.info(output)
+        logger.info(output)
         os.system("make -j")
         os.chdir(self.test_root_path)
 
@@ -252,7 +252,7 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
             shutil.rmtree("build")
         os.makedirs("build")
         os.chdir("build")
-        logging.info(os.getcwd())
+        logger.info(os.getcwd())
 
         cmd = (
             "cmake .. -DOPENCV_DIR=%s -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main \
@@ -261,11 +261,11 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
     -DCUDA_LIB=%s -DTENSORRT_ROOT=%s -DCUSTOM_OPERATOR_FILES=''"
             % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
         )
-        logging.info(cmd)
+        logger.info(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
         # exit_code = repo_result[0]
         output = repo_result[1]
-        logging.info(output)
+        logger.info(output)
         os.system("make -j")
         os.chdir(self.test_root_path)
 
@@ -275,7 +275,7 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
             shutil.rmtree("build")
         os.makedirs("build")
         os.chdir("build")
-        logging.info(os.getcwd())
+        logger.info(os.getcwd())
 
         cmd = (
             "cmake .. -DOPENCV_DIR=%s -DPADDLE_LIB=%s -DWITH_MKL=ON \
@@ -284,11 +284,11 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
     -DCUSTOM_OPERATOR_FILES='custom_ops/iou3d_nms.cpp;custom_ops/iou3d_nms_api.cpp;custom_ops/iou3d_nms_kernel.cu'"
             % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
         )
-        logging.info(cmd)
+        logger.info(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
         # exit_code = repo_result[0]
         output = repo_result[1]
-        logging.info(output)
+        logger.info(output)
         os.system("make -j")
         os.chdir(self.test_root_path)
 
