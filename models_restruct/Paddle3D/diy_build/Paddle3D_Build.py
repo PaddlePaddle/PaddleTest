@@ -15,7 +15,7 @@ import yaml
 import wget
 from Model_Build import Model_Build
 
-logger = logger.info.getLogger("ce")
+logger = logging.info.getLogger("ce")
 
 
 class Paddle3D_Build(Model_Build):
