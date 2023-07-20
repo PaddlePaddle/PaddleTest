@@ -86,7 +86,7 @@ class PaddleScience_Start(object):
         """
         mode = os.getenv("mode")
         if mode == "function":
-            os.system("apt-get install curl")
+            os.system("apt-get install -y curl")
             # os.system("===============调试=====================")
             # os.system("pwd")
             # os.system("ls")
