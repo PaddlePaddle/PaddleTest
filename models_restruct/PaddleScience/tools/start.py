@@ -86,18 +86,8 @@ class PaddleScience_Start(object):
         """
         mode = os.getenv("mode")
         if mode == "function":
+            os.system("apt update")
             os.system("apt-get install -y curl")
-            # os.system("===============调试=====================")
-            # os.system("pwd")
-            # os.system("ls")
-            # os.system("===============调试=====================")
-            # model_list=["./PaddleScience/examples/aneurysm/","./PaddleScience/examples/bracket/","./PaddleScience/examples/deephpms/"]
-            # os.system("wget -q https://paddle-org.bj.bcebos.com/paddlescience/datasets/bracket/bracket_dataset.tar")
-            # for model_name in model_list:
-            #     os.system("tar -xvf bracket_dataset.tar -C {}".format(model_name))
-            #     os.system("===============调试=====================")
-            #     os.system("ls {}".format(model_name))
-            #     os.system("===============调试=====================")
 
 
 def run():
