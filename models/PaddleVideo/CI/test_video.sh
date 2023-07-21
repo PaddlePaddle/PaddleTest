@@ -1,11 +1,12 @@
 #!/bin/bash
 #prepare env
-mkdir run_env_py37
-ln -s $(which python3.7) run_env_py37/python
-ln -s $(which pip3.7) run_env_py37/pip
-export PATH=$(pwd)/run_env_py37:${PATH}
-export http_proxy=${proxy}
-export https_proxy=${proxy}
+#
+#mkdir run_env_py37
+#ln -s $(which python3.7) run_env_py37/python
+#ln -s $(which pip3.7) run_env_py37/pip
+#export PATH=$(pwd)/run_env_py37:${PATH}
+#export http_proxy=${proxy}
+#export https_proxy=${proxy}
 export no_proxy=bcebos.com
 python -m pip install pip==20.2.4 --ignore-installed
 python -m pip install Cython --ignore-installed
