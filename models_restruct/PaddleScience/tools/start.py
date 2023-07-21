@@ -88,6 +88,7 @@ class PaddleScience_Start(object):
         if mode == "function":
             os.system("apt update")
             os.system("apt-get install -y curl")
+            os.system("curl --version")
 
 
 def run():
