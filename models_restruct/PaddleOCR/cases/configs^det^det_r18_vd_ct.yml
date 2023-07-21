@@ -8,6 +8,8 @@ case:
             name: multi_amp
         eval:
           -
+            name: trained
+          -
             name: pretrained
             result:
               f_score:
@@ -15,6 +17,11 @@ case:
                 threshold: 0
                 evaluation: "="
         export:
+          -
+            name: trained
+          -
+            name: pretrained
+        predict:
           -
             name: trained
           -
