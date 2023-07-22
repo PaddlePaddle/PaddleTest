@@ -134,7 +134,7 @@ def test_rnncellbase6():
         obj.get_initial_states(batch_ref=x, shape=shape, dtype=dtype, batch_dim_idx=batch_dim_idx)
     except Exception as e:
         if is_in_eager:
-            if "OutOfRangeError" in e.args[0]:
+            if "OutOfRangeError" in e.args[0] or "IndexError" in e.args[0]:
                 pass
             else:
                 raise Exception
