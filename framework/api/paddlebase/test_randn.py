@@ -25,7 +25,7 @@ class TestRandn(APIBase):
         implement
         """
         self.types = [np.float32, np.float64]
-        self.places = [fluid.CPUPlace()]
+        self.places = [paddle.CPUPlace()]
         # self.debug = True
         # self.static = True
         # enable check grad
