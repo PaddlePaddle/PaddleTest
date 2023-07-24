@@ -78,7 +78,7 @@ def test_lac_trt_fp16():
         precision="trt_fp16",
         dynamic=True,
         tuned=True,
-        min_subgraph_size=2,
+        min_subgraph_size=1,
         # see comments in test_lac_trt_fp32.py
         delete_op_list=["transpose_2.tmp_0_slice_0"],
     )
@@ -97,7 +97,7 @@ def test_lac_trt_fp16():
         precision="trt_fp16",
         dynamic=True,
         tuned=False,
-        min_subgraph_size=2,
+        min_subgraph_size=1,
         # see comments in test_lac_trt_fp32.py
         delete_op_list=["transpose_2.tmp_0_slice_0"],
     )

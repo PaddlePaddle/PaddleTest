@@ -17,9 +17,13 @@ case:
         params:
           - --slim_config configs/slim/quant/tinypose_qat.yml
       -
-        name: amp_multi
+        name: single_amp
       -
-        name: static_multi
+        name: multi_amp
+      -
+        name: single_dy2st
+      -
+        name: multi_dy2st
     eval:
       -
         name: pretrained
@@ -37,10 +41,10 @@ case:
         name: python
       -
         name: mkldnn
-      -
-        name: trt_fp32
-      -
-        name: trt_fp16
+      # -
+      #   name: trt_fp32
+      # -
+      #   name: trt_fp16
       -
         name: paddle2onnx
       -

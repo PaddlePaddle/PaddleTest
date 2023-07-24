@@ -428,37 +428,23 @@ def run():
     # input()
 
     update_name = {
-        "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "22812458/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "22812455/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P11-Develop": "22811663/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P12-Develop": "22811662/result.tar",
-        "PaddleClas-Linux-Cuda112-Python38-P0-Develop": "22812500/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P1-Release": "22812513/result.tar",
-        "PaddleClas-Linux-Cuda102-Python37-P12-Release": "22811646/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "23284718/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "23284734/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P11-Develop": "23284365/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P12-Develop": "23284382/result.tar",
+        "PaddleClas-Linux-Cuda112-Python38-P0-Develop": "23284715/result.tar",
+        "PaddleClas-Linux-Cuda120-Python311-P0-Develop": "23284767/result.tar",
+        "PaddleClas-Linux-Cuda117-Python310-P0-Develop": "23284722/result.tar",
+        "PaddleClas-Linux-Cuda120-Python311-P0-Develop-Centos": "23284736/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P0-Release": "23284719/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P1-Release": "23280105/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P11-Release": "23284371/result.tar",
+        "PaddleClas-Linux-Cuda102-Python37-P12-Release": "23279680/result.tar",
+        "PaddleClas-Linux-Cuda120-Python311-P0-Release": "23284710/result.tar",
+        "PaddleClas-Linux-Cuda117-Python310-P0-Release": "23284713/result.tar",
+        "PaddleClas-Linux-Cuda120-Python311-P0-Release-Centos": "23284766/result.tar",
     }
-
-    # update_name = {
-    #     "PaddleClas-Linux-Cuda102-Python37-P12-Release": "22811646/result.tar",
-    # }
-
-    # update_name = {
-    #     "PaddleClas-Linux-Cuda102-Python37-P0-Develop": "22765540/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P1-Develop": "22765491/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P11-Develop": "22764575/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P12-Develop": "22764592/result.tar",
-    #     "PaddleClas-Linux-Cuda112-Python38-P0-Develop": "22765553/result.tar",
-    #     "PaddleClas-Linux-Cuda116-Python39-P0-Develop": "22765551/result.tar",
-    #     "PaddleClas-Linux-Cuda117-Python310-P0-Develop": "22753464/result.tar",
-    #     "PaddleClas-Linux-Cuda116-Python39-P0-Develop-Centos": "22765559/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P0-Release": "22765543/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P1-Release": "22765495/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P11-Release": "22753006/result.tar",
-    #     "PaddleClas-Linux-Cuda102-Python37-P12-Release": "22753005/result.tar",
-    #     "PaddleClas-Linux-Cuda112-Python38-P0-Release": "22765557/result.tar",
-    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release": "22765548/result.tar",
-    #     "PaddleClas-Linux-Cuda117-Python310-P0-Release": "22765549/result.tar",
-    #     "PaddleClas-Linux-Cuda116-Python39-P0-Release-Centos": "22765558/result.tar",
-    # }
+    # "PaddleClas-Linux-Cuda112-Python38-P0-Release": "22868229/result.tar",
 
     for (key, value) in update_name.items():
         if value != "None":

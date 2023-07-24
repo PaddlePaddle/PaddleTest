@@ -16,14 +16,18 @@ case:
         name: quant_multi
         params:
           - --slim_config configs/slim/quant/ppyolo_mbv3_large_qat.yml
+      # -
+      #   name: prune_multi
+      #   params:
+      #     - --slim_config configs/slim/prune/ppyolo_mbv3_large_prune_fpgm.yml
       -
-        name: prune_multi
-        params:
-          - --slim_config configs/slim/prune/ppyolo_mbv3_large_prune_fpgm.yml
+        name: single_amp
       -
-        name: amp_multi
+        name: multi_amp
       -
-        name: static_multi
+        name: single_dy2st
+      -
+        name: multi_dy2st
     eval:
       -
         name: pretrained

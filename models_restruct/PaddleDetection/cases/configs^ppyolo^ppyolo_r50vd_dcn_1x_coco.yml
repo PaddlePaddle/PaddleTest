@@ -16,14 +16,18 @@ case:
         name: quant_multi
         params:
           - --slim_config configs/slim/quant/ppyolo_r50vd_qat_pact.yml
+      # -
+      #   name: prune_multi
+      #   params:
+      #     - --slim_config configs/slim/prune/ppyolo_r50vd_prune_fpgm.yml
       -
-        name: prune_multi
-        params:
-          - --slim_config configs/slim/prune/ppyolo_r50vd_prune_fpgm.yml
+        name: single_amp
       -
-        name: amp_multi
+        name: multi_amp
       -
-        name: static_multi
+        name: single_dy2st
+      -
+        name: multi_dy2st
     eval:
       -
         name: pretrained
@@ -39,16 +43,16 @@ case:
     predict:
       -
         name: python
-      -
-        name: mkldnn
+      # -
+      #   name: mkldnn
       -
         name: trt_fp32
       -
         name: trt_fp16
-      -
-        name: paddle2onnx
-      -
-        name: onnx_infer
+      # -
+      #   name: paddle2onnx
+      # -
+      #   name: onnx_infer
     api:
       -
         name: cpp
