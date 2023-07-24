@@ -77,21 +77,19 @@ else
    echo "######  system linux"
 fi
 
-unset http_proxy
-unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
-python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed --upgrade pip
 python -m pip install --upgrade pip
-python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
+python -m pip install  --ignore-installed paddleslim
 
-python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
-python -m pip install -U urllib3==1.26.15 -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed -r requirements.txt
+python -m pip install -U urllib3==1.26.15
 num=`python -m pip list | grep fasttext | wc -l`
 if [ "${num}" -eq "0" ]; then
-   python -m pip install --ignore-installed pybind11 -i https://mirror.baidu.com/pypi/simple
-   python -m pip install --ignore-installed fasttext -i https://mirror.baidu.com/pypi/simple
+   python -m pip install --ignore-installed pybind11
+   python -m pip install --ignore-installed fasttext
 fi
 # paddleocr
 # python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
