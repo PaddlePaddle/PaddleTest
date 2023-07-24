@@ -222,7 +222,7 @@ class Jelly_v2_torch(object):
         forward_time_list = []
         if self._layertypes(self.api) == "func":
             input_param = dict(self.data, **self.param)
-            tmp = timeit.timeit(lambda: self.api(**input_param), number=0.2 * self.loops * self.base_times)  # 预热
+            tmp = timeit.timeit(lambda: self.api(**input_param), number=int(0.2 * self.loops * self.base_times))  # 预热
             for i in range(self.loops):
                 forward_time = timeit.timeit(lambda: self.api(**input_param), number=self.base_times)
                 forward_time_list.append(forward_time)
@@ -230,11 +230,13 @@ class Jelly_v2_torch(object):
             obj = self.api(**self.param)
             # 预热
             if self.method == dict():
-                tmp = timeit.timeit(lambda: obj(*self.data.values()), number=0.2 * self.loops * self.base_times)
+                tmp = timeit.timeit(lambda: obj(*self.data.values()), number=int(0.2 * self.loops * self.base_times))
             else:
                 obj_method = eval("obj" + "." + list(self.method.keys())[0])
                 method_params_dict = self.method[list(self.method.keys())[0]]
-                tmp = timeit.timeit(lambda: obj_method(**method_params_dict), number=0.2 * self.loops * self.base_times)
+                tmp = timeit.timeit(
+                    lambda: obj_method(**method_params_dict), number=int(0.2 * self.loops * self.base_times)
+                )
             for i in range(self.loops):
                 if self.method == dict():
                     forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
@@ -262,9 +264,9 @@ class Jelly_v2_torch(object):
 
             # 预热
             if "y" in self.data.keys():
-                tmp = timeit.timeit(lambda: func(x, y), number=0.2 * self.loops * self.base_times)  # 预热
+                tmp = timeit.timeit(lambda: func(x, y), number=int(0.2 * self.loops * self.base_times))  # 预热
             else:
-                tmp = timeit.timeit(lambda: func_x(x), number=0.2 * self.loops * self.base_times)  # 预热
+                tmp = timeit.timeit(lambda: func_x(x), number=int(0.2 * self.loops * self.base_times))  # 预热
             for i in range(self.loops):
                 if "y" in self.data.keys():
                     forward_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
@@ -295,7 +297,7 @@ class Jelly_v2_torch(object):
                 res = self.api(**input_param)
                 res.backward(grad_tensor)
 
-            tmp = timeit.timeit(lambda: func(input_param), number=0.2 * self.loops * self.base_times)  # 预热
+            tmp = timeit.timeit(lambda: func(input_param), number=int(0.2 * self.loops * self.base_times))  # 预热
             for i in range(self.loops):
                 total_time = timeit.timeit(lambda: func(input_param), number=self.base_times)
                 total_time_list.append(total_time)
@@ -325,9 +327,11 @@ class Jelly_v2_torch(object):
 
             # 预热
             if self.method == dict():
-                tmp = timeit.timeit(lambda: clas(self.data.values()), number=0.2 * self.loops * self.base_times)
+                tmp = timeit.timeit(lambda: clas(self.data.values()), number=int(0.2 * self.loops * self.base_times))
             else:
-                tmp = timeit.timeit(lambda: clas_method(method_params_dict), number=0.2 * self.loops * self.base_times)
+                tmp = timeit.timeit(
+                    lambda: clas_method(method_params_dict), number=int(0.2 * self.loops * self.base_times)
+                )
             for i in range(self.loops):
                 if self.method == dict():
                     total_time = timeit.timeit(lambda: clas(self.data.values()), number=self.base_times)
@@ -359,9 +363,9 @@ class Jelly_v2_torch(object):
 
             # 预热
             if "y" in self.data.keys():
-                tmp = timeit.timeit(lambda: func(x, y), number=0.2 * self.loops * self.base_times)  # 预热
+                tmp = timeit.timeit(lambda: func(x, y), number=int(0.2 * self.loops * self.base_times))  # 预热
             else:
-                tmp = timeit.timeit(lambda: func_x(x), number=0.2 * self.loops * self.base_times)  # 预热
+                tmp = timeit.timeit(lambda: func_x(x), number=int(0.2 * self.loops * self.base_times))  # 预热
             for i in range(self.loops):
                 if "y" in self.data.keys():
                     total_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
