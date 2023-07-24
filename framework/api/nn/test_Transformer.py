@@ -30,7 +30,7 @@ def test1():
     )
 
     # batch_size, source_length, target_length, d_model, n_head = 4, 8, 8, 64, 8
-    paddle.set_device(paddle.CPUPlace())
+    paddle.set_device("cpu")
     transformer = Transformer(d_model, n_head, dim_feedforward=dim_feedforward, dropout=dropout)
     src = paddle.to_tensor(np.random.rand(batch_size, source_length, d_model).astype("float64"))
     tgt = paddle.to_tensor(np.random.rand(batch_size, target_length, d_model).astype("float64"))

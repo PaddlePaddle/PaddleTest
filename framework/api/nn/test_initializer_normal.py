@@ -8,7 +8,6 @@ from apibase import APIBase
 from apibase import randtool
 import pytest
 import paddle
-import paddle.fluid as fluid
 import numpy as np
 
 

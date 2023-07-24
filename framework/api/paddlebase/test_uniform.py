@@ -7,7 +7,6 @@ test uniform
 import paddle
 import pytest
 import numpy as np
-from paddle import fluid
 
 
 types = [np.float32, np.float64]

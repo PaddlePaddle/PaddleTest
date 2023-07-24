@@ -6,7 +6,6 @@ test_grad
 """
 import pytest
 import paddle
-import paddle.fluid as fluid
 import numpy as np
 
 # from apibase import randtool
@@ -15,11 +14,11 @@ import numpy as np
 
 # global params
 types = [np.float32, np.float64]
-if fluid.is_compiled_with_cuda() is True:
-    places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+if paddle.is_compiled_with_cuda() is True:
+    places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
 else:
     # default
-    places = [fluid.CPUPlace()]
+    places = [paddle.CPUPlace()]
 seed = 33
 
 

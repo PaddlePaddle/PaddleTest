@@ -8,7 +8,6 @@ import sys
 from apibase import APIBase
 import paddle
 import pytest
-from paddle import fluid
 import numpy as np
 
 sys.path.append("../..")
@@ -25,7 +24,7 @@ class TestRand(APIBase):
         implement
         """
         self.types = [np.float32, np.float64]
-        self.places = [fluid.CPUPlace()]
+        self.places = [paddle.CPUPlace()]
         # self.debug = True
         # self.static = True
         # enable check grad
@@ -106,7 +105,7 @@ def test_rand5():
     """
     test gpu
     """
-    obj.places = [fluid.CUDAPlace(0)]
+    obj.places = [paddle.CUDAPlace(0)]
     obj.seed = 33
     res = np.array([[0.7515413, 0.72745854], [0.7739062, 0.41597638]])
     obj.run(res=res, shape=np.array([2, 2]))
