@@ -28,10 +28,12 @@ class PaddleOCR_Case_Start(object):
         """
         执行准备过程
         """
-        sysstr = platform.system()
-        if sysstr == "Linux":
-            logger.info("###kill python process")
-            os.system("ps aux| grep python | awk '{print $2}' | xargs kill -9")
+        # sysstr = platform.system()
+        # if sysstr == "Linux":
+        #     logger.info("###kill python process")
+        #     pid = os.getpid()
+        #     cmd = """ps aux| grep python | grep -v main.py |grep -v %s | awk '{print $2}'| xargs kill -9;""" % pid
+        #     os.system(cmd)
 
 
 def run():
