@@ -43,7 +43,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    ln -s /usr/bin/python3.8 /usr/bin/python
    python -c "import sys; print('python version:',sys.version_info[:])";
 
-
+   set -x
    # PaddleSlim dev
    echo "install PaddleSlim dev"
    git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
@@ -52,11 +52,11 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    python setup.py install
    cd ..
 
-   unset http_proxy
-   unset https_proxy
+   # unset http_proxy
+   # unset https_proxy
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install $5 -i https://mirror.baidu.com/pypi/simple #paddle_compile
+   python -m pip install $5 #paddle_compile
    python -c 'import paddle;print(paddle.version.commit)'
 
    echo "######  ----ln  data-----"
