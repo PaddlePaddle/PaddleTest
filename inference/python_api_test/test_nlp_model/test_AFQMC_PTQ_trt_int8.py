@@ -284,7 +284,7 @@ def test_trt_int8_bz1():
     test_suite2.trt_more_bz_test(
         input_data_dict,
         output_data_dict,
-        min_subgraph_size=5,
+        min_subgraph_size=1,
         delta=4e-1,
         max_batch_size=40,
         use_static=False,
@@ -533,7 +533,12 @@ def test_trt_int8_bz1_multi_thread():
     set_dynamic_shape(test_suite2.pd_config)
     test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_bz1_multi_thread_test(
-        input_data_dict, output_data_dict, min_subgraph_size=5, delta=1e-1, use_static=False, precision="trt_int8"
+        input_data_dict,
+        output_data_dict,
+        min_subgraph_size=1,
+        delta=1e-1,
+        use_static=False,
+        precision="trt_int8",
     )
 
     del test_suite2  # destroy class to save memory

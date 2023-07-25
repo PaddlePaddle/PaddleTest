@@ -1,0 +1,11 @@
+train:
+  -
+    name: single
+    cmd: python examples/pipe/poiseuille_flow.py
+    params:
+      - --epochs=3000
+    result:
+      loss:
+        base: 0.00001
+        threshold: 1
+        evaluation: "-"

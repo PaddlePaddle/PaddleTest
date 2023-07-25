@@ -86,6 +86,7 @@ def test_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             max_batch_size=batch_size,
+            min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
             tuned=True,
@@ -102,6 +103,7 @@ def test_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             max_batch_size=batch_size,
+            min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
         )
@@ -142,6 +144,7 @@ def test_jetson_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             max_batch_size=batch_size,
+            min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
             tuned=True,
@@ -157,6 +160,7 @@ def test_jetson_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             max_batch_size=batch_size,
+            min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
         )

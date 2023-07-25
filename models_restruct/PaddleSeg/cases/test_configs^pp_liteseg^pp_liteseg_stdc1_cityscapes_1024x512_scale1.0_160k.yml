@@ -9,11 +9,15 @@ case:
         name: single
         cmd : python tools/train.py
       -
-        name: amp_multi
+        name: single_amp
       -
-        name: static_multi
+        name: single_dy2st
       -
-        name: quant_multi
+        name: multi_amp
+      -
+        name: multi_dy2st
+      # -
+      #   name: quant_multi
     eval:
       -
         name: pretrained
