@@ -23,6 +23,7 @@ class Test(unittest.TestCase):
         """
         test_decoder
         """
+        paddle.set_device("cpu")
         [
             batch_size,
             d_model,
@@ -40,18 +41,17 @@ class Test(unittest.TestCase):
         tgt_mask[0][0][0][0] = -1e9
         memory_mask = np.zeros((batch_size, n_head, target_length, source_length)).astype("float32")
         memory_mask[0][0][0][0] = -1e9
-        with fluid.dygraph.guard(fluid.CPUPlace()):
-            decoder_layer = TransformerDecoderLayer(d_model, n_head, dim_feedforward, dropout)
-            num_layers = 6
-            decoder = TransformerDecoder(decoder_layer, num_layers)
+        decoder_layer = TransformerDecoderLayer(d_model, n_head, dim_feedforward, dropout)
+        num_layers = 6
+        decoder = TransformerDecoder(decoder_layer, num_layers)
 
-            output = decoder(
-                paddle.to_tensor(tgt),
-                paddle.to_tensor(memory),
-                paddle.to_tensor(tgt_mask),
-                paddle.to_tensor(memory_mask),
-            )
-            print(output)
+        output = decoder(
+            paddle.to_tensor(tgt),
+            paddle.to_tensor(memory),
+            paddle.to_tensor(tgt_mask),
+            paddle.to_tensor(memory_mask),
+        )
+        print(output)
 
     @pytest.mark.api_nn_TransformerDecoder_parameters
     def test(self):
