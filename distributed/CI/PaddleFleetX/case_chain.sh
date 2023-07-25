@@ -528,7 +528,6 @@ function run_gpu_models(){
       done
 }
 
-
 main() {
     run_gpu_models
 }
