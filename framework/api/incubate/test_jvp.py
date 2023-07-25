@@ -51,7 +51,7 @@ def cal_jvp(func, xs, v=None):
     jvp API
     """
     jvp = paddle.incubate.autograd.jvp(func, xs, v)
-    if isinstance(jvp[1], paddle.fluid.framework.Variable):
+    if isinstance(jvp[1], paddle.Tensor):
         return jvp[1].reshape((-1,))
     else:
         return paddle.concat([x.reshape((-1,)) for x in jvp[1]]).reshape((-1,))
@@ -207,7 +207,7 @@ def test_jvp8():
     x = np.random.rand(3, 3)
     y = np.random.rand(3, 3)
     paddle.disable_static()
-    from paddle.fluid import core
+    from paddle.framework import core
 
     core._set_prim_backward_enabled(True)
     res = ans.jvp_with_jac(func3, [paddle.to_tensor(x), paddle.to_tensor(y)])

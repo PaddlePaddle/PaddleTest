@@ -261,14 +261,6 @@ def test_instancenorm2D7():
     """
     num_features=2, epsilon<=1e-3, momentum=0.9, weight_attr=False, bias_attr=False, data_format='NCW'
     """
-    # w_param_attrs = fluid.ParamAttr(name="w1_weight",
-    #                                 learning_rate=0.5,
-    #                                 regularizer=fluid.regularizer.L2Decay(1.0),
-    #                                 trainable=True)
-    # b_param_attrs = fluid.ParamAttr(name="b1_weight",
-    #                                 learning_rate=0.5,
-    #                                 regularizer=fluid.regularizer.L2Decay(1.0),
-    #                                 trainable=True)
     x_data = np.array(
         [
             [

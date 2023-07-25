@@ -8,11 +8,10 @@ test_concat.py
 import pytest
 import numpy as np
 import paddle
-import paddle.fluid as fluid
 
 # global params
 types = [np.float32, np.float64, np.uint8]
-if fluid.is_compiled_with_cuda() is True:
+if paddle.is_compiled_with_cuda() is True:
     places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
 else:
     # default
@@ -56,16 +55,16 @@ def static_base(axis):
         for t in types:
             if t != np.uint8:
                 paddle.enable_static()
-                main_program = fluid.Program()
-                startup_program = fluid.Program()
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+                main_program = paddle.static.Program()
+                startup_program = paddle.static.Program()
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                     input1 = paddle.static.data(name="x", shape=[2, 3], dtype=t)
                     input2 = paddle.static.data(name="y", shape=[2, 3], dtype=t)
                     input1.stop_gradient = False
                     output = paddle.concat(x=(input1, input2), axis=axis)
-                    g = fluid.gradients(output, input1)
+                    g = paddle.static.gradients(output, input1)
 
-                    exe = fluid.Executor(place)
+                    exe = paddle.static.Executor(place)
                     exe.run(startup_program)
                     x = np.arange(6).reshape((2, 3)).astype(t)
                     y = np.arange(6).reshape((2, 3)).astype(t)
