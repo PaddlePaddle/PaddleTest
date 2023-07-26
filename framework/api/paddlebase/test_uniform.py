@@ -7,14 +7,13 @@ test uniform
 import paddle
 import pytest
 import numpy as np
-from paddle import fluid
 
 
 types = [np.float32, np.float64]
-if fluid.is_compiled_with_cuda() is True:
-    places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+if paddle.is_compiled_with_cuda() is True:
+    places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
 else:
-    places = [fluid.CPUPlace()]
+    places = [paddle.CPUPlace()]
 
 
 @pytest.mark.api_base_uniform_vartype
@@ -147,12 +146,12 @@ def test_static1():
     """
     for place in places:
         for t in types:
-            main_program = fluid.default_main_program()
-            startup_program = fluid.default_startup_program()
+            main_program = paddle.static.default_main_program()
+            startup_program = paddle.static.default_startup_program()
             shape = [3, 4]
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-                    exe = fluid.Executor(place)
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
+                    exe = paddle.static.Executor(place)
                     exe.run(startup_program)
                     output = paddle.uniform(shape=shape)
                     res = exe.run(main_program, fetch_list=[output])
@@ -167,12 +166,12 @@ def test_static2():
     """
     for place in places:
         for t in types:
-            main_program = fluid.default_main_program()
-            startup_program = fluid.default_startup_program()
+            main_program = paddle.static.default_main_program()
+            startup_program = paddle.static.default_startup_program()
             shape = (3, 4)
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-                    exe = fluid.Executor(place)
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
+                    exe = paddle.static.Executor(place)
                     exe.run(startup_program)
                     output = paddle.uniform(shape=shape)
                     res = exe.run(main_program, fetch_list=[output])
@@ -187,14 +186,14 @@ def test_static3():
     """
     for place in places:
         for t in types:
-            main_program = fluid.default_main_program()
-            startup_program = fluid.default_startup_program()
+            main_program = paddle.static.default_main_program()
+            startup_program = paddle.static.default_startup_program()
             shape = np.array([3, 4]).astype("int32")
             feed = {"shape": shape}
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                     shape = paddle.static.data(name="shape", shape=[2], dtype="int32")
-                    exe = fluid.Executor(place)
+                    exe = paddle.static.Executor(place)
                     exe.run(startup_program)
                     output = paddle.uniform(shape=shape)
                     res = exe.run(main_program, feed=feed, fetch_list=[output])
@@ -209,14 +208,14 @@ def test_static4():
     """
     for place in places:
         for t in types:
-            main_program = fluid.default_main_program()
-            startup_program = fluid.default_startup_program()
+            main_program = paddle.static.default_main_program()
+            startup_program = paddle.static.default_startup_program()
             shape = np.array([3, 4]).astype("int32")
             feed = {"shape": shape}
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                     shape = paddle.static.data(name="shape", shape=[2], dtype="int32")
-                    exe = fluid.Executor(place)
+                    exe = paddle.static.Executor(place)
                     exe.run(startup_program)
                     output = paddle.uniform(shape=shape)
                     res = exe.run(main_program, feed=feed, fetch_list=[output])
@@ -230,14 +229,14 @@ def test_static5():
     :return:
     """
     for place in places:
-        main_program = fluid.default_main_program()
-        startup_program = fluid.default_startup_program()
+        main_program = paddle.static.default_main_program()
+        startup_program = paddle.static.default_startup_program()
         shape = np.array([3, 4]).astype("int32")
         feed = {"shape": shape}
-        with fluid.unique_name.guard():
-            with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        with paddle.utils.unique_name.guard():
+            with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                 shape = paddle.static.data(name="shape", shape=[2], dtype="int32")
-                exe = fluid.Executor(place)
+                exe = paddle.static.Executor(place)
                 exe.run(startup_program)
                 output = paddle.uniform(shape=shape, dtype="float32", min=-1, max=1)
                 res = exe.run(main_program, feed=feed, fetch_list=[output])

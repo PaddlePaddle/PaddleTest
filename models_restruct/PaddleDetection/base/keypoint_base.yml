@@ -11,6 +11,20 @@ train:
         threshold: 0
         evaluation: "="
   -
+    name: single_amp
+    cmd: python tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - --amp
+      - -o epoch=1
+      - TrainReader.batch_size=1
+      - amp_level=O2
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
     name: multi_amp
     cmd: python -m paddle.distributed.launch tools/train.py
     params:
@@ -19,6 +33,19 @@ train:
       - -o epoch=1
       - TrainReader.batch_size=1
       - amp_level=O2
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: single_dy2st
+    cmd: python tools/train.py
+    params:
+      - -c ${rd_yaml_path}
+      - --to_static
+      - -o epoch=1
+      - TrainReader.batch_size=1
     result:
       exit_code:
         base: 0

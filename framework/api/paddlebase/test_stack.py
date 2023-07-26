@@ -11,7 +11,6 @@ test_stack
 """
 import pytest
 import paddle
-import paddle.fluid as fluid
 import numpy as np
 from apibase import compare
 
@@ -46,10 +45,10 @@ def test_stack2():
     base list tensor, run with dygraph.
     :return:
     """
-    if fluid.is_compiled_with_cuda() is True:
-        places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+    if paddle.is_compiled_with_cuda() is True:
+        places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:
-        places = [fluid.CPUPlace()]
+        places = [paddle.CPUPlace()]
     types = [np.int32, np.int64, np.float32, np.float64]
     for t in types:
         x1 = np.array([2, 1]).astype(t)
@@ -68,10 +67,10 @@ def test_stack3():
     base tuple tensor, run with dygraph.
     :return:
     """
-    if fluid.is_compiled_with_cuda() is True:
-        places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+    if paddle.is_compiled_with_cuda() is True:
+        places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:
-        places = [fluid.CPUPlace()]
+        places = [paddle.CPUPlace()]
     types = [np.int32, np.int64, np.float32, np.float64]
     for t in types:
         x1 = np.array([2, 1]).astype(t)
@@ -113,18 +112,18 @@ def test_stack5():
     :return:
     """
     paddle.enable_static()
-    if fluid.is_compiled_with_cuda() is True:
-        places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+    if paddle.is_compiled_with_cuda() is True:
+        places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:
-        places = [fluid.CPUPlace()]
+        places = [paddle.CPUPlace()]
     x = paddle.static.data(name="x", shape=[1, 2], dtype=np.float64)
     y = paddle.static.data(name="y", shape=[1, 2], dtype=np.float64)
     res = paddle.stack([x, y], axis=0)
     for place in places:
-        exe = fluid.Executor(place)
+        exe = paddle.static.Executor(place)
         x1 = np.array([[2, 1]]).astype(np.float64)
         y1 = np.array([[5, 6]]).astype(np.float64)
-        res_val = exe.run(fluid.default_main_program(), feed={"x": x1, "y": y1}, fetch_list=[res])
+        res_val = exe.run(paddle.static.default_main_program(), feed={"x": x1, "y": y1}, fetch_list=[res])
         expect = np.stack([x1, y1], axis=0)
         result = np.allclose(res_val, expect, atol=1e-6, rtol=1e-6, equal_nan=True)
         assert result
@@ -138,18 +137,18 @@ def test_stack6():
     :return:
     """
     paddle.enable_static()
-    if fluid.is_compiled_with_cuda() is True:
-        places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+    if paddle.is_compiled_with_cuda() is True:
+        places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:
-        places = [fluid.CPUPlace()]
+        places = [paddle.CPUPlace()]
     x = paddle.static.data(name="x", shape=[1, 2], dtype="float64")
     y = paddle.static.data(name="y", shape=[1, 2], dtype="float64")
     res = paddle.stack((x, y), axis=0)
     for place in places:
-        exe = fluid.Executor(place)
+        exe = paddle.static.Executor(place)
         x1 = np.array([[2, 1]]).astype("float64")
         y1 = np.array([[5, 6]]).astype("float64")
-        res_val = exe.run(fluid.default_main_program(), feed={"x": x1, "y": y1}, fetch_list=[res])
+        res_val = exe.run(paddle.static.default_main_program(), feed={"x": x1, "y": y1}, fetch_list=[res])
         expect = np.stack((x1, y1), axis=0)
         result = np.allclose(res_val, expect, atol=1e-6, rtol=1e-6, equal_nan=True)
         assert result
@@ -163,10 +162,10 @@ def test_stack7():
     :return:
     """
     paddle.enable_static()
-    if fluid.is_compiled_with_cuda() is True:
-        places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+    if paddle.is_compiled_with_cuda() is True:
+        places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:
-        places = [fluid.CPUPlace()]
+        places = [paddle.CPUPlace()]
     x1 = np.array([2, 1]).astype(np.int64)
     y1 = np.array([3, 4]).astype(np.int64)
     for place in places:
@@ -187,10 +186,10 @@ def test_stack8():
     :return:
     """
     paddle.enable_static()
-    if fluid.is_compiled_with_cuda() is True:
-        places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+    if paddle.is_compiled_with_cuda() is True:
+        places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:
-        places = [fluid.CPUPlace()]
+        places = [paddle.CPUPlace()]
     x1 = np.array([2, 1]).astype(np.int64)
     y1 = np.array([3, 4]).astype(np.int64)
     for place in places:
@@ -211,18 +210,18 @@ def test_stack9():
     :return:
     """
     paddle.enable_static()
-    if fluid.is_compiled_with_cuda() is True:
-        places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+    if paddle.is_compiled_with_cuda() is True:
+        places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:
-        places = [fluid.CPUPlace()]
+        places = [paddle.CPUPlace()]
     x = paddle.static.data(name="x", shape=[1, 2], dtype="float64")
     y = paddle.static.data(name="y", shape=[1, 2], dtype="float64")
     res = paddle.stack((x, y), axis=-2)
     for place in places:
-        exe = fluid.Executor(place)
+        exe = paddle.static.Executor(place)
         x1 = np.array([[2, 1]]).astype("float64")
         y1 = np.array([[5, 6]]).astype("float64")
-        res_val = exe.run(fluid.default_main_program(), feed={"x": x1, "y": y1}, fetch_list=[res])
+        res_val = exe.run(paddle.static.default_main_program(), feed={"x": x1, "y": y1}, fetch_list=[res])
         expect = np.stack((x1, y1), axis=-2)
         result = np.allclose(res_val, expect, atol=1e-6, rtol=1e-6, equal_nan=True)
         assert result
@@ -236,18 +235,18 @@ def test_stack10():
     :return:
     """
     paddle.enable_static()
-    if fluid.is_compiled_with_cuda() is True:
-        places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+    if paddle.is_compiled_with_cuda() is True:
+        places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
     else:
-        places = [fluid.CPUPlace()]
+        places = [paddle.CPUPlace()]
     x = paddle.static.data(name="x", shape=[1, 2], dtype="float64")
     y = paddle.static.data(name="y", shape=[1, 2], dtype="float64")
     res = paddle.stack((x, y), axis=1)
     for place in places:
-        exe = fluid.Executor(place)
+        exe = paddle.static.Executor(place)
         x1 = np.array([[2, 1]]).astype("float64")
         y1 = np.array([[5, 6]]).astype("float64")
-        res_val = exe.run(fluid.default_main_program(), feed={"x": x1, "y": y1}, fetch_list=[res])
+        res_val = exe.run(paddle.static.default_main_program(), feed={"x": x1, "y": y1}, fetch_list=[res])
         expect = np.stack((x1, y1), axis=1)
         result = np.allclose(res_val, expect, atol=1e-6, rtol=1e-6, equal_nan=True)
         assert result

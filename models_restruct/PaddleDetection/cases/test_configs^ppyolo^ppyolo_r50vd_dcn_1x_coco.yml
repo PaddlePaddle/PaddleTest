@@ -21,7 +21,11 @@ case:
       #   params:
       #     - --slim_config configs/slim/prune/ppyolo_r50vd_prune_fpgm.yml
       -
+        name: single_amp
+      -
         name: multi_amp
+      -
+        name: single_dy2st
       -
         name: multi_dy2st
     eval:
