@@ -77,7 +77,7 @@ class InferenceTest(object):
         if device == "cpu":
             self.pd_config.disable_gpu()
         elif device == "gpu":
-            self.pd_config.enable_use_gpu(gpu_mem, 1)
+            self.pd_config.enable_use_gpu(gpu_mem, 0)
         else:
             raise Exception(f"{device} not support in current test codes")
         self.pd_config.switch_ir_optim(False)
@@ -628,7 +628,7 @@ class InferenceTest(object):
             "trt_fp16": paddle_infer.PrecisionType.Half,
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
-        self.pd_config.enable_use_gpu(gpu_mem, 1)
+        self.pd_config.enable_use_gpu(gpu_mem, 0)
         if dynamic:
             if tuned:
                 self.pd_config.collect_shape_range_info("shape_range.pbtxt")
