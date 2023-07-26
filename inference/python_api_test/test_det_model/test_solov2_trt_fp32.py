@@ -116,4 +116,13 @@ def test_trt_fp32_more_bz():
             precision="trt_fp32",
             dynamic=True,
             tuned=False,
+            delete_op_list=[
+                "im_shape_slice_0",
+                "im_shape_slice_0_slice_1",
+                "cast_6.tmp_0",
+                "im_shape_slice_0_slice_0",
+                "cast_5.tmp_0",
+                "im_shape_slice_0_slice_2",
+                "tmp_65",
+            ],
         )
