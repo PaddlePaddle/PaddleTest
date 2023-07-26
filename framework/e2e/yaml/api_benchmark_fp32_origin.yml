@@ -9652,33 +9652,33 @@ unsqueeze_2:
     mapping:
       ins: { x: input, axis: dim }
 
-#where_0:
-#  desc: "根据 condition 来选择 x 或 y 中的对应元素来组成新的 Tensor"
-#  paddle:
-#    api_name: "paddle.where"
-#    inputs:
-#      x:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1]
-#        range: [ -1, 1]
-#      y:
-#        random: true
-#        type: "Tensor"
-#        dtype: "float32"
-#        shape: [1, 1, 1]
-#        range: [ -1, 1]
-#    params:
-#      condition:
-#        random: false
-#        type: "Tensor"
-#        dtype: "bool"
-#        value: True
-#  pytorch:
-#    api_name: "torch.where"
-#    mapping:
-#      ins: { condition: condition, x: input, y: other }
+where_0:
+  desc: "根据 condition 来选择 x 或 y 中的对应元素来组成新的 Tensor"
+  paddle:
+    api_name: "paddle.where"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1]
+        range: [ -1, 1]
+      y:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1]
+        range: [ -1, 1]
+    params:
+      condition:
+        random: false
+        type: "Tensor"
+        dtype: "bool"
+        value: True
+  pytorch:
+    api_name: "torch.where"
+    mapping:
+      ins: { condition: condition, x: input, y: other }
 
 add_0:
   desc: "逐元素相加算子"
