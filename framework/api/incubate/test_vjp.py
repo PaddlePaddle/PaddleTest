@@ -34,7 +34,7 @@ def cal_vjp(func, xs, v=None):
     vjp API
     """
     vjp = paddle.incubate.autograd.vjp(func, xs, v)[1]
-    if isinstance(vjp, paddle.fluid.framework.Variable):
+    if isinstance(vjp, paddle.Tensor):
         return vjp.reshape((-1,))
     else:
         return paddle.concat([x.reshape((-1,)) for x in vjp]).reshape((-1,))

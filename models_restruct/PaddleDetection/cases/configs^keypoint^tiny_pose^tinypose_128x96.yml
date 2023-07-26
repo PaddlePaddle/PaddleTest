@@ -17,7 +17,11 @@ case:
         params:
           - --slim_config configs/slim/quant/tinypose_qat.yml
       -
+        name: single_amp
+      -
         name: multi_amp
+      -
+        name: single_dy2st
       -
         name: multi_dy2st
     eval:

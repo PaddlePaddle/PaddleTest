@@ -106,6 +106,7 @@ class PaddleSlim_Build(Model_Build):
         # os.system("python -m pip install --user -U paddlenlp")
         os.system("python -m pip install paddlenlp -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
         os.system("python -m pip install --user -U x2paddle==1.3.9")
+        os.system("python -m pip install --user -U protobuf==4.23.1")
         cmd_return = os.system("python -m pip install {}".format(self.paddle_whl))
         if cmd_return:
             logger.info("repo {} python -m pip install paddle failed".format(self.reponame))

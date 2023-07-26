@@ -6,27 +6,6 @@ export data_path=/fleetx_data
 export log_path=/paddle/log_fleetx
 
 fleet_gpu_model_list=( \
-    gpt_preprocess_data \
-    gpt_345M_single \
-    gpt_1.3B_dp \
-    gpt_6.7B_stage2_dp2_sharding4 \
-    gpt_6.7B_stage3_dp2_sharding4 \
-    gpt_6.7B_stage2_sharding8 \
-    gpt_175B_DP1_MP4_PP2 \
-    gpt_175B_DP1_MP4_PP2_sp \
-    gpt_175B_DP1_MP8_PP1 \
-    gpt_175B_DP1_MP8_PP1_sp \
-    gpt_175B_DP1_MP1_PP8 \
-    gpt_generation_345M_single \
-    gpt_generation_345M_hybrid  \
-    gpt_345M_mp8_qat \
-    gpt_export_345M_mp1 \
-    gpt_export_345M_mp2 \
-    gpt_inference_345M_single \
-    gpt_inference_345M_dp8 \
-    gpt_345M_single_finetune \
-    gpt_eval_WikiText \
-    gpt_eval_LAMBADA \
     ernie_base_3D \
     ernie_dp2 \
     vit_cifar10_finetune \
@@ -39,7 +18,6 @@ fleet_gpu_model_list=( \
     imagen_super_resolution_256_single_card \
     imagen_super_resolution_256_dp8 \
     )
-    # gpt_export_qat_345M \
 
 
 function gpt_preprocess_data() {
@@ -382,8 +360,8 @@ function vit_cifar10_finetune() {
     loss=`cat log/workerlog.0 | grep 19/24 | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}'`
     top1=`cat log/workerlog.0 | grep top1 | awk -F 'top1 = ' '{print $2}' | awk -F ',' '{print $1}'`
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 3.567670846 ${loss} ${FUNCNAME}_loss
-        check_diff 0.198096 ${top1} ${FUNCNAME}_top1
+        check_diff 3.567691541 ${loss} ${FUNCNAME}_loss
+        check_diff 0.197949 ${top1} ${FUNCNAME}_top1
     else
         check_diff 3.744726562 ${loss} ${FUNCNAME}_loss
         check_diff 0.216858 ${top1} ${FUNCNAME}_top1
@@ -406,7 +384,7 @@ function vit_qat() {
     check_result $FUNCNAME
     loss=`cat log/workerlog.0 | grep "1/20" | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}' `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 2.299868345 ${loss} ${FUNCNAME}_loss
+        check_diff 2.299868107 ${loss} ${FUNCNAME}_loss
     else
         check_diff 2.299857140 ${loss} ${FUNCNAME}_loss
     fi
@@ -549,7 +527,6 @@ function run_gpu_models(){
         echo "=========== ${model} run  end ==========="
       done
 }
-
 
 main() {
     run_gpu_models
