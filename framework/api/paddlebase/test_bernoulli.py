@@ -8,7 +8,6 @@ from apibase import APIBase
 from apibase import randtool
 import paddle
 import pytest
-from paddle import fluid
 import numpy as np
 
 
@@ -25,7 +24,7 @@ class TestBernoulli(APIBase):
         # self.debug = True
         # self.static = True
         # enable check grad
-        self.places = [fluid.CPUPlace()]
+        self.places = [paddle.CPUPlace()]
         self.enable_backward = False
 
 

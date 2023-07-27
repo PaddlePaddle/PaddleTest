@@ -377,13 +377,3 @@ def test_full29():
 #    res = np.full(shape, fill_value)
 #    obj.exception(etype=TypeError, mode="python", shape=shape, fill_value=fill_value, dtype=np.int32)
 
-
-# now test frame not support fluid.core.VarDesc.VarType.
-# def test_full31():
-#     """
-#     shape is list, fill_value is bool, bool:True, dtype:core.VarDesc.VarType.bool
-#     """
-#     shape = [3, 2]
-#     fill_value = True
-#     res = np.full(shape, fill_value)
-#     obj.run(res=res, shape=shape, fill_value=fill_value, dtype=fluid.core.VarDesc.VarType.BOOL)

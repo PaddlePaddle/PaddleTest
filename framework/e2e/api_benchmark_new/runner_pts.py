@@ -26,6 +26,10 @@ sys.path.append("..")
 from utils.logger import Logger
 from runner_base import ApiBenchmarkBASE
 
+import psutil
+
+p = psutil.Process()
+p.cpu_affinity([2])
 
 SKIP_DICT = {"Windows": ["fft"], "Darwin": ["fft"], "Linux": []}
 INDEX_DICT = {}
