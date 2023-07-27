@@ -12,6 +12,7 @@ import six
 import wget
 import pytest
 import numpy as np
+import paddle.inference as paddle_infer
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
@@ -90,6 +91,13 @@ def test_trt_fp16_more_bz():
 
         del test_suite1  # destroy class to save memory
 
+        # Cause of the diff error, delete the conv_elementwise_add_fuse_pass when trt_version < 8.0
+        ver = paddle_infer.get_trt_compile_version()
+        if ver[0] * 1000 + ver[1] * 100 + ver[2] * 10 < 8000:
+            delete_pass_list = ["conv_elementwise_add_fuse_pass"]
+        else:
+            delete_pass_list = []
+
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./DarkNet53/inference.pdmodel",
@@ -103,6 +111,7 @@ def test_trt_fp16_more_bz():
             min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
+            delete_pass_list=delete_pass_list,
         )
 
         del test_suite2  # destroy class to save memory
