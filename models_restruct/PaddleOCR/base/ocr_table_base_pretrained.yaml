@@ -177,7 +177,7 @@ predict:
       - --use_gpu=True
       - --use_tensorrt=True
       - --enable_mkldnn=False
-    -
+  -
     name: trained
     cmd:  python ppstructure/table/predict_structure.py
     params:

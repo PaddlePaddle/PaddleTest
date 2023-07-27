@@ -6,17 +6,16 @@ test shape
 """
 from apibase import APIBase
 from apibase import compare
-import paddle.fluid as fluid
 
 import paddle
 import pytest
 import numpy as np
 
 
-if fluid.is_compiled_with_cuda() is True:
-    places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+if paddle.is_compiled_with_cuda() is True:
+    places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
 else:
-    places = [fluid.CPUPlace()]
+    places = [paddle.CPUPlace()]
 
 
 @pytest.mark.api_base_shape_vartype

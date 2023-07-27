@@ -176,16 +176,6 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
     fi
-elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
-    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        linux_env_info_main get_wheel_url Cuda120 Python310 Develop ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
-    else
-        linux_env_info_main get_wheel_url Cuda120 Python310 Release ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
-    fi
 else
     if [[ ${paddle_whl} ]];then
         paddle_whl=${paddle_whl}
@@ -354,8 +344,8 @@ if [[ "${docker_flag}" == "" ]]; then
     ####创建docker
     set +x;
 
-    # 拉取更新镜像
-    docker pull ${Image_version}
+    # # 拉取更新镜像
+    # docker pull ${Image_version}
 
     docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
@@ -418,6 +408,7 @@ if [[ "${docker_flag}" == "" ]]; then
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
             yum install nfs-utils -y > install_nfs 2>&1
+            export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -524,6 +515,7 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
+        export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}

@@ -13,6 +13,7 @@ import numpy as np
 import yaml
 from Model_Build import Model_Build
 
+
 logger = logging.getLogger("ce")
 
 
@@ -59,7 +60,7 @@ class PaddleNLP_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         paddle_whl = self.paddle_whl
-        os.environ["no_proxy"] = "bcebos.com,huggingface.co,baidu.com,baidu-int.com,org.cn"
+        os.environ["no_proxy"] = "bcebos.com,baidu.com,baidu-int.com,org.cn"
         print("set timeout as:", os.environ["timeout"])
         print("set no_proxy as:", os.environ["no_proxy"])
 
@@ -95,13 +96,41 @@ class PaddleNLP_Build(Model_Build):
             os.chdir(self.reponame)
             logger.info("installing develop PaddleNLP")
             os.system("python setup.py bdist_wheel")
-            cmd_return = os.system(" python -m pip install -U dist/p****.whl")
+            cmd_return = os.system(" python -mxs pip install -U dist/p****.whl")
 
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
 
             logger.info("installing develop ppdiffusers")
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
+
+            os.system(
+                'sed -i "s/save_step: 10000/save_step: 1/g" examples/machine_translation/transformer/ \
+                    configs/transformer.base.yaml'
+            )
+            os.system(
+                'sed -i "s/print_step: 100/print_step: 1/g" examples/machine_translation/transformer/ \
+                    configs/transformer.base.yaml'
+            )
+            os.system(
+                'sed -i "s/epoch: 30/epoch: 1/g" examples/machine_translation/transformer/configs/ \
+                    transformer.base.yaml'
+            )
+            os.system(
+                'sed -i "s/max_iter: None/max_iter: 2/g" examples/machine_translation/transformer/ \
+                    configs/transformer.base.yaml'
+            )
+            os.system(
+                'sed -i "s/batch_size: 4096/batch_size: 1000/g" examples/machine_translation/transformer/ \
+                    configs/transformer.base.yaml'
+            )
+
+            from datasets import load_dataset
+
+            train_squad = load_dataset("squad", split="train", cache_dir="/root/.cache/huggingface/datasets")
+            train_sst2 = load_dataset("glue", "sst2", split="train", cache_dir="/root/.cache/huggingface/datasets")
+
+            print("download hf datasets", train_squad, train_sst2)
 
         if re.compile("CUDA11").findall(self.models_file):
             os.system(

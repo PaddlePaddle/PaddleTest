@@ -7,17 +7,16 @@ test empty
 import paddle
 import pytest
 import numpy as np
-from paddle import fluid
 
 
-if fluid.is_compiled_with_cuda() is True:
+if paddle.is_compiled_with_cuda() is True:
     devices = ["gpu", "cpu"]
 else:
     devices = ["cpu"]
-if fluid.is_compiled_with_cuda() is True:
-    places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+if paddle.is_compiled_with_cuda() is True:
+    places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
 else:
-    places = [fluid.CPUPlace()]
+    places = [paddle.CPUPlace()]
 dtypes = [
     None,
     # np.bool_,
@@ -114,17 +113,17 @@ def test_empty_static5():
     for t in types_list:
         shape = np.array([3, 3, 2]).astype(t)
         feed = {"shape": shape}
-        main_program = fluid.Program()
-        startup_program = fluid.Program()
-        with fluid.unique_name.guard():
-            with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+        main_program = paddle.static.Program()
+        startup_program = paddle.static.Program()
+        with paddle.utils.unique_name.guard():
+            with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                 for place in places:
                     for dtype in dtypes:
-                        exe = fluid.Executor(place)
+                        exe = paddle.static.Executor(place)
                         exe.run(startup_program)
                         shape = paddle.static.data(name="shape", shape=shape.shape, dtype=t)
                         res = paddle.empty(shape=shape, dtype=dtype)
-                        static_out = exe.run(fluid.default_main_program(), feed=feed, fetch_list=[res])
+                        static_out = exe.run(paddle.static.default_main_program(), feed=feed, fetch_list=[res])
                         assert np.allclose(
                             np.array(static_out).shape, [1, 3, 3, 2], atol=0.005, rtol=0.05, equal_nan=True
                         )
