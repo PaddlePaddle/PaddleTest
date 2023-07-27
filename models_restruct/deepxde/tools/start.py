@@ -117,9 +117,9 @@ class DeepXDE_Start(object):
     def get_example_dir(self):
         example_dir = self.qa_yaml_name.replace("^", "/")
         if "lulu" in example_dir:
-            example_dir = example_dir[5:]
+            example_dir = example_dir[5:] + ".py"
         elif  "RD" in example_dir:
-            example_dir = example_dir[3:]
+            example_dir = example_dir[3:] + ".py"
         return example_dir
 
     def build_prepare(self):
