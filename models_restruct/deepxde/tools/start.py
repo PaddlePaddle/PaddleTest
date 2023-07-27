@@ -59,6 +59,23 @@ class DeepXDE_Start(object):
         os.environ["DDE_BACKEND"] = "paddle"
         return 0
 
+    def alter(file,old_str,new_str,flag=True, except_str='model.train(0'):
+        """
+        replaced the backend 
+        """
+        file_data = ""
+        with open(file, "r", encoding="utf-8") as f:
+            for line in f:
+                if flag:
+                    if old_str in line and new_str not in line and except_str not in line:
+                        line = line.replace(old_str,new_str)
+                else:
+                    if old_str in line:
+                        line = line.replace(old_str,new_str)
+                file_data += line
+        with open(file,"w",encoding="utf-8") as f:
+            f.write(file_data)
+
     def add_seed(file,old_str,new_str):
         """
         add the seed 
