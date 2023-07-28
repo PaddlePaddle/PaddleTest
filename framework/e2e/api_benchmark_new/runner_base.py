@@ -262,13 +262,13 @@ class ApiBenchmarkBASE(object):
         :return:
         """
         forward_time_statistics = self.statistics.trimmean(data_list=forward_time_list)
-        forward_top_k_statistics = self.statistics.trimmean(data_list=forward_time_list)
+        forward_top_k_statistics = self.statistics.best_top_k(data_list=forward_time_list)
 
         backward_time_statistics = self.statistics.trimmean(data_list=backward_time_list)
-        backward_top_k_statistics = self.statistics.trimmean(data_list=backward_time_list)
+        backward_top_k_statistics = self.statistics.best_top_k(data_list=backward_time_list)
 
         total_time_statistics = self.statistics.trimmean(data_list=total_time_list)
-        total_top_k_statistics = self.statistics.trimmean(data_list=total_time_list)
+        total_top_k_statistics = self.statistics.best_top_k(data_list=total_time_list)
 
         total_time_best = self.statistics.best(data_list=total_time_list)
 
