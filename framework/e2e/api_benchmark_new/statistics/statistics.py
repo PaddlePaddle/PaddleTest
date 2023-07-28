@@ -53,7 +53,7 @@ class Statistics(object):
 
     def best_top_k(self, data_list, ratio=0.2):
         """
-        掐头去尾求平均
+        求最优top k的平均值，默认ratio=0.2
         :param data_list: 输入的data list, 多次试验的结果集合
         """
         head = int(len(data_list) * ratio)
