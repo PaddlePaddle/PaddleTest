@@ -5,7 +5,7 @@ train:
     params:
       - --epochs=2
     result:
-      exit_code:
-        base: 0
+      loss:
+        base: 1.13e-05
         threshold: 0
         evaluation: "="
