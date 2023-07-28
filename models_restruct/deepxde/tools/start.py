@@ -144,7 +144,7 @@ class DeepXDE_Start(object):
         return example_dir
 
     def get_deepxde_data(self):
-        os.system("cp -r deepxde/examples/dataset/ deepxde/")
+        os.system("cp -r deepxde/examples/dataset/ ./")
         return 0
 
     def build_prepare(self):
