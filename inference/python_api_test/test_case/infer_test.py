@@ -631,8 +631,6 @@ class InferenceTest(object):
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
-        self.pd_config.switch_ir_debug(True)
-        self.pd_config.enable_memory_optim()
         if dynamic:
             if tuned:
                 self.pd_config.collect_shape_range_info("shape_range.pbtxt")
