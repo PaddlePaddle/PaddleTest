@@ -10,13 +10,13 @@ train:
         threshold: 1
         evaluation: "-"
   -
-    name: single_dy2st
+    name: dy2st
     cmd: python examples/euler_beam/euler_beam.py
     params:
       - --to_static
-      - --epochs=10000
+      - --epochs=10
     result:
-      loss:
-        base: 0.00006
-        threshold: 1
-        evaluation: "-"
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

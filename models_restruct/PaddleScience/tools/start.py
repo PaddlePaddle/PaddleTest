@@ -56,7 +56,6 @@ class PaddleScience_Start(object):
         old_pythonpath = os.environ.get("PYTHONPATH", "")
         new_pythonpath = f"{paddle_path}:{old_pythonpath}"
         os.environ["PYTHONPATH"] = new_pythonpath
-        os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
         return 0
 
     def download_datasets(self):
@@ -81,6 +80,16 @@ class PaddleScience_Start(object):
         os.environ[self.reponame] = json.dumps(self.env_dict)
         return ret
 
+    def install_env(self):
+        """
+        install env for  paddlescience docker
+        """
+        mode = os.getenv("mode")
+        if mode == "function":
+            os.system("apt update")
+            os.system("apt-get install -y curl")
+            os.system("curl --version")
+
 
 def run():
     """
@@ -90,6 +99,7 @@ def run():
     model.build_prepare()
     model.add_paddlescience_to_pythonpath()
     model.download_datasets()
+    model.install_env()
     return 0
 
 

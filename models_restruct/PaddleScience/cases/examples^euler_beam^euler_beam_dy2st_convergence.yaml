@@ -3,7 +3,7 @@ case:
     base: ./base/euler_beam_base.yaml
     train:
       -
-        name: single_dy2st
+        name: dy2st
     eval: skipped
     infer: skipped
     export: skipped
