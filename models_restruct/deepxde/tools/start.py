@@ -176,7 +176,8 @@ def run():
     model.add_seed(filedir, "import deepxde", "import paddle\n")
     #add_seed(filedir, "import paddle", "paddle.seed(1)\n")
     model.add_seed(filedir, "import deepxde", "import numpy as np\n")
-    model.add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")    
+    model.add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
+    logger.info("============success========")
     return 0
 
 
