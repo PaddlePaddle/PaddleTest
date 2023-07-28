@@ -280,6 +280,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             mkldnn_cache_capacity(int): MKLDNN cache capacity
             repeat(int): inference repeat time
             delta(float): difference threshold between inference outputs and thruth value
@@ -355,6 +356,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
@@ -396,6 +398,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
@@ -435,6 +438,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
@@ -498,6 +502,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
             min_subgraph_size(int): min subgraph size
@@ -623,6 +628,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
             min_subgraph_size(int): min subgraph size
@@ -716,6 +722,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
             names(list): input names
@@ -801,6 +808,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time
             thread_num(int): number of threads
             delta(float): difference threshold between inference outputs and thruth value
@@ -939,6 +947,7 @@ class InferenceTest(object):
             predictor: paddle inference predictor
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
