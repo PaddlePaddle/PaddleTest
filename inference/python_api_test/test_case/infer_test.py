@@ -589,6 +589,7 @@ class InferenceTest(object):
         self,
         input_data_dict: dict,
         output_data_dict: dict,
+        check_output_list=None,
         repeat=1,
         delta=1e-5,
         gpu_mem=1000,
@@ -614,6 +615,7 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
+            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
             min_subgraph_size(int): min subgraph size
@@ -641,7 +643,7 @@ class InferenceTest(object):
                     use_static=use_static,
                     use_calib_mode=use_calib_mode,
                 )
-                self.pd_config.enable_tuned_tensorrt_dynamic_shape()
+                self.pd_config.enable_tuned_tensorrt_dynamic_shape("shape_range.pbtxt", True)
         else:
             self.pd_config.enable_tensorrt_engine(
                 workspace_size=1 << 30,
@@ -667,13 +669,12 @@ class InferenceTest(object):
             predictor.run()
         if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
             return 0
-        output_names = predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
