@@ -143,6 +143,10 @@ class DeepXDE_Start(object):
             example_dir = "deepxde" + example_dir[2:] + ".py"
         return example_dir
 
+    def get_deepxde_data(self):
+        os.system("cp -r deepxde/examples/dataset/ deepxde/")
+        return 0
+
     def build_prepare(self):
         """
         build prepare
@@ -164,6 +168,7 @@ def run():
     model = DeepXDE_Start()
     model.build_prepare()
     model.add_paddle_to_pythonpath()
+    model.get_deepxde_data()
     filedir = model.get_example_dir()
     logger.info("==============filedir===============")
     logger.info(filedir)
