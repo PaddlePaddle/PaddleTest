@@ -49,7 +49,7 @@ class ApiBenchmarkNoDB(object):
         :param baseline: 性能baseline键值对, key为case名, value为性能float
         """
         # 测试控制项
-        self.experi = 10000
+        self.experi = 1
         self.loops = 50  # 循环次数
         self.base_times = 1000  # timeit 基础运行时间
         self.default_dtype = "float32"
@@ -223,6 +223,14 @@ class ApiBenchmarkNoDB(object):
                 best_total_res_list = []
                 forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
 
+                self.logger.get_log().info(
+                    "experi {} start~~~~".format(k)
+                )
+                self.logger.get_log().warning("forward_time_list is: {}".format(forward_time_list))
+                self.logger.get_log().warning("forward_time_list length is: {}".format(len(forward_time_list)))
+                self.logger.get_log().warning("total_time_list is: {}".format(total_time_list))
+                self.logger.get_log().warning("total_time_list length is: {}".format(len(total_time_list)))
+
                 if isinstance(forward_time_list, str):
                     error["api"] = api
                     error["exception"] = forward_time_list
@@ -247,6 +255,18 @@ class ApiBenchmarkNoDB(object):
                     # total = self.statistics.best(data_list=total_res_list)
                     best_total = self.statistics.best(data_list=best_total_res_list)
 
+                    self.logger.get_log().warning("forward_res_list is: {}".format(forward_res_list))
+                    self.logger.get_log().warning("forward_res_list length is: {}".format(len(forward_res_list)))
+                    self.logger.get_log().warning("total_res_list is: {}".format(total_res_list))
+                    self.logger.get_log().warning("total_res_list length is: {}".format(len(total_res_list)))
+                    self.logger.get_log().warning("best_total_res_list is: {}".format(best_total_res_list))
+                    self.logger.get_log().warning("best_total_res_list length is: {}".format(len(best_total_res_list)))
+
+                    # self.logger.get_log().info(
+                    #     "experi {} forward_time_list: {}".format(
+                    #         k, forward_time_list
+                    #     )
+                    # )
                     if self.if_showtime:
                         self._show(experi_idx=k, forward_time=forward, best_total_time=best_total)
 

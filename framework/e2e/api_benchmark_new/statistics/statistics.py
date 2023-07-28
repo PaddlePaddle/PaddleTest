@@ -51,6 +51,15 @@ class Statistics(object):
         res = min(data_list)
         return res
 
+    def best_top_k(self, data_list, ratio=0.2):
+        """
+        掐头去尾求平均
+        :param data_list: 输入的data list, 多次试验的结果集合
+        """
+        head = int(len(data_list) * ratio)
+        res = sum(sorted(data_list)[:head]) / head
+        return res
+
     # def probability_plot(self, data_list):
     #     """
     #
