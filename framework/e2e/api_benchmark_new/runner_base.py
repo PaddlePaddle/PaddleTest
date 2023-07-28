@@ -150,8 +150,11 @@ class ApiBenchmarkBASE(object):
             latest_case = {}
 
             forward_res_list = []
+            forward_top_k_res_list = []
             total_res_list = []
+            total_top_k_res_list = []
             backward_res_list = []
+            backward_top_k_res_list = []
             best_total_res_list = []
 
             if case_name in SKIP_DICT[platform.system()]:
@@ -180,10 +183,21 @@ class ApiBenchmarkBASE(object):
                 error["exception"] = forward_time_list
                 error_dict[case_name] = error
             elif isinstance(forward_time_list, list):
-                forward_res_list, backward_res_list, total_res_list, best_total_res_list = self._base_statistics(
+                (
+                    forward_res_list,
+                    forward_top_k_res_list,
+                    backward_res_list,
+                    backward_top_k_res_list,
+                    total_res_list,
+                    total_top_k_res_list,
+                    best_total_res_list,
+                ) = self._base_statistics(
                     forward_res_list=forward_res_list,
+                    forward_top_k_res_list=forward_top_k_res_list,
                     backward_res_list=backward_res_list,
+                    backward_top_k_res_list=backward_top_k_res_list,
                     total_res_list=total_res_list,
+                    total_top_k_res_list=total_top_k_res_list,
                     best_total_res_list=best_total_res_list,
                     forward_time_list=forward_time_list,
                     backward_time_list=backward_time_list,
@@ -191,8 +205,14 @@ class ApiBenchmarkBASE(object):
                 )
 
                 forward = self.statistics.best(data_list=forward_res_list)
+                forward_top_k = self.statistics.best(data_list=forward_top_k_res_list)
+
                 backward = self.statistics.best(data_list=backward_res_list)
+                backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
+
                 total = self.statistics.best(data_list=total_res_list)
+                total_top_k = self.statistics.best(data_list=total_top_k_res_list)
+
                 best_total = self.statistics.best(data_list=best_total_res_list)
 
                 if self.if_showtime:
@@ -210,8 +230,11 @@ class ApiBenchmarkBASE(object):
                     "api": api,
                     "yaml": case_name,
                     "forward": forward,
+                    "forward_top_k": forward_top_k,
                     "total": total,
+                    "total_top_k": total_top_k,
                     "backward": backward,
+                    "backward_top_k": backward_top_k,
                     "best_total": best_total,
                 }
 
@@ -224,8 +247,11 @@ class ApiBenchmarkBASE(object):
     def _base_statistics(
         self,
         forward_res_list,
+        forward_top_k_res_list,
         backward_res_list,
+        backward_top_k_res_list,
         total_res_list,
+        total_top_k_res_list,
         best_total_res_list,
         forward_time_list,
         backward_time_list,
@@ -236,16 +262,36 @@ class ApiBenchmarkBASE(object):
         :return:
         """
         forward_time_statistics = self.statistics.trimmean(data_list=forward_time_list)
+        forward_top_k_statistics = self.statistics.trimmean(data_list=forward_time_list)
+
         backward_time_statistics = self.statistics.trimmean(data_list=backward_time_list)
+        backward_top_k_statistics = self.statistics.trimmean(data_list=backward_time_list)
+
         total_time_statistics = self.statistics.trimmean(data_list=total_time_list)
+        total_top_k_statistics = self.statistics.trimmean(data_list=total_time_list)
+
         total_time_best = self.statistics.best(data_list=total_time_list)
 
         forward_res_list.append(forward_time_statistics)
+        forward_top_k_res_list.append(forward_top_k_statistics)
+
         backward_res_list.append(backward_time_statistics)
+        backward_top_k_res_list.append(backward_top_k_statistics)
+
         total_res_list.append(total_time_statistics)
+        total_top_k_res_list.append(total_top_k_statistics)
+
         best_total_res_list.append(total_time_best)
 
-        return forward_res_list, backward_res_list, total_res_list, best_total_res_list
+        return (
+            forward_res_list,
+            forward_top_k_res_list,
+            backward_res_list,
+            backward_top_k_res_list,
+            total_res_list,
+            total_top_k_res_list,
+            best_total_res_list,
+        )
 
     def _show(self, forward_time, backward_time, total_time, best_total_time):
         """
