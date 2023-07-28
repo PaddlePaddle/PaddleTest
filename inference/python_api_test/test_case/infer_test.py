@@ -302,7 +302,7 @@ class InferenceTest(object):
         for i in range(2):
             predictor.run()
 
-        output_names = check_output_list if(check_output_list) else predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
         print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
@@ -347,7 +347,9 @@ class InferenceTest(object):
         print(f"benchmark diff: {benchmark_diff}")
         assert benchmark_diff <= benchmark_threshold, f"benchmark diff:{benchmark_diff} > {benchmark_threshold}"
 
-    def onnxruntime_test(self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=2, delta=1e-5):
+    def onnxruntime_test(
+        self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=2, delta=1e-5
+    ):
         """
         test enable_onnxruntime()
         Args:
@@ -370,7 +372,7 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
 
-        output_names = check_output_list if(check_output_list) else predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
         print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
@@ -386,7 +388,9 @@ class InferenceTest(object):
             # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
             #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
-    def gpu_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=1e-5, gpu_mem=1000):
+    def gpu_more_bz_test(
+        self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=1e-5, gpu_mem=1000
+    ):
         """
         test enable_use_gpu()
         Args:
@@ -407,7 +411,7 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-        output_names = check_output_list if(check_output_list) else predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
         print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
@@ -423,7 +427,9 @@ class InferenceTest(object):
             # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
             #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
-    def gpu_more_bz_test_mix(self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=5e-3, gpu_mem=1000):
+    def gpu_more_bz_test_mix(
+        self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=5e-3, gpu_mem=1000
+    ):
         """
         test enable_use_gpu() in mixed_precision
         Args:
@@ -444,7 +450,7 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-        output_names = check_output_list if(check_output_list) else predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         # Change the accuracy check to sequential comparison
         truth_value_names = list(output_data_dict.keys())
         print("output_names:", output_names)
@@ -539,7 +545,7 @@ class InferenceTest(object):
         for _, input_data_name in enumerate(input_names):
             input_handle = predictor.get_input_handle(input_data_name)
             input_handle.copy_from_cpu(input_data_dict[input_data_name])
-        output_names = check_output_list if(check_output_list) else predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
         print("truth_value_names:", output_names)
 
@@ -670,7 +676,7 @@ class InferenceTest(object):
             predictor.run()
         if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
             return 0
-        output_names = check_output_list if(check_output_list) else predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
         print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
@@ -755,7 +761,7 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
 
-        output_names = check_output_list if(check_output_list) else predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
         print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
@@ -945,7 +951,7 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-        output_names = check_output_list if(check_output_list) else predictor.get_output_names()
+        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
         print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
