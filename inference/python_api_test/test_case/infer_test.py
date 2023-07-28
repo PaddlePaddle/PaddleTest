@@ -95,7 +95,6 @@ class InferenceTest(object):
         for _, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
@@ -309,7 +308,6 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
@@ -380,15 +378,10 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
-            # diff_count = np.sum(diff > delta)
-            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
-            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
-            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def gpu_more_bz_test(
         self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=1e-5, gpu_mem=1000
@@ -420,15 +413,10 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
-            # diff_count = np.sum(diff > delta)
-            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
-            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
-            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def gpu_more_bz_test_mix(
         self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=5e-3, gpu_mem=1000
@@ -462,15 +450,10 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[truth_value_names[i]]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
-            # diff_count = np.sum(diff > delta)
-            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
-            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
-            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def trt_bz1_slim_test(
         self,
@@ -688,7 +671,6 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
@@ -774,7 +756,6 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
@@ -966,7 +947,6 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
