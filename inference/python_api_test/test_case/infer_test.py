@@ -304,7 +304,7 @@ class InferenceTest(object):
 
         output_names = check_output_list if(check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
@@ -372,7 +372,7 @@ class InferenceTest(object):
 
         output_names = check_output_list if(check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
@@ -409,7 +409,7 @@ class InferenceTest(object):
             predictor.run()
         output_names = check_output_list if(check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
@@ -448,7 +448,7 @@ class InferenceTest(object):
         # Change the accuracy check to sequential comparison
         truth_value_names = list(output_data_dict.keys())
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
@@ -541,7 +541,7 @@ class InferenceTest(object):
             input_handle.copy_from_cpu(input_data_dict[input_data_name])
         output_names = check_output_list if(check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
 
         predictor.run()
         if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
@@ -632,8 +632,6 @@ class InferenceTest(object):
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 1)
-        self.pd_config.switch_ir_debug(True)
-        self.pd_config.enable_memory_optim()
         if dynamic:
             if tuned:
                 self.pd_config.collect_shape_range_info("shape_range.pbtxt")
@@ -674,7 +672,7 @@ class InferenceTest(object):
             return 0
         output_names = check_output_list if(check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
@@ -759,7 +757,7 @@ class InferenceTest(object):
 
         output_names = check_output_list if(check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
@@ -949,7 +947,7 @@ class InferenceTest(object):
             predictor.run()
         output_names = check_output_list if(check_output_list) else predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", list(output_data_dict.keys()))
+        print("truth_value_names:", output_names)
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()

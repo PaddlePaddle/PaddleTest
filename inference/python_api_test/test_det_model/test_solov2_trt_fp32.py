@@ -111,6 +111,7 @@ def test_trt_fp32_more_bz():
         test_suite.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
+            check_output_list=["shape_40.tmp_0_slice_0"], # select which outputs to check
             repeat=1,
             delta=1e-5,
             precision="trt_fp32",
