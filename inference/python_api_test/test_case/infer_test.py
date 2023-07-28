@@ -95,6 +95,7 @@ class InferenceTest(object):
         for _, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+            # output_data = output_data.flatten()
             output_data_dict[output_data_name] = output_data
         return output_data_dict
 
@@ -264,7 +265,6 @@ class InferenceTest(object):
         self,
         input_data_dict: dict,
         output_data_dict: dict,
-        check_output_list=None,
         mkldnn_cache_capacity=1,
         cpu_num_threads=1,
         repeat=2,
@@ -279,7 +279,6 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
-            check_output_list(list): select which outputs to check
             mkldnn_cache_capacity(int): MKLDNN cache capacity
             repeat(int): inference repeat time
             delta(float): difference threshold between inference outputs and thruth value
@@ -302,12 +301,13 @@ class InferenceTest(object):
         for i in range(2):
             predictor.run()
 
-        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
+        output_names = predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
@@ -346,15 +346,12 @@ class InferenceTest(object):
         print(f"benchmark diff: {benchmark_diff}")
         assert benchmark_diff <= benchmark_threshold, f"benchmark diff:{benchmark_diff} > {benchmark_threshold}"
 
-    def onnxruntime_test(
-        self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=2, delta=1e-5
-    ):
+    def onnxruntime_test(self, input_data_dict: dict, output_data_dict: dict, repeat=2, delta=1e-5):
         """
         test enable_onnxruntime()
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
-            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
@@ -372,26 +369,28 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
 
-        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
+        output_names = predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
-    def gpu_more_bz_test(
-        self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=1e-5, gpu_mem=1000
-    ):
+    def gpu_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
         """
         test enable_use_gpu()
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
-            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
@@ -407,26 +406,28 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
+        output_names = predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
-    def gpu_more_bz_test_mix(
-        self, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=5e-3, gpu_mem=1000
-    ):
+    def gpu_more_bz_test_mix(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=5e-3, gpu_mem=1000):
         """
         test enable_use_gpu() in mixed_precision
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
-            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
@@ -442,24 +443,28 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
+        output_names = predictor.get_output_names()
         # Change the accuracy check to sequential comparison
         truth_value_names = list(output_data_dict.keys())
         print("output_names:", output_names)
-        print("truth_value_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[truth_value_names[i]]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
+            # diff_count = np.sum(diff > delta)
+            # print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)}")
+            # assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} \n" \
+            #                         f"output:{output_data} \ntruth:{output_data_truth_val}"
 
     def trt_bz1_slim_test(
         self,
         input_data_dict: dict,
         output_data_dict: dict,
-        check_output_list=None,
         repeat=1,
         delta=1e-5,
         gpu_mem=1000,
@@ -485,7 +490,6 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
-            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
             min_subgraph_size(int): min subgraph size
@@ -533,9 +537,9 @@ class InferenceTest(object):
         for _, input_data_name in enumerate(input_names):
             input_handle = predictor.get_input_handle(input_data_name)
             input_handle.copy_from_cpu(input_data_dict[input_data_name])
-        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
+        output_names = predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
 
         predictor.run()
         if tuned:  # collect_shape_range_info收集动态shape需要predictor后再退出
@@ -627,6 +631,8 @@ class InferenceTest(object):
             "trt_int8": paddle_infer.PrecisionType.Int8,
         }
         self.pd_config.enable_use_gpu(gpu_mem, 0)
+        self.pd_config.switch_ir_debug(True)
+        self.pd_config.enable_memory_optim()
         if dynamic:
             if tuned:
                 self.pd_config.collect_shape_range_info("shape_range.pbtxt")
@@ -671,6 +677,7 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
@@ -682,7 +689,6 @@ class InferenceTest(object):
         self,
         input_data_dict: dict,
         output_data_dict: dict,
-        check_output_list=None,
         repeat=1,
         delta=1e-5,
         gpu_mem=1000,
@@ -704,7 +710,6 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
-            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
             names(list): input names
@@ -750,12 +755,13 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
 
-        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
+        output_names = predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
@@ -765,7 +771,6 @@ class InferenceTest(object):
         self,
         input_data_dict: dict,
         output_data_dict: dict,
-        check_output_list=None,
         repeat=1,
         thread_num=2,
         delta=1e-5,
@@ -789,7 +794,6 @@ class InferenceTest(object):
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
-            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time
             thread_num(int): number of threads
             delta(float): difference threshold between inference outputs and thruth value
@@ -920,7 +924,7 @@ class InferenceTest(object):
             raise self.errors.get()
 
     def run_multi_thread_test_predictor(
-        self, predictor, input_data_dict: dict, output_data_dict: dict, check_output_list=None, repeat=1, delta=1e-5
+        self, predictor, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5
     ):
         """
         test paddle predictor in multithreaded task
@@ -928,7 +932,6 @@ class InferenceTest(object):
             predictor: paddle inference predictor
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
-            check_output_list(list): select which outputs to check
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
         Returns:
@@ -941,12 +944,13 @@ class InferenceTest(object):
 
         for i in range(repeat):
             predictor.run()
-        output_names = check_output_list if (check_output_list) else predictor.get_output_names()
+        output_names = predictor.get_output_names()
         print("output_names:", output_names)
-        print("truth_value_names:", output_names)
+        print("truth_value_names:", list(output_data_dict.keys()))
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
+            # output_data = output_data.flatten()
             output_data_truth_val = output_data_dict[output_data_name]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
