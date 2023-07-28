@@ -80,13 +80,10 @@ def test_gpu_bz1():
         model_file="./bert/inference.pdmodel",
         params_file="./bert/inference.pdiparams",
     )
-    data_path = "./bert/data.txt"
-    images_list = test_suite.get_text_npy(data_path)
+    input_ids = np.load("./bert/input_ids.npy").astype("int64")
+    token_type_ids = np.load("./bert/token_type_ids.npy").astype("int64")
 
-    input_data_dict = {
-        "input_ids": np.array([images_list[0][0]]).astype("int64"),
-        "token_type_ids": np.array([images_list[0][1]]).astype("int64"),
-    }
+    input_data_dict = {"input_ids": np.array([input_ids]), "token_type_ids": np.array([token_type_ids])}
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite  # destroy class to save memory
@@ -123,13 +120,10 @@ def test_gpu_mixed_precision_bz1():
         model_file="./bert/inference.pdmodel",
         params_file="./bert/inference.pdiparams",
     )
-    data_path = "./bert/data.txt"
-    images_list = test_suite.get_text_npy(data_path)
+    input_ids = np.load("./bert/input_ids.npy").astype("int64")
+    token_type_ids = np.load("./bert/token_type_ids.npy").astype("int64")
 
-    input_data_dict = {
-        "input_ids": np.array([images_list[0][0]]).astype("int64"),
-        "token_type_ids": np.array([images_list[0][1]]).astype("int64"),
-    }
+    input_data_dict = {"input_ids": np.array([input_ids]), "token_type_ids": np.array([token_type_ids])}
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite  # destroy class to save memory

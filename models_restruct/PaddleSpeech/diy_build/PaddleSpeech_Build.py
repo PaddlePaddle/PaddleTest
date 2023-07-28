@@ -103,6 +103,8 @@ class PaddleSpeech_Build(Model_Build):
             # M1: cant not add --ignore-installed"
             # windows install add --user
             os.system("python -m pip install -U setuptools")
+            # pyworld install
+            os.system("python -m pip install pyworld --no-build-isolation -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip install .  -i https://mirror.baidu.com/pypi/simple")
             # mac intel from numba.np.ufunc import _internal
             if sysstr == "Darwin" and platform.machine() == "x86_64":

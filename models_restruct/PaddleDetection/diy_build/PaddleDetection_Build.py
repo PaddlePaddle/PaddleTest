@@ -77,8 +77,12 @@ class PaddleDetection_Build(Model_Build):
         os.system("python -m pip install --upgrade pip")
         os.system("python -m pip install Cython")
         logger.info("***start setuptools update")
-        # os.system("python -m pip uninstall setuptools -y")
-        # os.system("python -m pip install setuptools")
+        # 源码编译lap; 为了适配python3.11
+        if sys.version_info.minor == 11:
+            wget.download("https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_64.whl")
+            os.system("python -m pip install lap*.whl")
+            os.system("python -m pip list | grep lap")
+            os.system('sed -i "s|lap|#lap|g" requirements.txt')
         os.system("python -m pip install -r requirements.txt")
         os.system("python -m pip install zip --ignore-installed")
         os.system("python -m pip uninstall paddleslim -y")

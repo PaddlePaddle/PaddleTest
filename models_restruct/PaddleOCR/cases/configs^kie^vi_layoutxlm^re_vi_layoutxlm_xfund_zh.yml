@@ -5,7 +5,7 @@ case:
           -
             name: multi
           -
-            name: amp
+            name: multi_amp
         infer:
           -
             name: pretrained

@@ -6,7 +6,6 @@ util for transformer
 
 import numpy as np
 import paddle
-import paddle.fluid as fluid
 
 
 def generate_basic_params(mode="attn", self_attention=True):
@@ -151,17 +150,16 @@ def cal_qkv(key, value, num_heads, embed_dim, multi_head_attn):
     """
     cal_qkv
     """
-    with fluid.dygraph.guard():
-        head_dim = embed_dim // num_heads
-        k_weight = multi_head_attn.k_proj.weight.numpy()
-        v_weight = multi_head_attn.v_proj.weight.numpy()
-        k = fc(key, k_weight)
-        v = fc(value, v_weight)
-        k = k.reshape((k.shape[0], k.shape[1], num_heads, head_dim))
-        k = k.transpose((0, 2, 1, 3))
-        v = v.reshape((v.shape[0], v.shape[1], num_heads, head_dim))
-        v = v.transpose((0, 2, 1, 3))
-        return k, v
+    head_dim = embed_dim // num_heads
+    k_weight = multi_head_attn.k_proj.weight.numpy()
+    v_weight = multi_head_attn.v_proj.weight.numpy()
+    k = fc(key, k_weight)
+    v = fc(value, v_weight)
+    k = k.reshape((k.shape[0], k.shape[1], num_heads, head_dim))
+    k = k.transpose((0, 2, 1, 3))
+    v = v.reshape((v.shape[0], v.shape[1], num_heads, head_dim))
+    v = v.transpose((0, 2, 1, 3))
+    return k, v
 
 
 def prepare_qkv(query, key, value, num_heads, embed_dim, self_attention, multi_head_attn, cache_dict):
@@ -187,13 +185,11 @@ def add(x, y=None):
     """
     add
     """
-    fluid.enable_dygraph()
-    with fluid.dygraph.guard():
-        x = x.numpy() if not isinstance(x, np.ndarray) else x
-        if y is not None:
-            x += y
-            return x
+    x = x.numpy() if not isinstance(x, np.ndarray) else x
+    if y is not None:
+        x += y
         return x
+    return x
 
 
 def relu(x):
@@ -208,25 +204,23 @@ def layer_norm(x, normalized_shape, norm, epsilon=1e-05, act=None):
     """
     layer_norm
     """
-    fluid.enable_dygraph()
-    with fluid.dygraph.guard():
         # scale:
-        weight = norm.weight.numpy()
-        # shift:
-        bias = norm.bias.numpy()
+    weight = norm.weight.numpy()
+    # shift:
+    bias = norm.bias.numpy()
 
-        batch_size, src_len, d_model = x.shape
-        x = x.reshape((batch_size * src_len, d_model))
-        mu = np.mean(x, axis=1, keepdims=True)
-        sigma_squar = np.sum(np.square(x - mu), axis=1) / d_model
-        x1_up = x - mu
-        x1_down_1 = sigma_squar + epsilon
-        x1_down = np.sqrt(x1_down_1)
-        x1_down = x1_down.reshape((x1_down.shape[0], 1))
-        x1 = x1_up / x1_down
-        x_scaled = weight * x1
-        x_scaled_bias = x_scaled + bias
-        x_scaled_bias = x_scaled_bias.reshape((batch_size, src_len, d_model))
+    batch_size, src_len, d_model = x.shape
+    x = x.reshape((batch_size * src_len, d_model))
+    mu = np.mean(x, axis=1, keepdims=True)
+    sigma_squar = np.sum(np.square(x - mu), axis=1) / d_model
+    x1_up = x - mu
+    x1_down_1 = sigma_squar + epsilon
+    x1_down = np.sqrt(x1_down_1)
+    x1_down = x1_down.reshape((x1_down.shape[0], 1))
+    x1 = x1_up / x1_down
+    x_scaled = weight * x1
+    x_scaled_bias = x_scaled + bias
+    x_scaled_bias = x_scaled_bias.reshape((batch_size, src_len, d_model))
     return x_scaled_bias
 
 

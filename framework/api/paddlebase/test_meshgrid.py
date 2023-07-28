@@ -8,15 +8,13 @@ from apibase import randtool
 from apibase import compare
 import paddle
 import pytest
-from paddle import fluid
-from paddle.fluid.dygraph.base import to_variable
 import numpy as np
 
 
-if fluid.is_compiled_with_cuda() is True:
-    places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+if paddle.is_compiled_with_cuda() is True:
+    places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
 else:
-    places = [fluid.CPUPlace()]
+    places = [paddle.CPUPlace()]
 
 
 @pytest.mark.api_base_meshgrid_vartype
@@ -30,7 +28,7 @@ def test_meshgrid_base():
         y = randtool("float", -10, 10, [4]).astype(t)
         for place in places:
             paddle.disable_static(place)
-            res = paddle.meshgrid(to_variable(x), to_variable(y))
+            res = paddle.meshgrid(paddle.to_tensor(x), paddle.to_tensor(y))
             expect = np.meshgrid(x, y)
             for i, exp in enumerate(expect):
                 expect[i] = exp.transpose(1, 0)
@@ -50,7 +48,7 @@ def test_meshgrid():
         z = randtool("float", -10, 10, [6]).astype(t)
         for place in places:
             paddle.disable_static(place)
-            res = paddle.meshgrid(to_variable(x), to_variable(y), to_variable(z))
+            res = paddle.meshgrid(paddle.to_tensor(x), paddle.to_tensor(y), paddle.to_tensor(z))
             expect = np.meshgrid(x, y, z)
             for i, exp in enumerate(expect):
                 expect[i] = exp.transpose(1, 0, 2)
