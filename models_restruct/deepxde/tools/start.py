@@ -59,7 +59,7 @@ class DeepXDE_Start(object):
         os.environ["DDE_BACKEND"] = "paddle"
         return 0
 
-    def alter(file,old_str,new_str,flag=True, except_str='model.train(0'):
+    def alter(self,file,old_str,new_str,flag=True, except_str='model.train(0'):
         """
         replaced the backend 
         """
@@ -75,8 +75,9 @@ class DeepXDE_Start(object):
                 file_data += line
         with open(file,"w",encoding="utf-8") as f:
             f.write(file_data)
+        return 0
 
-    def add_seed(file,old_str,new_str):
+    def add_seed(self,file,old_str,new_str):
         """
         add the seed 
         """
@@ -96,8 +97,9 @@ class DeepXDE_Start(object):
                 file_data += line
         with open(file,"w",encoding="utf-8") as f:
             f.write(file_data)
+        return 0
 
-    def change_backend(file,backend,flag):
+    def change_backend(self,file,backend,flag):
         """
         change models.py backend
         """
@@ -130,6 +132,7 @@ class DeepXDE_Start(object):
                     file_data += line
             with open(file,"w",encoding="utf-8") as f:
                 f.write(file_data)
+        return 0
 
     def get_example_dir(self):
         example_dir = self.qa_yaml_name.replace("^", "/")
