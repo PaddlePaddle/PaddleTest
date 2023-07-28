@@ -223,9 +223,7 @@ class ApiBenchmarkNoDB(object):
                 best_total_res_list = []
                 forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
 
-                self.logger.get_log().info(
-                    "experi {} start~~~~".format(k)
-                )
+                self.logger.get_log().info("experi {} start~~~~".format(k))
                 self.logger.get_log().warning("forward_time_list is: {}".format(forward_time_list))
                 self.logger.get_log().warning("forward_time_list length is: {}".format(len(forward_time_list)))
                 self.logger.get_log().warning("total_time_list is: {}".format(total_time_list))
