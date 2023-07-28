@@ -138,7 +138,6 @@ class DeepXDE_Start(object):
         example_dir = self.qa_yaml_name.replace("^", "/")
         if "lulu" in example_dir:
             example_dir = "deepxde" + example_dir[4:] + ".py"
-            logger.info("==============test===============")
         elif  "rd" in example_dir:
             example_dir = "deepxde" + example_dir[2:] + ".py"
         return example_dir
@@ -170,9 +169,6 @@ def run():
     model.add_paddle_to_pythonpath()
     model.get_deepxde_data()
     filedir = model.get_example_dir()
-    logger.info("==============filedir===============")
-    logger.info(filedir)
-    logger.info("==============filedir===============")
     model.alter(filedir, "tf", "paddle")
     model.change_backend(filedir, "Backend paddle", True)
     model.change_backend(filedir,"Backend tensorflow.compat.v1", False)
@@ -185,7 +181,6 @@ def run():
     #add_seed(filedir, "import paddle", "paddle.seed(1)\n")
     model.add_seed(filedir, "import deepxde", "import numpy as np\n")
     model.add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
-    logger.info("============success========")
     return 0
 
 
