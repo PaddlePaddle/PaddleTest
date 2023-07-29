@@ -74,24 +74,6 @@ def test_trt_fp16_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./ViT_base_patch16_384/inference.pdmodel",
-            params_file="./ViT_base_patch16_384/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=1,
-            precision="trt_fp16",
-            delta=0.005,
-            dynamic=True,
-            tuned=True,
-        )
-
-        del test_suite1  # destroy class to save memory
-
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./ViT_base_patch16_384/inference.pdmodel",
@@ -105,6 +87,7 @@ def test_trt_fp16_more_bz():
             precision="trt_fp16",
             delta=0.005,
             dynamic=True,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -135,24 +118,6 @@ def test_jetson_trt_fp16_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./ViT_base_patch16_384/inference.pdmodel",
-            params_file="./ViT_base_patch16_384/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=1,
-            precision="trt_fp16",
-            delta=0.005,
-            dynamic=True,
-            tuned=True,
-        )
-
-        del test_suite1  # destroy class to save memory
-
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./ViT_base_patch16_384/inference.pdmodel",
@@ -166,6 +131,7 @@ def test_jetson_trt_fp16_more_bz():
             precision="trt_fp16",
             delta=0.005,
             dynamic=True,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory
