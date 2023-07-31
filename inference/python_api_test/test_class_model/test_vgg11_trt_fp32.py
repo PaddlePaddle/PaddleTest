@@ -131,7 +131,7 @@ def test_jetson_trt_fp32_more_bz():
             min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
-            auto_tuned=False,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory
