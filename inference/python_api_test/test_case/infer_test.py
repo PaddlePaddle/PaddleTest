@@ -380,7 +380,6 @@ class InferenceTest(object):
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
-
     def gpu_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
         """
         test enable_use_gpu()
@@ -412,7 +411,6 @@ class InferenceTest(object):
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
-
 
     def gpu_more_bz_test_mix(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=5e-3, gpu_mem=1000):
         """

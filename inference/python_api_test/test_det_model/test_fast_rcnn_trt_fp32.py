@@ -89,7 +89,7 @@ def test_trt_fp32_more_bz():
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
-        del test_suite    # destroy class to save memory
+        del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -107,4 +107,4 @@ def test_trt_fp32_more_bz():
             auto_tuned=True,
         )
 
-        del test_suite2    # destroy class to save memory
+        del test_suite2  # destroy class to save memory

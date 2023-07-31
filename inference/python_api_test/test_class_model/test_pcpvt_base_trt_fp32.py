@@ -68,7 +68,7 @@ def test_trt_fp32_more_bz():
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        del test_suite   # destroy class to save memory
+        del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -111,7 +111,7 @@ def test_jetson_trt_fp32_more_bz():
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        del test_suite   # destroy class to save memory
+        del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -130,7 +130,7 @@ def test_jetson_trt_fp32_more_bz():
             shape_range_file="./pcpvt_base/shape_range.pbtxt",
         )
 
-        del test_suite2    # destroy class to save memory
+        del test_suite2  # destroy class to save memory
 
 
 @pytest.mark.trt_fp32_multi_thread
