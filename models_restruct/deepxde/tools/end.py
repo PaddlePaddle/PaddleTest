@@ -37,7 +37,7 @@ def run():
     """
     执行入口
     """
-    model = DeepXDE_End()
+    #model = DeepXDE_End()
     return 0
 
 
