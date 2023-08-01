@@ -93,7 +93,7 @@ class DeepXDE_Start(object):
                     else:
                         line += new_str
                     # line += "paddle.seed(1)\n"
-                    # line += "np.random.seed(1)\n" 
+                    # line += "np.random.seed(1)\n"
                 file_data += line
         with open(file, "w", encoding="utf-8") as f:
             f.write(file_data)
