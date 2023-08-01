@@ -59,27 +59,27 @@ class DeepXDE_Start(object):
         os.environ["DDE_BACKEND"] = "paddle"
         return 0
 
-    def alter(self,file,old_str,new_str,flag=True, except_str='model.train(0'):
+    def alter(self, file, old_str, new_str, flag=True, except_str='model.train(0'):
         """
-        replaced the backend 
+        replaced the backend
         """
         file_data = ""
         with open(file, "r", encoding="utf-8") as f:
             for line in f:
                 if flag:
                     if old_str in line and new_str not in line and except_str not in line:
-                        line = line.replace(old_str,new_str)
+                        line = line.replace(old_str, new_str)
                 else:
                     if old_str in line:
-                        line = line.replace(old_str,new_str)
+                        line = line.replace(old_str, new_str)
                 file_data += line
-        with open(file,"w",encoding="utf-8") as f:
+        with open(file, "w", encoding="utf-8") as f:
             f.write(file_data)
         return 0
 
-    def add_seed(self,file,old_str,new_str):
+    def add_seed(self, file, old_str, new_str):
         """
-        add the seed 
+        add the seed
         """
         file_data = ""
         with open(file, "r", encoding="utf-8") as f:
@@ -92,23 +92,23 @@ class DeepXDE_Start(object):
                             line += new_str
                     else:
                         line += new_str
-                    #line += "paddle.seed(1)\n"
-                    #line += "np.random.seed(1)\n" 
+                    # line += "paddle.seed(1)\n"
+                    # line += "np.random.seed(1)\n" 
                 file_data += line
-        with open(file,"w",encoding="utf-8") as f:
+        with open(file, "w", encoding="utf-8") as f:
             f.write(file_data)
         return 0
 
-    def change_backend(self,file,backend,flag):
+    def change_backend(self, file, backend, flag):
         """
         change models.py backend
         """
         file_data = ""
-        if flag==True:
+        if flag == True:
             index = False
             with open(file, "r", encoding="utf-8") as f:
                 for line in f:
-                    if index==True:
+                    if index == True:
                         if "# " in line and "Backend jax" not in line:
                             line = line.replace("# ", "")
                         else:
@@ -116,13 +116,13 @@ class DeepXDE_Start(object):
                     if backend in line:
                         index = True
                     file_data += line
-            with open(file,"w",encoding="utf-8") as f:
-                f.write(file_data)                
+            with open(file, "w", encoding="utf-8") as f:
+                f.write(file_data)
         else:
-            index = False 
+            index = False
             with open(file, "r", encoding="utf-8") as f:
                 for line in f:
-                    if index==True:
+                    if index == True:
                         if "Backend paddle" not in line:
                             line = "# " + line
                         else:
@@ -130,7 +130,7 @@ class DeepXDE_Start(object):
                     if backend in line:
                         index = True
                     file_data += line
-            with open(file,"w",encoding="utf-8") as f:
+            with open(file, "w", encoding="utf-8") as f:
                 f.write(file_data)
         return 0
 
@@ -138,7 +138,7 @@ class DeepXDE_Start(object):
         example_dir = self.qa_yaml_name.replace("^", "/")
         if "lulu" in example_dir:
             example_dir = "deepxde" + example_dir[4:] + ".py"
-        elif  "rd" in example_dir:
+        elif "rd" in example_dir:
             example_dir = "deepxde" + example_dir[2:] + ".py"
         return example_dir
 
@@ -159,7 +159,6 @@ class DeepXDE_Start(object):
         return ret
 
 
-
 def run():
     """
     执行入口
@@ -171,14 +170,14 @@ def run():
     filedir = model.get_example_dir()
     model.alter(filedir, "tf", "paddle")
     model.change_backend(filedir, "Backend paddle", True)
-    model.change_backend(filedir,"Backend tensorflow.compat.v1", False)
+    model.change_backend(filedir, "Backend tensorflow.compat.v1", False)
     model.alter(filedir, "model.train(", "model.train(display_every=1,", True, "model.train(0")
     model.alter(filedir, "model.train(", "losshistory, train_state = model.train(")
     model.alter(filedir, "display_every=1000,", " ", False)
     model.alter(filedir, "display_every=1000", " ", False)
     model.alter(filedir, "display_every=500", " ", False)
     model.add_seed(filedir, "import deepxde", "import paddle\n")
-    #add_seed(filedir, "import paddle", "paddle.seed(1)\n")
+    # add_seed(filedir, "import paddle", "paddle.seed(1)\n")
     model.add_seed(filedir, "import deepxde", "import numpy as np\n")
     model.add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
     return 0
