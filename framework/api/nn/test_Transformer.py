@@ -30,20 +30,20 @@ def test1():
     )
 
     # batch_size, source_length, target_length, d_model, n_head = 4, 8, 8, 64, 8
-    with fluid.dygraph.guard(fluid.CPUPlace()):
-        transformer = Transformer(d_model, n_head, dim_feedforward=dim_feedforward, dropout=dropout)
-        src = paddle.to_tensor(np.random.rand(batch_size, source_length, d_model).astype("float64"))
-        tgt = paddle.to_tensor(np.random.rand(batch_size, target_length, d_model).astype("float64"))
-        src_mask = np.zeros((batch_size, n_head, source_length, source_length)).astype("float64")
-        src_mask[0][0][0][0] = -np.inf
-        src_mask = paddle.to_tensor(src_mask)
-        tgt_mask = np.zeros((batch_size, n_head, target_length, target_length)).astype("float64")
-        tgt_mask[0][0][0][0] = -1e9
-        memory_mask = np.zeros((batch_size, n_head, target_length, source_length)).astype("float64")
-        memory_mask[0][0][0][0] = -1e9
-        tgt_mask, memory_mask = paddle.to_tensor(tgt_mask), paddle.to_tensor(memory_mask)
-        trans_output = transformer(src, tgt, src_mask, tgt_mask, memory_mask)
-        print(trans_output)
+    paddle.set_device("cpu")
+    transformer = Transformer(d_model, n_head, dim_feedforward=dim_feedforward, dropout=dropout)
+    src = paddle.to_tensor(np.random.rand(batch_size, source_length, d_model).astype("float64"))
+    tgt = paddle.to_tensor(np.random.rand(batch_size, target_length, d_model).astype("float64"))
+    src_mask = np.zeros((batch_size, n_head, source_length, source_length)).astype("float64")
+    src_mask[0][0][0][0] = -np.inf
+    src_mask = paddle.to_tensor(src_mask)
+    tgt_mask = np.zeros((batch_size, n_head, target_length, target_length)).astype("float64")
+    tgt_mask[0][0][0][0] = -1e9
+    memory_mask = np.zeros((batch_size, n_head, target_length, source_length)).astype("float64")
+    memory_mask[0][0][0][0] = -1e9
+    tgt_mask, memory_mask = paddle.to_tensor(tgt_mask), paddle.to_tensor(memory_mask)
+    trans_output = transformer(src, tgt, src_mask, tgt_mask, memory_mask)
+    print(trans_output)
 
 
 @pytest.mark.api_nn_Transformer_parameters

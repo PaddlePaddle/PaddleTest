@@ -2,27 +2,26 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-jelly_2 用于单个产品执行
+jelly_2 用于paddle单个产品执行
 """
 import random
 import timeit
 import os
 import json
 from inspect import isclass
-import torch
+import paddle
 import numpy as np
 from paddle import to_tensor
-
-# from utils.logger import logger
+from utils.logger import Logger
 from reload_config import OPERATOR_RELOAD
 
 
-TORCH_DTYPE = {"float16": torch.float16, "float32": torch.float32, "float64": torch.float64}
+PADDLE_DTYPE = {"float16": np.float16, "float32": np.float32, "float64": np.float64}
 # 计算精度，保留6位有效数字
 ACCURACY = "%.6g"
 
 
-class Jelly_v2_torch(object):
+class Jelly_v2(object):
     """
     compare tools
     """
@@ -31,7 +30,6 @@ class Jelly_v2_torch(object):
         self,
         api,
         logger,
-        # framework="paddle",
         default_dtype="float32",
         place=None,
         card=None,
@@ -42,8 +40,7 @@ class Jelly_v2_torch(object):
     ):
         """
 
-        :param paddle_api:
-        :param torch_api:
+        :param api: paddle的api
         :param place:  cpu or gpu (string)
         :param card: 0 1 2 3 (int)
         :param explain: case的说明 会打印在日志中
@@ -53,14 +50,19 @@ class Jelly_v2_torch(object):
         self.debug = True
         # self.framework = framework
 
-        torch.set_default_dtype(TORCH_DTYPE[default_dtype])
+        paddle.set_default_dtype(PADDLE_DTYPE[default_dtype])
 
         # 循环次数
         self.loops = loops
         # timeit 基础运行时间
         self.base_times = base_times
         # 设置logger
+        # self.logger = logger
         self.logger = logger.get_log()
+
+        # self.forward_time = []
+        # self.backward_time = []
+        # self.total_time = []
 
         self.dump_data = []
         self.result = {}
@@ -93,9 +95,8 @@ class Jelly_v2_torch(object):
         :return:
         """
         np.random.seed(self.seed)
-        torch.manual_seed(self.seed)
+        paddle.seed(self.seed)
         random.seed(self.seed)
-        torch.cuda.manual_seed(self.seed)
 
     def _set_place(self, card=None):
         """
@@ -103,22 +104,19 @@ class Jelly_v2_torch(object):
         :return:
         """
         if self.places is None:
-            if torch.cuda.is_available() is True:
-                if card is None:
-                    torch.device(0)
-                else:
-                    torch.device(card)
+            if paddle.is_compiled_with_cuda() is True:
+                paddle.set_device("gpu:0")
             else:
                 self.places = "cpu"
-                torch.device("cpu")
+                paddle.set_device("cpu")
         else:
             if self.places == "cpu":
-                torch.device("cpu")
+                paddle.set_device("cpu")
             else:
                 if card is None:
-                    torch.device(0)
+                    paddle.set_device("gpu:0")
                 else:
-                    torch.device(card)
+                    paddle.set_device("gpu:{}".format(card))
 
     def _layertypes(self, func):
         """
@@ -133,73 +131,51 @@ class Jelly_v2_torch(object):
         else:
             return types[0]
 
-    def set_torch_param(self, inputs: dict, param: dict):
+    def set_paddle_param(self, inputs: dict, param: dict):
         """
-        设置torch 输入参数
+        设置paddle 输入参数
         """
         for key, value in inputs.items():
             # 只针对输入为list[Tensor, Tensor]
             if isinstance(value, list):
                 self.data[key] = []
                 for i, v in enumerate(value):
-                    if self.places == "cpu":
-                        if isinstance(v, (np.generic, np.ndarray)):
-                            self.data[key].append(torch.tensor(v))
-                        else:
-                            self.data[key].append(v)
-                    else:
-                        if isinstance(v, (np.generic, np.ndarray)):
-                            self.data[key].append(torch.tensor(v).to("cuda"))
-                        else:
-                            self.data[key].append(v)
                     if isinstance(v, (np.generic, np.ndarray)):
+                        self.data[key].append(to_tensor(v))
                         if (
                             self.api_str.endswith("_")
                             or (v.dtype == np.int32)
                             or (v.dtype == np.int64)
                             or (v.dtype == bool)
                         ):
-                            self.data[key][i].requires_grad = False
+                            self.data[key][i].stop_gradient = True
                         else:
-                            self.data[key][i].requires_grad = True
+                            self.data[key][i].stop_gradient = False
+                    else:
+                        self.data[key].append(v)
             else:
-                if self.places == "cpu":
-                    if isinstance(value, (np.generic, np.ndarray)):
-                        self.data[key] = torch.tensor(value)
-                    else:
-                        self.data[key] = value
-                else:
-                    if isinstance(value, (np.generic, np.ndarray)):
-                        self.data[key] = torch.tensor(value).to("cuda")
-                    else:
-                        self.data[key] = value
                 if isinstance(value, (np.generic, np.ndarray)):
+                    self.data[key] = to_tensor(value)
                     if (
                         self.api_str.endswith("_")
                         or (value.dtype == np.int32)
                         or (value.dtype == np.int64)
                         or (value.dtype == bool)
                     ):
-                        self.data[key].requires_grad = False
+                        self.data[key].stop_gradient = True
                     else:
-                        self.data[key].requires_grad = True
+                        self.data[key].stop_gradient = False
+                else:
+                    self.data[key] = value
         for key, value in param.items():
             if isinstance(value, (np.generic, np.ndarray)):
-                if self.places == "cpu":
-                    self.param[key] = torch.tensor(value)
-                else:
-                    self.param[key] = torch.tensor(value).to("cuda")
-            elif key == "device":
-                if self.places == "cpu":
-                    self.param[key] = value
-                else:
-                    self.param[key] = torch.device("cuda")
+                self.param[key] = to_tensor(value)
             else:
                 self.param[key] = value
 
-    def set_torch_method(self, method: dict):
+    def set_paddle_method(self, method: dict):
         """
-        设置torch调用方法method
+        设置paddle调用方法method
         """
         if method is not None:
             for key, value_dict in method.items():
@@ -207,13 +183,13 @@ class Jelly_v2_torch(object):
                 for k, v in value_dict.items():
                     # 默认传入字典时，表示传入的是一个np.ndarray并转为tensor，否则传入的不为tensor。后续需优化code
                     if isinstance(v, dict):
-                        self.method[key][k] = torch.tensor(v["value"])
+                        self.method[key][k] = to_tensor(v["value"])
                     else:
                         self.method[key][k] = v
 
-    def torch_forward(self):
+    def paddle_forward(self):
         """
-        torch 前向时间
+        主体测试逻辑
         """
         forward_time_list = []
         if self._layertypes(self.api) == "func":
@@ -223,6 +199,10 @@ class Jelly_v2_torch(object):
                 forward_time = timeit.timeit(lambda: self.api(**input_param), number=self.base_times)
                 forward_time_list.append(forward_time)
         elif self._layertypes(self.api) == "class":
+            # obj = self.api(**self.param)
+            # for i in range(self.loops):
+            #     forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
+            #     forward_time.append(forward_time)
             obj = self.api(**self.param)
             # 预热
             if self.method == dict():
@@ -240,7 +220,6 @@ class Jelly_v2_torch(object):
                     obj_method = eval("obj" + "." + list(self.method.keys())[0])
                     method_params_dict = self.method[list(self.method.keys())[0]]
                     forward_time = timeit.timeit(lambda: obj_method(**method_params_dict), number=self.base_times)
-                # forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
                 forward_time_list.append(forward_time)
         elif self._layertypes(self.api) == "reload":
             # 判断"reload" api中有一个输入还是两个输入
@@ -263,6 +242,7 @@ class Jelly_v2_torch(object):
                 tmp = timeit.timeit(lambda: func(x, y), number=int(0.2 * self.loops * self.base_times))  # 预热
             else:
                 tmp = timeit.timeit(lambda: func_x(x), number=int(0.2 * self.loops * self.base_times))  # 预热
+
             for i in range(self.loops):
                 if "y" in self.data.keys():
                     forward_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
@@ -275,19 +255,15 @@ class Jelly_v2_torch(object):
         del tmp
         return forward_time_list
 
-    def torch_total(self):
+    def paddle_total(self):
         """
-        torch 总时间
+        计算paddle 总体时间
         """
         total_time_list = []
         if self._layertypes(self.api) == "func":
             input_param = dict(self.data, **self.param)
             res = self.api(**input_param)
-            # init grad tensor
-            if self.places == "gpu":
-                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
-            else:
-                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
+            grad_tensor = paddle.ones(res.shape, res.dtype)
 
             def func(input_param):
                 res = self.api(**input_param)
@@ -298,6 +274,9 @@ class Jelly_v2_torch(object):
                 total_time = timeit.timeit(lambda: func(input_param), number=self.base_times)
                 total_time_list.append(total_time)
         elif self._layertypes(self.api) == "class":
+            # obj = self.api(**self.param)
+            # res = obj(*self.data.values())
+            # grad_tensor = paddle.ones(res.shape, res.dtype)
             obj = self.api(**self.param)
             if self.method == dict():
                 res = obj(*self.data.values())
@@ -305,15 +284,9 @@ class Jelly_v2_torch(object):
                 obj_method = eval("obj" + "." + list(self.method.keys())[0])
                 method_params_dict = self.method[list(self.method.keys())[0]]
                 res = obj_method(**method_params_dict)
-            # res = obj(*self.data.values())
-            # init grad tensor
-            if self.places == "gpu":
-                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
-            else:
-                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
+            grad_tensor = paddle.ones(res.shape, res.dtype)
 
             def clas(input_param):
-                """lambda clas"""
                 res = obj(*input_param)
                 res.backward(grad_tensor)
 
@@ -335,7 +308,6 @@ class Jelly_v2_torch(object):
                     total_time = timeit.timeit(lambda: clas_method(method_params_dict), number=self.base_times)
                 total_time_list.append(total_time)
         elif self._layertypes(self.api) == "reload":
-            # 判断"reload" api中有一个输入还是两个输入
             if "y" in self.data.keys():
                 x = self.data["x"]
                 y = self.data["y"]
@@ -344,10 +316,7 @@ class Jelly_v2_torch(object):
                 x = self.data["x"]
                 expression = self.reload.get(self.api).format("x")
             res = eval(expression)
-            if self.places == "gpu":
-                grad_tensor = torch.ones(res.shape, dtype=res.dtype).to("cuda")
-            else:
-                grad_tensor = torch.ones(res.shape, dtype=res.dtype)
+            grad_tensor = paddle.ones(res.shape, res.dtype)
 
             def func(x, y):
                 res = eval(expression)
@@ -373,6 +342,85 @@ class Jelly_v2_torch(object):
 
         del tmp
         return total_time_list
+
+    # def run(self):
+    #     """
+    #     主执行函数，本地调试用
+    #     """
+    #     # 前反向时间
+    #     self._run_forward()
+    #     if self.enable_backward:
+    #         self._run_total()
+    #     # # 数据处理
+    #     self._compute()
+    #     # # 数据对比打印
+    #     self._show()
+    #
+    # def run_schedule(self):
+    #     """
+    #     例行执行，会写文件
+    #     """
+    #     # 前反向时间
+    #     self._run_forward()
+    #     if self.enable_backward:
+    #         self._run_total()
+    #     # 数据处理
+    #     self._compute()
+    #     # 写文件
+    #     self._save(self.result)
+    #
+    # def _run_forward(self):
+    #     """
+    #     测试前向时间
+    #     """
+    #     if self.framework == "paddle":
+    #         self.paddle_forward()
+    #
+    # def _run_total(self):
+    #     """
+    #     测试总时间
+    #     """
+    #     if self.framework == "paddle":
+    #         self.paddle_total()
+    #
+    # def _return_forward(self):
+    #     """
+    #     返回前向时间
+    #     """
+    #     # 前反向时间
+    #     self._run_forward()
+    #     # if self.enable_backward:
+    #     #     self._run_total()
+    #     # 数据处理
+    #     head = int(self.loops / 5)
+    #     tail = int(self.loops - self.loops / 5)
+    #     res = sum(sorted(self.forward_time)[head:tail]) / (tail - head)
+    #     return res
+
+    # def _compute(self):
+    #     """
+    #     数据处理
+    #     """
+    #     head = int(self.loops / 5)
+    #     tail = int(self.loops - self.loops / 5)
+    #     self.result["forward"] = ACCURACY % (sum(sorted(self.forward_time)[head:tail]) / (tail - head))
+    #     if self.enable_backward:
+    #         self.result["total"] = ACCURACY % (sum(sorted(self.total_time)[head:tail]) / (tail - head))
+    #         self.result["backward"] = ACCURACY % (float(self.result["total"]) - float(self.result["forward"]))
+    #         self.result["best_total"] = ACCURACY % min(self.total_time)
+    #     else:
+    #         self.result["total"] = self.result["forward"]
+    #         self.result["backward"] = 0
+    #         self.result["best_total"] = ACCURACY % min(self.forward_time)
+    #
+    # def _show(self, forward_time, backward_time, total_time, best_total_time):
+    #     """
+    #     logger 打印
+    #     """
+    #     self.logger.info("{} {} times forward cost {}s".format(self.framework, self.base_times, forward_time))
+    #     self.logger.info("{} {} times backward cost {}s".format(self.framework, self.base_times, backward_time))
+    #     self.logger.info("{} {} times total cost {}s".format(self.framework, self.base_times, total_time))
+    #     self.logger.info("{} {} times best_total cost {}s".format(self.framework, self.base_times, best_total_time))
 
     def _save(self, data):
         """

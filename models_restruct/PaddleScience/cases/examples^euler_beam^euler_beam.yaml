@@ -4,8 +4,6 @@ case:
     train:
       -
         name: single
-      -
-        name: single_dy2st
     eval: skipped
     infer: skipped
     export: skipped
