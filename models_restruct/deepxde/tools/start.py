@@ -93,7 +93,7 @@ class DeepXDE_Start(object):
                     else:
                         line += new_str
                     # line += "paddle.seed(1)\n"
-                    # line += "np.random.seed(1)\n"
+                    # line += "np.random.seed(1)\n" 
                 file_data += line
         with open(file, "w", encoding="utf-8") as f:
             f.write(file_data)
@@ -104,11 +104,11 @@ class DeepXDE_Start(object):
         change models.py backend
         """
         file_data = ""
-        if flag == True:
+        if flag is True:
             index = False
             with open(file, "r", encoding="utf-8") as f:
                 for line in f:
-                    if index == True:
+                    if index is True:
                         if "# " in line and "Backend jax" not in line:
                             line = line.replace("# ", "")
                         else:
@@ -122,7 +122,7 @@ class DeepXDE_Start(object):
             index = False
             with open(file, "r", encoding="utf-8") as f:
                 for line in f:
-                    if index == True:
+                    if index is True:
                         if "Backend paddle" not in line:
                             line = "# " + line
                         else:
@@ -135,6 +135,9 @@ class DeepXDE_Start(object):
         return 0
 
     def get_example_dir(self):
+        """
+        get_example_dir
+        """
         example_dir = self.qa_yaml_name.replace("^", "/")
         if "lulu" in example_dir:
             example_dir = "deepxde" + example_dir[4:] + ".py"
@@ -143,6 +146,9 @@ class DeepXDE_Start(object):
         return example_dir
 
     def get_deepxde_data(self):
+        """
+        get_deepxde_data
+        """
         os.system("cp -r deepxde/examples/dataset/ ./")
         return 0
 
