@@ -208,10 +208,10 @@ class ApiBenchmarkBASE(object):
                 forward_top_k = self.statistics.best(data_list=forward_top_k_res_list)
 
                 backward = self.statistics.best(data_list=backward_res_list)
-                backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
+                # backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
 
                 total = self.statistics.best(data_list=total_res_list)
-                total_top_k = self.statistics.best(data_list=total_top_k_res_list)
+                # total_top_k = self.statistics.best(data_list=total_top_k_res_list)
 
                 best_total = self.statistics.best(data_list=best_total_res_list)
 
@@ -232,9 +232,9 @@ class ApiBenchmarkBASE(object):
                     "forward": forward,
                     "forward_top_k": forward_top_k,
                     "total": total,
-                    "total_top_k": total_top_k,
+                    # "total_top_k": total_top_k,
                     "backward": backward,
-                    "backward_top_k": backward_top_k,
+                    # "backward_top_k": backward_top_k,
                     "best_total": best_total,
                 }
 

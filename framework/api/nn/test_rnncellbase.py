@@ -134,12 +134,12 @@ def test_rnncellbase6():
         obj.get_initial_states(batch_ref=x, shape=shape, dtype=dtype, batch_dim_idx=batch_dim_idx)
     except Exception as e:
         if is_in_eager:
-            if "InvalidArgument" in e.args[0]:
+            if "OutOfRangeError" in e.args[0] or "IndexError" in e.args[0]:
                 pass
             else:
                 raise Exception
         else:
-            if "[operator < fill_constant_batch_size_like > error]" in e.args[0]:
+            if "[operator < fill_constant > error]" in e.args[0]:
                 pass
             else:
                 raise Exception
@@ -209,12 +209,12 @@ def test_rnncellbase10():
     except Exception as e:
         print(e.args[0])
         if is_in_eager:
-            if "PreconditionNotMet" in e.args[0]:
+            if "InvalidArgument" in e.args[0]:
                 pass
             else:
                 raise Exception
         else:
-            if "[operator < fill_constant_batch_size_like > error]" in e.args[0]:
+            if "[operator < fill_constant > error]" in e.args[0]:
                 pass
             else:
                 raise Exception
