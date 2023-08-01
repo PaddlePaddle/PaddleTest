@@ -28,3 +28,4 @@ lulu^examples^pinn_forward^ode_2nd.yaml
 lulu^examples^pinn_inverse^brinkman_forchheimer.yaml
 lulu^examples^pinn_forward^ode_system.yaml
 lulu^examples^pinn_inverse^fractional_Poisson_2d_inverse.yaml
+lulu^examples^pinn_forward^Euler_beam.yaml

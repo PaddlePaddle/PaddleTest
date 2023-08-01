@@ -19,6 +19,7 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
     # logger.info("###kpi_name: {}".format(kpi_name))
     kpi_value_all = []
     f = open(log_content, encoding="utf-8", errors="ignore")
+    pattern_scientific = r"[-+]?\d*\.\d+e[-+]?\d+"  # 新的正则表达式模式
     for line in f.readlines():
         if kpi_name == "class_ids":
             if "class_ids" in line and ": [" in line:
@@ -47,13 +48,17 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
                 kpi_value_all.append(line[line.rfind("[") :])
         else:
             if kpi_name + ":" in line:
-                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi_name
-                # 如果解析不到符合格式到指标，默认值设置为-1
-                r = re.findall(regexp, line)
-                # kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                # kpi_value_all.append(kpi_value)
-                if len(re.findall(regexp, line)) > 0:  # 只要有值就行，部分模型可能因为学习率的问题导致后几轮的loss为nan, 不在保存-1
-                    kpi_value_all.append(float(r[0].strip()))
+                matches_scientific = re.findall(pattern_scientific, line)
+                if len(matches_scientific) > 0:
+                    kpi_value_all.append(float(matches_scientific[0]))
+                else:
+                    regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi_name
+                    # 如果解析不到符合格式到指标，默认值设置为-1
+                    r = re.findall(regexp, line)
+                    # kpi_value = float(r[0].strip()) if len(r) > 0 else -1
+                    # kpi_value_all.append(kpi_value)
+                    if len(re.findall(regexp, line)) > 0:  # 只要有值就行，部分模型可能因为学习率的问题导致后几轮的loss为nan, 不在保存-1
+                        kpi_value_all.append(float(r[0].strip()))
     f.close()
 
     # logger.info("###kpi_value_all: {}".format(kpi_value_all))
