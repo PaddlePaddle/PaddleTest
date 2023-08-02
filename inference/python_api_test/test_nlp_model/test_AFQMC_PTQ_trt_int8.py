@@ -280,7 +280,6 @@ def test_trt_int8_bz1():
 
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_path="./AFQMC_PTQ_1/strategy_1/")
-    test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_more_bz_test(
         input_data_dict,
         output_data_dict,
@@ -531,7 +530,6 @@ def test_trt_int8_bz1_multi_thread():
     test_suite2 = InferenceTest()
     test_suite2.load_config(model_path="./AFQMC_PTQ_1/strategy_1/")
     set_dynamic_shape(test_suite2.pd_config)
-    test_suite2.pd_config.exp_disable_tensorrt_ops(["elementwise_sub"])
     test_suite2.trt_bz1_multi_thread_test(
         input_data_dict,
         output_data_dict,
