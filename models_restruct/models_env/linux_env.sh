@@ -223,7 +223,7 @@ export models_name=${models_name:-models_restruct}  #后面复制使用，和模
 #### 二分定位使用
 export binary_search_flag=${binary_search_flag:-False}  #True表示在使用二分定位, main中一些跳出方法不生效
 # 使用大模型分析模型日志
-export is_analysis_logs=${is_analysis_logs:-False}
+export is_analysis_logs=${is_analysis_logs:-True}
 export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 export plot=${plot:-False}  #False表示不自动绘图
 export c_plus_plus_predict=${c_plus_plus_predict:-False}  #False表示不配置 C++预测库
@@ -243,6 +243,7 @@ export https_proxy=${http_proxy}
 export no_proxy=${no_proxy}
 export AK=${AK} #使用bos_new上传需要
 export SK=${SK}
+export api_key=${api_key}
 export bce_whl_url=${bce_whl_url}
 set -x;
 
@@ -343,8 +344,8 @@ if [[ "${docker_flag}" == "" ]]; then
     ####创建docker
     set +x;
 
-    # 拉取更新镜像
-    docker pull ${Image_version}
+    # # 拉取更新镜像
+    # docker pull ${Image_version}
 
     docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
@@ -398,6 +399,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e set_cuda=${set_cuda} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
+	-e api_key=${api_key} \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
@@ -406,6 +408,7 @@ if [[ "${docker_flag}" == "" ]]; then
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
             yum install nfs-utils -y > install_nfs 2>&1
+            export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -512,6 +515,7 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
+        export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}

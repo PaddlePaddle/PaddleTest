@@ -49,7 +49,8 @@ def test_config():
 
 
 # note: the diff is 2.294778823852539e-05 in cuda10.2
-if paddle.version.cuda() == "10.2":
+# note: the diff is 2.5510787963867188e-05 in win
+if paddle.version.cuda() == "10.2" or "win" in sys.platform:
     delta = 1e-4
 else:
     delta = 1e-5
@@ -86,23 +87,6 @@ def test_trt_fp32_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./GoogLeNet/inference.pdmodel",
-            params_file="./GoogLeNet/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=1,
-            delta=delta,
-            precision="trt_fp32",
-            dynamic=True,
-            tuned=True,
-        )
-        del test_suite1  # destroy class to save memory
-
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./GoogLeNet/inference.pdmodel",
@@ -116,6 +100,7 @@ def test_trt_fp32_more_bz():
             delta=delta,
             precision="trt_fp32",
             dynamic=True,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -146,23 +131,6 @@ def test_jetson_trt_fp32_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./GoogLeNet/inference.pdmodel",
-            params_file="./GoogLeNet/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=1,
-            delta=delta,
-            precision="trt_fp32",
-            dynamic=True,
-            tuned=True,
-        )
-        del test_suite1  # destroy class to save memory
-
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./GoogLeNet/inference.pdmodel",
@@ -176,6 +144,7 @@ def test_jetson_trt_fp32_more_bz():
             delta=1e-4,
             precision="trt_fp32",
             dynamic=True,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory

@@ -50,6 +50,31 @@ def get_last_eval_metric(log_file, loss_function):
     return last_metric
 
 
+def get_last_eval_metric_for_darcy(log_file, loss_function):
+    """
+    解析训练日志文件，获取最后一个eval的metric值
+    :param log_file: 日志文件路径
+    :param epoch_num: epoch数量
+    :return: 最后一个eval的loss值，如果没有找到，则返回空字符串
+    """
+    last_metric = ""  # 最后一个eval的metric值变量初始化为空字符串
+    last_eval_str = "[Epoch 0]"
+
+    with open(log_file, "r") as f:
+        # 倒序读取日志文件中的每一行
+        for line in list(f):
+            if last_eval_str in line and "[Eval]" in line and "[Avg]" in line:
+                # match = re.search(rf"{loss_function}\((.*?)\):\s(\d+\.\d+)", line)
+                # if match:
+                #     last_metric = match.group(2)
+                # else:
+                #     last_metric = "-1"
+                last_metric = line.split("loss({}): ".format(loss_function))[1].split(",")[0]
+                break
+
+    return last_metric
+
+
 if __name__ == "__main__":
     log_file_path = "examples^darcy^darcy2d_base.log"
     epoch_num = 20000

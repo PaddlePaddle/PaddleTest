@@ -78,24 +78,6 @@ def test_trt_fp16_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./resnet50/inference.pdmodel",
-            params_file="./resnet50/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            delta=2e-2,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=1,
-            precision="trt_fp16",
-            dynamic=True,
-            tuned=True,
-        )
-
-        del test_suite1  # destroy class to save memory
-
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./resnet50/inference.pdmodel",
@@ -109,6 +91,7 @@ def test_trt_fp16_more_bz():
             min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory

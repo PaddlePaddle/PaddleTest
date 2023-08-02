@@ -163,8 +163,8 @@ def test_tensor_array():
     """
     paddle.disable_static()
     tensor_x = paddle.to_tensor(np.zeros(12).reshape(2, 6).astype(np.float64))
-    tensor_y1 = paddle.zeros([1]) + 1
-    tensor_y2 = paddle.zeros([1]) + 3
+    tensor_y1 = paddle.zeros([1], dtype="int32") + 1
+    tensor_y2 = paddle.zeros([1], dtype="int64") + 3
     tensor_x[tensor_y1, 1:tensor_y2] = np.array([1, 3]).astype(np.float64)
     res = tensor_x.numpy()
     exp = np.array([[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 1.0, 3.0, 0.0, 0.0, 0.0]])
