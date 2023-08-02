@@ -9,9 +9,9 @@ for file_dir in ${cases}
 do
     name=`basename -s .yaml $file_dir`
     echo ${name}
-    python3.7 standardization_lulu.py -f ${file_dir}
-    python3.7 generate.py -f ${name} -a $1
-    python3.7 test_${name}.py
+    python${py_version} standardization_lulu.py -f ${file_dir}
+    python${py_version} generate.py -f ${name} -a $1
+    python${py_version} test_${name}.py
     if [ $? -ne 0 ]; then
         echo test_${name} >> result.txt
         bug=`expr ${bug} + 1`
