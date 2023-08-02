@@ -168,7 +168,7 @@ if %flag_version% equ 120311 (
         if not defined paddle_whl set paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-windows-cuda120-cudnn8-mkl/latest/paddlepaddle_gpu-0.0.0.post120-cp311-cp311-win_amd64.whl"
 
     )  else  (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.5/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-windows-cuda120-cudnn8-mkl/latest/paddlepaddle_gpu-0.0.0.post120-cp311-cp311-win_amd64.whl"
     )
 )
 
@@ -184,7 +184,7 @@ if %flag_version% equ 118310 (
         if not defined paddle_whl set paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-windows-cuda118-cudnn8-mkl/latest/paddlepaddle_gpu-0.0.0.post118-cp310-cp310-win_amd64.whl"
 
     )  else  (
-        if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.5/windows/windows-gpu-cuda11.7-cudnn8.4.1-mkl-avx-vs2019/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-win_amd64.whl"
+        if not defined paddle_whl set paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-windows-cuda118-cudnn8-mkl/latest/paddlepaddle_gpu-0.0.0.post118-cp310-cp310-win_amd64.whl"
     )
 )
 
