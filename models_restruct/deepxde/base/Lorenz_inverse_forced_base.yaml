@@ -1,0 +1,11 @@
+train:
+  -
+    name: single
+    cmd: python examples/pinn_inverse/Lorenz_inverse_forced.py
+    params:
+      - --epochs=2
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
