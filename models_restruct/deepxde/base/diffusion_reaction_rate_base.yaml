@@ -1,11 +1,18 @@
 train:
-  -
-    name: single
-    cmd: python examples/pinn_inverse/diffusion_reaction_rate.py
-    params:
-      - --epochs=2
-    result:
-      exit_code:
-        base: 0
-        threshold: 0
-        evaluation: "="
+- cmd: python examples/pinn_inverse/diffusion_reaction_rate.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    l2 relative error for k:
+      base: 0.031800378
+      evaluation: '='
+      threshold: 0
+    l2 relative error for u:
+      base: 0.000813408397123455
+      evaluation: '='
+      threshold: 0
+    loss:
+      base: 4.41e-06
+      evaluation: '-'
+      threshold: 1

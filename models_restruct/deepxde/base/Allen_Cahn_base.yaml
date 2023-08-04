@@ -4,11 +4,11 @@ train:
   params:
   - --epochs=2
   result:
-    loss:
-      base: 0.00194
-      evaluation: '-'
-      threshold: 1
     L2 relative error:
       base: 0.17004710807381
+      evaluation: '='
+      threshold: 0
+    loss:
+      base: 0.00194
       evaluation: '-'
       threshold: 1
