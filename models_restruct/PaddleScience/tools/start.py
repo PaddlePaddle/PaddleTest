@@ -66,7 +66,7 @@ class PaddleScience_Start(object):
         file_name = "datasets.tar.gz"
         urllib.request.urlretrieve(url, file_name)
         os.system("tar -zxvf " + file_name + " -C PaddleScience/")
-        os.system("python -m pip install skimage")
+        os.system("python -m pip install scikit-image")
         logger.info("download datasets done!!!!")
 
     def build_prepare(self):
