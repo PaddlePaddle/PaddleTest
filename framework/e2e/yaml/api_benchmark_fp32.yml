@@ -18783,7 +18783,7 @@ stack_0:
           type: "Tensor"
           dtype: "float32"
           shape: [ 1, 1 ]
-          range: [ -1, 1 ]
+          range: [ -1, 1 ]gi
     params:
       axis: 0
   pytorch:
