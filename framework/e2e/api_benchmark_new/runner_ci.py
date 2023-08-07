@@ -381,6 +381,9 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             )
         )
 
+        if bool(api_grade["doubt"]) or bool(api_grade["worse"]):
+            raise Exception("该pr会导致动态图cpu前向调度性能下降，请修复！！！")
+
     def _baseline_insert(self, wheel_link):
         """
 
