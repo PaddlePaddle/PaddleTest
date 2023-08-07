@@ -216,21 +216,21 @@ def data_compare(baseline_case, latest_case, case_name):
 #     return res
 
 
-def double_check_list(res):
-    """
-    获取需要 double check 的 api list
-    :param res: data_compare函数输出的结果
-    :return:
-    """
-    case_list = []
-    for case_name, grade_dict in res.items():
-        if (
-            performance_grade(grade_dict["forward"]) == "doubt"
-            or performance_grade(grade_dict["backward"]) == "doubt"
-            or performance_grade(grade_dict["total"]) == "doubt"
-        ):
-            case_list.append(case_name)
-    return case_list
+# def double_check_list(res):
+#     """
+#     获取需要 double check 的 api list
+#     :param res: data_compare函数输出的结果
+#     :return:
+#     """
+#     case_list = []
+#     for case_name, grade_dict in res.items():
+#         if (
+#             performance_grade(grade_dict["forward"]) == "doubt"
+#             or performance_grade(grade_dict["backward"]) == "doubt"
+#             or performance_grade(grade_dict["total"]) == "doubt"
+#         ):
+#             case_list.append(case_name)
+#     return case_list
 
 
 def double_check(res):
@@ -296,9 +296,10 @@ def ci_level_reveal(compare_res):
 
     for case_name, compare_dict in compare_res.items():
         tmp = {}
-        # print('compare_dict is: ', compare_dict)
-        grade = performance_grade(res=compare_dict["forward"])
-        tmp[compare_dict["latest_api"]] = compare_dict["forward"]
+        # grade = performance_grade(res=compare_dict["forward"])
+        # tmp[compare_dict["latest_api"]] = compare_dict["forward"]
+        grade = performance_grade(res=compare_dict["best_total"])
+        tmp[compare_dict["latest_api"]] = compare_dict["best_total"]
         grade_dict[grade].append(tmp)
 
     return grade_dict
