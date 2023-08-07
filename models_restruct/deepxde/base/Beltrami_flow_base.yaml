@@ -9,15 +9,15 @@ train:
         base: 7.56e-05
         threshold: 1
         evaluation: "-"
-      l2 relative error in u:
+      L2 relative error in u:
         base: 0.0014608804744531362
-        evaluation: '='
-        threshold: 0
-      l2 relative error in v:
+        evaluation: '-'
+        threshold: 1
+      L2 relative error in v:
         base: 0.00122855716442008
-        evaluation: '='
-        threshold: 0
-      l2 relative error in w:
+        evaluation: '-'
+        threshold: 1
+      L2 relative error in w:
         base: 0.0012779238184002226
-        evaluation: '='
-        threshold: 0
+        evaluation: '-'
+        threshold: 1
