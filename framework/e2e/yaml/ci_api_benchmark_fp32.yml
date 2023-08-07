@@ -6762,9 +6762,9 @@ BatchNorm1D_2:
 #    mapping:
 #      ins: { x: input }
 
-eye_0:
-  desc: "创建形状大小为shape并且数据类型为dtype的Tensor，其中元素值是未初始化的"
-  enable_backward: False
+#eye_0:
+#  desc: "创建形状大小为shape并且数据类型为dtype的Tensor，其中元素值是未初始化的"
+#  enable_backward: False
 #  paddle:
 #    api_name: "paddle.eye"
 #    params:
