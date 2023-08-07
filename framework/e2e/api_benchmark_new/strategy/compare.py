@@ -37,40 +37,90 @@ def data_compare(baseline_case, latest_case, case_name):
     :return:
     """
     res = {}
+    res[case_name] = {}
+    baseline_dict = {}
+    latest_dict = {}
     if isinstance(baseline_case.get("result"), str):
-        baseline_api = json.loads(baseline_case.get("result")).get("api")
-        forward_base = float(json.loads(baseline_case.get("result")).get("forward"))
-        backward_base = float(json.loads(baseline_case.get("result")).get("backward"))
-        total_base = float(json.loads(baseline_case.get("result")).get("total"))
+        baseline_result = json.loads(baseline_case.get("result"))
+        baseline_api = baseline_result.get("api")
+        baseline_dict["api"] = baseline_api
+        for k, v in baseline_result.items():
+            if k not in ["api", "yaml"]:
+                baseline_dict[k] = float(baseline_result[k])
     else:
-        baseline_api = baseline_case.get("result").get("api")
-        forward_base = baseline_case.get("result").get("forward")
-        backward_base = baseline_case.get("result").get("backward")
-        total_base = baseline_case.get("result").get("total")
+        baseline_result = baseline_case.get("result")
+        baseline_api = baseline_result.get("api")
+        baseline_dict["api"] = baseline_api
+        for k, v in baseline_result.items():
+            if k not in ["api", "yaml"]:
+                baseline_dict[k] = baseline_result[k]
 
     if isinstance(latest_case.get("result"), str):
-        latest_api = json.loads(latest_case.get("result")).get("api")
-        forward_latest = float(json.loads(latest_case.get("result")).get("forward"))
-        backward_latest = float(json.loads(latest_case.get("result")).get("backward"))
-        total_latest = float(json.loads(latest_case.get("result")).get("total"))
+        latest_result = json.loads(latest_case.get("result"))
+        latest_api = latest_result.get("api")
+        latest_dict["api"] = latest_api
+        for k, v in latest_result.items():
+            if k not in ["api", "yaml"]:
+                latest_dict[k] = float(latest_result[k])
     else:
-        latest_api = latest_case.get("result").get("api")
-        forward_latest = latest_case.get("result").get("forward")
-        backward_latest = latest_case.get("result").get("backward")
-        total_latest = latest_case.get("result").get("total")
+        latest_result = latest_case.get("result")
+        latest_api = latest_result.get("api")
+        latest_dict["api"] = latest_api
+        for k, v in latest_result.items():
+            if k not in ["api", "yaml"]:
+                latest_dict[k] = latest_result[k]
 
-    forward = base_compare(baseline=forward_base, latest=forward_latest)
-    backward = base_compare(baseline=backward_base, latest=backward_latest)
-    total = base_compare(baseline=total_base, latest=total_latest)
-    res[case_name] = {
-        "baseline_api": baseline_api,
-        "latest_api": latest_api,
-        "forward": forward,
-        "backward": backward,
-        "total": total,
-    }
+    res[case_name]["baseline_api"] = baseline_api
+    res[case_name]["latest_api"] = latest_api
+    for k, v in latest_dict.items():
+        if k not in ["api", "yaml"]:
+            res[case_name][k] = base_compare(baseline=baseline_dict[k], latest=latest_dict[k])
 
     return res
+
+
+# def data_compare_origin(baseline_case, latest_case, case_name):
+#     """
+#     用于api benchmark 的 单个case性能数 据对比方法
+#     :param baseline_data: 基线{}
+#     :param latest_data: 待测{}
+#     :return:
+#     """
+#     res = {}
+#     if isinstance(baseline_case.get("result"), str):
+#         baseline_api = json.loads(baseline_case.get("result")).get("api")
+#         forward_base = float(json.loads(baseline_case.get("result")).get("forward"))
+#         backward_base = float(json.loads(baseline_case.get("result")).get("backward"))
+#         total_base = float(json.loads(baseline_case.get("result")).get("total"))
+#     else:
+#         baseline_api = baseline_case.get("result").get("api")
+#         forward_base = baseline_case.get("result").get("forward")
+#         backward_base = baseline_case.get("result").get("backward")
+#         total_base = baseline_case.get("result").get("total")
+#
+#     if isinstance(latest_case.get("result"), str):
+#         latest_api = json.loads(latest_case.get("result")).get("api")
+#         forward_latest = float(json.loads(latest_case.get("result")).get("forward"))
+#         backward_latest = float(json.loads(latest_case.get("result")).get("backward"))
+#         total_latest = float(json.loads(latest_case.get("result")).get("total"))
+#     else:
+#         latest_api = latest_case.get("result").get("api")
+#         forward_latest = latest_case.get("result").get("forward")
+#         backward_latest = latest_case.get("result").get("backward")
+#         total_latest = latest_case.get("result").get("total")
+#
+#     forward = base_compare(baseline=forward_base, latest=forward_latest)
+#     backward = base_compare(baseline=backward_base, latest=backward_latest)
+#     total = base_compare(baseline=total_base, latest=total_latest)
+#     res[case_name] = {
+#         "baseline_api": baseline_api,
+#         "latest_api": latest_api,
+#         "forward": forward,
+#         "backward": backward,
+#         "total": total,
+#     }
+#
+#     return res
 
 
 # def data_dict_compare(baseline_data, latest_data):
@@ -189,14 +239,26 @@ def double_check(res):
     :param res: data_compare函数输出的结果
     :return:
     """
-    if (
-        performance_grade(res["forward"]) == "doubt"
-        or performance_grade(res["backward"]) == "doubt"
-        or performance_grade(res["total"]) == "doubt"
-    ):
+    if performance_grade(res["best_total"]) == "doubt":
         return True
     else:
         return False
+
+
+# def double_check_origin(res):
+#     """
+#     获取需要 double check 的 api list
+#     :param res: data_compare函数输出的结果
+#     :return:
+#     """
+#     if (
+#         performance_grade(res["forward"]) == "doubt"
+#         or performance_grade(res["backward"]) == "doubt"
+#         or performance_grade(res["total"]) == "doubt"
+#     ):
+#         return True
+#     else:
+#         return False
 
 
 def performance_grade(res):
