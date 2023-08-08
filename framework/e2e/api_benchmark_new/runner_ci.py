@@ -124,7 +124,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # 邮件报警
         # self.email = Alarm(storage=self.storage)
 
-    def _run_main(self, all_cases, latest_id, iters, compare_switch):
+    def _run_main_ci(self, all_cases, latest_id, iters, compare_switch):
         """
         对指定case运行测试
         :param all_cases: list of cases
@@ -355,7 +355,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             update_time=self.now_time,
         )
 
-        compare_dict, error_dict = self._run_main(
+        compare_dict, error_dict = self._run_main_ci(
             all_cases=self.all_cases, latest_id=latest_id, iters=self.check_iters, compare_switch=True
         )
 
@@ -412,10 +412,10 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             create_time=self.now_time,
             update_time=self.now_time,
         )
-
-        cases_dict, error_dict = self._run_main(
-            all_cases=self.all_cases, latest_id=job_id, iters=1, compare_switch=False
-        )
+        # cases_dict, error_dict = self._run_main(
+        #     all_cases=self.all_cases, latest_id=job_id, iters=1, compare_switch=False
+        # )
+        cases_dict, error_dict = self._run_main(all_cases=self.all_cases, latest_id=job_id)
 
         if bool(error_dict):
             self.db.ci_update_job(id=job_id, status="error", update_time=self.now_time)
