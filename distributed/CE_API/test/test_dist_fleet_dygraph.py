@@ -23,6 +23,7 @@ import signal
 import os
 import subprocess
 
+
 class TestDygraph(object):
     """Test dygraph"""
 
