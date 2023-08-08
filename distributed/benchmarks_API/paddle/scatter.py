@@ -1,8 +1,11 @@
+#!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+scatter
+"""
 import argparse
-import yaml
-
 import time
+import yaml
 
 import paddle
 import paddle.distributed as dist
@@ -18,7 +21,7 @@ yaml_config = yaml.load(f, Loader=yaml.FullLoader)["scatter"]
 
 
 def get_res(case, config):
-
+    """get_res"""
     is_legacy = yaml_config[case_name]["is_legacy"]
     sync_op = yaml_config[case_name]["sync_op"]
     use_calc_stream = yaml_config[case_name]["use_calc_stream"]
@@ -47,7 +50,7 @@ def get_res(case, config):
         else:
             data = paddle.to_tensor([1] * n_ele, "float32")
 
-        if is_legacy == True:
+        if is_legacy is True:
             tensor_list = [paddle.to_tensor([0] * n_ele, "float32") for i in range(devices)]
             # warmup
             for i in range(warms):
@@ -60,7 +63,7 @@ def get_res(case, config):
             paddle.device.cuda.synchronize()
             cost = (time.perf_counter() - start) / epochs
         else:
-            if is_tensor == True:
+            if is_tensor is True:
                 tensor = paddle.to_tensor([0] * n_ele * devices, "float32")
                 # warmup
                 for i in range(warms):

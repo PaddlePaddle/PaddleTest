@@ -1,8 +1,11 @@
+#!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+send_recv
+"""
 import argparse
-import yaml
-
 import time
+import yaml
 
 import paddle
 import paddle.distributed as dist
@@ -18,7 +21,7 @@ yaml_config = yaml.load(f, Loader=yaml.FullLoader)["send_recv"]
 
 
 def get_res(case, config):
-
+    """get_res"""
     is_legacy = yaml_config[case_name]["is_legacy"]
     sync_op = yaml_config[case_name]["sync_op"]
     use_calc_stream = yaml_config[case_name]["use_calc_stream"]
@@ -46,7 +49,7 @@ def get_res(case, config):
         else:
             data = paddle.to_tensor([1] * n_ele, "float32")
 
-        if is_legacy == True:
+        if is_legacy is True:
             # warmup
             for i in range(warms):
                 if dist.get_rank() % 2 == 0:

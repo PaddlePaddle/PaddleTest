@@ -1,6 +1,12 @@
-import yaml
-import os
+#!/bin/env python
+# -*- coding: utf-8 -*-
+"""
+run.py
+"""
 import subprocess
+import os
+
+import yaml
 
 api_list = [
     "all_gather",
@@ -17,6 +23,7 @@ loops = 10
 
 
 def get_average(file_loops, case):
+    """average"""
     counters = {}
     averages = {}
 
@@ -36,9 +43,9 @@ def get_average(file_loops, case):
                         averages[num]["algbw"] += item["algbw"]
 
     # 计算每个数字对应的平均值
-    for num in counters.keys():
-        averages[num]["time"] /= counters[num]["time"]
-        averages[num]["algbw"] /= counters[num]["algbw"]
+    for key in counters.items():
+        averages[key]["time"] /= counters[key]["time"]
+        averages[key]["algbw"] /= counters[key]["algbw"]
 
     # 关闭文件
     f.close()
@@ -54,6 +61,7 @@ def get_average(file_loops, case):
 
 
 def compare(case, res_dict):
+    """compare"""
     f = open("./base_value", encoding="utf-8")
     lines = f.readlines()
     for line in lines:
@@ -86,6 +94,7 @@ def compare(case, res_dict):
 
 
 def gather_dict(case):
+    """gather_dict"""
     all_dict = {}
     f_dict = {"base": "./base_value", "avg": "./mylog/log_avg", "diff": "./mylog/log_diff"}
 
@@ -126,6 +135,7 @@ def gather_dict(case):
 
 
 def main():
+    """main"""
     f = open("config.yaml", "rb")
     yaml_config = yaml.load(f, Loader=yaml.FullLoader)
 

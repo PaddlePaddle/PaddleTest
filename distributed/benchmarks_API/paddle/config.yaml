@@ -197,7 +197,7 @@ alltoall_single:
     sync_op: False
     use_calc_stream: False # 该模式下无用
     is_split: False # 默认配置
-  
+
   alltoall_single_legacy_sync_split:
     desc: "paddle.distributed.alltoall_single(data, ouput, in_split_sizes, out_split_sizes, sync_op=True)"
     is_legacy: True
@@ -211,7 +211,7 @@ alltoall_single:
     sync_op: False
     use_calc_stream: False # 该模式下无用
     is_split: True
-  
+
   # alltoall_single_stream_sync:
   #   # 与alltoall_single_legacy配置相同，无需重复执行
   #   desc: "paddle.distributed.stream.all_gather(data, ouput, sync_op=True)"
@@ -281,7 +281,7 @@ broadcast:
     is_legacy: True
     sync_op: True # 该模式下无用
     use_calc_stream: False # 该模式下无用
-  
+
   broadcast_stream_sync:
     desc: "paddle.distributed.stream.broadcast(tensor, src, sync_op=True, use_calc_stream=False)"
     is_legacy: False
@@ -293,7 +293,7 @@ broadcast:
     is_legacy: False
     sync_op: True # 默认配置
     use_calc_stream: True
-  
+
   broadcast_stream:
     desc: "paddle.distributed.stream.broadcast(tensor, src, sync_op=False, use_calc_stream=False)"
     is_legacy: False
@@ -313,13 +313,13 @@ send_recv:
     is_legacy: True
     sync_op: True # 默认配置
     use_calc_stream: False # 该模式下无用
-  
+
   send_recv_legacy:
     desc: "paddle.distributed.send(tensor, dst, sync_op=False)"
     is_legacy: True
     sync_op: False
     use_calc_stream: False # 该模式下无用
-  
+
   send_recv_stream_sync:
     desc: "paddle.distributed.stream.send(tensor, dst, sync_op=True, use_calc_stream=False))"
     is_legacy: False
@@ -331,7 +331,7 @@ send_recv:
     is_legacy: False
     sync_op: True # 默认配置
     use_calc_stream: True
-  
+
   send_recv_stream:
     desc: "paddle.distributed.stream.send(tensor, dst,  sync_op=False, use_calc_stream=False)"
     is_legacy: False
@@ -517,4 +517,3 @@ scatter:
     sync_op: False
     use_calc_stream: False
     is_tensor: False
-
