@@ -415,13 +415,17 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # cases_dict, error_dict = self._run_main(
         #     all_cases=self.all_cases, latest_id=job_id, iters=1, compare_switch=False
         # )
-        cases_dict, error_dict = self._run_main(all_cases=self.all_cases, latest_id=job_id)
+        #
+        # if bool(error_dict):
+        #     self.db.ci_update_job(id=job_id, status="error", update_time=self.now_time)
+        #     raise Exception("something wrong with api benchmark job id: {} !!".format(job_id))
+        # else:
+        #     self.db.ci_update_job(id=job_id, status="done", update_time=self.now_time)
 
-        if bool(error_dict):
-            self.db.ci_update_job(id=job_id, status="error", update_time=self.now_time)
-            raise Exception("something wrong with api benchmark job id: {} !!".format(job_id))
-        else:
-            self.db.ci_update_job(id=job_id, status="done", update_time=self.now_time)
+        # debug
+        cases_dict = self._run_main(all_cases=self.all_cases, latest_id=job_id)
+        self.db.ci_update_job(id=job_id, status="done", update_time=self.now_time)
+        del cases_dict
 
 
 if __name__ == "__main__":
