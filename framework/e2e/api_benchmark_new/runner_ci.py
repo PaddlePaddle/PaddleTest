@@ -140,8 +140,11 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             latest_case = {}
 
             forward_res_list = []
+            forward_top_k_res_list = []
             total_res_list = []
+            total_top_k_res_list = []
             backward_res_list = []
+            backward_top_k_res_list = []
             best_total_res_list = []
 
             if case_name in SKIP_DICT[platform.system()]:
@@ -192,10 +195,21 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                     }
 
             elif isinstance(forward_time_list, list):
-                forward_res_list, backward_res_list, total_res_list, best_total_res_list = self._base_statistics(
+                (
+                    forward_res_list,
+                    forward_top_k_res_list,
+                    backward_res_list,
+                    backward_top_k_res_list,
+                    total_res_list,
+                    total_top_k_res_list,
+                    best_total_res_list,
+                ) = self._base_statistics(
                     forward_res_list=forward_res_list,
+                    forward_top_k_res_list=forward_top_k_res_list,
                     backward_res_list=backward_res_list,
+                    backward_top_k_res_list=backward_top_k_res_list,
                     total_res_list=total_res_list,
+                    total_top_k_res_list=total_top_k_res_list,
                     best_total_res_list=best_total_res_list,
                     forward_time_list=forward_time_list,
                     backward_time_list=backward_time_list,
@@ -203,8 +217,14 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                 )
 
                 forward = self.statistics.best(data_list=forward_res_list)
+                forward_top_k = self.statistics.best(data_list=forward_top_k_res_list)
+
                 backward = self.statistics.best(data_list=backward_res_list)
+                # backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
+
                 total = self.statistics.best(data_list=total_res_list)
+                # total_top_k = self.statistics.best(data_list=total_top_k_res_list)
+
                 best_total = self.statistics.best(data_list=best_total_res_list)
 
                 if self.if_showtime:
@@ -222,8 +242,11 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                     "api": api,
                     "yaml": case_name,
                     "forward": forward,
+                    "forward_top_k": forward_top_k,
                     "total": total,
+                    # "total_top_k": total_top_k,
                     "backward": backward,
+                    # "backward_top_k": backward_top_k,
                     "best_total": best_total,
                 }
 
@@ -232,7 +255,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                         baseline_case=self.baseline_dict[case_name], latest_case=latest_case, case_name=case_name
                     )
                     compare_dict[case_name] = compare_res[case_name]
-
+                    # 从这里继续开发
                     if self.double_check and double_check(res=compare_res[case_name]):
                         for i in range(iters - 1):
                             self.logger.get_log().warning("start double check {} time.".format(i))
@@ -240,13 +263,19 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
                             (
                                 forward_res_list,
+                                forward_top_k_res_list,
                                 backward_res_list,
+                                backward_top_k_res_list,
                                 total_res_list,
+                                total_top_k_res_list,
                                 best_total_res_list,
                             ) = self._base_statistics(
                                 forward_res_list=forward_res_list,
+                                forward_top_k_res_list=forward_top_k_res_list,
                                 backward_res_list=backward_res_list,
+                                backward_top_k_res_list=backward_top_k_res_list,
                                 total_res_list=total_res_list,
+                                total_top_k_res_list=total_top_k_res_list,
                                 best_total_res_list=best_total_res_list,
                                 forward_time_list=forward_time_list,
                                 backward_time_list=backward_time_list,
@@ -255,8 +284,14 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
                         # if bool(forward_res_list) and bool(backward_res_list) and bool(total_res_list):
                         forward = self.statistics.best(data_list=forward_res_list)
+                        forward_top_k = self.statistics.best(data_list=forward_top_k_res_list)
+
                         backward = self.statistics.best(data_list=backward_res_list)
+                        # backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
+
                         total = self.statistics.best(data_list=total_res_list)
+                        # total_top_k = self.statistics.best(data_list=total_top_k_res_list)
+
                         best_total = self.statistics.best(data_list=best_total_res_list)
 
                         latest_case["jid"] = latest_id
@@ -266,8 +301,11 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                             "api": api,
                             "yaml": case_name,
                             "forward": forward,
+                            "forward_top_k": forward_top_k,
                             "total": total,
+                            # "total_top_k": total_top_k,
                             "backward": backward,
+                            # "backward_top_k": backward_top_k,
                             "best_total": best_total,
                         }
                         compare_res = data_compare(
@@ -342,6 +380,9 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                 latest_id, self.baseline_id
             )
         )
+
+        if bool(api_grade["doubt"]) or bool(api_grade["worse"]):
+            raise Exception("该pr会导致动态图cpu前向调度性能下降，请修复！！！")
 
     def _baseline_insert(self, wheel_link):
         """
