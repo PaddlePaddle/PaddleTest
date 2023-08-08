@@ -231,6 +231,8 @@ export c_plus_plus_predict=${c_plus_plus_predict:-False}  #False表示不配置 
 #cinn编译器
 export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
 export FLAGS_prim_all=${FLAGS_prim_all:-false}
+# new ir
+export FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor:-0}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -397,6 +399,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
+        -e FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
