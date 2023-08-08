@@ -67,7 +67,7 @@ class PaddleScience_Start(object):
         urllib.request.urlretrieve(url, file_name)
         os.system("tar -zxvf " + file_name + " -C PaddleScience/")
         os.system("python -m pip install scikit-image")
-        os.syetem("python -m pip install hdf5storage")
+        # os.syetem("python -m pip install hdf5storage")
         logger.info("download datasets done!!!!")
 
     def build_prepare(self):
