@@ -55,7 +55,7 @@ def test_dist_strategy():
     strategy.a_sync_configs = {"k_steps": 1}
     strategy.auto = True
 
-    build_strategy = paddle.fluid.BuildStrategy()
+    build_strategy = paddle.static.BuildStrategy()
     build_strategy.enable_sequential_execution = True
     build_strategy.fuse_elewise_add_act_ops = True
     build_strategy.fuse_bn_act_ops = True
@@ -66,7 +66,7 @@ def test_dist_strategy():
     build_strategy.sync_batch_norm = True
     build_strategy.enable_inplace = True
 
-    exe_strategy = paddle.fluid.ExecutionStrategy()
+    exe_strategy = paddle.static.ExecutionStrategy()
     exe_strategy.num_threads = 10
     exe_strategy.num_iteration_per_drop_scope = 10
     exe_strategy.num_iteration_per_run = 10

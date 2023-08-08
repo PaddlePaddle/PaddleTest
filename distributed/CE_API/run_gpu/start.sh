@@ -1,6 +1,8 @@
 
 export FLAGS_call_stack_level=2
 
+# cd PaddleTest/distributed/CE_API && mkdir task
+# cp -r run_gpu/. task && cp -r ../case/. task && cp -r ../test/. task
 cd task
 cases="test_dist_auto_api.py \
        test_dist_collective_communicator_api.py \
