@@ -36,11 +36,17 @@ class YamlLoader(object):
         get all case name
         """
         # 获取全部case name
-        return self.yml.keys()
+        if bool(self.yml):
+            return self.yml.keys()
+        else:
+            return []
 
     def get_junior_name(self, junior):
         """
         get testings name
         """
         # 获取全部case name
-        return self.yml.get(junior).keys()
+        if bool(self.yml):
+            return self.yml.get(junior).keys()
+        else:
+            return []

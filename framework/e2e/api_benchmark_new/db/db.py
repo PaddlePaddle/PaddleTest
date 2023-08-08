@@ -145,10 +145,15 @@ class DB(object):
 
     def insert_case(self, jid, data_dict, create_time):
         """向case表中录入数据"""
-        data_dict["result"]["forward"] = ACCURACY % data_dict["result"]["forward"]
-        data_dict["result"]["total"] = ACCURACY % data_dict["result"]["total"]
-        data_dict["result"]["backward"] = ACCURACY % data_dict["result"]["backward"]
-        data_dict["result"]["best_total"] = ACCURACY % data_dict["result"]["best_total"]
+        for k, v in data_dict["result"].items():
+            if k == "api" or k == "yaml":
+                continue
+            data_dict["result"][k] = ACCURACY % v
+
+        # data_dict["result"]["forward"] = ACCURACY % data_dict["result"]["forward"]
+        # data_dict["result"]["total"] = ACCURACY % data_dict["result"]["total"]
+        # data_dict["result"]["backward"] = ACCURACY % data_dict["result"]["backward"]
+        # data_dict["result"]["best_total"] = ACCURACY % data_dict["result"]["best_total"]
         data = {
             "jid": jid,
             "case_name": data_dict["case_name"],

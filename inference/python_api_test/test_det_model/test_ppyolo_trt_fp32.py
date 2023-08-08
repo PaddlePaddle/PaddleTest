@@ -116,7 +116,7 @@ def test_trt_fp32_more_bz():
         test_suite.trt_more_bz_test(
             input_data_dict,
             output_data_dict,
-            min_subgraph_size=10,
+            min_subgraph_size=5,
             repeat=1,
             delta=1,
             precision="trt_fp32",

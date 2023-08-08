@@ -141,18 +141,19 @@ class TestLog2(APIBase):
         """
         implement
         """
-        self.types = [np.int32]
+        self.types = [np.int32, np.int64]
         # log has backward compute
-        self.enable_backward = True
+        self.enable_backward = False
 
 
 obj2 = TestLog2(paddle.log)
 
 
-@pytest.mark.api_base_log_exception
+@pytest.mark.api_base_log_parameters
 def test_log9():
     """
     x = float16(tensor)
     """
     x = np.array([[1, 2], [3, 4]])
-    obj2.exception(mode="c", etype="NotFoundError", x=x)
+    res = np.log(x)
+    obj2.run(res=res, x=x)

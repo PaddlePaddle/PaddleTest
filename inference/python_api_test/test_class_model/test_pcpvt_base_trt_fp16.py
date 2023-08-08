@@ -68,17 +68,6 @@ def test_trt_fp16_more_bz():
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        del test_suite.pd_config
-        test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel",
-            params_file="./pcpvt_base/inference.pdiparams",
-        )
-        test_suite.collect_shape_info(
-            model_path="./pcpvt_base/",
-            input_data_dict=input_data_dict,
-            device="gpu",
-        )
-
         del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
@@ -91,8 +80,10 @@ def test_trt_fp16_more_bz():
             output_data_dict,
             delta=1e-1,
             max_batch_size=1,
+            min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
+            auto_tuned=True,
             shape_range_file="./pcpvt_base/shape_range.pbtxt",
         )
 
@@ -120,17 +111,6 @@ def test_jetson_trt_fp16_more_bz():
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-        del test_suite.pd_config
-        test_suite.load_config(
-            model_file="./pcpvt_base/inference.pdmodel",
-            params_file="./pcpvt_base/inference.pdiparams",
-        )
-        test_suite.collect_shape_info(
-            model_path="./pcpvt_base/",
-            input_data_dict=input_data_dict,
-            device="gpu",
-        )
-
         del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
@@ -143,8 +123,10 @@ def test_jetson_trt_fp16_more_bz():
             output_data_dict,
             delta=5e-1,
             max_batch_size=1,
+            min_subgraph_size=1,
             precision="trt_fp16",
             dynamic=True,
+            auto_tuned=True,
             shape_range_file="./pcpvt_base/shape_range.pbtxt",
         )
 

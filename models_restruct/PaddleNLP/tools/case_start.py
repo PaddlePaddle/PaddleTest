@@ -3,15 +3,8 @@
 执行case前：生成yaml，设置特殊参数，改变监控指标
 """
 import os
-import sys
-import json
-import shutil
 import logging
-import tarfile
-import argparse
-import yaml
-import wget
-import numpy as np
+import re
 
 logger = logging.getLogger("ce")
 
@@ -99,7 +92,8 @@ def run():
     执行入口
     """
     platform = os.environ["system"]
-    if platform == "linux_convergence":
+    all = re.compile("All").findall(os.environ["AGILE_PIPELINE_NAME"])
+    if platform == "linux_convergence" and not all:
         model = PaddleNLP_Case_Start()
         model.build_prepare()
         return 0

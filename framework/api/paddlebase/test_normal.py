@@ -7,13 +7,12 @@ test normal
 import paddle
 import pytest
 import numpy as np
-from paddle import fluid
 
 types = [np.float32, np.float64]
-if fluid.is_compiled_with_cuda() is True:
-    places = [fluid.CPUPlace(), fluid.CUDAPlace(0)]
+if paddle.is_compiled_with_cuda() is True:
+    places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
 else:
-    places = [fluid.CPUPlace()]
+    places = [paddle.CPUPlace()]
 
 
 @pytest.mark.api_base_normal_vartype
@@ -103,12 +102,12 @@ def test_static1():
     """
     for place in places:
         for t in types:
-            main_program = fluid.default_main_program()
-            startup_program = fluid.default_startup_program()
+            main_program = paddle.static.default_main_program()
+            startup_program = paddle.static.default_startup_program()
             # shape = [3, 4]
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
-                    exe = fluid.Executor(place)
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
+                    exe = paddle.static.Executor(place)
                     exe.run(startup_program)
                     output = paddle.normal(shape=[3, 4])
                     res = exe.run(main_program, fetch_list=[output])
@@ -123,15 +122,15 @@ def test_static2():
     """
     for place in places:
         for t in types:
-            main_program = fluid.default_main_program()
-            startup_program = fluid.default_startup_program()
+            main_program = paddle.static.default_main_program()
+            startup_program = paddle.static.default_startup_program()
             # shape = [3, 4]
             mean = np.array([1, 2, 3]).astype("float32")
             feed = {"mean": mean}
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                     mean1 = paddle.static.data(name="mean", shape=[-1], dtype="float32")
-                    exe = fluid.Executor(place)
+                    exe = paddle.static.Executor(place)
                     exe.run(startup_program)
                     output = paddle.normal(shape=[3, 4], mean=mean1)
                     res = exe.run(main_program, feed=feed, fetch_list=[output])
@@ -146,17 +145,17 @@ def test_static3():
     """
     for place in places:
         for t in types:
-            main_program = fluid.default_main_program()
-            startup_program = fluid.default_startup_program()
+            main_program = paddle.static.default_main_program()
+            startup_program = paddle.static.default_startup_program()
             # shape = [3, 4]
             mean = np.array([1, 2, 3]).astype("float32")
             std = np.array([1, 2, 3]).astype("float32")
             feed = {"mean": mean, "std": std}
-            with fluid.unique_name.guard():
-                with fluid.program_guard(main_program=main_program, startup_program=startup_program):
+            with paddle.utils.unique_name.guard():
+                with paddle.static.program_guard(main_program=main_program, startup_program=startup_program):
                     mean1 = paddle.static.data(name="mean", shape=[-1], dtype="float32")
                     std1 = paddle.static.data(name="std", shape=[-1], dtype="float32")
-                    exe = fluid.Executor(place)
+                    exe = paddle.static.Executor(place)
                     exe.run(startup_program)
                     output = paddle.normal(shape=[3, 4], mean=mean1, std=std1)
                     res = exe.run(main_program, feed=feed, fetch_list=[output])

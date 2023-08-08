@@ -10,7 +10,7 @@ case:
           - --max_target_length=142
           - --logging_steps=1
           - --save_steps=1
-          - --train_batch_size=2
+          - --train_batch_size=1
           - --model_name_or_path=bart-base
           - --output_dir=output
           - --max_steps 1
@@ -27,7 +27,7 @@ case:
           - --model_name_or_path=bart-base
           - --logging_steps=100
           - --train_batch_size=2
-          - --eval_batch_size=32
+          - --eval_batch_size=16
           - --output_dir=output
 
   windows:
