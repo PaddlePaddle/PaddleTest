@@ -412,7 +412,6 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             create_time=self.now_time,
             update_time=self.now_time,
         )
-
         # cases_dict, error_dict = self._run_main(
         #     all_cases=self.all_cases, latest_id=job_id, iters=1, compare_switch=False
         # )
