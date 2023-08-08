@@ -44,9 +44,9 @@ def test_auto_process_mesh():
     assert process_mesh.dim_size(-1) == 3
     assert process_mesh.dim_size("x") == 2
     assert process_mesh.dim_size("y") == 3
-    assert process_mesh.empty() == False
-    assert process_mesh.contains(0) == True
-    assert process_mesh.contains(6) == False
+    assert process_mesh.empty() is False
+    assert process_mesh.contains(0) is True
+    assert process_mesh.contains(6) is False
     assert process_mesh == process_mesh
     assert process_mesh != process_mesh2
     assert str(process_mesh) == str(process_mesh)

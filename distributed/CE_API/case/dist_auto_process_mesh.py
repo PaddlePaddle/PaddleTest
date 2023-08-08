@@ -42,6 +42,8 @@ sequence_len = 512
 
 
 class MLPLayer(nn.Layer):
+    """MLPLayer"""
+
     def __init__(
         self,
         hidden_size=1024,
@@ -69,6 +71,7 @@ class MLPLayer(nn.Layer):
         )
 
     def forward(self, input):
+        """forward"""
         out = self.norm(input)
         out = self.linear0(out)
         out = F.gelu(out, approximate=True)
@@ -130,7 +133,7 @@ def test_auto_process_mesh_context_manager():
         shape=[batch_size, sequence_len, hidden_size],
         dtype="float32",
     )
-    label = static.data(name="label", shape=[batch_size, sequence_len, 1], dtype="float32")
+    # label = static.data(name="label", shape=[batch_size, sequence_len, 1], dtype="float32")
 
     mlp = MLPLayer(
         hidden_size=hidden_size,
@@ -141,6 +144,7 @@ def test_auto_process_mesh_context_manager():
 
     with ProcessMesh(mesh, ["d"]):
         out = mlp(input)
+        print(out)
 
     default_program = paddle.static.default_main_program()
     default_dist_context = get_default_distributed_context()

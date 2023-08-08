@@ -40,8 +40,8 @@ def test_mkdirs():
     """test_mkdirs"""
     client.mkdirs("LocalFS_mkdirs")
     time.sleep(1)
-    assert os.path.exists("LocalFS_mkdirs") == True
-    assert os.path.isdir("LocalFS_mkdirs") == True
+    assert os.path.exists("LocalFS_mkdirs") is True
+    assert os.path.isdir("LocalFS_mkdirs") is True
     print("{} ... ok".format(sys._getframe().f_code.co_name))
 
 
@@ -51,7 +51,7 @@ def test_delete():
     client.mkdirs("LocalFS_delete")
     time.sleep(1)
     client.delete("LocalFS_delete")
-    assert os.path.exists("LocalFS_delete") == False
+    assert os.path.exists("LocalFS_delete") is False
     print("{} ... ok".format(sys._getframe().f_code.co_name))
 
 
@@ -60,7 +60,7 @@ def test_touch():
     """test_touch"""
     client.touch("LocalFS_touch")
     time.sleep(1)
-    assert os.path.isfile("LocalFS_touch") == True
+    assert os.path.isfile("LocalFS_touch") is True
     print("{} ... ok".format(sys._getframe().f_code.co_name))
 
 
@@ -87,7 +87,7 @@ def test_is_dir():
     """test_is_dir"""
     client.mkdirs("LocalFS_is_dir")
     time.sleep(1)
-    assert client.is_dir("LocalFS_is_dir") == True
+    assert client.is_dir("LocalFS_is_dir") is True
     print("{} ... ok".format(sys._getframe().f_code.co_name))
 
 
@@ -96,7 +96,7 @@ def test_is_exist():
     """test_is_exist"""
     client.touch("LocalFS_exist")
     time.sleep(1)
-    assert client.is_exist("LocalFS_exist") == True
+    assert client.is_exist("LocalFS_exist") is True
     print("{} ... ok".format(sys._getframe().f_code.co_name))
 
 
@@ -106,7 +106,7 @@ def test_local_mv():
     client.touch("LocalFS_mv_src")
     time.sleep(1)
     client.mv("LocalFS_mv_src", "LocalFS_mv_dst")
-    assert client.is_exist("LocalFS_mv_dst") == True
+    assert client.is_exist("LocalFS_mv_dst") is True
     print("{} ... ok".format(sys._getframe().f_code.co_name))
 
 

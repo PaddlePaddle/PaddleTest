@@ -39,7 +39,8 @@ def limit_by_capacity(expert_count, _capacity, n_worker):
     old_shape = expert_count.shape
     expert_count = np.reshape(expert_count, (n_worker, len(capacity)))
     output = np.zeros_like(expert_count)
-    for wid in range(len(expert_count)):
+    length = len(expert_count)
+    for wid in range(length):
         for eid in range(len(expert_count[wid])):
             last_cap = capacity[eid]
             if last_cap >= 0:
@@ -55,7 +56,8 @@ def prune_gate_by_capacity(gate_idx, expert_count, n_expert, n_worker):
     """assert_compare"""
     new_gate_idx = np.copy(gate_idx)
     expert_count = np.copy(expert_count)
-    for i in range(len(gate_idx)):
+    length = len(gate_idx)
+    for i in range(length):
         idx = gate_idx[i]
         last_cap = expert_count[idx]
         if last_cap > 0:

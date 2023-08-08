@@ -41,7 +41,6 @@ class LinearNet(nn.Layer):
 def train(print_result=True):
     """train"""
     # 1. initialize parallel environment
-    train_data_list = []
     dist.init_parallel_env()
 
     # 2. create data parallel layer & optimizer

@@ -1,11 +1,11 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
-#======================================================================
+# ======================================================================
 #
 # Copyright (c) 2017 Baidu.com, Inc. All Rights Reserved
 #
-#======================================================================
+# ======================================================================
 """
 /***************************************************************************
   *
@@ -19,6 +19,7 @@
 """
 import paddle
 import paddle.distributed.fleet as fleet
+
 paddle.enable_static()
 
 
@@ -26,12 +27,14 @@ def test_dist_strategy():
     """dist strategy"""
     strategy = fleet.DistributedStrategy()
     strategy.amp = True
-    strategy.amp_configs = {"init_loss_scaling": 10240,
-                            "decr_every_n_nan_or_inf": 2,
-                            "incr_every_n_steps": 1000,
-                            "incr_ratio": 3.0,
-                            "use_dynamic_loss_scaling": True,
-                            "decr_ratio": 0.5}
+    strategy.amp_configs = {
+        "init_loss_scaling": 10240,
+        "decr_every_n_nan_or_inf": 2,
+        "incr_every_n_steps": 1000,
+        "incr_ratio": 3.0,
+        "use_dynamic_loss_scaling": True,
+        "decr_ratio": 0.5,
+    }
     strategy.recompute = True
     strategy.recompute_configs = {"checkpoints": ["a", "b", "c"]}
     strategy.pipeline = True

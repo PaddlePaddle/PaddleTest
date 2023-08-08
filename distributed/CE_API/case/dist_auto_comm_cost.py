@@ -34,7 +34,8 @@ from paddle.distributed.auto_parallel.static.cost import (
     build_comm_desc,
 )
 
-from dist_auto_cluster import cluster_json, multi_cluster_json
+from dist_auto_cluster import cluster_json
+from dist_auto_multi_cluster import multi_cluster_json
 from utils import run_priority
 
 

@@ -48,7 +48,6 @@ def test_dist_fleet_DistributedStrategy1():
     strategy1.sharding_configs = {
         "sharding_segment_strategy": "segment_broadcast_MB",
         "segment_broadcast_MB": 32,
-        "sharding_degree": 8,
         "sharding_degree": 2,
         "gradient_merge_acc_step": 4,
     }
@@ -72,12 +71,12 @@ def test_dist_fleet_DistributedStrategy1():
     assert new_strategy.sharding == strategy1.sharding
     assert new_strategy.sharding_configs == strategy1.sharding_configs
 
-    assert new_strategy.auto == False
-    assert new_strategy.pipeline == False
-    assert new_strategy.lars == False
-    assert new_strategy.localsgd == False
-    assert new_strategy.amp == False
-    assert new_strategy.fp16_allreduce == False
+    assert new_strategy.auto is False
+    assert new_strategy.pipeline is False
+    assert new_strategy.lars is False
+    assert new_strategy.localsgd is False
+    assert new_strategy.amp is False
+    assert new_strategy.fp16_allreduce is False
 
     print("test_dist_fleet_DistributedStrategy1 ... ok")
 
@@ -122,12 +121,12 @@ def test_dist_fleet_DistributedStrategy2():
     assert new_strategy.fp16_allreduce == strategy2.fp16_allreduce
     assert new_strategy.a_sync == strategy2.a_sync
 
-    assert new_strategy.recompute == False
-    assert new_strategy.gradient_merge == False
-    assert new_strategy.lamb == False
-    assert new_strategy.adaptive_localsgd == False
-    assert new_strategy.dgc == False
-    assert new_strategy.sharding == False
+    assert new_strategy.recompute is False
+    assert new_strategy.gradient_merge is False
+    assert new_strategy.lamb is False
+    assert new_strategy.adaptive_localsgd is False
+    assert new_strategy.dgc is False
+    assert new_strategy.sharding is False
 
     print("test_dist_fleet_DistributedStrategy2 ... ok")
 
@@ -180,9 +179,9 @@ def test_dist_fleet_DistributedStrategy4():
     assert new_strategy.build_strategy.enable_sequential_execution == build_strategy.enable_sequential_execution
     assert new_strategy.build_strategy.fuse_broadcast_ops == build_strategy.fuse_broadcast_ops
     assert new_strategy.build_strategy.enable_inplace == build_strategy.enable_inplace
-    assert new_strategy.build_strategy.cache_runtime_context == False
-    assert new_strategy.build_strategy.enable_addto == False
-    assert new_strategy.build_strategy.allow_cuda_graph_capture == False
+    assert new_strategy.build_strategy.cache_runtime_context is False
+    assert new_strategy.build_strategy.enable_addto is False
+    assert new_strategy.build_strategy.allow_cuda_graph_capture is False
 
     print("test_dist_fleet_DistributedStrategy4 ... ok")
 

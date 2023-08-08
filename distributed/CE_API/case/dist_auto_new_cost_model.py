@@ -58,9 +58,7 @@ def test_auto_cost_base():
 def test_auto_cost_comp():
     """test_auto_cost_comp"""
     x = paddle.static.data(name="x", shape=[20, 20], dtype="float32")
-    y = paddle.static.data(name="y", shape=[20, 20], dtype="float32")
 
-    z = paddle.matmul(x, y)
     matmul_v2_op = None
     ops = paddle.static.default_main_program().global_block().ops
     for op in ops:
@@ -96,7 +94,6 @@ def test_auto_cost_comm():
     # Build CommConetxt
     CommContext._has_instance = None
     CommContext._instance = None
-    comm_context = CommContext(cluster)
     desc = {}
     desc["op"] = "c_allreduce_sum"
     desc["inputs"] = {"X": [(paddle.float32, [100, 200])]}

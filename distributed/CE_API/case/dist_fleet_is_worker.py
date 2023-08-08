@@ -28,7 +28,7 @@ fleet.init(is_collective=True)
 @run_priority(level="P0")
 def test_is_worker():
     """test_is_worker"""
-    assert fleet.is_worker() == True
+    assert fleet.is_worker() is True
     print("{} ... ok".format(sys._getframe().f_code.co_name))
 
 

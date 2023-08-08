@@ -42,7 +42,7 @@ def train(print_result=True):
     """train"""
     # 1. initialize parallel environment
     train_data_list1 = []
-    train_data_list2 = []
+    # train_data_list2 = []
     dist.init_parallel_env()
 
     # 2. create data parallel layer & optimizer
@@ -59,7 +59,8 @@ def train(print_result=True):
     loss = loss_fn(outputs, labels)
     if print_result is True:
         train_data_list1.append(loss.numpy())
-    assert len(train_data_list1)
+
+    assert len(train_data_list1) == 1
 
     loss.backward()
 

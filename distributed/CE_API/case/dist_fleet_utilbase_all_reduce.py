@@ -17,12 +17,12 @@
   *
   **************************************************************************/
 """
-import paddle.distributed.fleet as fleet
 import os
 import numpy as np
-from utils import run_priority
-from paddle.distributed.fleet import PaddleCloudRoleMaker
 
+import paddle.distributed.fleet as fleet
+from paddle.distributed.fleet import PaddleCloudRoleMaker
+from utils import run_priority
 
 os.environ["PADDLE_WITH_GLOO"] = "2"
 

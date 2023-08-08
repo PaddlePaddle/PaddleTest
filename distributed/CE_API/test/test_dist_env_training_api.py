@@ -96,7 +96,8 @@ class TestApi(object):
 
     def test_env_destroy_process_group(self):
         """test_env_destroy_process_group"""
-        cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id destroy_process_group dist_env_destroy_process_group.py"
+        cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id destroy_process_group \
+            dist_env_destroy_process_group.py"
         pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = pro.communicate()
         print(out)

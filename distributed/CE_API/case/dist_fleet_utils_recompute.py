@@ -19,10 +19,11 @@
 """
 import os
 import sys
+import random
 import numpy as np
+
 import paddle
 from paddle.distributed.fleet.utils import recompute
-import random
 from utils import run_priority
 
 # required: gpu

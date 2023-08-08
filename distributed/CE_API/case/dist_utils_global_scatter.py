@@ -32,10 +32,10 @@ from utils import run_priority
 def test_utils_global_scatter():
     """test_utils_global_scatter"""
     init_parallel_env()
-    n_expert = 2
-    world_size = 2
-    d_model = 2
-    in_feat = d_model
+    # n_expert = 2
+    # world_size = 2
+    # d_model = 2
+    # in_feat = d_model
     if paddle.distributed.ParallelEnv().local_rank == 0:
         local_count = np.array([2, 1, 1, 1])
         global_count = np.array([2, 1, 1, 1])

@@ -17,8 +17,9 @@
   *
   **************************************************************************/
 """
-import paddle
 import os
+
+import paddle
 from utils import run_priority
 
 paddle.enable_static()
@@ -55,7 +56,7 @@ def test_data_inmemorydataset1():
     place = paddle.CPUPlace()
     exe = paddle.static.Executor(place)
     startup_program = paddle.static.Program()
-    main_program = paddle.static.Program()
+    # main_program = paddle.static.Program()
     exe.run(startup_program)
     # exe.train_from_dataset(main_program, dataset)
 

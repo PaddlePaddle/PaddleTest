@@ -20,9 +20,10 @@
 from __future__ import division
 from __future__ import print_function
 import os
-import paddle
-import numpy as np
 import random
+import numpy as np
+
+import paddle
 import paddle.distributed as dist
 import paddle.distributed.fleet as fleet
 from paddle.io import DataLoader, Dataset

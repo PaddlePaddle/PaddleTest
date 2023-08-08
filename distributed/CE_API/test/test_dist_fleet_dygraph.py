@@ -22,8 +22,6 @@ import time
 import signal
 import os
 import subprocess
-import time
-
 
 class TestDygraph(object):
     """Test dygraph"""

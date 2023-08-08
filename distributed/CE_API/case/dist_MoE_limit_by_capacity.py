@@ -30,7 +30,8 @@ def limit_by_capacity(expert_count, _capacity, n_worker):
     old_shape = expert_count.shape
     expert_count = np.reshape(expert_count, (n_worker, len(capacity)))
     output = np.zeros_like(expert_count)
-    for wid in range(len(expert_count)):
+    length = len(expert_count)
+    for wid in range(length):
         for eid in range(len(expert_count[wid])):
             last_cap = capacity[eid]
             if last_cap >= 0:

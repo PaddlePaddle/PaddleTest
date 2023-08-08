@@ -17,10 +17,11 @@
   *
   **************************************************************************/
 """
-import paddle
 import multiprocessing
 from contextlib import closing
 import socket
+import paddle
+
 from utils import run_priority
 
 port_set = set()

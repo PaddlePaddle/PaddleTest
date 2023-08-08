@@ -24,7 +24,6 @@ import signal
 # import nose.tools as tools
 import os
 import subprocess
-import time
 
 single_data = [0.70575, 0.69835, 0.69342, 0.690098, 0.687781]
 
