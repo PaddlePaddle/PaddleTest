@@ -1,7 +1,6 @@
 export FLAGS_call_stack_level=2
 
-cd run_cpu
-mv ../case/* ./
+cd task
 cases="dist_data_inmemorydataset.py  \
        dist_data_queuedataset.py \
        dist_env_get_rank.py \

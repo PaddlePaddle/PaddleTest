@@ -1,10 +1,7 @@
 
 export FLAGS_call_stack_level=2
 
-
-cd run_gpu
-mv ../case/* ./
-mv ../test/* ./
+cd task
 cases="test_dist_auto_api.py \
        test_dist_collective_communicator_api.py \
        test_dist_data_load.py  \
