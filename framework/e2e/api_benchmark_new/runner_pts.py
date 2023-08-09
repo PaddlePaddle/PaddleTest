@@ -116,6 +116,10 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
 
         :return:
         """
+        error_dict = self._run_main(all_cases=self.all_cases)
+        # 初始化数据库
+        db = PTSdb(storage=self.storage)
+
         job_dict = {
             # 'status': 'done',
             "commit": self.commit,
@@ -139,11 +143,6 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
             # "create_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "update_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
-
-        # 初始化数据库
-        db = PTSdb(storage=self.storage)
-
-        error_dict = self._run_main(all_cases=self.all_cases)
 
         self._db_save(db=db, latest_id=self.latest_id)
 
