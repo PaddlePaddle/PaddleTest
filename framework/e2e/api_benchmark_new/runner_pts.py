@@ -55,61 +55,61 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
         self.check_iters = 5
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # # 初始化数据库
-        # self.db = PTSdb(storage=self.storage)
-
-        # md5唯一标识码
-        self.md5_id = Snapshot().get_md5_id()
-
-        # 例行标识
-        self.latest_id = latest_id
-        self.comment = comment
-        self.ci = 0
-
-        # 框架信息
-        self.framework = framework
-        self.wheel_link = wheel_link
-
-        # 框架信息callback
-        if self.framework == "torch":
-            import torch
-
-            self.commit = "torch_commit"
-            self.version = torch.__version__
-            self.cuda = torch.version.cuda
-            self.cudnn = torch.backends.cudnn.version()
-        else:
-            self.commit = paddle.__git_commit__
-            self.version = paddle.__version__
-            self.cuda = paddle.version.cuda()
-            self.cudnn = paddle.version.cudnn()
-
-        # 项目配置信息
-        self.place = place
-        self.python = python
-        self.enable_backward = enable_backward
-        self.yaml_info = yaml_info
-        self.card = 0
-
-        # 机器系统信息
-        self.hostname = socket.gethostname()
-        self.system = platform.system()
-        self.snapshot = {
-            "os": platform.platform(),
-            "card": self.card,
-            "cuda": self.cuda,
-            "cudnn": self.cudnn,
-            "comment": self.comment,
-        }
-
-        # 初始化日志
-        self.logger = Logger("ApiBenchmarkPTS")
-
-        # 初始化统计模块
-        self.statistics = Statistics()
-
-        # 邮件报警
-        # self.email = Alarm(storage=self.storage)
+        # # # 初始化数据库
+        # # self.db = PTSdb(storage=self.storage)
+        #
+        # # md5唯一标识码
+        # self.md5_id = Snapshot().get_md5_id()
+        #
+        # # 例行标识
+        # self.latest_id = latest_id
+        # self.comment = comment
+        # self.ci = 0
+        #
+        # # 框架信息
+        # self.framework = framework
+        # self.wheel_link = wheel_link
+        #
+        # # 框架信息callback
+        # if self.framework == "torch":
+        #     import torch
+        #
+        #     self.commit = "torch_commit"
+        #     self.version = torch.__version__
+        #     self.cuda = torch.version.cuda
+        #     self.cudnn = torch.backends.cudnn.version()
+        # else:
+        #     self.commit = paddle.__git_commit__
+        #     self.version = paddle.__version__
+        #     self.cuda = paddle.version.cuda()
+        #     self.cudnn = paddle.version.cudnn()
+        #
+        # # 项目配置信息
+        # self.place = place
+        # self.python = python
+        # self.enable_backward = enable_backward
+        # self.yaml_info = yaml_info
+        # self.card = 0
+        #
+        # # 机器系统信息
+        # self.hostname = socket.gethostname()
+        # self.system = platform.system()
+        # self.snapshot = {
+        #     "os": platform.platform(),
+        #     "card": self.card,
+        #     "cuda": self.cuda,
+        #     "cudnn": self.cudnn,
+        #     "comment": self.comment,
+        # }
+        #
+        # # 初始化日志
+        # self.logger = Logger("ApiBenchmarkPTS")
+        #
+        # # 初始化统计模块
+        # self.statistics = Statistics()
+        #
+        # # 邮件报警
+        # # self.email = Alarm(storage=self.storage)
 
     def _run_pts(self):
         """
@@ -117,41 +117,42 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
         :return:
         """
         error_dict = self._run_main(all_cases=self.all_cases)
-        # 初始化数据库
-        db = PTSdb(storage=self.storage)
-
-        job_dict = {
-            # 'status': 'done',
-            "commit": self.commit,
-            "version": self.version,
-            "hostname": self.hostname,
-            "place": self.place,
-            "system": self.system,
-            "cuda": self.cuda,
-            "cudnn": self.cudnn,
-            "snapshot": json.dumps(self.snapshot),
-            "md5_id": self.md5_id,
-            # "uid": self.uid,
-            # "routine": self.routine,
-            "ci": self.ci,
-            "comment": self.comment,
-            "enable_backward": self.enable_backward,
-            "python": self.python,
-            "yaml_info": self.yaml_info,
-            "wheel_link": self.wheel_link,
-            # "description": json.dumps(self.description),
-            # "create_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "update_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        }
-
-        self._db_save(db=db, latest_id=self.latest_id)
-
-        if bool(error_dict):
-            db.pts_update_job(id=self.latest_id, status="error", job_dict=job_dict)
-            print("error cases: {}".format(error_dict))
-            raise Exception("something wrong with api benchmark PTS job id: {} !!".format(self.latest_id))
-        else:
-            db.pts_update_job(id=self.latest_id, status="done", job_dict=job_dict)
+        # # 初始化数据库
+        # db = PTSdb(storage=self.storage)
+        #
+        # job_dict = {
+        #     # 'status': 'done',
+        #     "commit": self.commit,
+        #     "version": self.version,
+        #     "hostname": self.hostname,
+        #     "place": self.place,
+        #     "system": self.system,
+        #     "cuda": self.cuda,
+        #     "cudnn": self.cudnn,
+        #     "snapshot": json.dumps(self.snapshot),
+        #     "md5_id": self.md5_id,
+        #     # "uid": self.uid,
+        #     # "routine": self.routine,
+        #     "ci": self.ci,
+        #     "comment": self.comment,
+        #     "enable_backward": self.enable_backward,
+        #     "python": self.python,
+        #     "yaml_info": self.yaml_info,
+        #     "wheel_link": self.wheel_link,
+        #     # "description": json.dumps(self.description),
+        #     # "create_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        #     "update_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        # }
+        #
+        # self._db_save(db=db, latest_id=self.latest_id)
+        #
+        # if bool(error_dict):
+        #     db.pts_update_job(id=self.latest_id, status="error", job_dict=job_dict)
+        #     print("error cases: {}".format(error_dict))
+        #     raise Exception("something wrong with api benchmark PTS job id: {} !!".format(self.latest_id))
+        # else:
+        #     db.pts_update_job(id=self.latest_id, status="done", job_dict=job_dict)
+        print(error_dict)
 
 
 if __name__ == "__main__":
