@@ -1,7 +1,7 @@
 export FLAGS_call_stack_level=2
 
 # cd PaddleTest/distributed/CE_API && mkdir task
-# cp -r run_cpu/. task && cp -r ../case/. task && cp -r ../test/. task
+# cp -r run_cpu/. task && cp -r case/. task && cp -r test/. task
 
 cd task
 cases="dist_data_inmemorydataset.py  \
