@@ -326,6 +326,8 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
+        error_dict = self._run_main(all_cases=self.all_cases)
+
         # 查询数据库构建baseline
         db = CIdb(storage=self.storage)
         baseline_id = db.ci_select_baseline_job(
@@ -362,7 +364,6 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # compare_dict, error_dict = self._run_main_ci(
         #     all_cases=self.all_cases, latest_id=latest_id, iters=self.check_iters, compare_switch=True
         # )
-        error_dict = self._run_main(all_cases=self.all_cases)
 
         if bool(error_dict):
             db.ci_update_job(id=latest_id, status="error", update_time=self.now_time)
@@ -393,7 +394,10 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
+        error_dict = self._run_main(all_cases=self.all_cases)
+        # 初始化数据库
         db = CIdb(storage=self.storage)
+
         job_id = db.ci_insert_job(
             commit=self.commit,
             version=self.version,
@@ -420,7 +424,6 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # cases_dict, error_dict = self._run_main(
         #     all_cases=self.all_cases, latest_id=job_id, iters=1, compare_switch=False
         # )
-        error_dict = self._run_main(all_cases=self.all_cases)
 
         self._db_save(db=db, latest_id=job_id)
 
