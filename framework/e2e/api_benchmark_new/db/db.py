@@ -145,41 +145,46 @@ class DB(object):
 
     def insert_case(self, jid, data_dict, create_time):
         """向case表中录入数据"""
-        for k, v in data_dict["result"].items():
-            if k == "api" or k == "yaml":
-                continue
-            data_dict["result"][k] = ACCURACY % v
-
-        # data_dict["result"]["forward"] = ACCURACY % data_dict["result"]["forward"]
-        # data_dict["result"]["total"] = ACCURACY % data_dict["result"]["total"]
-        # data_dict["result"]["backward"] = ACCURACY % data_dict["result"]["backward"]
-        # data_dict["result"]["best_total"] = ACCURACY % data_dict["result"]["best_total"]
         data = {
             "jid": jid,
             "case_name": data_dict["case_name"],
-            "api": data_dict["result"]["api"],
-            "result": json.dumps(data_dict["result"]),
+            "api": data_dict["api"],
+            "result": data_dict["result"],
             "create_time": create_time,
         }
         retry = 3
-        # case_id = 0
         for i in range(retry):
             case_id = self.insert(table="case", data=data)
-            # self.insert_case(jid=job_id, data_dict=case, create_time=create_time)
             if case_id == -1:
                 print("db ping again~~~")
                 self.db.ping(True)
                 continue
             else:
                 break
-            # # self.ci_update_job(id=job_id, status="error", update_time=time_now)
-            # print(traceback.format_exc())
-            # print(e)
-            # # 防止超时失联
-            # self.db.ping(True)
-            # continue
 
-        # return case_id
+    # def insert_case_origin(self, jid, data_dict, create_time):
+    #     """向case表中录入数据"""
+    #     for k, v in data_dict["result"].items():
+    #         if k == "api" or k == "yaml":
+    #             continue
+    #         data_dict["result"][k] = ACCURACY % v
+    #
+    #     data = {
+    #         "jid": jid,
+    #         "case_name": data_dict["case_name"],
+    #         "api": data_dict["result"]["api"],
+    #         "result": json.dumps(data_dict["result"]),
+    #         "create_time": create_time,
+    #     }
+    #     retry = 3
+    #     for i in range(retry):
+    #         case_id = self.insert(table="case", data=data)
+    #         if case_id == -1:
+    #             print("db ping again~~~")
+    #             self.db.ping(True)
+    #             continue
+    #         else:
+    #             break
 
     def show_list(self, table):
         """返回table中的列list"""

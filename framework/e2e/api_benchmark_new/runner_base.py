@@ -333,7 +333,7 @@ class ApiBenchmarkBASE(object):
         try:
             with open(log_file, "w") as json_file:
                 json.dump(data, json_file)
-            self.logger.info("[{}] log file save success!".format(case_name))
+            self.logger.get_log().info("[{}] log file save success!".format(case_name))
         except Exception as e:
             print(e)
 
@@ -341,7 +341,6 @@ class ApiBenchmarkBASE(object):
         """
         数据库交互
         """
-        # 初始化数据库
         # db = DB(storage=self.storage)
         latest_case = {}
         data = dict()
