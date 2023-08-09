@@ -143,7 +143,7 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
         # 初始化数据库
         db = PTSdb(storage=self.storage)
 
-        error_dict = self._run_main(all_cases=self.all_cases, latest_id=self.latest_id)
+        error_dict = self._run_main(all_cases=self.all_cases)
 
         self._db_save(db=db, latest_id=self.latest_id)
 
