@@ -5,7 +5,8 @@
 """
 runner
 """
-
+import os
+import json
 import platform
 import traceback
 import sys
@@ -24,6 +25,7 @@ from jelly.jelly_v2 import Jelly_v2
 
 # from jelly.jelly_v2_torch import Jelly_v2_torch
 
+ACCURACY = "%.6g"
 
 SKIP_DICT = {"Windows": ["fft"], "Darwin": ["fft"], "Linux": []}
 INDEX_DICT = {}
@@ -51,8 +53,8 @@ class ApiBenchmarkBASE(object):
         self.check_iters = 5
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # 初始化数据库
-        self.db = DB(storage=self.storage)
+        # # 初始化数据库
+        # self.db = DB(storage=self.storage)
 
         # 框架信息
         self.framework = "paddle"
@@ -119,21 +121,35 @@ class ApiBenchmarkBASE(object):
                 forward_time_list = jelly.paddle_forward()
                 total_time_list = jelly.paddle_total()
                 backward_time_list = list(map(lambda x: x[0] - x[1], zip(total_time_list, forward_time_list)))
+
             else:
                 forward_time_list = jelly.paddle_forward()
                 total_time_list = forward_time_list
                 backward_time_list = list(map(lambda x: x[0] - x[1], zip(total_time_list, forward_time_list)))
+            forward = self.statistics.trimmean(data_list=forward_time_list, ratio=0.2)
+            forward_top_k = self.statistics.best_top_k(data_list=forward_time_list, ratio=0.2)
+            backward = self.statistics.trimmean(data_list=backward_time_list, ratio=0.2)
+            total = self.statistics.trimmean(data_list=total_time_list, ratio=0.2)
+            best_total = self.statistics.best(data_list=forward_time_list)
+
+            jelly.result["forward"] = ACCURACY % forward
+            jelly.result["forward_top_k"] = ACCURACY % forward_top_k
+            jelly.result["backward"] = ACCURACY % backward
+            jelly.result["total"] = ACCURACY % total
+            jelly.result["best_total"] = ACCURACY % best_total
+            self._log_save(data=jelly.result, case_name=case_name)
+            error_logo = False
+            error_info = ""
 
         except Exception as e:
             # 存储异常
-            forward_time_list = traceback.format_exc()
-            total_time_list = "error"
-            backward_time_list = "error"
+            error_info = traceback.format_exc()
+            error_logo = True
             paddle.enable_static()
             paddle.disable_static()
             self.logger.get_log().warning(e)
 
-        return forward_time_list, total_time_list, backward_time_list, api
+        return error_logo, error_info, api
 
     def _run_main(self, all_cases, latest_id):
         """
@@ -147,15 +163,15 @@ class ApiBenchmarkBASE(object):
 
         for case_name in all_cases:
             error = {}
-            latest_case = {}
-
-            forward_res_list = []
-            forward_top_k_res_list = []
-            total_res_list = []
-            total_top_k_res_list = []
-            backward_res_list = []
-            backward_top_k_res_list = []
-            best_total_res_list = []
+            # latest_case = {}
+            #
+            # forward_res_list = []
+            # forward_top_k_res_list = []
+            # total_res_list = []
+            # total_top_k_res_list = []
+            # backward_res_list = []
+            # backward_top_k_res_list = []
+            # best_total_res_list = []
 
             if case_name in SKIP_DICT[platform.system()]:
                 self.logger.get_log().warning("skip case -->{}<--".format(case_name))
@@ -176,122 +192,122 @@ class ApiBenchmarkBASE(object):
                     self.logger.get_log().warning("skip case -->{}<--".format(case_name))
                     continue
 
-            forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
+            error_logo, error_info, api = self._run_test(case_name)
 
-            if isinstance(forward_time_list, str):
+            if error_logo:
                 error["api"] = api
-                error["exception"] = forward_time_list
+                error["exception"] = error_info
                 error_dict[case_name] = error
-            elif isinstance(forward_time_list, list):
-                (
-                    forward_res_list,
-                    forward_top_k_res_list,
-                    backward_res_list,
-                    backward_top_k_res_list,
-                    total_res_list,
-                    total_top_k_res_list,
-                    best_total_res_list,
-                ) = self._base_statistics(
-                    forward_res_list=forward_res_list,
-                    forward_top_k_res_list=forward_top_k_res_list,
-                    backward_res_list=backward_res_list,
-                    backward_top_k_res_list=backward_top_k_res_list,
-                    total_res_list=total_res_list,
-                    total_top_k_res_list=total_top_k_res_list,
-                    best_total_res_list=best_total_res_list,
-                    forward_time_list=forward_time_list,
-                    backward_time_list=backward_time_list,
-                    total_time_list=total_time_list,
-                )
-
-                forward = self.statistics.best(data_list=forward_res_list)
-                forward_top_k = self.statistics.best(data_list=forward_top_k_res_list)
-
-                backward = self.statistics.best(data_list=backward_res_list)
-                # backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
-
-                total = self.statistics.best(data_list=total_res_list)
-                # total_top_k = self.statistics.best(data_list=total_top_k_res_list)
-
-                best_total = self.statistics.best(data_list=best_total_res_list)
-
-                if self.if_showtime:
-                    self._show(
-                        forward_time=forward,
-                        backward_time=backward,
-                        total_time=total,
-                        best_total_time=best_total,
-                    )
-
-                latest_case["jid"] = latest_id
-                latest_case["case_name"] = case_name
-                latest_case["api"] = api
-                latest_case["result"] = {
-                    "api": api,
-                    "yaml": case_name,
-                    "forward": forward,
-                    "forward_top_k": forward_top_k,
-                    "total": total,
-                    # "total_top_k": total_top_k,
-                    "backward": backward,
-                    # "backward_top_k": backward_top_k,
-                    "best_total": best_total,
-                }
-
-                self.db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)
-            else:
-                raise Exception("when ApiBenchmark.run(), something wrong with case: {}".format(case_name))
+            # elif error_logo:
+            #     (
+            #         forward_res_list,
+            #         forward_top_k_res_list,
+            #         backward_res_list,
+            #         backward_top_k_res_list,
+            #         total_res_list,
+            #         total_top_k_res_list,
+            #         best_total_res_list,
+            #     ) = self._base_statistics(
+            #         forward_res_list=forward_res_list,
+            #         forward_top_k_res_list=forward_top_k_res_list,
+            #         backward_res_list=backward_res_list,
+            #         backward_top_k_res_list=backward_top_k_res_list,
+            #         total_res_list=total_res_list,
+            #         total_top_k_res_list=total_top_k_res_list,
+            #         best_total_res_list=best_total_res_list,
+            #         forward_time_list=forward_time_list,
+            #         backward_time_list=backward_time_list,
+            #         total_time_list=total_time_list,
+            #     )
+            #
+            #     forward = self.statistics.best(data_list=forward_res_list)
+            #     forward_top_k = self.statistics.best(data_list=forward_top_k_res_list)
+            #
+            #     backward = self.statistics.best(data_list=backward_res_list)
+            #     # backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
+            #
+            #     total = self.statistics.best(data_list=total_res_list)
+            #     # total_top_k = self.statistics.best(data_list=total_top_k_res_list)
+            #
+            #     best_total = self.statistics.best(data_list=best_total_res_list)
+            #
+            #     if self.if_showtime:
+            #         self._show(
+            #             forward_time=forward,
+            #             backward_time=backward,
+            #             total_time=total,
+            #             best_total_time=best_total,
+            #         )
+            #
+            #     latest_case["jid"] = latest_id
+            #     latest_case["case_name"] = case_name
+            #     latest_case["api"] = api
+            #     latest_case["result"] = {
+            #         "api": api,
+            #         "yaml": case_name,
+            #         "forward": forward,
+            #         "forward_top_k": forward_top_k,
+            #         "total": total,
+            #         # "total_top_k": total_top_k,
+            #         "backward": backward,
+            #         # "backward_top_k": backward_top_k,
+            #         "best_total": best_total,
+            #     }
+            #
+            #     self.db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)
+            # else:
+            #     raise Exception("when ApiBenchmark.run(), something wrong with case: {}".format(case_name))
 
         return error_dict
 
-    def _base_statistics(
-        self,
-        forward_res_list,
-        forward_top_k_res_list,
-        backward_res_list,
-        backward_top_k_res_list,
-        total_res_list,
-        total_top_k_res_list,
-        best_total_res_list,
-        forward_time_list,
-        backward_time_list,
-        total_time_list,
-    ):
-        """
-
-        :return:
-        """
-        forward_time_statistics = self.statistics.trimmean(data_list=forward_time_list)
-        forward_top_k_statistics = self.statistics.best_top_k(data_list=forward_time_list)
-
-        backward_time_statistics = self.statistics.trimmean(data_list=backward_time_list)
-        backward_top_k_statistics = self.statistics.best_top_k(data_list=backward_time_list)
-
-        total_time_statistics = self.statistics.trimmean(data_list=total_time_list)
-        total_top_k_statistics = self.statistics.best_top_k(data_list=total_time_list)
-
-        total_time_best = self.statistics.best(data_list=total_time_list)
-
-        forward_res_list.append(forward_time_statistics)
-        forward_top_k_res_list.append(forward_top_k_statistics)
-
-        backward_res_list.append(backward_time_statistics)
-        backward_top_k_res_list.append(backward_top_k_statistics)
-
-        total_res_list.append(total_time_statistics)
-        total_top_k_res_list.append(total_top_k_statistics)
-
-        best_total_res_list.append(total_time_best)
-
-        return (
-            forward_res_list,
-            forward_top_k_res_list,
-            backward_res_list,
-            backward_top_k_res_list,
-            total_res_list,
-            total_top_k_res_list,
-            best_total_res_list,
-        )
+    # def _base_statistics(
+    #     self,
+    #     forward_res_list,
+    #     forward_top_k_res_list,
+    #     backward_res_list,
+    #     backward_top_k_res_list,
+    #     total_res_list,
+    #     total_top_k_res_list,
+    #     best_total_res_list,
+    #     forward_time_list,
+    #     backward_time_list,
+    #     total_time_list,
+    # ):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     forward_time_statistics = self.statistics.trimmean(data_list=forward_time_list)
+    #     forward_top_k_statistics = self.statistics.best_top_k(data_list=forward_time_list)
+    #
+    #     backward_time_statistics = self.statistics.trimmean(data_list=backward_time_list)
+    #     backward_top_k_statistics = self.statistics.best_top_k(data_list=backward_time_list)
+    #
+    #     total_time_statistics = self.statistics.trimmean(data_list=total_time_list)
+    #     total_top_k_statistics = self.statistics.best_top_k(data_list=total_time_list)
+    #
+    #     total_time_best = self.statistics.best(data_list=total_time_list)
+    #
+    #     forward_res_list.append(forward_time_statistics)
+    #     forward_top_k_res_list.append(forward_top_k_statistics)
+    #
+    #     backward_res_list.append(backward_time_statistics)
+    #     backward_top_k_res_list.append(backward_top_k_statistics)
+    #
+    #     total_res_list.append(total_time_statistics)
+    #     total_top_k_res_list.append(total_top_k_statistics)
+    #
+    #     best_total_res_list.append(total_time_best)
+    #
+    #     return (
+    #         forward_res_list,
+    #         forward_top_k_res_list,
+    #         backward_res_list,
+    #         backward_top_k_res_list,
+    #         total_res_list,
+    #         total_top_k_res_list,
+    #         best_total_res_list,
+    #     )
 
     def _show(self, forward_time, backward_time, total_time, best_total_time):
         """
@@ -305,3 +321,38 @@ class ApiBenchmarkBASE(object):
         self.logger.get_log().info(
             "{} {} times best_total cost {}s".format(self.framework, self.base_times, best_total_time)
         )
+
+    def _log_save(self, data, case_name):
+        """
+        保存数据到磁盘
+        :return:
+        """
+        log_file = "./log/{}.json".format(case_name)
+        if not os.path.exists("./log"):
+            os.makedirs("./log")
+        try:
+            with open(log_file, "w") as json_file:
+                json.dump(data, json_file)
+            self.logger.info("[{}] log file save success!".format(case_name))
+        except Exception as e:
+            print(e)
+
+    def _db_save(self, db, latest_id):
+        """
+        数据库交互
+        """
+        # 初始化数据库
+        # db = DB(storage=self.storage)
+        latest_case = {}
+        data = dict()
+        for i in os.listdir("./log/"):
+            with open("./log/" + i) as case:
+                res = case.readline()
+                api = i.split(".")[0]
+                data[api] = res
+        for k, v in data.items():
+            latest_case["jid"] = latest_id
+            latest_case["case_name"] = k
+            latest_case["api"] = json.loads(v).get("api")
+            latest_case["result"] = v
+            db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)

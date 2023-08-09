@@ -55,8 +55,8 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
         self.check_iters = 5
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # 初始化数据库
-        self.db = PTSdb(storage=self.storage)
+        # # 初始化数据库
+        # self.db = PTSdb(storage=self.storage)
 
         # md5唯一标识码
         self.md5_id = Snapshot().get_md5_id()
@@ -140,14 +140,19 @@ class ApiBenchmarkPTS(ApiBenchmarkBASE):
             "update_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
 
+        # 初始化数据库
+        db = PTSdb(storage=self.storage)
+
         error_dict = self._run_main(all_cases=self.all_cases, latest_id=self.latest_id)
 
+        self._db_save(db=db, latest_id=self.latest_id)
+
         if bool(error_dict):
-            self.db.pts_update_job(id=self.latest_id, status="error", job_dict=job_dict)
+            db.pts_update_job(id=self.latest_id, status="error", job_dict=job_dict)
             print("error cases: {}".format(error_dict))
             raise Exception("something wrong with api benchmark PTS job id: {} !!".format(self.latest_id))
         else:
-            self.db.pts_update_job(id=self.latest_id, status="done", job_dict=job_dict)
+            db.pts_update_job(id=self.latest_id, status="done", job_dict=job_dict)
 
 
 if __name__ == "__main__":

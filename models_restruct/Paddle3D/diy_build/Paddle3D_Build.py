@@ -107,7 +107,7 @@ class Paddle3D_Build(Model_Build):
                     "https://bj.bcebos.com/paddle3d/pretrained/dla34.pdparams", out="/root/.paddle3d/pretrained/dla34/"
                 )
 
-            if "3.11.3" in sys.version:
+            if "3.11" in sys.version:
                 print("sys.version:{}".format(sys.version))
                 print("python3.11 result:")
                 os.system("python -m pip install -U pip")
