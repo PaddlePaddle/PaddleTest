@@ -341,7 +341,6 @@ class ApiBenchmarkBASE(object):
         """
         数据库交互
         """
-        # 初始化数据库
         # db = DB(storage=self.storage)
         latest_case = {}
         data = dict()
