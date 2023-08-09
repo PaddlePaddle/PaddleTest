@@ -422,7 +422,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # )
         error_dict = self._run_main(all_cases=self.all_cases)
 
-        self._db_save(db=db, latest_id=self.latest_id)
+        self._db_save(db=db, latest_id=job_id)
 
         if bool(error_dict):
             db.ci_update_job(id=job_id, status="error", update_time=self.now_time)
