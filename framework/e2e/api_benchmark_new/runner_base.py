@@ -137,7 +137,15 @@ class ApiBenchmarkBASE(object):
             jelly.result["backward"] = ACCURACY % backward
             jelly.result["total"] = ACCURACY % total
             jelly.result["best_total"] = ACCURACY % best_total
+
             self._log_save(data=jelly.result, case_name=case_name)
+
+            self._show(
+                forward_time=ACCURACY % forward,
+                backward_time=ACCURACY % backward,
+                total_time=ACCURACY % total,
+                best_total_time=ACCURACY % best_total,
+            )
             error_logo = False
             error_info = ""
 
@@ -151,7 +159,7 @@ class ApiBenchmarkBASE(object):
 
         return error_logo, error_info, api
 
-    def _run_main(self, all_cases, latest_id):
+    def _run_main(self, all_cases):
         """
         对指定case运行测试
         :param all_cases: list of cases
