@@ -48,3 +48,24 @@ Tensor_uniform__0:
 #    api_name: "torch.Tensor.uniform_"
 #    mapping:
 #      ins: {min: min, max: max, seed: seed}
+
+Tensor_fill_diagonal__0:
+  desc: "以 value 值填充输入 Tensor x 的对角线元素值。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.fill_diagonal_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      value: 2
+      offset: 0
+      wrap: False
+#  pytorch:
+#    api_name: "torch.Tensor.fill_diagonal_"
+#    mapping:
+#      ins: { x: input, value: fill_value, wrap: wrap }
