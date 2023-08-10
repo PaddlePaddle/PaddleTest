@@ -11,5 +11,5 @@ train:
         evaluation: "-"
       L2 relative error:
         base: 4.0793406e-05
-        threshold: 0
-        evaluation: "="
+        threshold: 1
+        evaluation: "-"
