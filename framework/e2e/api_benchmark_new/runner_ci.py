@@ -16,6 +16,8 @@ import sys
 from datetime import datetime
 
 from statistics.statistics import Statistics
+
+# from db.db import DB
 from db.ci_db import CIdb
 from info.snapshot import Snapshot
 from strategy.compare import double_check, ci_level_reveal, data_compare
@@ -57,8 +59,8 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         self.check_iters = 5
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # 初始化数据库
-        self.db = CIdb(storage=self.storage)
+        # # 初始化数据库
+        # self.db = CIdb(storage=self.storage)
 
         # md5唯一标识码
         self.md5_id = Snapshot().get_md5_id()
@@ -77,12 +79,12 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         self.uid = -1
 
         # # 查询数据库构建baseline
-        # self.baseline_id = self.db.ci_select_baseline_job(
+        # baseline_id = self.db.ci_select_baseline_job(
         #     comment=self.baseline_comment, routine=1, ci=self.ci, md5_id=self.md5_id
         # )
-        # # self.baseline_id = 123
-        # self.baseline_list = self.db.select(table="case", condition_list=["jid = {}".format(self.baseline_id)])
-        # self.baseline_dict = data_list_to_dict(self.baseline_list)
+        # # baseline_id = 123
+        # baseline_list = self.db.select(table="case", condition_list=["jid = {}".format(baseline_id)])
+        # baseline_dict = data_list_to_dict(baseline_list)
 
         # 框架信息
         self.framework = "paddle"
@@ -124,215 +126,32 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # 邮件报警
         # self.email = Alarm(storage=self.storage)
 
-    def _run_main(self, all_cases, latest_id, iters, compare_switch):
-        """
-        对指定case运行测试
-        :param all_cases: list of cases
-        :param latest_id: 任务jid
-        :param iters: 迭代次数
-        :return:
-        """
-        compare_dict = {}
-        error_dict = {}
-
-        for case_name in all_cases:
-            error = {}
-            latest_case = {}
-
-            forward_res_list = []
-            forward_top_k_res_list = []
-            total_res_list = []
-            total_top_k_res_list = []
-            backward_res_list = []
-            backward_top_k_res_list = []
-            best_total_res_list = []
-
-            if case_name in SKIP_DICT[platform.system()]:
-                self.logger.get_log().warning("skip case -->{}<--".format(case_name))
-                continue
-            if SPECIAL and case_name not in SKIP_DICT[platform.system()]:
-                self.logger.get_log().warning("case is not in index_dict, skipping...-->{}<--".format(case_name))
-                continue
-            if self.yaml_info == "case_0":
-                if not case_name.endswith("_0"):
-                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
-                    continue
-            if self.yaml_info == "case_1":
-                if case_name.endswith("_2"):
-                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
-                    continue
-            if self.yaml_info == "case_2":
-                if not case_name.endswith("_2"):
-                    self.logger.get_log().warning("skip case -->{}<--".format(case_name))
-                    continue
-
-            forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
-
-            if isinstance(forward_time_list, str):
-                forward = "error"
-                backward = "error"
-                total = "error"
-                best_total = "error"
-                error["api"] = api
-                error["exception"] = forward_time_list
-                error_dict[case_name] = error
-
-                if self.if_showtime:
-                    self._show(
-                        forward_time=forward,
-                        backward_time=backward,
-                        total_time=total,
-                        best_total_time=best_total,
-                    )
-
-                if compare_switch:
-                    compare_dict[case_name] = {
-                        "baseline_api": self.baseline_dict[case_name]["api"],
-                        "latest_api": api,
-                        "forward": forward,
-                        "backward": backward,
-                        "total": total,
-                    }
-
-            elif isinstance(forward_time_list, list):
-                (
-                    forward_res_list,
-                    forward_top_k_res_list,
-                    backward_res_list,
-                    backward_top_k_res_list,
-                    total_res_list,
-                    total_top_k_res_list,
-                    best_total_res_list,
-                ) = self._base_statistics(
-                    forward_res_list=forward_res_list,
-                    forward_top_k_res_list=forward_top_k_res_list,
-                    backward_res_list=backward_res_list,
-                    backward_top_k_res_list=backward_top_k_res_list,
-                    total_res_list=total_res_list,
-                    total_top_k_res_list=total_top_k_res_list,
-                    best_total_res_list=best_total_res_list,
-                    forward_time_list=forward_time_list,
-                    backward_time_list=backward_time_list,
-                    total_time_list=total_time_list,
-                )
-
-                forward = self.statistics.best(data_list=forward_res_list)
-                forward_top_k = self.statistics.best(data_list=forward_top_k_res_list)
-
-                backward = self.statistics.best(data_list=backward_res_list)
-                # backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
-
-                total = self.statistics.best(data_list=total_res_list)
-                # total_top_k = self.statistics.best(data_list=total_top_k_res_list)
-
-                best_total = self.statistics.best(data_list=best_total_res_list)
-
-                if self.if_showtime:
-                    self._show(
-                        forward_time=forward,
-                        backward_time=backward,
-                        total_time=total,
-                        best_total_time=best_total,
-                    )
-
-                latest_case["jid"] = latest_id
-                latest_case["case_name"] = case_name
-                latest_case["api"] = api
-                latest_case["result"] = {
-                    "api": api,
-                    "yaml": case_name,
-                    "forward": forward,
-                    "forward_top_k": forward_top_k,
-                    "total": total,
-                    # "total_top_k": total_top_k,
-                    "backward": backward,
-                    # "backward_top_k": backward_top_k,
-                    "best_total": best_total,
-                }
-
-                if compare_switch:
-                    compare_res = data_compare(
-                        baseline_case=self.baseline_dict[case_name], latest_case=latest_case, case_name=case_name
-                    )
-                    compare_dict[case_name] = compare_res[case_name]
-                    # 从这里继续开发
-                    if self.double_check and double_check(res=compare_res[case_name]):
-                        for i in range(iters - 1):
-                            self.logger.get_log().warning("start double check {} time.".format(i))
-                            forward_time_list, total_time_list, backward_time_list, api = self._run_test(case_name)
-
-                            (
-                                forward_res_list,
-                                forward_top_k_res_list,
-                                backward_res_list,
-                                backward_top_k_res_list,
-                                total_res_list,
-                                total_top_k_res_list,
-                                best_total_res_list,
-                            ) = self._base_statistics(
-                                forward_res_list=forward_res_list,
-                                forward_top_k_res_list=forward_top_k_res_list,
-                                backward_res_list=backward_res_list,
-                                backward_top_k_res_list=backward_top_k_res_list,
-                                total_res_list=total_res_list,
-                                total_top_k_res_list=total_top_k_res_list,
-                                best_total_res_list=best_total_res_list,
-                                forward_time_list=forward_time_list,
-                                backward_time_list=backward_time_list,
-                                total_time_list=total_time_list,
-                            )
-
-                        # if bool(forward_res_list) and bool(backward_res_list) and bool(total_res_list):
-                        forward = self.statistics.best(data_list=forward_res_list)
-                        forward_top_k = self.statistics.best(data_list=forward_top_k_res_list)
-
-                        backward = self.statistics.best(data_list=backward_res_list)
-                        # backward_top_k = self.statistics.best(data_list=backward_top_k_res_list)
-
-                        total = self.statistics.best(data_list=total_res_list)
-                        # total_top_k = self.statistics.best(data_list=total_top_k_res_list)
-
-                        best_total = self.statistics.best(data_list=best_total_res_list)
-
-                        latest_case["jid"] = latest_id
-                        latest_case["case_name"] = case_name
-                        latest_case["api"] = api
-                        latest_case["result"] = {
-                            "api": api,
-                            "yaml": case_name,
-                            "forward": forward,
-                            "forward_top_k": forward_top_k,
-                            "total": total,
-                            # "total_top_k": total_top_k,
-                            "backward": backward,
-                            # "backward_top_k": backward_top_k,
-                            "best_total": best_total,
-                        }
-                        compare_res = data_compare(
-                            baseline_case=self.baseline_dict[case_name], latest_case=latest_case, case_name=case_name
-                        )
-                        compare_dict[case_name] = compare_res[case_name]
-
-                self.db.insert_case(jid=latest_id, data_dict=latest_case, create_time=self.now_time)
-            else:
-                raise Exception("when ApiBenchmarkCI.run(), something wrong with case: {}".format(case_name))
-
-        return compare_dict, error_dict
-
     def _run_ci(self):
         """
 
         :return:
         """
+        error_dict = self._run_main(all_cases=self.all_cases)
+
         # 查询数据库构建baseline
-        self.baseline_id = self.db.ci_select_baseline_job(
+        db = CIdb(storage=self.storage)
+        baseline_id = db.ci_select_baseline_job(
             comment=self.baseline_comment, routine=1, ci=self.ci, md5_id=self.md5_id
         )
-        # self.baseline_id = 123
-        self.baseline_list = self.db.select(table="case", condition_list=["jid = {}".format(self.baseline_id)])
-        self.baseline_dict = data_list_to_dict(self.baseline_list)
+        # baseline_id = 123
+        baseline_list = db.select(table="case", condition_list=["jid = {}".format(baseline_id)])
 
-        latest_id = self.db.ci_insert_job(
+        # baseline_dict = {
+        # 'equal_0': {
+        # 'id': 1358965, 'jid': 2991, 'case_name': 'equal_0', 'api': 'paddle.equal',
+        # 'result': '{"api": "paddle.equal", "yaml": "equal_0", "forward": "0.0049017",
+        # "forward_top_k": "0.00472002", "backward": "0", "total": "0.0049017", "best_total": "0.00458201"
+        # }',
+        # 'create_time': datetime.datetime(2023, 8, 9, 11, 58, 3)}} 参考格式
+
+        baseline_dict = data_list_to_dict(baseline_list)  # 需要在_run_main之后添加对比逻辑，才会用到baseline_dict
+
+        latest_id = db.ci_insert_job(
             commit=self.commit,
             version=self.version,
             hostname=self.hostname,
@@ -355,17 +174,49 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             update_time=self.now_time,
         )
 
-        compare_dict, error_dict = self._run_main(
-            all_cases=self.all_cases, latest_id=latest_id, iters=self.check_iters, compare_switch=True
-        )
+        # compare_dict, error_dict = self._run_main_ci(
+        #     all_cases=self.all_cases, latest_id=latest_id, iters=self.check_iters, compare_switch=True
+        # )
+
+        ci_dict = {}
+        data = dict()
+        for i in os.listdir("./log/"):
+            with open("./log/" + i) as case:
+                res = case.readline()
+                api = i.split(".")[0]
+                data[api] = res
+        for k, v in data.items():
+            ci_dict[k] = {}
+            # all_case[k]["jid"] = latest_id
+            ci_dict[k]["case_name"] = k
+            ci_dict[k]["api"] = json.loads(v).get("api")
+            ci_dict[k]["result"] = v
+
+        compare_dict = {}
+        double_check_case = []
+        for k, v in ci_dict.items():
+            baseline_case = baseline_dict[k]
+            latest_case = ci_dict[k]
+            compare_res = data_compare(baseline_case=baseline_case, latest_case=latest_case, case_name=k)
+            compare_dict[k] = compare_res[k]
+            if self.double_check and double_check(res=compare_res[k]):
+                double_check_case.append(k)
+
+        # if self.double_check:
+        #     for i in range(self.check_iters):
+        #         double_error_dict = self._run_main(all_cases=double_check_case, log='log_{}'.format(i))
+        #         # self._db_save(db=db, latest_id=latest_id, log="./log_{}/".format(i))  # 不可以录入数据
+        # else:
+        #     double_error_dict = {}
+
+        self._db_save(db=db, latest_id=latest_id)
 
         if bool(error_dict):
-            self.db.ci_update_job(id=latest_id, status="error", update_time=self.now_time)
+            db.ci_update_job(id=latest_id, status="error", update_time=self.now_time)
             raise Exception("something wrong with api benchmark CI job id: {} !!".format(latest_id))
         else:
-            self.db.ci_update_job(id=latest_id, status="done", update_time=self.now_time)
+            db.ci_update_job(id=latest_id, status="done", update_time=self.now_time)
 
-        # print("compare_dict is: ", compare_dict)
         api_grade = ci_level_reveal(compare_dict)
         del api_grade["equal"]
         del api_grade["better"]
@@ -377,7 +228,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         print(api_grade)
         print(
             "详情差异请点击以下链接查询: http://paddletest.baidu-int.com:8081/#/paddle/benchmark/apiBenchmark/report/{}&{}".format(
-                latest_id, self.baseline_id
+                latest_id, baseline_id
             )
         )
 
@@ -389,7 +240,11 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
-        job_id = self.db.ci_insert_job(
+        error_dict = self._run_main(all_cases=self.all_cases)
+        # 初始化数据库
+        db = CIdb(storage=self.storage)
+
+        job_id = db.ci_insert_job(
             commit=self.commit,
             version=self.version,
             hostname=self.hostname,
@@ -412,16 +267,23 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             create_time=self.now_time,
             update_time=self.now_time,
         )
+        # cases_dict, error_dict = self._run_main(
+        #     all_cases=self.all_cases, latest_id=job_id, iters=1, compare_switch=False
+        # )
 
-        cases_dict, error_dict = self._run_main(
-            all_cases=self.all_cases, latest_id=job_id, iters=1, compare_switch=False
-        )
+        self._db_save(db=db, latest_id=job_id)
 
         if bool(error_dict):
-            self.db.ci_update_job(id=job_id, status="error", update_time=self.now_time)
+            db.ci_update_job(id=job_id, status="error", update_time=self.now_time)
+            print("error cases: {}".format(error_dict))
             raise Exception("something wrong with api benchmark job id: {} !!".format(job_id))
         else:
-            self.db.ci_update_job(id=job_id, status="done", update_time=self.now_time)
+            db.ci_update_job(id=job_id, status="done", update_time=self.now_time)
+
+        # # debug
+        # cases_dict = self._run_main(all_cases=self.all_cases, latest_id=job_id)
+        # self.db.ci_update_job(id=job_id, status="done", update_time=self.now_time)
+        # del cases_dict
 
 
 if __name__ == "__main__":
