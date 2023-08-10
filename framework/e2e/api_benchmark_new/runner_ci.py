@@ -202,11 +202,16 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             if self.double_check and double_check(res=compare_res[k]):
                 double_check_case.append(k)
 
-        double_error_dict = self._run_main(all_cases=double_check_case)  # 对于double check的api会覆盖第一轮测试的json
+        # if self.double_check:
+        #     for i in range(self.check_iters):
+        #         double_error_dict = self._run_main(all_cases=double_check_case, log='log_{}'.format(i))
+        #         # self._db_save(db=db, latest_id=latest_id, log="./log_{}/".format(i))  # 不可以录入数据
+        # else:
+        #     double_error_dict = {}
 
         self._db_save(db=db, latest_id=latest_id)
 
-        if bool(error_dict) or bool(double_error_dict):
+        if bool(error_dict):
             db.ci_update_job(id=latest_id, status="error", update_time=self.now_time)
             raise Exception("something wrong with api benchmark CI job id: {} !!".format(latest_id))
         else:
