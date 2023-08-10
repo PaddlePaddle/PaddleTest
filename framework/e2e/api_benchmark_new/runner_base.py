@@ -77,7 +77,7 @@ class ApiBenchmarkBASE(object):
         # 初始化统计模块
         self.statistics = Statistics()
 
-    def _run_test(self, case_name, log):
+    def _run_test(self, case_name, log="log"):
         """
         运行单个case
         """
