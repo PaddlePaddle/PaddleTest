@@ -77,7 +77,7 @@ class ApiBenchmarkBASE(object):
         # 初始化统计模块
         self.statistics = Statistics()
 
-    def _run_test(self, case_name):
+    def _run_test(self, case_name, log):
         """
         运行单个case
         """
@@ -138,7 +138,7 @@ class ApiBenchmarkBASE(object):
             jelly.result["total"] = ACCURACY % total
             jelly.result["best_total"] = ACCURACY % best_total
 
-            self._log_save(data=jelly.result, case_name=case_name)
+            self._log_save(data=jelly.result, case_name=case_name, log=log)
 
             self._show(
                 forward_time=ACCURACY % forward,
@@ -159,7 +159,7 @@ class ApiBenchmarkBASE(object):
 
         return error_logo, error_info, api
 
-    def _run_main(self, all_cases):
+    def _run_main(self, all_cases, log="log"):
         """
         对指定case运行测试
         :param all_cases: list of cases
@@ -200,7 +200,7 @@ class ApiBenchmarkBASE(object):
                     self.logger.get_log().warning("skip case -->{}<--".format(case_name))
                     continue
 
-            error_logo, error_info, api = self._run_test(case_name)
+            error_logo, error_info, api = self._run_test(case_name=case_name, log=log)
 
             if error_logo:
                 error["api"] = api
@@ -330,14 +330,14 @@ class ApiBenchmarkBASE(object):
             "{} {} times best_total cost {}s".format(self.framework, self.base_times, best_total_time)
         )
 
-    def _log_save(self, data, case_name):
+    def _log_save(self, data, case_name, log="log"):
         """
         保存数据到磁盘
         :return:
         """
-        log_file = "./log/{}.json".format(case_name)
-        if not os.path.exists("./log"):
-            os.makedirs("./log")
+        log_file = "./{}/{}.json".format(log, case_name)
+        if not os.path.exists("./{}".format(log)):
+            os.makedirs("./{}".format(log))
         try:
             with open(log_file, "w") as json_file:
                 json.dump(data, json_file)
@@ -365,15 +365,15 @@ class ApiBenchmarkBASE(object):
     #         all_case[k]["result"] = v
     #     return all_case
 
-    def _db_save(self, db, latest_id):
+    def _db_save(self, db, latest_id, log="log"):
         """
         数据库交互
         """
         # db = DB(storage=self.storage)
         latest_case = {}
         data = dict()
-        for i in os.listdir("./log/"):
-            with open("./log/" + i) as case:
+        for i in os.listdir("./{}/".format(log)):
+            with open("./{}/".format(log) + i) as case:
                 res = case.readline()
                 api = i.split(".")[0]
                 data[api] = res
