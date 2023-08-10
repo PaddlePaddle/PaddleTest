@@ -345,25 +345,25 @@ class ApiBenchmarkBASE(object):
         except Exception as e:
             print(e)
 
-    def _log_load(self):
-        """
-        保存数据到磁盘
-        :return:
-        """
-        all_case = {}
-        data = dict()
-        for i in os.listdir("./log/"):
-            with open("./log/" + i) as case:
-                res = case.readline()
-                api = i.split(".")[0]
-                data[api] = res
-        for k, v in data.ites():
-            all_case[k] = {}
-            # all_case[k]["jid"] = latest_id
-            all_case[k]["case_name"] = k
-            all_case[k]["api"] = json.loads(v).get("api")
-            all_case[k]["result"] = v
-        return all_case
+    # def _log_load(self):
+    #     """
+    #     保存数据到磁盘
+    #     :return:
+    #     """
+    #     all_case = {}
+    #     data = dict()
+    #     for i in os.listdir("./log/"):
+    #         with open("./log/" + i) as case:
+    #             res = case.readline()
+    #             api = i.split(".")[0]
+    #             data[api] = res
+    #     for k, v in data.items():
+    #         all_case[k] = {}
+    #         # all_case[k]["jid"] = latest_id
+    #         all_case[k]["case_name"] = k
+    #         all_case[k]["api"] = json.loads(v).get("api")
+    #         all_case[k]["result"] = v
+    #     return all_case
 
     def _db_save(self, db, latest_id):
         """
