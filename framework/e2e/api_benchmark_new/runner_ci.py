@@ -140,8 +140,16 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         )
         # baseline_id = 123
         baseline_list = db.select(table="case", condition_list=["jid = {}".format(baseline_id)])
+
+        # baseline_dict = {
+        # 'equal_0': {
+        # 'id': 1358965, 'jid': 2991, 'case_name': 'equal_0', 'api': 'paddle.equal',
+        # 'result': '{"api": "paddle.equal", "yaml": "equal_0", "forward": "0.0049017",
+        # "forward_top_k": "0.00472002", "backward": "0", "total": "0.0049017", "best_total": "0.00458201"
+        # }',
+        # 'create_time': datetime.datetime(2023, 8, 9, 11, 58, 3)}} 参考格式
+
         baseline_dict = data_list_to_dict(baseline_list)  # 需要在_run_main之后添加对比逻辑，才会用到baseline_dict
-        print(baseline_dict)
 
         latest_id = db.ci_insert_job(
             commit=self.commit,
@@ -170,29 +178,57 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         #     all_cases=self.all_cases, latest_id=latest_id, iters=self.check_iters, compare_switch=True
         # )
 
-        if bool(error_dict):
+        ci_dict = {}
+        data = dict()
+        for i in os.listdir("./log/"):
+            with open("./log/" + i) as case:
+                res = case.readline()
+                api = i.split(".")[0]
+                data[api] = res
+        for k, v in data.items():
+            ci_dict[k] = {}
+            # all_case[k]["jid"] = latest_id
+            ci_dict[k]["case_name"] = k
+            ci_dict[k]["api"] = json.loads(v).get("api")
+            ci_dict[k]["result"] = v
+
+        compare_dict = {}
+        double_check_case = []
+        for k, v in ci_dict.items():
+            baseline_case = baseline_dict[k]
+            latest_case = ci_dict[k]
+            compare_res = data_compare(baseline_case=baseline_case, latest_case=latest_case, case_name=k)
+            compare_dict[k] = compare_res[k]
+            if self.double_check and double_check(res=compare_res[k]):
+                double_check_case.append(k)
+
+        double_error_dict = self._run_main(all_cases=double_check_case)  # 对于double check的api会覆盖第一轮测试的json
+
+        self._db_save(db=db, latest_id=latest_id)
+
+        if bool(error_dict) or bool(double_error_dict):
             db.ci_update_job(id=latest_id, status="error", update_time=self.now_time)
             raise Exception("something wrong with api benchmark CI job id: {} !!".format(latest_id))
         else:
             db.ci_update_job(id=latest_id, status="done", update_time=self.now_time)
 
-        # api_grade = ci_level_reveal(compare_dict)
-        # del api_grade["equal"]
-        # del api_grade["better"]
+        api_grade = ci_level_reveal(compare_dict)
+        del api_grade["equal"]
+        del api_grade["better"]
         print(
             "以下为pr{}引入之后，api调度性能相对于baseline的变化。worse表示性能下降超过30%的api，doubt表示性能下降为15%~30%之间的api".format(
                 self.AGILE_PULL_ID
             )
         )
-        # print(api_grade)
+        print(api_grade)
         print(
             "详情差异请点击以下链接查询: http://paddletest.baidu-int.com:8081/#/paddle/benchmark/apiBenchmark/report/{}&{}".format(
                 latest_id, baseline_id
             )
         )
 
-        # if bool(api_grade["doubt"]) or bool(api_grade["worse"]):
-        #     raise Exception("该pr会导致动态图cpu前向调度性能下降，请修复！！！")
+        if bool(api_grade["doubt"]) or bool(api_grade["worse"]):
+            raise Exception("该pr会导致动态图cpu前向调度性能下降，请修复！！！")
 
     def _baseline_insert(self, wheel_link):
         """
