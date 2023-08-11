@@ -523,7 +523,6 @@ function run_gpu_models(){
       do
         echo "=========== ${model} run begin ==========="
         $model
-        # sleep 1
         echo "=========== ${model} run  end ==========="
       done
 }
