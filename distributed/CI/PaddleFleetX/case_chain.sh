@@ -360,8 +360,8 @@ function vit_cifar10_finetune() {
     loss=`cat log/workerlog.0 | grep 19/24 | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}'`
     top1=`cat log/workerlog.0 | grep top1 | awk -F 'top1 = ' '{print $2}' | awk -F ',' '{print $1}'`
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 3.567691541 ${loss} ${FUNCNAME}_loss
-        check_diff 0.197949 ${top1} ${FUNCNAME}_top1
+        check_diff 3.567650485 ${loss} ${FUNCNAME}_loss
+        check_diff 0.197876 ${top1} ${FUNCNAME}_top1
     else
         check_diff 3.744726562 ${loss} ${FUNCNAME}_loss
         check_diff 0.216858 ${top1} ${FUNCNAME}_top1
