@@ -51,6 +51,52 @@ case:
             base: 1.456469
             threshold: 0.01
             evaluation: "="
+      -
+        name: single_dy2st
+        path: model_zoo/bert
+        cmd: cd data && wget -q https://bj.bcebos.com/paddlenlp/datasets/benchmark_wikicorpus_en_seqlen128.tar && tar -xf benchmark_wikicorpus_en_seqlen128.tar && cd ..; python run_pretrain.py
+        params:
+          - --max_predictions_per_seq 20
+          - --learning_rate 1e-4
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --output_dir ./dy2st/
+          - --logging_steps 1
+          - --save_steps 100000
+          - --model_type bert
+          - --fuse_transformer false
+          - --input_dir ./hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/training/
+          - --model_name_or_path bert-base-uncased
+          - --max_step 100
+          - --batch_size 128
+          - --seed 42
+          - --to_static True
+          - --use_amp True
+          - --amp_level O2
+      -
+        name: multi_dy2st
+        path: model_zoo/bert
+        cmd: cd data && wget -q https://bj.bcebos.com/paddlenlp/datasets/benchmark_wikicorpus_en_seqlen128.tar && tar -xf benchmark_wikicorpus_en_seqlen128.tar && cd ..; python -m paddle.distributed.launch run_pretrain.py
+        params:
+          - --max_predictions_per_seq 20
+          - --learning_rate 1e-4
+          - --weight_decay 1e-2
+          - --adam_epsilon 1e-6
+          - --warmup_steps 10000
+          - --output_dir ./dy2st/
+          - --logging_steps 1
+          - --save_steps 100000
+          - --model_type bert
+          - --fuse_transformer false
+          - --input_dir ./hdf5_lower_case_1_seq_len_128_max_pred_20_masked_lm_prob_0.15_random_seed_12345_dupe_factor_5/wikicorpus_en/training/
+          - --model_name_or_path bert-base-uncased
+          - --max_step 100
+          - --batch_size 128
+          - --seed 42
+          - --to_static True
+          - --use_amp True
+          - --amp_level O2
     eval: skipped
     infer: skipped
     export:
