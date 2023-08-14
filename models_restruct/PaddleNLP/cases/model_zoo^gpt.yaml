@@ -31,7 +31,7 @@ case:
             base: 1.456469
             threshold: 0.01
             evaluation: "="
-      - 
+      -
         name: single_dy2st
         path: model_zoo/gpt
         cmd: mkdir data && cd data && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy && cd ..; python run_pretrain.py
@@ -50,7 +50,7 @@ case:
           - --device gpu
           - --to_static
           - --seed 100
-      - 
+      -
         name: multi_dy2st
         path: model_zoo/gpt
         cmd: mkdir data && cd data && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy && cd ..; python -m paddle.distributed.launch run_pretrain.py
@@ -69,7 +69,7 @@ case:
           - --device gpu
           - --to_static
           - --seed 100
-      
+
     eval: skipped
     infer: skipped
     export:
