@@ -32,7 +32,7 @@ case:
         params:
           - --model_file=output_model_mmoe/2/tostatic.pdmodel
           - --params_file=output_model_mmoe/2/tostatic.pdiparams
-          - --use_gpu=True 
+          - --use_gpu=True
           - --data_dir=models/multitask/mmoe/data/train
           - --reader_file=models/multitask/mmoe/census_reader.py
           - --batchsize=5

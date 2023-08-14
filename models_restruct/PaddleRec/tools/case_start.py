@@ -23,7 +23,6 @@ class PaddleRecCaseStart(object):
         self.case_name = os.environ["case_name"]
         self.set_cuda = os.environ["set_cuda"]
         self.system = os.environ["system"]
-    
     def update_yaml_config(self, file_path, old_str, new_str):
         """
         update config yaml:
@@ -52,7 +51,7 @@ def run():
     if "dy2st" in current_name:
         paddlerec_case_start.update_yaml_config(rd_yaml, "#model_init_path:", "model_init_path:")
         paddlerec_case_start.update_yaml_config(rd_yaml, "# model_init_path:", "model_init_path:")
-        
+
 
 if __name__ == "__main__":
     run()
