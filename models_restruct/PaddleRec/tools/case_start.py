@@ -45,11 +45,11 @@ def run():
     case_start.py run:
     """
     paddlerec_case_start = PaddleRecCaseStart()
-    currnet_step = paddlerec_case_start.case_step
+    #currnet_step = paddlerec_case_start.case_step
     current_name = paddlerec_case_start.case_name
-    system = paddlerec_case_start.system
+    #system = paddlerec_case_start.system
     rd_yaml = os.path.join(paddlerec_case_start.REPO_PATH, paddlerec_case_start.rd_yaml_path)
-    qa_yaml = paddlerec_case_start.qa_yaml_name
+    #qa_yaml = paddlerec_case_start.qa_yaml_name
     if "dy2st" in current_name:
         paddlerec_case_start.update_yaml_config(rd_yaml, "#model_init_path:", "model_init_path:")
         paddlerec_case_start.update_yaml_config(rd_yaml, "# model_init_path:", "model_init_path:")
