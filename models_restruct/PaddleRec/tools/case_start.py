@@ -13,7 +13,7 @@ class PaddleRecCaseStart(object):
     """
     PaddleRecCaseStart:
     """
-    
+
     def __init__(self):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
