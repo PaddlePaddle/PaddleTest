@@ -13,6 +13,7 @@ class PaddleRecCaseStart(object):
     """
     PaddleRecCaseStart:
     """
+    
     def __init__(self):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
@@ -23,6 +24,7 @@ class PaddleRecCaseStart(object):
         self.case_name = os.environ["case_name"]
         self.set_cuda = os.environ["set_cuda"]
         self.system = os.environ["system"]
+
     def update_yaml_config(self, file_path, old_str, new_str):
         """
         update config yaml:
