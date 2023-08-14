@@ -1,0 +1,8 @@
+models^multitask^dselect_k^config.yaml
+models^multitask^mmoe^config.yaml
+models^multitask^ple^config.yaml
+models^multitask^esmm^config.yaml
+models^rank^dnn^config.yaml
+models^multitask^escm2^config.yaml
+models^rank^wide_deep^config.yaml
+models^rank^deepfm^config.yaml
