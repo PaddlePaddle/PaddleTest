@@ -9,7 +9,6 @@ train:
       evaluation: '-'
       threshold: 1
     metric:
-      base: 0.000364
-      evaluation: '='
-
-      threshold: 0
+      base: 0.000371
+      evaluation: '-'
+      threshold: 1

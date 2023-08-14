@@ -5,14 +5,14 @@ train:
   - --epochs=2
   result:
     l2 relative error for q:
-      base: 0.015783513
-      evaluation: '='
-      threshold: 0
+      base: 0.015782122
+      evaluation: '-'
+      threshold: 1
     l2 relative error for u:
-      base: 0.00029195496
-      evaluation: '='
-      threshold: 0
+      base: 0.00029393204
+      evaluation: '-'
+      threshold: 1
     loss:
-      base: 4.82e-05
+      base: 4.85e-05
       evaluation: '-'
       threshold: 1

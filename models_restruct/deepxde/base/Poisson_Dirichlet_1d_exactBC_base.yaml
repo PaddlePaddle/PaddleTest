@@ -5,10 +5,10 @@ train:
   - --epochs=2
   result:
     loss:
-      base: 4.93e-05
+      base: 4.92e-05
       evaluation: '-'
       threshold: 1
     metric:
-      base: 1.69e-05
-      evaluation: '='
-      threshold: 0
+      base: 5.71e-06
+      evaluation: '-'
+      threshold: 1

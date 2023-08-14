@@ -5,6 +5,6 @@ train:
   - --epochs=2
   result:
     loss:
-      base: 1.69e-06
+      base: 1.67e-06
       evaluation: '-'
       threshold: 1

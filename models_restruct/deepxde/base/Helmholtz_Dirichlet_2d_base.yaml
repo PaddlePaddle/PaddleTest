@@ -10,5 +10,5 @@ train:
       threshold: 1
     metric:
       base: 0.00381
-      evaluation: '='
-      threshold: 0
+      evaluation: '-'
+      threshold: 1

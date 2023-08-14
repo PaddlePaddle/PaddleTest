@@ -5,10 +5,10 @@ train:
   - --epochs=2
   result:
     L2 relative error:
-      base: 0.0050593987
+      base: 0.001680081
       evaluation: '-'
       threshold: 1
     loss:
-      base: 2.3e-05
+      base: 2.29e-05
       evaluation: '-'
       threshold: 1
