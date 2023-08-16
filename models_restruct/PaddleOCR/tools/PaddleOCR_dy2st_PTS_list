@@ -1,0 +1,5 @@
+configs^cls^cls_mv3
+configs^det^ch_PP-OCRv3^ch_PP-OCRv3_det_cml
+configs^e2e^e2e_r50_vd_pg
+configs^kie^vi_layoutxlm^ser_vi_layoutxlm_xfund_zh
+configs^rec^rec_svtrnet
