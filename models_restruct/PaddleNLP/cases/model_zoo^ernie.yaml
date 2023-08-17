@@ -1,7 +1,7 @@
 case:
   linux:
     train:
-    -
+      -
         name: single_dy2st
         path: tests/
         cmd: python test_tipc/train.py
