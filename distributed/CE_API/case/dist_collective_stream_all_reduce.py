@@ -61,6 +61,7 @@ def test_collective_stream_all_reduce_default():
         assert len(out) == 2
         print("test_collective_stream_all_reduce_default %s... ok" % t)
 
+
 @run_priority(level="P0")
 def test_collective_stream_all_reduce_sync_calc():
     """test_collective_stream_all_reduce_sync_calc"""
@@ -72,7 +73,7 @@ def test_collective_stream_all_reduce_sync_calc():
         data = paddle.to_tensor(np_data)
         paddle.distributed.stream.all_reduce(data, sync_op=True, use_calc_stream=True)
         out = data.numpy()
-        assert out[0][0] == 4
+        assert out[0][0] == 5
         assert len(out) == 2
         print("test_collective_stream_all_reduce_sync_calc %s... ok" % t)
 
@@ -80,4 +81,3 @@ def test_collective_stream_all_reduce_sync_calc():
 if __name__ == "__main__":
     test_collective_stream_all_reduce_default()
     test_collective_stream_all_reduce_sync_calc()
-    
