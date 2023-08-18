@@ -168,10 +168,10 @@ class DeepXDE_Start(object):
         """
         download dataset
         """
-        url = "https://paddle-qa.bj.bcebos.com/deepxde/datasets.zip"
-        file_name = "datasets.zip"
+        url = "https://paddle-qa.bj.bcebos.com/deepxde/datasets.tar.gz"
+        file_name = "datasets.tar.gz"
         urllib.request.urlretrieve(url, file_name)
-        os.system("unzip " + file_name + " -C deepxde/")
+        os.system("tar -zxvf " + file_name + " -C deepxde/")
         return 0
 
 def run():
