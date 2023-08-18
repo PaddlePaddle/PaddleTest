@@ -1,8 +1,3 @@
-lulu^examples^pinn_forward^Allen_Cahn.yaml
-lulu^examples^pinn_forward^heat_resample.yaml
-lulu^examples^pinn_forward^Poisson_PointSetOperator_1d.yaml
-lulu^examples^pinn_forward^Helmholtz_Dirichlet_2d_HPO.yaml
-lulu^examples^pinn_forward^Klein_Gordon.yaml
 lulu^examples^operator^diff_rec_unaligned_pideeponet.yaml
 lulu^examples^operator^advection_aligned_pideeponet_2d.yaml
 lulu^examples^operator^advection_aligned_pideeponet.yaml
