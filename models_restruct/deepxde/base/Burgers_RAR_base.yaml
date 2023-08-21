@@ -5,7 +5,11 @@ train:
     params:
       - --epochs=2
     result:
-      exit_code:
-        base: 0
-        threshold: 0
-        evaluation: "="
+      loss:
+        base: 0.000104
+        threshold: 1
+        evaluation: "-"
+      L2 relative error:
+        base: 0.0013336926037153523
+        evaluation: '-'
+        threshold: 1

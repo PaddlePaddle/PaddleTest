@@ -224,6 +224,7 @@ export models_name=${models_name:-models_restruct}  #后面复制使用，和模
 export binary_search_flag=${binary_search_flag:-False}  #True表示在使用二分定位, main中一些跳出方法不生效
 # 使用大模型分析模型日志
 export is_analysis_logs=${is_analysis_logs:-True}
+export analysis_case=${analysis_case:-None}
 export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 export plot=${plot:-False}  #False表示不自动绘图
 export c_plus_plus_predict=${c_plus_plus_predict:-False}  #False表示不配置 C++预测库
@@ -264,6 +265,7 @@ echo "@@@docker_flag: ${docker_flag}"
 echo "@@@timeout: ${timeout}"
 echo "@@@binary_search_flag: ${binary_search_flag}"
 echo "@@@is_analysis_logs: ${is_analysis_logs}"
+echo "@@@analysis_case: ${analysis_case}"
 echo "@@@use_data_cfs: ${use_data_cfs}"
 echo "@@@plot: ${plot}"
 echo "@@@c_plus_plus_predict: ${c_plus_plus_predict}"
@@ -388,6 +390,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e use_build=${use_build} \
         -e binary_search_flag=${binary_search_flag} \
         -e is_analysis_logs=${is_analysis_logs} \
+        -e analysis_case=${analysis_case} \
         -e use_data_cfs=${use_data_cfs} \
         -e plot=${plot} \
         -e c_plus_plus_predict=${c_plus_plus_predict} \
