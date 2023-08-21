@@ -601,6 +601,13 @@ else
     export mount_path="/home/paddleqa/cfs/${reponame}"
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
+   
+    # FLAGS_enable_new_ir_in_executor bug  
+    if [ $FLAGS_enable_new_ir_in_executor == 0 ];then
+    echo FLAGS_enable_new_ir_in_executor
+    echo $FLAGS_enable_new_ir_in_executor
+    unset FLAGS_enable_new_ir_in_executor
+    fi
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
