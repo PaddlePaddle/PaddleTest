@@ -8,6 +8,7 @@ cases="./test_pcpvt_base_gpu.py \
        ./test_resnet50_trt_fp32.py \
        ./test_resnet50_trt_fp16.py \
        ./test_resnet50_slim.py \
+       ./test_swin_transformer_gpu.py \
        ./test_swin_transformer_trt_fp32.py \
        ./test_tnt_small_gpu.py \
        ./test_tnt_small_trt_fp32.py \
