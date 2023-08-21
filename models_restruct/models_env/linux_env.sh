@@ -605,10 +605,10 @@ else
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
 
+    echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
     # FLAGS_enable_new_ir_in_executor bug
     if [ $FLAGS_enable_new_ir_in_executor == 0 ];then
-    echo FLAGS_enable_new_ir_in_executor
-    echo $FLAGS_enable_new_ir_in_executor
+    echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
     unset FLAGS_enable_new_ir_in_executor
     fi
 
