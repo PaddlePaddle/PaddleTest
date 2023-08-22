@@ -39,7 +39,7 @@ def test_collective_stream_reduce_default():
         else:
             np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
         data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.reduce(data, 0) # sync_op=True, use_calc_stream=False
+        paddle.distributed.stream.reduce(data, 0)  # sync_op=True, use_calc_stream=False
         out = data.numpy()
         assert len(out) == 2
         print("test_collective_stream_reduce_default %s ... ok" % t)
@@ -58,6 +58,7 @@ def test_collective_stream_reduce_sync_calc():
         out = data.numpy()
         assert len(out) == 2
         print("test_collective_stream_reduce_sync_calc %s ... ok" % t)
+
 
 if __name__ == "__main__":
     test_collective_stream_reduce_default()

@@ -52,6 +52,7 @@ def test_collective_stream_all_gather_default_tensor():
         assert len(tensor) == 12
         print("test_collective_stream_all_gather_default_tensor %s... ok" % t)
 
+
 @run_priority(level="P0")
 def test_collective_stream_all_gather_sync_calc_tensor():
     """test_collective_stream_all_gather_sync_calc_tensor"""
@@ -74,6 +75,7 @@ def test_collective_stream_all_gather_sync_calc_tensor():
         assert out[0] == 4
         assert len(tensor) == 12
         print("test_collective_stream_all_gather_sync_calc_tensor %s... ok" % t)
+
 
 @run_priority(level="P0")
 def test_collective_stream_all_gather_sync_calc_tensorlist():
@@ -100,6 +102,7 @@ def test_collective_stream_all_gather_sync_calc_tensorlist():
         assert len(tensor_list) == 2
         print("test_collective_stream_all_gather_sync_calc_tensorlist %s... ok" % t)
 
+
 @run_priority(level="P0")
 def test_collective_stream_all_gather_tensor():
     """test_collective_stream_all_gather_tensor"""
@@ -122,6 +125,7 @@ def test_collective_stream_all_gather_tensor():
         assert out[0] == 4
         assert len(tensor) == 12
         print("test_collective_stream_all_gather_tensor %s... ok" % t)
+
 
 if __name__ == "__main__":
     test_collective_stream_all_gather_default_tensor()
