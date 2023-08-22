@@ -10,9 +10,9 @@
 /***************************************************************************
   *
   * Copyright (c) 2019 Baidu.com, Inc. All Rights Reserved
-  * @file dist_collective_stream_all_reduce.py
+  * @file dist_collective_stream_broadcast.py
   * @author liujie44@baidu.com
-  * @date 2021-11-09 11:00
+  * @date 2021-11-09 11:10
   * @brief
   *
   **************************************************************************/
@@ -21,7 +21,7 @@ import sys
 
 import numpy as np
 import paddle
-from paddle.distributed import ReduceOp, init_parallel_env
+from paddle.distributed import init_parallel_env
 
 from utils import run_priority
 
@@ -31,53 +31,54 @@ init_parallel_env()
 
 
 @run_priority(level="P0")
-def test_collective_stream_all_reduce_default():
-    """test_collective_stream_all_reduce_default"""
+def test_collective_stream_broadcast_sync():
+    """test_collective_stream_broadcast_sync"""
     for t in types:
         if paddle.distributed.ParallelEnv().local_rank == 0:
             np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
         else:
             np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
         data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data)
+        paddle.distributed.stream.broadcast(data, 1, sync_op=True, use_calc_stream=False)
         out = data.numpy()
-        assert out[0][0] == 5
+        assert out[0][0] == 1
         assert len(out) == 2
-        print("test_collective_stream_all_reduce_default %s... ok" % t)
+        print("test_collective_stream_broadcast_sync %s ... ok" % t)
 
 
 @run_priority(level="P0")
-def test_collective_stream_all_reduce_default():
-    """test_collective_stream_all_reduce_default"""
+def test_collective_stream_broadcast_sync_calc():
+    """test_collective_stream_broadcast_sync_calc"""
     for t in types:
         if paddle.distributed.ParallelEnv().local_rank == 0:
             np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
         else:
             np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
         data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data)
+        paddle.distributed.stream.broadcast(data, 1, sync_op=True, use_calc_stream=True)
         out = data.numpy()
-        assert out[0][0] == 5
+        assert out[0][0] == 1
         assert len(out) == 2
-        print("test_collective_stream_all_reduce_default %s... ok" % t)
+        print("test_collective_stream_broadcast_sync_calc %s ... ok" % t)
 
 
 @run_priority(level="P0")
-def test_collective_stream_all_reduce_sync_calc():
-    """test_collective_stream_all_reduce_sync_calc"""
+def test_collective_stream_broadcast():
+    """test_collective_stream_broadcast"""
     for t in types:
         if paddle.distributed.ParallelEnv().local_rank == 0:
             np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
         else:
             np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
         data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data, sync_op=True, use_calc_stream=True)
+        paddle.distributed.stream.broadcast(data, 1, sync_op=False, use_calc_stream=False)
         out = data.numpy()
-        assert out[0][0] == 5
+        assert out[0][0] == 1
         assert len(out) == 2
-        print("test_collective_stream_all_reduce_sync_calc %s... ok" % t)
+        print("test_collective_stream_broadcast %s ... ok" % t)
 
 
 if __name__ == "__main__":
-    test_collective_stream_all_reduce_default()
-    test_collective_stream_all_reduce_sync_calc()
+    test_collective_stream_broadcast_sync()
+    test_collective_stream_broadcast_sync_calc()
+    test_collective_stream_broadcast()
