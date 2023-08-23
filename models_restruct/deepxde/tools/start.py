@@ -164,6 +164,15 @@ class DeepXDE_Start(object):
         os.environ[self.reponame] = json.dumps(self.env_dict)
         return ret
 
+    def download_datasets(self):
+        """
+        download dataset
+        """
+        url = "https://paddle-qa.bj.bcebos.com/deepxde/datasets.tar.gz"
+        file_name = "datasets.tar.gz"
+        urllib.request.urlretrieve(url, file_name)
+        os.system("tar -zxvf " + file_name + " -C deepxde/")
+        return 0
 
 def run():
     """
@@ -186,6 +195,8 @@ def run():
     # add_seed(filedir, "import paddle", "paddle.seed(1)\n")
     model.add_seed(filedir, "import deepxde", "import numpy as np\n")
     model.add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
+    if "antiderivative" in model.qa_yaml_name:
+        model.download_datasets()
     return 0
 
 
