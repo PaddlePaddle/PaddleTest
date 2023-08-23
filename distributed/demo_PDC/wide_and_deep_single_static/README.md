@@ -22,7 +22,6 @@ python 2.7/3.5/3.6/3.7
 
 os : windows/linux/macos 
 
-
 ## 快速开始
 在该目录下执行如下命令即可运行单机静态图版本的wide_and_deep模型训练 .
 """
