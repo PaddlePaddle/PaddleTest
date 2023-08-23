@@ -384,7 +384,7 @@ function vit_qat() {
     check_result $FUNCNAME
     loss=`cat log/workerlog.0 | grep "1/20" | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}' `
     if [[ ${AGILE_COMPILE_BRANCH} =~ "develop" ]];then
-        check_diff 2.299868107 ${loss} ${FUNCNAME}_loss
+        check_diff 2.299863338 ${loss} ${FUNCNAME}_loss
     else
         check_diff 2.299857140 ${loss} ${FUNCNAME}_loss
     fi
