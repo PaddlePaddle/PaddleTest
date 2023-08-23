@@ -1,5 +1,11 @@
-import paddle
+"""
+    @module reader
+    @function
+    @class
+    @method
+"""
 import os
+import paddle
 import numpy as np
 from paddle.io import IterableDataset
 
@@ -12,33 +18,38 @@ categorical_range_ = range(14, 40)
 
 
 class WideDeepDataset(IterableDataset):
+    """
+    WideDeepDataset
+    """
+
     def __init__(self, file_list):
         self.file_list = file_list
 
     def line_process(self, line):
-        features = line.rstrip('\n').split('\t')
+        """
+        line_process
+        """
+        features = line.rstrip("\n").split("\t")
         dense_feature = []
         sparse_feature = []
         for idx in continuous_range_:
             if features[idx] == "":
                 dense_feature.append(0.0)
             else:
-                dense_feature.append(
-                    (float(features[idx]) - cont_min_[idx - 1]) / cont_diff_[idx - 1])
+                dense_feature.append((float(features[idx]) - cont_min_[idx - 1]) / cont_diff_[idx - 1])
         for idx in categorical_range_:
-            sparse_feature.append(
-                [hash(str(idx) + features[idx]) % hash_dim_])
+            sparse_feature.append([hash(str(idx) + features[idx]) % hash_dim_])
         label = [int(features[0])]
         output_list = []
-        output_list.append(np.array(dense_feature).astype('float32'))
+        output_list.append(np.array(dense_feature).astype("float32"))
         for sparse in sparse_feature:
-            output_list.append(np.array(sparse).astype('int64'))
-        output_list.append(np.array(label).astype('int64'))
+            output_list.append(np.array(sparse).astype("int64"))
+        output_list.append(np.array(label).astype("int64"))
         return output_list
 
     def __iter__(self):
         for file in self.file_list:
-            with open(file, 'r') as f:
+            with open(file, "r") as f:
                 for line in f:
                     input_data = self.line_process(line)
                     yield input_data
