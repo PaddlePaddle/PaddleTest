@@ -12,7 +12,7 @@
 ```
 <label> <integer feature 1> ... <integer feature 13> <categorical feature 1> ... <categorical feature 26>
 ```
-其中```<label>```表示广告是否被点击，点击用1表示，未点击用0表示。```<integer feature>```代表数值特征（连续特征），共有13个连续特征。```<categorical feature>```代表分类特征（离散特征），共有26个离散特征。相邻两个特征用```\t```分隔，缺失特征用空格表示。测试集中```<label>```特征已被移除。  
+其中```<label>```表示广告是否被点击，点击用1表示，未点击用0表示。```<integer feature>```代表数值特征（连续特征），共有13个连续特征。```<categorical feature>```代表分类特征（离散特征），共有26个离散特征。相邻两个特征用```\t```分隔，缺失特征用空格表示。测试集中```<label>```特征已被移除。
 在data目录下为您准备了快速运行的示例数据，数据处理参见reader.py脚本。
 
 ## 运行环境
@@ -20,7 +20,7 @@ PaddlePaddle>=2.0
 
 python 2.7/3.5/3.6/3.7
 
-os : windows/linux/macos 
+os : windows/linux/macos
 
 ## 快速开始
 在该目录下执行如下命令即可运行单机静态图版本的wide_and_deep模型训练 .
