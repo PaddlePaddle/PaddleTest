@@ -1,0 +1,10 @@
+train:
+- cmd: python examples/operator/antiderivative_unaligned_pideeponet.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 5.16e-05
+      evaluation: '-'
+      threshold: 1

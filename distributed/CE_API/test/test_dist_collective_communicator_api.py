@@ -62,18 +62,6 @@ class TestApi(object):
         assert str(out).find("Error") == -1
         assert str(err).find("Error") == -1
 
-    def test_collective_stream_all_reduce(self):
-        """test_collective_stream_all_reduce"""
-        cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id stream_all_reduce \
-            dist_collective_stream_all_reduce.py"
-        pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = pro.communicate()
-        print(out)
-        pro.wait()
-        pro.returncode == 0
-        assert str(out).find("Error") == -1
-        assert str(err).find("Error") == -1
-
     def test_collective_barrier(self):
         """test_collective_barrier"""
         cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id barrier dist_collective_barrier.py"

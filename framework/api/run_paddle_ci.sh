@@ -1,6 +1,6 @@
 home=$PWD
-python3.7 -m pip install pytest
-python3.7 -m pip install scipy
+python -m pip install pytest
+python -m pip install scipy
 export FLAGS_use_curand=1
 export FLAGS_set_to_1d=0
 
@@ -9,7 +9,7 @@ result_array=()
 for case_dir in ${case_dir_list[@]}
 do
 rm -rf ${home}/$case_dir/result.txt
-python3.7 multithreading_case.py $case_dir
+python multithreading_case.py $case_dir
 result_array[${#result_array[@]}]=$?
 wait;
 done

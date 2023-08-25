@@ -13,6 +13,7 @@ class PaddleRecCaseStart(object):
     """
     PaddleRecCaseStart:
     """
+
     def __init__(self):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.rd_yaml_path = os.environ["rd_yaml_path"]
@@ -23,7 +24,7 @@ class PaddleRecCaseStart(object):
         self.case_name = os.environ["case_name"]
         self.set_cuda = os.environ["set_cuda"]
         self.system = os.environ["system"]
-    
+
     def update_yaml_config(self, file_path, old_str, new_str):
         """
         update config yaml:
@@ -44,15 +45,15 @@ def run():
     case_start.py run:
     """
     paddlerec_case_start = PaddleRecCaseStart()
-    currnet_step = paddlerec_case_start.case_step
+    # currnet_step = paddlerec_case_start.case_step
     current_name = paddlerec_case_start.case_name
-    system = paddlerec_case_start.system
+    # system = paddlerec_case_start.system
     rd_yaml = os.path.join(paddlerec_case_start.REPO_PATH, paddlerec_case_start.rd_yaml_path)
-    qa_yaml = paddlerec_case_start.qa_yaml_name
-    if current_name == "dy2st":
+    # qa_yaml = paddlerec_case_start.qa_yaml_name
+    if "dy2st" in current_name:
         paddlerec_case_start.update_yaml_config(rd_yaml, "#model_init_path:", "model_init_path:")
         paddlerec_case_start.update_yaml_config(rd_yaml, "# model_init_path:", "model_init_path:")
-        
+
 
 if __name__ == "__main__":
     run()

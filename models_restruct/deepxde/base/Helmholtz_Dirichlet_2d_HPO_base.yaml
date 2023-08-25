@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Helmholtz_Dirichlet_2d_HPO.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 6050.0
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.671
+      evaluation: '-'
+      threshold: 1
