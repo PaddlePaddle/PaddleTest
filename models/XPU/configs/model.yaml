@@ -1,0 +1,34 @@
+PaddleClas:
+  white: all
+  black: PPShiTu_mainbody_det_linux_gpu_normal_normal_paddle2onnx_python_linux_cpu
+PaddleGAN:
+  white: all
+  black: none
+PaddleOCR:
+  white: all
+  black: en_table_structure|ocr_det
+PaddleVideo:
+  white: all
+  black: none
+PaddleDetection:
+  white: all
+  black: none
+PaddleSeg:
+  white: all
+  black: none
+PaddleNLP:
+  white: all
+  black: none
+PaddleRec:
+  white: all
+  black: none
+PaddleSpeech:
+  white: all
+  black: none
+PaddleSlim:
+  white: all
+  black: none
+PARL:
+  white: all
+  black: none
+
