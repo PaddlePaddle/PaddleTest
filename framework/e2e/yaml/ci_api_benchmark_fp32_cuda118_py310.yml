@@ -1,3 +1,4 @@
+# 已禁用的api: paddle.nn.functional.glu, paddle.diff
 Conv2D_0:
   desc: "二维卷积 0"
   paddle:
@@ -1567,68 +1568,68 @@ slice_2:
 #    mapping:
 #      ins: {x: input, axes: dim, starts: start, ends: length}
 
-diff_0:
-  desc: "沿着指定轴计算输入Tensor的n阶前向差值 0"
-  enable_backward: False
-  paddle:
-    api_name: "paddle.diff"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 1, 1, 1, 1 ]
-        range: [ -1, 1 ]
-    params:
-      n: 1
-      axis: -1
-      prepend:
-      append:
-  pytorch:
-    api_name: "torch.diff"
-    mapping:
-      ins: {x: input, n: n, axis: dim, prepend: prepend, append: append}
+# diff_0:
+#   desc: "沿着指定轴计算输入Tensor的n阶前向差值 0"
+#   enable_backward: False
+#   paddle:
+#     api_name: "paddle.diff"
+#     inputs:
+#       x:
+#         random: true
+#         dtype: "float32"
+#         shape: [ 1, 1, 1, 1 ]
+#         range: [ -1, 1 ]
+#     params:
+#       n: 1
+#       axis: -1
+#       prepend:
+#       append:
+#   pytorch:
+#     api_name: "torch.diff"
+#     mapping:
+#       ins: {x: input, n: n, axis: dim, prepend: prepend, append: append}
 
-diff_1:
-  desc: "沿着指定轴计算输入Tensor的n阶前向差值 1"
-  enable_backward: False
-  paddle:
-    api_name: "paddle.diff"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 10, 10 ]
-        range: [ -1, 1 ]
-    params:
-      n: 1
-      axis: -1
-      prepend:
-      append:
-  pytorch:
-    api_name: "torch.diff"
-    mapping:
-      ins: {x: input, n: n, axis: dim, prepend: prepend, append: append}
+# diff_1:
+#   desc: "沿着指定轴计算输入Tensor的n阶前向差值 1"
+#   enable_backward: False
+#   paddle:
+#     api_name: "paddle.diff"
+#     inputs:
+#       x:
+#         random: true
+#         dtype: "float32"
+#         shape: [ 10, 10, 10, 10 ]
+#         range: [ -1, 1 ]
+#     params:
+#       n: 1
+#       axis: -1
+#       prepend:
+#       append:
+#   pytorch:
+#     api_name: "torch.diff"
+#     mapping:
+#       ins: {x: input, n: n, axis: dim, prepend: prepend, append: append}
 
-diff_2:
-  desc: "沿着指定轴计算输入Tensor的n阶前向差值 2"
-  enable_backward: False
-  paddle:
-    api_name: "paddle.diff"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 10, 10, 100, 100 ]
-        range: [ -1, 1 ]
-    params:
-      n: 1
-      axis: -1
-      prepend:
-      append:
-  pytorch:
-    api_name: "torch.diff"
-    mapping:
-      ins: {x: input, n: n, axis: dim, prepend: prepend, append: append}
+# diff_2:
+#   desc: "沿着指定轴计算输入Tensor的n阶前向差值 2"
+#   enable_backward: False
+#   paddle:
+#     api_name: "paddle.diff"
+#     inputs:
+#       x:
+#         random: true
+#         dtype: "float32"
+#         shape: [ 10, 10, 100, 100 ]
+#         range: [ -1, 1 ]
+#     params:
+#       n: 1
+#       axis: -1
+#       prepend:
+#       append:
+#   pytorch:
+#     api_name: "torch.diff"
+#     mapping:
+#       ins: {x: input, n: n, axis: dim, prepend: prepend, append: append}
 
 Sigmoid_0:
   desc: "Sigmoid激活函数"
@@ -14727,23 +14728,23 @@ gelu_0:
     mapping:
       ins: { x: input }
 
-glu_0:
-  desc: "门控线性单元。输入按照给定的维度二等分，其中第一部分被用作内容，第二部分经过一个 sigmoid 函数之后被用作门限"
-  paddle:
-    api_name: "paddle.nn.functional.glu"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1, 1, 2]
-        range: [ -1, 1]
-    params:
-      axis: -1
-  pytorch:
-    api_name: "torch.nn.functional.glu"
-    mapping:
-      ins: { x: input, axis: dim }
+# glu_0:
+#   desc: "门控线性单元。输入按照给定的维度二等分，其中第一部分被用作内容，第二部分经过一个 sigmoid 函数之后被用作门限"
+#   paddle:
+#     api_name: "paddle.nn.functional.glu"
+#     inputs:
+#       x:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1, 1, 2]
+#         range: [ -1, 1]
+#     params:
+#       axis: -1
+#   pytorch:
+#     api_name: "torch.nn.functional.glu"
+#     mapping:
+#       ins: { x: input, axis: dim }
 
 grid_sample_0:
   desc: "基于flow field网格的对输入X进行双线性插值采样"
