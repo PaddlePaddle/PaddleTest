@@ -1,4 +1,4 @@
-# 已禁用的api: paddle.nn.functional.glu, paddle.diff
+# 已禁用的api: paddle.nn.functional.glu, paddle.diff, paddle.Tensor.lerp_, paddle.nn.GRUCell
 Conv2D_0:
   desc: "二维卷积 0"
   paddle:
@@ -15650,31 +15650,31 @@ upsample_0:
     mapping:
       ins: { x: input, size: size }
 
-GRUCell_0:
-  desc: "门控循环单元Cell"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.nn.GRUCell"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-      data1:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-    params:
-      input_size: 1
-      hidden_size: 1
-  pytorch:
-    api_name: "torch.nn.GRUCell"
-    mapping:
-      ins: { data0: input, data1: hidden, input_size: input_size, hidden_size: hidden_size }
+# GRUCell_0:
+#   desc: "门控循环单元Cell"
+#   enable_backward: false
+#   paddle:
+#     api_name: "paddle.nn.GRUCell"
+#     inputs:
+#       data0:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1]
+#         range: [ -1, 1]
+#       data1:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1]
+#         range: [ -1, 1]
+#     params:
+#       input_size: 1
+#       hidden_size: 1
+#   pytorch:
+#     api_name: "torch.nn.GRUCell"
+#     mapping:
+#       ins: { data0: input, data1: hidden, input_size: input_size, hidden_size: hidden_size }
 
 Hardshrink_0:
   desc: "Hardshrink激活层"
@@ -17605,30 +17605,30 @@ Tensor_floor__0:
 #    mapping:
 #      ins: { x: input, y: end, weight: weight }
 
-Tensor_lerp__0:
-  desc: "基于给定的 weight 计算 x 与 y 的线性插值"
-  enable_backward: false
-  paddle:
-    api_name: "paddle.Tensor.lerp_"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1, 1, 1]
-        range: [ -1, 1]
-    params:
-      y:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [ 1, 1, 1, 1 ]
-        range: [ -1, 1 ]
-      weight: 0.5
-#  pytorch:
-#    api_name: "torch.Tensor.lerp_"
-#    mapping:
-#      ins: { x: input, y: end, weight: weight }
+# Tensor_lerp__0:
+#   desc: "基于给定的 weight 计算 x 与 y 的线性插值"
+#   enable_backward: false
+#   paddle:
+#     api_name: "paddle.Tensor.lerp_"
+#     inputs:
+#       x:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1, 1, 1]
+#         range: [ -1, 1]
+#     params:
+#       y:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [ 1, 1, 1, 1 ]
+#         range: [ -1, 1 ]
+#       weight: 0.5
+# #  pytorch:
+# #    api_name: "torch.Tensor.lerp_"
+# #    mapping:
+# #      ins: { x: input, y: end, weight: weight }
 
 # Tensor_lgamma_0:
 #   desc: "计算输入 x 的 gamma 函数的自然对数并返回。"
