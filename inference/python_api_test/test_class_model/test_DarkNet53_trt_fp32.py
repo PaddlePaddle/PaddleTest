@@ -73,12 +73,12 @@ def test_trt_fp32_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        # Cause of the diff error, delete the conv_elementwise_add_fuse_pass when trt_version < 8.0
+        # Cause of the diff error, delete the conv2d_fusion when trt_version < 8.0
         ver = paddle_infer.get_trt_compile_version()
         if ver[0] * 1000 + ver[1] * 100 + ver[2] * 10 < 8000:
-            delete_pass_list = ["conv_elementwise_add_fuse_pass"]
+            delete_op_list = ["conv2d_fusion"]
         else:
-            delete_pass_list = []
+            delete_op_list = []
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -93,7 +93,7 @@ def test_trt_fp32_more_bz():
             precision="trt_fp32",
             dynamic=True,
             auto_tuned=True,
-            delete_pass_list=delete_pass_list,
+            delete_op_list=delete_op_list,
         )
 
         del test_suite2  # destroy class to save memory
