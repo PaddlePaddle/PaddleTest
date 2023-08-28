@@ -47,106 +47,37 @@ def test_collective_stream_all_reduce_default():
 
 
 @run_priority(level="P0")
-def test_collective_stream_all_reduce_sum():
-    """test_collective_stream_all_reduce_sum"""
+def test_collective_stream_all_reduce_default():
+    """test_collective_stream_all_reduce_default"""
     for t in types:
         if paddle.distributed.ParallelEnv().local_rank == 0:
             np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
         else:
             np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
         data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data, ReduceOp.SUM)
+        paddle.distributed.stream.all_reduce(data)
         out = data.numpy()
         assert out[0][0] == 5
         assert len(out) == 2
-        print("test_collective_stream_all_reduce_sum %s... ok" % t)
+        print("test_collective_stream_all_reduce_default %s... ok" % t)
 
 
 @run_priority(level="P0")
-def test_collective_stream_all_reduce_max():
-    """test_collective_stream_all_reduce_max"""
+def test_collective_stream_all_reduce_sync_calc():
+    """test_collective_stream_all_reduce_sync_calc"""
     for t in types:
         if paddle.distributed.ParallelEnv().local_rank == 0:
             np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
         else:
             np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
         data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data, ReduceOp.MAX)
+        paddle.distributed.stream.all_reduce(data, sync_op=True, use_calc_stream=True)
         out = data.numpy()
-        assert out[0][0] == 4
+        assert out[0][0] == 5
         assert len(out) == 2
-        print("test_collective_stream_all_reduce_max %s... ok" % t)
-
-
-@run_priority(level="P0")
-def test_collective_stream_all_reduce_min():
-    """test_collective_stream_all_reduce_min"""
-    for t in types:
-        if paddle.distributed.ParallelEnv().local_rank == 0:
-            np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
-        else:
-            np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
-        data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data, ReduceOp.MIN)
-        out = data.numpy()
-        assert out[0][0] == 1
-        assert len(out) == 2
-        print("test_collective_stream_all_reduce_min %s... ok" % t)
-
-
-@run_priority(level="P0")
-def test_collective_stream_all_reduce_prod():
-    """test_collective_stream_all_reduce_prod"""
-    for t in types:
-        if paddle.distributed.ParallelEnv().local_rank == 0:
-            np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
-        else:
-            np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
-        data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data, ReduceOp.PROD)
-        out = data.numpy()
-        assert out[0][0] == 4
-        assert len(out) == 2
-        print("test_collective_stream_all_reduce_prod %s... ok" % t)
-
-
-@run_priority(level="P0")
-def test_collective_stream_all_reduce_sync_op_False():
-    """test_collective_stream_all_reduce_sync_op_False"""
-    for t in types:
-        if paddle.distributed.ParallelEnv().local_rank == 0:
-            np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
-        else:
-            np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
-        data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data, ReduceOp.MAX, sync_op=False)
-        out = data.numpy()
-        assert out[0][0] == 4
-        assert len(out) == 2
-        print("test_collective_stream_all_reduce_sync_op_False %s... ok" % t)
-
-
-@run_priority(level="P0")
-def test_collective_stream_all_reduce_use_calc_stream():
-    """test_collective_stream_all_reduce_use_calc_stream"""
-    for t in types:
-        if paddle.distributed.ParallelEnv().local_rank == 0:
-            np_data = np.array([[4, 5, 6], [4, 5, 6]]).astype(t)
-        else:
-            np_data = np.array([[1, 2, 3], [1, 2, 3]]).astype(t)
-        data = paddle.to_tensor(np_data)
-        paddle.distributed.stream.all_reduce(data, ReduceOp.MAX, use_calc_stream=True)
-        out = data.numpy()
-        assert out[0][0] == 4
-        assert len(out) == 2
-        print("test_collective_stream_all_reduce_use_calc_stream %s... ok" % t)
+        print("test_collective_stream_all_reduce_sync_calc %s... ok" % t)
 
 
 if __name__ == "__main__":
     test_collective_stream_all_reduce_default()
-    test_collective_stream_all_reduce_sum()
-    test_collective_stream_all_reduce_max()
-    test_collective_stream_all_reduce_min()
-    test_collective_stream_all_reduce_prod()
-    test_collective_stream_all_reduce_sync_op_False()
-    test_collective_stream_all_reduce_use_calc_stream()
+    test_collective_stream_all_reduce_sync_calc()

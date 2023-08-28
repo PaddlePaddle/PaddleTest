@@ -29,3 +29,7 @@ lulu^examples^pinn_inverse^brinkman_forchheimer.yaml
 lulu^examples^pinn_forward^ode_system.yaml
 lulu^examples^pinn_inverse^fractional_Poisson_2d_inverse.yaml
 lulu^examples^pinn_forward^Euler_beam.yaml
+lulu^examples^pinn_forward^heat_resample.yaml
+lulu^examples^pinn_forward^Poisson_PointSetOperator_1d.yaml
+lulu^examples^pinn_forward^Helmholtz_Dirichlet_2d_HPO.yaml
+lulu^examples^pinn_forward^Klein_Gordon.yaml

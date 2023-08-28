@@ -1,0 +1,10 @@
+train:
+- cmd: python examples/operator/diff_rec_unaligned_pideeponet.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 8.98e-05
+      evaluation: '-'
+      threshold: 1

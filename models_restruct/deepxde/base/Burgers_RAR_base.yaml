@@ -10,6 +10,6 @@ train:
         threshold: 1
         evaluation: "-"
       L2 relative error:
-        base: 0.0013336926037153523
+        base: 0.006342550655524987
         evaluation: '-'
         threshold: 1

@@ -1,0 +1,10 @@
+train:
+- cmd: python examples/operator/advection_aligned_pideeponet_2d.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 0.0142
+      evaluation: '-'
+      threshold: 1
