@@ -363,7 +363,7 @@ if [[ "${docker_flag}" == "" ]]; then
     NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
         --name=${docker_name} --net=host --cap-add=SYS_ADMIN \
         --shm-size=128G \
-        -v $(pwd):/workspace \
+        -v ${pwd}:/workspace \
         -v /ssd2:/ssd2 \
         -e AK=${AK} \
         -e SK=${SK} \
