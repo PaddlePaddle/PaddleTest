@@ -203,7 +203,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
                 double_check_case.append(k)
 
         if self.double_check:
-            double_check_case = ["Conv2D_0, Linear_0"]
+            double_check_case = ["Conv2D_0", "Linear_0"]
             double_error_dict = self._run_main(
                 all_cases=double_check_case, loops=self.loops * 6, base_times=self.base_times
             )
@@ -239,6 +239,8 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             raise Exception("something wrong with api benchmark CI job id: {} !!".format(latest_id))
         else:
             db.ci_update_job(id=latest_id, status="done", update_time=self.now_time)
+        
+        print('compare_dict is: ', compare_dict)
 
         api_grade = ci_level_reveal(compare_dict)
         del api_grade["equal"]
