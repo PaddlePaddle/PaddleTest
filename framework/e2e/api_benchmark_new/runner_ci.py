@@ -202,12 +202,34 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             if self.double_check and double_check(res=compare_res[k]):
                 double_check_case.append(k)
 
-        # if self.double_check:
-        #     for i in range(self.check_iters):
-        #         double_error_dict = self._run_main(all_cases=double_check_case, log='log_{}'.format(i))
-        #         # self._db_save(db=db, latest_id=latest_id, log="./log_{}/".format(i))  # 不可以录入数据
-        # else:
-        #     double_error_dict = {}
+        if self.double_check and bool(double_check_case):
+            double_error_dict = self._run_main(
+                all_cases=double_check_case, loops=self.loops * 6, base_times=self.base_times
+            )
+            ci_dict = {}
+            data = dict()
+            for i in os.listdir("./log/"):
+                with open("./log/" + i) as case:
+                    res = case.readline()
+                    api = i.split(".")[0]
+                    data[api] = res
+            for k, v in data.items():
+                ci_dict[k] = {}
+                # all_case[k]["jid"] = latest_id
+                ci_dict[k]["case_name"] = k
+                ci_dict[k]["api"] = json.loads(v).get("api")
+                ci_dict[k]["result"] = v
+
+            compare_dict = {}
+            for k, v in ci_dict.items():
+                baseline_case = baseline_dict[k]
+                latest_case = ci_dict[k]
+                compare_res = data_compare(baseline_case=baseline_case, latest_case=latest_case, case_name=k)
+                compare_dict[k] = compare_res[k]
+            print("double_error_dict is: ", double_error_dict)
+        else:
+            double_error_dict = {}
+            print("double_error_dict is: ", double_error_dict)
 
         self._db_save(db=db, latest_id=latest_id)
 
@@ -220,6 +242,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         api_grade = ci_level_reveal(compare_dict)
         del api_grade["equal"]
         del api_grade["better"]
+        print("double_check_case are: ", double_check_case)
         print(
             "以下为pr{}引入之后，api调度性能相对于baseline的变化。worse表示性能下降超过30%的api，doubt表示性能下降为15%~30%之间的api".format(
                 self.AGILE_PULL_ID
