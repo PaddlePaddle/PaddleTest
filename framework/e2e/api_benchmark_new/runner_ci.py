@@ -45,7 +45,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
     api benchmark 调度CI, 监控cpu+前向, 支持多个机器baseline
     """
 
-    def __init__(self, yaml_path):
+    def __init__(self, yaml_path, python):
         super(ApiBenchmarkCI, self).__init__(yaml_path)
         """
         :param baseline: 性能baseline键值对, key为case名, value为性能float
@@ -101,7 +101,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         # 项目配置信息
         self.place = "cpu"
-        self.python = "python3.7"
+        self.python = python
         self.enable_backward = 0
         self.yaml_info = "case_0"
         self.card = 0
@@ -131,7 +131,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
-        error_dict = self._run_main(all_cases=self.all_cases)
+        error_dict = self._run_main(all_cases=self.all_cases, loops=self.loops, base_times=self.base_times)
 
         # 查询数据库构建baseline
         db = CIdb(storage=self.storage)
@@ -240,7 +240,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
-        error_dict = self._run_main(all_cases=self.all_cases)
+        error_dict = self._run_main(all_cases=self.all_cases, loops=self.loops, base_times=self.base_times)
         # 初始化数据库
         db = CIdb(storage=self.storage)
 
@@ -289,10 +289,11 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--yaml", type=str, help="input the yaml path")
+    parser.add_argument("--python", type=str, default="python3.10", help="input the yaml path")
     parser.add_argument("--baseline_whl_link", type=str, default=None, help="only be used to insert baseline data")
     args = parser.parse_args()
     # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
-    api_bm = ApiBenchmarkCI(yaml_path=args.yaml)
+    api_bm = ApiBenchmarkCI(yaml_path=args.yaml, python=args.python)
     if bool(args.baseline_whl_link):
         api_bm._baseline_insert(wheel_link=args.baseline_whl_link)
     else:
