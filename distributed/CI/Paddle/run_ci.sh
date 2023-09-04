@@ -14,12 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ####################################
-export python=$1
+export repo=$1
 export paddle=$2
 export nlp_dir=/workspace/PaddleNLP
 mkdir -p /workspace/PaddleNLP/model_logs
 export log_path=/workspace/PaddleNLP/model_logs
 export case_list=()
+
+cd /workspace/${repo}
 
 ####################################
 # Insatll paddlepaddle-gpu
