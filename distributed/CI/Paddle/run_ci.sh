@@ -35,24 +35,24 @@ for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{pri
     dir1=${arr_file_name[0]}
     dir2=${arr_file_name[1]}
     dir3=${arr_file_name[2]}
-    echo "file_name:"${file_name}, 
-    echo "dir1:"${dir1}, "dir2:"${dir2},"dir3:"${dir3},".xx:" ${file_name##*.}
+    dir4=${arr_file_name[3]}
+    echo "file_name:"${file_name}, "dir1:"${dir1}, "dir2:"${dir2},"dir3:"${dir3},"dir4:"${dir4},".xx:" ${file_name##*.}
     if [ ! -f ${file_name} ];then # 针对pr删掉文件
         continue
     elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
-    elif [[ ${dir0} =~ "python" ]] && [[ ${dir1} =~ "paddle" ]];then
-        if [[ ${dir2} =~ "distributed" ]] || [[ ${dir2} =~ "fluid" ]];then
+    elif [[ ${dir1} =~ "python" ]] && [[ ${dir2} =~ "paddle" ]];then
+        if [[ ${dir3} =~ "distributed" ]] || [[ ${dir3} =~ "fluid" ]];then
             # python/paddle/distributed  || python/paddle/fluid
             case_list[${#case_list[*]}]=auto_parallel
         else
             continue
         fi
-    elif [[ ${dir0} =~ "python" ]] && [[ ${dir1} =~ "fluid" ]];then
-        if [[ ${dir2} =~ "distributed" ]];then
+    elif [[ ${dir1} =~ "python" ]] && [[ ${dir2} =~ "fluid" ]];then
+        if [[ ${dir3} =~ "distributed" ]];then
             # paddle/fluid/distributed
             case_list[${#case_list[*]}]=auto_parallel
-        elif [[ ${dir2} =~ "framework" ]] && [[ ${dir3} =~ "new_executor" ]];then
+        elif [[ ${dir3} =~ "framework" ]] && [[ ${dir4} =~ "new_executor" ]];then
             # paddle/fluid/framework/new_executor
             case_list[${#case_list[*]}]=auto_parallel
         else
@@ -89,7 +89,6 @@ if [[ ${#case_list[*]} -ne 0 ]];then
         bash ./ci_case.sh ${case} 
         print_info $? `ls -lt ${log_path} | grep gpt | head -n 1 | awk '{print $9}'`
         let case_num++
-        fi
     done
     echo -e "\033[35m ---- end run case  \033[0m"
     cd ${nlp_dir}/model_logs
