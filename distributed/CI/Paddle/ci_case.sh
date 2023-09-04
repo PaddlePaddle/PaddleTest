@@ -515,6 +515,7 @@ function before_hook() {
     export FLAGS_embedding_deterministic=1         # 1：关闭随机性
     export FLAGS_cudnn_deterministic=1             # 1：关闭随机性
     unset CUDA_MODULE_LOADING
+    env | grep FLAGS
     # requirements
     python -m pip install -r requirements.txt --force-reinstall
 

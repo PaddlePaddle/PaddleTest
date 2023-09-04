@@ -66,23 +66,27 @@ done
 ####################################
 print_info(){
 if [ $1 -ne 0 ];then
-    mv ${log_path}/$2 ${log_path}/$2_FAIL.log
-    echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
-    cat ${log_path}/$2_FAIL.log
+    if [ ! -f ${log_path}/$2 ];then
+        echo -e "\033[31m run CI FAIL \033[0m"
+    else
+        mv ${log_path}/$2 ${log_path}/$2_FAIL.log
+        echo -e "\033[31m ${log_path}/$2_FAIL \033[0m"
+        cat ${log_path}/$2_FAIL.log
+    fi
 else
-    echo -e "\033[32m ${log_path}/$2_SUCCESS \033[0m"
+    echo -e "\033[32m run CI SUCCESS \033[0m"
 fi
 }
 ####################################
 get_diff_TO_case # 获取待执行case列表
 case_list=($(awk -v RS=' ' '!a[$1]++' <<< ${case_list[*]}))  # 去重并将结果存储回原列表
 if [[ ${#case_list[*]} -ne 0 ]];then
-    # Install paddle
-    install_paddle
     echo -e "\033[35m =======CI Check case========= \033[0m"
     echo -e "\033[35m ---- case_list length: ${#case_list[*]}, cases: ${case_list[*]} \033[0m"
     set +e
     echo -e "\033[35m ---- start run case  \033[0m"
+    # Install paddle
+    install_paddle
     case_num=1
     for case in ${case_list[*]};do
         echo -e "\033[35m ---- running case $case_num/${#case_list[*]}: ${case} \033[0m"
@@ -92,19 +96,17 @@ if [[ ${#case_list[*]} -ne 0 ]];then
     done
     echo -e "\033[35m ---- end run case  \033[0m"
     cd ${nlp_dir}/model_logs
-    FF=`ls *FAIL*|wc -l`
-    EXCODE=0
-    if [ "${FF}" -gt "0" ];then
+    if [ ! -f *FAIL* ];then
+        FF=0
+        case_EXCODE=0
+        EXCODE=0
+        echo -e "\033[32m ---- case Success \033[0m"
+    else
+        FF=`ls *FAIL*|wc -l`
         case_EXCODE=1
         EXCODE=2
-    else
-        case_EXCODE=0
-    fi
-    if [ $case_EXCODE -ne 0 ] ; then
         echo -e "\033[31m ---- case Failed number: ${FF} \033[0m"
         ls *_FAIL*
-    else
-        echo -e "\033[32m ---- case Success \033[0m"
     fi
 else
     echo -e "\033[32m Changed Not CI case, Skips \033[0m"
