@@ -577,11 +577,7 @@ function check_result() {
 main() {
     cd ${case_path}
     before_hook
-    if $1 == "auto_parallel";then
-        case_list_auto
-    else
-        continue
-    fi
+    case_list_auto
 }
 
 main$@

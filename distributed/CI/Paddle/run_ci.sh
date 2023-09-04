@@ -17,7 +17,7 @@
 export python=$1
 export paddle=$2
 export nlp_dir=/workspace/PaddleNLP
-mkdir /workspace/PaddleNLP/model_logs
+mkdir -p /workspace/PaddleNLP/model_logs
 export log_path=/workspace/PaddleNLP/model_logs
 export case_list=()
 
@@ -25,7 +25,7 @@ export case_list=()
 # Insatll paddlepaddle-gpu
 install_paddle(){
     echo -e "\033[35m ---- Install paddlepaddle-gpu  \033[0m"
-    python -m pip install --user ${paddle} --forceoreinstall --no-dependencies;
+    python -m pip install --user ${paddle} --force-reinstall --no-dependencies;
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 }
 ####################################
@@ -86,7 +86,7 @@ if [[ ${#case_list[*]} -ne 0 ]];then
     case_num=1
     for case in ${case_list[*]};do
         echo -e "\033[35m ---- running case $case_num/${#case_list[*]}: ${case} \033[0m"
-        bash ./ci_case.sh ${case} 
+        bash ./ci_case.sh
         print_info $? `ls -lt ${log_path} | grep gpt | head -n 1 | awk '{print $9}'`
         let case_num++
     done
