@@ -535,7 +535,7 @@ if [[ "${docker_flag}" == "" ]]; then
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
         
-        if [ $reponame == PaddleNLP ];then
+        if [ $reponame == "PaddleNLP" ];then
         export https_proxy=agent.baidu.com:8118
         export http_proxy=agent.baidu.com:8118
         fi
