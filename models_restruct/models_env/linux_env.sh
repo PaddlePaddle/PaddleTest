@@ -527,8 +527,6 @@ if [[ "${docker_flag}" == "" ]]; then
         git config --global https.https://github.com.proxy agent.baidu.com:8118
         git config --global https.https://github.com.sslVerify false
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
-        unset http_proxy
-        unset https_proxy
         fi
 
         nvidia-smi;
@@ -648,8 +646,6 @@ else
         git config --global https.https://github.com.proxy agent.baidu.com:8118
         git config --global https.https://github.com.sslVerify false
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
-        unset http_proxy
-        unset https_proxy
         fi
 
     nvidia-smi;
