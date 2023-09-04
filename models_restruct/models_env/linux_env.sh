@@ -519,7 +519,11 @@ if [[ "${docker_flag}" == "" ]]; then
         # ENABLE_FALL_BACK install
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        export http_proxy=http://172.19.57.45:3128
+        export https_proxy=http://172.19.57.45:3128
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        unset http_proxy
+        unset https_proxy
         fi
 
         nvidia-smi;
@@ -631,7 +635,11 @@ else
         # ENABLE_FALL_BACK install
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        export http_proxy=http://172.19.57.45:3128
+        export https_proxy=http://172.19.57.45:3128
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        unset http_proxy
+        unset https_proxy
         fi
 
     nvidia-smi;
