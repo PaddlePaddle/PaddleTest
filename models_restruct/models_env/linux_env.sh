@@ -519,6 +519,13 @@ if [[ "${docker_flag}" == "" ]]; then
         # ENABLE_FALL_BACK install
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        set -x
+        export https_proxy=http://172.19.57.45:3128
+        export http_proxy=http://172.19.57.45:3128
+        git config --global http.https://github.com.proxy agent.baidu.com:8118
+        git config --global http.https://github.com.sslVerify false
+        git config --global https.https://github.com.proxy agent.baidu.com:8118
+        git config --global https.https://github.com.sslVerify false
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
         fi
 
@@ -631,6 +638,13 @@ else
         # ENABLE_FALL_BACK install
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        set -x
+        export https_proxy=http://172.19.57.45:3128
+        export http_proxy=http://172.19.57.45:3128
+        git config --global http.https://github.com.proxy agent.baidu.com:8118
+        git config --global http.https://github.com.sslVerify false
+        git config --global https.https://github.com.proxy agent.baidu.com:8118
+        git config --global https.https://github.com.sslVerify false
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
         fi
 
