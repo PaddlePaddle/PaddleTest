@@ -516,6 +516,11 @@ if [[ "${docker_flag}" == "" ]]; then
         unset FLAGS_enable_new_ir_in_executor
         fi
     echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        # ENABLE_FALL_BACK install
+        if [ $ENABLE_FALL_BACK == True ];then
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        fi
 
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
@@ -623,6 +628,11 @@ else
     unset FLAGS_enable_new_ir_in_executor
     fi
     echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        # ENABLE_FALL_BACK install
+        if [ $ENABLE_FALL_BACK == True ];then
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        fi
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
