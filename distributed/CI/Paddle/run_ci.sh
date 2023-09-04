@@ -17,23 +17,14 @@
 export python=$1
 export paddle=$2
 export nlp_dir=/workspace/PaddleNLP
-mkdir /workspace/PaddleNLP/logs
 mkdir /workspace/PaddleNLP/model_logs
-mkdir /workspace/PaddleNLP/unittest_logs
-mkdir /workspace/PaddleNLP/coverage_logs
-mkdir /workspace/PaddleNLP/upload
 export log_path=/workspace/PaddleNLP/model_logs
 export case_list=()
-declare -A Normal_dic
-declare -A all_case_dic
-declare -A Build_list
-all_case_dic=(["distributed"]=5 ["fluid"]=5 ["distributed"]=5 ["new_executor"]=5)
 
 ####################################
 # Insatll paddlepaddle-gpu
 install_paddle(){
     echo -e "\033[35m ---- Install paddlepaddle-gpu  \033[0m"
-    # python -m pip install --user -r scripts/regression/requirements_ci.txt
     python -m pip install --user ${paddle} --forceoreinstall --no-dependencies;
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 }
@@ -95,7 +86,7 @@ if [[ ${#case_list[*]} -ne 0 ]];then
     case_num=1
     for case in ${case_list[*]};do
         echo -e "\033[35m ---- running case $case_num/${#case_list[*]}: ${case} \033[0m"
-        bash ./ci_case.sh ${case} ${cudaid1} ${cudaid2}
+        bash ./ci_case.sh ${case} 
         print_info $? `ls -lt ${log_path} | grep gpt | head -n 1 | awk '{print $9}'`
         let case_num++
         fi
