@@ -527,6 +527,12 @@ if [[ "${docker_flag}" == "" ]]; then
         git config --global https.https://github.com.proxy agent.baidu.com:8118
         git config --global https.https://github.com.sslVerify false
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        
+        # paddlenlp dataset https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v1.1.json
+        git config --global http.https://rajpurkar.github.io.proxy agent.baidu.com:8118
+        git config --global http.https://rajpurkar.github.io.sslVerify false
+        git config --global https.https://rajpurkar.github.io.proxy agent.baidu.com:8118
+        git config --global https.https://rajpurkar.github.io.sslVerify false
         fi
 
         nvidia-smi;
