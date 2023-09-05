@@ -103,12 +103,10 @@ if [[ ${#case_list[*]} -ne 0 ]];then
     cd ${nlp_dir}/model_logs
     if [ ! -f *FAIL* ];then
         FF=0
-        case_EXCODE=0
         EXCODE=0
         echo -e "\033[32m ---- case Success \033"
     else
         FF=`ls *FAIL*|wc -l`
-        case_EXCODE=1
         EXCODE=2
         echo -e "\033[31m ---- case Failed number: ${FF} \033"
         ls *_FAIL*

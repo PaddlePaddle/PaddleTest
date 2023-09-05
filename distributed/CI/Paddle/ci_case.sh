@@ -517,6 +517,8 @@ function before_hook() {
     unset CUDA_MODULE_LOADING
     env | grep FLAGS
     # requirements
+    export http_proxy=${proxy}
+    export https_proxy=${proxy}
     python -m pip install -r requirements.txt --force-reinstall
 
     rm -rf data
@@ -535,13 +537,13 @@ function before_hook() {
 function check_result() {
     if [ $? -ne 0 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033[31m ${log_path}/$1_FAIL \033[0m"
+        echo -e "\033 ${log_path}/$1_FAIL \033"
         cat ${log_path}/$1_FAIL.log
         exit -1
     fi
 
     if [ $# -ne 7 ]; then
-        echo -e "\033[31m parameter transfer failed: $@ \033[0m" 
+        echo -e "\033 parameter transfer failed: $@ \033" 
         cat ${log_path}/$1_FAIL.log
         exit -1
     fi
@@ -549,7 +551,7 @@ function check_result() {
     echo -e "loss_base: $2 loss_test: $3" | tee -a ${log_path}/$1
     if [ $2 != $3 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033[31m ${log_path}/$1 loss diff check failed! \033[0m"
+        echo -e "\033 ${log_path}/$1 loss diff check failed! \033"
         cat ${log_path}/$1_FAIL.log
         exit -1
     else
