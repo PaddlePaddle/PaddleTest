@@ -26,7 +26,7 @@ cd /workspace/${repo}
 ####################################
 # Insatll paddlepaddle-gpu
 install_paddle(){
-    echo -e "\033 ---- Install paddlepaddle-gpu  \033"
+    echo -e "\033[31m ---- Install paddlepaddle-gpu  \033"
     python -m pip install --user ${paddle} --force-reinstall --no-dependencies;
     
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
@@ -86,20 +86,20 @@ fi
 get_diff_TO_case # 获取待执行case列表
 case_list=($(awk -v RS=' ' '!a[$1]++' <<< ${case_list[*]}))  # 去重并将结果存储回原列表
 if [[ ${#case_list[*]} -ne 0 ]];then
-    echo -e "\033 =======CI Check case========= \033"
-    echo -e "\033 ---- case_list length: ${#case_list[*]}, cases: ${case_list[*]} \033"
+    echo -e "\033[31m =======CI Check case========= \033"
+    echo -e "\033[31m ---- case_list length: ${#case_list[*]}, cases: ${case_list[*]} \033"
     set +e
-    echo -e "\033 ---- start run case  \033"
+    echo -e "\033[31m ---- start run case  \033"
     # Install paddle
     install_paddle
     case_num=1
     for case in ${case_list[*]};do
-        echo -e "\033 ---- running case $case_num/${#case_list[*]}: ${case} \033"
+        echo -e "\033[31m ---- running case $case_num/${#case_list[*]}: ${case} \033"
         bash /workspace/PaddleTest/distributed/CI/Paddle/ci_case.sh
         print_info $? `ls -lt ${log_path} | grep gpt | head -n 1 | awk '{print $9}'`
         let case_num++
     done
-    echo -e "\033 ---- end run case  \033"
+    echo -e "\033[31m ---- end run case  \033"
     cd ${nlp_dir}/model_logs
     if [ ! -f *FAIL* ];then
         FF=0

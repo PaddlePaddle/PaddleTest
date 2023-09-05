@@ -510,17 +510,18 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage3() {
 ############ case end ############
 
 function before_hook() {
-    # env FLAGS
+    echo -e "\033[31m ---- Set FLAGS  \033[0m"
     export FLAGS_new_executor_micro_batching=True  # True：打开新执行器
     export FLAGS_embedding_deterministic=1         # 1：关闭随机性
     export FLAGS_cudnn_deterministic=1             # 1：关闭随机性
     unset CUDA_MODULE_LOADING
     env | grep FLAGS
-    # requirements
+    echo -e "\033[31m ---- Install requirements  \033[0m"
     export http_proxy=${proxy}
     export https_proxy=${proxy}
     python -m pip install -r requirements.txt --force-reinstall
 
+    echo -e "\033[31m ---- download data  \033[0m"
     rm -rf data
     if [[ -e ${data_path}/data ]]; then
         echo "data downloaded"
@@ -530,7 +531,6 @@ function before_hook() {
         wget -O ${data_path}/data/gpt_en_dataset_300m_ids.npy https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy;
         wget -O ${data_path}/data/gpt_en_dataset_300m_idx.npz https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz;
     fi
-
     cp -r ${data_path}/data ${case_path}/
 }
 
@@ -564,7 +564,7 @@ function check_result() {
       echo -e "\033[31m $1 IPS increase greater than 5%! \033[0m" | tee -a $log_path/result.log
     fi
     if [[ $v2 == 0 ]];then
-      echo -e "\033[31m $1 ips diff check failed! \033[0m" | tee -a $log_path/result.log
+      echo -e "\033[31m $1 IPS diff check failed! \033[0m" | tee -a $log_path/result.log
       exit -1
     fi
 
@@ -573,7 +573,7 @@ function check_result() {
     w1=$(echo $diff_mem 5.0|awk '{print($1>=$2)?"0":"1"}')
     w2=$(echo $diff_mem -5.0|awk '{print($1<=$2)?"0":"1"}')
     if [[ $w1 == 0 ]];then
-      echo -e "\033[31m $1 mem diff check failed! \033[0m" | tee -a $log_path/result.log
+      echo -e "\033[31m $1 MEM diff check failed! \033[0m" | tee -a $log_path/result.log
       exit -1
     fi
     if [[ $w2 == 0 ]];then
@@ -584,6 +584,7 @@ function check_result() {
 main() {
     cd ${case_path}
     before_hook
+    echo -e "\033[31m ---- Start executing case \033[0m"
     case_list_auto
     cat $log_path/result.log | grep "greater than"
 }
