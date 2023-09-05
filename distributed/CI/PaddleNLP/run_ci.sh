@@ -28,6 +28,8 @@ cd /workspace/${repo}
 install_paddle(){
     echo -e "\033[31m ---- Install paddlepaddle-gpu  \033"
     python -m pip install --user ${paddle} --force-reinstall --no-dependencies;
+    export http_proxy=${proxy} && export https_proxy=${proxy};
+    python -m pip install httpx
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 }
 ####################################
