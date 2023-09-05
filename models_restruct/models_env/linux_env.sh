@@ -2,9 +2,9 @@ set +x;
 pwd;
 
 ### 加载tools/linux_env_info.sh文件
-# if [ -e linux_env_info.sh ];then
-#     rm -rf linux_env_info.sh
-# fi
+if [ -e linux_env_info.sh ];then
+    rm -rf linux_env_info.sh
+fi
 wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
 source ./linux_env_info.sh
 set +e
@@ -360,7 +360,6 @@ if [[ "${docker_flag}" == "" ]]; then
     }
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
-    set -x
     NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
         --name=${docker_name} --net=host --cap-add=SYS_ADMIN \
         --shm-size=128G \
