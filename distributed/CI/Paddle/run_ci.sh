@@ -75,7 +75,7 @@ if [ $1 -ne 0 ];then
     else
         mv ${log_path}/$2 ${log_path}/$2_FAIL.log
         echo -e "\033[31m ${log_path}/$2_FAIL \033"
-        cat ${log_path}/$2_FAIL.log
+        tail -10 ${log_path}/$2_FAIL.log
     fi
     exit $EXCODE
 else

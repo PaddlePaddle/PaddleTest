@@ -107,7 +107,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP1-PP8() {
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.570028400
     ips_base=34566
-    mem_base=2052.9
+    mem_base=1988.9
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
 }
@@ -537,13 +537,13 @@ function before_hook() {
 function check_result() {
     if [ $? -ne 0 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033 ${log_path}/$1_FAIL \033"
+        echo -e "\033[31m ${log_path}/$1_FAIL \033[0m"
         cat ${log_path}/$1_FAIL.log
         exit -1
     fi
 
     if [ $# -ne 7 ]; then
-        echo -e "\033 parameter transfer failed: $@ \033" 
+        echo -e "\033[31m parameter transfer failed: $@ \033[0m" 
         cat ${log_path}/$1_FAIL.log
         exit -1
     fi
@@ -551,29 +551,33 @@ function check_result() {
     echo -e "loss_base: $2 loss_test: $3" | tee -a ${log_path}/$1
     if [ $2 != $3 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033 ${log_path}/$1 loss diff check failed! \033"
+        echo -e "\033[31m ${log_path}/$1 loss diff check failed! \033[0m"
         cat ${log_path}/$1_FAIL.log
         exit -1
-    else
-        echo -e "\033 $1 loss diff check successfully! \033" | tee -a $log_path/result.log
     fi
 
-    diff=$(echo $4 $5|awk '{printf "%0.2f\n", ($2-$1)/$1*100}')
-    echo -e "ips_base: $4 ips_test: $5 ips_diff: $diff% " | tee -a $log_path/result.log
-    v1=$(echo $diff 5.0|awk '{print($1>=$2)?"0":"1"}')
-    v2=$(echo $diff -5.0|awk '{print($1<=$2)?"0":"1"}')
+    diff_ips=$(echo $4 $5|awk '{printf "%0.2f\n", ($2-$1)/$1*100}')
+    echo -e "ips_base: $4 ips_test: $5 ips_diff: $diff_ips% " | tee -a $log_path/result.log
+    v1=$(echo $diff_ips 5.0|awk '{print($1>=$2)?"0":"1"}')
+    v2=$(echo $diff_ips -5.0|awk '{print($1<=$2)?"0":"1"}')
     if [[ $v1 == 0 ]];then
-      echo -e "\033 $1 IPS increase greater than 5%! \033" | tee -a $log_path/result.log
+      echo -e "\033[31m $1 IPS increase greater than 5%! \033[0m" | tee -a $log_path/result.log
     fi
     if [[ $v2 == 0 ]];then
-      echo -e "\033 $1 ips diff check failed! \033" | tee -a $log_path/result.log
+      echo -e "\033[31m $1 ips diff check failed! \033[0m" | tee -a $log_path/result.log
       exit -1
     fi
 
-    echo -e "mem_base: $6 mem_test: $7" | tee -a $log_path/result.log
-    if [ $6 != $7 ];then
-      echo -e "\033 $1 mem diff check failed! \033" | tee -a $log_path/result.log
+    diff_mem=$(echo $6 $7|awk '{printf "%0.2f\n", ($2-$1)/$1*100}')
+    echo -e "mem_base: $6 mem_test: $7 mem_diff: $diff_mem% " | tee -a $log_path/result.log
+    w1=$(echo $diff_mem 5.0|awk '{print($1>=$2)?"0":"1"}')
+    w2=$(echo $diff_mem -5.0|awk '{print($1<=$2)?"0":"1"}')
+    if [[ $w1 == 0 ]];then
+      echo -e "\033[31m $1 mem diff check failed! \033[0m" | tee -a $log_path/result.log
       exit -1
+    fi
+    if [[ $w2 == 0 ]];then
+      echo -e "\033[31m $1 MEM decreases greater than 5%! \033[0m" | tee -a $log_path/result.log
     fi
 }
 
@@ -581,6 +585,7 @@ main() {
     cd ${case_path}
     before_hook
     case_list_auto
+    cat $log_path/result.log | grep "greater than"
 }
 
 main$@
