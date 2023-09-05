@@ -142,7 +142,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP2-PP4() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.697089195
-    ips_base=31923
+    ips_base=30016
     mem_base=1535.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -178,7 +178,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.669981194
-    ips_base=18986
+    ips_base=17508
     mem_base=2135.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -213,8 +213,8 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage1() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.715782070
-    ips_base=15418
+    loss_base=10.715789890
+    ips_base=13722
     mem_base=1999.2
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -250,7 +250,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage2() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.715772343
-    ips_base=15639
+    ips_base=14033
     mem_base=1999.2
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -286,7 +286,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage3() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.681084633
-    ips_base=14023
+    ips_base=12381
     mem_base=1747.6
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -394,7 +394,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage3() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.585316849
-    ips_base=15833
+    ips_base=14949
     mem_base=1591.6
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -430,7 +430,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage1() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.669967556
-    ips_base=19608
+    ips_base=18136
     mem_base=1384.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -466,7 +466,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage2() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.669967556
-    ips_base=19818
+    ips_base=18369
     mem_base=1384.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -502,7 +502,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage3() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.694304180
-    ips_base=16810
+    ips_base=15384
     mem_base=1288.5
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="   

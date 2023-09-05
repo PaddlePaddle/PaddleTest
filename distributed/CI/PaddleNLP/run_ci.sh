@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ####################################
-export repo=$1
+export python=$1
 export paddle=$2
 export nlp_dir=/workspace/PaddleNLP
 mkdir -p /workspace/PaddleNLP/model_logs
@@ -28,8 +28,6 @@ cd /workspace/${repo}
 install_paddle(){
     echo -e "\033[31m ---- Install paddlepaddle-gpu  \033"
     python -m pip install --user ${paddle} --force-reinstall --no-dependencies;
-    export http_proxy=${proxy} && export https_proxy=${proxy};
-    python -m pip install httpx
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 }
 ####################################
@@ -45,22 +43,12 @@ for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{pri
         continue
     elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
-    elif [[ ${dir1} =~ "python" ]] && [[ ${dir2} =~ "paddle" ]];then
-        if [[ ${dir3} =~ "distributed" ]] || [[ ${dir3} =~ "fluid" ]];then
-            # python/paddle/distributed  || python/paddle/fluid
-            case_list[${#case_list[*]}]=auto_parallel
-        else
+    elif [[ ${dir1} =~ "model_zoo" ]] && [[ ${dir2} =~ "gpt-3" ]];then
+        if [[ ${dir3} =~ "benchmarks" ]];then
             continue
-        fi
-    elif [[ ${dir1} =~ "python" ]] && [[ ${dir2} =~ "fluid" ]];then
-        if [[ ${dir3} =~ "distributed" ]];then
-            # paddle/fluid/distributed
-            case_list[${#case_list[*]}]=auto_parallel
-        elif [[ ${dir3} =~ "framework" ]] && [[ ${dir4} =~ "new_executor" ]];then
-            # paddle/fluid/framework/new_executor
-            case_list[${#case_list[*]}]=auto_parallel
         else
-            continue
+            # model_zoo/gpt-3
+            case_list[${#case_list[*]}]=gpt-3
         fi
     else
         continue
@@ -96,7 +84,7 @@ if [[ ${#case_list[*]} -ne 0 ]];then
     case_num=1
     for case in ${case_list[*]};do
         echo -e "\033[31m ---- running case $case_num/${#case_list[*]}: ${case} \033"
-        bash /workspace/PaddleTest/distributed/CI/Paddle/ci_case.sh
+        bash /workspace/PaddleTest/distributed/CI/PaddleNLP/ci_case.sh
         print_info $? `ls -lt ${log_path} | grep gpt | head -n 1 | awk '{print $9}'`
         let case_num++
     done
