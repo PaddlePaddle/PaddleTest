@@ -552,7 +552,6 @@ function check_result() {
     if [ $2 != $3 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
         echo -e "\033[31m ${log_path}/$1 loss diff check failed! \033[0m"
-        cat ${log_path}/$1_FAIL.log
         exit -1
     fi
 
