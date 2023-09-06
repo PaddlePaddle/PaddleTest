@@ -70,7 +70,7 @@ function gpt_auto_recompute_bs16_fp32_DP1-MP1-PP1() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.507633400
-    ips_base=3504
+    ips_base=3518
     mem_base=11750.6
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -106,7 +106,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP1-PP8() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.570028400
-    ips_base=34566
+    ips_base=35050
     mem_base=1988.9
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -142,7 +142,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP2-PP4() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.697089195
-    ips_base=30016
+    ips_base=32518
     mem_base=1535.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -178,7 +178,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.669981194
-    ips_base=17508
+    ips_base=18681
     mem_base=2135.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -214,7 +214,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage1() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.715789890
-    ips_base=13722
+    ips_base=15232
     mem_base=1999.2
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -250,7 +250,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage2() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.715772343
-    ips_base=14033
+    ips_base=15571.5
     mem_base=1999.2
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -286,7 +286,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage3() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.681084633
-    ips_base=12381
+    ips_base=13813
     mem_base=1747.6
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -322,7 +322,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage1() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.579057693
-    ips_base=19860
+    ips_base=19822
     mem_base=1709.8
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -358,7 +358,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage2() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.579057693
-    ips_base=20167
+    ips_base=20170
     mem_base=1709.8
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -394,7 +394,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage3() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.585316849
-    ips_base=14949
+    ips_base=15742
     mem_base=1591.6
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -430,7 +430,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage1() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.669967556
-    ips_base=18136
+    ips_base=19461
     mem_base=1384.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -466,7 +466,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage2() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.669967556
-    ips_base=18369
+    ips_base=19652
     mem_base=1384.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -502,8 +502,8 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage3() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.694304180
-    ips_base=15384
-    mem_base=1288.5
+    ips_base=16613
+    mem_base=1280.5
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="   
 }
@@ -537,13 +537,14 @@ function before_hook() {
 function check_result() {
     if [ $? -ne 0 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033[31m ${log_path}/$1_FAIL \033[0m"
+        echo -e "\033[31m $1 run failed! \033[0m"
         cat ${log_path}/$1_FAIL.log
         exit -1
     fi
 
     if [ $# -ne 7 ]; then
-        echo -e "\033[31m parameter transfer failed: $@ \033[0m" 
+        mv ${log_path}/$1 ${log_path}/$1_FAIL.log
+        echo -e "\033[31m $1 parameter transfer failed: $@ \033[0m" 
         cat ${log_path}/$1_FAIL.log
         exit -1
     fi
@@ -551,7 +552,7 @@ function check_result() {
     echo -e "loss_base: $2 loss_test: $3" | tee -a ${log_path}/$1
     if [ $2 != $3 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033[31m ${log_path}/$1 loss diff check failed! \033[0m"
+        echo -e "\033[31m $1 loss diff check failed! \033[0m"
         exit -1
     fi
 
@@ -563,8 +564,9 @@ function check_result() {
       echo -e "\033[31m $1 IPS increase greater than 5%! \033[0m" | tee -a $log_path/result.log
     fi
     if [[ $v2 == 0 ]];then
-      echo -e "\033[31m $1 IPS diff check failed! \033[0m" | tee -a $log_path/result.log
-      exit -1
+        mv ${log_path}/$1 ${log_path}/$1_FAIL.log
+        echo -e "\033[31m $1 IPS diff check failed! \033[0m" | tee -a $log_path/result.log
+        exit -1
     fi
 
     diff_mem=$(echo $6 $7|awk '{printf "%0.2f\n", ($2-$1)/$1*100}')
@@ -572,8 +574,9 @@ function check_result() {
     w1=$(echo $diff_mem 5.0|awk '{print($1>=$2)?"0":"1"}')
     w2=$(echo $diff_mem -5.0|awk '{print($1<=$2)?"0":"1"}')
     if [[ $w1 == 0 ]];then
-      echo -e "\033[31m $1 MEM diff check failed! \033[0m" | tee -a $log_path/result.log
-      exit -1
+        mv ${log_path}/$1 ${log_path}/$1_FAIL.log
+        echo -e "\033[31m $1 MEM diff check failed! \033[0m" | tee -a $log_path/result.log
+        exit -1
     fi
     if [[ $w2 == 0 ]];then
       echo -e "\033[31m $1 MEM decreases greater than 5%! \033[0m" | tee -a $log_path/result.log
