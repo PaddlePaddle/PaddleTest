@@ -549,7 +549,8 @@ function check_result() {
         exit -1
     fi
 
-    echo -e "loss_base: $2 loss_test: $3" | tee -a ${log_path}/$1
+    diff_loss=$(echo $2 $3|awk '{printf "%0.2f\n", ($2-$1)/$1*100}')
+    echo -e "loss_base: $2 loss_test: $3 loss_diff: $diff_loss%" | tee -a ${log_path}/result.log
     if [ $2 != $3 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
         echo -e "\033[31m $1 loss diff check failed! \033[0m"
