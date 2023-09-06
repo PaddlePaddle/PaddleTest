@@ -590,7 +590,6 @@ main() {
     before_hook
     echo -e "\033[31m ---- Start executing case \033[0m"
     case_list_auto
-    cat $log_path/result.log | grep "greater than"
 }
 
 main$@
