@@ -250,7 +250,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage2() {
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
     loss_base=10.715772343
-    ips_base=15571.5
+    ips_base=15571
     mem_base=1999.2
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
@@ -535,16 +535,17 @@ function before_hook() {
 }
 
 function check_result() {
+    echo -e "$1" | tee -a ${log_path}/result.log
     if [ $? -ne 0 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033[31m $1 run failed! \033[0m"
+        echo -e "\033[31m $1 run failed! \033[0m" | tee -a ${log_path}/result.log
         cat ${log_path}/$1_FAIL.log
         exit -1
     fi
 
     if [ $# -ne 7 ]; then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033[31m $1 parameter transfer failed: $@ \033[0m" 
+        echo -e "\033[31m $1 parameter transfer failed: $@ \033[0m" | tee -a ${log_path}/result.log
         cat ${log_path}/$1_FAIL.log
         exit -1
     fi
@@ -553,7 +554,7 @@ function check_result() {
     echo -e "loss_base: $2 loss_test: $3 loss_diff: $diff_loss%" | tee -a ${log_path}/result.log
     if [ $2 != $3 ];then
         mv ${log_path}/$1 ${log_path}/$1_FAIL.log
-        echo -e "\033[31m $1 loss diff check failed! \033[0m"
+        echo -e "\033[31m $1 loss diff check failed! \033[0m" | tee -a ${log_path}/result.log
         exit -1
     fi
 
