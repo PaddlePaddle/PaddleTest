@@ -505,7 +505,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage3() {
     ips_base=16613
     mem_base=1280.5
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
-    echo "=========== $FUNCNAME run  end ==========="   
+    echo "=========== $FUNCNAME run  end ==========="
 }
 ############ case end ############
 
