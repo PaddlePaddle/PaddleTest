@@ -6,6 +6,6 @@ train:
       - --epochs=20000
     result:
       best metric:
-        base: 0.014035339467227459
+        base: 0.01403
         threshold: 1
         evaluation: "-"
