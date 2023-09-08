@@ -408,7 +408,7 @@ class PaddleClas_Build(Model_Build):
         ):
             logger.info("#### fp16 or amp install")
             if os.path.exists("nvidia_dali_cuda102-1.8.0-3362432-py3-none-manylinux2014_x86_64.whl") and os.path.exists(
-                "nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl"
+                "nvidia_dali_nightly_cuda110-1.30.0.dev20230904-9637328-py3-none-manylinux2014_x86_64.whl"
             ):
                 logger.info("#### already download nvidia_dali_cuda102 nvidia_dali_cuda110")
             else:
@@ -420,7 +420,7 @@ class PaddleClas_Build(Model_Build):
                     )
                     wget.download(
                         "https://paddle-qa.bj.bcebos.com/PaddleClas/{}".format(
-                            "nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl"
+                            "nvidia_dali_nightly_cuda110-1.30.0.dev20230904-9637328-py3-none-manylinux2014_x86_64.whl"
                         )
                     )
                 except:
@@ -467,13 +467,13 @@ class PaddleClas_Build(Model_Build):
             # 安装nvidia
             exit_code_nvidia = os.system(
                 "python -m  pip install \
-            nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl \
+            nvidia_dali_nightly_cuda110-1.30.0.dev20230904-9637328-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
             )
             if exit_code_nvidia and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
                 exit_code_nvidia = os.system(
                     "python -m  pip install --user\
-            nvidia_dali_cuda110-1.23.0-7355173-py3-none-manylinux2014_x86_64.whl \
+            nvidia_dali_nightly_cuda110-1.30.0.dev20230904-9637328-py3-none-manylinux2014_x86_64.whl \
                 -i https://mirror.baidu.com/pypi/simple"
                 )
             if exit_code_nvidia:
