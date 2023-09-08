@@ -537,23 +537,18 @@ function before_hook() {
 function check_result() {
     echo -e "$1" | tee -a ${log_path}/result.log
     if [ $? -ne 0 ];then
-        mv ${log_path}/$1 ${log_path}/$1_FAIL.log
         echo -e "\033[31m $1 run failed! \033[0m" | tee -a ${log_path}/result.log
-        cat ${log_path}/$1_FAIL.log
         exit -1
     fi
 
     if [ $# -ne 7 ]; then
-        mv ${log_path}/$1 ${log_path}/$1_FAIL.log
         echo -e "\033[31m $1 parameter transfer failed: $@ \033[0m" | tee -a ${log_path}/result.log
-        cat ${log_path}/$1_FAIL.log
         exit -1
     fi
 
     diff_loss=$(echo $2 $3|awk '{printf "%0.2f\n", ($2-$1)/$1*100}')
     echo -e "loss_base: $2 loss_test: $3 loss_diff: $diff_loss%" | tee -a ${log_path}/result.log
     if [ $2 != $3 ];then
-        mv ${log_path}/$1 ${log_path}/$1_FAIL.log
         echo -e "\033[31m $1 loss diff check failed! \033[0m" | tee -a ${log_path}/result.log
         exit -1
     fi
@@ -566,7 +561,6 @@ function check_result() {
       echo -e "\033[31m $1 IPS increase greater than 5%! \033[0m" | tee -a $log_path/result.log
     fi
     if [[ $v2 == 0 ]];then
-        mv ${log_path}/$1 ${log_path}/$1_FAIL.log
         echo -e "\033[31m $1 IPS diff check failed! \033[0m" | tee -a $log_path/result.log
         exit -1
     fi
@@ -576,7 +570,6 @@ function check_result() {
     w1=$(echo $diff_mem 5.0|awk '{print($1>=$2)?"0":"1"}')
     w2=$(echo $diff_mem -5.0|awk '{print($1<=$2)?"0":"1"}')
     if [[ $w1 == 0 ]];then
-        mv ${log_path}/$1 ${log_path}/$1_FAIL.log
         echo -e "\033[31m $1 MEM diff check failed! \033[0m" | tee -a $log_path/result.log
         exit -1
     fi
