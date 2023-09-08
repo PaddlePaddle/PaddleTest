@@ -558,7 +558,7 @@ function check_result() {
     v1=$(echo $diff_ips 5.0|awk '{print($1>=$2)?"0":"1"}')
     v2=$(echo $diff_ips -5.0|awk '{print($1<=$2)?"0":"1"}')
     if [[ $v1 == 0 ]];then
-      echo -e "\033[31m $1 IPS increase greater than 5%! \033[0m" | tee -a $log_path/result.log
+        echo -e " $1 IPS increase greater than 5%, not exit " | tee -a $log_path/result.log
     fi
     if [[ $v2 == 0 ]];then
         echo -e "\033[31m $1 IPS diff check failed! \033[0m" | tee -a $log_path/result.log
@@ -574,7 +574,7 @@ function check_result() {
         exit -1
     fi
     if [[ $w2 == 0 ]];then
-      echo -e "\033[31m $1 MEM decreases greater than 5%! \033[0m" | tee -a $log_path/result.log
+        echo -e " $1 MEM decreases greater than 5%, not exit " | tee -a $log_path/result.log
     fi
 }
 
