@@ -44,8 +44,8 @@ for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{pri
     elif [[ ${file_name##*.} == "md" ]] || [[ ${file_name##*.} == "rst" ]] || [[ ${dir1} == "docs" ]];then
         continue
     elif [[ ${dir1} =~ "python" ]] && [[ ${dir2} =~ "paddle" ]];then
-        if [[ ${dir3} =~ "distributed" ]] || [[ ${dir3} =~ "fluid" ]];then
-            # python/paddle/distributed  || python/paddle/fluid
+        if [[ ${dir3} =~ "distributed" ]] || [[ ${dir3} =~ "base" ]];then
+            # python/paddle/distributed  || python/paddle/base
             case_list[${#case_list[*]}]=auto_parallel
         else
             continue
@@ -56,6 +56,16 @@ for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{pri
             case_list[${#case_list[*]}]=auto_parallel
         elif [[ ${dir3} =~ "framework" ]] && [[ ${dir4} =~ "new_executor" ]];then
             # paddle/fluid/framework/new_executor
+            case_list[${#case_list[*]}]=auto_parallel
+        else
+            continue
+        fi
+    elif [[ ${dir1} =~ "paddle" ]] && [[ ${dir2} =~ "phi" ]];then
+        if [[ ${dir3} =~ "infermeta" ]] && [[ ${dir4} =~ "spmd_rules" ]];then
+            # paddle/phi/infermeta/spmd_rules
+            case_list[${#case_list[*]}]=auto_parallel
+        elif [[ ${dir3} =~ "core" ]] && [[ ${dir4} =~ "distributed" ]];then
+            # paddle/phi/core/distributed
             case_list[${#case_list[*]}]=auto_parallel
         else
             continue
