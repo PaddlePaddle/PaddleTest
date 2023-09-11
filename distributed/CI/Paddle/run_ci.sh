@@ -50,7 +50,7 @@ for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{pri
         else
             continue
         fi
-    elif [[ ${dir1} =~ "python" ]] && [[ ${dir2} =~ "fluid" ]];then
+    elif [[ ${dir1} =~ "paddle" ]] && [[ ${dir2} =~ "fluid" ]];then
         if [[ ${dir3} =~ "distributed" ]];then
             # paddle/fluid/distributed
             case_list[${#case_list[*]}]=auto_parallel

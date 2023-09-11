@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ####################################
-export python=$1
+export repo=$1
 export paddle=$2
 export nlp_dir=/workspace/PaddleNLP
 mkdir -p /workspace/PaddleNLP/model_logs
@@ -28,8 +28,6 @@ cd /workspace/${repo}
 install_paddle(){
     echo -e "\033[31m ---- Install paddlepaddle-gpu  \033"
     python -m pip install --user ${paddle} --force-reinstall --no-dependencies;
-    export http_proxy=${proxy} && export https_proxy=${proxy};
-    python -m pip install httpx
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 }
 ####################################
