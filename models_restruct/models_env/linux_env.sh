@@ -5,7 +5,9 @@ pwd;
 if [ -e linux_env_info.sh ];then
     rm -rf linux_env_info.sh
 fi
-wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+# 临时使用
+wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh
 source ./linux_env_info.sh
 set +e
 
@@ -234,6 +236,8 @@ export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
 export FLAGS_prim_all=${FLAGS_prim_all:-false}
 # new ir
 export FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor:-0}
+# paddleSOT
+export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -403,6 +407,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
         -e FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor} \
+        -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
@@ -512,6 +517,19 @@ if [[ "${docker_flag}" == "" ]]; then
         echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
         unset FLAGS_enable_new_ir_in_executor
         fi
+    echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        # ENABLE_FALL_BACK install
+        if [ $ENABLE_FALL_BACK == True ];then
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        set -x
+        export https_proxy=http://172.19.57.45:3128
+        export http_proxy=http://172.19.57.45:3128
+        git config --global http.https://github.com.proxy agent.baidu.com:8118
+        git config --global http.https://github.com.sslVerify false
+        git config --global https.https://github.com.proxy agent.baidu.com:8118
+        git config --global https.https://github.com.sslVerify false
+        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        fi
 
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
@@ -618,6 +636,19 @@ else
     echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
     unset FLAGS_enable_new_ir_in_executor
     fi
+    echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        # ENABLE_FALL_BACK install
+        if [ $ENABLE_FALL_BACK == True ];then
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        set -x
+        export https_proxy=http://172.19.57.45:3128
+        export http_proxy=http://172.19.57.45:3128
+        git config --global http.https://github.com.proxy agent.baidu.com:8118
+        git config --global http.https://github.com.sslVerify false
+        git config --global https.https://github.com.proxy agent.baidu.com:8118
+        git config --global https.https://github.com.sslVerify false
+        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        fi
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";

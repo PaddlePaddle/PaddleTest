@@ -1,0 +1,6 @@
+python/paddle/distributed
+python/paddle/base
+paddle/fluid/distributed
+paddle/fluid/framework/new_executor
+paddle/phi/infermeta/spmd_rules
+paddle/phi/core/distributed
