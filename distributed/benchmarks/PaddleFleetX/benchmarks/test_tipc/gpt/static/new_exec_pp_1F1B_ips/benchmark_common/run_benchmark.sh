@@ -170,7 +170,7 @@ function _train(){
     export FLAGS_new_executor_micro_batching=True  # True：打开新执行器；False：关闭新执行器
     export FLAGS_embedding_deterministic=0         # 1：关闭随机性（仅在测试精度时为1），0：打开随机性（测性能时必须为0，或者不设置）
     export FLAGS_cudnn_deterministic=0             # 1：关闭随机性（仅在测试精度时为1）；0：打开随机性（测性能时必须为0，或者不设置）
-    export FLAGS_dynamic_static_unified_comm=True  # 新通信库
+    export FLAGS_dynamic_static_unified_comm=False  # 新通信库
     env |grep FLAGS
     if [[ ${model_item} =~ "CE" ]];then # CE精度-不限制执行时间
         ${train_cmd} > ${log_file} 2>&1
