@@ -3,7 +3,7 @@
 cur_path=`pwd`
 echo ${cur_path}
 
-work_path = ${root_path}/PaddleMIX/ppdiffusers/examples
+work_path=${root_path}/PaddleMIX/ppdiffusers/examples
 echo ${work_path}
 
 log_dir=${cur_path}/../log
