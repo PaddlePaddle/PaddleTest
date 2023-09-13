@@ -156,7 +156,7 @@ function _train(){
             -o Distributed.pp_degree=${pp_degree} \
             -o Distributed.sharding.sharding_degree=${sharding_degree} \
             -o Engine.mix_precision.enable=False \
-            -o Engine.max_steps=99 \
+            -o Engine.max_steps=100 \
             -o Engine.eval_freq=100000 \
             -o Distributed.schedule_mode=${schedule_mode} \
             -o Engine.verbose=3 \
