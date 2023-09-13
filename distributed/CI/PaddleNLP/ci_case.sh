@@ -977,12 +977,12 @@ function before_hook() {
 }
 
 function check_result() {
-    echo -e "$1" | tee -a ${log_path}/result.log
     if [ $? -ne 0 ];then
         echo -e "\033[31m $1 run failed! \033[0m" | tee -a ${log_path}/result.log
         exit -1
     fi
     if [[ $1 =~ "auto" ]];then
+        echo -e "$1" | tee -a ${log_path}/result.log
         if [ $# -ne 7 ]; then
             echo -e "\033[31m $1 parameter transfer failed: $@ \033[0m" | tee -a ${log_path}/result.log
             exit -1
@@ -1018,8 +1018,6 @@ function check_result() {
         if [[ $w2 == 0 ]];then
             echo -e " $1 MEM decreases greater than 5%, not exit " | tee -a $log_path/result.log
         fi
-    else
-        continue
     fi
 
 }
