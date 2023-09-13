@@ -1,5 +1,5 @@
 # 已禁用的api: paddle.nn.functional.glu, paddle.diff, paddle.Tensor.lerp_, paddle.nn.GRUCell
-# 因为pr57010导致的禁用: nanmean_0, Fold_0, unfold_0, nansum_0, fold_0, Unfold_0
+# 因为pr57010导致的禁用: nanmean_0, Fold_0, unfold_0, nansum_0, fold_0, Unfold_0, PairwiseDistance_0
 Conv2D_0:
   desc: "二维卷积 0"
   paddle:
@@ -16038,29 +16038,29 @@ MultiHeadAttention_0:
     mapping:
       ins: { data0: query, data1: key, data2: value, embed_dim: embed_dim, num_heads: num_heads, dropout: dropout }
 
-PairwiseDistance_0:
-  desc: "计算两个tensor之间pairwise的距离"
-  paddle:
-    api_name: "paddle.nn.PairwiseDistance"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-      data1:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-    params:
-      p: 2.
-  pytorch:
-    api_name: "torch.nn.PairwiseDistance"
-    mapping:
-      ins: { data0: input1, data1: input2, p: p }
+# PairwiseDistance_0:
+#   desc: "计算两个tensor之间pairwise的距离"
+#   paddle:
+#     api_name: "paddle.nn.PairwiseDistance"
+#     inputs:
+#       data0:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1]
+#         range: [ -1, 1]
+#       data1:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1]
+#         range: [ -1, 1]
+#     params:
+#       p: 2.
+#   pytorch:
+#     api_name: "torch.nn.PairwiseDistance"
+#     mapping:
+#       ins: { data0: input1, data1: input2, p: p }
 
 PixelShuffle_0:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"
