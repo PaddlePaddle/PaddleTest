@@ -21,12 +21,14 @@ exit_code=0
 export http_proxy=${proxy}
 export https_proxy=${proxy}
 # 下载依赖、数据集和权重
+python3.10 -m pip install --upgrade pip
 bash prepare.sh
 
 echo "*******ppdiffusers examples_test train begin***********"
 bash train.sh 2>&1 | tee ${log_dir}/ppdiffusers_examples_test_train.log
-exit_code=$(($exit_code + $?))
-if [ $? -eq 0 ]; then
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run ppdiffusers examples_test train run success" >> "${log_dir}/ppdiffusers_examples_test_ce_res.log"
 else

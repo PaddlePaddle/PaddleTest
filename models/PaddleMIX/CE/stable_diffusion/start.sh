@@ -33,8 +33,9 @@ bash prepare.sh
 # 单机训练
 echo "*******stable_diffusion singe_train begin***********"
 bash singe_train.sh 2>&1 | tee ${log_dir}/stable_diffusion_singe_train.log
-exit_code=$(($exit_code + $?))
-if [ $? -eq 0 ]; then
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run stable_diffusion_singe_train run success" >> "${log_dir}/ce_res.log"
 else
@@ -47,9 +48,9 @@ echo "*******stable_diffusion singe_train end***********"
 echo "******stable_diffusion singe infer begin***********"
 rm -rf astronaut_rides_horse.png
 python infer.py 2>&1 | tee ${log_dir}/stable_diffusion_single_infer.log
-exit_code=$(($exit_code + $?))
-# 检查infer.py的返回状态
-if [ $? -eq 0 ]; then
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run stable_diffusion_single_infer run success" >> "${log_dir}/ce_res.log"
 else
@@ -61,8 +62,9 @@ echo "*******stable_diffusion singe infer end***********"
 # 多机训练
 echo "*******stable_diffusion muti_train begin***********"
 bash muti_train.sh 2>&1 | tee ${log_dir}/stable_diffusion_muti_train.log
-exit_code=$(($exit_code + $?))
-if [ $? -eq 0 ]; then
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run stable_diffusion_muti_train run success" >> "${log_dir}/ce_res.log"
 else
@@ -75,9 +77,9 @@ echo "*******stable_diffusion muti_train end***********"
 echo "*******stable_diffusion multi infer begin***********"
 rm -rf astronaut_rides_horse.png
 python infer.py 2>&1 | tee ${log_dir}/stable_diffusion_muti_infer.log
-exit_code=$(($exit_code + $?))
-# 检查infer.py的返回状态
-if [ $? -eq 0 ]; then
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run stable_diffusion_multi_infer run success" >> "${log_dir}/ce_res.log"
 else

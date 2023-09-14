@@ -22,8 +22,9 @@ bash dreambooth_prepare.sh
 # lora dreambooth_train
 echo "*******lora dreambooth_train begin***********"
 bash dreambooth_train.sh 2>&1 | tee ${log_dir}/lora_dreambooth_train.log
-exit_code=$(($exit_code + $?))
-if [ $? -eq 0 ]; then
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run lora_dreambooth_train run success" >> "${log_dir}/lora_ce_res.log"
 else
@@ -35,9 +36,10 @@ echo "*******lora dreambooth_train end***********"
 # lora dreambooth_infer
 echo "*******lora dreambooth infer begin***********"
 python dreambooth_infer.py 2>&1 | tee ${log_dir}/lora_dreambooth_infer.log
-exit_code=$(($exit_code + $?))
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
 # 检查infer.py的返回状态
-if [ $? -eq 0 ]; then
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run lora dreambooth_infer run success" >> "${log_dir}/lora_ce_res.log"
 else
@@ -50,11 +52,11 @@ echo "*******lora dreambooth_infer end***********"
 cd ${work_path}/text_to_image/
 # 下载依赖
 bash text_to_image_prepare.sh
-exit_code=$(($exit_code + $?))
 echo "*******lora text_to_image train begin***********"
 bash text_to_image_train.sh 2>&1 | tee ${log_dir}/lora_text_to_image_train.log
-exit_code=$(($exit_code + $?))
-if [ $? -eq 0 ]; then
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run lora text_to_image run success" >> "${log_dir}/lora_ce_res.log"
 else
@@ -63,12 +65,12 @@ else
 fi
 echo "*******lora text_to_image train end***********"
 
-# 多机训练的结果进行推理
+# lora_text_to_image
 echo "*******lora text_to_image infer begin***********"
 python text_to_image_infer.py 2>&1 | tee ${log_dir}/lora_text_to_image_infer.log
-exit_code=$(($exit_code + $?))
-# 检查infer.py的返回状态
-if [ $? -eq 0 ]; then
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "run lora text_to_image run success" >> "${log_dir}/lora_ce_res.log"
 else
