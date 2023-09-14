@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
-
 rm -rf ./laion400m_pretrain_output_trainer
 export FLAGS_conv_workspace_size_limit=4096
 # 是否开启ema
