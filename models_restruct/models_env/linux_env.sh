@@ -5,7 +5,9 @@ pwd;
 if [ -e linux_env_info.sh ];then
     rm -rf linux_env_info.sh
 fi
-wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+# 临时使用
+wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh
 source ./linux_env_info.sh
 set +e
 
@@ -234,6 +236,8 @@ export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
 export FLAGS_prim_all=${FLAGS_prim_all:-false}
 # new ir
 export FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor:-0}
+# paddleSOT
+export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -403,6 +407,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
         -e FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor} \
+        -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
@@ -512,12 +517,25 @@ if [[ "${docker_flag}" == "" ]]; then
         echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
         unset FLAGS_enable_new_ir_in_executor
         fi
+    echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        # ENABLE_FALL_BACK install
+        if [ $ENABLE_FALL_BACK == True ];then
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        set -x
+        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        # paddlenlp
+	if [ $reponame == "PaddleNLP" ];then
+        echo "PaddleNLP config"
+        sed -i "128,133d" diy_build/PaddleNLP_Build.py
+        fi
+        fi
 
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None}
     ' &
     wait $!
@@ -618,6 +636,13 @@ else
     echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
     unset FLAGS_enable_new_ir_in_executor
     fi
+    echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        # ENABLE_FALL_BACK install
+        if [ $ENABLE_FALL_BACK == True ];then
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        set -x
+        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        fi
 
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
