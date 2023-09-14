@@ -347,5 +347,5 @@ fi
 #echo "THE RESULT ${repo}" >>${ROOT_PATH}/FINAL_RESULT_${repo}
 
 #echo "" >>${ROOT_PATH}/FINAL_RESULT_${repo}
-python report.py ${repo} chain_base xpu_test@baidu.com suijiaxin@baidu.com,songkai05@baidu.com,liqi27@baidu.com proxy-in.baidu.com >${ROOT_PATH}/FINAL_RESULT_${repo}
-#python report.py ${repo} chain_base xpu_test@baidu.com suijiaxin@baidu.com proxy-in.baidu.com >${ROOT_PATH}/FINAL_RESULT_${repo}
+# python report.py ${repo} chain_base xpu_test@baidu.com suijiaxin@baidu.com,songkai05@baidu.com,liqi27@baidu.com proxy-in.baidu.com >${ROOT_PATH}/FINAL_RESULT_${repo}
+python report.py ${repo} chain_base xpu_test@baidu.com suijiaxin@baidu.com proxy-in.baidu.com >${ROOT_PATH}/FINAL_RESULT_${repo}
