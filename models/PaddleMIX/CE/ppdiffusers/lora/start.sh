@@ -21,8 +21,8 @@ exit_code=0
 bash dreambooth_prepare.sh
 # lora dreambooth_train
 echo "*******lora dreambooth_train begin***********"
-bash dreambooth_train.sh 2>&1 | tee ${log_dir}/lora_dreambooth_train.log
-tmp_exit_code=$?
+(bash dreambooth_train.sh) 2>&1 | tee ${log_dir}/lora_dreambooth_train.log
+tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
@@ -35,8 +35,8 @@ echo "*******lora dreambooth_train end***********"
 
 # lora dreambooth_infer
 echo "*******lora dreambooth infer begin***********"
-python dreambooth_infer.py 2>&1 | tee ${log_dir}/lora_dreambooth_infer.log
-tmp_exit_code=$?
+(python dreambooth_infer.py) 2>&1 | tee ${log_dir}/lora_dreambooth_infer.log
+tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 # 检查infer.py的返回状态
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -53,8 +53,8 @@ cd ${work_path}/text_to_image/
 # 下载依赖
 bash text_to_image_prepare.sh
 echo "*******lora text_to_image train begin***********"
-bash text_to_image_train.sh 2>&1 | tee ${log_dir}/lora_text_to_image_train.log
-tmp_exit_code=$?
+(bash text_to_image_train.sh) 2>&1 | tee ${log_dir}/lora_text_to_image_train.log
+tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
@@ -67,8 +67,8 @@ echo "*******lora text_to_image train end***********"
 
 # lora_text_to_image
 echo "*******lora text_to_image infer begin***********"
-python text_to_image_infer.py 2>&1 | tee ${log_dir}/lora_text_to_image_infer.log
-tmp_exit_code=$?
+(python text_to_image_infer.py) 2>&1 | tee ${log_dir}/lora_text_to_image_infer.log
+tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log

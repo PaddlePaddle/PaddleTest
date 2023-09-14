@@ -32,8 +32,9 @@ exit_code=0
 bash prepare.sh
 # 单机训练
 echo "*******stable_diffusion singe_train begin***********"
-bash singe_train.sh 2>&1 | tee ${log_dir}/stable_diffusion_singe_train.log
-tmp_exit_code=$?
+(bash singe_train.sh) 2>&1 | tee ${log_dir}/stable_diffusion_singe_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+echo ${tmp_exit_code}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
@@ -47,8 +48,8 @@ echo "*******stable_diffusion singe_train end***********"
 # 单机训练的结果进行推理
 echo "******stable_diffusion singe infer begin***********"
 rm -rf astronaut_rides_horse.png
-python infer.py 2>&1 | tee ${log_dir}/stable_diffusion_single_infer.log
-tmp_exit_code=$?
+(python infer.py 2>&1) | tee ${log_dir}/stable_diffusion_single_infer.log
+tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
@@ -61,8 +62,8 @@ echo "*******stable_diffusion singe infer end***********"
 
 # 多机训练
 echo "*******stable_diffusion muti_train begin***********"
-bash muti_train.sh 2>&1 | tee ${log_dir}/stable_diffusion_muti_train.log
-tmp_exit_code=$?
+(bash muti_train.sh) 2>&1 | tee ${log_dir}/stable_diffusion_muti_train.log
+tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
@@ -76,8 +77,8 @@ echo "*******stable_diffusion muti_train end***********"
 # 多机训练的结果进行推理
 echo "*******stable_diffusion multi infer begin***********"
 rm -rf astronaut_rides_horse.png
-python infer.py 2>&1 | tee ${log_dir}/stable_diffusion_muti_infer.log
-tmp_exit_code=$?
+(python infer.py) 2>&1 | tee ${log_dir}/stable_diffusion_muti_infer.log
+tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log

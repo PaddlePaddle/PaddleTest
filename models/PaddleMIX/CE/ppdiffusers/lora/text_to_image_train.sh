@@ -25,3 +25,8 @@ python train_text_to_image_lora.py \
   --lora_rank=4 \
   --seed=1337 \
   --validation_epochs 10
+
+# 检查命令是否成功执行
+if [ $? -ne 0 ]; then
+  exit 1
+fi

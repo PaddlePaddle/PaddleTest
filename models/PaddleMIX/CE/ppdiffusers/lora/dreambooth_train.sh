@@ -25,3 +25,8 @@ python train_dreambooth_lora.py \
   --validation_epochs=50 \
   --lora_rank=4 \
   --seed=0
+
+# 检查命令是否成功执行
+if [ $? -ne 0 ]; then
+  exit 1
+fi

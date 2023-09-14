@@ -31,3 +31,8 @@ python -u -m paddle.distributed.launch --gpus "0,1,2,3,4,5,6,7" train_txt2img_la
     --max_grad_norm -1 \
     --disable_tqdm True \
     --bf16 True
+
+# 检查命令是否成功执行
+if [ $? -ne 0 ]; then
+  exit 1
+fi
