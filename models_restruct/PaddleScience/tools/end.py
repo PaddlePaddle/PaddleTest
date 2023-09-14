@@ -61,7 +61,8 @@ class PaddleScience_End(object):
         #     logger.info("build remove_data failed")
         #     return ret
         mode = os.getenv("mode")
-        if mode == "precision":
+        system = os.environ["system"]
+        if mode == "precision" and "Windows" not in system:
             url = "https://paddle-qa.bj.bcebos.com/suijiaxin/base_log/{}_base.log".format(self.qa_yaml_name)
             file_name = "{}_base.log".format(self.qa_yaml_name)
             try:
