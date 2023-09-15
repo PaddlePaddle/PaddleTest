@@ -6,9 +6,6 @@ echo ${cur_path}
 work_path=${root_path}/PaddleMIX/ppdiffusers/examples/stable_diffusion
 echo ${work_path}
 
-work_path2=${root_path}/PaddleMIX/ppdiffusers/
-echo ${work_path2}
-
 log_dir=${root_path}/log
 
 # 检查上一级目录中是否存在log目录
@@ -19,11 +16,6 @@ fi
 
 
 /bin/cp -rf ./* ${work_path}
-
-cd ${work_path2}
-pip install -e . -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
-pip install -r requirements.txt -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
-pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
 
 cd ${work_path}
 exit_code=0
@@ -88,8 +80,8 @@ else
 fi
 echo "*******stable_diffusion multi infer end***********"
 
-# 查看结果
-cat ${log_dir}/ce_res.log
+# # 查看结果
+# cat ${log_dir}/ce_res.log
 
 echo exit_code:${exit_code}
 exit ${exit_code}

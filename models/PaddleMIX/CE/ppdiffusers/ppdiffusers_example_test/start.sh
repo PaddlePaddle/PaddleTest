@@ -37,8 +37,8 @@ else
 fi
 echo "*******ppdiffusers examples_test train end***********"
 
-# 查看结果
-cat ${log_dir}/ce_res.log
+# # 查看结果
+# cat ${log_dir}/ce_res.log
 
 echo exit_code:${exit_code}
 exit ${exit_code}

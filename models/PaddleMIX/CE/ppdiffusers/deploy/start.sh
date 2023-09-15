@@ -87,3 +87,9 @@ else
     echo "ppdiffusers deploy test_infer_fd run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******ppdiffusers deploy test_infer_fd end***********"
+
+# # 查看结果
+# cat ${log_dir}/lora_ce_res.log
+
+echo exit_code:${exit_code}
+exit ${exit_code}

@@ -35,5 +35,8 @@ bash single_predict.sh
 bash multi_predict.sh
 exit_code=$(($exit_code + $?))
 
+# # 查看结果
+# cat ${log_dir}/ce_res.log
+
 echo exit_code:${exit_code}
 exit ${exit_code}
