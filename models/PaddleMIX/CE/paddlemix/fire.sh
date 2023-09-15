@@ -23,9 +23,11 @@ for subdir in */; do
   if [ -d "$subdir" ]; then
     start_script_path="$subdir/start.sh"
     
-    # 检查start.sh文件是否存在并可执行，然后执行它
-    if [ -f "$start_script_path" ] && [ -x "$start_script_path" ]; then
-      "$start_script_path"
+    # 检查start.sh文件是否存在
+    if [ -f "$start_script_path" ]; then
+      # 执行start.sh文件，并将退出码存储在变量中
+      cd $subdir
+      bash start.sh
       exit_code=$((exit_code + $?))
     fi
   fi

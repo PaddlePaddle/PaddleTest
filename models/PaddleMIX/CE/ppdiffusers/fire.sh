@@ -21,11 +21,19 @@ cd ${work_path}
 # 遍历当前目录下的子目录
 for subdir in */; do
   if [ -d "$subdir" ]; then
+
+    # 检查子目录是否为"deploy"，如果是，则跳过(该目录需要在A100设备下跑)
+    if [ "$subdir" == "deploy/" ]; then
+      continue
+    fi
+
     start_script_path="$subdir/start.sh"
     
-    # 检查start.sh文件是否存在并可执行，然后执行它
-    if [ -f "$start_script_path" ] && [ -x "$start_script_path" ]; then
-      "$start_script_path"
+    # 检查start.sh文件是否存在
+    if [ -f "$start_script_path" ]; then
+      # 执行start.sh文件，并将退出码存储在变量中
+      cd $subdir
+      bash start.sh
       exit_code=$((exit_code + $?))
     fi
   fi
