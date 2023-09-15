@@ -3,11 +3,9 @@
 cur_path=`pwd`
 echo ${cur_path}
 
-work_path=${root_path}/PaddleMIX/paddlemix/examples/blip2
-echo ${work_path}
 
-work_path2=${root_path}/PaddleMIX/
-echo ${work_path2}
+work_path=${root_path}/PaddleMIX/
+echo ${work_path}
 
 log_dir=${root_path}/log
 
@@ -20,11 +18,10 @@ fi
 /bin/cp -rf ./* ${work_path}/
 exit_code=0
 
-cd ${work_path2}
+cd ${work_path}
 # 下载依赖、数据集和权重
 bash prepare.sh
 
-cd ${work_path}
 # 训练
 bash single_train.sh
 bash multi_train.sh
