@@ -3,7 +3,7 @@
 cur_path=`pwd`
 echo ${cur_path}
 
-work_path=${root_path}/PaddleMIX/ppdiffusers/examples/stable_diffusion
+work_path=${root_path}/PaddleMIX/paddlemix/examples/blip2
 echo ${work_path}
 
 work_path2=${root_path}/PaddleMIX/
@@ -23,4 +23,20 @@ exit_code=0
 cd ${work_path2}
 # 下载依赖、数据集和权重
 bash prepare.sh
-# todo
+
+cd ${work_path}
+# 训练
+bash single_train.sh
+bash multi_train.sh
+exit_code=$(($exit_code + $?))
+# 评估
+# bash single_eval.sh
+# bash multi_eval.sh
+# exit_code=$(($exit_code + $?))
+# 预测
+bash single_predict.sh
+bash multi_predict.sh
+exit_code=$(($exit_code + $?))
+
+echo exit_code:${exit_code}
+exit ${exit_code}
