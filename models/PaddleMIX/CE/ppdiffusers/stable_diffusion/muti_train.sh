@@ -8,7 +8,7 @@ export FLAG_USE_EMA=0
 export FLAG_RECOMPUTE=1
 # 是否开启xformers
 export FLAG_XFORMERS=1
-python -u -m paddle.distributed.launch --gpus "0,1,2,3,4,5,6,7" train_txt2img_laion400m_trainer.py \
+python -u -m paddle.distributed.launch --gpus "0,1" train_txt2img_laion400m_trainer.py \
     --do_train \
     --output_dir ./laion400m_pretrain_output_trainer \
     --per_device_train_batch_size 2 \

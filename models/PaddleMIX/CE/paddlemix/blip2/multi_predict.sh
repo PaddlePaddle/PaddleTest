@@ -6,7 +6,7 @@ exit_code=0
 
 
 echo "*******paddlemix blip2 multi card run_predict begin***********"
-(fleetrun --gpus=0,1,2,3 paddlemix/examples/blip2/run_predict.py \
+(fleetrun --gpus=0,1 paddlemix/examples/blip2/run_predict.py \
     --per_device_train_batch_size 64 \
     --num_train_epochs 1) | tee ${log_dir}/multi_run_predict.log
 tmp_exit_code=${PIPESTATUS[0]}

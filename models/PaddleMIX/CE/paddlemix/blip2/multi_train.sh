@@ -6,7 +6,7 @@ exit_code=0
 
 # stage1
 echo "*******paddlemix blip2 multi card run_pretrain_stage1 begin***********"
-(fleetrun --gpus=0,1,2,3 paddlemix/examples/blip2/run_pretrain_stage1.py \
+(fleetrun --gpus=0,1 paddlemix/examples/blip2/run_pretrain_stage1.py \
     --per_device_train_batch_size 64 \
     --num_train_epochs 1) | tee ${log_dir}/multi_run_pretrain_stage1.log
 tmp_exit_code=${PIPESTATUS[0]}
@@ -22,7 +22,7 @@ echo "*******paddlemix blip2 multi card run_pretrain_stage1 end***********"
 
 # stage2
 echo "*******paddlemix blip2 multi card run_pretrain_stage2 begin***********"
-(fleetrun --gpus=0,1,2,3 paddlemix/examples/blip2/run_pretrain_stage2.py \
+(fleetrun --gpus=0,1 paddlemix/examples/blip2/run_pretrain_stage2.py \
     --per_device_train_batch_size 64 \
     --num_train_epochs 1) | tee ${log_dir}/multi_run_pretrain_stage2.log
 tmp_exit_code=${PIPESTATUS[0]}

@@ -35,6 +35,7 @@ for subdir in */; do
       cd $subdir
       bash start.sh
       exit_code=$((exit_code + $?))
+      cd ..
     fi
   fi
 done
