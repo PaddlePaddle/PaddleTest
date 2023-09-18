@@ -47,9 +47,9 @@ def test_poiseuille_flow_exit_code():
     assert exit_code == 0
 
 
-def test_darcy2d_loss():
+def test_poiseuille_flow_loss():
     """
-    测试函数：测试 darcy2d.py 脚本的损失值
+    测试函数：测试 poiseuille_flow.py 脚本的损失值
     """
     epoch_num = 10  # 迭代次数
     output_dir = "./output_poiseuille_flow"  # 输出目录
