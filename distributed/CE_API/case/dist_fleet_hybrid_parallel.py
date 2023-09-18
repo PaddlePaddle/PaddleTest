@@ -173,7 +173,7 @@ class DygraphHybrid:
             loss_b.backward()
             optimizer_b.step()
             optimizer_b.clear_grad()
-            loss_b_arr.append(loss_a)
+            loss_b_arr.append(loss_b)
         print(np.allclose(loss_a_arr, loss_b_arr))
         # assert np.allclose(loss_a_arr, loss_b_arr)
         print("all is success...")

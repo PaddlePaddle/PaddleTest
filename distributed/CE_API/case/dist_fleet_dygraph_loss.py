@@ -81,7 +81,7 @@ def train():
         labels = paddle.randn([10, 1], "float32")[start_no:end_no]
         loss = loss_fn(outputs, labels)
         if dist.get_rank() == 0:
-            arr1.append(loss.numpy()[0])
+            arr1.append(loss)
         loss.backward()
         adam.step()
         adam.clear_grad()
@@ -90,7 +90,7 @@ def train():
         loss = loss_fn(outputs, labels)
         loss.backward()
         if dist.get_rank() == 0:
-            arr2.append(loss.numpy()[0])
+            arr2.append(loss)
         adam2.step()
         adam2.clear_grad()
     check_data(arr1, arr2)
