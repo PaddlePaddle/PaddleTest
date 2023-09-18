@@ -3,10 +3,10 @@
 cur_path=`pwd`
 echo ${cur_path}
 
-work_path=${root_path}/PaddleMIX/ppdiffusers/deploy
+work_path=${root_path}/PaddleMIX/ppdiffusers/deploy/scripts
 echo ${work_path}
 
-work_path2=${root_path}/PaddleMIX/ppdiffusers/
+work_path2=${root_path}/PaddleMIX/ppdiffusers
 echo ${work_path2}
 
 log_dir=${root_path}/log
