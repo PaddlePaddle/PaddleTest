@@ -522,13 +522,12 @@ if [[ "${docker_flag}" == "" ]]; then
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         set -x
-        export https_proxy=http://172.19.57.45:3128
-        export http_proxy=http://172.19.57.45:3128
-        git config --global http.https://github.com.proxy agent.baidu.com:8118
-        git config --global http.https://github.com.sslVerify false
-        git config --global https.https://github.com.proxy agent.baidu.com:8118
-        git config --global https.https://github.com.sslVerify false
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        # paddlenlp
+	if [ $reponame == "PaddleNLP" ];then
+        echo "PaddleNLP config"
+        sed -i "128,133d" diy_build/PaddleNLP_Build.py
+        fi
         fi
 
         nvidia-smi;
@@ -536,6 +535,7 @@ if [[ "${docker_flag}" == "" ]]; then
         git --version;
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None}
     ' &
     wait $!
@@ -641,12 +641,6 @@ else
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         set -x
-        export https_proxy=http://172.19.57.45:3128
-        export http_proxy=http://172.19.57.45:3128
-        git config --global http.https://github.com.proxy agent.baidu.com:8118
-        git config --global http.https://github.com.sslVerify false
-        git config --global https.https://github.com.proxy agent.baidu.com:8118
-        git config --global https.https://github.com.sslVerify false
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
         fi
 
