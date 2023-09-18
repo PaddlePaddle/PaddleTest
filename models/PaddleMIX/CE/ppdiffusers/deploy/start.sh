@@ -6,7 +6,7 @@ echo ${cur_path}
 work_path=${root_path}/PaddleMIX/ppdiffusers/deploy
 echo ${work_path}
 
-work_path2=${root_path}/PaddleMIX/ppdiffusers/
+work_path2=${root_path}/PaddleMIX/ppdiffusers/scripts
 echo ${work_path2}
 
 log_dir=${root_path}/log
