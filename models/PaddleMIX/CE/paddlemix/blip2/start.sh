@@ -28,9 +28,9 @@ bash single_train.sh
 bash multi_train.sh
 exit_code=$(($exit_code + $?))
 # 评估
-# bash single_eval.sh
-# bash multi_eval.sh
-# exit_code=$(($exit_code + $?))
+bash single_eval.sh
+bash multi_eval.sh
+exit_code=$(($exit_code + $?))
 # 预测
 bash single_predict.sh
 bash multi_predict.sh

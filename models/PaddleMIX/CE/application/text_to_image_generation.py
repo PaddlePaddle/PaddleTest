@@ -1,3 +1,4 @@
+import paddle
 from paddlemix.appflow import Appflow
 
 paddle.seed(1024)

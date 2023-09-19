@@ -1,3 +1,4 @@
+import paddle
 from paddlemix.appflow import Appflow
 from PIL import Image
 from ppdiffusers.utils import load_image

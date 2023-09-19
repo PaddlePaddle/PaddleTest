@@ -10,7 +10,7 @@ def show_mask(mask, ax, random_color=False):
     mask_image = mask.reshape(h, w, 1) * color.reshape(1, 1, -1)
     ax.imshow(mask_image)
 
-task = Appflow(task="openset_det_sam",
+task = Appflow(app="openset_det_sam",
                    models=["GroundingDino/groundingdino-swint-ogc","Sam/SamVitH-1024"],
                    static_mode=False) #如果开启静态图推理，设置为True,默认动态图
 url = "https://paddlenlp.bj.bcebos.com/models/community/CompVis/stable-diffusion-v1-4/overture-creations.png"
