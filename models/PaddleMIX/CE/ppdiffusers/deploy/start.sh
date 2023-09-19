@@ -42,6 +42,7 @@ else
     # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "ppdiffusers deploy test_controlnet_infer_dygraph run fail" >> "${log_dir}/ce_res.log"
 fi
+python analyse_log.py --log_name ${log_dir}/test_controlnet_infer_dygraph.log
 echo "*******ppdiffusers deploy test_controlnet_infer_dygraph end***********"
 
 unset http_proxy
@@ -57,6 +58,7 @@ else
     # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "ppdiffusers deploy test_infer_dygraph run fail" >> "${log_dir}/ce_res.log"
 fi
+python analyse_log.py --log_name ${log_dir}/test_infer_dygraph.log
 echo "*******ppdiffusers deploy test_infer_dygraph  end***********"
 
 export http_proxy=${proxy}
@@ -72,6 +74,7 @@ else
     # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "ppdiffusers deploy test_controlnet_infer_fd run fail" >> "${log_dir}/ce_res.log"
 fi
+python analyse_log.py --log_name ${log_dir}/test_controlnet_infer_fd.log
 echo "*******ppdiffusers deploy test_controlnet_infer_fd end***********"
 
 
@@ -86,6 +89,7 @@ else
     # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "ppdiffusers deploy test_infer_fd run fail" >> "${log_dir}/ce_res.log"
 fi
+python analyse_log.py --log_name ${log_dir}/test_infer_fd.log
 echo "*******ppdiffusers deploy test_infer_fd end***********"
 
 # # 查看结果
