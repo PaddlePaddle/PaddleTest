@@ -6,4 +6,4 @@ wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/benchmark/blip2/
 cd /root/.paddlemix/datasets/
 tar -zxvf coco.tar.gz
 
-apt-get install default-jre
+apt-get install -y default-jre
