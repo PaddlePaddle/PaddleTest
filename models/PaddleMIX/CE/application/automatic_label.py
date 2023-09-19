@@ -1,4 +1,4 @@
-from paddlemix import Appflow
+from paddlemix.appflow import Appflow
 from ppdiffusers.utils import load_image
 task = Appflow(app="auto_label",
                models=["paddlemix/blip2-caption-opt2.7b","GroundingDino/groundingdino-swint-ogc","Sam/SamVitH-1024"]

@@ -1,4 +1,4 @@
-from paddlemix import Appflow
+from paddlemix.appflow import Appflow
 from PIL import Image
 
 

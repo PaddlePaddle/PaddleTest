@@ -1,4 +1,4 @@
-from paddlemix import Appflow
+from paddlemix.appflow import Appflow
 from PIL import Image
 from ppdiffusers.utils import load_image
 
@@ -15,4 +15,3 @@ app = Appflow(app='image2image_text_guided_generation',models=['Linaqruf/anythin
 image = app(prompt=prompt,negative_prompt=negative_prompt,image=image)['result']
 
 image.save("image_Kurisu_img2img.png")
-

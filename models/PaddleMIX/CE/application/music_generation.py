@@ -1,5 +1,5 @@
 #music generation
-from paddlemix import Appflow
+from paddlemix.appflow import Appflow
 import paddle
 from PIL import Image
 import scipy

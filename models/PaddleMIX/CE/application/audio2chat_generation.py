@@ -1,5 +1,5 @@
 #audio_chat 
-from paddlemix import Appflow
+from paddlemix.appflow import Appflow
 import paddle
 paddle.seed(1024)
 task = Appflow(app="audio_chat", models=["whisper", "THUDM/chatglm-6b", "speech"])
