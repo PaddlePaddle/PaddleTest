@@ -1,5 +1,5 @@
 from paddlemix.appflow import Appflow
-from PIL import Image
+import imageio
 
 
 prompt = "An astronaut riding a horse."
