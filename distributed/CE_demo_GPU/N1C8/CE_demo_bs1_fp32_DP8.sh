@@ -20,12 +20,10 @@ bs_item=1
 fp_item=fp32
 run_mode=DP8
 device_num=N1C8
-convergence_key="1800:"
 
 model=demo
 micro_bs=${bs_item}
 
 bash ./distributed/CE_demo_GPU/benchmark_common/prepare.sh
 # run
-bash ./distributed/CE_demo_GPU/benchmark_common/run_benchmark.sh ${model_item} ${fp_item} ${dp_degree} ${mp_degree} ${pp_degree} ${micro_bs} ${bs_item} ${run_mode} ${device_num} \
-${convergence_key} 2>&1;
+bash ./distributed/CE_demo_GPU/benchmark_common/run_benchmark.sh ${model_item} ${fp_item} ${dp_degree} ${mp_degree} ${pp_degree} ${micro_bs} ${bs_item} ${run_mode} ${device_num} 2>&1;

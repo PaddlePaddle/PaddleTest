@@ -71,4 +71,4 @@ for step_id, (images, labels) in enumerate(train_reader()):
     adam.step()
     model.clear_gradients()
     if step_id % 100 == 0:
-        print("loss at step %d: %f" % (step_id, avg_loss.numpy()))
+        print("step: %d, loss: %f" % (step_id, avg_loss.numpy()))

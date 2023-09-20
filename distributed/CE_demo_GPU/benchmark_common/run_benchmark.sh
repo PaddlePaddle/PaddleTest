@@ -30,8 +30,8 @@ function _set_params(){
     model_repo="PaddleTest"          # (必选) 模型套件的名字
     speed_unit="tokens/s"         # (必选)速度指标单位
     skip_steps=0                  # (必选)解析日志，跳过模型前几个性能不稳定的step
-    keyword=${10:-"14900: "}                 # (必选)解析日志，筛选出性能数据所在行的关键字
-    convergence_key=${10:-"14900: "}        # (可选)解析日志，筛选出收敛数据所在行的关键字 如：convergence_key="loss:"
+    keyword="loss:"                 # (必选)解析日志，筛选出性能数据所在行的关键字
+    convergence_key="loss:"        # (可选)解析日志，筛选出收敛数据所在行的关键字 如：convergence_key="loss:"
     num_workers=0                  # (可选)
     base_batch_size=$global_batch_size
     # 以下为通用执行命令，无特殊可不用修改
