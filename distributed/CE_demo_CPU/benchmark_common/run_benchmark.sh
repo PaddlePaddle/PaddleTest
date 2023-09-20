@@ -34,6 +34,8 @@ function _set_params(){
     convergence_key="loss:"        # (可选)解析日志，筛选出收敛数据所在行的关键字 如：convergence_key="loss:"
     num_workers=0                  # (可选)
     base_batch_size=$global_batch_size
+    server_num=${10-"1"}
+    worker_num=${11-"1"}
     # 以下为通用执行命令，无特殊可不用修改
     model_name=${model_item}_bs${global_batch_size}_${fp_item}_${run_mode}  # (必填) 且格式不要改动,与竞品名称对齐
     device=${CUDA_VISIBLE_DEVICES//,/ }
@@ -75,34 +77,9 @@ function _train(){
         PADDLE_RANK_OPTION=""
     fi
     # 以下为通用执行命令，无特殊可不用修改
-    case ${device_num} in
-    N1C1) echo "run device_num: ${device_num}"
-        train_cmd="python -m paddle.distributed.launch --server_num=1 --worker_num=1 \
+    train_cmd="python -m paddle.distributed.launch --server_num=${server_num} --worker_num=${worker_num} \
         --log_dir=./mylog ps_static_cpu.py" 
         workerlog_id=0
-        ;;
-    N1C2) echo "run device_num: ${device_num}"
-        train_cmd="python -m paddle.distributed.launch --server_num=1 --worker_num=2 \
-        --log_dir=./mylog ps_static_cpu.py" 
-        workerlog_id=0
-        ;;
-    N2C2) echo "run device_num: ${device_num}"
-        train_cmd="python -m paddle.distributed.launch --server_num=2 --worker_num=1 \
-        --log_dir=./mylog ps_static_cpu.py" 
-        workerlog_id=0
-        ;;
-    N2C4) echo "run device_num: ${device_num}"
-        train_cmd="python -m paddle.distributed.launch --server_num=2 --worker_num=2 \
-        --log_dir=./mylog ps_static_cpu.py" 
-        workerlog_id=0
-        ;;
-    N2C4) echo "run device_num: ${device_num}"
-        train_cmd="python -m paddle.distributed.launch --server_num=2 --worker_num=2 \
-        --log_dir=./mylog ps_static_cpu.py" 
-        workerlog_id=0
-        ;;
-    *) echo "choose run_mode "; exit 1;
-    esac
     echo "train_cmd: ${train_cmd}  log_file: ${log_file}"
     cd ./distributed/demo_PDC/wide_and_deep_single_static
     timeout 15m ${train_cmd} > ${log_file} 2>&1

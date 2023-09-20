@@ -12,18 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-model_item=CE_wide_deep
+model_item=CE_wide_deep_s1w2
 dp_degree=1
 mp_degree=1
 pp_degree=1
 bs_item=1
 fp_item=fp32
 run_mode=PSCPU
-device_num=N1C1
+device_num=N1X2
+server_num=1
+worker_num=2
 
 model=wide_deep
 micro_bs=${bs_item}
 
 bash ./distributed/CE_demo_CPU/benchmark_common/prepare.sh
 # run
-bash ./distributed/CE_demo_CPU/benchmark_common/run_benchmark.sh ${model_item} ${fp_item} ${dp_degree} ${mp_degree} ${pp_degree} ${micro_bs} ${bs_item} ${run_mode} ${device_num} 2>&1;
+bash ./distributed/CE_demo_CPU/benchmark_common/run_benchmark.sh ${model_item} ${fp_item} ${dp_degree} ${mp_degree} ${pp_degree} ${micro_bs} ${bs_item} ${run_mode} ${device_num} \
+${server_num} ${worker_num} 2>&1;
