@@ -244,3 +244,6 @@ else
     echo "application auodio_image2image run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application auodio_image2image end***********"
+
+echo exit_code:${exit_code}
+exit $exit_code

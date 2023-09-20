@@ -45,3 +45,5 @@ echo "exit code: $exit_code"
 
 # 查看结果
 cat ${log_dir}/ce_res.log
+
+exit $exit_code
