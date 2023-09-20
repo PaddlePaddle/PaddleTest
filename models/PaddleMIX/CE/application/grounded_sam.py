@@ -19,14 +19,14 @@ url = "https://paddlenlp.bj.bcebos.com/models/community/CompVis/stable-diffusion
 image_pil = load_image(url)
 result = task(image=image_pil,prompt="dog")
 
-plt.figure(figsize=(10, 10))
-plt.imshow(image_pil)
-for mask in result['seg_masks']:
-    show_mask(mask.cpu().numpy(), plt.gca(), random_color=True)
+# plt.figure(figsize=(10, 10))
+# plt.imshow(image_pil)
+# for mask in result['seg_masks']:
+#     show_mask(mask.cpu().numpy(), plt.gca(), random_color=True)
 
 
-plt.axis('off')
-plt.savefig(
-    'dog.jpg',
-    bbox_inches="tight", dpi=300, pad_inches=0.0
-)
+# plt.axis('off')
+# plt.savefig(
+#     'dog.jpg',
+#     bbox_inches="tight", dpi=300, pad_inches=0.0
+# )
