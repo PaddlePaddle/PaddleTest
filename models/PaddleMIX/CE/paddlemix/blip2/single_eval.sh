@@ -22,6 +22,8 @@ echo "*******paddlemix blip2 single card run_eval_vqav2_zeroshot end***********"
 
 
 # task_caption
+export http_proxy=${proxy}
+export https_proxy=${proxy}
 echo "*******paddlemix blip2 single card run_eval_caption begin***********"
 (CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_eval_caption.py \
     --per_device_train_batch_size 64 \
@@ -36,6 +38,8 @@ else
     echo "paddlemix blip2 single card run_eval_caption run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix blip2 single card run_eval_caption end***********"
+unset http_proxy
+unset https_proxy
 
 # 检查命令是否成功执行
 if [ ${exit_code} -ne 0 ]; then
