@@ -11,8 +11,12 @@ work_path2=${root_path}/PaddleMIX/ppdiffusers/
 echo ${work_path2}/
 
 cd ${work_path2}
-pip install -e . -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
-pip install -r requirements.txt -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+export http_proxy=${proxy}
+export https_proxy=${proxy}
+pip install -e .
+pip install -r requirements.txt
+unset http_proxy
+unset https_proxy
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
 
 
