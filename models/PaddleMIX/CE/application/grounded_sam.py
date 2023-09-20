@@ -1,5 +1,7 @@
 from paddlemix.appflow import Appflow
 from ppdiffusers.utils import load_image
+import matplotlib.pyplot as plt
+import numpy as np
 
 def show_mask(mask, ax, random_color=False):
     if random_color:
