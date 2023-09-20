@@ -35,3 +35,8 @@ else
     echo "paddlemix blip2 multi card run_pretrain_stage2 run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix blip2 multi card run_pretrain_stage2 end***********"
+
+# 检查命令是否成功执行
+if [ ${exit_code} -ne 0 ]; then
+  exit 1
+fi
