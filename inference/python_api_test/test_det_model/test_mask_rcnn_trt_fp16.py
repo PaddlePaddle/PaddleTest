@@ -105,6 +105,7 @@ def test_trt_fp16_more_bz():
             auto_tuned=True,
             min_subgraph_size=5,
             det_top_bbox=True,
+            check_output_list=["save_infer_model/scale_0.tmp_0", "save_infer_model/scale_1.tmp_0"],
         )
 
         del test_suite2  # destroy class to save memory
