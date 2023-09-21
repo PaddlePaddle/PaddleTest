@@ -15,12 +15,12 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_txt2img_laion400m_no_t
     --logging_steps 10 \
     --save_steps 100 \
     --seed 23 \
-    --dataloader_num_workers 6 \
+    --dataloader_num_workers 1 \
     --vae_name_or_path CompVis/stable-diffusion-v1-4/vae \
     --text_encoder_config_file config/ldmbert.json \
     --unet_config_file config/unet.json \
     --file_list ./data/filelist/train.filelist.list \
-    --num_inference_steps 20 \
+    --num_inference_steps 1 \
     --model_max_length 77 \
     --tokenizer_name bert-base-uncased \
     --max_grad_norm -1

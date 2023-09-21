@@ -22,18 +22,32 @@ exit_code=0
 
 bash prepare.sh
 # 单机训练
-echo "*******text_to_image_laion400m singe_train begin***********"
-(bash single_train.sh) 2>&1 | tee ${log_dir}/text_to_image_laion400m_singe_train.log
+echo "*******text_to_image_laion400m single_train begin***********"
+(bash single_train.sh) 2>&1 | tee ${log_dir}/text_to_image_laion400m_single_train.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
-    echo "text_to_image_laion400m singe_train run success" >> "${log_dir}/ce_res.log"
+    echo "text_to_image_laion400m single_train run success" >> "${log_dir}/ce_res.log"
 else
     # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
-    echo "text_to_image_laion400m singe_train run fail" >> "${log_dir}/ce_res.log"
+    echo "text_to_image_laion400m single_train run fail" >> "${log_dir}/ce_res.log"
 fi
-echo "*******text_to_image_laion400m singe_train end***********"
+echo "*******text_to_image_laion400m single_train end***********"
+
+# 单机训练的结果进行推理
+echo "*******text_to_image_laion400m single_infer begin***********"
+(bash infer.sh) 2>&1 | tee ${log_dir}/text_to_image_laion400m_single_infer.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
+    echo "text_to_image_laion400m single_infer run success" >> "${log_dir}/ce_res.log"
+else
+    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
+    echo "text_to_image_laion400m single_infer run fail" >> "${log_dir}/ce_res.log"
+fi
+echo "*******text_to_image_laion400m single_infer end***********"
 
 # 多机训练
 echo "*******text_to_image_laion400m muti_train begin***********"
@@ -50,6 +64,22 @@ fi
 echo "*******text_to_image_laion400m multi_train end***********"
 
 
+# 多机训练的结果进行推理
+echo "*******text_to_image_laion400m multi_infer begin***********"
+(bash infer.sh) 2>&1 | tee ${log_dir}/text_to_image_laion400m_multi_infer.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
+    echo "text_to_image_laion400m multi_infer run success" >> "${log_dir}/ce_res.log"
+else
+    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
+    echo "text_to_image_laion400m multi_infer run fail" >> "${log_dir}/ce_res.log"
+fi
+echo "*******text_to_image_laion400m multi_infer end***********"
+
+
+# 自定义训练逻辑开启训练
 echo "*******text_to_image_laion400m single_train_no_trainer begin***********"
 (bash single_train_no_trainer.sh) 2>&1 | tee ${log_dir}/text_to_image_laion400m_single_train_no_trainer.log
 tmp_exit_code=${PIPESTATUS[0]}

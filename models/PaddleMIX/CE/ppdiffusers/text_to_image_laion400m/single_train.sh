@@ -22,7 +22,12 @@ python -u train_txt2img_laion400m_trainer.py \
     --text_encoder_config_file config/ldmbert.json \
     --unet_config_file config/unet.json \
     --file_list ./data/filelist/train.filelist.list \
-    --num_inference_steps 20 \
+    --num_inference_steps 1 \
     --model_max_length 77 \
     --tokenizer_name bert-base-uncased \
     --max_grad_norm -1
+
+# 检查命令是否成功执行
+if [ $? -ne 0 ]; then
+  exit 1
+fi
