@@ -522,12 +522,12 @@ if [[ "${docker_flag}" == "" ]]; then
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         set -x
+        # Flag
+        export STRICT_MODE=0
+        export ENABLE_SOT=True
+        export COST_MODEL=False
+        export MIN_GRAPH_SIZE=0
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
-        # paddlenlp
-	if [ $reponame == "PaddleNLP" ];then
-        echo "PaddleNLP config"
-        sed -i "128,133d" diy_build/PaddleNLP_Build.py
-        fi
         fi
 
         nvidia-smi;
@@ -641,6 +641,11 @@ else
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         set -x
+        # Flag
+        export STRICT_MODE=0
+        export ENABLE_SOT=True
+        export COST_MODEL=False
+        export MIN_GRAPH_SIZE=0
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
         fi
 
