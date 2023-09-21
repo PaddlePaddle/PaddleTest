@@ -43,7 +43,7 @@ def get_average(file_loops, case):
                         averages[num]["algbw"] += item["algbw"]
 
     # 计算每个数字对应的平均值
-    for key in counters.items():
+    for key, value in counters.items():
         averages[key]["time"] /= counters[key]["time"]
         averages[key]["algbw"] /= counters[key]["algbw"]
 
@@ -77,7 +77,7 @@ def compare(case, res_dict):
             diff_dict[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}
             if (time_diff > 5 or time_diff < -5) or (algbw_diff > 5 or algbw_diff < -5):
                 diff_exp[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}
-
+ 
     diff_res = {case: diff_dict}
     if len(diff_exp) != 0:
         diff_exp_res = {case: diff_exp}
