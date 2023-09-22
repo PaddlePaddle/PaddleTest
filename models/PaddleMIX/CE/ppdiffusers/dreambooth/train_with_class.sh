@@ -1,7 +1,5 @@
 #!/bin/bash
 
-rm -rf dream_outputs_with_class/
-
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
 export INSTANCE_DIR="./dogs"
 export CLASS_DIR="./dream_class_image"
@@ -21,7 +19,7 @@ python -u train_dreambooth.py \
   --learning_rate=5e-6 \
   --lr_scheduler="constant" \
   --lr_warmup_steps=0 \
-  --num_class_images=200 \
+  --num_class_images=10 \
   --max_train_steps=100
 
 # 检查命令是否成功执行

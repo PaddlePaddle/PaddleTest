@@ -20,6 +20,7 @@ fi
 cd ${work_path}
 exit_code=0
 
+# 下载依赖和数据
 bash prepare.sh
 
 # 单机训练
