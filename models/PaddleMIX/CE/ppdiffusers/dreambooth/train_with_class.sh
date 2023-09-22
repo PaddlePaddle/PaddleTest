@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+rm -rf ./dream_outputs_with_class
+
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
 export INSTANCE_DIR="./dogs"
 export CLASS_DIR="./dream_class_image"

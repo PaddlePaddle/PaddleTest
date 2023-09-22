@@ -79,7 +79,7 @@ echo "*******dreambooth multi infer end***********"
 
 # 给模型引入先验知识（图片）一同训练
 echo "*******dreambooth train_with_class begin***********"
-(python train_with_class.sh) 2>&1 | tee ${log_dir}/dreambooth_train_with_class.log
+(bash train_with_class.sh) 2>&1 | tee ${log_dir}/dreambooth_train_with_class.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
