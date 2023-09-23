@@ -6,6 +6,9 @@ echo ${cur_path}
 work_path=${root_path}/PaddleMIX/ppdiffusers/examples/inference/
 echo ${work_path}
 
+work_path2=${root_path}/PaddleMIX/ppdiffusers/
+echo ${work_path}
+
 log_dir=${root_path}/infer_log
 
 # 检查上一级目录中是否存在log目录
@@ -17,9 +20,9 @@ fi
 
 /bin/cp -rf ./* ${work_path}
 
-cd ${work_path}
-exit_code=0
 
+
+cd ${work_path2}
 export http_proxy=${proxy}
 export https_proxy=${proxy}
 python3.10 -m pip install --upgrade pip
@@ -29,6 +32,8 @@ pip install pytest safetensors ftfy fastcore opencv-python einops parameterized 
 unset http_proxy
 unset https_proxy
 
+cd ${work_path}
+exit_code=0
 
 # Text-to-Image Generation	
 
