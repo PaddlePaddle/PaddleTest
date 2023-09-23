@@ -6,7 +6,7 @@ echo ${cur_path}
 work_path=${root_path}/PaddleMIX/ppdiffusers
 echo ${work_path}
 
-log_dir=${root_path}/log
+log_dir=${root_path}/ut_log
 
 # 检查上一级目录中是否存在log目录
 if [ ! -d "$log_dir" ]; then
