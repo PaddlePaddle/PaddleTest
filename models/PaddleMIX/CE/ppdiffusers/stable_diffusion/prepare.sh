@@ -1,8 +1,11 @@
 #!/bin/bash
 
 echo "*******prepare begin***********"
-
-pip install -r requirements.txt -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+export http_proxy=${proxy}
+export https_proxy=${proxy}
+pip install -r requirements.txt
+unset http_proxy
+unset https_proxy
 
 rm -rf data/
 # 下载数据集
