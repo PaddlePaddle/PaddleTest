@@ -66,6 +66,7 @@ class PaddleNLP_Build(Model_Build):
 
         if platform == "linux" or platform == "linux_convergence":
             os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip install nltk h5py")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall protobuf -y")
             os.system("python -m pip uninstall protobuf -y")
