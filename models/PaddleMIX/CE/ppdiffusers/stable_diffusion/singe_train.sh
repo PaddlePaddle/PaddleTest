@@ -30,7 +30,7 @@ python -u train_txt2img_laion400m_trainer.py \
     --model_max_length 77 \
     --max_grad_norm -1 \
     --disable_tqdm True \
-    --bf16 True
+    # --bf16 True
 
 # 检查命令是否成功执行
 if [ $? -ne 0 ]; then
