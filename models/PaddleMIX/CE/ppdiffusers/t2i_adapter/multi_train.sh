@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -rf ./sd15_openpose
+
 export FLAGS_conv_workspace_size_limit=4096
 python -u -m paddle.distributed.launch --gpus "0,1" train_t2i_adapter_trainer.py \
     --do_train \
