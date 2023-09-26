@@ -78,7 +78,7 @@ function _train(){
     fi
     # 以下为通用执行命令，无特殊可不用修改
     train_cmd="python -m paddle.distributed.launch --server_num=${server_num} --worker_num=${worker_num} \
-        --log_dir=./mylog ps_static_cpu.py" 
+        --log_dir=./mylog ps_static_cpu.py"
         workerlog_id=0
     echo "train_cmd: ${train_cmd}  log_file: ${log_file}"
     cd ./distributed/demo_PDC/wide_and_deep_single_static

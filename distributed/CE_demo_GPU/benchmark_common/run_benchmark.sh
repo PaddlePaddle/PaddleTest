@@ -78,7 +78,7 @@ function _train(){
     case ${run_mode} in
     DP1|DP2) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --devices 0 --log_dir=./mylog \
-        paddle_collective_gpu_mnist_demo.py" 
+        paddle_collective_gpu_mnist_demo.py"
         workerlog_id=0
         ;;
     DP8|DP16) echo "run run_mode: ${run_mode}"
