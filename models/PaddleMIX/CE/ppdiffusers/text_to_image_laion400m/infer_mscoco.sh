@@ -1,14 +1,14 @@
 #!/bin/bash
 
-wget https://paddlenlp.bj.bcebos.com/models/community/CompVis/data/mscoco.en.1k
+# wget https://paddlenlp.bj.bcebos.com/models/community/CompVis/data/mscoco.en.1k
 
 
 python generate_images.py \
     --model_name_or_path ./ldm_pipelines \
-    --file ./mscoco.en.1k \
-    --batch_size 1 \
+    --file coco1k \
+    --batch_size 16 \
     --save_path ./outputs \
-    --guidance_scales 3 4 5 6 7 8 \
+    --guidance_scales 3 \
     --seed 42 \
     --scheduler_type ddim \
     --height 256 \
