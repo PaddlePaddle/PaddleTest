@@ -161,5 +161,5 @@ def main():
 if __name__ == "__main__":
     os.system("rm -rf mylog && mkdir -p mylog")
     main()
-    os.system("echo ====================================")
+    os.system("echo ============================= log_exp ================================")
     os.system("cat mylog/log_exp")
