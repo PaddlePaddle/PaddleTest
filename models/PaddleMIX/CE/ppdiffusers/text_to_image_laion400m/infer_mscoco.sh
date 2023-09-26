@@ -22,7 +22,7 @@ python generate_images.py \
     --scheduler_type ddim \
     --height 256 \
     --width 256 \
-    --num_inference_steps 3 \
+    --num_inference_steps 1 \
     --device gpu
 
 # 检查命令是否成功执行
