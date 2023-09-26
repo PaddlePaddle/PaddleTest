@@ -1,4 +1,4 @@
-model_item=gpt_auto_stage2_o2
+model_item=CE_gpt_auto_stage2_o1
 dp_degree=2
 mp_degree=1
 pp_degree=4
@@ -8,7 +8,7 @@ run_mode=DP2-MP1-PP4
 device_num=N1C8
 sharding_degree=2 # sharding_degree = dp_degree
 sharding_stage=2
-level=o2
+level=o1
 local_batch_size=8
 
 model=gpt

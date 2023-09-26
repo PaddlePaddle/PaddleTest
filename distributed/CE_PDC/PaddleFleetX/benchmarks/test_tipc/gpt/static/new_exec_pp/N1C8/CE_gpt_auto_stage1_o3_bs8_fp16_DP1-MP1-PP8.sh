@@ -1,18 +1,18 @@
-model_item=gpt_auto_stage1_o2
+model_item=CE_gpt_auto_stage1_o3
 dp_degree=1
-mp_degree=2
-pp_degree=4
+mp_degree=1
+pp_degree=8
 bs_item=8 # micro * dp * pp
 fp_item=fp16
-run_mode=DP1-MP2-PP4
+run_mode=DP1-MP1-PP8
 device_num=N1C8
-sharding_degree=1 # sharding_degree = dp_degree
+sharding_degree=1
 sharding_stage=1
-level=o2
+level=o3
 local_batch_size=8
 
 model=gpt
-micro_bs=2 # local_batch_size / pp_degree
+micro_bs=1 # local_batch_size / pp_degree
 
 cd ./benchmarks
 bash ./test_tipc/gpt/static/new_exec_pp/benchmark_common/prepare.sh

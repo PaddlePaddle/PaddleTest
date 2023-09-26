@@ -110,14 +110,12 @@ function _train(){
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
         workerlog_id_1=6
-        workerlog_id_2=7
         ;;
     DP2-MP1-PP4|DP2-MP2-PP2) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
         workerlog_id_1=3
-        workerlog_id_2=7
         ;;
     DP1-MP8-PP2) echo "run run_mode: ${run_mode}"
         # fp32
@@ -167,14 +165,13 @@ function _train(){
     esac
     cd ../
     echo "train_cmd: ${train_cmd}  log_file: ${log_file}"
-    export FLAGS_new_executor_micro_batching=True  # True：打开新执行器；False：关闭新执行器
-    export FLAGS_embedding_deterministic=0         # 1：关闭随机性（仅在测试精度时为1），0：打开随机性（测性能时必须为0，或者不设置）
-    export FLAGS_cudnn_deterministic=0             # 1：关闭随机性（仅在测试精度时为1）；0：打开随机性（测性能时必须为0，或者不设置）
-    export FLAGS_dynamic_static_unified_comm=False  # 新通信库
-    env |grep FLAGS
     if [[ ${model_item} =~ "CE" ]];then # CE精度-不限制执行时间
-        ${train_cmd} > ${log_file} 2>&1
+        export FLAGS_embedding_deterministic=1         # 1：关闭随机性（仅在测试精度时为1），0：打开随机性（测性能时必须为0，或者不设置）
+        export FLAGS_cudnn_deterministic=1             # 1：关闭随机性（仅在测试精度时为1）；0：打开随机性（测性能时必须为0，或者不设置）
+        timeout 60m ${train_cmd} > ${log_file} 2>&1
     else
+        export FLAGS_embedding_deterministic=0         # 1：关闭随机性（仅在测试精度时为1），0：打开随机性（测性能时必须为0，或者不设置）
+        export FLAGS_cudnn_deterministic=0             # 1：关闭随机性（仅在测试精度时为1）；0：打开随机性（测性能时必须为0，或者不设置）
         timeout 60m ${train_cmd} > ${log_file} 2>&1
     fi
     if [ $? -ne 0 ];then
@@ -184,23 +181,9 @@ function _train(){
     fi
     #kill -9 `ps -ef|grep 'python'|awk '{print $2}'`
     if [ ${device_num} != "N1C1" -a -d mylog ]; then
-        cp -r ./mylog ${run_log_path}/
-        case ${run_mode} in
-        DP1-MP1-PP8|DP1-MP8-PP2|DP1-MP8-PP4) echo "${run_mode} cp  mylog/workerlog.${workerlog_id}"
-            rm ${log_file}
-            cp mylog/workerlog.${workerlog_id} ${log_file}
-            ;;
-        DP2-MP2-PP2|DP1-MP2-PP4|DP2-MP1-PP4) echo "${run_mode} cp  mylog/workerlog.${workerlog_id_1} & mylog/workerlog.${workerlog_id_2}"
-            rm ${log_file}
-            cp mylog/workerlog.${workerlog_id_1} ${log_file}
-            cp mylog/workerlog.${workerlog_id_2} ${log_file}_2
-            ;;
-        *) echo "${run_mode} cp  mylog/workerlog.${workerlog_id}"
-            rm ${log_file}
-            workerlog_id=0
-            cp mylog/workerlog.${workerlog_id} ${log_file}
-            ;;
-        esac
+        cp -r ./mylog/workerlog.* ${run_log_path}/mylog/
+        rm ${log_file}
+        cp mylog/workerlog.${workerlog_id} ${log_file}
     fi
 }
 
@@ -208,6 +191,7 @@ export PYTHONPATH=$(dirname "$PWD"):$PYTHONPATH
 # 避免预分配的的显存影响实际值观测
 export FLAGS_fraction_of_gpu_memory_to_use=0.1
 unset CUDA_MODULE_LOADING
+env |grep FLAGS
 
 source ${BENCHMARK_ROOT}/scripts/run_model.sh   # 在该脚本中会对符合benchmark规范的log使用analysis.py 脚本进行性能数据解析;如果不联调只想要产出训练log可以注掉本行,提交时需打开
 _set_params $@

@@ -1,14 +1,14 @@
-model_item=gpt_auto_stage2_o3
-dp_degree=2
-mp_degree=1
+model_item=CE_gpt_auto_stage1_o2
+dp_degree=1
+mp_degree=2
 pp_degree=4
-bs_item=16 # micro * dp * pp
+bs_item=8 # micro * dp * pp
 fp_item=fp16
-run_mode=DP2-MP1-PP4
+run_mode=DP1-MP2-PP4
 device_num=N1C8
-sharding_degree=2 # sharding_degree = dp_degree
-sharding_stage=2
-level=o3
+sharding_degree=1 # sharding_degree = dp_degree
+sharding_stage=1
+level=o2
 local_batch_size=8
 
 model=gpt
