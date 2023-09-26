@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-model_item=CE_wide_deep_s1w2
+model_item=CE_wide_deep_s2w2
 dp_degree=1
 mp_degree=1
 pp_degree=1
 bs_item=1
 fp_item=fp32
 run_mode=PSCPU
-device_num=N1X2
-server_num=1
+device_num=N1C1
+server_num=2
 worker_num=2
 
 model=wide_deep
