@@ -16,7 +16,7 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_text_to_image.py \
   --learning_rate=1e-05 \
   --max_grad_norm=1 \
   --lr_scheduler="constant" --lr_warmup_steps=0 \
-  --output_dir="sd-pokemon-model"
+  --output_dir="sd-pokemon-model" --debug
 
 # 检查命令是否成功执行
 if [ $? -ne 0 ]; then
