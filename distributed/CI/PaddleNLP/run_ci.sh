@@ -46,7 +46,7 @@ install_paddlenlp(){
 }
 ####################################
 get_diff_TO_case(){
-FLAG_paddlenlp=0
+export FLAG_paddlenlp=0
 for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
     dir1=${arr_file_name[0]}
@@ -66,7 +66,7 @@ for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{pri
             case_list[${#case_list[*]}]=gpt-3
         fi
     elif [[ ${dir1} =~ "paddlenlp" ]];then
-        FLAG_paddlenlp=1
+        export FLAG_paddlenlp=1
     else
         continue
     fi
