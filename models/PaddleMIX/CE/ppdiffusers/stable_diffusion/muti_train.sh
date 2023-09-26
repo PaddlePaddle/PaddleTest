@@ -29,7 +29,7 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_txt2img_laion400m_trai
     --file_list ./data/filelist/train.filelist.list \
     --model_max_length 77 \
     --max_grad_norm -1 \
-    --disable_tqdm True \
+    --disable_tqdm True
     # --bf16 True
 
 # 检查命令是否成功执行
