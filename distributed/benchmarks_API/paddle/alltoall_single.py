@@ -43,11 +43,6 @@ def get_res(case, config):
     #     byte_to_test.append(b)
     #     b *= 2
 
-    byte_to_test = []
-    while b <= e:
-        byte_to_test.append(b)
-        b *= 2
-
     time_list = {case_name: {}}
     for b in byte_to_test:
         n_ele = b // 4 // devices

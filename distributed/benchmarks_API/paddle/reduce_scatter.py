@@ -26,9 +26,9 @@ def get_res(case, config):
     sync_op = yaml_config[case_name]["sync_op"]
     use_calc_stream = yaml_config[case_name]["use_calc_stream"]
     is_tensor = yaml_config[case_name]["is_tensor"]
-
-   dist.init_parallel_env()
-
+    
+    dist.init_parallel_env()
+    
     # args
     warms = 5
     epochs = 20
