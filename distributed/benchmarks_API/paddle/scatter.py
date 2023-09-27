@@ -33,7 +33,7 @@ def get_res(case, config):
     warms = 5
     epochs = 20
     devices = 8
-    byte_to_test = [67108864, 134217728]  # 64MB, 128MB
+    byte_to_test = [134217728]  # 128MB
     # byte_to_test = []
     # b = 1024 # 1KB
     # e = 134217728  # 128M 
