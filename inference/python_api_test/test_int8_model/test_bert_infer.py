@@ -30,7 +30,7 @@ from paddlenlp.datasets import load_dataset
 from paddlenlp.data import Stack, Tuple, Pad
 from paddlenlp.metrics import AccuracyAndF1, Mcc, PearsonAndSpearman
 from paddlenlp.transformers import BertForSequenceClassification, BertTokenizer
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
+from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine
 
 METRIC_CLASSES = {
     "cola": Mcc,
@@ -68,15 +68,19 @@ def argsparser():
         required=True,
         help="The path prefix of inference model to be used.",
     )
-    parser.add_argument("--model_filename", type=str, default="model.pdmodel", help="model file name")
-    parser.add_argument("--params_filename", type=str, default="model.pdiparams", help="params file name")
+    parser.add_argument("--model_filename", type=str,
+                        default="model.pdmodel", help="model file name")
+    parser.add_argument("--params_filename", type=str,
+                        default="model.pdiparams", help="params file name")
     parser.add_argument(
         "--task_name",
         default="cola",
         type=str,
-        help="The name of the task to perform predict, selected in the list: " + ", ".join(METRIC_CLASSES.keys()),
+        help="The name of the task to perform predict, selected in the list: " +
+        ", ".join(METRIC_CLASSES.keys()),
     )
-    parser.add_argument("--model_type", default="bert-base-cased", type=str, help="Model type selected in bert.")
+    parser.add_argument("--model_type", default="bert-base-cased",
+                        type=str, help="Model type selected in bert.")
     parser.add_argument(
         "--model_name_or_path",
         default="bert-base-cased",
@@ -89,7 +93,8 @@ def argsparser():
         default="GPU",
         help="Choose the device you want to run, it can be: CPU/GPU/XPU, default is GPU",
     )
-    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
+    parser.add_argument("--use_dynamic_shape", type=bool,
+                        default=True, help="Whether use dynamic shape or not.")
     parser.add_argument(
         "--batch_size",
         default=32,
@@ -121,16 +126,20 @@ def argsparser():
         choices=["fp32", "fp16", "int8"],
         help="The precision of inference. It can be 'fp32', 'fp16' or 'int8'. Default is 'fp16'.",
     )
-    parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
-    parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
+    parser.add_argument("--use_mkldnn", type=bool,
+                        default=False, help="Whether use mkldnn or not.")
+    parser.add_argument("--cpu_threads", type=int,
+                        default=1, help="Num of cpu threads.")
     parser.add_argument(
         "--deploy_backend",
         type=str,
         default="paddle_inference",
         help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
     )
-    parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
-    parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
+    parser.add_argument("--calibration_file", type=str, default=None,
+                        help="quant onnx model calibration cache file.")
+    parser.add_argument("--model_name", type=str, default="",
+                        help="model_name for benchmark")
     return parser
 
 
@@ -152,7 +161,8 @@ def _convert_example(
         label = np.array([label], dtype=label_dtype)
     # Convert raw text to feature
     sentence1_key, sentence2_key = task_to_keys[task_name]
-    texts = (example[sentence1_key],) if sentence2_key is None else (example[sentence1_key], example[sentence2_key])
+    texts = (example[sentence1_key],) if sentence2_key is None else (
+        example[sentence1_key], example[sentence2_key])
     example = tokenizer(
         *texts, max_seq_len=max_seq_length, padding=padding, return_attention_mask=return_attention_mask
     )
@@ -180,13 +190,15 @@ class WrapperPredictor(object):
         """
         predict func
         """
-        batch_sampler = paddle.io.BatchSampler(dataset, batch_size=FLAGS.batch_size, shuffle=False)
+        batch_sampler = paddle.io.BatchSampler(
+            dataset, batch_size=FLAGS.batch_size, shuffle=False)
         data_loader = paddle.io.DataLoader(
             dataset=dataset, batch_sampler=batch_sampler, collate_fn=collate_fn, num_workers=0, return_list=True
         )
 
         for i, data in enumerate(data_loader):
-            data = [ele.numpy() if isinstance(ele, paddle.Tensor) else ele for ele in data]
+            data = [ele.numpy() if isinstance(ele, paddle.Tensor)
+                    else ele for ele in data]
             real_data = data[0:3]
             self.predictor.prepare_data(real_data)
             output = self.predictor.run()
@@ -200,11 +212,10 @@ class WrapperPredictor(object):
         use_gpu = True
         if FLAGS.device == "CPU":
             use_gpu = False
-        monitor = Monitor(0, use_gpu)
 
-        monitor.start()
         for i, data in enumerate(data_loader):
-            data = [ele.numpy() if isinstance(ele, paddle.Tensor) else ele for ele in data]
+            data = [ele.numpy() if isinstance(ele, paddle.Tensor)
+                    else ele for ele in data]
             real_data = data[0:3]
             self.predictor.prepare_data(real_data)
             start_time = time.time()
@@ -212,24 +223,9 @@ class WrapperPredictor(object):
             end_time = time.time()
             predict_time += end_time - start_time
             label = data[-1]
-            correct = metric.compute(paddle.to_tensor(output[0]), paddle.to_tensor(np.array(label).flatten()))
+            correct = metric.compute(paddle.to_tensor(
+                output[0]), paddle.to_tensor(np.array(label).flatten()))
             metric.update(correct)
-
-        monitor.stop()
-        monitor_result = monitor.output()
-
-        cpu_mem = (
-            monitor_result["result"]["cpu_memory.used"]
-            if ("result" in monitor_result and "cpu_memory.used" in monitor_result["result"])
-            else 0
-        )
-        gpu_mem = (
-            monitor_result["result"]["gpu_memory.used"]
-            if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
-            else 0
-        )
-
-        print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
 
         sequences_num = i * FLAGS.batch_size
         print(
@@ -241,7 +237,8 @@ class WrapperPredictor(object):
             )
         )
         res = metric.accumulate()
-        print("[Benchmark]task name: %s, acc: %s. \n" % (FLAGS.task_name, res), end="")
+        print("[Benchmark]task name: %s, acc: %s. \n" %
+              (FLAGS.task_name, res), end="")
         final_res = {
             "model_name": FLAGS.model_name,
             "batch_size": FLAGS.batch_size,
@@ -252,14 +249,6 @@ class WrapperPredictor(object):
             "xingneng": {
                 "value": round(predict_time * 1000 / i, 2),
                 "unit": "ms",
-            },
-            "gpu_mem": {
-                "value": gpu_mem,
-                "unit": "MB",
-            },
-            "cpu_mem": {
-                "value": cpu_mem,
-                "unit": "MB",
             },
         }
         print("[Benchmark][final result]{}".format(final_res))
