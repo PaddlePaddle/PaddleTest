@@ -3,10 +3,12 @@
 export http_proxy=${proxy}
 export https_proxy=${proxy}
 
-cd ${root_path}/PaddleMIX/ppdiffusers
-pip install -e .
-pip install -r requirements.txt
+# cd ${root_path}/PaddleMIX/ppdiffusers
+# pip install -e .
+# pip install -r requirements.txt
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
+pip install -U ppdiffusers
+pip install imageio
 
 cd ${root_path}/PaddleMIX/
 pip install -r requirements.txt
