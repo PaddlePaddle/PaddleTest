@@ -2,7 +2,7 @@
 
 log_dir=${root_path}/log
 
-echo "*******paddlemix blip2 single card run_pretrain_stage1 begin***********"
+echo "*******paddlemix minigpt4_7b predict begin***********"
 
 wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/model_state.pdparams
 wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/minigpt4_7b.tar.gz
@@ -29,7 +29,6 @@ else
     # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "paddlemix minigpt4_7b predict run fail" >> "${log_dir}/ce_res.log"
 fi
-echo "*******paddlemix minigpt4_7b predict end***********"
 echo "*******paddlemix minigpt4_7b predict end***********"
 
 # 检查命令是否成功执行
