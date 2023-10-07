@@ -22,6 +22,14 @@ exit_code=0
 bash prepare.sh
 
 cd ${work_path}
+
+export http_proxy=${proxy}
+export https_proxy=${proxy}
+wget https://user-images.githubusercontent.com/35913314/242832479-d8070644-4713-465d-9c7e-9585024c1819.png
+mv 242832479-d8070644-4713-465d-9c7e-9585024c1819.png example.png
+unset http_proxy
+unset https_proxy
+
 bash minigpt4_7b.sh
 exit_code=$(($exit_code + $?))
 bash minigpt4_13b.sh
