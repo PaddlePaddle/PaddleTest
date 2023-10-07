@@ -17,7 +17,7 @@ pip install -e .
 pip install -r paddlemix/appflow/requirements.txt
 python nltk_data_download.py
 
-wget https://github.com/luyao-cv/file_download/blob/main/assets/zh.wav
+wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/zh.wav
 
 unset http_proxy
 unset https_proxy

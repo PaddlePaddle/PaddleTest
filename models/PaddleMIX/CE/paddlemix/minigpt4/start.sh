@@ -4,7 +4,7 @@ cur_path=`pwd`
 echo ${cur_path}
 
 
-work_path=${root_path}/PaddleMIX/
+work_path=${root_path}/PaddleMIX/paddlemix/examples/minigpt4/
 echo ${work_path}
 
 log_dir=${root_path}/log
@@ -22,22 +22,11 @@ exit_code=0
 bash prepare.sh
 
 cd ${work_path}
+bash minigpt4_7b.sh
+exit_code=$(($exit_code + $?))
+bash minigpt4_13b.sh
+exit_code=$(($exit_code + $?))
 
-# 训练
-bash single_train.sh
-exit_code=$(($exit_code + $?))
-bash multi_train.sh
-exit_code=$(($exit_code + $?))
-# 评估
-bash single_eval.sh
-exit_code=$(($exit_code + $?))
-bash multi_eval.sh
-exit_code=$(($exit_code + $?))
-# 预测
-bash single_predict.sh
-exit_code=$(($exit_code + $?))
-bash multi_predict.sh
-exit_code=$(($exit_code + $?))
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
