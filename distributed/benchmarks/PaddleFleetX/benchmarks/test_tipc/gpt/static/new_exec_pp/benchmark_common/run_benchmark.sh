@@ -109,13 +109,13 @@ function _train(){
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
-        workerlog_id_1=6
+        workerlog_id=6
         ;;
     DP2-MP1-PP4|DP2-MP2-PP2) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
-        workerlog_id_1=3
+        workerlog_id=3
         ;;
     DP1-MP8-PP2) echo "run run_mode: ${run_mode}"
         # fp32
@@ -166,10 +166,12 @@ function _train(){
     cd ../
     echo "train_cmd: ${train_cmd}  log_file: ${log_file}"
     if [[ ${model_item} =~ "CE" ]];then # CE精度-不限制执行时间
+        export FLAGS_new_executor_micro_batching=True  # True：打开新执行器；False：关闭新执行器
         export FLAGS_embedding_deterministic=1         # 1：关闭随机性（仅在测试精度时为1），0：打开随机性（测性能时必须为0，或者不设置）
         export FLAGS_cudnn_deterministic=1             # 1：关闭随机性（仅在测试精度时为1）；0：打开随机性（测性能时必须为0，或者不设置）
         timeout 60m ${train_cmd} > ${log_file} 2>&1
     else
+        export FLAGS_new_executor_micro_batching=True  # True：打开新执行器；False：关闭新执行器
         export FLAGS_embedding_deterministic=0         # 1：关闭随机性（仅在测试精度时为1），0：打开随机性（测性能时必须为0，或者不设置）
         export FLAGS_cudnn_deterministic=0             # 1：关闭随机性（仅在测试精度时为1）；0：打开随机性（测性能时必须为0，或者不设置）
         timeout 60m ${train_cmd} > ${log_file} 2>&1
@@ -181,6 +183,7 @@ function _train(){
     fi
     #kill -9 `ps -ef|grep 'python'|awk '{print $2}'`
     if [ ${device_num} != "N1C1" -a -d mylog ]; then
+        mkdir -p ${run_log_path}/mylog
         cp -r ./mylog/workerlog.* ${run_log_path}/mylog/
         rm ${log_file}
         cp mylog/workerlog.${workerlog_id} ${log_file}
