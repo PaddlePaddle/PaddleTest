@@ -7,18 +7,7 @@ log_dir=${root_path}/log
 work_path=`pwd`
 echo ${work_path}
 
-work_path2=${root_path}/PaddleMIX/ppdiffusers/
-echo ${work_path2}/
-
-cd ${work_path2}
-export http_proxy=${proxy}
-export https_proxy=${proxy}
-python3.10 -m pip install --upgrade pip
-pip install -r requirements.txt
-pip install -e .
-unset http_proxy
-unset https_proxy
-pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+bash prepare.sh
 
 
 cd ${work_path}
