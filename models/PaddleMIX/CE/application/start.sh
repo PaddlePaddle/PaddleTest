@@ -128,18 +128,18 @@ else
 fi
 echo "*******application text_guided_image_upscaling end***********"
 
-echo "*******application dual_text_image_guided_generation begin***********"
-(python dual_text_image_guided_generation.py) | tee ${log_dir}/dual_text_image_guided_generation.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
-    echo "application dual_text_image_guided_generation run success" >> "${log_dir}/ce_res.log"
-else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
-    echo "application dual_text_image_guided_generation run fail" >> "${log_dir}/ce_res.log"
-fi
-echo "*******application dual_text_image_guided_generation end***********"
+# echo "*******application dual_text_image_guided_generation begin***********"
+# (python dual_text_image_guided_generation.py) | tee ${log_dir}/dual_text_image_guided_generation.log
+# tmp_exit_code=${PIPESTATUS[0]}
+# exit_code=$(($exit_code + ${tmp_exit_code}))
+# if [ ${tmp_exit_code} -eq 0 ]; then
+#     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
+#     echo "application dual_text_image_guided_generation run success" >> "${log_dir}/ce_res.log"
+# else
+#     # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
+#     echo "application dual_text_image_guided_generation run fail" >> "${log_dir}/ce_res.log"
+# fi
+# echo "*******application dual_text_image_guided_generation end***********"
 
 echo "*******application image2image_text_guided_generation begin***********"
 (python image2image_text_guided_generation.py) | tee ${log_dir}/image2image_text_guided_generation.log
