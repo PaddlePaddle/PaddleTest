@@ -5,8 +5,8 @@ echo "*******paddlemix imagebind predict begin***********"
 (python run_predict.py \
 --model_name_or_path The dir name of imagebind checkpoint. \
 --input_text "A dog."
---input_image an image file. \
---input_audio an audio file.) 2>&1 | tee ${log_dir}/run_imagebind_predict.log
+--input_image https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/dog_image.jpg \
+--input_audio https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/wave.wav) 2>&1 | tee ${log_dir}/run_imagebind_predict.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
