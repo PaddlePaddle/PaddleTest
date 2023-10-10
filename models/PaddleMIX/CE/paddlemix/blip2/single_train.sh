@@ -9,7 +9,7 @@ echo "*******paddlemix blip2 single card run_pretrain_stage1 begin***********"
 (CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_pretrain_stage1.py \
     --per_device_train_batch_size 64 \
     --warmup_steps 100 \
-    --num_train_epochs 1) | tee ${log_dir}/single_run_pretrain_stage1.log
+    --num_train_epochs 1) 2>&1 | tee ${log_dir}/single_run_pretrain_stage1.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then

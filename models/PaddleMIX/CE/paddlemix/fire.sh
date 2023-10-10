@@ -7,6 +7,12 @@ exit_code=0
 work_path=`pwd`
 echo ${work_path}
 
+cd ${root_path}
+mkdir data
+cd data
+wget https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/imagenet-val.tar
+tar -xvf imagenet-val.tar
+
 cd ${root_path}/PaddleMIX/
 
 export http_proxy=${proxy}
