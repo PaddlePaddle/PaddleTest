@@ -245,5 +245,7 @@ else
 fi
 echo "*******application auodio_image2image end***********"
 
+cat ${log_dir}/ce_res.log
+
 echo exit_code:${exit_code}
 exit $exit_code
