@@ -11,7 +11,10 @@ cd ${root_path}/PaddleMIX/
 
 export http_proxy=${proxy}
 export https_proxy=${proxy}
+python3.10 -m pip install --upgrade pip
 pip install -r requirements.txt
+pip install einops
+pip install -e .
 unset http_proxy
 unset https_proxy
 

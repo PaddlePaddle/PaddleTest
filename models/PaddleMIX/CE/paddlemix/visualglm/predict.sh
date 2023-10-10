@@ -3,7 +3,8 @@
 echo "*******paddlemix visualglm predict begin***********"
 
 (python run_predict.py \
-    --pretrained_name_or_path "THUDM/visualglm-6b") 2>&1 | tee ${log_dir}/run_visualglm_predict.log
+    --pretrained_name_or_path "THUDM/visualglm-6b" \
+    --image_path "https://paddlenlp.bj.bcebos.com/data/images/mugs.png") 2>&1 | tee ${log_dir}/run_visualglm_predict.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then

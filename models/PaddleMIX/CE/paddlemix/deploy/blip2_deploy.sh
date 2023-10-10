@@ -4,7 +4,7 @@ cur_path=`pwd`
 echo ${cur_path}
 
 
-work_path=${root_path}/PaddleMIX/develop/deploy/blip2/
+work_path=${root_path}/PaddleMIX/deploy/blip2/
 echo ${work_path}
 
 log_dir=${root_path}/log

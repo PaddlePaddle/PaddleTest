@@ -5,7 +5,7 @@ echo "*******paddlemix sam predict begin***********"
 #box
 (python run_predict.py \
 --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg \
---box_prompt  112, 118, 513, 382 \
+--box_prompt  112 118 513 382 \
 --input_type boxs) 2>&1 | tee ${log_dir}/run_sam_box_predict.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
@@ -20,7 +20,7 @@ fi
 #points
 (python run_predict.py \
 --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg \
---points_prompt points 362 250
+--points_prompt  362 250 \
 --input_type points) 2>&1 | tee ${log_dir}/run_sam_point_predict.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))

@@ -4,7 +4,7 @@ cur_path=`pwd`
 echo ${cur_path}
 
 
-work_path=${root_path}/PaddleMIX/develop/deploy/sam/
+work_path=${root_path}/PaddleMIX/deploy/sam/
 echo ${work_path}
 
 log_dir=${root_path}/log
@@ -54,9 +54,9 @@ fi
 
 
 #bbox 提示词推理
-(python predict.py
+(python predict.py \
 --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg \
---box_prompt  112, 118, 513, 382 \
+--box_prompt  112 118 513 382 \
 --input_type boxs \
 --model_name_or_path Sam/SamVitH-1024 \
 --cfg sam_export_SamVitH_boxs/deploy.yaml) 2>&1 | tee ${log_dir}/run_deploy_sam_box_predict.log
@@ -74,7 +74,7 @@ fi
 #points 提示词推理
 (python predict.py \
 --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg \
---points_prompt points 362 250 \
+--points_prompt  362 250 \
 --input_type points \
 --model_name_or_path Sam/SamVitH-1024 \
 --cfg sam_export_SamVitH_points/deploy.yaml) 2>&1 | tee ${log_dir}/run_deploy_sam_point_predict.log

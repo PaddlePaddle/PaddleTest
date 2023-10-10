@@ -4,7 +4,7 @@ cur_path=`pwd`
 echo ${cur_path}
 
 
-work_path=${root_path}/PaddleMIX/develop/deploy/groundingdino/
+work_path=${root_path}/PaddleMIX/deploy/groundingdino/
 echo ${work_path}
 
 log_dir=${root_path}/log
@@ -47,7 +47,7 @@ fi
  --text_encoder_type GroundingDino/groundingdino-swint-ogc \
  --model_path output_groundingdino/GroundingDino/groundingdino-swint-ogc \
  --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg \
- -output_dir "./groundingdino_predict_output" \
+ --output_dir "./groundingdino_predict_output" \
  --prompt "bus") 2>&1 | tee ${log_dir}/run_deploy_groundingdino_predict.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
