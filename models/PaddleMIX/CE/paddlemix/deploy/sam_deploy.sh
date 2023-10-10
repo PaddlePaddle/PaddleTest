@@ -56,10 +56,10 @@ fi
 #bbox 提示词推理
 (python predict.py \
 --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg \
---box_prompt  112 118 513 382 \
+--box_prompt 112 118 513 382 \
 --input_type boxs \
 --model_name_or_path Sam/SamVitH-1024 \
---cfg sam_export_SamVitH_boxs/deploy.yaml) 2>&1 | tee ${log_dir}/run_deploy_sam_box_predict.log
+--cfg Sam/SamVitH-1024_boxs/deploy.yaml) 2>&1 | tee ${log_dir}/run_deploy_sam_box_predict.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -74,10 +74,10 @@ fi
 #points 提示词推理
 (python predict.py \
 --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg \
---points_prompt  362 250 \
+--points_prompt 548 372 \
 --input_type points \
 --model_name_or_path Sam/SamVitH-1024 \
---cfg sam_export_SamVitH_points/deploy.yaml) 2>&1 | tee ${log_dir}/run_deploy_sam_point_predict.log
+--cfg Sam/SamVitH-1024_points/deploy.yaml) 2>&1 | tee ${log_dir}/run_deploy_sam_point_predict.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
