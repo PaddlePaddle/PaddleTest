@@ -22,7 +22,7 @@ cd ${work_path}
 
 bash prepare.sh
 
-bash prepare.sh
+bash train.sh
 exit_code=$(($exit_code + $?))
 
 bash eval.sh

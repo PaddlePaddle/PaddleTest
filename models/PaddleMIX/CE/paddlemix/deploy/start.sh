@@ -9,6 +9,8 @@ exit_code=0
 bash blip2_deploy.sh
 exit_code=$(($exit_code + $?))
 
+python -m pip install paddlepaddle-gpu==2.5.1.post117 -f https://www.paddlepaddle.org.cn/whl/linux/mkl/avx/stable.html -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+
 bash groundingdino_deploy.sh
 exit_code=$(($exit_code + $?)
 
