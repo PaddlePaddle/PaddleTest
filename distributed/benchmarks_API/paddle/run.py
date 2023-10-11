@@ -19,7 +19,7 @@ api_list = [
     "reduce_scatter",
     "scatter",
 ]
-loops = 20
+loops = 10
 
 
 def get_average(file_loops, case):
