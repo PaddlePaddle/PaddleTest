@@ -1,5 +1,9 @@
 #!/bin/bash
 
+log_dir=${root_path}/log
+
+exit_code=0
+
 echo "*******paddlemix coca eval begin***********"
 
 MODEL_NAME="paddlemix/CoCa/coca_Vit-L-14"

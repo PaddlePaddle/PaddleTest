@@ -2,6 +2,8 @@
 
 log_dir=${root_path}/log
 
+exit_code=0
+
 echo "*******paddlemix minigpt4_7b predict begin***********"
 
 wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/model_state.pdparams

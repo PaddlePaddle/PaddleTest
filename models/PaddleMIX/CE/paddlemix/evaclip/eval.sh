@@ -1,5 +1,9 @@
 #!/bin/bash
 
+log_dir=${root_path}/log
+
+exit_code=0
+
 echo "*******paddlemix evaclip eval begin***********"
 
 MODEL_NAME="paddlemix/EVA/EVA02-CLIP-L-14"

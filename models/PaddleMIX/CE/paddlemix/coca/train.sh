@@ -1,5 +1,8 @@
 #!/bin/bash
 
+log_dir=${root_path}/log
+
+exit_code=0
 
 echo "*******paddlemix coca train begin***********"
 
