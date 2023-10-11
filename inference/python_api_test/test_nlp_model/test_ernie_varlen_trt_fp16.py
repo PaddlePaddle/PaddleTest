@@ -193,8 +193,6 @@ def test_trt_fp16():
     """
     check_model_exist()
 
-    # file_path = "./ernie_model_4"
-
     if "win" in sys.platform:
         model_path = ".\\ernie_model_4"
     else:
