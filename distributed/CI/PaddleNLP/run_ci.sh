@@ -40,6 +40,7 @@ install_paddlenlp(){
     rm -rf build/ && rm -rf paddlenlp.egg-info/ && rm -rf dist/
     python -m pip install --ignore-installed -r requirements.txt
     python setup.py install
+    python setup.py build_ext
     unset http_proxy && unset https_proxy
     cd -
     python -c "import paddlenlp; print('paddlenlp commit:',paddlenlp.version.commit)";
