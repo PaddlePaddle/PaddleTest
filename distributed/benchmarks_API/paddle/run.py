@@ -77,7 +77,7 @@ def compare(case, res_dict):
             diff_dict[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}
             if time_diff > 5 or algbw_diff < -5:
                 diff_exp[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}
- 
+
     diff_res = {case: diff_dict}
     if len(diff_exp) != 0:
         diff_exp_res = {case: diff_exp}
@@ -165,5 +165,3 @@ def main():
 if __name__ == "__main__":
     os.system("rm -rf mylog && mkdir -p mylog")
     main()
-    
-

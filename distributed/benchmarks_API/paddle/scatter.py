@@ -36,7 +36,7 @@ def get_res(case, config):
     byte_to_test = [134217728]  # 128MB
     # byte_to_test = []
     # b = 1024 # 1KB
-    # e = 134217728  # 128M 
+    # e = 134217728  # 128M
     # while b <= e:
     #     byte_to_test.append(b)
     #     b *= 2
