@@ -5,7 +5,12 @@ echo ${cur_path}
 
 exit_code=0
 
-python -m pip install https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl --force-reinstall -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+export http_proxy=${proxy}
+export https_proxy=${proxy}
+python -m pip install https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl
+unset http_proxy
+unset https_proxy
+
 bash blip2_deploy.sh
 exit_code=$(($exit_code + $?))
 
