@@ -50,50 +50,6 @@ accum_freq=1 # update_freq
 logging_steps=10 # print_freq
 seed=0
 
-export FLAGS_embedding_deterministic=1
-export FLAGS_cudnn_deterministic=1
-export NVIDIA_TF32_OVERRIDE=0
-export NCCL_ALGO=Tree
-
-optim="adamw"
-lr=2e-4
-layer_decay=0.9
-warmup_lr=0.0
-min_lr=0.0
-weight_decay=0.05
-CLIP_GRAD=0.0
-
-num_train_epochs=1
-save_epochs=1
-
-warmup_epochs=1
-warmup_steps=0
-drop_path=0.1
-
-TRAINING_MODEL_RESUME="None"
-TRAINER_INSTANCES='127.0.0.1'
-MASTER='127.0.0.1:8080'
-
-TRAINERS_NUM=1 # nnodes, machine num
-TRAINING_GPUS_PER_NODE=8 # nproc_per_node
-DP_DEGREE=8 # dp_parallel_degree
-MP_DEGREE=1 # tensor_parallel_degree
-SHARDING_DEGREE=1 # sharding_parallel_degree
-
-MODEL_NAME="paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_ft_in1k_p14"
-PRETRAIN_CKPT=/root/.paddlenlp/models/paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14/model_state.pdparams # pretrained model, input_size is 224
-
-OUTPUT_DIR=./output/eva02_Ti_pt_in21k_ft_in1k_p14
-
-DATA_PATH=${root_path}/dataset/ILSVRC2012_tiny
-
-input_size=336
-batch_size=128
-num_workers=2
-accum_freq=1 # update_freq
-logging_steps=10 # print_freq
-seed=0
-
 USE_AMP=False
 FP16_OPT_LEVEL="O1"
 enable_tensorboard=True
