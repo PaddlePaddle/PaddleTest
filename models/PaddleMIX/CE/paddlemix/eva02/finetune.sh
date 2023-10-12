@@ -37,7 +37,7 @@ MP_DEGREE=1 # tensor_parallel_degree
 SHARDING_DEGREE=1 # sharding_parallel_degree
 
 MODEL_NAME="paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_ft_in1k_p14"
-PRETRAIN_CKPT=/root/.paddlenlp/models/paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14/model_state.pdparams # pretrained model, input_size is 224
+PRETRAIN_CKPT=/root/.paddlenlp/models/paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14/model_state.pdparams
 
 OUTPUT_DIR=./output/eva02_Ti_pt_in21k_ft_in1k_p14
 
