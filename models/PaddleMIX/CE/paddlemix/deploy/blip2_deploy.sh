@@ -21,7 +21,9 @@ exit_code=0
 export http_proxy=${proxy}
 export https_proxy=${proxy}
 git clone https://github.com/PaddlePaddle/PaddleNLP.git -b develop
-cd PaddleNLP/csrc
+cd PaddleNLP
+pip install -e .
+cd csrc
 python setup_cuda.py install
 unset http_proxy
 unset https_proxy
