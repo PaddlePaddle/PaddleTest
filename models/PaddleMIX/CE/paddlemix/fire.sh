@@ -7,11 +7,21 @@ exit_code=0
 work_path=`pwd`
 echo ${work_path}
 
+
+rm -rf /root/.paddlemix/models/paddlemix/EVA/
+rm -rf /root/.paddlenlp/models/paddlemix/EVA
+
 cd ${root_path}
 mkdir data
 cd data
 wget https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/imagenet-val.tar
 tar -xvf imagenet-val.tar
+
+cd ${root_path}/
+mkdir dataset
+cd dataset
+wget https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/ILSVRC2012_tiny.tar
+tar -xvf ILSVRC2012_tiny.tar
 
 cd ${root_path}/PaddleMIX/
 
