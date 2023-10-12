@@ -48,7 +48,7 @@ install_paddlenlp(){
 }
 ####################################
 get_diff_TO_case(){
-export FLAG_paddlenlp=0
+export FLAGS_paddlenlp=0
 for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
     dir1=${arr_file_name[0]}
@@ -68,7 +68,7 @@ for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{pri
             case_list[${#case_list[*]}]=gpt-3
         fi
     elif [[ ${dir1} =~ "paddlenlp" ]];then
-        export FLAG_paddlenlp=1
+        export FLAGS_paddlenlp=1
     else
         continue
     fi
@@ -100,7 +100,7 @@ if [[ ${#case_list[*]} -ne 0 ]];then
     echo -e "\033[31m ---- start run case  \033"
     # Install paddle
     install_paddle
-    if [[ FLAG_paddlenlp -eq 1 ]];then
+    if [[ FLAGS_paddlenlp -eq 1 ]];then
         # 安装本地paddlenlp
         install_paddlenlp
     fi
