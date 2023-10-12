@@ -181,7 +181,6 @@ else:
 
 
 @pytest.mark.win
-@pytest.mark.jetson
 @pytest.mark.server
 @pytest.mark.trt_fp16
 @trt_skip
