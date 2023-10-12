@@ -4,7 +4,7 @@ cur_path=`pwd`
 echo ${cur_path}
 
 
-work_path=${root_path}/PaddleMIX/paddlemix/examples/clip/
+work_path=${root_path}/PaddleMIX/paddlemix/examples/eva02/
 echo ${work_path}
 
 log_dir=${root_path}/log
