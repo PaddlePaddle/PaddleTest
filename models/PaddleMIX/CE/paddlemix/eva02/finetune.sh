@@ -22,7 +22,7 @@ CLIP_GRAD=0.0
 num_train_epochs=1
 save_epochs=1
 
-warmup_epochs=1
+warmup_epochs=0
 warmup_steps=0
 drop_path=0.1
 
