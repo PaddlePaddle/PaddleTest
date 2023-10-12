@@ -99,25 +99,26 @@ function _train(){
     fi
     # 以下为通用执行命令，无特殊可不用修改
     case ${run_mode} in
-    DP1-MP1-PP8) echo "run run_mode: ${run_mode}"
+    DP1-MP1-PP8-SD1-stage1) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
         workerlog_id=7
         ;;
-    DP1-MP2-PP4) echo "run run_mode: ${run_mode}"
+    DP1-MP2-PP4-SD1-stage1) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
         workerlog_id=6
         ;;
-    DP2-MP1-PP4|DP2-MP2-PP2) echo "run run_mode: ${run_mode}"
+    DP2-MP1-PP4-SD2-stage1|DP2-MP1-PP4-SD2-stage2| \
+    DP2-MP2-PP2-SD2-stage1|DP2-MP2-PP2-SD2-stage2) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
         workerlog_id=3
         ;;
-    DP1-MP8-PP2) echo "run run_mode: ${run_mode}"
+    DP1-MP8-PP2-SD1-stage1) echo "run run_mode: ${run_mode}"
         # fp32
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_13B_sharding8.yaml \
@@ -138,7 +139,7 @@ function _train(){
             -o Engine.logging_freq=1 "
         workerlog_id=0
         ;;
-    DP1-MP8-PP4) echo "run run_mode: ${run_mode}"
+    DP1-MP8-PP4-SD1-stage1) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_13B_sharding8.yaml \
             -o Model.hidden_dropout_prob=0 \
