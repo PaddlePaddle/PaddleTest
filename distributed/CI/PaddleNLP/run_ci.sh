@@ -41,6 +41,7 @@ install_paddlenlp(){
     python -m pip install --ignore-installed -r requirements.txt
     python setup.py install
     python setup.py build_ext
+    python setup.py bdist_wheel
     unset http_proxy && unset https_proxy
     cd -
     python -c "import paddlenlp; print('paddlenlp commit:',paddlenlp.version.commit)";
