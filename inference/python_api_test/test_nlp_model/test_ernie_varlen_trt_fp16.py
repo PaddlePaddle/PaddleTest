@@ -8,11 +8,9 @@ import os
 import sys
 import logging
 import tarfile
-import six
 import wget
 import pytest
 import numpy as np
-import argparse
 import paddle.inference as paddle_infer
 
 from paddle.inference import Config
@@ -23,6 +21,7 @@ from paddle.inference import InternalUtils
 # pylint: disable=wrong-import-position
 sys.path.append("..")
 from test_case import InferenceTest
+from test_case.image_preprocess import sig_fig_compare
 
 # pylint: enable=wrong-import-position
 
@@ -49,35 +48,13 @@ def test_config():
     test_suite.config_test()
 
 
-def sig_fig_compare(array1, array2, delta=1e-3):
-    """
-    compare significant figure
-    Args:
-        array1(numpy array): input array 1
-        array2(numpy array): input array 2
-    Returns:
-        diff(numpy array): return diff array
-    """
-    assert not np.all(np.isnan(array1)), f"output value all nan! \n{array1}"
-    
-    if np.any(abs(array2) > 100):
-        normalize_func = np.vectorize(normalize)
-        array1_normal = normalize_func(array1)
-        array2_normal = normalize_func(array2)
-    else:
-        array1_normal = array1
-        array2_normal = array2
-    diff = np.abs(array1_normal - array2_normal)
-    diff_count = np.sum(diff > delta)
-    print(f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} delta:{delta}")
-    print("output max: ", np.max(abs(array1)), "output min: ", np.min(abs(array1)))
-    print("output diff array: ", array1[diff > delta])
-    print("truth diff array:  ", array2[diff > delta])
-    assert diff_count == 0, f"total: {np.size(diff)} diff count:{diff_count} max:{np.max(diff)} delta:{delta}"
-    return diff
-
-
 def init_predictor(model_path):
+    """
+    Args:
+        model_path (str): Path to the TensorRT model
+    Returns:
+        Predictor: Returns a TensorRT model predictor object
+    """
     config = Config(model_path)
     config.enable_memory_optim()
     config.enable_use_gpu(1000, 0, PrecisionType.Float32)
@@ -108,30 +85,53 @@ def init_predictor(model_path):
     min_shape = [min_batch_seq_len]
     max_shape = [max_batch_seq_len]
     opt_shape = [opt_batch_seq_len]
-      
+
     config.set_trt_dynamic_shape_info(
-            {input_name0: min_shape,input_name1: min_shape, input_name2: [1], input_name3: [min_batch, min_single_seq_len, 1]},
-            {input_name0: max_shape,input_name1: max_shape, input_name2: [max_batch + 1], input_name3: [max_batch, max_single_seq_len, 1]},
-            {input_name0: opt_shape,input_name1: opt_shape, input_name2: [max_batch + 1], input_name3: [max_batch, opt_single_seq_len, 1]},
+        {
+            input_name0: min_shape,
+            input_name1: min_shape,
+            input_name2: [1],
+            input_name3: [min_batch, min_single_seq_len, 1],
+        },
+        {
+            input_name0: max_shape,
+            input_name1: max_shape,
+            input_name2: [max_batch + 1],
+            input_name3: [max_batch, max_single_seq_len, 1],
+        },
+        {
+            input_name0: opt_shape,
+            input_name1: opt_shape,
+            input_name2: [max_batch + 1],
+            input_name3: [max_batch, opt_single_seq_len, 1],
+        },
     )
 
     config.enable_tensorrt_varseqlen()
-    InternalUtils.set_transformer_posid(config,input_name2)
-    InternalUtils.set_transformer_maskid(config,input_name3)
-    
+    InternalUtils.set_transformer_posid(config, input_name2)
+    InternalUtils.set_transformer_maskid(config, input_name3)
+
     predictor = create_predictor(config)
     return predictor
 
 
 def run(predictor, delta):
+    """
+    Runs model prediction and compares the prediction results with the real values within a tolerance threshold.
+    Args:
+        predictor (Predictor): A model predictor object.
+        delta (float): A tolerance threshold for comparison.
+    Returns:
+        None
+    """
     run_batch = 10
     seq_len = 384
-    run_seq_len = run_batch*seq_len
+    run_seq_len = run_batch * seq_len
     max_seq_len = seq_len
     i0 = np.ones(run_seq_len, dtype=np.int64)
     i1 = np.zeros(run_seq_len, dtype=np.int64)
-    i2 = np.array([0,384,768,1152,1536,1920,2304,2688,3072,3456,3840], dtype=np.int64)
-    i3 = np.ones([run_batch, max_seq_len ,1], dtype=float)
+    i2 = np.array([0, 384, 768, 1152, 1536, 1920, 2304, 2688, 3072, 3456, 3840], dtype=np.int64)
+    i3 = np.ones([run_batch, max_seq_len, 1], dtype=float)
 
     input_names = predictor.get_input_names()
 
@@ -159,7 +159,7 @@ def run(predictor, delta):
         output_data = output_tensor.copy_to_cpu()
         output_data_dict[name] = output_data
 
-    output_data_array = np.array(output_data_dict['save_infer_model/scale_0'])
+    output_data_array = np.array(output_data_dict["save_infer_model/scale_0"])
 
     if "win" in sys.platform:
         npy_path = ".\\ernie_model_4\\output_data_truth_val.npy"
@@ -168,11 +168,7 @@ def run(predictor, delta):
 
     output_data_truth_val = np.load(npy_path, allow_pickle=True)
     truth_val_dict = output_data_truth_val.item()
-    truth_val_array = truth_val_dict['save_infer_model/scale_0']
-
-    print("output_data_array: ", output_data_array)
-    print("truth_val_array: ", truth_val_array)
-
+    truth_val_array = truth_val_dict["save_infer_model/scale_0"]
     diff = sig_fig_compare(output_data_array, truth_val_array, delta)
 
 
@@ -184,6 +180,7 @@ else:
     trt_skip = pytest.mark.none
 
 
+@pytest.mark.win
 @pytest.mark.server
 @pytest.mark.trt_fp16
 @trt_skip
@@ -199,5 +196,4 @@ def test_trt_fp16():
         model_path = "./ernie_model_4"
 
     pred = init_predictor(model_path)
-    run(pred, delta=1e-3) 
-    
+    run(pred, delta=1e-3)
