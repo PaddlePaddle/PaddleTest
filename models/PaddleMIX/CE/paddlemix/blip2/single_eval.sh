@@ -8,7 +8,7 @@ exit_code=0
 echo "*******paddlemix blip2 single card run_eval_vqav2_zeroshot begin***********"
 (CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_eval_vqav2_zeroshot.py \
     --per_device_train_batch_size 64 \
-    --num_train_epochs 1) | tee ${log_dir}/single_run_eval_vqav2_zeroshot.log
+    --num_train_epochs 1) | tee ${log_dir}/blip2_single_run_eval_vqav2_zeroshot.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -27,7 +27,7 @@ export https_proxy=${proxy}
 echo "*******paddlemix blip2 single card run_eval_caption begin***********"
 (CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_eval_caption.py \
     --per_device_train_batch_size 64 \
-    --num_train_epochs 1) 2>&1 | tee ${log_dir}/single_run_eval_caption.log
+    --num_train_epochs 1) 2>&1 | tee ${log_dir}/blip2_single_run_eval_caption.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
