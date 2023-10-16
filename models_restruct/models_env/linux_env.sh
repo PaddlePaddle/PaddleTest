@@ -524,7 +524,7 @@ if [[ "${docker_flag}" == "" ]]; then
         set -x
         # Flag
         export STRICT_MODE=0
-        cexport SOT_LOG_LEVEL=2
+        export SOT_LOG_LEVEL=2
         export COST_MODEL=False
         export MIN_GRAPH_SIZE=0
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
