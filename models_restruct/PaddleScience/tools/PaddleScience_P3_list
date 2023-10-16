@@ -1,1 +1,2 @@
-examples^ldc^ldc2d_unsteady_Re10.yaml
+examples^ide^volterra_ide.yaml
+examples^pipe^poiseuille_flow.yaml
