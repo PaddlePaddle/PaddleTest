@@ -105,6 +105,8 @@ def test_trt_fp16_more_bz():
             auto_tuned=True,
             min_subgraph_size=5,
             det_top_bbox=True,
+            need_sort=True,
+            det_top_bbox_threshold=0.85,
             check_output_list=["save_infer_model/scale_0.tmp_0", "save_infer_model/scale_1.tmp_0"],
         )
 
