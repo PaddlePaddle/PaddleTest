@@ -36,8 +36,8 @@ def test_laplace2d_exit_code():
 
     # 执行命令行命令，运行 laplace2d.py 脚本
     command = f"python{py_version} ../../examples/laplace/laplace2d.py \
-                --epochs={epoch_num} \
-                --output_dir={output_dir}"
+                TRAIN.epochs={epoch_num} \
+                output_dir={output_dir}"
     process = subprocess.Popen(command, shell=True)
     # 等待脚本执行完成，并返回退出码
     exit_code = process.wait()
