@@ -27,10 +27,8 @@ configs^singan_universal.yaml
 configs^msvsr_vimeo90k_BD.yaml
 configs^animeganv2_pretrain.yaml
 configs^photopen.yaml
-configs^starganv2_afhq.yaml
 configs^mprnet_denoising.yaml
 configs^cyclegan_horse2zebra.yaml
-configs^starganv2_celeba_hq.yaml
 configs^drn_psnr_x4_div2k.yaml
 configs^gpen_256_ffhq.yaml
 configs^prenet.yaml
