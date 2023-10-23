@@ -73,7 +73,7 @@ class PaddleNLP_Case_Start(object):
                 os.environ["FLAGS_cudnn_deterministic"] = "1"
                 os.environ["FLAGS_enable_pir_api"] = "True"
                 os.environ["FLAGS_prim_all"] = "true"
-                os.environ["GLOG_vmodule"] = os.environ["generated_vjp"]="4"
+                os.environ["GLOG_vmodule"] = os.environ["generated_vjp"] = "4"
 
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("set FLAGS_cudnn_deterministic as {}".format(os.getenv("FLAGS_cudnn_deterministic")))
