@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/heat.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    L2 relative error:
+      base: 0.0015696938391428314
+      evaluation: '-'
+      threshold: 1
+    loss:
+      base: 9.12e-06
+      evaluation: '-'
+      threshold: 1

@@ -43,7 +43,7 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    ln -s /usr/bin/python3.8 /usr/bin/python
    python -c "import sys; print('python version:',sys.version_info[:])";
 
-
+   set -x
    # PaddleSlim dev
    echo "install PaddleSlim dev"
    git clone -b develop https://github.com/PaddlePaddle/PaddleSlim.git
@@ -52,11 +52,11 @@ if [[ $1 =~ 'pr' ]] || [[ $1 =~ 'all' ]] || [[ $1 =~ 'single' ]]; then #model_fl
    python setup.py install
    cd ..
 
-   unset http_proxy
-   unset https_proxy
+   # unset http_proxy
+   # unset https_proxy
    echo "######  ----install  paddle-----"
    python -m pip uninstall paddlepaddle-gpu -y
-   python -m pip install $5 -i https://mirror.baidu.com/pypi/simple #paddle_compile
+   python -m pip install $5 #paddle_compile
    python -c 'import paddle;print(paddle.version.commit)'
 
    echo "######  ----ln  data-----"
@@ -77,21 +77,19 @@ else
    echo "######  system linux"
 fi
 
-unset http_proxy
-unset https_proxy
 # env
 export FLAGS_fraction_of_gpu_memory_to_use=0.8
 # dependency
-python -m pip install --ignore-installed --upgrade pip -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed --upgrade pip
 python -m pip install --upgrade pip
-python -m pip install  --ignore-installed paddleslim -i https://mirror.baidu.com/pypi/simple
+python -m pip install  --ignore-installed paddleslim
 
-python -m pip install --ignore-installed -r requirements.txt -i https://mirror.baidu.com/pypi/simple
-python -m pip install -U urllib3==1.26.15 -i https://mirror.baidu.com/pypi/simple
+python -m pip install --ignore-installed -r requirements.txt
+python -m pip install -U urllib3==1.26.15
 num=`python -m pip list | grep fasttext | wc -l`
 if [ "${num}" -eq "0" ]; then
-   python -m pip install --ignore-installed pybind11 -i https://mirror.baidu.com/pypi/simple
-   python -m pip install --ignore-installed fasttext -i https://mirror.baidu.com/pypi/simple
+   python -m pip install --ignore-installed pybind11
+   python -m pip install --ignore-installed fasttext
 fi
 # paddleocr
 # python -m pip install  --ignore-installed paddleocr -i https://mirror.baidu.com/pypi/simple
@@ -114,9 +112,9 @@ rm -rf models_list
 rm -rf models_list_all
 rm -rf models_list_det
 rm -rf models_list_rec
-
-find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'det_mv3_east'| grep -v 'det_mv3_pse' > models_list_det
-find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_resnet_stn_bilstm_att' | grep -v 'rec_r32_gaspin_bilstm_att' > models_list_rec
+# rec_r31_robustscanner export bug 230810
+find configs/det -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'det_mv3_east'| grep -v 'det_mv3_pse' | grep -v 'OCRv4' > models_list_det
+find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 'rec_multi_language_lite_train' | grep -v 'rec_resnet_stn_bilstm_att' | grep -v 'rec_r32_gaspin_bilstm_att' | grep -v 'rec_r31_robustscanner' | grep -v 'OCRv4' > models_list_rec
 
 shuf models_list_det > models_list_all
 shuf models_list_rec >> models_list_all

@@ -8,13 +8,25 @@ case:
             name: multi_amp
         eval:
           -
+            name: trained
+          -
             name: pretrained
             result:
               f_score:
                 base: ${eval_base_acc}
                 threshold: 0
                 evaluation: "="
+        infer:
+          -
+            name: trained
+          -
+            name: pretrained
         export:
+          -
+            name: trained
+          -
+            name: pretrained
+        predict:
           -
             name: trained
           -

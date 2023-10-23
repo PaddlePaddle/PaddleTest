@@ -8,6 +8,7 @@ import shutil
 import urllib
 import logging
 import wget
+import subprocess
 
 logger = logging.getLogger("ce")
 
@@ -56,7 +57,6 @@ class PaddleScience_Start(object):
         old_pythonpath = os.environ.get("PYTHONPATH", "")
         new_pythonpath = f"{paddle_path}:{old_pythonpath}"
         os.environ["PYTHONPATH"] = new_pythonpath
-        os.system("cp PaddleScience/examples/cylinder/3d_steady/re20_5.0.npy ./PaddleScience")
         return 0
 
     def download_datasets(self):
@@ -67,6 +67,17 @@ class PaddleScience_Start(object):
         file_name = "datasets.tar.gz"
         urllib.request.urlretrieve(url, file_name)
         os.system("tar -zxvf " + file_name + " -C PaddleScience/")
+        try:
+            subprocess.check_call(["python", "-m", "pip", "install", "scikit-image"])
+            logger.info("Install scikit-image success!")
+        except subprocess.CalledProcessError as e:
+            logger.error("Install scikit-image failed. Error code: {}. Output: {}".format(e.returncode, e.output))
+
+        try:
+            subprocess.check_call(["python", "-m", "pip", "install", "hdf5storage"])
+            logger.info("Install hdf5storage success!")
+        except subprocess.CalledProcessError as e:
+            logger.error("Install hdf5storage failed. Error code: {}. Output: {}".format(e.returncode, e.output))
         logger.info("download datasets done!!!!")
 
     def build_prepare(self):
@@ -81,6 +92,16 @@ class PaddleScience_Start(object):
         os.environ[self.reponame] = json.dumps(self.env_dict)
         return ret
 
+    def install_env(self):
+        """
+        install env for  paddlescience docker
+        """
+        mode = os.getenv("mode")
+        if mode == "function":
+            os.system("apt update")
+            os.system("apt-get install -y curl")
+            os.system("curl --version")
+
 
 def run():
     """
@@ -90,6 +111,7 @@ def run():
     model.build_prepare()
     model.add_paddlescience_to_pythonpath()
     model.download_datasets()
+    model.install_env()
     return 0
 
 
