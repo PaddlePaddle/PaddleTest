@@ -86,10 +86,6 @@ class PaddleNLP_Build(Model_Build):
                  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
             )
 
-        import nltk
-
-        nltk.download("punkt")
-
         if re.compile("37").findall(paddle_whl) or re.compile("38").findall(paddle_whl):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
@@ -106,24 +102,24 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
 
             os.system(
-                'sed -i "s/save_step: 10000/save_step: 1/g" examples/machine_translation/transformer/ \
-                    configs/transformer.base.yaml'
+                'sed -i "s/save_step: 10000/save_step: 1/g" \
+                    examples/machine_translation/transformer/configs/transformer.base.yaml'
             )
             os.system(
-                'sed -i "s/print_step: 100/print_step: 1/g" examples/machine_translation/transformer/ \
-                    configs/transformer.base.yaml'
+                'sed -i "s/print_step: 100/print_step: 1/g" \
+                    examples/machine_translation/transformer/configs/transformer.base.yaml'
             )
             os.system(
-                'sed -i "s/epoch: 30/epoch: 1/g" examples/machine_translation/transformer/configs/ \
-                    transformer.base.yaml'
+                'sed -i "s/epoch: 30/epoch: 1/g" \
+                    examples/machine_translation/transformer/configs/transformer.base.yaml'
             )
             os.system(
-                'sed -i "s/max_iter: None/max_iter: 2/g" examples/machine_translation/transformer/ \
-                    configs/transformer.base.yaml'
+                'sed -i "s/max_iter: None/max_iter: 2/g" \
+                    examples/machine_translation/transformer/configs/transformer.base.yaml'
             )
             os.system(
-                'sed -i "s/batch_size: 4096/batch_size: 1000/g" examples/machine_translation/transformer/ \
-                    configs/transformer.base.yaml'
+                'sed -i "s/batch_size: 4096/batch_size: 1000/g" \
+                    examples/machine_translation/transformer/configs/transformer.base.yaml'
             )
 
             from datasets import load_dataset
