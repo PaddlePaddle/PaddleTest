@@ -68,12 +68,14 @@ class PaddleNLP_Case_Start(object):
             elif self.case_name.split("train_")[-1] == "dy2st_pri":
                 os.environ["FLAGS_cudnn_deterministic"] = "1"
                 os.environ["FLAGS_enable_pir_api"] = "True"
+                os.environ["ENABLE_FALL_BACK"] = "False"
 
             elif self.case_name.split("train_")[-1] == "dy2st_pri_prim":
                 os.environ["FLAGS_cudnn_deterministic"] = "1"
                 os.environ["FLAGS_enable_pir_api"] = "True"
                 os.environ["FLAGS_prim_all"] = "true"
                 os.environ["GLOG_vmodule"] = os.environ["generated_vjp"] = "4"
+                os.environ["ENABLE_FALL_BACK"] = "False"
 
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("set FLAGS_cudnn_deterministic as {}".format(os.getenv("FLAGS_cudnn_deterministic")))
@@ -81,6 +83,7 @@ class PaddleNLP_Case_Start(object):
             logger.info("set FLAGS_enable_pir_api as {}".format(os.getenv("FLAGS_enable_pir_api")))
             logger.info("set GLOG_vmodule as {}".format(os.getenv("GLOG_vmodule")))
             logger.info("set generated_vjp as {}".format(os.getenv("generated_vjp")))
+            logger.info("set ENABLE_FALL_BACK as {}".format(os.getenv("ENABLE_FALL_BACK")))
 
         elif "ernie_convergence" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
