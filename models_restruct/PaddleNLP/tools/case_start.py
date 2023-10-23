@@ -65,11 +65,11 @@ class PaddleNLP_Case_Start(object):
             if self.case_name.split("train_")[-1] == "dy2st_baseline":
                 os.environ["FLAGS_cudnn_deterministic"] = "1"
 
-            elif self.case_name.split("train_")[-1] == "dy2st_pri_to_static":
+            elif self.case_name.split("train_")[-1] == "dy2st_pri":
                 os.environ["FLAGS_cudnn_deterministic"] = "1"
                 os.environ["FLAGS_enable_pir_api"] = "True"
 
-            elif self.case_name.split("train_")[-1] == "dy2st_pri_to_static_prim":
+            elif self.case_name.split("train_")[-1] == "dy2st_pri_prim":
                 os.environ["FLAGS_cudnn_deterministic"] = "1"
                 os.environ["FLAGS_enable_pir_api"] = "True"
                 os.environ["FLAGS_prim_all"] = "true"
