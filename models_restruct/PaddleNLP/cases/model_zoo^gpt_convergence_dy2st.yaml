@@ -2,7 +2,7 @@ case:
   linux_convergence:
     train:
       -
-        name: prepare_datasets
+        name: datasets
         path: model_zoo/gpt-3/tasks/gpt
         cmd: mkdir data && cd data && wget https://bj.bcebos.com/paddlenlp/models/transformers/llama/data/llama_openwebtext_100k_ids.npy && wget https://bj.bcebos.com/paddlenlp/models/transformers/llama/data/llama_openwebtext_100k_idx.npz
 
