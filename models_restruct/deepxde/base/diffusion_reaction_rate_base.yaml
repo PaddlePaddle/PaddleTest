@@ -1,0 +1,18 @@
+train:
+- cmd: python examples/pinn_inverse/diffusion_reaction_rate.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    l2 relative error for k:
+      base: 0.031831145
+      evaluation: '-'
+      threshold: 1
+    l2 relative error for u:
+      base: 0.0008225579436135605
+      evaluation: '-'
+      threshold: 1
+    loss:
+      base: 4.43e-06
+      evaluation: '-'
+      threshold: 1

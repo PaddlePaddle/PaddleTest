@@ -36,7 +36,6 @@ ppcls^configs^ImageNet^DeiT^DeiT_small_patch16_224.yaml
 ppcls^configs^ImageNet^DeiT^DeiT_small_distilled_patch16_224.yaml
 ppcls^configs^ImageNet^ResNeXt101_wsl^ResNeXt101_32x16d_wsl.yaml
 ppcls^configs^ImageNet^DataAugment^ResNet50_RandomErasing.yaml
-ppcls^configs^ImageNet^DataAugment^ResNet50_Cutout.yaml
 ppcls^configs^ImageNet^DataAugment^ResNet50_RandAugment.yaml
 ppcls^configs^ImageNet^DataAugment^ResNet50_AutoAugment.yaml
 ppcls^configs^ImageNet^DataAugment^ResNet50_GridMask.yaml

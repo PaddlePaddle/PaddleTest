@@ -1,0 +1,10 @@
+train:
+- cmd: python examples/pinn_inverse/Navier_Stokes_inverse.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 0.000167
+      evaluation: '-'
+      threshold: 1

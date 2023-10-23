@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/ide.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    L2 relative error:
+      base: 0.00014512333
+      evaluation: '-'
+      threshold: 1
+    loss:
+      base: 7.32e-06
+      evaluation: '-'
+      threshold: 1

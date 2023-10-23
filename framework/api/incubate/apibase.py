@@ -546,6 +546,7 @@ class APIBase(object):
         dtype = t.dtype
         flat_t = paddle.reshape(t, [-1])
         orig = flat_t.__getitem__(idx)
+        orig = paddle.assign(orig)
         flat_t.__setitem__(idx, orig + self.gap)
         x_pos = flat_t.reshape(t.shape).astype(dtype)
         if isinstance(n, int):

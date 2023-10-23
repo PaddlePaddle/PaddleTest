@@ -1,0 +1,10 @@
+train:
+- cmd: python examples/pinn_inverse/fractional_Poisson_2d_inverse.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 3.03
+      evaluation: '-'
+      threshold: 1

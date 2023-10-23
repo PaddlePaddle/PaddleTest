@@ -1,0 +1,18 @@
+train:
+- cmd: python examples/pinn_inverse/elliptic_inverse_field.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    l2 relative error for q:
+      base: 0.015782122
+      evaluation: '-'
+      threshold: 1
+    l2 relative error for u:
+      base: 0.00029393204
+      evaluation: '-'
+      threshold: 1
+    loss:
+      base: 4.85e-05
+      evaluation: '-'
+      threshold: 1

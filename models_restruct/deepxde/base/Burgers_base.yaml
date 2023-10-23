@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Burgers.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    L2 relative error:
+      base: 0.013301038167238695
+      evaluation: '-'
+      threshold: 1
+    loss:
+      base: 8.98e-06
+      evaluation: '-'
+      threshold: 1

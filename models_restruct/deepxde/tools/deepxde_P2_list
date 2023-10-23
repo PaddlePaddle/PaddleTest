@@ -1,0 +1,12 @@
+lulu^examples^operator^diff_rec_unaligned_pideeponet.yaml
+lulu^examples^operator^advection_aligned_pideeponet_2d.yaml
+lulu^examples^operator^advection_aligned_pideeponet.yaml
+lulu^examples^operator^antiderivative_unaligned_pideeponet.yaml
+lulu^examples^operator^antiderivative_aligned.yaml
+lulu^examples^operator^advection_unaligned_pideeponet.yaml
+lulu^examples^operator^diff_rec_aligned_pideeponet.yaml
+lulu^examples^operator^advection_unaligned_pideeponet_2d.yaml
+lulu^examples^operator^ADR_solver.yaml
+lulu^examples^operator^antiderivative_unaligned.yaml
+lulu^examples^operator^antiderivative_aligned_pideeponet.yaml
+lulu^examples^operator^poisson_1d_pideeponet.yaml

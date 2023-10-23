@@ -1,38 +1,3 @@
-Tanh_0:
-  desc: "Tanh激活层"
-  paddle:
-    api_name: "paddle.nn.Tanh"
-    inputs:
-      x:
-        random: true
-        dtype: "float32"
-        shape: [ 1, 1, 1, 4 ]
-        range: [ -1, 1 ]
-#    params:
-  pytorch:
-    api_name: "torch.nn.Tanh"
-    mapping:
-      ins: {x: input}
-
-
-#fft:
-#  desc: "一维离散傅里叶变换fft"
-#  paddle:
-#    api_name: "paddle.fft.fft"
-#    inputs:
-#      x:
-#        random: true
-#        dtype: "float32"
-#        shape: [ 1, 1, 1, 4 ]
-#        range: [ -1, 1 ]
-#    params:
-#      n: 3
-#      norm: "forward"
-#  pytorch:
-#    api_name: "torch.fft.fft"
-#    mapping:
-#      ins: { x: input, n: "n", norm: "norm"}
-
 conv2d_0:
   desc: "2维卷积"
   paddle:
@@ -63,3 +28,85 @@ conv2d_0:
     api_name: "torch.nn.functional.conv2d"
     mapping:
       ins: { x: input, weight: weight, bias: bias, stride: stride, padding: padding }
+
+Tensor_uniform__0:
+  desc: "均匀分布采样的随机数 0"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.uniform_"
+    inputs:
+      x:
+        random: true
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+    params:
+      min: -1.0
+      max: 1.0
+      seed: 0
+#  pytorch:
+#    api_name: "torch.Tensor.uniform_"
+#    mapping:
+#      ins: {min: min, max: max, seed: seed}
+
+Tensor_fill_diagonal__0:
+  desc: "以 value 值填充输入 Tensor x 的对角线元素值。"
+  enable_backward: false
+  paddle:
+    api_name: "paddle.Tensor.fill_diagonal_"
+    inputs:
+      x:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      value: 2
+      offset: 0
+      wrap: False
+#  pytorch:
+#    api_name: "torch.Tensor.fill_diagonal_"
+#    mapping:
+#      ins: { x: input, value: fill_value, wrap: wrap }
+
+Linear_0:
+  desc: "线性层 0"
+  paddle:
+    api_name: "paddle.nn.Linear"
+    inputs:
+      x:
+        random: true
+        dtype: "float32"
+        shape: [ 1, 1]
+        range: [ -1, 1 ]
+    params:
+      in_features: 1
+      out_features: 1
+  pytorch:
+    api_name: "torch.nn.Linear"
+    mapping:
+      ins: {x: input, in_features: in_features, out_features: out_features}
+
+Conv2D_0:
+  desc: "二维卷积 0"
+  paddle:
+    api_name: "paddle.nn.Conv2D"
+    inputs:
+      x:
+        random: true
+        dtype: "float32"
+        shape: [ 1, 1, 1, 1 ]
+        range: [ -1, 1 ]
+    params:
+      in_channels: 1
+      out_channels: 1
+      kernel_size: 1
+      stride: 1
+      padding: 0
+      dilation: 1
+      groups: 1
+  pytorch:
+    api_name: "torch.nn.Conv2d"
+    mapping:
+      ins: {x: input, in_channels: in_channels, out_channels: out_channels, kernel_size: kernel_size, stride: stride, padding: padding, dilation: dilation, groups: groups}

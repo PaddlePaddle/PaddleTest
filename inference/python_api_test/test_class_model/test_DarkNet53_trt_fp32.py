@@ -12,6 +12,7 @@ import six
 import wget
 import pytest
 import numpy as np
+import paddle.inference as paddle_infer
 
 # pylint: disable=wrong-import-position
 sys.path.append("..")
@@ -72,21 +73,12 @@ def test_trt_fp32_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./DarkNet53/inference.pdmodel",
-            params_file="./DarkNet53/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=1,
-            precision="trt_fp32",
-            dynamic=True,
-            tuned=True,
-        )
-        del test_suite1  # destroy class to save memory
+        # Cause of the diff error, delete the conv2d_fusion when trt_version < 8.0
+        ver = paddle_infer.get_trt_compile_version()
+        if ver[0] * 1000 + ver[1] * 100 + ver[2] * 10 < 8000:
+            delete_op_list = ["conv2d_fusion"]
+        else:
+            delete_op_list = []
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -100,6 +92,8 @@ def test_trt_fp32_more_bz():
             min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
+            auto_tuned=True,
+            delete_op_list=delete_op_list,
         )
 
         del test_suite2  # destroy class to save memory
@@ -130,22 +124,6 @@ def test_jetson_trt_fp32_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./DarkNet53/inference.pdmodel",
-            params_file="./DarkNet53/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            max_batch_size=max_batch_size,
-            min_subgraph_size=1,
-            precision="trt_fp32",
-            dynamic=True,
-            tuned=True,
-        )
-        del test_suite1  # destroy class to save memory
-
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./DarkNet53/inference.pdmodel",
@@ -158,6 +136,7 @@ def test_jetson_trt_fp32_more_bz():
             min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory

@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Helmholtz_Neumann_2d_hole.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 0.0129
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.0124
+      evaluation: '-'
+      threshold: 1

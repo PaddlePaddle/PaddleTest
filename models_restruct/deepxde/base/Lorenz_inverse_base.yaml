@@ -1,0 +1,10 @@
+train:
+- cmd: python examples/pinn_inverse/Lorenz_inverse.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 3.45e-05
+      evaluation: '-'
+      threshold: 1

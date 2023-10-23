@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Poisson_multiscale_1d.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 6.17
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.0176
+      evaluation: '-'
+      threshold: 1

@@ -195,9 +195,9 @@ class Jelly_v2(object):
         if self._layertypes(self.api) == "func":
             input_param = dict(self.data, **self.param)
             tmp = timeit.timeit(lambda: self.api(**input_param), number=int(0.2 * self.loops * self.base_times))  # 预热
-            for i in range(self.loops):
-                forward_time = timeit.timeit(lambda: self.api(**input_param), number=self.base_times)
-                forward_time_list.append(forward_time)
+            for i in range(self.loops * self.base_times):
+                forward_time = timeit.timeit(lambda: self.api(**input_param), number=1)
+                forward_time_list.append(forward_time * self.base_times)
         elif self._layertypes(self.api) == "class":
             # obj = self.api(**self.param)
             # for i in range(self.loops):
@@ -213,14 +213,14 @@ class Jelly_v2(object):
                 tmp = timeit.timeit(
                     lambda: obj_method(**method_params_dict), number=int(0.2 * self.loops * self.base_times)
                 )
-            for i in range(self.loops):
+            for i in range(self.loops * self.base_times):
                 if self.method == dict():
-                    forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=self.base_times)
+                    forward_time = timeit.timeit(lambda: obj(*self.data.values()), number=1)
                 else:
                     obj_method = eval("obj" + "." + list(self.method.keys())[0])
                     method_params_dict = self.method[list(self.method.keys())[0]]
-                    forward_time = timeit.timeit(lambda: obj_method(**method_params_dict), number=self.base_times)
-                forward_time_list.append(forward_time)
+                    forward_time = timeit.timeit(lambda: obj_method(**method_params_dict), number=1)
+                forward_time_list.append(forward_time * self.base_times)
         elif self._layertypes(self.api) == "reload":
             # 判断"reload" api中有一个输入还是两个输入
             if "y" in self.data.keys():
@@ -243,12 +243,12 @@ class Jelly_v2(object):
             else:
                 tmp = timeit.timeit(lambda: func_x(x), number=int(0.2 * self.loops * self.base_times))  # 预热
 
-            for i in range(self.loops):
+            for i in range(self.loops * self.base_times):
                 if "y" in self.data.keys():
-                    forward_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
+                    forward_time = timeit.timeit(lambda: func(x, y), number=1)
                 else:
-                    forward_time = timeit.timeit(lambda: func_x(x), number=self.base_times)
-                forward_time_list.append(forward_time)
+                    forward_time = timeit.timeit(lambda: func_x(x), number=1)
+                forward_time_list.append(forward_time * self.base_times)
         else:
             raise AttributeError
 
@@ -270,9 +270,9 @@ class Jelly_v2(object):
                 res.backward(grad_tensor)
 
             tmp = timeit.timeit(lambda: func(input_param), number=int(0.2 * self.loops * self.base_times))  # 预热
-            for i in range(self.loops):
-                total_time = timeit.timeit(lambda: func(input_param), number=self.base_times)
-                total_time_list.append(total_time)
+            for i in range(self.loops * self.base_times):
+                total_time = timeit.timeit(lambda: func(input_param), number=1)
+                total_time_list.append(total_time * self.base_times)
         elif self._layertypes(self.api) == "class":
             # obj = self.api(**self.param)
             # res = obj(*self.data.values())
@@ -301,12 +301,12 @@ class Jelly_v2(object):
                 tmp = timeit.timeit(
                     lambda: clas_method(method_params_dict), number=int(0.2 * self.loops * self.base_times)
                 )
-            for i in range(self.loops):
+            for i in range(self.loops * self.base_times):
                 if self.method == dict():
-                    total_time = timeit.timeit(lambda: clas(self.data.values()), number=self.base_times)
+                    total_time = timeit.timeit(lambda: clas(self.data.values()), number=1)
                 else:
-                    total_time = timeit.timeit(lambda: clas_method(method_params_dict), number=self.base_times)
-                total_time_list.append(total_time)
+                    total_time = timeit.timeit(lambda: clas_method(method_params_dict), number=1)
+                total_time_list.append(total_time * self.base_times)
         elif self._layertypes(self.api) == "reload":
             if "y" in self.data.keys():
                 x = self.data["x"]
@@ -331,12 +331,12 @@ class Jelly_v2(object):
                 tmp = timeit.timeit(lambda: func(x, y), number=int(0.2 * self.loops * self.base_times))  # 预热
             else:
                 tmp = timeit.timeit(lambda: func_x(x), number=int(0.2 * self.loops * self.base_times))  # 预热
-            for i in range(self.loops):
+            for i in range(self.loops * self.base_times):
                 if "y" in self.data.keys():
-                    total_time = timeit.timeit(lambda: func(x, y), number=self.base_times)
+                    total_time = timeit.timeit(lambda: func(x, y), number=1)
                 else:
-                    total_time = timeit.timeit(lambda: func_x(x), number=self.base_times)
-                total_time_list.append(total_time)
+                    total_time = timeit.timeit(lambda: func_x(x), number=1)
+                total_time_list.append(total_time * self.base_times)
         else:
             raise AttributeError
 

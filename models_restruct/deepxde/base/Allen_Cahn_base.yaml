@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Allen_Cahn.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    L2 relative error:
+      base: 0.3676247746126911
+      evaluation: '-'
+      threshold: 1
+    loss:
+      base: 0.00471
+      evaluation: '-'
+      threshold: 1

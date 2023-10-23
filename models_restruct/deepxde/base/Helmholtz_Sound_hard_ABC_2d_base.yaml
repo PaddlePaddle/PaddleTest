@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Helmholtz_Sound_hard_ABC_2d.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 0.00113
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.0698
+      evaluation: '-'
+      threshold: 1

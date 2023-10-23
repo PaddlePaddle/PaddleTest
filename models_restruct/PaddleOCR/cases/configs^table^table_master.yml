@@ -6,6 +6,8 @@ case:
             name: multi
           -
             name: multi_amp
+          - name: single_dy2st
+          - name: multi_dy2st
         export:
           -
             name: trained
