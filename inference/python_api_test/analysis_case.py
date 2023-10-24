@@ -109,7 +109,6 @@ def analysis_error_case(path, flow_id):
             else:
                 analysis_result["error_type"] = "Failed to retrieve corresponding error information from the log."
 
-            analysis_result = json.loads(analysis_result)
             print("analysis_result:", analysis_result)
             result_data["analysis_result"] = analysis_result
 
