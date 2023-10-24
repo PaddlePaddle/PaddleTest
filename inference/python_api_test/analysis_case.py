@@ -66,8 +66,8 @@ def write_json(path, data):
     :param data: The data to be written.
     """
     try:
-        with open(path, "w", encoding="utf-8") as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
     except Exception as e:
         logging.error(f"Error writing JSON file: {e}")
         return {}
