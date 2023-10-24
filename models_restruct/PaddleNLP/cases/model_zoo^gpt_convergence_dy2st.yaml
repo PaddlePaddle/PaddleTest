@@ -12,8 +12,8 @@ case:
         cmd: python train_pir.py
         params:
           - -c ../../ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml
-          - -o Global.micro_batch_size=1
-          - -o Global.local_batch_size=1
+          - -o Global.micro_batch_size=2
+          - -o Global.local_batch_size=2
           - -o Global.to_static=False
           - -o Engine.max_steps=5000
 
@@ -23,8 +23,8 @@ case:
         cmd: python train_pir.py
         params:
           - -c ../../ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml
-          - -o Global.micro_batch_size=1
-          - -o Global.local_batch_size=1
+          - -o Global.micro_batch_size=2
+          - -o Global.local_batch_size=2
           - -o Global.to_static=True
           - -o Engine.max_steps=5000
       -
@@ -33,7 +33,7 @@ case:
         cmd: python train_pir.py
         params:
           - -c ../../ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml
-          - -o Global.micro_batch_size=1
-          - -o Global.local_batch_size=1
+          - -o Global.micro_batch_size=2
+          - -o Global.local_batch_size=2
           - -o Global.to_static=True
           - -o Engine.max_steps=5000
