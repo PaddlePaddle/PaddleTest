@@ -67,7 +67,7 @@ def write_json(path, data):
     """
     try:
         with open(path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+            json.dump(data, f, ensure_ascii=False)
     except Exception as e:
         logging.error(f"Error writing JSON file: {e}")
         return {}
