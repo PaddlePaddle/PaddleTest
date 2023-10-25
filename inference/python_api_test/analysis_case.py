@@ -67,7 +67,7 @@ def write_json(path, data):
     """
     try:
         with open(path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+            json.dump(data, f, ensure_ascii=False)
     except Exception as e:
         logging.error(f"Error writing JSON file: {e}")
         return {}
@@ -109,7 +109,6 @@ def analysis_error_case(path, flow_id):
             else:
                 analysis_result["error_type"] = "Failed to retrieve corresponding error information from the log."
 
-            analysis_result = json.loads(analysis_result)
             print("analysis_result:", analysis_result)
             result_data["analysis_result"] = analysis_result
 
