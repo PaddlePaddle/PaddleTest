@@ -300,7 +300,14 @@ else
 fi
 
 #复制模型相关文件到指定位置
-cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+if [ $PaddleX = True ];then
+  echo "PaddleX is True"
+  cp -r ./task/${models_name}/PaddleX/.  ./${CE_version_name}/
+else
+  echo "PaddleX is False"
+  cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+fi
+
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
