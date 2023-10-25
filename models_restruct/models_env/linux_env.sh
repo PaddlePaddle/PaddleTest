@@ -387,6 +387,7 @@ if [[ "${docker_flag}" == "" ]]; then
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
+        -v /mnt:/mnt \
         -e AK=${AK} \
         -e SK=${SK} \
         -e CFS_IP=${CFS_IP} \
