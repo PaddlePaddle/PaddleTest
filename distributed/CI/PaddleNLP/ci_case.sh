@@ -432,7 +432,7 @@ function gpt_auto_recompute_bs16_fp32_DP1-MP1-PP1() {
         -o Distributed.pp_degree=1 \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=False \
         -o Engine.max_steps=30 \
         -o Engine.eval_freq=100000 \
@@ -467,7 +467,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP1-PP8() {
         -o Distributed.pp_degree=8 \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -503,7 +503,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP2-PP4() {
         -o Distributed.pp_degree=4 \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -539,7 +539,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2() {
         -o Distributed.pp_degree=2 \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -575,7 +575,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage1() {
         -o Distributed.pp_degree=1 \
         -o Distributed.sharding.sharding_degree=4 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -611,7 +611,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage2() {
         -o Distributed.pp_degree=1 \
         -o Distributed.sharding.sharding_degree=4 \
         -o Distributed.sharding.sharding_stage=2 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -647,7 +647,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage3() {
         -o Distributed.pp_degree=1 \
         -o Distributed.sharding.sharding_degree=4 \
         -o Distributed.sharding.sharding_stage=3 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -683,7 +683,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage1() {
         -o Distributed.pp_degree=4 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -719,7 +719,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage2() {
         -o Distributed.pp_degree=4 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=2 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -755,7 +755,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage3() {
         -o Distributed.pp_degree=4 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=3 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -791,7 +791,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage1() {
         -o Distributed.pp_degree=2 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -827,7 +827,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage2() {
         -o Distributed.pp_degree=2 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=2 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -863,7 +863,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage3() {
         -o Distributed.pp_degree=2 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=3 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
