@@ -3,7 +3,7 @@ train:
     name: single
     cmd: python examples/hpinns/holography.py
     params:
-      - --epochs=20000
+      - TRAIN.epochs=20000
     result:
       loss:
         base: 0.08736
