@@ -6,7 +6,7 @@ train:
 eval:
   name: avg
   path: ${model_path}
-  cmd: mv exp/checkpoints/0.pdparams exp/checkpoints/0.pdparams exp/checkpoints/avg_1.pdparams
+  cmd: cp exp/checkpoints/0.pdparams exp/checkpoints/avg_1.pdparams
 infer: skipped
 
 export:
