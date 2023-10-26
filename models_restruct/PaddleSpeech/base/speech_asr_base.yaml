@@ -6,8 +6,7 @@ train:
 eval:
   name: avg
   path: ${model_path}
-  cmd:  pwd; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/s2t/exps/${model_bin}/bin; avg_num=1; avg.sh best exp/${ckpt}/checkpoints ${avg_num}
-
+  cmd: mv exp/checkpoints/0.pdparams exp/checkpoints/0.pdparams exp/checkpoints/avg_1.pdparams
 infer: skipped
 
 export:
