@@ -300,7 +300,14 @@ else
 fi
 
 #复制模型相关文件到指定位置
-cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+if [ $PaddleX = True ];then
+  echo "PaddleX is True"
+  cp -r ./task/${models_name}/PaddleX/.  ./${CE_version_name}/
+else
+  echo "PaddleX is False"
+  cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+fi
+
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
@@ -380,6 +387,7 @@ if [[ "${docker_flag}" == "" ]]; then
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
+        -v /mnt:/mnt \
         -e AK=${AK} \
         -e SK=${SK} \
         -e CFS_IP=${CFS_IP} \
