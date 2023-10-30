@@ -240,7 +240,7 @@ export analysis_case=${analysis_case:-None}
 export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 export plot=${plot:-False}  #False表示不自动绘图
 export c_plus_plus_predict=${c_plus_plus_predict:-False}  #False表示不配置 C++预测库
-export PaddleX=${PaddleX:-False}
+export PaddleX=${PaddleX:-None}
 
 #cinn编译器
 export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
@@ -556,7 +556,7 @@ if [[ "${docker_flag}" == "" ]]; then
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
 
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} 
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None --PaddleX=${PaddleX:-None}} 
     ' &
     wait $!
     exit $?
@@ -674,5 +674,5 @@ else
     git --version;
     python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
     python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None --PaddleX=${PaddleX:-None}
 fi
