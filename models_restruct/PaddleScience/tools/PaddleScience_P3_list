@@ -1,1 +1,3 @@
 examples^pipe^poiseuille_flow.yaml
+examples^ide^volterra_ide.yaml
+examples^heat_pinn^heat_pinn.yaml
