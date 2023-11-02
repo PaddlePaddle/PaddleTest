@@ -6,6 +6,6 @@ train:
       - TRAIN.epochs=10
     result:
       loss:
-        base: 
+        base: 1010619.97367
         threshold: 0
         evaluation: "="
