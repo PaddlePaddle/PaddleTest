@@ -5,7 +5,7 @@ train:
     params:
       - TRAIN.epochs=10
     result:
-      best metric:
-        base: 0.0002432141627650708
+      loss:
+        base: 0.0001
         threshold: 1
         evaluation: "-"
