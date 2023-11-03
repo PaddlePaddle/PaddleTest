@@ -3,7 +3,7 @@ train:
     name: single
     cmd: python examples/epnn/epnn.py
     params:
-      - --epochs=10000
+      - TRAIN.epochs=10000
     result:
       loss:
         base: 0.00473
