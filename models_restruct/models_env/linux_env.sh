@@ -256,7 +256,7 @@ export PaddleX=${PaddleX:-None}
 export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
 export FLAGS_prim_all=${FLAGS_prim_all:-false}
 # new ir
-export FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor:-0}
+export FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor:-0}
 # paddleSOT
 export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
 
@@ -436,7 +436,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
-        -e FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor} \
+        -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
@@ -541,11 +541,11 @@ if [[ "${docker_flag}" == "" ]]; then
         ls ${mount_path}
         echo "@@@mount_path: ${mount_path}"
 
-	echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
-        # FLAGS_enable_new_ir_in_executor bug
-        if [ $FLAGS_enable_new_ir_in_executor == 0 ];then
-        echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
-        unset FLAGS_enable_new_ir_in_executor
+	echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+        # FLAGS_enable_pir_in_executor bug
+        if [ $FLAGS_enable_pir_in_executor == 0 ];then
+        echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+        unset FLAGS_enable_pir_in_executor
         fi
     echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         # ENABLE_FALL_BACK install
@@ -660,11 +660,11 @@ else
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
 
-    echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
-    # FLAGS_enable_new_ir_in_executor bug
-    if [ $FLAGS_enable_new_ir_in_executor == 0 ];then
-    echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
-    unset FLAGS_enable_new_ir_in_executor
+    echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+    # FLAGS_enable_pir_in_executor bug
+    if [ $FLAGS_enable_pir_in_executor == 0 ];then
+    echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+    unset FLAGS_enable_pir_in_executor
     fi
     echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         # ENABLE_FALL_BACK install
