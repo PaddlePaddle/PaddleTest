@@ -426,9 +426,6 @@ def test_comp_cost():
     assert op_cost.time >= 0
     assert op_cost.memory >= 0
 
-    # Remove unnecessary files
-    if os.path.exists(cluster_json_path):
-        os.remove(cluster_json_path)
     print("test_comp_cost ... ok")
 
 

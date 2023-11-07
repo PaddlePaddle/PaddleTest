@@ -30,8 +30,25 @@ install_paddle(){
     python -m pip install --user ${paddle} --force-reinstall --no-dependencies;
     python -c "import paddle; print('paddle version:',paddle.__version__,'\npaddle commit:',paddle.version.commit)";
 }
+# Install paddlenlp
+install_paddlenlp(){
+    echo -e "\033[31m ---- Install paddlenlp  \033"
+    cd ${nlp_dir}
+    sed -i -e "s/paddlenlp/#paddlenlp/g" model_zoo/gpt-3/requirements.txt
+    export http_proxy=${proxy} && export https_proxy=${proxy}
+    python -m pip uninstall paddlenlp -y
+    rm -rf build/ && rm -rf paddlenlp.egg-info/ && rm -rf dist/
+    python -m pip install --ignore-installed -r requirements.txt
+    python setup.py install
+    python setup.py build_ext
+    python setup.py bdist_wheel
+    unset http_proxy && unset https_proxy
+    cd -
+    python -c "import paddlenlp; print('paddlenlp commit:',paddlenlp.version.commit)";
+}
 ####################################
 get_diff_TO_case(){
+export FLAGS_paddlenlp=0
 for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{print $NF}'`;do
     arr_file_name=(${file_name//// })
     dir1=${arr_file_name[0]}
@@ -50,6 +67,8 @@ for file_name in `git diff --numstat upstream/${AGILE_COMPILE_BRANCH} |awk '{pri
             # model_zoo/gpt-3
             case_list[${#case_list[*]}]=gpt-3
         fi
+    elif [[ ${dir1} =~ "paddlenlp" ]];then
+        export FLAGS_paddlenlp=1
     else
         continue
     fi
@@ -81,13 +100,13 @@ if [[ ${#case_list[*]} -ne 0 ]];then
     echo -e "\033[31m ---- start run case  \033"
     # Install paddle
     install_paddle
-    case_num=1
-    for case in ${case_list[*]};do
-        echo -e "\033[31m ---- running case $case_num/${#case_list[*]}: ${case} \033"
-        bash /workspace/PaddleTest/distributed/CI/PaddleNLP/ci_case.sh
-        print_info $? `ls -lt ${log_path} | grep gpt | head -n 1 | awk '{print $9}'`
-        let case_num++
-    done
+    if [[ FLAGS_paddlenlp -eq 1 ]];then
+        # 安装本地paddlenlp
+        install_paddlenlp
+    fi
+    echo -e "\033[31m ---- running case gpt-3 \033"
+    bash /workspace/PaddleTest/distributed/CI/PaddleNLP/ci_case.sh
+    print_info $? `ls -lt ${log_path} | grep gpt | head -n 1 | awk '{print $9}'`
     echo -e "\033[31m ---- end run case  \033"
     cd ${nlp_dir}/model_logs
     if [ ! -f *FAIL* ];then
