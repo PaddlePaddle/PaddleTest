@@ -58,7 +58,7 @@ function gpt_auto_recompute_bs16_fp32_DP1-MP1-PP1() {
         -o Distributed.pp_degree=1 \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=False \
         -o Engine.max_steps=30 \
         -o Engine.eval_freq=100000 \
@@ -69,7 +69,7 @@ function gpt_auto_recompute_bs16_fp32_DP1-MP1-PP1() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.507633400
+    loss_base=10.507633305
     ips_base=3518
     mem_base=11750.6
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
@@ -93,7 +93,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP1-PP8() {
         -o Distributed.pp_degree=8 \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -129,7 +129,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP2-PP4() {
         -o Distributed.pp_degree=4 \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -141,7 +141,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP1-MP2-PP4() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.697089195
+    loss_base=10.700293922
     ips_base=32518
     mem_base=1535.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
@@ -165,7 +165,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2() {
         -o Distributed.pp_degree=2 \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -177,7 +177,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.669981194
+    loss_base=10.672543240
     ips_base=18681
     mem_base=2135.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
@@ -201,7 +201,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage1() {
         -o Distributed.pp_degree=1 \
         -o Distributed.sharding.sharding_degree=4 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -213,7 +213,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage1() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.715789890
+    loss_base=10.720068359
     ips_base=15232
     mem_base=1999.2
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
@@ -237,7 +237,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage2() {
         -o Distributed.pp_degree=1 \
         -o Distributed.sharding.sharding_degree=4 \
         -o Distributed.sharding.sharding_stage=2 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -249,7 +249,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage2() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.715772343
+    loss_base=10.720078850
     ips_base=15571
     mem_base=1999.2
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
@@ -273,7 +273,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage3() {
         -o Distributed.pp_degree=1 \
         -o Distributed.sharding.sharding_degree=4 \
         -o Distributed.sharding.sharding_stage=3 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -285,7 +285,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP4-MP2-Sharding4_stage3() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.681084633
+    loss_base=10.681921577
     ips_base=13813
     mem_base=1747.6
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
@@ -309,7 +309,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage1() {
         -o Distributed.pp_degree=4 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -345,7 +345,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage2() {
         -o Distributed.pp_degree=4 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=2 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -381,7 +381,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP1-PP4_Sharding2_stage3() {
         -o Distributed.pp_degree=4 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=3 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -417,7 +417,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage1() {
         -o Distributed.pp_degree=2 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -429,7 +429,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage1() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.669967556
+    loss_base=10.672568035
     ips_base=19461
     mem_base=1384.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
@@ -453,7 +453,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage2() {
         -o Distributed.pp_degree=2 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=2 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -465,7 +465,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage2() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.669967556
+    loss_base=10.672568035
     ips_base=19652
     mem_base=1384.7
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
@@ -489,7 +489,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage3() {
         -o Distributed.pp_degree=2 \
         -o Distributed.sharding.sharding_degree=2 \
         -o Distributed.sharding.sharding_stage=3 \
-        -o Distributed.schedule_mode=1F1B \
+        -o Distributed.pipeline.schedule_mode=1F1B \
         -o Engine.mix_precision.enable=True \
         -o Engine.mix_precision.level="o2" \
         -o Engine.max_steps=30 \
@@ -501,7 +501,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage3() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.694304180
+    loss_base=10.696336079
     ips_base=16613
     mem_base=1280.5
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
