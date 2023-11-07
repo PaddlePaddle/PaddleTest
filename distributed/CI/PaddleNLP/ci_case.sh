@@ -895,7 +895,7 @@ function gpt_auto_sp_acc_check() {
 
     # sp on
     sp=True
-    log_dir_spTrue=./$FUNCNAME_mp${mp_degree}_sp${sp}
+    log_dir_spTrue=./${FUNCNAME}_mp${mp_degree}_sp${sp}
     rm -rf ./${log_dir_spTrue}/*
     python -m paddle.distributed.launch --log_dir=${log_dir_spTrue} --devices=0,1 --rank 0 tools/auto.py \
         -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_1.3B_dp8.yaml \
@@ -912,7 +912,7 @@ function gpt_auto_sp_acc_check() {
         -o Distributed.pp_degree=${pp_degree} \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=FThenB \
+        -o Distributed.pipeline.schedule_mode=FThenB \
         -o Engine.mix_precision.enable=False \
         -o Engine.mix_precision.level=o2 \
         -o Engine.max_steps=30 \
@@ -930,7 +930,7 @@ function gpt_auto_sp_acc_check() {
 
     # sp off
     sp=False
-    log_dir_spFalse=./$FUNCNAME_mp${mp_degree}_sp${sp}
+    log_dir_spFalse=./${FUNCNAME}_mp${mp_degree}_sp${sp}
     rm -rf ./${log_dir_spFalse}/*
 
     python -m paddle.distributed.launch --log_dir=${log_dir_spFalse} --devices=0,1 --rank 0 tools/auto.py \
@@ -948,7 +948,7 @@ function gpt_auto_sp_acc_check() {
         -o Distributed.pp_degree=${pp_degree} \
         -o Distributed.sharding.sharding_degree=1 \
         -o Distributed.sharding.sharding_stage=1 \
-        -o Distributed.schedule_mode=FThenB \
+        -o Distributed.pipeline.schedule_mode=FThenB \
         -o Engine.mix_precision.enable=False \
         -o Engine.mix_precision.level=o2 \
         -o Engine.max_steps=30 \
