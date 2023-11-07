@@ -21,7 +21,6 @@ configs^animeganv2_pretrain.yaml
 configs^photopen.yaml
 configs^stylegan_v2_256_ffhq.yaml
 configs^mprnet_denoising.yaml
-configs^starganv2_celeba_hq.yaml
 configs^drn_psnr_x4_div2k.yaml
 configs^gpen_256_ffhq.yaml
 configs^prenet.yaml

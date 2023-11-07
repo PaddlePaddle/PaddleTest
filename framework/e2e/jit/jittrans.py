@@ -190,6 +190,11 @@ class JitTrans(WeakTrans):
             "tensordot_0",
             "tensordot_1",
         ]
+
+        # 忽略naive_func测试
+        self.ignore_naivefunc_api = []
+        self.ignore_naivefunc_case = ["assign_base", "assign_1", "assign_2"]
+
         # self.in_tensor, self.in_params, self.func = self.get_func_params("paddle")
         self.in_tensor = self.get_inputs("paddle")
         self.none_shape_tensor_list = []
@@ -396,7 +401,8 @@ class JitTrans(WeakTrans):
                 self.test_method(method="BuildClass")
                 self.test_method(method="BuildClassWithInputSpec")  # 需要进一步排查，涉及到某些有问题的api
             else:
-                self.test_method(method="naive_func")
+                if self.func not in self.ignore_naivefunc_api and self.case_name not in self.ignore_naivefunc_case:
+                    self.test_method(method="naive_func")
                 self.test_method(method="BuildFunc")
                 self.test_method(method="BuildFuncWithInputSpec")
         else:

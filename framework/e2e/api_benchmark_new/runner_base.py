@@ -77,7 +77,7 @@ class ApiBenchmarkBASE(object):
         # 初始化统计模块
         self.statistics = Statistics()
 
-    def _run_test(self, case_name, log="log"):
+    def _run_test(self, case_name, loops, base_times, log="log"):
         """
         运行单个case
         """
@@ -100,8 +100,8 @@ class ApiBenchmarkBASE(object):
                     place=self.place,
                     card=self.card,
                     default_dtype=self.default_dtype,
-                    loops=self.loops,
-                    base_times=self.base_times,
+                    loops=loops,
+                    base_times=base_times,
                 )
             else:
                 jelly = Jelly_v2(
@@ -111,8 +111,8 @@ class ApiBenchmarkBASE(object):
                     place=self.place,
                     card=self.card,
                     default_dtype=self.default_dtype,
-                    loops=self.loops,
-                    base_times=self.base_times,
+                    loops=loops,
+                    base_times=base_times,
                 )
             jelly.set_paddle_param(bt.get_paddle_inputs(), bt.get_paddle_param())
             jelly.set_paddle_method(bt.get_paddle_method())
@@ -159,7 +159,7 @@ class ApiBenchmarkBASE(object):
 
         return error_logo, error_info, api
 
-    def _run_main(self, all_cases, log="log"):
+    def _run_main(self, all_cases, loops, base_times, log="log"):
         """
         对指定case运行测试
         :param all_cases: list of cases
@@ -200,7 +200,9 @@ class ApiBenchmarkBASE(object):
                     self.logger.get_log().warning("skip case -->{}<--".format(case_name))
                     continue
 
-            error_logo, error_info, api = self._run_test(case_name=case_name, log=log)
+            error_logo, error_info, api = self._run_test(
+                case_name=case_name, loops=loops, base_times=base_times, log=log
+            )
 
             if error_logo:
                 error["api"] = api

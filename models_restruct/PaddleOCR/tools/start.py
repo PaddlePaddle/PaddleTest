@@ -77,6 +77,8 @@ class PaddleOCR_Start(object):
                             #  image_shape: [100, 32] # W H
                             if algorithm == "NRTR":
                                 image_shape = "32,100"
+                            if algorithm == "ABINet":
+                                image_shape = "3,32,128"
                             if len(image_shape.split(",")) == 2:
                                 image_shape = "1," + image_shape
 
@@ -172,6 +174,8 @@ class PaddleOCR_Start(object):
                             "          -" + os.linesep,
                             "            name: multi_amp" + os.linesep,
                             "          -" + os.linesep,
+                            "            name: single_dy2st" + os.linesep,
+                            "          -" + os.linesep,
                             "            name: multi_dy2st" + os.linesep,
                             "        eval:" + os.linesep,
                             "          -" + os.linesep,
@@ -207,6 +211,8 @@ class PaddleOCR_Start(object):
                                 "            name: multi" + os.linesep,
                                 "          -" + os.linesep,
                                 "            name: multi_amp" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: single_dy2st" + os.linesep,
                                 "          -" + os.linesep,
                                 "            name: multi_dy2st" + os.linesep,
                                 "        eval:" + os.linesep,
@@ -317,6 +323,8 @@ class PaddleOCR_Start(object):
                                 "            name: multi" + os.linesep,
                                 "          -" + os.linesep,
                                 "            name: multi_amp" + os.linesep,
+                                "          -" + os.linesep,
+                                "            name: single_dy2st" + os.linesep,
                                 "          -" + os.linesep,
                                 "            name: multi_dy2st" + os.linesep,
                                 "        eval:" + os.linesep,
