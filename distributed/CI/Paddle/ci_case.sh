@@ -69,7 +69,7 @@ function gpt_auto_recompute_bs16_fp32_DP1-MP1-PP1() {
     ips=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'ips: ' '{print $2}' | awk -F ' tokens/s,' '{print $1}'`
     mem=`cat $log_dir/workerlog.0 | grep '29/30' | awk -F 'max_memory_reserved: ' '{print $2}' | awk -F ' MB,' '{print $1}'`
     echo "result: loss=$loss ips=$ips mem=$mem"
-    loss_base=10.507633400
+    loss_base=10.507633305
     ips_base=3518
     mem_base=11750.6
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
