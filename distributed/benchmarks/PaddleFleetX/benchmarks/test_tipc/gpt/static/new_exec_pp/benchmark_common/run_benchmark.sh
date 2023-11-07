@@ -87,7 +87,7 @@ function _train(){
                -o Engine.mix_precision.level=${level} \
                -o Engine.max_steps=100 \
                -o Engine.eval_freq=100000 \
-               -o Distributed.schedule_mode=${schedule_mode} \
+               -o Distributed.pipeline.schedule_mode=${schedule_mode} \
                -o Engine.verbose=3 \
                -o Engine.logging_freq=1 "
 
@@ -134,7 +134,7 @@ function _train(){
             -o Engine.mix_precision.enable=False \
             -o Engine.max_steps=100 \
             -o Engine.eval_freq=100000 \
-            -o Distributed.schedule_mode=${schedule_mode} \
+            -o Distributed.pipeline.schedule_mode=${schedule_mode} \
             -o Engine.verbose=3 \
             -o Engine.logging_freq=1 "
         workerlog_id=0
@@ -157,7 +157,7 @@ function _train(){
             -o Engine.mix_precision.enable=False \
             -o Engine.max_steps=100 \
             -o Engine.eval_freq=100000 \
-            -o Distributed.schedule_mode=${schedule_mode} \
+            -o Distributed.pipeline.schedule_mode=${schedule_mode} \
             -o Engine.verbose=3 \
             -o Engine.logging_freq=1 "
         workerlog_id=0
