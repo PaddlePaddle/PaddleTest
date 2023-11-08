@@ -924,7 +924,7 @@ function gpt_auto_recompute_bs16_fp16_o2_DP2-MP2-PP2_Sharding2_stage3() {
 function gpt_auto_sp_acc_check() {
     echo "=========== $FUNCNAME run begin ==========="
     export PYTHONPATH=/workspace/PaddleNLP/:$PYTHONPATH
-    export FLAGS_infer_spmd_enable=true  
+    export FLAGS_infer_spmd_enable=true
     export FLAGS_call_stack_level=2
     mp_degree=2
     dp_degree=1
@@ -990,14 +990,14 @@ function gpt_auto_sp_acc_check() {
         -o Engine.save_load.output_dir="" \
         -o Model.sequence_parallel=${sp} \
         >>${log_path}/$FUNCNAME 2>&1
-    
+
     # loss diff
     loss=`cat ${log_dir_spTrue}/workerlog.0 |  grep '30/30' | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}'`
-    ips=0.0
-    mem=0.0
+    ips=-1
+    mem=-1
     loss_base=`cat ${log_dir_spFalse}/workerlog.0 |  grep '30/30' | awk -F 'loss: ' '{print $2}' | awk -F ',' '{print $1}'`
-    ips_base=0.0
-    mem_base=0.0
+    ips_base=-1
+    mem_base=-1
     echo "result: loss_spTrue=$loss loss_spFasle=$loss_base"
     check_result $FUNCNAME ${loss_base} ${loss} ${ips_base} ${ips} ${mem_base} ${mem}
     echo "=========== $FUNCNAME run  end ==========="
