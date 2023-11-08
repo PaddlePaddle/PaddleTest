@@ -22,18 +22,27 @@ export TO_DIFFUSERS=False
 export HF_HUB_OFFLINE=False
 export CUDA_VISIBLE_DEVICES=$cudaid1
 
+work_path=`pwd`
+echo ${work_path}
+
 exit_code=0
 
-bash prepare.sh
+cd ${work_path}
 
-bash paddlemix/fire.sh
+cd ${work_path}/paddlemix/
+bash fire.sh
 exit_code=$(($exit_code + $?))
 
-bash ppdiffusers/fire.sh
+cd ${work_path}/ppdiffusers/
+bash fire.sh
 exit_code=$(($exit_code + $?))
 
-bash ut/fire.sh
+cd ${work_path}/ut/
+bash fire.sh
 exit_code=$(($exit_code + $?))
+
+log_dir=${root_path}/log
+cat ${log_dir}/res.log
 
 echo exit_code:${exit_code}
 exit ${exit_code}

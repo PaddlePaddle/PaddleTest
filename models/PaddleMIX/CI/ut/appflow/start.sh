@@ -9,9 +9,7 @@ echo ${work_path}
 
 log_dir=${root_path}/log
 
-# 检查上一级目录中是否存在log目录
 if [ ! -d "$log_dir" ]; then
-    # 如果log目录不存在，则创建它
     mkdir -p "$log_dir"
 fi
 
@@ -25,10 +23,8 @@ echo "*******tests/appflow/ test_cviw begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "tests/appflow/ test_cviw run success" >> "${log_dir}/res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "tests/appflow/ test_cviw run fail" >> "${log_dir}/res.log"
 fi
 echo "*******tests/appflow/ test_cviw end***********"

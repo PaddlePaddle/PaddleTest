@@ -64,8 +64,7 @@ exit_code=$(($exit_code + $?))
 bash vq_diffusion_infer.sh
 exit_code=$(($exit_code + $?))
 
-# # 查看结果
-# cat ${log_dir}/ce_res.log
+# cat ${log_dir}/res.log
 
 echo exit_code:${exit_code}
 exit ${exit_code}
