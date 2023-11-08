@@ -9,115 +9,63 @@ echo ${work_path}
 
 log_dir=${root_path}/log
 
-# 检查上一级目录中是否存在log目录
 if [ ! -d "$log_dir" ]; then
-    # 如果log目录不存在，则创建它
     mkdir -p "$log_dir"
 fi
 
+/bin/cp -rf ./* ${work_path}/
 exit_code=0
+
 
 cd ${work_path}
 
+bash alt_diffusion_infer.sh
+exit_code=$(($exit_code + $?))
 
-echo "*******ppdiffusers/examples/inference stable_diffusion text_to_image_generation begin***********"
-(python text_to_image_generation-stable_diffusion.py) 2>&1 | tee ${log_dir}/inference_stable_diffusion_text_to_image_generation.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/examples/inference stable_diffusion text_to_image_generation run success" >> "${log_dir}/res.log"
-else
-    echo "ppdiffusers/examples/inference stable_diffusion text_to_image_generation run fail" >> "${log_dir}/res.log"
-fi
-echo "*******ppdiffusers/examples/inference stable_diffusion text_to_image_generation end***********"
+bash audio_diffusion_infer.sh
+exit_code=$(($exit_code + $?))
 
+bash controlnet_infer.sh
+exit_code=$(($exit_code + $?))
 
-echo "*******ppdiffusers/examples/inference stable_diffusion image_to_image_text_guided_generation begin***********"
-(python image_to_image_text_guided_generation-stable_diffusion.py) 2>&1 | tee ${log_dir}/inference_stable_diffusion_image_to_image_text_guided_generation.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/examples/inference stable_diffusion image_to_image_text_guided_generation run success" >> "${log_dir}/res.log"
-else
-    echo "ppdiffusers/examples/inference stable_diffusion image_to_image_text_guided_generation run fail" >> "${log_dir}/res.log"
-fi
-echo "*******ppdiffusers/examples/inference stable_diffusion image_to_image_text_guided_generation end***********"
+bash dance_diffusion_infer.sh
+exit_code=$(($exit_code + $?))
 
+bash ddim_infer.sh
+exit_code=$(($exit_code + $?))
 
-echo "*******ppdiffusers/examples/inference stable_diffusion text_guided_image_inpainting begin***********"
-(python text_guided_image_inpainting-stable_diffusion.py) 2>&1 | tee ${log_dir}/inference_stable_diffusion_text_guided_image_inpainting.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/examples/inference stable_diffusion text_guided_image_inpainting run success" >> "${log_dir}/res.log"
-else
-    echo "ppdiffusers/examples/inference stable_diffusion text_guided_image_inpainting run fail" >> "${log_dir}/res.log"
-fi
-echo "*******ppdiffusers/examples/inference stable_diffusion text_guided_image_inpainting end***********"
+bash latent_diffusion_infer.sh
+exit_code=$(($exit_code + $?))
 
+bash paint_by_example_infer.sh
+exit_code=$(($exit_code + $?))
 
-echo "*******ppdiffusers/examples/inference stable_diffusion  text_to_image_generation begin***********"
-(python text_to_image_generation-stable_diffusion_2.py) 2>&1 | tee ${log_dir}/inference_stable_diffusion_text_to_image_generation.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/examples/inference stable_diffusion text_to_image_generation run success" >> "${log_dir}/res.log"
-else
-    echo "ppdiffusers/examples/inference stable_diffusion text_to_image_generation run fail" >> "${log_dir}/res.log"
-fi
-echo "*******ppdiffusers/examples/inference stable_diffusion text_to_image_generation end***********"
+bash pndm_infer.sh
+exit_code=$(($exit_code + $?))
 
+bash repaint_infer.sh
+exit_code=$(($exit_code + $?))
 
+bash score_sde_ve_infer.sh
+exit_code=$(($exit_code + $?))
 
-echo "*******ppdiffusers/examples/inference stable_diffusion image_to_image_text_guided_generation begin***********"
-(python image_to_image_text_guided_generation-stable_diffusion_2.py) 2>&1 | tee ${log_dir}/inference_stable_diffusion_image_to_image_text_guided_generation.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/examples/inference stable_diffusion image_to_image_text_guided_generation run success" >> "${log_dir}/res.log"
-else
-    echo "ppdiffusers/examples/inference stable_diffusion image_to_image_text_guided_generation run fail" >> "${log_dir}/res.log"
-fi
-echo "*******ppdiffusers/examples/inference stable_diffusion image_to_image_text_guided_generation end***********"
+bash stable_diffusion_infer.sh
+exit_code=$(($exit_code + $?))
 
+bash stochastic_karras_ve_infer.sh
+exit_code=$(($exit_code + $?))
 
-echo "*******ppdiffusers/examples/inference stable_diffusion2 text_guided_image_inpainting begin***********"
-(python text_guided_image_inpainting-stable_diffusion_2.py) 2>&1 | tee ${log_dir}/inference_stable_diffusion2_text_guided_image_inpainting.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/examples/inference stable_diffusion2 text_guided_image_inpainting run success" >> "${log_dir}/res.log"
-else
-    echo "ppdiffusers/examples/inference stable_diffusion2 text_guided_image_inpainting run fail" >> "${log_dir}/res.log"
-fi
-echo "*******ppdiffusers/examples/inference stable_diffusion2 text_guided_image_inpainting end***********"
+bash unclip_infer.sh
+exit_code=$(($exit_code + $?))
 
+bash versatile_diffusion_infer.sh
+exit_code=$(($exit_code + $?))
 
-echo "*******ppdiffusers/examples/inference stable_diffusion2 text_guided_image_upscaling begin***********"
-(python text_guided_image_upscaling-stable_diffusion_2.py) 2>&1 | tee ${log_dir}/inference_stable_diffusion2_text_guided_image_upscaling.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/examples/inference stable_diffusion2 text_guided_image_upscaling run success" >> "${log_dir}/res.log"
-else
-    echo "ppdiffusers/examples/inference stable_diffusion2 text_guided_image_upscaling run fail" >> "${log_dir}/res.log"
-fi
-echo "*******ppdiffusers/examples/inference stable_diffusion2 text_guided_image_upscaling end***********"
+bash vq_diffusion_infer.sh
+exit_code=$(($exit_code + $?))
 
-
-
-echo "*******ppdiffusers/examples/inference stable_diffusion_safe text_to_image_generation begin***********"
-(python text_to_image_generation-stable_diffusion_safe.py) 2>&1 | tee ${log_dir}/inference_stable_diffusion_safe_text_to_image_generation.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到res.log
-    echo "ppdiffusers/examples/inference stable_diffusion_safe text_to_image_generation run success" >> "${log_dir}/res.log"
-else
-    # 如果返回状态不为0（失败），则追加失败消息到res.log
-    echo "ppdiffusers/examples/inference stable_diffusion_safe text_to_image_generation run fail" >> "${log_dir}/res.log"
-fi
-echo "*******ppdiffusers/examples/inference stable_diffusion_safe text_to_image_generation end***********"
+# # 查看结果
+# cat ${log_dir}/ce_res.log
 
 echo exit_code:${exit_code}
 exit ${exit_code}
