@@ -17,7 +17,8 @@ exit_code=0
 
 cd ${work_path}
 
-
+export http_proxy=${proxy};
+export https_proxy=${proxy};
 echo "*******tests/appflow/ test_cviw begin***********"
 (python test_cviw.py) 2>&1 | tee ${log_dir}/appflow_test_cviw.log
 tmp_exit_code=${PIPESTATUS[0]}
@@ -28,6 +29,8 @@ else
     echo "tests/appflow/ test_cviw run fail" >> "${log_dir}/res.log"
 fi
 echo "*******tests/appflow/ test_cviw end***********"
+unset http_proxy
+unset https_proxy
 
 echo exit_code:${exit_code}
 exit ${exit_code}
