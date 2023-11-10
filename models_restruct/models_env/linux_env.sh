@@ -158,6 +158,16 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/release/2.5/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
     fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        linux_env_info_main get_wheel_url_covall Cuda116 Python310 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/develop/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
+    else
+        linux_env_info_main get_wheel_url_covall Cuda116 Python310 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/release/2.5/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
+    fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda117 Python310 Develop ON
@@ -240,12 +250,13 @@ export analysis_case=${analysis_case:-None}
 export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 export plot=${plot:-False}  #False表示不自动绘图
 export c_plus_plus_predict=${c_plus_plus_predict:-False}  #False表示不配置 C++预测库
+export PaddleX=${PaddleX:-None}
 
 #cinn编译器
 export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
 export FLAGS_prim_all=${FLAGS_prim_all:-false}
 # new ir
-export FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor:-0}
+export FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor:-0}
 # paddleSOT
 export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
 
@@ -299,7 +310,14 @@ else
 fi
 
 #复制模型相关文件到指定位置
-cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+if [ $PaddleX = True ];then
+  echo "PaddleX is True"
+  cp -r ./task/${models_name}/PaddleX/.  ./${CE_version_name}/
+else
+  echo "PaddleX is False"
+  cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+fi
+
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
@@ -379,6 +397,7 @@ if [[ "${docker_flag}" == "" ]]; then
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
+        -v /mnt:/mnt \
         -e AK=${AK} \
         -e SK=${SK} \
         -e CFS_IP=${CFS_IP} \
@@ -408,6 +427,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e use_data_cfs=${use_data_cfs} \
         -e plot=${plot} \
         -e c_plus_plus_predict=${c_plus_plus_predict} \
+        -e PaddleX=${PaddleX} \
         -e branch=${branch} \
         -e get_repo=${get_repo} \
         -e paddle_whl=${paddle_whl} \
@@ -416,7 +436,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
-        -e FLAGS_enable_new_ir_in_executor=${FLAGS_enable_new_ir_in_executor} \
+        -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
@@ -521,11 +541,11 @@ if [[ "${docker_flag}" == "" ]]; then
         ls ${mount_path}
         echo "@@@mount_path: ${mount_path}"
 
-	echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
-        # FLAGS_enable_new_ir_in_executor bug
-        if [ $FLAGS_enable_new_ir_in_executor == 0 ];then
-        echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
-        unset FLAGS_enable_new_ir_in_executor
+	echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+        # FLAGS_enable_pir_in_executor bug
+        if [ $FLAGS_enable_pir_in_executor == 0 ];then
+        echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+        unset FLAGS_enable_pir_in_executor
         fi
     echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         # ENABLE_FALL_BACK install
@@ -546,7 +566,7 @@ if [[ "${docker_flag}" == "" ]]; then
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
 
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None}
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
     ' &
     wait $!
     exit $?
@@ -640,11 +660,11 @@ else
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
 
-    echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
-    # FLAGS_enable_new_ir_in_executor bug
-    if [ $FLAGS_enable_new_ir_in_executor == 0 ];then
-    echo "@@@FLAGS_enable_new_ir_in_executor: ${FLAGS_enable_new_ir_in_executor}"
-    unset FLAGS_enable_new_ir_in_executor
+    echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+    # FLAGS_enable_pir_in_executor bug
+    if [ $FLAGS_enable_pir_in_executor == 0 ];then
+    echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+    unset FLAGS_enable_pir_in_executor
     fi
     echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         # ENABLE_FALL_BACK install
@@ -664,5 +684,5 @@ else
     git --version;
     python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
     python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
 fi
