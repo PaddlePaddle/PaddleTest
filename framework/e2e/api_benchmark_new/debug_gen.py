@@ -106,13 +106,11 @@ print(result)"""
                 "\n".format(self.case_name)
             )
             f.write(self.randtool)
-            f.write(
-                "\n"
-                "\n"
-                "api = {}\n"
-                "all_data = {}\n"
-                "params = {}\n".format('"' + self.paddle_api + '"', self.inputs, self.params)
-            )
+            f.write("\n" "\n" "api = {}\n" "all_data = {}\n".format('"' + self.paddle_api + '"', self.inputs))
+            if self.params is None:
+                f.write("params = {}\n")
+            else:
+                f.write("params = {}\n".format(self.params))
             f.write(self.caculate)
 
 
