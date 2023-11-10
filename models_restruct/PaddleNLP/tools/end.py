@@ -38,23 +38,23 @@ class PaddleNLP_End(object):
     def drow_picture(self, model_name, baseline_info, strategy_info, metric):
         """drowing metrics curve"""
         for key, value in strategy_info.items():
-            if value==[]:
+            if value == []:
                 continue
             elif re.compile(metric).findall(key):
                 print(len(value))
-                plt.subplot(1,1,1)
+                plt.subplot(1, 1, 1)
                 picture_name = (model_name.replace("model_zoo^", "") + key.replace("dy2st", "")).upper()
 
                 x = [i for i in range(len(baseline_info["baseline_" + metric]))]
                 y1 = baseline_info["baseline_" + metric]
                 y2 = strategy_info[key]
-                plt.plot(x,y1,color="g",label="baseline_" + metric)
-                plt.plot(x,y2, color="r", label=key)
+                plt.plot(x, y1, color="g", label="baseline_" + metric)
+                plt.plot(x, y2, color="r", label=key)
                 plt.xlabel("step")
                 plt.ylabel(metric)
                 plt.legend()
                 plt.title(picture_name)
-        
+
                 if not os.path.exists("picture"):
                     os.makedirs("picture")
                 plt.savefig("./picture/{}.png".format(picture_name))
