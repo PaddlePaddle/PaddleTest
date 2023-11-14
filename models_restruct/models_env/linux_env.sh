@@ -673,7 +673,7 @@ else
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
-        
+
         set -x
         # Flag
         export STRICT_MODE=0
