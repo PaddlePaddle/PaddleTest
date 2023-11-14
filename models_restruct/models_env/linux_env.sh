@@ -259,6 +259,7 @@ export FLAGS_prim_all=${FLAGS_prim_all:-false}
 export FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor:-0}
 # paddleSOT
 export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
+export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-0}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -438,6 +439,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e set_cuda=${set_cuda} \
         -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
+        -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
@@ -551,12 +553,12 @@ if [[ "${docker_flag}" == "" ]]; then
         # ENABLE_FALL_BACK install
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
         set -x
         # Flag
         export STRICT_MODE=0
         export SOT_LOG_LEVEL=2
         export COST_MODEL=False
-        export MIN_GRAPH_SIZE=0
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
         fi
 
@@ -670,12 +672,13 @@ else
         # ENABLE_FALL_BACK install
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
+        
         set -x
         # Flag
         export STRICT_MODE=0
         export SOT_LOG_LEVEL=2
         export COST_MODEL=False
-        export MIN_GRAPH_SIZE=0
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
         fi
 
