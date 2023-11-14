@@ -9,3 +9,4 @@ examples^ide^volterra_ide.yaml
 examples^fpde^fractional_poisson_2d.yaml
 examples^shock_wave^shock_wave.yaml
 examples^heat_pinn^heat_pinn.yaml
+examples^epnn^epnn.yaml
