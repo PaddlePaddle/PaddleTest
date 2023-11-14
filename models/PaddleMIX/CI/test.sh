@@ -30,4 +30,3 @@ cat ${log_dir}/res.log
 
 echo exit_code:${exit_code}
 exit ${exit_code}
-exit ${exit_code}
