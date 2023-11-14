@@ -10,11 +10,11 @@ case:
         path: llm/llama
         cmd: GLOG_vmodule=generated_vjp=4,op_decomp=4 python run_pretrain.py
         params:
-          - --model_type llama
-          - --model_name_or_path '__internal_testing__/tiny-random-llama'
-          - --tokenizer_name_or_path '__internal_testing__/tiny-random-llama'
-          - --input_dir ./data
-          - --output_dir ./output/llama_output_baseline
+          - --model_type "llama"
+          - --model_name_or_path "__internal_testing__/tiny-random-llama"
+          - --tokenizer_name_or_path "__internal_testing__/tiny-random-llama"
+          - --input_dir "./data"
+          - --output_dir "./output/llama_output_baseline"
           - --split 949,50,1
           - --max_seq_length 2048
           - --per_device_train_batch_size 4
@@ -24,7 +24,7 @@ case:
           - --scale_loss 1024
           - --learning_rate 0.00001
           - --min_learning_rate 0.000005
-          - --lr_scheduler_type cosine
+          - --lr_scheduler_type "cosine"
           - --max_steps 3000
           - --save_steps 3000
           - --weight_decay 0.01
@@ -33,13 +33,13 @@ case:
           - --logging_steps 1
           - --dataloader_num_workers 1
           - --eval_steps 3000
-          - --report_to visualdl
+          - --report_to "visualdl"
           - --disable_tqdm true
           - --continue_training 0
           - --recompute 0
           - --do_train
           - --do_eval
-          - --device gpu
+          - --device "gpu"
           - --seed 2023
           - --use_fused_rms_norm False
       -
@@ -47,11 +47,11 @@ case:
         path: llm/llama
         cmd: GLOG_vmodule=generated_vjp=4,op_decomp=4 python run_pretrain.py
         params:
-          - --model_type llama
-          - --model_name_or_path '__internal_testing__/tiny-random-llama'
-          - --tokenizer_name_or_path '__internal_testing__/tiny-random-llama'
-          - --input_dir ./data
-          - --output_dir ./llama_output_pir_prim
+          - --model_type "llama"
+          - --model_name_or_path "__internal_testing__/tiny-random-llama"
+          - --tokenizer_name_or_path "__internal_testing__/tiny-random-llama"
+          - --input_dir "./data"
+          - --output_dir "./llama_output_pir_prim"
           - --split 949,50,1
           - --max_seq_length 2048
           - --per_device_train_batch_size 4
@@ -61,7 +61,7 @@ case:
           - --scale_loss 1024
           - --learning_rate 0.00001
           - --min_learning_rate 0.000005
-          - --lr_scheduler_type cosine
+          - --lr_scheduler_type "cosine"
           - --max_steps 3000
           - --save_steps 3000
           - --weight_decay 0.01
@@ -70,12 +70,12 @@ case:
           - --logging_steps 1
           - --dataloader_num_workers 1
           - --eval_steps 3000
-          - --report_to visualdl
+          - --report_to "visualdl"
           - --disable_tqdm true
           - --continue_training 0
           - --recompute 0
           - --do_train
           - --do_eval
-          - --device gpu
+          - --device "gpu"
           - --seed 2023
           - --use_fused_rms_norm False
