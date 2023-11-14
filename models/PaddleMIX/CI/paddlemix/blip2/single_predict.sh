@@ -18,3 +18,6 @@ else
     echo "paddlemix blip2 single card run_predict run fail" >> "${log_dir}/res.log"
 fi
 echo "*******paddlemix blip2 single card run_predict end***********"
+
+echo exit_code:${exit_code}
+exit ${exit_code}
