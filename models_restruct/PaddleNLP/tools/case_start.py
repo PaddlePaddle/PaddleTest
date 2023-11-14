@@ -96,7 +96,7 @@ class PaddleNLP_Case_Start(object):
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("export FLAGS_cudnn_deterministic=1")
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
-        
+
         elif "llama_convergence" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
@@ -116,7 +116,6 @@ class PaddleNLP_Case_Start(object):
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
             logger.info("set FLAGS_enable_pir_api as {}".format(os.getenv("FLAGS_enable_pir_api")))
             logger.info("set ENABLE_FALL_BACK as {}".format(os.getenv("ENABLE_FALL_BACK")))
-
 
 
 def run():
