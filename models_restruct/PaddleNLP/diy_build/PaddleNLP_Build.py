@@ -91,7 +91,6 @@ class PaddleNLP_Build(Model_Build):
 
         if os.path.exists(self.reponame):
             os.chdir(self.reponame)
-            os.system("python -m pip uninstall paddlenlp -y")
             logger.info("installing develop PaddleNLP")
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system(" python -m pip install -U dist/p****.whl")
