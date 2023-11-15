@@ -43,7 +43,7 @@ class PaddleNLP_End(object):
             elif re.compile(metric).findall(key):
                 print(len(value))
                 plt.subplot(1, 1, 1)
-                picture_name = (model_name.replace("model_zoo^", "") + key.replace("dy2st", "")).upper()
+                picture_name = (model_name.replace("^", "_")).upper()
 
                 x = [i for i in range(len(baseline_info["baseline_" + metric]))]
                 y1 = baseline_info["baseline_" + metric]
@@ -101,13 +101,11 @@ class PaddleNLP_End(object):
             if re.compile("baseline").findall(file):
                 baseline_info["baseline_loss"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
                 baseline_info["baseline_ips"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
-            elif re.compile("dy2st").findall(file):
+            else:
                 strategy_loss = file.split("train_")[-1].replace(".log", "") + "_loss"
                 strategy_ips = file.split("train_")[-1].replace(".log", "") + "_ips"
                 strategy_info[strategy_loss] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
                 strategy_info[strategy_ips] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
-            else:
-                logger.info("this log file not convergence task ")
 
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="loss")
         self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="ips")

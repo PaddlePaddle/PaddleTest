@@ -139,10 +139,9 @@ class PaddleNLP_Build(Model_Build):
         os.system("python -m pip uninstall protobuf -y")
         os.system("python -m pip uninstall protobuf -y")
         os.system("python -m pip install protobuf==3.20.2")
-
+        os.system("python -m pip list")
         import paddle
         import paddlenlp
-
         print("paddle final commit", paddle.version.commit)
         print("paddlenlp final commit", paddlenlp.version.commit)
         os.system("python -m pip list")
