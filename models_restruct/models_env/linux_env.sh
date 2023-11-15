@@ -442,11 +442,15 @@ if [[ "${docker_flag}" == "" ]]; then
         -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
-	-e api_key=${api_key} \
+	    -e api_key=${api_key} \
+        -e PTS_ENV_VARS=$PTS_ENV_VARS \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
 
+        if [ -f "./PTSTools/tools/set_env/set_env.sh" ]; then
+        source ./PTSTools/tools/set_env/set_env.sh $PTS_ENV_VARS
+        fi
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
