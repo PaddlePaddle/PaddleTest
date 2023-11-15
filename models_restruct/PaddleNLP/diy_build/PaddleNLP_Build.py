@@ -91,12 +91,14 @@ class PaddleNLP_Build(Model_Build):
 
         if os.path.exists(self.reponame):
             os.chdir(self.reponame)
+            os.system("python -m pip uninstall paddlenlp -y")
             logger.info("installing develop PaddleNLP")
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system(" python -m pip install -U dist/p****.whl")
 
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
+            
 
             logger.info("installing develop ppdiffusers")
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
@@ -140,8 +142,10 @@ class PaddleNLP_Build(Model_Build):
         os.system("python -m pip install protobuf==3.20.2")
 
         import paddle
+        import paddlenlp
 
         print("paddle final commit", paddle.version.commit)
+        print("paddlenlp final commit", paddlenlp.version.commit)
         os.system("python -m pip list")
 
         return 0
