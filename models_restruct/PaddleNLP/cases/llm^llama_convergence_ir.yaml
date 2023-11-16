@@ -25,14 +25,14 @@ case:
           - --learning_rate 0.00001
           - --min_learning_rate 0.000005
           - --lr_scheduler_type "cosine"
-          - --max_steps 3000
-          - --save_steps 3000
+          - --max_steps 30
+          - --save_steps 30
           - --weight_decay 0.01
           - --warmup_ratio 0.01
           - --max_grad_norm 1.0
           - --logging_steps 1
           - --dataloader_num_workers 1
-          - --eval_steps 3000
+          - --eval_steps 30
           - --report_to "visualdl"
           - --disable_tqdm true
           - --continue_training 0
@@ -62,14 +62,14 @@ case:
           - --learning_rate 0.00001
           - --min_learning_rate 0.000005
           - --lr_scheduler_type "cosine"
-          - --max_steps 3000
-          - --save_steps 3000
+          - --max_steps 30
+          - --save_steps 30
           - --weight_decay 0.01
           - --warmup_ratio 0.01
           - --max_grad_norm 1.0
           - --logging_steps 1
           - --dataloader_num_workers 1
-          - --eval_steps 3000
+          - --eval_steps 30
           - --report_to "visualdl"
           - --disable_tqdm true
           - --continue_training 0
