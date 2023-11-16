@@ -1,130 +1,134 @@
 # encoding: utf-8
 """
-post preocessing
+执行case前：生成yaml，设置特殊参数，改变监控指标
 """
-from copyreg import pickle
 import os
-from platform import system
-import pstats
-import sys
-import json
-import glob
-import shutil
-import argparse
 import logging
 import re
-import numpy as np
-import matplotlib.pyplot as plt
 
 logger = logging.getLogger("ce")
 
 
-class PaddleNLP_End(object):
+class PaddleNLP_Case_Start(object):
     """
-    post processing
+    自定义环境准备
     """
 
     def __init__(self):
         """
-        init
+        初始化变量
         """
-        # export qa_yaml_name='model_zoo^bert_convergence_dy2st'
-        # export reponame='PaddleNLP'
-        # export system='linux_convergence'
         self.reponame = os.environ["reponame"]
+        self.mode = os.environ["mode"]
+        self.case_step = os.environ["case_step"]
+        self.case_name = os.environ["case_name"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
-        self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
 
-    def drow_picture(self, model_name, baseline_info, strategy_info, metric):
-        """drowing metrics curve"""
-        for key, value in strategy_info.items():
-            if value == []:
-                continue
-            elif re.compile(metric).findall(key):
-                print(len(value))
-                plt.subplot(1, 1, 1)
-                picture_name = (model_name.replace("^", "")).upper()
-
-                x = [i for i in range(len(baseline_info["baseline_" + metric]))]
-                y1 = baseline_info["baseline_" + metric]
-                y2 = strategy_info[key]
-                plt.plot(x, y1, color="g", label="baseline_" + metric)
-                plt.plot(x, y2, color="r", label=key)
-                plt.xlabel("step")
-                plt.ylabel(metric)
-                plt.legend()
-                plt.title(picture_name)
-
-                if not os.path.exists("picture"):
-                    os.makedirs("picture")
-                plt.savefig("./picture/{}.png".format(picture_name))
-                plt.close()
-
-    def get_metrics(self, filename, kpi):
-        """
-        Get metrics such as: loss acc ips ...
-        """
-        data_list = []
-        f = open(filename, encoding="utf-8", errors="ignore")
-        for line in f.readlines():
-            if kpi + ":" in line:
-                regexp = r"%s:(\s*\d+(?:\.\d+)?)" % kpi
-                r = re.findall(regexp, line)
-                # 如果解析不到符合格式到指标，默认值设置为-1
-                kpi_value = float(r[0].strip()) if len(r) > 0 else -1
-                data_list.append(kpi_value)
-        f.close()
-        return data_list
-
-    def analysis_log(self):
-        """
-        Analysis log & save it to ./picture/
-
-        Return:
-        Examples:
-            baseline_info={
-            'baseline_loss': [], # loss
-            'baseline_ips': [], # ips
-             ...
-            }
-            strategy_info={
-            'cinn_loss': [], # loss
-            'cinn_ips': [], # ips
-             ...
-            }
-
-        """
-        baseline_info = {}
-        strategy_info = {}
-        for file in os.listdir(self.TRAIN_LOG_PATH):
-            logger.info("check log file is {}".format(file))
-            if re.compile("baseline").findall(file):
-                baseline_info["baseline_loss"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
-                baseline_info["baseline_ips"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
-            elif re.compile("dy2st").findall(file) or re.compile("ir").findall(file):
-                strategy_loss = file.split("train_")[-1].replace(".log", "") + "_loss"
-                strategy_ips = file.split("train_")[-1].replace(".log", "") + "_ips"
-                strategy_info[strategy_loss] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
-                strategy_info[strategy_ips] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
-            else:
-                logger.info("this log file not convergence task ")
-
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="loss")
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="ips")
-
-    def build_end(self):
+    def build_prepare(self):
         """
         执行准备过程
         """
-        # 进入repo中
-        logger.info("build analysis log start")
-        ret = 0
-        ret = self.analysis_log()
-        if ret:
-            logger.info("build analysis log failed")
-            return ret
-        logger.info("build analysis log end")
-        return ret
+        if "bert_convergence_dy2st" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
+            logger.info("export NVIDIA_TF32_OVERRIDE=1")
+
+            if "bert_convergence_daily" in self.qa_yaml_name:
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                logger.info("export FLAGS_cudnn_deterministic=1")
+
+            if self.case_name.split("train_")[-1] == "dy2st_cinn":
+                os.environ["FLAGS_use_cinn"] = "1"
+                os.environ["FLAGS_use_reduce_split_pass"] = "1"
+                os.environ["FLAGS_deny_cinn_ops"] = "dropout"
+                os.environ["FLAGS_nvrtc_compile_to_cubin"] = "1"
+            elif self.case_name.split("train_")[-1] == "dy2st_prim":
+                os.environ["FLAGS_prim_all"] = "true"
+            elif self.case_name.split("train_")[-1] == "dy2st_prim_cinn":
+                os.environ["FLAGS_use_cinn"] = "1"
+                os.environ["FLAGS_use_reduce_split_pass"] = "1"
+                os.environ["FLAGS_prim_all"] = "true"
+                os.environ["FLAGS_deny_cinn_ops"] = "dropout"
+                os.environ["FLAGS_nvrtc_compile_to_cubin"] = "1"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("set FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
+            logger.info("set FLAGS_use_reduce_split_pass as {}".format(os.getenv("FLAGS_use_reduce_split_pass")))
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            logger.info("set FLAGS_deny_cinn_ops as {}".format(os.getenv("FLAGS_deny_cinn_ops")))
+            logger.info("set FLAGS_nvrtc_compile_to_cubin as {}".format(os.getenv("FLAGS_nvrtc_compile_to_cubin")))
+
+        elif "gpt_convergence_dy2st" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            if self.case_name.split("train_")[-1] == "dy2st_baseline":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_pir":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_enable_pir_api"] = "True"
+                os.environ["ENABLE_FALL_BACK"] = "False"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_pir_prim":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_enable_pir_api"] = "True"
+                os.environ["FLAGS_prim_all"] = "true"
+                os.environ["ENABLE_FALL_BACK"] = "False"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("set FLAGS_cudnn_deterministic as {}".format(os.getenv("FLAGS_cudnn_deterministic")))
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            logger.info("set FLAGS_enable_pir_api as {}".format(os.getenv("FLAGS_enable_pir_api")))
+            logger.info("set ENABLE_FALL_BACK as {}".format(os.getenv("ENABLE_FALL_BACK")))
+
+        elif "ernie_convergence_dy2st" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            if self.case_name.split("train_")[-1] == "dy2st_prim":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_prim_all"] = "True"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_baseline":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_prim_all"] = "False"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("export FLAGS_cudnn_deterministic=1")
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+
+        elif "llama_convergence_dy2st" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            if self.case_name.split("train_")[-1] == "dy2st_baseline":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_enable_pir_api"] = "True"
+                os.environ["ENABLE_FALL_BACK"] = "False"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_pir_prim":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_enable_pir_api"] = "True"
+                os.environ["FLAGS_prim_all"] = "true"
+                os.environ["ENABLE_FALL_BACK"] = "False"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("set FLAGS_cudnn_deterministic as {}".format(os.getenv("FLAGS_cudnn_deterministic")))
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            logger.info("set FLAGS_enable_pir_api as {}".format(os.getenv("FLAGS_enable_pir_api")))
+            logger.info("set ENABLE_FALL_BACK as {}".format(os.getenv("ENABLE_FALL_BACK")))
+
+        elif "convergence_ir" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            if self.case_name.split("train_")[-1] == "baseline":
+                logger.info("baseline test")
+            else:
+                os.system("python -m pip uninstall paddlepaddle-gpu -y")
+                os.system("python -m pip install https://paddle-qa.bj.bcebos.com/CompileService/train/v11.7/3.10/pr/58990/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl")
+
+                os.environ["FLAGS_enable_pir_in_executor"] = "1"
+                os.environ["ENABLE_FALL_BACK"] = "False"
+
 
 
 def run():
@@ -134,8 +138,8 @@ def run():
     platform = os.environ["system"]
     all = re.compile("All").findall(os.environ["AGILE_PIPELINE_NAME"])
     if platform == "linux_convergence" and not all:
-        model = PaddleNLP_End()
-        model.build_end()
+        model = PaddleNLP_Case_Start()
+        model.build_prepare()
         return 0
     else:
         return 0
