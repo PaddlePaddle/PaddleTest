@@ -122,12 +122,13 @@ class PaddleNLP_Case_Start(object):
 
             if self.case_name.split("train_")[-1] == "baseline":
                 logger.info("baseline test")
-            else:
+            elif self.case_name.split("train_")[-1] == "ir":
                 os.system("python -m pip uninstall paddlepaddle-gpu -y")
                 os.system("python -m pip install https://paddle-qa.bj.bcebos.com/CompileService/train/v11.7/3.10/pr/58990/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl")
 
                 os.environ["FLAGS_enable_pir_in_executor"] = "1"
                 os.environ["ENABLE_FALL_BACK"] = "False"
+            
 
 
 
