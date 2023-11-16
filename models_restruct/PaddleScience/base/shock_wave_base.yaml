@@ -3,7 +3,7 @@ train:
     name: single
     cmd: python examples/shock_wave/shock_wave.py
     params:
-      - --epochs=100
+      - TRAIN.epochs=100
     result:
       loss:
         base: 1.17008
