@@ -28,7 +28,7 @@ class PaddleNLP_End(object):
         """
         init
         """
-        # export qa_yaml_name='model_zoo^bert_convergence_2st'
+        # export qa_yaml_name='model_zoo^bert_convergence_dy2st'
         # export reponame='PaddleNLP'
         # export system='linux_convergence'
         self.reponame = os.environ["reponame"]
@@ -43,7 +43,7 @@ class PaddleNLP_End(object):
             elif re.compile(metric).findall(key):
                 print(len(value))
                 plt.subplot(1, 1, 1)
-                picture_name = (model_name.replace("^", "_")).upper()
+                picture_name = (model_name.replace("model_zoo^", "") + key.replace("dy2st", "")).upper()
 
                 x = [i for i in range(len(baseline_info["baseline_" + metric]))]
                 y1 = baseline_info["baseline_" + metric]
