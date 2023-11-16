@@ -1,4 +1,4 @@
-model_zoo^llama_convergence_ir.yaml
+llm^llama_convergence_ir.yaml
 model_zoo^gpt_convergence_ir.yaml
 model_zoo^bert_convergence_ir.yaml
 model_zoo^ernie_convergence_ir.yaml
