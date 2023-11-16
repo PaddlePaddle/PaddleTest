@@ -28,7 +28,7 @@ class PaddleNLP_End(object):
         """
         init
         """
-        # export qa_yaml_name='model_zoo^bert_convergence_dy2st'
+        # export qa_yaml_name='model_zoo^bert_convergence_2st'
         # export reponame='PaddleNLP'
         # export system='linux_convergence'
         self.reponame = os.environ["reponame"]
@@ -101,7 +101,7 @@ class PaddleNLP_End(object):
             if re.compile("baseline").findall(file):
                 baseline_info["baseline_loss"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
                 baseline_info["baseline_ips"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
-            elif re.compile("dy2st").findall(file) or re.compile("ir").findall(file):
+            elif re.compile("2st").findall(file) or re.compile("ir").findall(file):
                 strategy_loss = file.split("train_")[-1].replace(".log", "") + "_loss"
                 strategy_ips = file.split("train_")[-1].replace(".log", "") + "_ips"
                 strategy_info[strategy_loss] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
