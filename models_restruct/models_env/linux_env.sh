@@ -454,6 +454,8 @@ if [[ "${docker_flag}" == "" ]]; then
         ${Image_version}  \
         /bin/bash -c '
         if [ -f "./PTSTools/tools/set_env/set_env.sh" ]; then
+        set -x
+        echo "PTSTools"
         source ./PTSTools/tools/set_env/set_env.sh $PTS_ENV_VARS
         env
         fi
