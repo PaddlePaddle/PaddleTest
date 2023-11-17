@@ -257,6 +257,7 @@ export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
 export FLAGS_prim_all=${FLAGS_prim_all:-false}
 # new ir
 export FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor:-0}
+export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-0}
 # paddleSOT
 export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
 export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-0}
@@ -444,6 +445,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
         -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
+	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
