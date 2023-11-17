@@ -43,7 +43,7 @@ def get_average(file_loops, case):
                         averages[num]["algbw"] += item["algbw"]
 
     # 计算每个数字对应的平均值
-    for key in counters.items():
+    for key, value in counters.items():
         averages[key]["time"] /= counters[key]["time"]
         averages[key]["algbw"] /= counters[key]["algbw"]
 
@@ -75,7 +75,7 @@ def compare(case, res_dict):
             time_diff = round((item["time"] - base_dict[key][num]["time"]) / base_dict[key][num]["time"] * 100, 2)
             algbw_diff = round((item["algbw"] - base_dict[key][num]["algbw"]) / base_dict[key][num]["algbw"] * 100, 2)
             diff_dict[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}
-            if (time_diff > 5 or time_diff < -5) or (algbw_diff > 5 or algbw_diff < -5):
+            if time_diff > 5 or algbw_diff < -5:
                 diff_exp[num] = {"time": str(time_diff) + "%", "algbw": str(algbw_diff) + "%"}
 
     diff_res = {case: diff_dict}
@@ -84,6 +84,10 @@ def compare(case, res_dict):
         with open("mylog/log_exp", "a", encoding="utf8") as f:
             f.write(str(diff_exp_res) + "\n")
             f.flush()
+        os.system("echo ============================= log_exp ================================")
+        os.system("cat mylog/log_exp")
+        os.system("echo ============================= log end ================================")
+        exit(-1)
 
     # 写入文件，存档
     with open("mylog/log_diff", "a", encoding="utf8") as f:
@@ -161,5 +165,3 @@ def main():
 if __name__ == "__main__":
     os.system("rm -rf mylog && mkdir -p mylog")
     main()
-    os.system("echo ====================================")
-    os.system("cat mylog/log_exp")

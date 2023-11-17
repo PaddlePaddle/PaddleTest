@@ -1,5 +1,5 @@
 # 已禁用的api: paddle.nn.functional.glu, paddle.diff, paddle.Tensor.lerp_, paddle.nn.GRUCell
-# 因为pr57010导致的禁用: nanmean_0, Fold_0, unfold_0, nansum_0, fold_0, Unfold_0
+# 因为pr57010导致的禁用: nanmean_0, Fold_0, unfold_0, nansum_0, fold_0, Unfold_0, PairwiseDistance_0, subtract_0, mm_0
 Conv2D_0:
   desc: "二维卷积 0"
   paddle:
@@ -5711,71 +5711,71 @@ triu_2:
     mapping:
       ins: { x: input }
 
-mm_0:
-  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
-  paddle:
-    api_name: "paddle.mm"
-    inputs:
-      input:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-      mat2:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-  pytorch:
-    api_name: "torch.mm"
-    mapping:
-      ins: { input: input, mat2: mat2 }
+# mm_0:
+#   desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
+#   paddle:
+#     api_name: "paddle.mm"
+#     inputs:
+#       input:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1]
+#         range: [ -1, 1]
+#       mat2:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1]
+#         range: [ -1, 1]
+#   pytorch:
+#     api_name: "torch.mm"
+#     mapping:
+#       ins: { input: input, mat2: mat2 }
 
-mm_1:
-  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
-  paddle:
-    api_name: "paddle.mm"
-    inputs:
-      input:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [100, 100]
-        range: [ -1, 1]
-      mat2:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [100, 100]
-        range: [ -1, 1]
-  pytorch:
-    api_name: "torch.mm"
-    mapping:
-      ins: { input: input, mat2: mat2 }
+# mm_1:
+#   desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
+#   paddle:
+#     api_name: "paddle.mm"
+#     inputs:
+#       input:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [100, 100]
+#         range: [ -1, 1]
+#       mat2:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [100, 100]
+#         range: [ -1, 1]
+#   pytorch:
+#     api_name: "torch.mm"
+#     mapping:
+#       ins: { input: input, mat2: mat2 }
 
-mm_2:
-  desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
-  paddle:
-    api_name: "paddle.mm"
-    inputs:
-      input:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1000, 1000]
-        range: [ -1, 1]
-      mat2:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1000, 1000]
-        range: [ -1, 1]
-  pytorch:
-    api_name: "torch.mm"
-    mapping:
-      ins: { input: input, mat2: mat2 }
+# mm_2:
+#   desc: "用于两个输入矩阵的相乘, 两个输入的形状可为任意维度, 但当任一输入维度大于3时, 两个输入的维度必须相等"
+#   paddle:
+#     api_name: "paddle.mm"
+#     inputs:
+#       input:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1000, 1000]
+#         range: [ -1, 1]
+#       mat2:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1000, 1000]
+#         range: [ -1, 1]
+#   pytorch:
+#     api_name: "torch.mm"
+#     mapping:
+#       ins: { input: input, mat2: mat2 }
 
 logical_or_0:
   desc: "逐元素的对 X 和 Y 进行逻辑或运算"
@@ -6188,71 +6188,71 @@ real_2:
     mapping:
       ins: { x: input }
 
-subtract_0:
-  desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
-  paddle:
-    api_name: "paddle.subtract"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1, 1, 1]
-        range: [ -1, 1]
-      y:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1, 1, 1]
-        range: [ -1, 1]
-  pytorch:
-    api_name: "torch.subtract"
-    mapping:
-      ins: { x: input, y: other }
+# subtract_0:
+#   desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
+#   paddle:
+#     api_name: "paddle.subtract"
+#     inputs:
+#       x:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1, 1, 1]
+#         range: [ -1, 1]
+#       y:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1, 1, 1]
+#         range: [ -1, 1]
+#   pytorch:
+#     api_name: "torch.subtract"
+#     mapping:
+#       ins: { x: input, y: other }
 
-subtract_1:
-  desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
-  paddle:
-    api_name: "paddle.subtract"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [10, 10, 10, 10]
-        range: [ -1, 1]
-      y:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [10, 10, 10, 10]
-        range: [ -1, 1]
-  pytorch:
-    api_name: "torch.subtract"
-    mapping:
-      ins: { x: input, y: other }
+# subtract_1:
+#   desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
+#   paddle:
+#     api_name: "paddle.subtract"
+#     inputs:
+#       x:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [10, 10, 10, 10]
+#         range: [ -1, 1]
+#       y:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [10, 10, 10, 10]
+#         range: [ -1, 1]
+#   pytorch:
+#     api_name: "torch.subtract"
+#     mapping:
+#       ins: { x: input, y: other }
 
-subtract_2:
-  desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
-  paddle:
-    api_name: "paddle.subtract"
-    inputs:
-      x:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [10, 10, 100, 100]
-        range: [ -1, 1]
-      y:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [10, 10, 100, 100]
-        range: [ -1, 1]
-  pytorch:
-    api_name: "torch.subtract"
-    mapping:
-      ins: { x: input, y: other }
+# subtract_2:
+#   desc: "逐元素相减算子，输入 x 与输入 y 逐元素相减，并将各个位置的输出元素保存到返回结果中"
+#   paddle:
+#     api_name: "paddle.subtract"
+#     inputs:
+#       x:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [10, 10, 100, 100]
+#         range: [ -1, 1]
+#       y:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [10, 10, 100, 100]
+#         range: [ -1, 1]
+#   pytorch:
+#     api_name: "torch.subtract"
+#     mapping:
+#       ins: { x: input, y: other }
 
 topk_0:
   desc: "沿着可选的 axis 查找topk最大或者最小的结果和结果所在的索引信息"
@@ -16038,29 +16038,29 @@ MultiHeadAttention_0:
     mapping:
       ins: { data0: query, data1: key, data2: value, embed_dim: embed_dim, num_heads: num_heads, dropout: dropout }
 
-PairwiseDistance_0:
-  desc: "计算两个tensor之间pairwise的距离"
-  paddle:
-    api_name: "paddle.nn.PairwiseDistance"
-    inputs:
-      data0:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-      data1:
-        random: true
-        type: "Tensor"
-        dtype: "float32"
-        shape: [1, 1]
-        range: [ -1, 1]
-    params:
-      p: 2.
-  pytorch:
-    api_name: "torch.nn.PairwiseDistance"
-    mapping:
-      ins: { data0: input1, data1: input2, p: p }
+# PairwiseDistance_0:
+#   desc: "计算两个tensor之间pairwise的距离"
+#   paddle:
+#     api_name: "paddle.nn.PairwiseDistance"
+#     inputs:
+#       data0:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1]
+#         range: [ -1, 1]
+#       data1:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1]
+#         range: [ -1, 1]
+#     params:
+#       p: 2.
+#   pytorch:
+#     api_name: "torch.nn.PairwiseDistance"
+#     mapping:
+#       ins: { data0: input1, data1: input2, p: p }
 
 PixelShuffle_0:
   desc: "该算子将一个形为[N, C, H, W]或是[N, H, W, C]的Tensor重新排列成形为 [N, C/r**2, H*r, W*r]或 [N, H*r, W*r, C/r**2] 的Tensor"

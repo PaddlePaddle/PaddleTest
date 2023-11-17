@@ -1,6 +1,5 @@
-PaddleRec-Linux-Cuda102-Python37-P0-Develop
-PaddleRec-Linux-Cuda102-Python37-P0-Develop-Precision-01
-PaddleRec-Linux-Cuda102-Python37-P0-Develop-Precision-02
+PaddleRec-Linux-Cuda112-Python38-P0-Develop-Precision-01
+PaddleRec-Linux-Cuda112-Python38-P0-Develop-Precision-02
 PaddleRec-Linux-Cuda112-Python38-P0-Develop
 PaddleRec-Linux-Cuda120-Python311-P0-Develop
 PaddleRec-Linux-Cuda118-Python310-P0-Develop
@@ -10,9 +9,8 @@ PaddleRec-Windows-Cuda118-Python310-P0-Develop
 PaddleRec-Windows-Cuda120-Python311-P0-Develop
 PaddleRec-Mac-Intel-Python310-P0CPU-Develop
 PaddleRec-Mac-M1-Python310-P0CPU-Develop
-PaddleRec-Linux-Cuda102-Python37-P0-Release
-PaddleRec-Linux-Cuda102-Python37-P0-Release-Precision-01
-PaddleRec-Linux-Cuda102-Python37-P0-Release-Precision-02
+PaddleRec-Linux-Cuda112-Python38-P0-Release-Precision-01
+PaddleRec-Linux-Cuda112-Python38-P0-Release-Precision-02
 PaddleRec-Linux-Cuda112-Python38-P0-Release
 PaddleRec-Linux-Cuda120-Python311-P0-Release
 PaddleRec-Linux-Cuda118-Python310-P0-Release

@@ -1,0 +1,17 @@
+CenterPoint.yaml
+CLIP_vit_base_patch16_224.yaml
+MobileNetV3_small_x1_0.yaml
+OCRNet_HRNetW48.yaml
+Patchtst.yaml
+picodet_s_320_lcnet.yaml
+PP-HGNet_small.yaml
+PP-HGNetV2-B4.yaml
+PP-LCNet_x1_0.yaml
+PP-LiteSeg-Tiny.yaml
+PP-OCRv4-mobile-det.yaml
+PP-OCRv4-mobile-rec.yaml
+PP-TS.yaml
+ppyoloe_plus_l.yaml
+ResNet50.yaml
+rt_detr_hgnetv2_l.yaml
+SwinTransformer_base_patch4_window7_224.yaml
