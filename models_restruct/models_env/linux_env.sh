@@ -458,6 +458,7 @@ if [[ "${docker_flag}" == "" ]]; then
         echo "PTSTools"
         source ./PTSTools/tools/set_env/set_env.sh $PTS_ENV_VARS
         env
+        set +x
         fi
 
         ldconfig;
