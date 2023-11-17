@@ -328,6 +328,12 @@ if [[ -d "../../${reponame}" ]];then  #前面cd 了 2次所以使用 ../../
     echo "因为 ${reponame} 在根目录存在 使用预先clone或wget的 ${reponame}"
 fi
 
+# PTS
+if [[ -d "../../PTSTools" ]];then
+    cp -r ../../PTSTools .
+    echo "Get PTSTools"
+fi
+
 ####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称
 if  [[ "${set_cuda}" == "" ]] ;then  #换了docker启动的方式，使用默认制定方式即可，SET_MULTI_CUDA参数只是在启动时使用
     tc_name=`(echo $PWD|awk -F 'xly/' '{print $2}'|awk -F '/' '{print $1}')`
@@ -448,8 +454,11 @@ if [[ "${docker_flag}" == "" ]]; then
         ${Image_version}  \
         /bin/bash -c '
         if [ -f "./PTSTools/tools/set_env/set_env.sh" ]; then
+        set -x
+        echo "PTSTools"
         source ./PTSTools/tools/set_env/set_env.sh $PTS_ENV_VARS
         env
+        set +x
         fi
 
         ldconfig;
