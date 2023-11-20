@@ -185,7 +185,7 @@ def eval(predictor, FLAGS):
         if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
         else 0
     )
-    xpu = (monitor_result["XPU"] if "XPU" in monitor_result else {})
+    xpu = monitor_result["XPU"] if "XPU" in monitor_result else {}
 
     print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
 
@@ -235,7 +235,7 @@ def eval(predictor, FLAGS):
             "L3_used": xpu.get("L3_used", 0),
             "HBM_used": xpu.get("HBM_used", 0),
             "use_ratio": xpu.get("use_ratio", 0),
-        }
+        },
     }
     print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()

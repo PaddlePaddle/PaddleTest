@@ -45,9 +45,30 @@ class StatBase(object):
         "utilization.gpu",
         "utilization.memory",
     )
-    xpu_keys = ("pci_addr", "board_id", "dev_id", "sn", "temperature", "p1", "mem temperature", "p2", "power(mW)",
-                "freq_0", "freq_1", "freq_2", "freq_3", "freq_4", "freq_5", "L3_used", "L3_size", "HBM_used",
-                "HBM_size", "use_ratio", "firmware version", "model")
+    xpu_keys = (
+        "pci_addr",
+        "board_id",
+        "dev_id",
+        "sn",
+        "temperature",
+        "p1",
+        "mem temperature",
+        "p2",
+        "power(mW)",
+        "freq_0",
+        "freq_1",
+        "freq_2",
+        "freq_3",
+        "freq_4",
+        "freq_5",
+        "L3_used",
+        "L3_size",
+        "HBM_used",
+        "HBM_size",
+        "use_ratio",
+        "firmware version",
+        "model",
+    )
     nu_opt = ",nounits"
     cpu_keys = ("cpu.util", "memory.util", "memory.used")
 
@@ -85,9 +106,13 @@ class Monitor(StatBase):
 
         if self.use_xpu:
             self.xpu_stat_worker = subprocess.Popen(
-                xpu_cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, shell=True, close_fds=True, preexec_fn=os.setsid
+                xpu_cmd,
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE,
+                shell=True,
+                close_fds=True,
+                preexec_fn=os.setsid,
             )
-
 
         # cpu stat
         pid = os.getpid()
