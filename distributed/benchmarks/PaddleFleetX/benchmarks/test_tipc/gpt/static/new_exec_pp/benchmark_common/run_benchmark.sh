@@ -33,7 +33,7 @@ function _set_params(){
     keyword="ips:"                 # (必选)解析日志，筛选出性能数据所在行的关键字
     convergence_key="loss:"        # (可选)解析日志，筛选出收敛数据所在行的关键字 如：convergence_key="loss:"
     sharding_degree=${10:-"1"}      # (可选)
-    sharding_stage=${11:-"1"}       # (可选)sharding case 
+    sharding_stage=${11:-"1"}       # (可选)sharding case
     level=${12:-"o1"}               # o1|o2|o3
     local_batch_size=${13:-"8"}    # （可选）本地batch size
     schedule_mode=${14:-"1F1B"}    # （可选）schedule mode
@@ -87,7 +87,7 @@ function _train(){
                -o Engine.mix_precision.level=${level} \
                -o Engine.max_steps=100 \
                -o Engine.eval_freq=100000 \
-               -o Distributed.schedule_mode=${schedule_mode} \
+               -o Distributed.pipeline.schedule_mode=${schedule_mode} \
                -o Engine.verbose=3 \
                -o Engine.logging_freq=1 "
 
@@ -99,25 +99,26 @@ function _train(){
     fi
     # 以下为通用执行命令，无特殊可不用修改
     case ${run_mode} in
-    DP1-MP1-PP8) echo "run run_mode: ${run_mode}"
+    DP1-MP1-PP8-SD1-stage1) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
         workerlog_id=7
         ;;
-    DP1-MP2-PP4) echo "run run_mode: ${run_mode}"
+    DP1-MP2-PP4-SD1-stage1) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
-        workerlog_id_1=6
+        workerlog_id=6
         ;;
-    DP2-MP1-PP4|DP2-MP2-PP2) echo "run run_mode: ${run_mode}"
+    DP2-MP1-PP4-SD2-stage1|DP2-MP1-PP4-SD2-stage2| \
+    DP2-MP2-PP2-SD2-stage1|DP2-MP2-PP2-SD2-stage2) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_6.7B_sharding16.yaml \
             ${train_cmd}"
-        workerlog_id_1=3
+        workerlog_id=3
         ;;
-    DP1-MP8-PP2) echo "run run_mode: ${run_mode}"
+    DP1-MP8-PP2-SD1-stage1) echo "run run_mode: ${run_mode}"
         # fp32
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_13B_sharding8.yaml \
@@ -133,12 +134,12 @@ function _train(){
             -o Engine.mix_precision.enable=False \
             -o Engine.max_steps=100 \
             -o Engine.eval_freq=100000 \
-            -o Distributed.schedule_mode=${schedule_mode} \
+            -o Distributed.pipeline.schedule_mode=${schedule_mode} \
             -o Engine.verbose=3 \
             -o Engine.logging_freq=1 "
         workerlog_id=0
         ;;
-    DP1-MP8-PP4) echo "run run_mode: ${run_mode}"
+    DP1-MP8-PP4-SD1-stage1) echo "run run_mode: ${run_mode}"
         train_cmd="python -m paddle.distributed.launch --log_dir=./mylog --devices=0,1,2,3,4,5,6,7 ${PADDLE_RANK_OPTION}\
             tools/auto.py -c ppfleetx/configs/nlp/gpt/auto/pretrain_gpt_13B_sharding8.yaml \
             -o Model.hidden_dropout_prob=0 \
@@ -156,7 +157,7 @@ function _train(){
             -o Engine.mix_precision.enable=False \
             -o Engine.max_steps=100 \
             -o Engine.eval_freq=100000 \
-            -o Distributed.schedule_mode=${schedule_mode} \
+            -o Distributed.pipeline.schedule_mode=${schedule_mode} \
             -o Engine.verbose=3 \
             -o Engine.logging_freq=1 "
         workerlog_id=0
@@ -166,10 +167,12 @@ function _train(){
     cd ../
     echo "train_cmd: ${train_cmd}  log_file: ${log_file}"
     if [[ ${model_item} =~ "CE" ]];then # CE精度-不限制执行时间
+        export FLAGS_new_executor_micro_batching=True  # True：打开新执行器；False：关闭新执行器
         export FLAGS_embedding_deterministic=1         # 1：关闭随机性（仅在测试精度时为1），0：打开随机性（测性能时必须为0，或者不设置）
         export FLAGS_cudnn_deterministic=1             # 1：关闭随机性（仅在测试精度时为1）；0：打开随机性（测性能时必须为0，或者不设置）
         timeout 60m ${train_cmd} > ${log_file} 2>&1
     else
+        export FLAGS_new_executor_micro_batching=True  # True：打开新执行器；False：关闭新执行器
         export FLAGS_embedding_deterministic=0         # 1：关闭随机性（仅在测试精度时为1），0：打开随机性（测性能时必须为0，或者不设置）
         export FLAGS_cudnn_deterministic=0             # 1：关闭随机性（仅在测试精度时为1）；0：打开随机性（测性能时必须为0，或者不设置）
         timeout 60m ${train_cmd} > ${log_file} 2>&1
@@ -181,6 +184,7 @@ function _train(){
     fi
     #kill -9 `ps -ef|grep 'python'|awk '{print $2}'`
     if [ ${device_num} != "N1C1" -a -d mylog ]; then
+        mkdir -p ${run_log_path}/mylog
         cp -r ./mylog/workerlog.* ${run_log_path}/mylog/
         rm ${log_file}
         cp mylog/workerlog.${workerlog_id} ${log_file}

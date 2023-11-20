@@ -257,8 +257,10 @@ export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
 export FLAGS_prim_all=${FLAGS_prim_all:-false}
 # new ir
 export FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor:-0}
+export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-0}
 # paddleSOT
 export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
+export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-0}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -325,6 +327,12 @@ cd ./${CE_version_name}/
 if [[ -d "../../${reponame}" ]];then  #前面cd 了 2次所以使用 ../../
     cp -r ../../${reponame} .
     echo "因为 ${reponame} 在根目录存在 使用预先clone或wget的 ${reponame}"
+fi
+
+# PTS
+if [[ -d "../../PTSTools" ]];then
+    cp -r ../../PTSTools .
+    echo "Get PTSTools"
 fi
 
 ####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称
@@ -437,14 +445,16 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
         -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
+	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
+        -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
+        -e PTS_ENV_VARS=$PTS_ENV_VARS \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
-
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
@@ -551,12 +561,12 @@ if [[ "${docker_flag}" == "" ]]; then
         # ENABLE_FALL_BACK install
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
         set -x
         # Flag
         export STRICT_MODE=0
         export SOT_LOG_LEVEL=2
         export COST_MODEL=False
-        export MIN_GRAPH_SIZE=0
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
         fi
 
@@ -670,12 +680,13 @@ else
         # ENABLE_FALL_BACK install
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
+
         set -x
         # Flag
         export STRICT_MODE=0
         export SOT_LOG_LEVEL=2
         export COST_MODEL=False
-        export MIN_GRAPH_SIZE=0
         python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
         fi
 
