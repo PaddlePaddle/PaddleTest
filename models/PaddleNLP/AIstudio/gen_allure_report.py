@@ -88,11 +88,11 @@ def gen_allure_report():
             print("allure generate report failed")
         else:
             print("allure generate report sucess")
-        REPORT_SERVER = "https://xly.bce.baidu.com/ipipe/ipipe-report"
-        os.environ["REPORT_SERVER_USERNAME"] = "paddle"
-        os.environ["REPORT_SERVER_PASSWORD"] = "915eedab953b6f51151f50eb"
-        os.environ["REPORT_SERVER"] = REPORT_SERVER
+        os.environ["REPORT_SERVER_USERNAME"] = os.getenv("REPORT_SERVER_USERNAME")
+        os.environ["REPORT_SERVER_PASSWORD"] = os.getenv("REPORT_SERVER_PASSWORD")
+        os.environ["REPORT_SERVER"] = os.getenv("REPORT_SERVER")
         job_build_id = os.getenv("AGILE_JOB_BUILD_ID")
+        REPORT_SERVER = os.getenv("REPORT_SERVER")
         if job_build_id:
             if os.path.exists("result"):
                 make_tar("result", "result.tar")

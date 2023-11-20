@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright (c) 2022 PaddlePaddle Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,7 @@
 
 python -m pip install -r ../requirements.txt
 # get data
-cd ../
+cd ../ || return
 rm -rf data
 mkdir data
 wget -O data/gpt_en_dataset_300m_ids.npy https://bj.bcebos.com/paddlenlp/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy

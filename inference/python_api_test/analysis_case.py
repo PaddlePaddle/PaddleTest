@@ -84,9 +84,10 @@ def analysis_error_case(path, flow_id):
     for result_file in result_list:
         result_path = os.path.join(path, result_file)
         result_data = read_json(result_path)
+        status = result_data.get("status", "")
         status_details = result_data.get("statusDetails", {})
 
-        if status_details:
+        if status_details and status == "failed":
             # Get error information and keep valid error information for problem analysis
             trace = status_details.get("trace", "")
             trace_data = "".join(trace.split("\n")[-10:])
