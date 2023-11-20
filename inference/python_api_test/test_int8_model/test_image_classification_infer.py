@@ -46,6 +46,7 @@ def argsparser():
     parser.add_argument("--cpu_num_threads", type=int, default=10, help="Number of cpu threads")
     parser.add_argument("--precision", type=str, default="paddle", help="mode of running(fp32/fp16/int8)")
     parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt")
+    parser.add_argument("--use_l3", type=bool, default=False, help="Whether use L3_cache or not.")
     parser.add_argument("--gpu_mem", type=int, default=8000, help="GPU memory")
     parser.add_argument(
         "--device",
@@ -121,10 +122,11 @@ def eval(predictor, FLAGS):
     if FLAGS.small_data:
         sample_nums = 1000
 
-    use_gpu = True
-    if FLAGS.device == "CPU":
-        use_gpu = False
-    monitor = Monitor(0, use_gpu)
+    use_gpu = True if FLAGS.device == "GPU" else False
+    use_xpu = True if FLAGS.device == "XPU" else False
+
+    monitor = Monitor(0, use_gpu, 0, use_xpu)
+
     rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
     # in collect shape mode ,we do not start monitor!
     if not rerun_flag:
@@ -183,6 +185,7 @@ def eval(predictor, FLAGS):
         if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
         else 0
     )
+    xpu = (monitor_result["XPU"] if "XPU" in monitor_result else {})
 
     print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
 
@@ -226,6 +229,13 @@ def eval(predictor, FLAGS):
             "value": cpu_mem,
             "unit": "MB",
         },
+        "xpu": {
+            "device_name": xpu.get("model", None),
+            "dev_id": xpu.get("dev_id", 0),
+            "L3_used": xpu.get("L3_used", 0),
+            "HBM_used": xpu.get("HBM_used", 0),
+            "use_ratio": xpu.get("use_ratio", 0),
+        }
     }
     print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
@@ -247,6 +257,7 @@ def main(FLAGS):
             params_filename=FLAGS.params_filename,
             precision=FLAGS.precision,
             use_trt=FLAGS.use_trt,
+            use_l3=FLAGS.use_l3,
             use_mkldnn=FLAGS.use_mkldnn,
             batch_size=FLAGS.batch_size,
             device=FLAGS.device,
