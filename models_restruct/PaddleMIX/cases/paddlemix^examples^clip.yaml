@@ -3,6 +3,7 @@ case:
     train:
       -
         name: prepare
+        path: paddlemix/examples/clip/
         cmd: mkdir /home/data && cd /home/data && wget https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/imagenet-val.tar && tar -xvf imagenet-val.tar
       -
         name: single

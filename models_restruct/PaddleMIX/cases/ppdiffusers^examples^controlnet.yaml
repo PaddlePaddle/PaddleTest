@@ -4,7 +4,7 @@ case:
       -
         name: prepare
         path: ppdiffusers/examples/controlnet/
-        cmd: wget https://paddlenlp.bj.bcebos.com/models/community/junnyu/develop/fill50k.zip && unzip -o fill50k.zip && wget https://user-images.githubusercontent.com/50394665/221844474-fd539851-7649-470e-bded-4d174271cc7f.png
+        cmd: pip install -r requirements.txt && wget https://paddlenlp.bj.bcebos.com/models/community/junnyu/develop/fill50k.zip && unzip -o fill50k.zip && wget https://user-images.githubusercontent.com/50394665/221844474-fd539851-7649-470e-bded-4d174271cc7f.png
       -
         name: single
         path: ppdiffusers/examples/controlnet/
