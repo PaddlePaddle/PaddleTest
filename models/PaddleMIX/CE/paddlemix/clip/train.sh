@@ -8,7 +8,7 @@ echo "*******paddlemix clip train begin***********"
 MODEL_NAME="paddlemix/CLIP/Vit-L-14/"
 IN_1K_DIR=${root_path}/data/imagenet-val/
 
-(python -m paddle.distributed.launch --nproc_per_node 8 run_pretrain_dist.py \
+(python -m paddle.distributed.launch --nproc_per_node 1 run_pretrain_dist.py \
     --dataloader_num_workers=2 \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1 \
@@ -22,7 +22,7 @@ IN_1K_DIR=${root_path}/data/imagenet-val/
     --max_grad_norm 5.0 \
     --num_train_epochs 1 \
     --tensor_parallel_degree 1 \
-    --sharding_parallel_degree 8 \
+    --sharding_parallel_degree 1 \
     --sharding "stage2" \
     --bf16 False \
     --output_dir "./output" \
