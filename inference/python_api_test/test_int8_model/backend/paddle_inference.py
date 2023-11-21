@@ -19,6 +19,7 @@ import os
 import paddle
 from paddle.inference import Config
 from paddle.inference import create_predictor
+from paddle.inference import XpuConfig
 
 paddle.disable_signal_handler()
 
@@ -35,6 +36,7 @@ class PaddleInferenceEngine(object):
         params_filename="model.pdiparams",
         precision="fp32",
         use_trt=False,
+        use_l3=False,
         use_mkldnn=False,
         batch_size=1,
         device="CPU",
@@ -65,6 +67,20 @@ class PaddleInferenceEngine(object):
             config.enable_use_gpu(200, 0)
             # optimize graph and fuse op
             config.switch_ir_optim(True)
+        elif device == "XPU":
+            # Enable to use Kunlun XPU
+            config.enable_xpu()
+            xpu_config = XpuConfig()
+            xpu_config.device_id = 0
+            # xpu_config.context_gm_size = 0
+            l3_size = 0
+            if use_l3:
+                # R200 l3_size = 67104768
+                l3_size = 67104768
+                print("use l3_cache")
+            xpu_config.l3_size = l3_size
+            xpu_config.l3_autotune_size = 0
+            config.set_xpu_config(xpu_config)
         else:
             config.disable_gpu()
             config.set_cpu_math_library_num_threads(cpu_threads)

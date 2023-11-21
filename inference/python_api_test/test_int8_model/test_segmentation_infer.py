@@ -52,11 +52,12 @@ def argsparser():
     parser.add_argument("--dataset_config", type=str, default=None, help="path of dataset config.")
     parser.add_argument("--benchmark", type=bool, default=False, help="Whether to run benchmark or not.")
     parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt engine or not.")
+    parser.add_argument("--use_l3", type=bool, default=False, help="Whether use L3_cache or not.")
     parser.add_argument(
         "--device",
         type=str,
         default="GPU",
-        choices=["CPU", "GPU"],
+        choices=["CPU", "GPU", "XPU"],
         help="Choose the device you want to run, it can be: CPU/GPU, default is GPU",
     )
     parser.add_argument(
@@ -87,10 +88,10 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     time_max = float("-inf")
     warmup = 20
 
-    use_gpu = True
-    if FLAGS.device == "CPU":
-        use_gpu = False
-    monitor = Monitor(0, use_gpu)
+    use_gpu = True if FLAGS.device == "GPU" else False
+    use_xpu = True if FLAGS.device == "XPU" else False
+
+    monitor = Monitor(0, use_gpu, 0, use_xpu)
 
     if not rerun_flag:
         monitor.start()
@@ -151,6 +152,7 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
         else 0
     )
+    xpu = monitor_result["XPU"] if "XPU" in monitor_result else {}
 
     print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
 
@@ -188,6 +190,13 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
             "value": gpu_mem,
             "unit": "MB",
         },
+        "xpu": {
+            "device_name": xpu.get("model", None),
+            "dev_id": xpu.get("dev_id", 0),
+            "L3_used": xpu.get("L3_used", 0),
+            "HBM_used": xpu.get("HBM_used", 0),
+            "use_ratio": xpu.get("use_ratio", 0),
+        },
     }
     print("[Benchmark][final result]{}".format(final_res))
     sys.stdout.flush()
@@ -213,6 +222,7 @@ def main():
             params_filename=FLAGS.params_filename,
             precision=FLAGS.precision,
             use_trt=FLAGS.use_trt,
+            use_l3=FLAGS.use_l3,
             use_mkldnn=FLAGS.use_mkldnn,
             batch_size=FLAGS.batch_size,
             device=FLAGS.device,
