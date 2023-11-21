@@ -146,8 +146,8 @@ if __name__ == "__main__":
     with open(args.yaml, encoding="utf-8") as f:
         yml = yaml.load(f, Loader=yaml.FullLoader)
 
-    cases_name = [args.case_name]
-    # cases_name = yml.keys()  # 生成全部配置
+    # cases_name = [args.case_name]
+    cases_name = yml.keys()  # 生成全部配置
     for case_name in cases_name:
         case = yml.get(case_name)
         case_gen = DebugCaseGen(case, case_name)
