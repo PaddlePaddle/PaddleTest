@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-debug gen 复现代码
+debug 生成复现代码
 """
 import argparse
 import yaml
