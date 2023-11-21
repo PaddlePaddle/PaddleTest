@@ -118,7 +118,7 @@ print(result)"""
             )
             f.write(self.randtool)
             # f.write("\n" "\n" "api = {}\n" "all_data = {}\n".format('"' + self.paddle_api + '"', self.inputs))
-            
+
             f.write("\n" "\n" "api = {}\n".format('"' + self.paddle_api + '"'))
             if self.inputs is None:
                 f.write("all_data = {}\n")
