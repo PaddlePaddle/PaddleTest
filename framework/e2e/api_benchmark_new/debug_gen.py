@@ -52,7 +52,7 @@ class DebugCaseGen(object):
     else:
         assert False, "dtype is not supported"'''
 
-        self.caculate = """
+        self.caculate = '''
 inputs = {}
 for data, v in all_data.items():
     if isinstance(v, dict):
@@ -69,9 +69,15 @@ for data, v in params.items():
             params[data] = paddle.to_tensor(np.array(v.get("value")), dtype=v.get("dtype"))
 
 def func_def(api, inputs, params):
+    """
+    func
+    """
     eval(api)(**inputs, **params)
 
 def func_class(api, inputs, params):
+    """
+    class
+    """
     obj = eval(api)(**params)
     obj(*inputs)
 
@@ -92,7 +98,7 @@ for i in range(loops):
 head = int(loops / 5)
 tail = int(loops - loops / 5)
 result = (sum(sorted(all_time)[head:tail]) / (tail - head))
-print(result)"""
+print(result)'''
 
     def py_gen(self):
         """
@@ -109,9 +115,9 @@ print(result)"""
                 '"""\n'
                 "import timeit\n"
                 "from inspect import isclass\n"
+                "import time\n"
                 "import numpy as np\n"
                 "import paddle\n"
-                "import time\n"
                 "paddle.set_device('cpu')"
                 "\n"
                 "\n".format(self.case_name)
@@ -140,8 +146,8 @@ if __name__ == "__main__":
     with open(args.yaml, encoding="utf-8") as f:
         yml = yaml.load(f, Loader=yaml.FullLoader)
 
-    cases_name = [args.case_name]
-    # cases_name = yml.keys()  # 生成全部配置
+    # cases_name = [args.case_name]
+    cases_name = yml.keys()  # 生成全部配置
     for case_name in cases_name:
         case = yml.get(case_name)
         case_gen = DebugCaseGen(case, case_name)
