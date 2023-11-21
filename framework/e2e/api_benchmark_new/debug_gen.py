@@ -76,17 +76,17 @@ def func_class(api, inputs, params):
     obj(*inputs)
 
 all_time = []
-loops = 5
+loops = 50
 
 for i in range(loops):
     if isclass(eval(api)):
         inputs_list = []
         for k, v in inputs.items():
             inputs_list.append(v)
-        forward_time = timeit.timeit(lambda: func_class(api, inputs_list, params), number=5)
+        forward_time = timeit.timeit(lambda: func_class(api, inputs_list, params), number=1000)
         all_time.append(forward_time)
     else:
-        forward_time = timeit.timeit(lambda: func_def(api, inputs, params), number=5)
+        forward_time = timeit.timeit(lambda: func_def(api, inputs, params), number=1000)
         all_time.append(forward_time)
 
 head = int(loops / 5)
