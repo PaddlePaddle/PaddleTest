@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test Multinomial_0
+test multinomial_0
 """
 import timeit
 from inspect import isclass
@@ -43,9 +43,9 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.distribution.Multinomial"
-all_data = {}
-params = {"total_count": 1, "probs": {"random": False, "type": "Tensor", "dtype": "float32", "value": [0.5]}}
+api = "paddle.multinomial"
+all_data = {"x": {"random": True, "dtype": "float32", "shape": [1, 1], "range": [0, 1]}}
+params = {"num_samples": 1, "replacement": False}
 
 inputs = {}
 for data, v in all_data.items():
