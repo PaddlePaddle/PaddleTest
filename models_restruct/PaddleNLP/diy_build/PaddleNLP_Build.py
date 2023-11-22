@@ -72,11 +72,11 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip uninstall protobuf -y")
             os.system("python -m pip uninstall protobuf -y")
             os.system("python -m pip install protobuf==3.20.2")
-            os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
+            # os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
         else:
             os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")
-            os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
+            # os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
 
         if re.compile("elease").findall(paddle_whl):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
