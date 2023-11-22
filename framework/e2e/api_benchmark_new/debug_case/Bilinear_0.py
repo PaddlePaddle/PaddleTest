@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test bilinear_0
+test Bilinear_0
 """
 import timeit
 from inspect import isclass
@@ -43,12 +43,12 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.functional.bilinear"
+api = "paddle.nn.Bilinear"
 all_data = {
-    "x1": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1], "range": [-1, 1]},
-    "x2": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1], "range": [-1, 1]},
+    "data0": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1], "range": [-1, 1]},
+    "data1": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1], "range": [-1, 1]},
 }
-params = {"weight": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1], "range": [-1, 1]}}
+params = {"in1_features": 1, "in2_features": 1, "out_features": 1}
 
 inputs = {}
 for data, v in all_data.items():

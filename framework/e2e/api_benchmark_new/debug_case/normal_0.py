@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test Normal_0
+test normal_0
 """
 import timeit
 from inspect import isclass
@@ -43,9 +43,9 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.distribution.Normal"
+api = "paddle.normal"
 all_data = {}
-params = {"loc": 0.0, "scale": 0.1}
+params = {"mean": 0.0, "std": 1.0, "shape": [1, 1, 1, 1]}
 
 inputs = {}
 for data, v in all_data.items():
