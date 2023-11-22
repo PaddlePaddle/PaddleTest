@@ -8,7 +8,7 @@ case:
       -
         name: prepare
         path: paddlemix/examples/minigpt4/
-        cmd: wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/model_state.pdparams && wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/minigpt4_7b.tar.gz && tar -zxvf minigpt4_7b.tar.gz && mv model_state.pdparams minigpt4_7b/
+        cmd: wget https://user-images.githubusercontent.com/35913314/242832479-d8070644-4713-465d-9c7e-9585024c1819.png && mv 242832479-d8070644-4713-465d-9c7e-9585024c1819.png example.png && wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/model_state.pdparams && wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/minigpt4_7b.tar.gz && tar -zxvf minigpt4_7b.tar.gz && mv model_state.pdparams minigpt4_7b/
       -
         name: predict
         path: paddlemix/examples/minigpt4/

@@ -6,7 +6,8 @@ case:
         path: paddlemix/external_ops/
         cmd: python setup.py install
       -
-        name: train
+        name: single
+        path: paddlemix/examples/coca/
         cmd: python -m paddle.distributed.launch --nproc_per_node 1 run_pretrain_dist.py
         params:
           - --dataloader_num_workers=2
@@ -42,6 +43,7 @@ case:
     eval:
       -
         name: eval
+        path: paddlemix/examples/coca/
         cmd: python run_zero_shot_eval.py
         params:
           - --per_device_eval_batch_size 1

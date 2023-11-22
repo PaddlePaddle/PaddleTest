@@ -3,7 +3,7 @@ case:
     train:
       -
         name: prepare
-        cmd: wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/zh.wav
+        cmd: rm -rf zh.wav && wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/zh.wav
       -
         name: audio2chat_generation
         # 注意该文件需要提前拷贝到mix库代码根目录中

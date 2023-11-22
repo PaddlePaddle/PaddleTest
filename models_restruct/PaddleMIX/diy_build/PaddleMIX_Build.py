@@ -71,6 +71,8 @@ class PaddleMIX_Build(Model_Build):
         os.system("pip install -e .")
         os.system("pip install -r paddlemix/appflow/requirements.txt")
         print("install ppdiffusers")
+        import nltk
+        nltk.download(["punkt", "averaged_perceptron_tagger", "wordnet", "cmudict"])
         os.chdir("ppdiffusers")
         os.system("pip install -r requirements.txt")
         os.system("pip install -e .")

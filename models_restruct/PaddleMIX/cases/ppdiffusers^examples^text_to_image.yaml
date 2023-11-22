@@ -29,7 +29,7 @@ case:
         name: infer
         path: ppdiffusers/examples/text_to_image/
         # 需要将文件拷贝到case执行的目录
-        cmd: infer.py
+        cmd: python infer.py
         result:
           exit_code:
             base: 0

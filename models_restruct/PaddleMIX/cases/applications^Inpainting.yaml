@@ -2,7 +2,7 @@ case:
   linux:
     train:
       -
-        name: Det_Guided_Inpainting
+        name: DetGuided
         # 注意该文件需要提前拷贝到mix库代码根目录中
         cmd: python grounded_sam_inpainting.py
         result:
@@ -11,7 +11,7 @@ case:
             threshold: 0
             evaluation: "="
       -
-        name: ChatAndDet_Guided_Inpainting
+        name: ChatAndDetGuided
         # 注意该文件需要提前拷贝到mix库代码根目录中
         cmd: python grounded_sam_chatglm.py
         result:
@@ -20,7 +20,7 @@ case:
             threshold: 0
             evaluation: "="
       -
-        name: Text_Guided_Image_Inpainting
+        name: TextGuidedImage
         # 注意该文件需要提前拷贝到mix库代码根目录中
         cmd: python text_guided_image_inpainting.py
         result:

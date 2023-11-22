@@ -2,20 +2,20 @@ case:
   linux:
     train:
       -
-        name: audio_text2image
+        name: audioText2Image
         cmd: python applications/Audio2Img/audio2img_imagebind.py
         params:
           - --model_name_or_path imagebind-1.2b/
           - --stable_unclip_model_name_or_path stabilityai/stable-diffusion-2-1-unclip
           - --input_audio https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/bird_audio.wav
-          - --input_text 'A photo.'
+          - --input_text "A photo."
         result:
           exit_code:
             base: 0
             threshold: 0
             evaluation: "="
       -
-        name: audio_image2image
+        name: audioImage2image
         cmd: python applications/Audio2Img/audio2img_imagebind.py
         params:
           - --model_name_or_path imagebind-1.2b/

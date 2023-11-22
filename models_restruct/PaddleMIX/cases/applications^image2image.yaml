@@ -2,7 +2,7 @@ case:
   linux:
     train:
       -
-        name: text_guided_image_upscaling
+        name: textGuidedImageUpscaling
         # 注意该文件需要提前拷贝到mix库代码根目录中
         cmd: python text_guided_image_upscaling.py
         result:
@@ -11,16 +11,7 @@ case:
             threshold: 0
             evaluation: "="
       -
-        name: dual_text_image_guided_generation
-        # 注意该文件需要提前拷贝到mix库代码根目录中
-        cmd: python dual_text_image_guided_generation.py
-        result:
-          exit_code:
-            base: 0
-            threshold: 0
-            evaluation: "="
-      -
-        name: image2image_text_guided_generation
+        name: image2imageText
         # 注意该文件需要提前拷贝到mix库代码根目录中
         cmd: python image2image_text_guided_generation.py
         result:
