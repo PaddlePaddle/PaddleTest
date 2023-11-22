@@ -45,8 +45,8 @@ def test_config():
     )
     test_suite.config_test()
 
-#默认开启mkldnn推理hang住，排查中
-#@pytest.mark.server
+
+@pytest.mark.server
 @pytest.mark.config_disablegpu_memory
 def test_disable_gpu():
     """
