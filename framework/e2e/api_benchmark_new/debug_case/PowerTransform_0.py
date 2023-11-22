@@ -79,7 +79,7 @@ def func_class(api, inputs, params):
     class
     """
     obj = eval(api)(**params)
-    obj.forward(x=paddle.to_tensor(1.0))
+    obj.forward(x=paddle.to_tensor([1.0]))
 
 
 all_time = []
