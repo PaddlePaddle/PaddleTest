@@ -24,7 +24,7 @@ import yaml
 
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
+from backend.monitor import Monitor
 from paddle.io import DataLoader
 from utils.imagenet_reader import ImageNetDataset
 
@@ -251,6 +251,8 @@ def main(FLAGS):
         FLAGS.device = "CPU"
 
     if FLAGS.deploy_backend == "paddle_inference":
+        from backend.paddle_inference import PaddleInferenceEngine
+
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
             model_filename=FLAGS.model_filename,
@@ -266,6 +268,7 @@ def main(FLAGS):
             cpu_threads=FLAGS.cpu_threads,
         )
     elif FLAGS.deploy_backend == "tensorrt":
+        from backend.tensorrt import TensorRTEngine
 
         model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
@@ -288,6 +291,8 @@ def main(FLAGS):
             verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
+        from backend.onnxruntime import ONNXRuntimeEngine
+
         model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         print(engine_file)

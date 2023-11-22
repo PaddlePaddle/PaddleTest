@@ -22,7 +22,7 @@ import cv2
 import numpy as np
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
+from backend.monitor import Monitor
 from ppdet.core.workspace import load_config, create
 from ppdet.metrics import COCOMetric
 
@@ -222,6 +222,8 @@ def main():
     reader_cfg = load_config(FLAGS.reader_config)
     FLAGS.batch_size = reader_cfg["EvalReader"]["batch_size"]
     if FLAGS.deploy_backend == "paddle_inference":
+        from backend.paddle_inference import PaddleInferenceEngine
+
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
             precision=FLAGS.precision,
@@ -235,6 +237,8 @@ def main():
             cpu_threads=FLAGS.cpu_threads,
         )
     elif FLAGS.deploy_backend == "tensorrt":
+        from backend.tensorrt import TensorRTEngine
+
         model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         predictor = TensorRTEngine(
@@ -253,6 +257,8 @@ def main():
             verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
+        from backend.onnxruntime import ONNXRuntimeEngine
+
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
             precision=FLAGS.precision,
