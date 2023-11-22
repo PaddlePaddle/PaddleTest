@@ -54,15 +54,11 @@ all_data = {
 }
 params = {}
 
-inputs = {}
-for data, v in all_data.items():
-    if isinstance(v, dict):
-        if v.get("random"):
-            inputs[data] = paddle.to_tensor(
-                _randtool(dtype=v.get("dtype"), low=v.get("range")[0], high=v.get("range")[1], shape=v.get("shape"))
-            )
-        else:
-            inputs[data] = paddle.to_tensor(np.array(v.get("value")), dtype=v.get("dtype"))
+inputs = {
+    "x": paddle.to_tensor(
+        [[-1.0, 2.0, float("nan")], [float("-inf"), float("inf"), float("-nan")], [2.4, 0.0, float("-inf")]]
+    )
+}
 
 for data, v in params.items():
     if isinstance(v, dict):

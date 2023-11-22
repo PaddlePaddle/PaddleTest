@@ -44,7 +44,7 @@ def _randtool(dtype, low, high, shape):
 
 
 api = "paddle.nn.BatchNorm1D"
-all_data = {"data": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 2]}}
+all_data = {"data": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 2], "range": [-1, 1]}}
 params = {"num_features": 1}
 
 inputs = {}

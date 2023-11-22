@@ -79,7 +79,7 @@ def func_class(api, inputs, params):
     class
     """
     obj = eval(api)(**params)
-    obj(*inputs)
+    obj.sample(shape=[1, 1, 1])
 
 
 all_time = []
