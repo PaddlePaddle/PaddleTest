@@ -21,11 +21,12 @@ import sys
 import cv2
 import numpy as np
 import paddle
-from paddleseg.cvlibs import Config as PaddleSegDataConfig
+from paddleseg.cvlibs import Config, SegBuilder
+from paddleseg.cvlibs import config_checker as checker
 from paddleseg.core.infer import reverse_transform
 from paddleseg.utils import metrics
 
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
+from backend.monitor import Monitor
 
 
 def argsparser():
@@ -98,8 +99,11 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
 
     for batch_id, data in enumerate(loader):
-        image = np.array(data[0])
-        label = np.array(data[1]).astype("int64")
+        # print(batch_id)
+        # print(data, type(data))
+        image = np.array(data["img"])
+        label = np.array(data["label"]).astype("int64")
+        trans_info = data["trans_info"]
         ori_shape = np.array(label).shape[-2:]
 
         predictor.prepare_data([image])
@@ -119,13 +123,12 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         if rerun_flag:
             return
 
-        logit = reverse_transform(
-            paddle.to_tensor(outs[0]), ori_shape, eval_dataset.transforms.transforms, mode="bilinear"
-        )
+        logit = reverse_transform(paddle.to_tensor(outs[0]), trans_info, mode="bilinear")
         pred = paddle.to_tensor(logit)
         if len(pred.shape) == 4:  # for humanseg model whose prediction is distribution but not class id
             pred = paddle.argmax(pred, axis=1, keepdim=True, dtype="int32")
 
+        # print(pred, type(pred))
         intersect_area, pred_area, label_area = metrics.calculate_area(
             pred, paddle.to_tensor(label), eval_dataset.num_classes, ignore_index=eval_dataset.ignore_index
         )
@@ -206,8 +209,11 @@ def main():
     """
     main func
     """
-    data_cfg = PaddleSegDataConfig(FLAGS.dataset_config)
-    eval_dataset = data_cfg.val_dataset
+    config_checker = checker.ConfigChecker([], allow_update=True)
+    data_cfg = Config(FLAGS.dataset_config, checker=config_checker)
+    builder = SegBuilder(data_cfg)
+
+    eval_dataset = builder.val_dataset
 
     batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
     eval_loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
@@ -216,6 +222,8 @@ def main():
     FLAGS.batch_size = int(FLAGS.total_samples / FLAGS.sample_nums)
 
     if FLAGS.deploy_backend == "paddle_inference":
+        from backend.paddle_inference import PaddleInferenceEngine
+
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
             model_filename=FLAGS.model_filename,
@@ -231,6 +239,8 @@ def main():
             cpu_threads=FLAGS.cpu_threads,
         )
     elif FLAGS.deploy_backend == "tensorrt":
+        from backend.tensorrt import TensorRTEngine
+
         model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         predictor = TensorRTEngine(
@@ -243,6 +253,8 @@ def main():
             verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
+        from backend.onnxruntime import ONNXRuntimeEngine
+
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
             precision=FLAGS.precision,

@@ -24,7 +24,7 @@ from tqdm import tqdm
 import pkg_resources as pkg
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
+from backend.monitor import Monitor
 from utils.dataset import COCOValDataset
 from utils.yolo_series_post_process import YOLOPostProcess, coco_metric
 
@@ -218,6 +218,8 @@ def main():
     val_loader = paddle.io.DataLoader(dataset, batch_size=FLAGS.batch_size, drop_last=True)
 
     if FLAGS.deploy_backend == "paddle_inference":
+        from backend.paddle_inference import PaddleInferenceEngine
+
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
             precision=FLAGS.precision,
@@ -231,6 +233,8 @@ def main():
             cpu_threads=FLAGS.cpu_threads,
         )
     elif FLAGS.deploy_backend == "tensorrt":
+        from backend.tensorrt import TensorRTEngine
+
         model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         predictor = TensorRTEngine(
@@ -244,6 +248,8 @@ def main():
             verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
+        from backend.onnxruntime import ONNXRuntimeEngine
+
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
             precision=FLAGS.precision,
