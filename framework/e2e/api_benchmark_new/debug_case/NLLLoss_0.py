@@ -50,15 +50,8 @@ all_data = {
 }
 params = {"weight": None, "ignore_index": -100, "reduction": "mean"}
 
-inputs = {}
-for data, v in all_data.items():
-    if isinstance(v, dict):
-        if v.get("random"):
-            inputs[data] = paddle.to_tensor(
-                _randtool(dtype=v.get("dtype"), low=v.get("range")[0], high=v.get("range")[1], shape=v.get("shape"))
-            )
-        else:
-            inputs[data] = paddle.to_tensor(np.array(v.get("value")), dtype=v.get("dtype"))
+inputs = paddle.to_tensor(_randtool(dtype="float32", low=-1, high=1, shape=[1, 1, 1, 1]))
+label = paddle.to_tensor(_randtool(dtype="int64", low=0, high=1, shape=[1, 1, 1]))
 
 for data, v in params.items():
     if isinstance(v, dict):
@@ -77,12 +70,12 @@ def func_def(api, inputs, params):
     eval(api)(**inputs, **params)
 
 
-def func_class(api, inputs, params):
+def func_class(api, inputs, label, params):
     """
     class
     """
     obj = eval(api)(**params)
-    obj(*inputs)
+    obj(inputs, label)
 
 
 all_time = []
@@ -90,10 +83,7 @@ loops = 50
 
 for i in range(loops):
     if isclass(eval(api)):
-        inputs_list = []
-        for k, v in inputs.items():
-            inputs_list.append(v)
-        forward_time = timeit.timeit(lambda: func_class(api, inputs_list, params), number=1000)
+        forward_time = timeit.timeit(lambda: func_class(api, inputs, label, params), number=1000)
         all_time.append(forward_time)
     else:
         forward_time = timeit.timeit(lambda: func_def(api, inputs, params), number=1000)
