@@ -95,7 +95,7 @@ def gsb_function(data_df):
     normal_count = len(normal_df)
     GSB = (good_count - bad_count) / normal_count * 100
     big_diff_df = data_df[abs(data_df["avg_cost_diff(%)"]) > 5]
-    important_df = big_diff_df.append(error_df, ignore_index=True)
+    important_df = pd.concat([big_diff_df, error_df], ignore_index=True)
 
     # GSB
     total_gsb = calculate_gsb(normal_df, 5)
