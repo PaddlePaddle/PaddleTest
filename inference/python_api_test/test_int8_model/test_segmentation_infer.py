@@ -202,6 +202,27 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         },
     }
     print("[Benchmark][final result]{}".format(final_res))
+    benchmark_result = {
+        "model_path": FLAGS.model_path,
+        "model_name": FLAGS.model_name,
+        "repo": "Seg",
+        "batch_size": FLAGS.batch_size,
+        "avg_cost": round(time_avg * 1000, 3),
+        "xpu_stat": final_res["xpu"],
+        "device_name": final_res["xpu"]["device_name"],
+        "HBM_used": final_res["xpu"]["HBM_used"],
+        "l3_used": final_res["xpu"]["L3_used"],
+        "jingdu": round(final_res["jingdu"]["value"], 5),
+        "unit": final_res["jingdu"]["unit"],
+        "precision": FLAGS.precision,
+        "l3_cache": FLAGS.use_l3,
+    }
+    print("======benchmark result======")
+    print(benchmark_result)
+    with open("result.txt", "a+") as f:
+        for key, val in benchmark_result.items():
+            f.write(key + " : " + str(val) + "\n")
+        f.write("\n")
     sys.stdout.flush()
 
 
