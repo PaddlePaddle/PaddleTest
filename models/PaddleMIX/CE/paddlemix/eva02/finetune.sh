@@ -32,12 +32,12 @@ MASTER='127.0.0.1:8080'
 
 TRAINERS_NUM=1 # nnodes, machine num
 TRAINING_GPUS_PER_NODE=1 # nproc_per_node
-DP_DEGREE=1 # dp_parallel_degree
+DP_DEGREE=2 # dp_parallel_degree
 MP_DEGREE=1 # tensor_parallel_degree
-SHARDING_DEGREE=1 # sharding_parallel_degree
+SHARDING_DEGREE=2 # sharding_parallel_degree
 
 MODEL_NAME="paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_ft_in1k_p14"
-PRETRAIN_CKPT=/root/.paddlenlp/models/paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14/model_state.pdparams
+PRETRAIN_CKPT=./model_state.pdparams
 
 OUTPUT_DIR=./output/eva02_Ti_pt_in21k_ft_in1k_p14
 

@@ -70,6 +70,9 @@ class PaddleMIX_Build(Model_Build):
         os.system("pip install -r requirements.txt")
         os.system("pip install -e .")
         os.system("pip install -r paddlemix/appflow/requirements.txt")
+        self.download_data("https://paddle-qa.bj.bcebos.com/PaddleMIX/application.tar.gz")
+        self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/imagenet-val.tar", destination_folder="/home" ,dir_name="data")
+        self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/ILSVRC2012_tiny.tar", destination_folder="/home", dir_name="dataset")
         print("install ppdiffusers")
         import nltk
         nltk.download(["punkt", "averaged_perceptron_tagger", "wordnet", "cmudict"])
@@ -79,13 +82,50 @@ class PaddleMIX_Build(Model_Build):
         os.chdir(path_now)
         return 0
 
+    def download_data(self, data_link, destination_folder=".", dir_name=""):
+        """
+        下载数据集和使用的文件
+        """
+        tar_name = data_link.split("/")[-1]
+        logger.info("start download {}".format(tar_name))
+        # 下载文件
+        file_name = wget.download(data_link, destination_folder)
+        logger.info("start tar extract {}".format(tar_name))
+        # 获取文件名和扩展名
+        base_name, file_extension = os.path.splitext(file_name)
+        if dir_name:
+            base_name = dir_name
+            destination_path = os.path.join(destination_folder, base_name)
+            os.makedirs(destination_path, exist_ok=True)
+        else:
+            destination_path = destination_folder
+        try:
+            # 判断文件扩展名，选择相应的解压方式
+            if file_extension == '.tar':
+                with tarfile.open(file_name, 'r:') as tar:
+                    tar.extractall(destination_path)
+            elif file_extension == '.tar.gz':
+                with tarfile.open(file_name, 'r:gz') as tar:
+                    tar.extractall(destination_path)
+            else:
+                logger.info(f"不支持的文件格式: {file_name}")
+                return
+
+            logger.info(f"文件解压成功: {file_name}")
+        except Exception as e:
+            logger.info(f"文件解压失败: {file_name}, 错误信息: {str(e)}")
+        finally:
+            # 删除下载的文件
+            time.sleep(5)
+            os.remove(file_name)
+
     def build_env(self):
         """
         使用父类实现好的能力
         """
         super(PaddleMIX_Build, self).build_env()
         ret = 0
-        ret = self.build_paddlerec()
+        ret = self.build_paddlemix()
         if ret:
             logger.info("build env whl failed")
             return ret

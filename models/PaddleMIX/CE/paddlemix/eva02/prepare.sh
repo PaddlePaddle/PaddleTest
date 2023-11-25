@@ -8,3 +8,6 @@ cd ${root_path}/PaddleMIX/paddlemix/external_ops/
 python setup.py install
 unset http_proxy
 unset https_proxy
+
+cd ${root_path}/PaddleMIX/paddlemix/examples/eva02/
+wget https://bj.bcebos.com/v1/paddlenlp/models/community/paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14/model_state.pdparams

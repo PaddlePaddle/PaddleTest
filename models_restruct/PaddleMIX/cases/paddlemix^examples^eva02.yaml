@@ -6,14 +6,14 @@ case:
         path: paddlemix/external_ops/
         cmd: python setup.py install
       -
+        name: down_load_params
+        path: paddlemix/examples/eva02/
+        cmd: wget https://bj.bcebos.com/v1/paddlenlp/models/community/paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14/model_state.pdparams
+      -
         name: pretrain
         path: paddlemix/examples/eva02/
-        cmd: python -m paddle.distributed.launch run_eva02_pretrain_dist.py
+        cmd: python -m paddle.distributed.launch --master "127.0.0.1:8080" --nnodes 1 --nproc_per_node 2 run_eva02_pretrain_dist.py
         params:
-          - --master "127.0.0.1:8080"
-          - --nnodes 1
-          - --nproc_per_node 1
-          - --ips "127.0.0.1"
           - --do_train
           - --data_path /home/dataset/ILSVRC2012_tiny/train
           - --model "paddlemix/EVA/EVA02/eva02_Ti_for_pretrain"
@@ -42,7 +42,7 @@ case:
           - --accum_freq 1
           - --dp_degree 1
           - --tensor_parallel_degree 1
-          - --sharding_parallel_degree 1
+          - --sharding_parallel_degree 2
           - --pipeline_parallel_degree 1
           - --disable_tqdm True
           - --tensorboard True
@@ -58,18 +58,14 @@ case:
             threshold: 0
             evaluation: "="
       -
-        name: fintue
+        name: finetune
         path: paddlemix/examples/eva02/
-        cmd: python -m paddle.distributed.launch run_eva02_finetune_dist.py
+        cmd: python -m paddle.distributed.launch --master "127.0.0.1:8080" --nnodes 1 --nproc_per_node 1 --ips "127.0.0.1" run_eva02_finetune_dist.py
         params:
-          - --master "127.0.0.1:8080"
-          - --nnodes 1
-          - --nproc_per_node 1
-          - --ips "127.0.0.1"
           - --do_train
           - --data_path /home/dataset/ILSVRC2012_tiny/train
           - --eval_data_path /home/dataset/ILSVRC2012_tiny/val
-          - --pretrained_model_path /root/.paddlenlp/models/paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14/model_state.pdparams
+          - --pretrained_model_path ./model_state.pdparams
           - --model "paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_ft_in1k_p14"
           - --input_size 336
           - --layer_decay 0.9
@@ -94,9 +90,9 @@ case:
           - --logging_dir ./output/eva02_Ti_pt_in21k_ft_in1k_p14/tb_log
           - --logging_steps 10
           - --accum_freq 1
-          - --dp_degree 1
+          - --dp_degree 2
           - --tensor_parallel_degree 1
-          - --sharding_parallel_degree 1
+          - --sharding_parallel_degree 2
           - --pipeline_parallel_degree 1
           - --disable_tqdm True
           - --tensorboard True
@@ -118,7 +114,7 @@ case:
           - --do_eval
           - --model "paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_ft_in1k_p14"
           - --pretrained_model_path None
-          - --eval_data_path ${root_path}/dataset/ILSVRC2012_tiny/val
+          - --eval_data_path /home/dataset/ILSVRC2012_tiny/val
           - --input_size 336
           - --per_device_eval_batch_size 128
           - --dataloader_num_workers 2
