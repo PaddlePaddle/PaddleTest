@@ -131,7 +131,11 @@ def gsb_function(data_df):
                     bgcolor = "#FF6666"
                 elif round(row[index], 3) > 5:
                     bgcolor = "#66FF66"
-            msg += f"<td bgcolor={bgcolor}>{round(row[index], 3) if isinstance(row[index], float) else row[index]}</td>"
+            if index in ["精度", "精度_base"]:
+                td_data = round(row[index], 5)
+            else:
+                td_data = round(row[index], 3) if isinstance(row[index], float) else row[index]
+            msg += f"<td bgcolor={bgcolor}>{td_data}</td>"
         msg += "</tr>"
     msg += "</table>"
 
@@ -160,7 +164,11 @@ def gsb_function(data_df):
                     bgcolor = "#FF6666"
                 elif round(row[index], 3) > 5:
                     bgcolor = "#66FF66"
-            msg += f"<td bgcolor={bgcolor}>{round(row[index], 3) if isinstance(row[index], float) else row[index]}</td>"
+            if index in ["精度", "精度_base"]:
+                td_data = round(row[index], 5)
+            else:
+                td_data = round(row[index], 3) if isinstance(row[index], float) else row[index]
+            msg += f"<td bgcolor={bgcolor}>{td_data}</td>"
         msg += "</tr>"
     msg += "</table>"
 
