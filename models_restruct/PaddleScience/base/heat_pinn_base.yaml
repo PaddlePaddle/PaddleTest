@@ -1,7 +1,7 @@
 train:
   -
     name: single
-    cmd: python examples/Heat_PINN/heat_pinn.py
+    cmd: python examples/heat_pinn/heat_pinn.py
     params:
       - --epoch=1000
     result:
