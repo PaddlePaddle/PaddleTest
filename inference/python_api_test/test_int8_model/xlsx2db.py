@@ -125,11 +125,11 @@ def main():
             )
         )
 
-    # cursor.executemany(sql, data_list)
-    print(data_list)
-    # conn.commit()
-    # cursor.close()
-    # conn.close()
+    cursor.executemany(sql, data_list)
+    # print(data_list)
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 
 if __name__ == "__main__":
