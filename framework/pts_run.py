@@ -138,11 +138,11 @@ if __name__ == "__main__":
                 "utils",
             ]
         }
-        worker = Erwin(case_dict, thread_num=4)
+        worker = Erwin(case_dict, thread_num=2)
         worker.run()
     elif args.module == "jit":
         case_dict = {"e2e": ["jit"]}
-        worker = Erwin(case_dict, thread_num=4)
+        worker = Erwin(case_dict, thread_num=2)
         worker.run()
     elif args.module == "external_api_function":
         case_dict = {"e2e": ["custom_op"]}
