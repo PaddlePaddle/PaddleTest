@@ -90,7 +90,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         self.framework = "paddle"
         self.wheel_link = (
             "https://xly-devops.bj.bcebos.com/PR/build_whl/{}/{}"
-            "/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
+            "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
         )
 
         # 框架信息callback
