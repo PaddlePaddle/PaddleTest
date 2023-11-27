@@ -1,11 +1,11 @@
 train:
   -
     name: single
-    cmd: python examples/pipe/poiseuille_flow.py
+    cmd: python examples/epnn/epnn.py
     params:
-      - --epochs=3000
+      - TRAIN.epochs=10000
     result:
       loss:
-        base: 0.00001
+        base: 0.00473
         threshold: 1
         evaluation: "-"

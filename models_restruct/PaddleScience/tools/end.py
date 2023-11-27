@@ -60,19 +60,20 @@ class PaddleScience_End(object):
         # if ret:
         #     logger.info("build remove_data failed")
         #     return ret
-        mode = os.getenv("mode")
-        if mode == "precision":
-            url = "https://paddle-qa.bj.bcebos.com/suijiaxin/base_log/{}_base.log".format(self.qa_yaml_name)
-            file_name = "{}_base.log".format(self.qa_yaml_name)
-            try:
-                urllib.request.urlretrieve(url, file_name)
-                shutil.copy(file_name, "./logs/{}/{}/".format(self.reponame, self.qa_yaml_name))
-            except Exception as e:
-                logger.error("Failed to download file from {}. Error: {}".format(url, e))
-                raise Exception("File download failed!")
-            logger.info("plot start!")
-            self.plot_loss()
-        logger.info("build remove_data end")
+        # mode = os.getenv("mode")
+        # system = os.environ["system"]
+        # if mode == "precision" and "Windows" not in system:
+        #     url = "https://paddle-qa.bj.bcebos.com/suijiaxin/base_log/{}_base.log".format(self.qa_yaml_name)
+        #     file_name = "{}_base.log".format(self.qa_yaml_name)
+        #     try:
+        #         urllib.request.urlretrieve(url, file_name)
+        #         shutil.copy(file_name, "./logs/{}/{}/".format(self.reponame, self.qa_yaml_name))
+        #     except Exception as e:
+        #         logger.error("Failed to download file from {}. Error: {}".format(url, e))
+        #         raise Exception("File download failed!")
+        #     logger.info("plot start!")
+        #     self.plot_loss()
+        # logger.info("build remove_data end")
         return ret
 
 
