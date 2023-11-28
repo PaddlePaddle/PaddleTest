@@ -55,7 +55,7 @@ fi
 (python predict.py  \
  --first_model_path blip2_export/image_encoder \
  --second_model_path opt-2.7b-infer_static/opt \
- --image_path https://paddlenlp.bj.bcebos.com/data/images/mugs.png\
+ --image_path https://paddlenlp.bj.bcebos.com/data/images/mugs.png \
  --prompt "a photo of") 2>&1 | tee ${log_dir}/run_deploy_blip2_predict.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))

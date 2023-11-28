@@ -1,0 +1,63 @@
+case:
+  linux:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: bbox_export
+        path: deploy/sam/
+        cmd: python export.py
+        params:
+          - --model_type Sam/SamVitH-1024
+          - --input_type boxs
+          - --save_dir sam_export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: points_export
+        path: deploy/sam/
+        cmd: python export.py
+        params:
+          - --model_type Sam/SamVitH-1024
+          - --input_type points
+          - --save_dir sam_export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    predict:
+      -
+        name: box_predict
+        path: deploy/sam/
+        cmd: python predict.py
+        params:
+          - --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg
+          - --box_prompt 112 118 513 382
+          - --input_type boxs
+          - --model_name_or_path Sam/SamVitH-1024
+          - --cfg Sam/SamVitH-1024_boxs/deploy.yaml
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: points_predict
+        path: deploy/sam/
+        cmd: python predict.py
+        params:
+          - --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg
+          - --points_prompt 548 372
+          - --input_type points
+          - --model_name_or_path Sam/SamVitH-1024
+          - --cfg Sam/SamVitH-1024_points/deploy.yaml
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
