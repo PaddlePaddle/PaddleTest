@@ -1,30 +1,17 @@
-# 其它 yaml要严格保证train的顺序, 否则会出现参数倒置的现象
 case:
   linux:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/GeneralRecognition_base.yaml
     train:
       -
         name: single
       -
-        name: single_dy2st
-      -
         name: multi
-      -
-        name: multi_dy2st
-      -
-        name: multi_amp
-      -
-        name: multi_amp_dy2st
     eval:
       -
         name: trained
       -
         name: pretrained
-    infer:
-      -
-        name: trained
-      -
-        name: pretrained
+    infer: skipped
     export:
       -
         name: trained
@@ -34,24 +21,19 @@ case:
       -
         name: trained
       -
-        name: trained_mkldnn
-      -
-        name: trained_trt
-      -
         name: pretrained
 
   linux_convergence:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/GeneralRecognition_base.yaml
     train:
       -
         name: single_convergence
       -
         name: multi_convergence
-      -
-        name: multi_static_convergence
+
 
   # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
-    # base: ./base/ImageNet_base.yaml
+    # base: ./base/GeneralRecognition_base.yaml
   #   train:
   #     -
   #       name: function
@@ -59,50 +41,27 @@ case:
   #         - -o Global.device=cpu
 
   windows:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/GeneralRecognition_base.yaml
     train:
       -
         name: function
-        params:
-          - -o DataLoader.Train.sampler.batch_size=16
-          - -o DataLoader.Eval.sampler.batch_size=16
-      -
-        name: function_dy2st
-        params:
-          - -o DataLoader.Train.sampler.batch_size=16
-          - -o DataLoader.Eval.sampler.batch_size=16
-      -
-        name: function_amp
-        params:
-          - -o DataLoader.Train.sampler.batch_size=16
-          - -o DataLoader.Eval.sampler.batch_size=16
     eval:
       -
         name: function
       -
         name: pretrained
-    infer:
-      -
-        name: function
-      -
-        name: pretrained
+    infer: skipped
     export:
-      # -
-      #   name: function
       -
         name: pretrained
     predict:
       -
         name: function
       -
-        name: function_mkldnn
-      -
-        name: function_trt
-      -
         name: pretrained
 
   windows_cpu:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/GeneralRecognition_base.yaml
     train:
       -
         name: function
@@ -117,20 +76,12 @@ case:
         name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
-    infer:
+    infer: skipped
+    export:
       -
         name: function
         params:
           - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
-        params:
-          - -o Global.device=${set_cuda_flag}
-    export:
-      # -
-      #   name: function
-      #   params:
-      #     - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
         params:
@@ -146,14 +97,10 @@ case:
           - -o Global.device=${set_cuda_flag}
 
   mac:
-    base: ./base/ImageNet_base.yaml
+    base: ./base/GeneralRecognition_base.yaml
     train:
       -
         name: function
-        params:
-          - -o Global.device=${set_cuda_flag}
-      -
-        name: function_dy2st
         params:
           - -o Global.device=${set_cuda_flag}
     eval:
@@ -165,15 +112,7 @@ case:
         name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
-    infer:
-      -
-        name: function
-        params:
-          - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
-        params:
-          - -o Global.device=${set_cuda_flag}
+    infer: skipped
     export:
       -
         name: function
