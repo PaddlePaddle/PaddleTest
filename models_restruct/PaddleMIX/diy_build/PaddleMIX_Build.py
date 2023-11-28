@@ -12,6 +12,7 @@ import argparse
 import numpy as np
 import yaml
 import wget
+import shutil
 from Model_Build import Model_Build
 
 logger = logging.getLogger("ce")
@@ -79,6 +80,12 @@ class PaddleMIX_Build(Model_Build):
         os.chdir("ppdiffusers")
         os.system("pip install -r requirements.txt")
         os.system("pip install -e .")
+        self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ppdiffusers_infer.tar.gz", destination_folder="/home", dir_name="ppdiffusers_infer_file")
+        for test_model_path in self.test_model_list:
+            test_model_name = test_model_path.split("/")[-1]
+            root_path = "/home/ppdiffusers_infer_file"
+            target_path = os.path.join(path_now, "PaddleMIX", test_model_name)
+            self.copy_files_with_prefix(root_path, target_path, test_model_name)
         os.chdir(path_now)
         return 0
 
@@ -93,6 +100,9 @@ class PaddleMIX_Build(Model_Build):
         logger.info("start tar extract {}".format(tar_name))
         # 获取文件名和扩展名
         base_name, file_extension = os.path.splitext(file_name)
+        if '.' in base_name:
+            base_name, additional_extension = os.path.splitext(base_name)
+            file_extension = additional_extension + file_extension
         if dir_name:
             base_name = dir_name
             destination_path = os.path.join(destination_folder, base_name)
@@ -118,6 +128,24 @@ class PaddleMIX_Build(Model_Build):
             # 删除下载的文件
             time.sleep(5)
             os.remove(file_name)
+
+    def copy_files_with_prefix(self, root_dir, target_dir, model_name, prefix="infer"):
+        """
+        复制指定目录下子目录内以指定前缀开头的的文件到指定目录
+        """
+        # 遍历根目录下的所有子文件夹
+        for subdir in os.listdir(root_dir):
+            subdir_path = os.path.join(root_dir, subdir)
+            if os.path.isdir(subdir_path):
+                # 遍历子文件夹下的所有文件
+                for filename in os.listdir(subdir_path):
+                    if model_name == subdir:
+                        # 检查文件是否以指定前缀开头
+                        if filename.startswith(prefix):
+                            source_path = os.path.join(subdir_path, filename)
+                            target_path = os.path.join(target_dir, filename)
+                            shutil.copy(source_path, target_path)
+                            print(f"File {filename} copied to {target_dir}")
 
     def build_env(self):
         """
