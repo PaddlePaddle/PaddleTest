@@ -14,9 +14,9 @@ train:
     cmd: python examples/euler_beam/euler_beam.py
     params:
       - --to_static
-      - --epochs=10
+      - --epochs=10000
     result:
-      exit_code:
-        base: 0
-        threshold: 0
-        evaluation: "="
+      loss:
+        base: 0.00002
+        threshold: 1
+        evaluation: "-"

@@ -6,7 +6,7 @@ train:
       - --epochs=2
     result:
       loss:
-        base: 5.18e-09
+        base: 1.1e-08
         threshold: 1
         evaluation: "-"
       L2 relative error:

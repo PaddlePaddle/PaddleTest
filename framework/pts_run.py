@@ -116,8 +116,8 @@ if __name__ == "__main__":
     # prepare env
     os.environ["FLAGS_call_stack_level"] = "2"
     os.environ["NVIDIA_TF32_OVERRIDE"] = "0"
-    os.environ["FLAGS_USE_STANDALONE_EXECUTOR"] = "1"
-    os.environ["FLAGS_CONVERT_GRAPH_TO_PROGRAM"] = "1"
+    # os.environ["FLAGS_USE_STANDALONE_EXECUTOR"] = "1"
+    # os.environ["FLAGS_CONVERT_GRAPH_TO_PROGRAM"] = "1"
     # download allure and unzip
     # wget.download("https://paddle-qa.cdn.bcebos.com/PTS/allure-2.17.3.tgz")
     # os.system("mkdir allure && tar -xf allure-2.17.3.tgz -C allure --strip-components 1")
@@ -138,7 +138,7 @@ if __name__ == "__main__":
                 "utils",
             ]
         }
-        worker = Erwin(case_dict, thread_num=4)
+        worker = Erwin(case_dict, thread_num=6)
         worker.run()
     elif args.module == "jit":
         case_dict = {"e2e": ["jit"]}
