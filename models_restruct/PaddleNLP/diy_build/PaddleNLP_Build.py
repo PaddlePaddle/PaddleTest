@@ -123,15 +123,15 @@ class PaddleNLP_Build(Model_Build):
                     examples/machine_translation/transformer/configs/transformer.base.yaml'
             )
 
-            if platform == "linux_convergence":
-                print("pass donwload hf datasets")
-            else:
-                from datasets import load_dataset
+            # if platform == "linux_convergence":
+            #     print("pass donwload hf datasets")
+            # else:
+            #     from datasets import load_dataset
 
-                train_squad = load_dataset("squad", split="train", cache_dir="/root/.cache/huggingface/datasets")
-                train_sst2 = load_dataset("glue", "sst2", split="train", cache_dir="/root/.cache/huggingface/datasets")
+            #     train_squad = load_dataset("squad", split="train", cache_dir="/root/.cache/huggingface/datasets")
+            #     train_sst2 = load_dataset("glue", "sst2", split="train", cache_dir="/root/.cache/huggingface/datasets")
 
-                print("download hf datasets", train_squad, train_sst2)
+            #     print("download hf datasets", train_squad, train_sst2)
 
         if re.compile("CUDA11").findall(self.models_file):
             os.system(
