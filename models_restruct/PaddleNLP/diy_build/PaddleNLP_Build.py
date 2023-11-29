@@ -95,7 +95,6 @@ class PaddleNLP_Build(Model_Build):
 
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
-            
 
             logger.info("installing develop ppdiffusers")
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
@@ -142,6 +141,7 @@ class PaddleNLP_Build(Model_Build):
         os.system("python -m pip install protobuf==3.20.2")
         os.system("python -m pip list")
         import paddle
+
         # import paddlenlp
         print("paddle final commit", paddle.version.commit)
         # print("paddlenlp final commit", paddlenlp.version.commit)
