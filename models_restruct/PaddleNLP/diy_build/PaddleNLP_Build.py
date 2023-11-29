@@ -5,9 +5,7 @@
 import os
 import re
 from platform import platform
-import sys
 import logging
-import tarfile
 import argparse
 import numpy as np
 import yaml
