@@ -77,20 +77,6 @@ case:
         name: function
       -
         name: pretrained
-    export:
-      # -
-      #   name: function
-      -
-        name: pretrained
-    predict:
-      -
-        name: function
-      -
-        name: function_mkldnn
-      -
-        name: function_trt
-      -
-        name: pretrained
 
   windows_cpu:
     base: ./base/ImageNet_base.yaml

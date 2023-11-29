@@ -52,7 +52,7 @@ def is_complex(dtype):
     Returns:
 
     """
-    return dtype == paddle.fluid.core.VarDesc.VarType.COMPLEX64 or dtype == paddle.fluid.core.VarDesc.VarType.COMPLEX128
+    return dtype == paddle.base.core.VarDesc.VarType.COMPLEX64 or dtype == paddle.base.core.VarDesc.VarType.COMPLEX128
 
 
 def to_complex(dtype):
