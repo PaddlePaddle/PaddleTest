@@ -125,8 +125,10 @@ class PaddleNLP_Build(Model_Build):
             # else:
             #     from datasets import load_dataset
 
-            #     train_squad = load_dataset("squad", split="train", cache_dir="/root/.cache/huggingface/datasets")
-            #     train_sst2 = load_dataset("glue", "sst2", split="train", cache_dir="/root/.cache/huggingface/datasets")
+            #     train_squad = load_dataset("squad", split="train",
+            #  cache_dir="/root/.cache/huggingface/datasets")
+            #     train_sst2 = load_dataset("glue", "sst2", split="train",
+            #  cache_dir="/root/.cache/huggingface/datasets")
 
             #     print("download hf datasets", train_squad, train_sst2)
 
