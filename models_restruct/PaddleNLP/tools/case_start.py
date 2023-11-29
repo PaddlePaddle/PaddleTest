@@ -28,7 +28,7 @@ class PaddleNLP_Case_Start(object):
         """
         执行准备过程
         """
-        ir_paddle = "https://paddle-qa.bj.bcebos.com/CompileService/train/v11.7/3.10/pr/58990/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl"
+
         if "bert_convergence_dy2st" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
@@ -119,7 +119,8 @@ class PaddleNLP_Case_Start(object):
             logger.info("set ENABLE_FALL_BACK as {}".format(os.getenv("ENABLE_FALL_BACK")))
         elif "convergence_ir" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
-            
+            ir_paddle = "https://paddle-qa.bj.bcebos.com/CompileService/train/v11.7/3.10/pr/ \
+                58990/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl"
             if self.case_name.split("train_")[-1] == "ir":
                 os.system("python -m pip uninstall paddlepaddle-gpu -y")
                 os.system("python -m pip install {} ".format(ir_paddle))
