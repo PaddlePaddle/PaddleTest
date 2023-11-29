@@ -21,7 +21,7 @@ exit_code=0
 export http_proxy=${proxy}
 export https_proxy=${proxy}
 # 下载依赖、数据集和权重
-python3.10 -m pip install --upgrade pip
+python -m pip install --upgrade pip
 bash prepare.sh
 
 echo "*******ppdiffusers examples_test train begin***********"
