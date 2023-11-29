@@ -10,6 +10,7 @@ wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/model_state.pd
 wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/minigpt4_7b.tar.gz
 tar -zxvf minigpt4_7b.tar.gz
 mv model_state.pdparams minigpt4_7b/
+rm -rf minigpt4_7b.tar.gz
 
 (python run_predict.py \
     --pretrained_name_or_path minigpt4_7b \
