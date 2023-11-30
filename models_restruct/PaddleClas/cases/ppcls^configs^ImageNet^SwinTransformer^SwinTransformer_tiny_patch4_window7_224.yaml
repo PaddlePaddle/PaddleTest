@@ -103,24 +103,6 @@ case:
         name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
-    export:
-      # -
-      #   name: function
-      #   params:
-      #     - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
-        params:
-          - -o Global.device=${set_cuda_flag}
-    predict:
-      -
-        name: function
-        params:
-          - -o Global.device=${set_cuda_flag}
-      -
-        name: pretrained
-        params:
-          - -o Global.device=${set_cuda_flag}
 
   mac:
     base: ./base/ImageNet_base.yaml

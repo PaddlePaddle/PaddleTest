@@ -19,7 +19,6 @@ ppcls^configs^ImageNet^VAN^VAN_B0.yaml
 ppcls^configs^ImageNet^DPN^DPN98.yaml
 ppcls^configs^ImageNet^Distillation^resnet34_distill_resnet18_afd.yaml
 ppcls^configs^ImageNet^Distillation^PPLCNet_x2_5_dml.yaml
-ppcls^configs^ImageNet^Distillation^resnet34_distill_resnet18_dkd.yaml
 ppcls^configs^ImageNet^Distillation^resnet34_distill_resnet18_mgd.yaml
 ppcls^configs^ImageNet^Distillation^PPLCNet_x2_5_ssld.yaml
 ppcls^configs^ImageNet^Distillation^PPLCNet_x2_5_udml.yaml
