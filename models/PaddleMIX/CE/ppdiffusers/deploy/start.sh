@@ -19,12 +19,14 @@ fi
 
 
 cd ${work_path2}
-pip install -e . -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+python -m pip install --upgrade pip
 pip install -r requirements.txt -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+pip install -e . -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
 
 cd ${work_path}
-pip install fastdeploy-gpu-python==1.0.7 -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html  -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+# pip install fastdeploy-gpu-python==1.0.7 -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html  -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
+pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html -i http://pip.baidu.com/root/baidu/+simple/ --trusted-host pip.baidu.com
 
 exit_code=0
 export http_proxy=${proxy}

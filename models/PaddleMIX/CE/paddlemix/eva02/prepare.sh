@@ -6,6 +6,7 @@ export http_proxy=${proxy}
 export https_proxy=${proxy}
 cd ${root_path}/PaddleMIX/paddlemix/external_ops/
 python setup.py install
+pip install -U numpy==1.23.5
 unset http_proxy
 unset https_proxy
 
