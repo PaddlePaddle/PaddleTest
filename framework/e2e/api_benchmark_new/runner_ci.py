@@ -20,7 +20,7 @@ from statistics.statistics import Statistics
 # from db.db import DB
 from db.ci_db import CIdb
 from info.snapshot import Snapshot
-from strategy.compare import double_check, ci_level_reveal, data_compare
+from strategy.compare import double_check, bad_check, ci_level_reveal, data_compare
 from strategy.transdata import data_list_to_dict
 from alarm.alarm import Alarm
 
@@ -90,7 +90,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         self.framework = "paddle"
         self.wheel_link = (
             "https://xly-devops.bj.bcebos.com/PR/build_whl/{}/{}"
-            "/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
+            "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
         )
 
         # 框架信息callback
@@ -193,12 +193,15 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             ci_dict[k]["result"] = v
 
         compare_dict = {}
+        bad_check_case = []
         double_check_case = []
         for k, v in ci_dict.items():
             baseline_case = baseline_dict[k]
             latest_case = ci_dict[k]
             compare_res = data_compare(baseline_case=baseline_case, latest_case=latest_case, case_name=k)
             compare_dict[k] = compare_res[k]
+            if bad_check(res=compare_res[k]):
+                bad_check_case.append(k)
             if self.double_check and double_check(res=compare_res[k]):
                 double_check_case.append(k)
 
@@ -249,6 +252,19 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
             )
         )
         print(api_grade)
+
+        if bool(bad_check_case):
+            baseline_whl = db.select_by_id(table="job", id=baseline_id)
+            latest_whl = db.select_by_id(table="job", id=latest_id)
+            print("性能基线paddle wheel包: {}".format(baseline_whl[-1]["wheel_link"]))
+            print("此次测试paddle wheel包: {}".format(latest_whl[-1]["wheel_link"]))
+            print("报错case的复现代码链接如下, 请依次安装基线wheel包和测试wheel包, 使用复现代码进行性能对比验证: ")
+            for i in bad_check_case:
+                print(
+                    "https://github.com/PaddlePaddle/PaddleTest/tree/develop/"
+                    "framework/e2e/api_benchmark_new/debug_case/{}.py".format(i)
+                )
+
         print(
             "详情差异请点击以下链接查询: http://paddletest.baidu-int.com:8081/#/paddle/benchmark/apiBenchmark/report/{}&{}".format(
                 latest_id, baseline_id

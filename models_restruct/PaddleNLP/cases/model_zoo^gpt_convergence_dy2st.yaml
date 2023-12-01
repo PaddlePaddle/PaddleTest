@@ -2,44 +2,38 @@ case:
   linux_convergence:
     train:
       -
-        name: prepare_datasets
-        path: model_zoo/gpt
-        cmd: mkdir data && cd data && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_idx.npz && wget https://paddlenlp.bj.bcebos.com/models/transformers/gpt/data/gpt_en_dataset_300m_ids.npy
+        name: datasets
+        path: model_zoo/gpt-3/tasks/gpt
+        cmd: mkdir data && cd data && wget https://bj.bcebos.com/paddlenlp/models/transformers/llama/data/llama_openwebtext_100k_ids.npy && wget https://bj.bcebos.com/paddlenlp/models/transformers/llama/data/llama_openwebtext_100k_idx.npz
+
       -
         name: dy2st_baseline
-        path: model_zoo/gpt
-        cmd: python run_pretrain.py
+        path: model_zoo/gpt-3/tasks/gpt
+        cmd: GLOG_vmodule=generated_vjp=4 python train_pir.py
         params:
-          - --model_type gpt
-          - --model_name_or_path gpt2-en
-          - --input_dir "./data"
-          - --output_dir "output_base"
-          - --weight_decay 0.01
-          - --grad_clip 1.0
-          - --max_steps 150000
-          - --save_steps 100000
-          - --decay_steps 320000
-          - --warmup_rate 0.01
-          - --micro_batch_size 2
-          - --device gpu
-          - --to_static
-          - --seed 100
+          - -c ../../ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml
+          - -o Global.micro_batch_size=2
+          - -o Global.local_batch_size=2
+          - -o Global.to_static=False
+          - -o Engine.max_steps=5000
+
       -
-        name: dy2st_prim
-        path: model_zoo/gpt
-        cmd: python run_pretrain.py
+        name: dy2st_pir
+        path: model_zoo/gpt-3/tasks/gpt
+        cmd: GLOG_vmodule=generated_vjp=4 python train_pir.py
         params:
-          - --model_type gpt
-          - --model_name_or_path gpt2-en
-          - --input_dir "./data"
-          - --output_dir "output_prim"
-          - --weight_decay 0.01
-          - --grad_clip 1.0
-          - --max_steps 150000
-          - --save_steps 100000
-          - --decay_steps 320000
-          - --warmup_rate 0.01
-          - --micro_batch_size 2
-          - --device gpu
-          - --to_static
-          - --seed 100
+          - -c ../../ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml
+          - -o Global.micro_batch_size=2
+          - -o Global.local_batch_size=2
+          - -o Global.to_static=True
+          - -o Engine.max_steps=5000
+      -
+        name: dy2st_pir_prim
+        path: model_zoo/gpt-3/tasks/gpt
+        cmd: GLOG_vmodule=generated_vjp=4 python train_pir.py
+        params:
+          - -c ../../ppfleetx/configs/nlp/gpt/pretrain_gpt_345M_single_card.yaml
+          - -o Global.micro_batch_size=2
+          - -o Global.local_batch_size=2
+          - -o Global.to_static=True
+          - -o Engine.max_steps=5000

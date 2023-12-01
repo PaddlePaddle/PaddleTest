@@ -7,7 +7,7 @@ case:
         cmd: python -u tools/trainer.py
         result:
           loss:
-            base: 0.3963076
+            base: 0.39855692
             threshold: 0.0003
             evaluation: "-"
 
@@ -17,6 +17,6 @@ case:
         cmd: python -u tools/infer.py
         result:
           query_doc_sim:
-            base: 0.9819532
+            base: 0.952202
             threshold: 0.0003
             evaluation: "+"

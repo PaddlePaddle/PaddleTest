@@ -32,19 +32,19 @@ def mnist():
     mnist = MNIST()
     adam = paddle.optimizer.Adam(learning_rate=0.001, parameters=mnist.parameters())
 
-    train_reader = paddle.batch(reader_decorator(paddle.dataset.mnist.train()), batch_size=BATCH_SIZE, drop_last=True)
+    train_reader = paddle.batch(paddle.dataset.mnist.train(), batch_size=BATCH_SIZE, drop_last=True)
 
-    test_reader = paddle.batch(reader_decorator(paddle.dataset.mnist.test()), batch_size=BATCH_SIZE, drop_last=True)
 
-    train_loader = paddle.io.DataLoader.from_generator(capacity=10)
-    train_loader.set_sample_list_generator(train_reader, places=place)
-
-    test_loader = paddle.io.DataLoader.from_generator(capacity=10)
-    test_loader.set_sample_list_generator(test_reader, places=place)
 
     for epoch in range(epoch_num):
-        for batch_id, data in enumerate(train_loader()):
-            img, label = data
+        for batch_id, data in enumerate(train_reader()):
+            img = []
+            label = []
+            for d in data:
+                img.append(d[0])
+                label.append([d[1]])
+            img = paddle.reshape(paddle.to_tensor(img),[64, 1, 28, 28])
+            label = paddle.to_tensor(label)
             label.stop_gradient = True
 
             cost, acc = mnist(img, label)
@@ -81,21 +81,21 @@ def custom_mnist():
     mnist = CUSTOMMNIST()
     adam = paddle.optimizer.Adam(learning_rate=0.001, parameters=mnist.parameters())
 
-    train_reader = paddle.batch(reader_decorator(paddle.dataset.mnist.train()), batch_size=BATCH_SIZE, drop_last=True)
+    train_reader = paddle.batch(paddle.dataset.mnist.train(), batch_size=BATCH_SIZE, drop_last=True)
 
-    test_reader = paddle.batch(reader_decorator(paddle.dataset.mnist.test()), batch_size=BATCH_SIZE, drop_last=True)
 
-    train_loader = paddle.io.DataLoader.from_generator(capacity=10)
-    train_loader.set_sample_list_generator(train_reader, places=place)
-
-    test_loader = paddle.io.DataLoader.from_generator(capacity=10)
-    test_loader.set_sample_list_generator(test_reader, places=place)
 
     for epoch in range(epoch_num):
-        for batch_id, data in enumerate(train_loader()):
-            img, label = data
-            label.stop_gradient = True
+        for batch_id, data in enumerate(train_reader()):
 
+            img = []
+            label = []
+            for d in data:
+                img.append(d[0])
+                label.append([d[1]])
+            img = paddle.reshape(paddle.to_tensor(img),[64, 1, 28, 28])
+            label = paddle.to_tensor(label)
+            label.stop_gradient = True
             cost, acc = mnist(img, label)
 
             loss = paddle.nn.functional.cross_entropy(cost, label)

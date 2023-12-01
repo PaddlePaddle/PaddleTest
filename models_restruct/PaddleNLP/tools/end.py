@@ -35,31 +35,30 @@ class PaddleNLP_End(object):
         self.qa_yaml_name = os.environ["qa_yaml_name"]
         self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
 
-    def drow_picture(self, model_name, baseline_info, strategy_info, metrics):
-        """drowing loss/ips curve"""
-        num = 1
-        picture_name = (model_name.replace("model_zoo^", "") + "_" + metrics).upper()
+    def drow_picture(self, model_name, baseline_info, strategy_info, metric):
+        """drowing metrics curve"""
         for key, value in strategy_info.items():
-            if re.compile(metrics).findall(key):
-                plt.subplot(1, len(strategy_info.items()) // 2, num)
-                plt.plot(
-                    [i for i in range(len(baseline_info["baseline_" + metrics]))],
-                    baseline_info["baseline_" + metrics],
-                    color="g",
-                    label="baseline_" + metrics,
-                )
-                plt.plot([i for i in range(len(baseline_info["baseline_" + metrics]))], value, color="r", label=key)
+            if value == []:
+                continue
+            elif re.compile(metric).findall(key):
+                print(len(value))
+                plt.subplot(1, 1, 1)
+                picture_name = (model_name.replace("model_zoo^", "") + key.replace("dy2st", "")).upper()
 
+                x = [i for i in range(len(baseline_info["baseline_" + metric]))]
+                y1 = baseline_info["baseline_" + metric]
+                y2 = strategy_info[key]
+                plt.plot(x, y1, color="g", label="baseline_" + metric)
+                plt.plot(x, y2, color="r", label=key)
+                plt.xlabel("step")
+                plt.ylabel(metric)
                 plt.legend()
-                if num == 1:
-                    plt.xlabel("step")
-                    plt.ylabel(metrics)
-                    plt.title(picture_name)
-                num = num + 1
-        if not os.path.exists("picture"):
-            os.makedirs("picture")
-        plt.savefig("./picture/{}.png".format(picture_name))
-        plt.close()
+                plt.title(picture_name)
+
+                if not os.path.exists("picture"):
+                    os.makedirs("picture")
+                plt.savefig("./picture/{}.png".format(picture_name))
+                plt.close()
 
     def get_metrics(self, filename, kpi):
         """
@@ -102,7 +101,7 @@ class PaddleNLP_End(object):
             if re.compile("baseline").findall(file):
                 baseline_info["baseline_loss"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
                 baseline_info["baseline_ips"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
-            elif re.compile("dy2st").findall(file):
+            elif re.compile("dy2st").findall(file) or re.compile("ir").findall(file):
                 strategy_loss = file.split("train_")[-1].replace(".log", "") + "_loss"
                 strategy_ips = file.split("train_")[-1].replace(".log", "") + "_ips"
                 strategy_info[strategy_loss] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
@@ -110,8 +109,8 @@ class PaddleNLP_End(object):
             else:
                 logger.info("this log file not convergence task ")
 
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics="loss")
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metrics="ips")
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="loss")
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="ips")
 
     def build_end(self):
         """

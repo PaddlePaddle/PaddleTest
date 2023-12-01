@@ -78,7 +78,7 @@ class PaddleOCR_Start(object):
                             if algorithm == "NRTR":
                                 image_shape = "32,100"
                             if algorithm == "ABINet":
-                                image_shape = "3, 32, 128"
+                                image_shape = "3,32,128"
                             if len(image_shape.split(",")) == 2:
                                 image_shape = "1," + image_shape
 

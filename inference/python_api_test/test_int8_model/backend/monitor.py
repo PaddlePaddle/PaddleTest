@@ -45,6 +45,30 @@ class StatBase(object):
         "utilization.gpu",
         "utilization.memory",
     )
+    xpu_keys = (
+        "pci_addr",
+        "board_id",
+        "dev_id",
+        "sn",
+        "temperature",
+        "p1",
+        "mem temperature",
+        "p2",
+        "power(mW)",
+        "freq_0",
+        "freq_1",
+        "freq_2",
+        "freq_3",
+        "freq_4",
+        "freq_5",
+        "L3_used",
+        "L3_size",
+        "HBM_used",
+        "HBM_size",
+        "use_ratio",
+        "firmware version",
+        "model",
+    )
     nu_opt = ",nounits"
     cpu_keys = ("cpu.util", "memory.util", "memory.used")
 
@@ -52,13 +76,15 @@ class StatBase(object):
 class Monitor(StatBase):
     """Monitor"""
 
-    def __init__(self, gpu_id=0, use_gpu=True, interval=0.1):
+    def __init__(self, gpu_id=0, use_gpu=True, xpu_id=0, use_xpu=False, interval=0.1):
         self.result = {}
         self.result["result"] = {}
         # in Paddle-Test int8 model test
         # we usually export CUDA_VISIBLE_DEVICES=global_gpu_id first.
         self.gpu_id = int(os.environ.get("CUDA_VISIBLE_DEVICES", gpu_id))
         self.use_gpu = use_gpu
+        self.xpu_id = int(os.environ.get("XPU_VISIBLE_DEVICES", xpu_id))
+        self.use_xpu = use_xpu
         self.interval = interval
 
         self.cpu_stat_q = multiprocessing.Queue()
@@ -71,10 +97,21 @@ class Monitor(StatBase):
             ",".join(StatBase.gpu_keys),
             StatBase.nu_opt,
         )
+        xpu_cmd = f"while true; do xpu_smi -d{self.xpu_id} -m; sleep 0.05; done"
         # print(cmd)
         if self.use_gpu:
             self.gpu_stat_worker = subprocess.Popen(
                 cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, shell=True, close_fds=True, preexec_fn=os.setsid
+            )
+
+        if self.use_xpu:
+            self.xpu_stat_worker = subprocess.Popen(
+                xpu_cmd,
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE,
+                shell=True,
+                close_fds=True,
+                preexec_fn=os.setsid,
             )
 
         # cpu stat
@@ -89,6 +126,8 @@ class Monitor(StatBase):
         try:
             if self.use_gpu:
                 os.killpg(self.gpu_stat_worker.pid, signal.SIGUSR1)
+            if self.use_xpu:
+                os.killpg(self.xpu_stat_worker.pid, signal.SIGUSR1)
             # os.killpg(p.pid, signal.SIGTERM)
             self.cpu_stat_worker.terminate()
             self.cpu_stat_worker.join(timeout=0.01)
@@ -112,6 +151,23 @@ class Monitor(StatBase):
                     else:
                         result[k] = max(result[k], item[k])
             self.result["result"]["gpu_memory.used"] = result["memory.used"]
+
+        # xpu
+        if self.use_xpu:
+            lines = self.xpu_stat_worker.stdout.readlines()
+            # print(lines)
+            lines = [line.strip().decode("utf-8") for line in lines if line.strip() != ""]
+            xpu_info_list = [{k: v for k, v in zip(StatBase.xpu_keys, line.split(" "))} for line in lines]
+            if len(xpu_info_list) == 0:
+                return
+            result = xpu_info_list[0]
+            for item in xpu_info_list:
+                for k in item.keys():
+                    if k not in ["pci_addr", "sn", "firmware version", "model"]:
+                        result[k] = max(int(result[k]), int(item[k]))
+                    else:
+                        result[k] = max(result[k], item[k])
+            self.result["XPU"] = result
 
         # cpu
         cpu_result = {}
@@ -145,7 +201,8 @@ class Monitor(StatBase):
 
 if __name__ == "__main__":
     begin = time.time()
-    monitor = Monitor(0)
+    # monitor = Monitor(0)
+    monitor = Monitor(use_gpu=False, use_xpu=True, xpu_id=2)
 
     monitor.start()
     time.sleep(80)
