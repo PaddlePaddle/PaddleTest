@@ -15,9 +15,9 @@ exit_code=0
 
 cd ${work_path}
 
-cd ${work_path}/paddlemix/
-bash fire.sh
-exit_code=$(($exit_code + $?))
+# cd ${work_path}/paddlemix/
+# bash fire.sh
+# exit_code=$(($exit_code + $?))
 
 cd ${work_path}/ppdiffusers/
 bash fire.sh
