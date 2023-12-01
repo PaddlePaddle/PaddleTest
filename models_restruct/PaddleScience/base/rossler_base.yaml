@@ -3,7 +3,7 @@ train:
     name: train_enn
     cmd: python examples/rossler/train_enn.py
     params:
-      - --epochs=300
+      - TRAIN.epochs=300
     result:
       loss:
         base: 26.90194
@@ -13,7 +13,7 @@ train:
     name: train_transformer
     cmd: python examples/rossler/train_transformer.py
     params:
-      - --epochs=200
+      - TRAIN.epochs=200
     result:
       loss:
         base: 0.000001

@@ -36,6 +36,8 @@ case:
       -
         name: trained_mkldnn
       -
+        name: trained_trt
+      -
         name: pretrained
 
   linux_convergence:
@@ -84,18 +86,6 @@ case:
         name: function
       -
         name: pretrained
-    export:
-      -
-        name: function
-      -
-        name: pretrained
-    predict:
-      -
-        name: function
-      -
-        name: function_mkldnn
-      -
-        name: pretrained
 
   windows_cpu:
     base: ./base/ImageNet_base.yaml
@@ -123,10 +113,10 @@ case:
         params:
           - -o Global.device=${set_cuda_flag}
     export:
-      -
-        name: function
-        params:
-          - -o Global.device=${set_cuda_flag}
+      # -
+      #   name: function
+      #   params:
+      #     - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
         params:
