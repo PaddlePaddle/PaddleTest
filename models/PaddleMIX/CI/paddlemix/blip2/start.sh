@@ -18,8 +18,12 @@ exit_code=0
 
 cd ${work_path}
 
+export http_proxy=${proxy};
+export https_proxy=${proxy};
 bash single_predict.sh
 exit_code=$(($exit_code + $?))
+unset http_proxy
+unset https_proxy
 
 echo exit_code:${exit_code}
 exit ${exit_code}
