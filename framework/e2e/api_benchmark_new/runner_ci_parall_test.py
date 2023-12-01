@@ -34,6 +34,7 @@ import psutil
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--core_index", type=int, help="index of cpu core")
+parser.add_argument("--baseline_comment", type=str, default="apibm_CI_parall_test_lzy", help="db job comment")
 parser.add_argument("--yaml", type=str, help="input the yaml path")
 parser.add_argument("--python", type=str, default="python3.10", help="input the yaml path")
 parser.add_argument("--baseline_whl_link", type=str, default=None, help="only be used to insert baseline data")
@@ -52,7 +53,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
     api benchmark 调度CI, 监控cpu+前向, 支持多个机器baseline
     """
 
-    def __init__(self, yaml_path, python):
+    def __init__(self, yaml_path, python, baseline_comment):
         super(ApiBenchmarkCI, self).__init__(yaml_path)
         """
         :param baseline: 性能baseline键值对, key为case名, value为性能float
@@ -80,7 +81,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         # 例行标识
         # self.baseline_comment = "baseline_CI_api_benchmark_pr_dev"
-        self.baseline_comment = "apibm_CI_parall_test_lzy"
+        self.baseline_comment = baseline_comment
         self.comment = "CI_api_benchmark_pr_{}_ver_{}".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
         self.routine = 0
         self.ci = 1
@@ -334,7 +335,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
 
 if __name__ == "__main__":
-    api_bm = ApiBenchmarkCI(yaml_path=args.yaml, python=args.python)
+    api_bm = ApiBenchmarkCI(yaml_path=args.yaml, python=args.python, baseline_comment=args.baseline_comment)
     if bool(args.baseline_whl_link):
         api_bm._baseline_insert(wheel_link=args.baseline_whl_link)
     # else:
