@@ -1,7 +1,0 @@
-model_item: facebook-llama-13b_seqlen2048_pretrain
-bs_item_list: 32|64|128                  # 使用 | 区分该模型支持的batch_size场景
-fp_item_list: bf16
-run_mode_list: MP2-PP4-vpp5-mbs2-acc16-recompute|MP4-PP2-mbs1-acc32|PP8-vpp5-mbs1-acc32-recompute
-device_num_list: N1C8
-model_item_script_path: test_tipc/dygraph/hybrid_parallelism/llama   # model_item脚本存放的目录; 比如 test_tipc、test/test_tipc/static
-prepare_data_params: None       # 执行prepare.sh时后面带的参数,不需要带则设置为 None
