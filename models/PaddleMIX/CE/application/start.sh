@@ -9,9 +9,7 @@ echo ${work_path}
 
 log_dir=${root_path}/log
 
-# 检查上一级目录中是否存在log目录
 if [ ! -d "$log_dir" ]; then
-    # 如果log目录不存在，则创建它
     mkdir -p "$log_dir"
 fi
 
@@ -28,10 +26,8 @@ echo "*******application grounded_sam begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application grounded_sam run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application grounded_sam run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application grounded_sam end***********"
@@ -42,10 +38,8 @@ echo "*******application automatic_label begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application automatic_label run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application automatic_label run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application automatic_label end***********"
@@ -56,10 +50,8 @@ echo "*******application grounded_sam_inpainting begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application grounded_sam_inpainting run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application grounded_sam_inpainting run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application grounded_sam_inpainting end***********"
@@ -69,10 +61,8 @@ echo "*******application grounded_sam_chatglm begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application grounded_sam_chatglm run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application grounded_sam_chatglm run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application grounded_sam_chatglm end***********"
@@ -82,10 +72,8 @@ echo "*******application text_guided_image_inpainting begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application text_guided_image_inpainting run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application text_guided_image_inpainting run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application text_guided_image_inpainting end***********"
@@ -95,10 +83,8 @@ echo "*******application text_to_image_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application text_to_image_generation run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application text_to_image_generation run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application text_to_image_generation end***********"
@@ -108,10 +94,8 @@ echo "*******application text_guided_image_upscaling begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application text_guided_image_upscaling run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application text_guided_image_upscaling run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application text_guided_image_upscaling end***********"
@@ -121,10 +105,8 @@ echo "*******application text_guided_image_upscaling end***********"
 # tmp_exit_code=${PIPESTATUS[0]}
 # exit_code=$(($exit_code + ${tmp_exit_code}))
 # if [ ${tmp_exit_code} -eq 0 ]; then
-#     # 如果返回状态为0（成功），则追加成功消息到ce_res.log
 #     echo "application dual_text_image_guided_generation run success" >> "${log_dir}/ce_res.log"
 # else
-#     # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
 #     echo "application dual_text_image_guided_generation run fail" >> "${log_dir}/ce_res.log"
 # fi
 # echo "*******application dual_text_image_guided_generation end***********"
@@ -134,10 +116,8 @@ echo "*******application image2image_text_guided_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application image2image_text_guided_generation run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application image2image_text_guided_generation run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application image2image_text_guided_generation end***********"
@@ -147,10 +127,8 @@ echo "*******application text2video_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application text2video_generation run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application text2video_generation run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application text2video_generation end***********"
@@ -160,10 +138,8 @@ echo "*******application audio2caption_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application audio2caption_generation run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application audio2caption_generation run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application audio2caption_generation end***********"
@@ -173,10 +149,8 @@ echo "*******application audio2chat_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application audio2chat_generation run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application audio2chat_generation run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application audio2chat_generation end***********"
@@ -186,10 +160,8 @@ echo "*******application music_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application music_generation run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application music_generation run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application music_generation end***********"
@@ -199,10 +171,8 @@ echo "*******application audio2img begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application audio2img run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application audio2img run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application audio2img end***********"
@@ -212,10 +182,8 @@ echo "*******application audio_text2img begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application audio_text2img run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application audio_text2img run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application audio_text2img end***********"
@@ -225,10 +193,8 @@ echo "*******application auodio_image2image begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "application auodio_image2image run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "application auodio_image2image run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application auodio_image2image end***********"

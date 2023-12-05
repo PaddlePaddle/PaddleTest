@@ -8,9 +8,8 @@ echo ${work_path}
 
 log_dir=${root_path}/log
 
-# 检查上一级目录中是否存在log目录
+
 if [ ! -d "$log_dir" ]; then
-    # 如果log目录不存在，则创建它
     mkdir -p "$log_dir"
 fi
 
@@ -27,10 +26,8 @@ echo "*******text_to_image_laion400m single_train begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m single_train run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m single_train run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m single_train end***********"
@@ -41,10 +38,8 @@ echo "*******text_to_image_laion400m single_infer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m single_infer run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m single_infer run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m single_infer end***********"
@@ -55,10 +50,8 @@ echo "*******text_to_image_laion400m muti_train begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m multi_train run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m multi_train run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m multi_train end***********"
@@ -70,10 +63,8 @@ echo "*******text_to_image_laion400m multi_infer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m multi_infer run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m multi_infer run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m multi_infer end***********"
@@ -85,10 +76,8 @@ echo "*******text_to_image_laion400m single_train_no_trainer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m single_train_no_trainer run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m single_train_no_trainer run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m single_train_no_trainer end***********"
@@ -99,10 +88,8 @@ echo "*******text_to_image_laion400m single infer_no_trainer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m single infer_no_trainer run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m single infer_no_trainer run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m single infer_no_trainer end***********"
@@ -112,10 +99,8 @@ echo "*******text_to_image_laion400m multi_train_no_trainer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m multi_train_no_trainer run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m multi_train_no_trainer run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m multi_train_no_trainer end***********"
@@ -126,10 +111,8 @@ echo "*******text_to_image_laion400m multi infer_no_trainer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m multi infer_no_trainer run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m multi infer_no_trainer run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m multi infer_no_trainer end***********"
@@ -140,10 +123,8 @@ echo "*******text_to_image_laion400m infer_mscoco begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "text_to_image_laion400m infer_mscoco run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "text_to_image_laion400m infer_mscoco run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image_laion400m infer_mscoco end***********"

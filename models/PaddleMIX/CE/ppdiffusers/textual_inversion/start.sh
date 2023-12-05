@@ -8,9 +8,8 @@ echo ${work_path}
 
 log_dir=${root_path}/log
 
-# 检查上一级目录中是否存在log目录
+
 if [ ! -d "$log_dir" ]; then
-    # 如果log目录不存在，则创建它
     mkdir -p "$log_dir"
 fi
 
@@ -27,10 +26,8 @@ echo "*******textual_inversion singe_train begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "textual_inversion singe_train run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "textual_inversion singe_train run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******textual_inversion singe_train end***********"
@@ -41,10 +38,8 @@ echo "******textual_inversion singe infer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "textual_inversion single_infer run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "textual_inversion single_infer run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******textual_inversion singe infer end***********"
@@ -55,10 +50,8 @@ echo "*******textual_inversion muti_train begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "textual_inversion multi_train run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "textual_inversion multi_train run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******textual_inversion multi_train end***********"
@@ -69,10 +62,8 @@ echo "*******textual_inversion multi infer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "textual_inversion multi_infer run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "textual_inversion multi_infer run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******textual_inversion multi infer end***********"

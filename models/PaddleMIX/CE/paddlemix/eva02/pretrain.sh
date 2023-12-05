@@ -100,10 +100,8 @@ TRAINING_PYTHON="python -m paddle.distributed.launch --master ${MASTER} --nnodes
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ce_res.log
     echo "paddlemix eva02 pretrain run success" >> "${log_dir}/ce_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ce_res.log
     echo "paddlemix eva02 pretrain run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix eva02 pretrain end***********"

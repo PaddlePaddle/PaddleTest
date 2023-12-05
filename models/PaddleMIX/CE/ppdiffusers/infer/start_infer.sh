@@ -42,10 +42,8 @@ echo "*******infer text_to_image_generation-alt_diffusion begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_to_image_generation-alt_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_to_image_generation-alt_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_to_image_generation-alt_diffusion end***********"
@@ -56,10 +54,8 @@ echo "*******infer image_to_image_text_guided_generation-alt_diffusion begin****
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer image_to_image_text_guided_generation-alt_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer image_to_image_text_guided_generation-alt_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer image_to_image_text_guided_generation-alt_diffusion end***********"
@@ -70,10 +66,8 @@ echo "*******infer unconditional_audio_generation-audio_diffusion begin*********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer unconditional_audio_generation-audio_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer unconditional_audio_generation-audio_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer unconditional_audio_generation-audio_diffusion end***********"
@@ -85,10 +79,8 @@ echo "*******infer image_to_image_text_guided_generation-controlnet begin*******
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer image_to_image_text_guided_generation-controlnet run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer image_to_image_text_guided_generation-controlnet run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer image_to_image_text_guided_generation-controlnet end***********"
@@ -99,10 +91,8 @@ echo "*******infer unconditional_audio_generation-dance_diffusion begin*********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer unconditional_audio_generation-dance_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer unconditional_audio_generation-dance_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer unconditional_audio_generation-dance_diffusion end***********"
@@ -113,10 +103,8 @@ echo "*******infer unconditional_image_generation-ddpm begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer unconditional_image_generation-ddpm run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer unconditional_image_generation-ddpm run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer unconditional_image_generation-ddpm end***********"
@@ -128,10 +116,8 @@ echo "*******infer unconditional_image_generation-ddim begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer unconditional_image_generation-ddim run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer unconditional_image_generation-ddim run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer unconditional_image_generation-ddim end***********"
@@ -143,10 +129,8 @@ echo "*******infer text_to_image_generation-latent_diffusion begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_to_image_generation-latent_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_to_image_generation-latent_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_to_image_generation-latent_diffusion end***********"
@@ -157,10 +141,8 @@ echo "*******infer super_resolution-latent_diffusion begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer super_resolution-latent_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer super_resolution-latent_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer super_resolution-latent_diffusion end***********"
@@ -171,10 +153,8 @@ echo "*******infer unconditional_image_generation-latent_diffusion_uncond begin*
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer unconditional_image_generation-latent_diffusion_uncond run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer unconditional_image_generation-latent_diffusion_uncond run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer unconditional_image_generation-latent_diffusion_uncond end***********"
@@ -185,10 +165,8 @@ echo "*******infer image_guided_image_inpainting-paint_by_example begin*********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer image_guided_image_inpainting-paint_by_example run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer image_guided_image_inpainting-paint_by_example run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer image_guided_image_inpainting-paint_by_example end***********"
@@ -199,10 +177,8 @@ echo "*******infer unconditional_image_generation-pndm begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer unconditional_image_generation-pndm run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer unconditional_image_generation-pndm run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer unconditional_image_generation-pndm end***********"
@@ -213,10 +189,8 @@ echo "*******infer image_inpainting-repaint begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer image_inpainting-repaint run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer image_inpainting-repaint run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer image_inpainting-repaint end***********"
@@ -227,10 +201,8 @@ echo "*******infer unconditional_image_generation-score_sde_ve begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer unconditional_image_generation-score_sde_ve run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer unconditional_image_generation-score_sde_ve run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer unconditional_image_generation-score_sde_ve end***********"
@@ -241,10 +213,8 @@ echo "*******infer text_guided_generation-semantic_stable_diffusion begin*******
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_guided_generation-semantic_stable_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_guided_generation-semantic_stable_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_guided_generation-semantic_stable_diffusion end***********"
@@ -255,10 +225,8 @@ echo "*******infer text_to_image_generation-stable_diffusion begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_to_image_generation-stable_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_to_image_generation-stable_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_to_image_generation-stable_diffusion end***********"
@@ -269,10 +237,8 @@ echo "*******infer image_to_image_text_guided_generation-stable_diffusion begin*
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer image_to_image_text_guided_generation-stable_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer image_to_image_text_guided_generation-stable_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer image_to_image_text_guided_generation-stable_diffusion end***********"
@@ -283,10 +249,8 @@ echo "*******infer text_guided_image_inpainting-stable_diffusion begin**********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_guided_image_inpainting-stable_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_guided_image_inpainting-stable_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_guided_image_inpainting-stable_diffusion end***********"
@@ -297,10 +261,8 @@ echo "*******infer text_to_image_generation-stable_diffusion_2 begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_to_image_generation-stable_diffusion_2 run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_to_image_generation-stable_diffusion_2 run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_to_image_generation-stable_diffusion_2 end***********"
@@ -311,10 +273,8 @@ echo "*******infer image_to_image_text_guided_generation-stable_diffusion_2 begi
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer image_to_image_text_guided_generation-stable_diffusion_2 run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer image_to_image_text_guided_generation-stable_diffusion_2 run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer image_to_image_text_guided_generation-stable_diffusion_2 end***********"
@@ -325,10 +285,8 @@ echo "*******infer text_guided_image_inpainting-stable_diffusion_2 begin********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_guided_image_inpainting-stable_diffusion_2 run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_guided_image_inpainting-stable_diffusion_2 run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_guided_image_inpainting-stable_diffusion_2 end***********"
@@ -339,10 +297,8 @@ echo "*******infer text_guided_image_upscaling-stable_diffusion_2 begin*********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_guided_image_upscaling-stable_diffusion_2 run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_guided_image_upscaling-stable_diffusion_2 run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_guided_image_upscaling-stable_diffusion_2 end***********"
@@ -354,10 +310,8 @@ echo "*******infer text_to_image_generation-stable_diffusion_safe begin*********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_to_image_generation-stable_diffusion_safe run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_to_image_generation-stable_diffusion_safe run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_to_image_generation-stable_diffusion_safe end***********"
@@ -368,10 +322,8 @@ echo "*******infer unconditional_image_generation-stochastic_karras_ve begin****
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer unconditional_image_generation-stochastic_karras_ve run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer unconditional_image_generation-stochastic_karras_ve run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer unconditional_image_generation-stochastic_karras_ve end***********"
@@ -382,10 +334,8 @@ echo "*******infer text_to_image_generation-unclip begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_to_image_generation-unclip run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_to_image_generation-unclip run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_to_image_generation-unclip end***********"
@@ -396,10 +346,8 @@ echo "*******infer text_to_image_generation-versatile_diffusion begin***********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_to_image_generation-versatile_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_to_image_generation-versatile_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_to_image_generation-versatile_diffusion end***********"
@@ -410,10 +358,8 @@ echo "*******infer image_variation-versatile_diffusion begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer image_variation-versatile_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer image_variation-versatile_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer image_variation-versatile_diffusion end***********"
@@ -424,10 +370,8 @@ echo "*******infer dual_text_and_image_guided_generation-versatile_diffusion beg
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer dual_text_and_image_guided_generation-versatile_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer dual_text_and_image_guided_generation-versatile_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer dual_text_and_image_guided_generation-versatile_diffusion end***********"
@@ -438,10 +382,8 @@ echo "*******infer text_to_image_generation-vq_diffusion begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    # 如果返回状态为0（成功），则追加成功消息到ut_res.log
     echo "infer text_to_image_generation-vq_diffusion run success" >> "${log_dir}/infer_res.log"
 else
-    # 如果返回状态不为0（失败），则追加失败消息到ut_res.log
     echo "infer text_to_image_generation-vq_diffusion run fail" >> "${log_dir}/infer_res_res.log"
 fi
 echo "*******infer text_to_image_generation-vq_diffusion end***********"
