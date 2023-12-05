@@ -80,7 +80,7 @@ class PaddleMIX_Build(Model_Build):
         os.chdir("ppdiffusers")
         os.system("pip install -r requirements.txt")
         os.system("pip install -e .")
-        self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ppdiffusers_infer.tar.gz", destination_folder="/home", dir_name="ppdiffusers_infer_file")
+        self.download_data("https://paddle-qa.bj.bcebos.com/PaddleMIX/ppdiffusers_infer.tar.gz", destination_folder="/home", dir_name="ppdiffusers_infer_file")
         for test_model_path in self.test_model_list:
             test_model_name = test_model_path.split("/")[-1]
             root_path = "/home/ppdiffusers_infer_file"
