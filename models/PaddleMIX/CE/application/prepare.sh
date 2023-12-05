@@ -17,6 +17,8 @@ pip install -e .
 pip install -r paddlemix/appflow/requirements.txt
 python nltk_data_download.py
 
+pip install git+https://github.com/PaddlePaddle/PaddleSpeech.git
+
 wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/zh.wav
 
 unset http_proxy
