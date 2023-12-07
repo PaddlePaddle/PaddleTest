@@ -32,8 +32,15 @@ from runner_base import ApiBenchmarkBASE
 
 import psutil
 
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--core_index", type=int, default=2, help="index of cpu core")
+parser.add_argument("--yaml", type=str, help="input the yaml path")
+parser.add_argument("--python", type=str, default="python3.10", help="input the yaml path")
+parser.add_argument("--baseline_whl_link", type=str, default=None, help="only be used to insert baseline data")
+args = parser.parse_args()
+
 p = psutil.Process()
-p.cpu_affinity([2])
+p.cpu_affinity([args.core_index])
 
 SKIP_DICT = {"Windows": ["fft"], "Darwin": ["fft"], "Linux": []}
 INDEX_DICT = {}
@@ -326,11 +333,6 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--yaml", type=str, help="input the yaml path")
-    parser.add_argument("--python", type=str, default="python3.10", help="input the yaml path")
-    parser.add_argument("--baseline_whl_link", type=str, default=None, help="only be used to insert baseline data")
-    args = parser.parse_args()
     # api_bm = ApiBenchmarkCI(yaml_path="./../yaml/api_benchmark_fp32.yml")
     api_bm = ApiBenchmarkCI(yaml_path=args.yaml, python=args.python)
     if bool(args.baseline_whl_link):
