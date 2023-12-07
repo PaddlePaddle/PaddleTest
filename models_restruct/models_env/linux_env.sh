@@ -259,8 +259,8 @@ export FLAGS_prim_all=${FLAGS_prim_all:-false}
 export FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor:-0}
 export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-0}
 # paddleSOT
-export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
-export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-0}
+export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-true}
+export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-10}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
