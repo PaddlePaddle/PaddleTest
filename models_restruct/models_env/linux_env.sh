@@ -261,7 +261,7 @@ export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-0}
 # paddleSOT
 export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-true}
 export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-10}
-export FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir:-/ssd2/subgraph/clas}
+export FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir:-}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
