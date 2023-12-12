@@ -133,7 +133,7 @@ echo "*******ppdiffusers/deploy/controlnet paddle_tensorrt paddle_tensorrt_sdxl_
 --source_image ./infer_op_raw_fp16/text2img_control.png  \
 --target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sd15_controlnet_infer_op_raw_fp16/text2img_control.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_text2img.log
 python ${cur_path}/annalyse_log_tool.py \
---log_name ${log_dir}/sdxl_test_image_diff_text2img.log
+--file_path ${log_dir}/sdxl_test_image_diff_text2img.log
 tmp_exit_code=$?
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -147,7 +147,7 @@ echo "*******ppdiffusers/deploy/controlnet sdxl_test_image_diff_text2img end****
 (python ../utils/test_image_diff.py \
 --source_image ./infer_op_raw_fp16/img2img_control.png \
 --target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sd15_controlnet_infer_op_raw_fp16/img2img_control.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_img2img.log
-python ${cur_path}/annalyse_log_tool.py --log_name ${log_dir}/sdxl_test_image_diff_img2img.log
+python ${cur_path}/annalyse_log_tool.py --file_path ${log_dir}/sdxl_test_image_diff_img2img.log
 tmp_exit_code=$?
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -160,7 +160,7 @@ echo "*******ppdiffusers/deploy/controlnet sdxl_test_image_diff_img2img end*****
 (python ../utils/test_image_diff.py \
 --source_image ./infer_op_raw_fp16/inpaint_legacy_control.png \
 --target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sd15_controlnet_infer_op_raw_fp16/inpaint_legacy_control.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_inpaint.log
-python ${cur_path}/annalyse_log_tool.py --log_name ${log_dir}/sdxl_test_image_diff_inpaint.log
+python ${cur_path}/annalyse_log_tool.py --file_path ${log_dir}/sdxl_test_image_diff_inpaint.log
 tmp_exit_code=$?
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
