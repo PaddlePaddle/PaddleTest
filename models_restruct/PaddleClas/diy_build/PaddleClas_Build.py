@@ -403,6 +403,19 @@ class PaddleClas_Build(Model_Build):
                 logger.info("repo {} python -m pip install bcolz failed".format(self.reponame))
                 # return 1
 
+            exit_code_Pillow = os.system(
+                "python -m  pip install Pillow==9.5.0 \
+                -i https://mirror.baidu.com/pypi/simple"
+            )
+            if exit_code_Pillow and ("Windows" not in platform.system() and "Darwin" not in platform.system()):
+                exit_code_Pillow = os.system(
+                    "python -m  pip install Pillow==9.5.0 --user \
+                -i https://mirror.baidu.com/pypi/simple"
+                )
+            if exit_code_Pillow:
+                logger.info("repo {} python -m pip install Pillow failed".format(self.reponame))
+                # return 1
+
         if (self.value_in_modellist(value="amp") or self.value_in_modellist(value="dy2st_convergence")) and (
             "Windows" not in platform.system() and "Darwin" not in platform.system()
         ):

@@ -245,6 +245,18 @@ def double_check(res):
         return False
 
 
+def bad_check(res):
+    """
+    获取需要性能较差 的 api list
+    :param res: data_compare函数输出的结果
+    :return:
+    """
+    if performance_grade(res["best_total"]) == "doubt" or performance_grade(res["best_total"]) == "worse":
+        return True
+    else:
+        return False
+
+
 # def double_check_origin(res):
 #     """
 #     获取需要 double check 的 api list

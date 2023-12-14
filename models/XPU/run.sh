@@ -158,7 +158,7 @@ pip install motmetrics
 pip install sklearn==0.0
 pip install pyclipper
 python setup.py install
-export LD_PRELOAD=/opt/py39/lib/python3.9/site-packages/sklearn/__check_build/../../scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
+#export LD_PRELOAD=/opt/py39/lib/python3.9/site-packages/sklearn/__check_build/../../scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
 else
 pip install --upgrade -r requirements.txt
 python setup.py install
@@ -168,6 +168,13 @@ fi
 if [[ ${repo} == "PaddleVideo" ]]; then
 pip install av
 pip install tqdm
+pip install numpy
+pip install pandas
+pip install PyYAML>=5.1
+pip install opencv-python
+pip install decord==0.4.2
+pip install scipy==1.6.3
+pip install scikit-image
 #export LD_PRELOAD=/opt/compiler/gcc-8.2/lib64/libgomp.so.1
 fi
 
@@ -182,7 +189,7 @@ if [[ ${repo} == "PaddleNLP" ]]; then
   #python -m pip install --retries 10  backports.lzma
   #sed -i '27c from backports.lzma import *' /usr/local/lib/python3.9/lzma.py
   #sed -i '28c from backports.lzma import _encode_filter_properties, _decode_filter_properties' /usr/local/lib/python3.9/lzma.py
-  export LD_PRELOAD=/opt/py39/lib/python3.9/site-packages/sklearn/__check_build/../../scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
+  #export LD_PRELOAD=/opt/py39/lib/python3.9/site-packages/sklearn/__check_build/../../scikit_learn.libs/libgomp-d22c30c5.so.1.0.0
 fi
 rm --rf test_tipc/output/*
 
@@ -198,7 +205,8 @@ then
     sed -i 's#https://github.com/LDOUBLEV/AutoLog.git#https://gitee.com/Double_V/AutoLog#g' test_tipc/prepare.sh
     python -m pip install --retries 10 yacs
     python -m pip install --retries 10 seqeval
-    export LD_PRELOAD=/opt/compiler/gcc-8.2/lib64/libgomp.so.1
+    python -m pip install --retries 10 paddleslim
+    # export LD_PRELOAD=/opt/compiler/gcc-8.2/lib64/libgomp.so.1
     wget https://xly-devops.bj.bcebos.com/PaddleTest/PaddleNLP/PaddleNLP-develop.tar.gz
     tar -zxf PaddleNLP-develop.tar.gz
     mv PaddleNLP-develop PaddleNLP
@@ -250,9 +258,8 @@ elif [[ ${repo} == "PaddleNLP" ]]; then
 #grep_models='bigru_crf|ernie_text_cls|bert_base_text_cls|ernie_information_extraction
 grep_models='ernie_information_extraction|bert_base_text_cls|transformer|gpt2|seq2seq|xlnet|stablediffusion'
 elif [[ ${repo} == "PaddleClas" ]]; then
-#grep_models='EfficientNetB4|EfficientNetB6|MobileViT_S|MobileViT_XS|MobileViT_XXS|PVT_V2_B0|PVT_V2_B1|PVT_V2_B2|PVT_V2_B2_Linear|PVT_V2_B3|PVT_V2_B4|PVT_V2_B5|ReXNet_1_0|ReXNet_1_3|ReXNet_1_5|ReXNet_2_0|ReXNet_3_0|SwinTransformer_base_patch4_window12_384|SwinTransformer_base_patch4_window7_224|SwinTransformer_large_patch4_window12_384|SwinTransformer_large_patch4_window7_224|SwinTransformer_small_patch4_window7_224|SwinTransformer_tiny_patch4_window7_224|alt_gvt_base|alt_gvt_large|alt_gvt_small|pcpvt_base|pcpvt_large|pcpvt_small|ViT_base_patch16_224|ViT_base_patch32_384|ViT_large_patch16_224|ViT_small_patch16_224'
-#grep_models='PVT_V2_B1|PVT_V2_B2|PVT_V2_B2_Linear|PVT_V2_B3|PVT_V2_B4|PVT_V2_B5|ReXNet_1_0|ReXNet_1_3|ReXNet_1_5|ReXNet_2_0|ReXNet_3_0|SwinTransformer_base_patch4_window12_384|SwinTransformer_base_patch4_window7_224|SwinTransformer_large_patch4_window12_384|SwinTransformer_large_patch4_window7_224|alt_gvt_base|alt_gvt_large|alt_gvt_small|pcpvt_base|pcpvt_large|pcpvt_small|ViT_small_patch16_224'
-grep_models='ResNet50|MobileNetV3_small_x1_0|InceptionV4|MobileNetV2_x1_5|PPLCNet_x1_0|PPHGNet_tiny|VGG16|VGG19|ResNet101|PeleeNet|DPN68|DLA102|ShuffleNetV2_swish|EfficientNetB0|DenseNet121|HarDNet39_ds|DeiT_tiny_patch16_224|InceptionV3|HRNet_W18_C|GhostNet_x0_5|ESNet_x0_25|MixNet_S|LeViT_128|TNT_small|ViT_base_patch16_224|PVT_V2_B0|CSWinTransformer_tiny_224|GoogLeNet'
+#grep_models='MobileNetV3_small_x1_0_ampo2_ultra|MobileNetV3_small_x1_0_fp32_ultra|PPLCNet_x1_0_ampo2_ultra|PPLCNet_x1_0_fp32_ultra|PeleeNet'
+grep_models='RsNet50|MobileNetV3_small_x1_0|InceptionV4|MobileNetV2_x1_5|PPLCNet_x1_0|PPHGNet_tiny|VGG16|VGG19|ResNet101|PeleeNet|DPN68|DLA102|ShuffleNetV2_swish|EfficientNetB0|DenseNet121|HarDNet39_ds|DeiT_tiny_patch16_224|InceptionV3|HRNet_W18_C|GhostNet_x0_5|ESNet_x0_25|MixNet_S|LeViT_128|TNT_small|ViT_base_patch16_224|PVT_V2_B0|CSWinTransformer_tiny_224|GoogLeNet'
 else
 grep_models=''
 fi
@@ -300,6 +307,10 @@ cat full_chain_list_all
 
 cat full_chain_list_all | while read config_file
 do
+  if [[ ${repo} == "PaddleClas" ]]; then
+    sed -i '16s/$/ -o Global.use_dali=False/'  $config_file
+    sed -i '24s/$/ -o Global.use_dali=False/'  $config_file
+  fi
   start=`date +%s`
   echo "==START=="$config_file
   
@@ -336,5 +347,5 @@ fi
 #echo "THE RESULT ${repo}" >>${ROOT_PATH}/FINAL_RESULT_${repo}
 
 #echo "" >>${ROOT_PATH}/FINAL_RESULT_${repo}
+# python report.py ${repo} chain_base xpu_test@baidu.com suijiaxin@baidu.com,songkai05@baidu.com,liqi27@baidu.com proxy-in.baidu.com >${ROOT_PATH}/FINAL_RESULT_${repo}
 python report.py ${repo} chain_base xpu_test@baidu.com suijiaxin@baidu.com proxy-in.baidu.com >${ROOT_PATH}/FINAL_RESULT_${repo}
-

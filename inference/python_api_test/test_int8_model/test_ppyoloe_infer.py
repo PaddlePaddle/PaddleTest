@@ -22,7 +22,7 @@ import cv2
 import numpy as np
 
 import paddle
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
+from backend.monitor import Monitor
 from ppdet.core.workspace import load_config, create
 from ppdet.metrics import COCOMetric
 
@@ -38,6 +38,7 @@ def argsparser():
     parser.add_argument("--model_path", type=str, help="inference model filepath")
     parser.add_argument("--reader_config", type=str, default=None, help="path of datset and reader config.")
     parser.add_argument("--use_trt", type=bool, default=False, help="Whether use TensorRT or not.")
+    parser.add_argument("--use_l3", type=bool, default=False, help="Whether use L3_cache or not.")
     parser.add_argument("--precision", type=str, default="paddle", help="mode of running(fp32/fp16/int8)")
     parser.add_argument(
         "--deploy_backend",
@@ -100,10 +101,10 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
     warmup = 20
     repeats = 20 if FLAGS.small_data else 1
 
-    use_gpu = True
-    if FLAGS.device == "CPU":
-        use_gpu = False
-    monitor = Monitor(0, use_gpu)
+    use_gpu = True if FLAGS.device == "GPU" else False
+    use_xpu = True if FLAGS.device == "XPU" else False
+
+    monitor = Monitor(0, use_gpu, 0, use_xpu)
 
     if not rerun_flag:
         monitor.start()
@@ -173,6 +174,7 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
         if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
         else 0
     )
+    xpu = monitor_result["XPU"] if "XPU" in monitor_result else {}
 
     print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
     time_avg = predict_time / sample_nums
@@ -201,8 +203,36 @@ def eval(predictor, val_loader, metric, rerun_flag=False):
             "value": gpu_mem,
             "unit": "MB",
         },
+        "xpu": {
+            "device_name": xpu.get("model", None),
+            "dev_id": xpu.get("dev_id", 0),
+            "L3_used": xpu.get("L3_used", 0),
+            "HBM_used": xpu.get("HBM_used", 0),
+            "use_ratio": xpu.get("use_ratio", 0),
+        },
     }
     print("[Benchmark][final result]{}".format(final_res))
+    benchmark_result = {
+        "model_path": FLAGS.model_path,
+        "model_name": FLAGS.model_name,
+        "repo": "Detection",
+        "batch_size": FLAGS.batch_size,
+        "avg_cost": round(time_avg * 1000, 3),
+        "xpu_stat": final_res["xpu"],
+        "device_name": final_res["xpu"]["device_name"],
+        "HBM_used": final_res["xpu"]["HBM_used"],
+        "l3_used": final_res["xpu"]["L3_used"],
+        "jingdu": round(final_res["jingdu"]["value"], 5),
+        "unit": final_res["jingdu"]["unit"],
+        "precision": FLAGS.precision,
+        "l3_cache": FLAGS.use_l3,
+    }
+    print("======benchmark result======")
+    print(benchmark_result)
+    with open("result.txt", "a+") as f:
+        for key, val in benchmark_result.items():
+            f.write(key + " : " + str(val) + "\n")
+        f.write("\n")
     sys.stdout.flush()
 
 
@@ -213,10 +243,13 @@ def main():
     reader_cfg = load_config(FLAGS.reader_config)
     FLAGS.batch_size = reader_cfg["EvalReader"]["batch_size"]
     if FLAGS.deploy_backend == "paddle_inference":
+        from backend.paddle_inference import PaddleInferenceEngine
+
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
             precision=FLAGS.precision,
             use_trt=FLAGS.use_trt,
+            use_l3=FLAGS.use_l3,
             use_mkldnn=FLAGS.use_mkldnn,
             batch_size=FLAGS.batch_size,
             device=FLAGS.device,
@@ -225,6 +258,8 @@ def main():
             cpu_threads=FLAGS.cpu_threads,
         )
     elif FLAGS.deploy_backend == "tensorrt":
+        from backend.tensorrt import TensorRTEngine
+
         model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         predictor = TensorRTEngine(
@@ -243,6 +278,8 @@ def main():
             verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
+        from backend.onnxruntime import ONNXRuntimeEngine
+
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
             precision=FLAGS.precision,

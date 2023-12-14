@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-debug gen
+debug 生成复现代码
 """
 import argparse
 import yaml
@@ -52,7 +52,7 @@ class DebugCaseGen(object):
     else:
         assert False, "dtype is not supported"'''
 
-        self.caculate = """
+        self.caculate = '''
 inputs = {}
 for data, v in all_data.items():
     if isinstance(v, dict):
@@ -61,19 +61,35 @@ for data, v in all_data.items():
         else:
             inputs[data] = paddle.to_tensor(np.array(v.get("value")), dtype=v.get("dtype"))
 
+for data, v in params.items():
+    if isinstance(v, dict):
+        if v.get("random"):
+            params[data] = paddle.to_tensor(_randtool(dtype=v.get("dtype"), low=v.get("range")[0], high=v.get("range")[1], shape=v.get("shape")))
+        else:
+            params[data] = paddle.to_tensor(np.array(v.get("value")), dtype=v.get("dtype"))
+
 def func_def(api, inputs, params):
+    """
+    func
+    """
     eval(api)(**inputs, **params)
 
 def func_class(api, inputs, params):
+    """
+    class
+    """
     obj = eval(api)(**params)
-    obj(**inputs)
+    obj(*inputs)
 
 all_time = []
 loops = 50
 
 for i in range(loops):
     if isclass(eval(api)):
-        forward_time = timeit.timeit(lambda: func_class(api, inputs, params), number=1000)
+        inputs_list = []
+        for k, v in inputs.items():
+            inputs_list.append(v)
+        forward_time = timeit.timeit(lambda: func_class(api, inputs_list, params), number=1000)
         all_time.append(forward_time)
     else:
         forward_time = timeit.timeit(lambda: func_def(api, inputs, params), number=1000)
@@ -82,14 +98,14 @@ for i in range(loops):
 head = int(loops / 5)
 tail = int(loops - loops / 5)
 result = (sum(sorted(all_time)[head:tail]) / (tail - head))
-print(result)"""
+print(result)'''
 
     def py_gen(self):
         """
         生成可执行py脚本
         :return:
         """
-        with open("test_{}.py".format(self.case_name), "w") as f:
+        with open("{}.py".format(self.case_name), "w") as f:
             f.write(
                 "#!/bin/env python3\n"
                 "# -*- coding: utf-8 -*-\n"
@@ -99,14 +115,21 @@ print(result)"""
                 '"""\n'
                 "import timeit\n"
                 "from inspect import isclass\n"
+                "import time\n"
                 "import numpy as np\n"
                 "import paddle\n"
-                "import time\n"
+                "paddle.set_device('cpu')"
                 "\n"
                 "\n".format(self.case_name)
             )
             f.write(self.randtool)
-            f.write("\n" "\n" "api = {}\n" "all_data = {}\n".format('"' + self.paddle_api + '"', self.inputs))
+            # f.write("\n" "\n" "api = {}\n" "all_data = {}\n".format('"' + self.paddle_api + '"', self.inputs))
+
+            f.write("\n" "\n" "api = {}\n".format('"' + self.paddle_api + '"'))
+            if self.inputs is None:
+                f.write("all_data = {}\n")
+            else:
+                f.write("all_data = {}\n".format(self.inputs))
             if self.params is None:
                 f.write("params = {}\n")
             else:

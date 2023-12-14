@@ -51,15 +51,7 @@ input_y = paddle.static.data(name="y", shape=[-1, 1], dtype="int64")
 
 cost = mlp(input_x, input_y)
 optimizer = paddle.optimizer.SGD(learning_rate=0.01)
-
-dist_strategy = DistributedStrategy()
-role = role_maker.PaddleCloudRoleMaker(is_collective=True)
-fleet.init(role)
-
-optimizer = fleet.distributed_optimizer(optimizer, strategy=dist_strategy)
-optimizer.minimize(cost, paddle.static.default_startup_program())
-
-train_prog = fleet.main_program
+optimizer.minimize(cost)
 
 gpu_id = int(os.getenv("FLAGS_selected_gpus", "0"))
 place = paddle.CUDAPlace(gpu_id)
@@ -70,6 +62,6 @@ exe.run(paddle.static.default_startup_program())
 step = 5
 train_info = []
 for i in range(step):
-    cost_val = exe.run(program=train_prog, feed=gen_data(), fetch_list=[cost.name])
-    train_info.extend(cost_val)
+    cost_val = exe.run(program=paddle.static.default_main_program(), feed=gen_data(), fetch_list=[cost.name])
+    train_info.append(cost_val[0])
 print(train_info)

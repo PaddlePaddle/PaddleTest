@@ -1,0 +1,10 @@
+train:
+- cmd: python examples/pinn_forward/elasticity_plate.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 0.026
+      evaluation: '-'
+      threshold: 1

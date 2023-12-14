@@ -9,3 +9,4 @@ lulu^examples^pinn_forward^fractional_Poisson_3d.yaml
 lulu^examples^pinn_forward^Poisson_Lshape.yaml
 lulu^examples^pinn_forward^fractional_Poisson_1d.yaml
 lulu^examples^pinn_forward^Burgers_RAR.yaml
+lulu^examples^pinn_forward^elasticity_plate.yaml
