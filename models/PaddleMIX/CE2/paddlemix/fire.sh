@@ -12,6 +12,12 @@ cd ${work_path}
 
 bash prepare.sh
 
+export http_proxy=${proxy};
+export https_proxy=${proxy};
+python nltk_data_download.py
+unset http_proxy
+unset https_proxy
+
 for subdir in */; do
   if [ -d "$subdir" ]; then
     start_script_path="$subdir/start.sh"

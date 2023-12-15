@@ -3,8 +3,6 @@
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 
-python nltk_data_download.py
-
 cd ${root_path}/PaddleMIX
 pip install -r requirements.txt
 python -m pip install --upgrade pip
