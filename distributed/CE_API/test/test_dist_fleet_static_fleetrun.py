@@ -31,7 +31,7 @@ all_args = [
     "--devices=0,1 --log_dir=mylog --job_id np2 dist_fleet_static.py",
     "--devices=0 --log_dir=mylog --job_id np0 dist_fleet_static.py",
     "--devices=1 --log_dir=mylog --job_id np1 dist_fleet_static.py",
-    "--log_dir=mylog dist_fleet_static.py",
+    "dist_fleet_static.py",
     "--log_dir=mylog dist_fleet_static.py",
     "--devices=0,1 --job_id np2 dist_fleet_static.py",
     "--devices=0 --job_id np0 dist_fleet_static.py",

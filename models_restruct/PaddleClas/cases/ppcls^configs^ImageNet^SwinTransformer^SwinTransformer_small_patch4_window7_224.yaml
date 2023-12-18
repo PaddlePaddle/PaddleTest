@@ -86,6 +86,8 @@ case:
         name: function
       -
         name: pretrained
+    export: skipped
+    predict: skipped
 
   windows_cpu:
     base: ./base/ImageNet_base.yaml

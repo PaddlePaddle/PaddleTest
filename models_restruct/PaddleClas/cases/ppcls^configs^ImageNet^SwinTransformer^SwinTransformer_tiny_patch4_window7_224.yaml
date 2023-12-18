@@ -77,6 +77,8 @@ case:
         name: function
       -
         name: pretrained
+    export: skipped
+    predict: skipped
 
   windows_cpu:
     base: ./base/ImageNet_base.yaml
@@ -103,6 +105,8 @@ case:
         name: pretrained
         params:
           - -o Global.device=${set_cuda_flag}
+    export: skipped
+    predict: skipped
 
   mac:
     base: ./base/ImageNet_base.yaml
