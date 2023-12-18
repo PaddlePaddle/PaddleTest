@@ -7,7 +7,7 @@ cur_path=`pwd`
 echo ${cur_path}
 
 
-work_path=${root_path}/PaddleMIX/ppdiffusers/deploy/controlnet
+work_path=${root_path}/PaddleMIX/ppdiffusers/deploy/sdxl
 echo ${work_path}
 
 log_dir=${root_path}/log

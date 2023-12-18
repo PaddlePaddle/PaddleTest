@@ -22,9 +22,17 @@ exit_code=0
 
 cd ${work_path}
 
-bash dynamic2static.sh
+bash sd15_deploy.sh
 exit_code=$(($exit_code + $?))
 
+work_path2=${root_path}/PaddleMIX/ppdiffusers/deploy/controlnet
+echo ${work_path2}
+
+/bin/cp -rf ./* ${work_path2}/
+cd ${work_path2}
+
+bash sd15_controlnet.sh
+exit_code=$(($exit_code + $?))
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log

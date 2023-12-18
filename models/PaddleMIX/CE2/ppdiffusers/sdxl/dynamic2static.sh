@@ -16,159 +16,96 @@ exit_code=0
 
 export USE_PPXFORMERS=False
 
+# export model
 (python export_model.py \
---pretrained_model_name_or_path runwayml/stable-diffusion-v1-5 \
---controlnet_pretrained_model_name_or_path lllyasviel/sd-controlnet-canny \
---output_path static_model/stable-diffusion-v1-5-canny) 2>&1 | tee ${log_dir}/sdxl_export_model.log
+--pretrained_model_name_or_path stabilityai/stable-diffusion-xl-base-1.0 \
+--output_path static_model/stable-diffusion-xl-base-1.0) 2>&1 | tee ${log_dir}/sdxl_export_model.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet sdxl_export_model success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_export_model success" >> "${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers/deploy/controlnet sdxl_export_model fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_export_model fail" >> "${log_dir}/ce_res.log"
 fi
-echo "*******ppdiffusers/deploy/controlnet sdxl_export_model end***********"
+echo "*******ppdiffusers/deploy/sdxl sdxl_export_model end***********"
 
 
 
 rm -rf infer_op_raw_fp16
-rm -rf infer_op_zero_copy_infer_fp16
 
-# paddle
+# inference
 (python infer.py \
---model_dir static_model/stable-diffusion-v1-5-canny \
---scheduler "preconfig-euler-ancestral" \
---backend paddle --device gpu \
---task_name text2img_control) 2>&1 | tee ${log_dir}/paddle_sdxl_infer_text2img_control.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet paddle sdxl_infer_text2img_control success" >> "${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/controlnet paddle sdxl_infer_text2img_control fail" >> "${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/controlnet paddle sdxl_infer_text2img_control end***********"
-
-(python infer.py \
---model_dir static_model/stable-diffusion-v1-5-canny \
+--model_dir static_model/stable-diffusion-xl-base-1.0 \
 --scheduler "preconfig-euler-ancestral" \
 --backend paddle \
 --device gpu \
---task_name img2img_control) 2>&1 | tee ${log_dir}/sdxl_infer_img2img_control.log
+--task_name all) 2>&1 | tee ${log_dir}/paddle_sdxl_inference.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet sdxl_infer_img2img_control success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl paddle sdxl_inference success" >> "${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers/deploy/controlnet sdxl_infer_img2img_control fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl paddle sdxl_inference fail" >> "${log_dir}/ce_res.log"
 fi
-echo "*******ppdiffusers/deploy/controlnet sdxl_infer_img2img_control end***********"
-
-(python infer.py \
---model_dir static_model/stable-diffusion-v1-5-canny \
---scheduler "preconfig-euler-ancestral" \
---backend paddle \
---device gpu \
---task_name inpaint_legacy_control) 2>&1 | tee ${log_dir}/sdxl_infer_inpaint_legacy_control.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet sdxl_infer_inpaint_legacy_control success" >> "${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/controlnet sdxl_infer_inpaint_legacy_control fail" >> "${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/controlnet sdxl_infer_inpaint_legacy_control end***********"
+echo "*******ppdiffusers/deploy/sdxl paddle sdxl_inference end***********"
 
 # paddle_tensorrt
 (python infer.py \
---model_dir static_model/stable-diffusion-v1-5-canny \
+--model_dir static_model/stable-diffusion-xl-base-1.0 \
 --scheduler "preconfig-euler-ancestral" \
 --backend paddle_tensorrt \
 --device gpu \
---task_name text2img_control) 2>&1 | tee ${log_dir}/paddle_tensorrt_sdxl_infer_inpaint_legacy_control.log
+--task_name all) 2>&1 | tee ${log_dir}/sdxl_inference_paddle_tensorrt.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet paddle_tensorrt sdxl_infer_inpaint_legacy_control success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt success" >> "${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers/deploy/controlnet paddle_tensorrt sdxl_infer_inpaint_legacy_control fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt fail" >> "${log_dir}/ce_res.log"
 fi
-echo "*******ppdiffusers/deploy/controlnet paddle_tensorrt sdxl_infer_inpaint_legacy_control end***********"
-
-
-(python infer.py \
---model_dir static_model/stable-diffusion-v1-5-canny \
---scheduler "preconfig-euler-ancestral" \
---backend paddle_tensorrt \
---device gpu \
---task_name img2img_control) 2>&1 | tee ${log_dir}/paddle_tensorrt_sdxl_infer_img2img_control.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet paddle_tensorrt paddle_tensorrt_sdxl_infer_img2img_control success" >> "${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/controlnet paddle_tensorrt paddle_tensorrt_sdxl_infer_img2img_control fail" >> "${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/controlnet paddle_tensorrt paddle_tensorrt_sdxl_infer_img2img_control end***********"
-
-
-(python infer.py \
---model_dir static_model/stable-diffusion-v1-5-canny \
---scheduler "preconfig-euler-ancestral" \
---backend paddle_tensorrt \
---device gpu \
---task_name inpaint_legacy_control) 2>&1 | tee ${log_dir}/paddle_tensorrt_sdxl_inpaint_legacy_control.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet paddle_tensorrt paddle_tensorrt_sdxl_inpaint_legacy_control success" >> "${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/controlnet paddle_tensorrt paddle_tensorrt_sdxl_inpaint_legacy_control fail" >> "${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/controlnet paddle_tensorrt paddle_tensorrt_sdxl_inpaint_legacy_control end***********"
-
+echo "*******ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt end***********"
 
 
 (python ../utils/test_image_diff.py \
---source_image ./infer_op_raw_fp16/text2img_control.png  \
---target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sd15_controlnet_infer_op_raw_fp16/text2img_control.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_text2img.log
+--source_image ./infer_op_raw_fp16/text2img.png  \
+--target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sdxl_infer_op_raw_fp16/text2img.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_text2img.log
 python ${cur_path}/annalyse_log_tool.py \
 --file_path ${log_dir}/sdxl_test_image_diff_text2img.log
 tmp_exit_code=$?
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet sdxl_test_image_diff_text2img success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img success" >> "${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers/deploy/controlnet sdxl_test_image_diff_text2img fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img fail" >> "${log_dir}/ce_res.log"
 fi
-echo "*******ppdiffusers/deploy/controlnet sdxl_test_image_diff_text2img end***********"
+echo "*******ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img end***********"
 
 
 (python ../utils/test_image_diff.py \
---source_image ./infer_op_raw_fp16/img2img_control.png \
---target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sd15_controlnet_infer_op_raw_fp16/img2img_control.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_img2img.log
+--source_image ./infer_op_raw_fp16/img2img.png \
+--target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sdxl_infer_op_raw_fp16/img2img.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_img2img.log
 python ${cur_path}/annalyse_log_tool.py --file_path ${log_dir}/sdxl_test_image_diff_img2img.log
 tmp_exit_code=$?
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet sdxl_test_image_diff_img2img success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_img2img success" >> "${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers/deploy/controlnet sdxl_test_image_diff_img2img fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_img2img fail" >> "${log_dir}/ce_res.log"
 fi
-echo "*******ppdiffusers/deploy/controlnet sdxl_test_image_diff_img2img end***********"
+echo "*******ppdiffusers/deploy/sdxl sdxl_test_image_diff_img2img end***********"
 
 (python ../utils/test_image_diff.py \
---source_image ./infer_op_raw_fp16/inpaint_legacy_control.png \
---target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sd15_controlnet_infer_op_raw_fp16/inpaint_legacy_control.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_inpaint.log
+--source_image ./infer_op_raw_fp16/inpaint.png \
+--target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sdxl_infer_op_raw_fp16/inpaint.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_inpaint.log
 python ${cur_path}/annalyse_log_tool.py --file_path ${log_dir}/sdxl_test_image_diff_inpaint.log
 tmp_exit_code=$?
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet sdxl_test_image_diff_inpaint success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_inpaint success" >> "${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers/deploy/controlnet sdxl_test_image_diff_inpaint fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_inpaint fail" >> "${log_dir}/ce_res.log"
 fi
-echo "*******ppdiffusers/deploy/controlnet sdxl_test_image_diff_inpaint end***********"
+echo "*******ppdiffusers/deploy/sdxl sdxl_test_image_diff_inpaint end***********"
 
 echo exit_code:${exit_code}
 exit ${exit_code}
