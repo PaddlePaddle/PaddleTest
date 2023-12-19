@@ -34,6 +34,7 @@ echo "*******ppdiffusers/deploy/sdxl sdxl_export_model end***********"
 rm -rf infer_op_raw_fp16
 
 # inference
+export FLAGS_use_cuda_managed_memory=true
 (python infer.py \
 --model_dir static_model/stable-diffusion-xl-base-1.0 \
 --scheduler "preconfig-euler-ancestral" \
@@ -55,7 +56,8 @@ echo "*******ppdiffusers/deploy/sdxl paddle sdxl_inference end***********"
 --scheduler "preconfig-euler-ancestral" \
 --backend paddle_tensorrt \
 --device gpu \
---task_name all) 2>&1 | tee ${log_dir}/sdxl_inference_paddle_tensorrt.log
+--task_name all \
+--infer_op raw) 2>&1 | tee ${log_dir}/sdxl_inference_paddle_tensorrt.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -67,7 +69,7 @@ echo "*******ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt end*********
 
 
 (python ../utils/test_image_diff.py \
---source_image ./infer_op_raw_fp16/text2img.png  \
+--source_image ./infer_op_raw_fp16/text2img.png \
 --target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sdxl_infer_op_raw_fp16/text2img.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_text2img.log
 python ${cur_path}/annalyse_log_tool.py \
 --file_path ${log_dir}/sdxl_test_image_diff_text2img.log
