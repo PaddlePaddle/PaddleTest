@@ -16,5 +16,5 @@ cd ${root_path}
 
 log_dir=${root_path}/log
 echo "paddle version:" >> ${log_dir}/ce_res.log
-echo "mix commit:" >> ${log_dir}/ce_res.log
+echo "paddle commit:" >> ${log_dir}/ce_res.log
 python -c "import paddle;print(paddle.__git_commit__)" >> ${log_dir}/ce_res.log
