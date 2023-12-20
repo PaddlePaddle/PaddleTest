@@ -6,7 +6,7 @@ if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
 fi
 
-echo "mix version:" >> ${log_dir}/ce_ce_res.log
+echo "mix version:" >> ${log_dir}/ce_res.log
 cd ${root_path}/PaddleMIX
 echo "mix branch:" >> ${log_dir}/ce_res.log
 git branch >> ${log_dir}/ce_res.log
