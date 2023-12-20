@@ -1,5 +1,11 @@
 #!/bin/bash
 
+log_dir=${root_path}/log
+
+if [ ! -d "$log_dir" ]; then
+    mkdir -p "$log_dir"
+fi
+
 echo "mix version:" >> ${log_dir}/res.log
 cd ${root_path}/PaddleMIX
 echo "mix branch:" >> ${log_dir}/res.log
