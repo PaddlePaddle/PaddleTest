@@ -71,6 +71,7 @@ class PaddleMIX_Build(Model_Build):
         os.system("pip install -r requirements.txt")
         os.system("pip install -e .")
         os.system("pip install -r paddlemix/appflow/requirements.txt")
+        os.system("pip install git+https://github.com/PaddlePaddle/PaddleSpeech.git")
         self.download_data("https://paddle-qa.bj.bcebos.com/PaddleMIX/application.tar.gz")
         self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/imagenet-val.tar", destination_folder="/home" ,dir_name="data")
         self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/ILSVRC2012_tiny.tar", destination_folder="/home", dir_name="dataset")

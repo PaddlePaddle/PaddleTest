@@ -50,24 +50,6 @@ else
 fi
 echo "*******ppdiffusers/deploy/sdxl paddle sdxl_inference end***********"
 
-# paddle_tensorrt
-(python infer.py \
---model_dir static_model/stable-diffusion-xl-base-1.0 \
---scheduler "preconfig-euler-ancestral" \
---backend paddle_tensorrt \
---device gpu \
---task_name all \
---infer_op raw) 2>&1 | tee ${log_dir}/sdxl_inference_paddle_tensorrt.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt success" >> "${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt fail" >> "${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt end***********"
-
-
 (python ../utils/test_image_diff.py \
 --source_image ./infer_op_raw_fp16/text2img.png \
 --target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sdxl_infer_op_raw_fp16/text2img.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_text2img.log
@@ -108,6 +90,23 @@ else
     echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_inpaint fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******ppdiffusers/deploy/sdxl sdxl_test_image_diff_inpaint end***********"
+
+# paddle_tensorrt
+(python infer.py \
+--model_dir static_model/stable-diffusion-xl-base-1.0 \
+--scheduler "preconfig-euler-ancestral" \
+--backend paddle_tensorrt \
+--device gpu \
+--task_name all \
+--infer_op raw) 2>&1 | tee ${log_dir}/sdxl_inference_paddle_tensorrt.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt success" >> "${log_dir}/ce_res.log"
+else
+    echo "ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt fail" >> "${log_dir}/ce_res.log"
+fi
+echo "*******ppdiffusers/deploy/sdxl sdxl_inference_paddle_tensorrt end***********"
 
 echo exit_code:${exit_code}
 exit ${exit_code}

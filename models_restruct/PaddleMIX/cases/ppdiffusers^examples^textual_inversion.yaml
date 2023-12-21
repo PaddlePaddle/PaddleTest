@@ -4,11 +4,7 @@ case:
       -
         name: prepare
         path: ppdiffusers/examples/textual_inversion/
-        cmd: >-
-          wget https://huggingface.co/sd-dreambooth-library/cat-toy/resolve/main/concept_images/0.jpeg -P ./cat_toy_images/
-          && wget https://huggingface.co/sd-dreambooth-library/cat-toy/resolve/main/concept_images/1.jpeg -P ./cat_toy_images/
-          && wget https://huggingface.co/sd-dreambooth-library/cat-toy/resolve/main/concept_images/2.jpeg -P ./cat_toy_images/
-          && wget https://huggingface.co/sd-dreambooth-library/cat-toy/resolve/main/concept_images/3.jpeg -P ./cat_toy_images/
+        cmd: wget https://paddle-qa.bj.bcebos.com/PaddleMIX/cat_toy_images.tar.gz && tar -zxvf cat_toy_images.tar.gz
       -
         name: single_train
         path: ppdiffusers/examples/textual_inversion/
