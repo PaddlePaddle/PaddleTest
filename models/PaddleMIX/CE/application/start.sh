@@ -133,6 +133,8 @@ else
 fi
 echo "*******application text2video_generation end***********"
 
+export http_proxy=${proxy}
+export https_proxy=${proxy}
 echo "*******application audio2caption_generation begin***********"
 (python audio2caption_generation.py) 2>&1 | tee ${log_dir}/audio2caption_generation.log
 tmp_exit_code=${PIPESTATUS[0]}
@@ -143,6 +145,8 @@ else
     echo "application audio2caption_generation run fail" >> "${log_dir}/ce_res.log"
 fi
 echo "*******application audio2caption_generation end***********"
+unset http_proxy
+unset https_proxy
 
 echo "*******application audio2chat_generation begin***********"
 (python audio2chat_generation.py) 2>&1 | tee ${log_dir}/audio2chat_generation.log
