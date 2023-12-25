@@ -16,8 +16,8 @@ export CUDA_VISIBLE_DEVICES=0
 export no_proxy=su.bcebos.com,hf-mirror.com,baidu.com,127.0.0.1,0.0.0.0,localhost,bj.bcebos.com,pypi.tuna.tsinghua.edu.cn,cdn-lfs.huggingface.co
 
 # 设置已经缓存好的部分文件。
-export PPNLP_HOME=/home/weight/ppdiffusers_cache/ppnlp_home
-export HUGGINGFACE_HUB_CACHE=/home/weight/ppdiffusers_cache/huggingface_home
+export PPNLP_HOME=/home/weight/ppnlp_home
+export HUGGINGFACE_HUB_CACHE=/home/weight/huggingface_home
 
 exit_code=0
 
