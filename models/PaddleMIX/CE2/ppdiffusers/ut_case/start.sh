@@ -13,15 +13,10 @@ if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
 fi
 
-
-cd ${work_path}
-
-
-/bin/cp -rf ./* ${work_path}
-
-cd ${work_path}
-
+/bin/cp -rf ./* ${work_path}/
 exit_code=0
+
+cd ${work_path}
 
 bash fast_case_test.sh
 exit_code=$(($exit_code + $?))
