@@ -57,6 +57,7 @@ else
 fi
 echo "*******ppdiffusers slow_case_test tests/others end***********"
 
+pip install note-seq==0.0.5
 echo "*******ppdiffusers slow_case_test tests/pipelines begin***********"
 (python -m pytest -v tests/pipelines -n 1 -s) 2>&1 | tee ${log_dir}/slow_case_test_pipelines.log
 tmp_exit_code=${PIPESTATUS[0]}

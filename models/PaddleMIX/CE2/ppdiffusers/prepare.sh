@@ -9,7 +9,7 @@ python -m pip install --upgrade pip
 pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
 pip install ligo-segments
-
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 unset http_proxy
 unset https_proxy
 
