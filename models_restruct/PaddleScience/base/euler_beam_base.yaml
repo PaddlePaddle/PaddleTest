@@ -13,7 +13,7 @@ train:
     name: dy2st
     cmd: python examples/euler_beam/euler_beam.py
     params:
-      - --to_static
+      - to_static=True
       - TRAIN.epochs=10000
     result:
       loss:
