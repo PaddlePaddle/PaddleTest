@@ -24,7 +24,7 @@ exit_code=0
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 echo "*******ppdiffusers fast_case_test begin***********"
-(python -m pytest -v tests -n 8 -s) 2>&1 | tee ${log_dir}/fast_case_test.log
+(python -m pytest -v tests -n 2 -s) 2>&1 | tee ${log_dir}/fast_case_test.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then

@@ -10,6 +10,7 @@ pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
 pip install ligo-segments
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip install pytest-xdist
 unset http_proxy
 unset https_proxy
 
