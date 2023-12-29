@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
 
 work_path=${root_path}/PaddleMIX/ppdiffusers/deploy/scripts
@@ -14,7 +14,6 @@ log_dir=${root_path}/log
 if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
 fi
-
 
 cd ${work_path2}
 export http_proxy=${proxy}
@@ -44,9 +43,9 @@ echo "*******ppdiffusers deploy test_controlnet_infer_dygraph begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers deploy test_controlnet_infer_dygraph run success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers deploy test_controlnet_infer_dygraph run success" >>"${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers deploy test_controlnet_infer_dygraph run fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers deploy test_controlnet_infer_dygraph run fail" >>"${log_dir}/ce_res.log"
 fi
 python ${cur_path}/analyse_log.py --log_name ${log_dir}/test_controlnet_infer_dygraph.log
 echo "*******ppdiffusers deploy test_controlnet_infer_dygraph end***********"
@@ -58,9 +57,9 @@ echo "*******ppdiffusers deploy test_infer_dygraph begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers deploy test_infer_dygraph run success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers deploy test_infer_dygraph run success" >>"${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers deploy test_infer_dygraph run fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers deploy test_infer_dygraph run fail" >>"${log_dir}/ce_res.log"
 fi
 python ${cur_path}/analyse_log.py --log_name ${log_dir}/test_infer_dygraph.log
 echo "*******ppdiffusers deploy test_infer_dygraph  end***********"
@@ -72,22 +71,21 @@ echo "*******ppdiffusers deploy test_controlnet_infer_fd begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers deploy test_controlnet_infer_fd run success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers deploy test_controlnet_infer_fd run success" >>"${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers deploy test_controlnet_infer_fd run fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers deploy test_controlnet_infer_fd run fail" >>"${log_dir}/ce_res.log"
 fi
 python ${cur_path}/analyse_log.py --log_name ${log_dir}/test_controlnet_infer_fd.log
 echo "*******ppdiffusers deploy test_controlnet_infer_fd end***********"
-
 
 echo "*******ppdiffusers deploy test_infer_fd begin***********"
 (bash test_infer_fd.sh) 2>&1 | tee ${log_dir}/test_infer_fd.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers deploy test_infer_fd run success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers deploy test_infer_fd run success" >>"${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers deploy test_infer_fd run fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers deploy test_infer_fd run fail" >>"${log_dir}/ce_res.log"
 fi
 python ${cur_path}/analyse_log.py --log_name ${log_dir}/test_infer_fd.log
 echo "*******ppdiffusers deploy test_infer_fd end***********"

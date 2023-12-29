@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 export HF_ENDPOINT=https://hf-mirror.com
 
 export RUN_SLOW=False
@@ -21,21 +20,20 @@ export HUGGINGFACE_HUB_CACHE=/home/weight/huggingface_home
 
 exit_code=0
 
-export http_proxy=${proxy};
-export https_proxy=${proxy};
+export http_proxy=${proxy}
+export https_proxy=${proxy}
 echo "*******ppdiffusers fast_case_test begin***********"
 (python -m pytest -v tests -n 2 -s) 2>&1 | tee ${log_dir}/fast_case_test.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers fast_case_test success" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers fast_case_test success" >>"${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers fast_case_test fail" >> "${log_dir}/ce_res.log"
+    echo "ppdiffusers fast_case_test fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******ppdiffusers fast_case_test end***********"
 unset http_proxy
 unset https_proxy
-
 
 echo exit_code:${exit_code}
 exit ${exit_code}

@@ -12,13 +12,13 @@ echo "*******paddlemix visualglm predict begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix visualglm predict run success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix visualglm predict run success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix visualglm predict run fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix visualglm predict run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix visualglm predict end***********"
 
 # 检查命令是否成功执行
 if [ ${exit_code} -ne 0 ]; then
-  exit 1
+    exit 1
 fi

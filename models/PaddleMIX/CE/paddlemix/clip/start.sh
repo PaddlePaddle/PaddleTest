@@ -1,8 +1,7 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
-
 
 work_path=${root_path}/PaddleMIX/paddlemix/examples/clip/
 echo ${work_path}

@@ -4,16 +4,15 @@ log_dir=${root_path}/log
 
 exit_code=0
 
-work_path=`pwd`
+work_path=$(pwd)
 echo ${work_path}
-
 
 cd ${work_path}
 
 bash prepare.sh
 
-export http_proxy=${proxy};
-export https_proxy=${proxy};
+export http_proxy=${proxy}
+export https_proxy=${proxy}
 python nltk_data_download.py
 unset http_proxy
 unset https_proxy

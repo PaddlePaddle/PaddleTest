@@ -3,9 +3,8 @@
 export PPNLP_HOME=/home/cache_weight
 export PPMIX_HOME=/home/cache_weight
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
-
 
 work_path=${root_path}/PaddleMIX/ppdiffusers/deploy/controlnet
 echo ${work_path}

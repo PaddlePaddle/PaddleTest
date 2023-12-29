@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
 
 exit_code=0
@@ -21,7 +21,6 @@ exit_code=$(($exit_code + $?))
 
 bash sam_deploy.sh
 exit_code=$(($exit_code + $?))
-
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log

@@ -4,9 +4,8 @@ log_dir=${root_path}/log
 
 exit_code=0
 
-work_path=`pwd`
+work_path=$(pwd)
 echo ${work_path}
-
 
 rm -rf /root/.paddlemix/models/paddlemix/EVA/
 rm -rf /root/.paddlenlp/models/paddlemix/EVA
@@ -34,14 +33,13 @@ pip install -e .
 unset http_proxy
 unset https_proxy
 
-
 cd ${work_path}
 
 # 遍历当前目录下的子目录
 for subdir in */; do
   if [ -d "$subdir" ]; then
     start_script_path="$subdir/start.sh"
-    
+
     # 检查start.sh文件是否存在
     if [ -f "$start_script_path" ]; then
       # 执行start.sh文件，并将退出码存储在变量中
@@ -52,7 +50,6 @@ for subdir in */; do
     fi
   fi
 done
-
 
 echo "exit code: $exit_code"
 

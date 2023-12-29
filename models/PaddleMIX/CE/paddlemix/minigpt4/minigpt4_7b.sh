@@ -26,13 +26,13 @@ rm -rf minigpt4_7b.tar.gz
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix minigpt4_7b predict run success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix minigpt4_7b predict run success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix minigpt4_7b predict run fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix minigpt4_7b predict run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix minigpt4_7b predict end***********"
 
 # 检查命令是否成功执行
 if [ ${exit_code} -ne 0 ]; then
-  exit 1
+    exit 1
 fi

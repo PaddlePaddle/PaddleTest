@@ -35,7 +35,8 @@ class PaddleMIX_Build(Model_Build):
         self.dataset_org = args.dataset_org
         self.dataset_target = args.dataset_target
 
-        self.REPO_PATH = os.path.join(os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
+        self.REPO_PATH = os.path.join(
+            os.getcwd(), args.reponame)  # 所有和yaml相关的变量与此拼接
         self.test_root_path = os.getcwd()
 
         self.reponame = args.reponame
@@ -54,12 +55,14 @@ class PaddleMIX_Build(Model_Build):
             for file_name in self.models_file.split(","):
                 for line in open(file_name):
                     if ".yaml" or ".yml" in line:
-                        self.test_model_list.append(line.strip().replace("^", "/"))
+                        self.test_model_list.append(
+                            line.strip().replace("^", "/"))
         else:
             for file_name in os.listdir("cases"):
                 if ".yaml" or ".yml" in file_name:
-                    self.test_model_list.append(file_name.strip().replace("^", "/"))
-    
+                    self.test_model_list.append(
+                        file_name.strip().replace("^", "/"))
+
     def build_paddlemix(self):
         """
         安装依赖包
@@ -71,22 +74,29 @@ class PaddleMIX_Build(Model_Build):
         os.system("pip install -r requirements.txt")
         os.system("pip install -e .")
         os.system("pip install -r paddlemix/appflow/requirements.txt")
-        os.system("pip install git+https://github.com/PaddlePaddle/PaddleSpeech.git")
-        self.download_data("https://paddle-qa.bj.bcebos.com/PaddleMIX/application.tar.gz")
-        self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/imagenet-val.tar", destination_folder="/home" ,dir_name="data")
-        self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/ILSVRC2012_tiny.tar", destination_folder="/home", dir_name="dataset")
+        os.system(
+            "pip install git+https://github.com/PaddlePaddle/PaddleSpeech.git")
+        self.download_data(
+            "https://paddle-qa.bj.bcebos.com/PaddleMIX/application.tar.gz")
+        self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/imagenet-val.tar",
+                           destination_folder="/home", dir_name="data")
+        self.download_data("https://bj.bcebos.com/v1/paddlenlp/datasets/paddlemix/ILSVRC2012/ILSVRC2012_tiny.tar",
+                           destination_folder="/home", dir_name="dataset")
         print("install ppdiffusers")
         import nltk
-        nltk.download(["punkt", "averaged_perceptron_tagger", "wordnet", "cmudict"])
+        nltk.download(
+            ["punkt", "averaged_perceptron_tagger", "wordnet", "cmudict"])
         os.chdir("ppdiffusers")
         os.system("pip install -r requirements.txt")
         os.system("pip install -e .")
-        self.download_data("https://paddle-qa.bj.bcebos.com/PaddleMIX/ppdiffusers_infer.tar.gz", destination_folder="/home", dir_name="ppdiffusers_infer_file")
+        self.download_data("https://paddle-qa.bj.bcebos.com/PaddleMIX/ppdiffusers_infer.tar.gz",
+                           destination_folder="/home", dir_name="ppdiffusers_infer_file")
         for test_model_path in self.test_model_list:
             test_model_name = test_model_path.split("/")[-1]
             root_path = "/home/ppdiffusers_infer_file"
             target_path = os.path.join(path_now, "PaddleMIX", test_model_name)
-            self.copy_files_with_prefix(root_path, target_path, test_model_name)
+            self.copy_files_with_prefix(
+                root_path, target_path, test_model_name)
         os.chdir(path_now)
         return 0
 
@@ -169,12 +179,13 @@ if __name__ == "__main__":
             最好尽可能减少输入给一些默认参数就能跑的示例!
         """
         parser = argparse.ArgumentParser("Tool for running CE task")
-        parser.add_argument("--models_file", help="模型列表文件", type=str, default=None)
-        parser.add_argument("--reponame", help="输入repo", type=str, default=None)
+        parser.add_argument("--models_file", help="模型列表文件",
+                            type=str, default=None)
+        parser.add_argument("--reponame", help="输入repo",
+                            type=str, default=None)
         args = parser.parse_args()
         return args
 
     args = parse_args()
     model = PaddleMIX_Build(args)
     model.build_paddlemix()
-        

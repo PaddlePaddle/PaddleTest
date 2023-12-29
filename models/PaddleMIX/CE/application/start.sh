@@ -1,8 +1,7 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
-
 
 work_path=${root_path}/PaddleMIX/
 echo ${work_path}
@@ -26,9 +25,9 @@ echo "*******application vision_language_chat begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application vision_language_chat run success" >> "${log_dir}/ce_res.log"
+    echo "application vision_language_chat run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application vision_language_chat run fail" >> "${log_dir}/ce_res.log"
+    echo "application vision_language_chat run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application vision_language_chat end***********"
 
@@ -37,33 +36,31 @@ echo "*******application grounded_sam begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application grounded_sam run success" >> "${log_dir}/ce_res.log"
+    echo "application grounded_sam run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application grounded_sam run fail" >> "${log_dir}/ce_res.log"
+    echo "application grounded_sam run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application grounded_sam end***********"
-
 
 echo "*******application automatic_label begin***********"
 (python automatic_label.py) 2>&1 | tee ${log_dir}/automatic_label.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application automatic_label run success" >> "${log_dir}/ce_res.log"
+    echo "application automatic_label run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application automatic_label run fail" >> "${log_dir}/ce_res.log"
+    echo "application automatic_label run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application automatic_label end***********"
-
 
 echo "*******application grounded_sam_inpainting begin***********"
 (python grounded_sam_inpainting.py) 2>&1 | tee ${log_dir}/grounded_sam_inpainting.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application grounded_sam_inpainting run success" >> "${log_dir}/ce_res.log"
+    echo "application grounded_sam_inpainting run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application grounded_sam_inpainting run fail" >> "${log_dir}/ce_res.log"
+    echo "application grounded_sam_inpainting run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application grounded_sam_inpainting end***********"
 
@@ -72,9 +69,9 @@ echo "*******application grounded_sam_chatglm begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application grounded_sam_chatglm run success" >> "${log_dir}/ce_res.log"
+    echo "application grounded_sam_chatglm run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application grounded_sam_chatglm run fail" >> "${log_dir}/ce_res.log"
+    echo "application grounded_sam_chatglm run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application grounded_sam_chatglm end***********"
 
@@ -83,9 +80,9 @@ echo "*******application text_guided_image_inpainting begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application text_guided_image_inpainting run success" >> "${log_dir}/ce_res.log"
+    echo "application text_guided_image_inpainting run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application text_guided_image_inpainting run fail" >> "${log_dir}/ce_res.log"
+    echo "application text_guided_image_inpainting run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application text_guided_image_inpainting end***********"
 
@@ -94,9 +91,9 @@ echo "*******application text_to_image_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application text_to_image_generation run success" >> "${log_dir}/ce_res.log"
+    echo "application text_to_image_generation run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application text_to_image_generation run fail" >> "${log_dir}/ce_res.log"
+    echo "application text_to_image_generation run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application text_to_image_generation end***********"
 
@@ -105,9 +102,9 @@ echo "*******application text_guided_image_upscaling begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application text_guided_image_upscaling run success" >> "${log_dir}/ce_res.log"
+    echo "application text_guided_image_upscaling run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application text_guided_image_upscaling run fail" >> "${log_dir}/ce_res.log"
+    echo "application text_guided_image_upscaling run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application text_guided_image_upscaling end***********"
 
@@ -127,9 +124,9 @@ echo "*******application image2image_text_guided_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application image2image_text_guided_generation run success" >> "${log_dir}/ce_res.log"
+    echo "application image2image_text_guided_generation run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application image2image_text_guided_generation run fail" >> "${log_dir}/ce_res.log"
+    echo "application image2image_text_guided_generation run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application image2image_text_guided_generation end***********"
 
@@ -138,9 +135,9 @@ echo "*******application text2video_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application text2video_generation run success" >> "${log_dir}/ce_res.log"
+    echo "application text2video_generation run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application text2video_generation run fail" >> "${log_dir}/ce_res.log"
+    echo "application text2video_generation run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application text2video_generation end***********"
 
@@ -151,9 +148,9 @@ echo "*******application audio2caption_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application audio2caption_generation run success" >> "${log_dir}/ce_res.log"
+    echo "application audio2caption_generation run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application audio2caption_generation run fail" >> "${log_dir}/ce_res.log"
+    echo "application audio2caption_generation run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application audio2caption_generation end***********"
 unset http_proxy
@@ -164,9 +161,9 @@ echo "*******application audio2chat_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application audio2chat_generation run success" >> "${log_dir}/ce_res.log"
+    echo "application audio2chat_generation run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application audio2chat_generation run fail" >> "${log_dir}/ce_res.log"
+    echo "application audio2chat_generation run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application audio2chat_generation end***********"
 
@@ -175,9 +172,9 @@ echo "*******application music_generation begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application music_generation run success" >> "${log_dir}/ce_res.log"
+    echo "application music_generation run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application music_generation run fail" >> "${log_dir}/ce_res.log"
+    echo "application music_generation run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application music_generation end***********"
 
@@ -186,9 +183,9 @@ echo "*******application audio2img begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application audio2img run success" >> "${log_dir}/ce_res.log"
+    echo "application audio2img run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application audio2img run fail" >> "${log_dir}/ce_res.log"
+    echo "application audio2img run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application audio2img end***********"
 
@@ -197,9 +194,9 @@ echo "*******application audio_text2img begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application audio_text2img run success" >> "${log_dir}/ce_res.log"
+    echo "application audio_text2img run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application audio_text2img run fail" >> "${log_dir}/ce_res.log"
+    echo "application audio_text2img run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application audio_text2img end***********"
 
@@ -208,9 +205,9 @@ echo "*******application auodio_image2image begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application auodio_image2image run success" >> "${log_dir}/ce_res.log"
+    echo "application auodio_image2image run success" >>"${log_dir}/ce_res.log"
 else
-    echo "application auodio_image2image run fail" >> "${log_dir}/ce_res.log"
+    echo "application auodio_image2image run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application auodio_image2image end***********"
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
 
 work_path=${root_path}/PaddleMIX/ppdiffusers/examples/stable_diffusion
@@ -8,11 +8,9 @@ echo ${work_path}
 
 log_dir=${root_path}/log
 
-
 if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
 fi
-
 
 /bin/cp -rf ./* ${work_path}
 
@@ -27,9 +25,9 @@ echo "*******stable_diffusion singe_train begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "stable_diffusion_singe_train run success" >> "${log_dir}/ce_res.log"
+    echo "stable_diffusion_singe_train run success" >>"${log_dir}/ce_res.log"
 else
-    echo "stable_diffusion_singe_train run fail" >> "${log_dir}/ce_res.log"
+    echo "stable_diffusion_singe_train run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******stable_diffusion singe_train end***********"
 
@@ -40,9 +38,9 @@ rm -rf astronaut_rides_horse.png
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "stable_diffusion_single_infer run success" >> "${log_dir}/ce_res.log"
+    echo "stable_diffusion_single_infer run success" >>"${log_dir}/ce_res.log"
 else
-    echo "stable_diffusion_single_infer run fail" >> "${log_dir}/ce_res.log"
+    echo "stable_diffusion_single_infer run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******stable_diffusion singe infer end***********"
 
@@ -52,9 +50,9 @@ echo "*******stable_diffusion muti_train begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "stable_diffusion_muti_train run success" >> "${log_dir}/ce_res.log"
+    echo "stable_diffusion_muti_train run success" >>"${log_dir}/ce_res.log"
 else
-    echo "stable_diffusion_muti_train run fail" >> "${log_dir}/ce_res.log"
+    echo "stable_diffusion_muti_train run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******stable_diffusion muti_train end***********"
 
@@ -65,9 +63,9 @@ rm -rf astronaut_rides_horse.png
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "stable_diffusion_multi_infer run success" >> "${log_dir}/ce_res.log"
+    echo "stable_diffusion_multi_infer run success" >>"${log_dir}/ce_res.log"
 else
-    echo "stable_diffusion_multi_infer run fail" >> "${log_dir}/ce_res.log"
+    echo "stable_diffusion_multi_infer run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******stable_diffusion multi infer end***********"
 

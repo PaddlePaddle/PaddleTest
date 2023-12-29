@@ -4,9 +4,8 @@ log_dir=${root_path}/log
 
 exit_code=0
 
-work_path=`pwd`
+work_path=$(pwd)
 echo ${work_path}
-
 
 cd ${work_path}
 

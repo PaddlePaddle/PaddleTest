@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
 
 work_path=${root_path}/PaddleMIX/ppdiffusers/examples/textual_inversion
@@ -8,11 +8,9 @@ echo ${work_path}
 
 log_dir=${root_path}/log
 
-
 if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
 fi
-
 
 /bin/cp -rf ./* ${work_path}
 
@@ -26,9 +24,9 @@ echo "*******textual_inversion singe_train begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "textual_inversion singe_train run success" >> "${log_dir}/ce_res.log"
+    echo "textual_inversion singe_train run success" >>"${log_dir}/ce_res.log"
 else
-    echo "textual_inversion singe_train run fail" >> "${log_dir}/ce_res.log"
+    echo "textual_inversion singe_train run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******textual_inversion singe_train end***********"
 
@@ -38,9 +36,9 @@ echo "******textual_inversion singe infer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "textual_inversion single_infer run success" >> "${log_dir}/ce_res.log"
+    echo "textual_inversion single_infer run success" >>"${log_dir}/ce_res.log"
 else
-    echo "textual_inversion single_infer run fail" >> "${log_dir}/ce_res.log"
+    echo "textual_inversion single_infer run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******textual_inversion singe infer end***********"
 
@@ -50,9 +48,9 @@ echo "*******textual_inversion muti_train begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "textual_inversion multi_train run success" >> "${log_dir}/ce_res.log"
+    echo "textual_inversion multi_train run success" >>"${log_dir}/ce_res.log"
 else
-    echo "textual_inversion multi_train run fail" >> "${log_dir}/ce_res.log"
+    echo "textual_inversion multi_train run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******textual_inversion multi_train end***********"
 
@@ -62,13 +60,11 @@ echo "*******textual_inversion multi infer begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "textual_inversion multi_infer run success" >> "${log_dir}/ce_res.log"
+    echo "textual_inversion multi_infer run success" >>"${log_dir}/ce_res.log"
 else
-    echo "textual_inversion multi_infer run fail" >> "${log_dir}/ce_res.log"
+    echo "textual_inversion multi_infer run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******textual_inversion multi infer end***********"
-
-
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log

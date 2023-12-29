@@ -12,13 +12,13 @@ IN_1K_DIR=${root_path}/data/imagenet-val/
     --dataloader_num_workers=2 \
     --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 1 \
-    --model ${MODEL_NAME}  \
+    --model ${MODEL_NAME} \
     --warmup_steps 100 \
     --learning_rate 5e-4 \
     --weight_decay 0.05 \
-    --adam_beta1 0.9  \
-    --adam_beta2 0.999  \
-    --adam_epsilon 1e-8  \
+    --adam_beta1 0.9 \
+    --adam_beta2 0.999 \
+    --adam_epsilon 1e-8 \
     --max_grad_norm 5.0 \
     --num_train_epochs 1 \
     --tensor_parallel_degree 1 \
@@ -37,13 +37,13 @@ IN_1K_DIR=${root_path}/data/imagenet-val/
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix clip train run success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix clip train run success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix clip train run fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix clip train run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix clip train end***********"
 
 # 检查命令是否成功执行
 if [ ${exit_code} -ne 0 ]; then
-  exit 1
+    exit 1
 fi

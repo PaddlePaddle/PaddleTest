@@ -1,8 +1,7 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
-
 
 work_path=${root_path}/PaddleMIX/ppdiffusers/examples/inference/
 echo ${work_path}
@@ -15,7 +14,6 @@ fi
 
 /bin/cp -rf ./* ${work_path}/
 exit_code=0
-
 
 cd ${work_path}
 

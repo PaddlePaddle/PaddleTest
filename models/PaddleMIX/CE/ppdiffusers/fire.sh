@@ -4,11 +4,10 @@ exit_code=0
 
 log_dir=${root_path}/log
 
-work_path=`pwd`
+work_path=$(pwd)
 echo ${work_path}
 
 bash prepare.sh
-
 
 cd ${work_path}
 
@@ -22,7 +21,7 @@ for subdir in */; do
     fi
 
     start_script_path="$subdir/start.sh"
-    
+
     # 检查start.sh文件是否存在
     if [ -f "$start_script_path" ]; then
       # 执行start.sh文件，并将退出码存储在变量中
@@ -33,7 +32,6 @@ for subdir in */; do
     fi
   fi
 done
-
 
 echo "exit code: $exit_code"
 

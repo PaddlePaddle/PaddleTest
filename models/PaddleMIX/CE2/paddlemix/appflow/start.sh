@@ -3,7 +3,7 @@
 export PPNLP_HOME=/home/cache_weight
 export PPMIX_HOME=/home/cache_weight
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
 
 work_path=${root_path}/PaddleMIX/tests/appflow
@@ -11,11 +11,9 @@ echo ${work_path}
 
 log_dir=${root_path}/log
 
-
 if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
 fi
-
 
 /bin/cp -rf ./* ${work_path}
 
@@ -28,9 +26,9 @@ echo "*******paddlemix appflow test_cviw begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_cviw success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_cviw success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_cviw fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_cviw fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_cviw end***********"
 
@@ -39,9 +37,9 @@ echo "*******paddlemix appflow test_inpainting begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_inpainting success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_inpainting success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_inpainting fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_inpainting fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_inpainting end***********"
 
@@ -51,9 +49,9 @@ echo "*******export RUN_SLOW_TEST=True paddlemix appflow test_cviw begin********
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "export RUN_SLOW_TEST=True paddlemix appflow test_cviw success" >> "${log_dir}/ce_res.log"
+    echo "export RUN_SLOW_TEST=True paddlemix appflow test_cviw success" >>"${log_dir}/ce_res.log"
 else
-    echo "export RUN_SLOW_TEST=True paddlemix appflow test_cviw fail" >> "${log_dir}/ce_res.log"
+    echo "export RUN_SLOW_TEST=True paddlemix appflow test_cviw fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******export RUN_SLOW_TEST=True paddlemix appflow test_cviw end***********"
 unset RUN_SLOW_TEST
@@ -63,21 +61,20 @@ echo "*******paddlemix appflow test_DualTextAndImageGuidedGeneration begin******
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_DualTextAndImageGuidedGeneration success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_DualTextAndImageGuidedGeneration success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_DualTextAndImageGuidedGeneration fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_DualTextAndImageGuidedGeneration fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_DualTextAndImageGuidedGeneration end***********"
-
 
 echo "*******paddlemix appflow test_Image2ImageTextGuidedGeneration begin***********"
 (python test_Image2ImageTextGuidedGeneration.py) 2>&1 | tee ${log_dir}/test_Image2ImageTextGuidedGeneration.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_Image2ImageTextGuidedGeneration success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_Image2ImageTextGuidedGeneration success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_Image2ImageTextGuidedGeneration fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_Image2ImageTextGuidedGeneration fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_Image2ImageTextGuidedGeneration end***********"
 
@@ -97,9 +94,9 @@ echo "*******paddlemix appflow test_TextGuidedImageInpainting begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_TextGuidedImageInpainting success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_TextGuidedImageInpainting success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_TextGuidedImageInpainting fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_TextGuidedImageInpainting fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_TextGuidedImageInpainting end***********"
 
@@ -108,9 +105,9 @@ echo "*******paddlemix appflow test_TextGuidedImageUpscaling begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_TextGuidedImageUpscaling success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_TextGuidedImageUpscaling success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_TextGuidedImageUpscaling fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_TextGuidedImageUpscaling fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_TextGuidedImageUpscaling end***********"
 
@@ -119,9 +116,9 @@ echo "*******paddlemix appflow test_audio-to-Caption begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_audio-to-Caption success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_audio-to-Caption success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_audio-to-Caption fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_audio-to-Caption fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_audio-to-Caption end***********"
 
@@ -130,9 +127,9 @@ echo "*******paddlemix appflow test_audio_chat begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_audio_chat success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_audio_chat success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_audio_chat fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_audio_chat fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_audio_chat end***********"
 
@@ -141,9 +138,9 @@ echo "*******paddlemix appflow test_autolabel begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_autolabel success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_autolabel success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_autolabel fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_autolabel fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_autolabel end***********"
 
@@ -152,9 +149,9 @@ echo "*******paddlemix appflow test_text2image begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_text2image success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_text2image success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_text2image fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_text2image fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_text2image end***********"
 
@@ -163,9 +160,9 @@ echo "*******paddlemix appflow test_text2video begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "paddlemix appflow test_text2video success" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_text2video success" >>"${log_dir}/ce_res.log"
 else
-    echo "paddlemix appflow test_text2video fail" >> "${log_dir}/ce_res.log"
+    echo "paddlemix appflow test_text2video fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******paddlemix appflow test_text2video end***********"
 

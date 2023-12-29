@@ -1,6 +1,6 @@
 #!/bin/bash
 
-work_path=`pwd`
+work_path=$(pwd)
 echo ${work_path}
 
 exit_code=0
@@ -16,7 +16,7 @@ bash fire.sh
 exit_code=$(($exit_code + $?))
 
 log_dir=${root_path}/log
-python -c "import paddle;print(paddle.__git_commit__)" >> ${log_dir}/res.log
+python -c "import paddle;print(paddle.__git_commit__)" >>${log_dir}/res.log
 cat ${log_dir}/res.log
 
 echo exit_code:${exit_code}

@@ -1,8 +1,7 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
-
 
 work_path=${root_path}/PaddleMIX/tests/appflow/
 echo ${work_path}
@@ -22,9 +21,9 @@ echo "*******tests/appflow/ test_cviw begin***********"
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "tests/appflow/ test_cviw run success" >> "${log_dir}/res.log"
+    echo "tests/appflow/ test_cviw run success" >>"${log_dir}/res.log"
 else
-    echo "tests/appflow/ test_cviw run fail" >> "${log_dir}/res.log"
+    echo "tests/appflow/ test_cviw run fail" >>"${log_dir}/res.log"
 fi
 echo "*******tests/appflow/ test_cviw end***********"
 

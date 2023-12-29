@@ -16,6 +16,7 @@ annalyse_log_tool
 """
 import argparse
 
+
 def check_log(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -25,10 +26,12 @@ def check_log(file_path):
     except FileNotFoundError:
         print(f"File not found: {file_path}")
         exit(1)
-             
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_path', required=True, help='file_path of the log file')
+    parser.add_argument('--file_path', required=True,
+                        help='file_path of the log file')
     args = parser.parse_args()
     file_path = args.file_path
     check_log(file_path)

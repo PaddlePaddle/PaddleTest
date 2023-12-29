@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 rm -rf ./textual_inversion_cat/
 
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"

@@ -4,9 +4,8 @@ log_dir=${root_path}/log
 
 exit_code=0
 
-work_path=`pwd`
+work_path=$(pwd)
 echo ${work_path}
-
 
 cd ${work_path}
 
@@ -19,7 +18,7 @@ for subdir in */; do
     if [ "$subdir" == "ut_case/" ]; then
       continue
     fi
-     
+
     start_script_path="$subdir/start.sh"
     if [ -f "$start_script_path" ]; then
       cd $subdir

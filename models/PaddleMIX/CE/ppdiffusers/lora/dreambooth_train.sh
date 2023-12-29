@@ -8,7 +8,7 @@ export INSTANCE_DIR="./dogs"
 export OUTPUT_DIR="./lora_dream_outputs"
 
 python train_dreambooth_lora.py \
-  --pretrained_model_name_or_path=$MODEL_NAME  \
+  --pretrained_model_name_or_path=$MODEL_NAME \
   --instance_data_dir=$INSTANCE_DIR \
   --output_dir=$OUTPUT_DIR \
   --instance_prompt="a photo of sks dog" \

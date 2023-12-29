@@ -1,14 +1,12 @@
 #!/bin/bash
 
-cur_path=`pwd`
+cur_path=$(pwd)
 echo ${cur_path}
-
 
 work_path=${root_path}/PaddleMIX/paddlemix/examples/groundingdino/
 echo ${work_path}
 
 log_dir=${root_path}/log
-
 
 if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
@@ -23,7 +21,6 @@ bash prepare.sh
 
 bash predict.sh
 exit_code=$(($exit_code + $?))
-
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
