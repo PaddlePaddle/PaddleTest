@@ -5,9 +5,9 @@ pwd;
 if [ -e linux_env_info.sh ];then
     rm -rf linux_env_info.sh
 fi
-# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh --no-proxy
 # 临时使用
-wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh
+wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh --no-proxy
 source ./linux_env_info.sh
 set +e
 
@@ -259,12 +259,13 @@ export FLAGS_prim_all=${FLAGS_prim_all:-false}
 export FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor:-0}
 export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-0}
 # paddleSOT
-export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-0}
-export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-0}
+export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-true}
+export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-10}
+export FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir:-}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
-wget -q ${CE_Link} #需要全局定义
+wget -q ${CE_Link} --no-proxy #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
@@ -301,6 +302,7 @@ echo "@@@TENSORRT_DIR: ${TENSORRT_DIR}"
 
 echo "@@@FLAGS_use_cinn: ${FLAGS_use_cinn}"
 echo "@@@FLAGS_prim_all: ${FLAGS_prim_all}"
+echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -452,6 +454,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
         -e PTS_ENV_VARS=$PTS_ENV_VARS \
+        -e FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir} \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
@@ -562,6 +565,7 @@ if [[ "${docker_flag}" == "" ]]; then
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
+        echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
         set -x
         # Flag
         export STRICT_MODE=0
@@ -681,6 +685,7 @@ else
         if [ $ENABLE_FALL_BACK == True ];then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
+        echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
 
         set -x
         # Flag
