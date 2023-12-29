@@ -12295,26 +12295,25 @@ det_0:
     mapping:
       ins: { x: A }
 
-# 废弃api
-# diag_embed_0:
-#   desc: "其在指定的 2D 平面（由 dim1 和 dim2 指定）上的对角线由输入 input 填充"
-#   paddle:
-#     api_name: "paddle.nn.functional.diag_embed"
-#     inputs:
-#       input:
-#         random: true
-#         type: "Tensor"
-#         dtype: "float32"
-#         shape: [1, 1, 1, 1, 1]
-#         range: [ -1, 1]
-#     params:
-#       offset: 0
-#       dim1: -2
-#       dim2: -1
-#   pytorch:
-#     api_name: "torch.diag_embed"
-#     mapping:
-#       ins: { input: input, offset: offset, dim1: dim1, dim2: dim2 }
+diag_embed_0:
+  desc: "其在指定的 2D 平面（由 dim1 和 dim2 指定）上的对角线由输入 input 填充"
+  paddle:
+    api_name: "paddle.diag_embed"
+    inputs:
+      input:
+        random: true
+        type: "Tensor"
+        dtype: "float32"
+        shape: [1, 1, 1, 1, 1]
+        range: [ -1, 1]
+    params:
+      offset: 0
+      dim1: -2
+      dim2: -1
+  pytorch:
+    api_name: "torch.diag_embed"
+    mapping:
+      ins: { input: input, offset: offset, dim1: dim1, dim2: dim2 }
 
 diagflat_0:
   desc: "如果 x 是一维张量，则返回带有 x 元素作为对角线的二维方阵. 如果 x 是大于等于二维的张量，则返回一个二维方阵"
