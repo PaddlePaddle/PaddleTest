@@ -1,0 +1,95 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: ppdiffusers/examples/text_to_image_laion400m/
+        cmd: pip install -r requirements.txt && rm -rf data/ && wget https://paddlenlp.bj.bcebos.com/models/community/junnyu/develop/laion400m_demo_data.tar.gz && tar -zxvf laion400m_demo_data.tar.gz
+      -
+        name: single_train
+        path: ppdiffusers/examples/text_to_image_laion400m/
+        cmd: python -u train_txt2img_laion400m_trainer.py
+        params:
+          - --do_train
+          - --output_dir ./laion400m_pretrain_output_trainer
+          - --per_device_train_batch_size 1
+          - --gradient_accumulation_steps 2
+          - --learning_rate 5e-5
+          - --weight_decay 0.02
+          - --max_steps 100
+          - --lr_scheduler_type "constant"
+          - --warmup_steps 0
+          - --image_logging_steps 50
+          - --logging_steps 10
+          - --save_steps 100
+          - --save_total_limit 50
+          - --seed 23
+          - --dataloader_num_workers 6
+          - --vae_name_or_path CompVis/stable-diffusion-v1-4/vae
+          - --text_encoder_config_file config/ldmbert.json
+          - --unet_config_file config/unet.json
+          - --file_list ./data/filelist/train.filelist.list
+          - --num_inference_steps 1
+          - --model_max_length 77
+          - --tokenizer_name bert-base-uncased
+          - --max_grad_norm -1
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: single_train_no_trainer
+        path: ppdiffusers/examples/text_to_image_laion400m/
+        cmd: python -u train_txt2img_laion400m_no_trainer.py
+        params:
+          - --output_dir ./laion400m_pretrain_output_no_trainer
+          - --per_device_train_batch_size 1
+          - --gradient_accumulation_steps 2
+          - --learning_rate 5e-5
+          - --weight_decay 0.02
+          - --max_steps 100
+          - --lr_scheduler_type "constant"
+          - --warmup_steps 0
+          - --image_logging_steps 50
+          - --logging_steps 10
+          - --save_steps 100
+          - --seed 23
+          - --dataloader_num_workers 2
+          - --vae_name_or_path CompVis/stable-diffusion-v1-4/vae
+          - --text_encoder_config_file config/ldmbert.json
+          - --unet_config_file config/unet.json
+          - --file_list ./data/filelist/train.filelist.list
+          - --num_inference_steps 1
+          - --model_max_length 77
+          - --tokenizer_name bert-base-uncased
+          - --max_grad_norm -1
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer:
+      -
+        name: infer
+        path: ppdiffusers/examples/text_to_image_laion400m/
+        # 需要将文件拷贝到case执行的目录
+        cmd: bash infer.sh
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: infer_no_trainer
+        path: ppdiffusers/examples/text_to_image_laion400m/
+        # 需要将文件拷贝到case执行的目录
+        cmd: bash infer_no_trainer.sh
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    export: skipped
+    predict: skipped

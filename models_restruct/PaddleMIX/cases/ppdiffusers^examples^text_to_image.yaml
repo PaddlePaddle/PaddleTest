@@ -1,0 +1,39 @@
+case:
+  linux:
+    train:
+      -
+        name: single_train
+        path: ppdiffusers/examples/text_to_image/
+        cmd: python -u train_text_to_image.py
+        params:
+          - --pretrained_model_name_or_path="CompVis/stable-diffusion-v1-4"
+          - --dataset_name="lambdalabs/pokemon-blip-captions"
+          - --resolution=512 --center_crop --random_flip
+          - --train_batch_size=1
+          - --gradient_accumulation_steps=4
+          - --gradient_checkpointing
+          - --max_train_steps=100
+          - --learning_rate=1e-05
+          - --max_grad_norm=1
+          - --lr_scheduler="constant"
+          - --lr_warmup_steps=0
+          - --output_dir="sd-pokemon-model"
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer:
+      -
+        name: infer
+        path: ppdiffusers/examples/text_to_image/
+        # 需要将文件拷贝到case执行的目录
+        cmd: python infer.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    export: skipped
+    predict: skipped

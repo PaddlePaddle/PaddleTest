@@ -1,0 +1,34 @@
+case:
+  linux:
+    train:
+      -
+        name: DetGuided
+        # 注意该文件需要提前拷贝到mix库代码根目录中
+        cmd: python grounded_sam_inpainting.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: ChatAndDetGuided
+        # 注意该文件需要提前拷贝到mix库代码根目录中
+        cmd: python grounded_sam_chatglm.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: TextGuidedImage
+        # 注意该文件需要提前拷贝到mix库代码根目录中
+        cmd: python text_guided_image_inpainting.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -1,0 +1,24 @@
+case:
+  linux:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict:
+      -
+        name: prepare
+        path: paddlemix/models/groundingdino/csrc/
+        # 需要代理
+        cmd: python setup_ms_deformable_attn_op.py install
+      -
+        name: predict
+        path: paddlemix/examples/groundingdino/
+        cmd: python run_predict.py
+        params:
+          - --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg
+          - --prompt "bus"
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
