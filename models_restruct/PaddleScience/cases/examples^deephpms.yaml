@@ -1,0 +1,54 @@
+case:
+  linux:
+    base: ./base/deephpms_base.yaml
+    train:
+      -
+        name: burgers1_train
+      -
+        name: burgers2_train
+      -
+        name: burgers3_train
+      -
+        name: korteweg_de_vries1_train
+      -
+        name: korteweg_de_vries2_train
+      -
+        name: kuramoto_sivashinsky_train
+      -
+        name: navier_stokes_train
+      -
+        name: schrodinger_train  
+    eval:
+      -
+        name: burgers1_eval_single
+      -
+        name: burgers1_eval_multi
+      -
+        name: burgers2_eval_single
+      -
+        name: burgers2_eval_multi
+      -
+        name: burgers3_eval_single
+      -
+        name: burgers3_eval_multi
+      -
+        name: korteweg_de_vries1_eval_single
+      -
+        name: korteweg_de_vries2_eval_multi
+      -
+        name: kuramoto_sivashinsky_eval_single
+      -
+        name: kuramoto_sivashinsky_eval_multi
+      -
+        name: navier_stokes_eval_single
+      -
+        name: navier_stokes_eval_multi
+      -
+        name: schrodinger_eval_single
+      -
+        name: schrodinger_eval_multi
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse

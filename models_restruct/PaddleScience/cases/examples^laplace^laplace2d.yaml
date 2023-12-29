@@ -4,7 +4,11 @@ case:
     train:
       -
         name: single
-    eval: skipped
+    eval:
+      -
+        name: single
+      -
+        name: multi
     infer: skipped
     export: skipped
     predict: skipped
