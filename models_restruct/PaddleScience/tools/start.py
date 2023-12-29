@@ -97,7 +97,8 @@ class PaddleScience_Start(object):
         install env for  paddlescience docker
         """
         mode = os.getenv("mode")
-        if mode == "function":
+        system = os.environ["system"]
+        if mode == "function" and "Windows" not in system:
             os.system("apt update")
             os.system("apt-get install -y curl")
             os.system("curl --version")

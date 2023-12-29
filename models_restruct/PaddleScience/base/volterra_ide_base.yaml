@@ -3,9 +3,9 @@ train:
     name: single
     cmd: python examples/ide/volterra_ide.py
     params:
-      - --epochs=1
+      - TRAIN.epochs=10
     result:
-      exit_code:
-        base: 0
-        threshold: 0
-        evaluation: "="
+      loss:
+        base: 0.0001
+        threshold: 1
+        evaluation: "-"

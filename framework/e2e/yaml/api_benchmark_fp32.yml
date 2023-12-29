@@ -6571,6 +6571,7 @@ BatchNorm1D_0:
         type: "Tensor"
         dtype: "float32"
         shape: [1, 1, 2]
+        range: [ -1, 1]
     params:
       num_features: 1
   pytorch:
@@ -6590,6 +6591,7 @@ BatchNorm1D_1:
         type: "Tensor"
         dtype: "float32"
         shape: [ 10, 10, 100]
+        range: [ -1, 1]
     params:
       num_features: 10
   pytorch:
@@ -6609,6 +6611,7 @@ BatchNorm1D_2:
         type: "Tensor"
         dtype: "float32"
         shape: [100, 100, 100]
+        range: [ -1, 1]
     params:
       num_features: 100
   pytorch:
@@ -12290,10 +12293,31 @@ det_0:
     mapping:
       ins: { x: A }
 
+#废弃api
+# diag_embed_0:
+#   desc: "其在指定的 2D 平面（由 dim1 和 dim2 指定）上的对角线由输入 input 填充"
+#   paddle:
+#     api_name: "paddle.nn.functional.diag_embed"
+#     inputs:
+#       input:
+#         random: true
+#         type: "Tensor"
+#         dtype: "float32"
+#         shape: [1, 1, 1, 1, 1]
+#         range: [ -1, 1]
+#     params:
+#       offset: 0
+#       dim1: -2
+#       dim2: -1
+#   pytorch:
+#     api_name: "torch.diag_embed"
+#     mapping:
+#       ins: { input: input, offset: offset, dim1: dim1, dim2: dim2 }
+
 diag_embed_0:
   desc: "其在指定的 2D 平面（由 dim1 和 dim2 指定）上的对角线由输入 input 填充"
   paddle:
-    api_name: "paddle.nn.functional.diag_embed"
+    api_name: "paddle.diag_embed"
     inputs:
       input:
         random: true
