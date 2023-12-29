@@ -92,5 +92,27 @@ fi
 echo "*******paddlemix models test_minigpt4 end***********"
 
 
+echo "*******paddlemix models test_groundingdino begin***********"
+(python -m pytest -v test_groundingdino.py) 2>&1 | tee ${log_dir}/test_groundingdino.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "paddlemix models test_groundingdino success" >> "${log_dir}/ce_res.log"
+else
+    echo "paddlemix models test_groundingdino fail" >> "${log_dir}/ce_res.log"
+fi
+echo "*******paddlemix models test_groundingdino end***********"
+
+echo "*******paddlemix models test_sam begin***********"
+(python -m pytest -v test_sam.py) 2>&1 | tee ${log_dir}/test_sam.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "paddlemix models test_sam success" >> "${log_dir}/ce_res.log"
+else
+    echo "paddlemix models test_sam fail" >> "${log_dir}/ce_res.log"
+fi
+echo "*******paddlemix models test_sam end***********"
+
 echo exit_code:${exit_code}
 exit ${exit_code}
