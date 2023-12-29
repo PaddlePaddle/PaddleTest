@@ -1,0 +1,74 @@
+train:
+  -
+    name: amgnet_airfoil_single
+    cmd: python examples/amgnet/amgnet_airfoil.py 
+    params:
+      - TRAIN.epochs=2
+    result:
+      loss:
+        base: 0.02257
+        threshold: 1
+        evaluation: "-"
+  -
+    name: amgnet_cylinder_single
+    cmd: python examples/amgnet/amgnet_cylinder.py 
+    params:
+      - TRAIN.epochs=2
+    result:
+      loss:
+        base: 0.02364
+        threshold: 1
+        evaluation: "-"
+eval:
+  -
+    name: amgnet_airfoil_single
+    cmd: python examples/amgnet/amgnet_airfoil.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/amgnet/amgnet_airfoil_pretrained.pdparams
+    result:
+      loss(RMSE_validator):
+        base: 0.0001
+        threshold: 1
+        evaluation: "-"
+      RMSE.RMSE(RMSE_validator):
+        base: 0.01315
+        threshold: 1
+        evaluation: "-"
+  -
+    name: amgnet_airfoil_multi
+    cmd: python -m paddle.distributed.launch examples/amgnet/amgnet_airfoil.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/amgnet/amgnet_airfoil_pretrained.pdparams
+    result:
+      RMSE.RMSE(RMSE_validator):
+        base: 0.01315
+        threshold: 1
+        evaluation: "-"
+  -
+    name: amgnet_cylinder_single
+    cmd: python examples/amgnet/amgnet_cylinder.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/amgnet/amgnet_airfoil_pretrained.pdparams
+    result:
+      loss(RMSE_validator):
+        base: 0.00048
+        threshold: 1
+        evaluation: "-"
+      RMSE.RMSE(RMSE_validator):
+        base: 0.02197
+        threshold: 1
+        evaluation: "-"
+  -
+    name: amgnet_cylinder_multi
+    cmd: python -m paddle.distributed.launch examples/amgnet/amgnet_cylinder.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/amgnet/amgnet_airfoil_pretrained.pdparams
+    result:
+      RMSE.RMSE(RMSE_validator):
+        base: 0.02197
+        threshold: 1
+        evaluation: "-"

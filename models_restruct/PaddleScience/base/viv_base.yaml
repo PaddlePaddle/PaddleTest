@@ -9,3 +9,34 @@ train:
         base: 0.00023
         threshold: 1
         evaluation: "-"
+eval:
+  -
+    name: single
+    cmd: python examples/fsi/viv.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/darcy2d/darcy2d_pretrained.pdparams
+    result:
+      MSE.eta(eta_mse):
+        base: 1.1416150300647132e-06
+        threshold: 1
+        evaluation: "-"
+      MSE.f(eta_mse):
+        base: 4.635014192899689e-06
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi
+    cmd: python -m paddle.distributed.launch examples/fsi/viv.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/darcy2d/darcy2d_pretrained.pdparams
+    result:
+      MSE.eta(eta_mse):
+        base: 1.1416150300647132e-06
+        threshold: 1
+        evaluation: "-"
+      MSE.f(eta_mse):
+        base: 4.635014192899689e-06
+        threshold: 1
+        evaluation: "-"

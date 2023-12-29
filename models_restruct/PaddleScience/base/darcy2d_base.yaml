@@ -9,3 +9,29 @@ train:
         base: 114.69631
         threshold: 1
         evaluation: "-"
+eval:
+  -
+    name: single
+    cmd: python examples/darcy/darcy2d.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/darcy2d/darcy2d_pretrained.pdparams
+    result:
+      loss(Residual):
+        base: 0.36500
+        threshold: 1
+        evaluation: "-"
+      MSE.poisson(Residual):
+        base: 0.00006
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi
+    cmd: python -m paddle.distributed.launch examples/darcy/darcy2d.py
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/darcy2d/darcy2d_pretrained.pdparams
+    result:
+      MSE.poisson(Residual):
+        base: 0.00006
+        threshold: 1
+        evaluation: "-"
