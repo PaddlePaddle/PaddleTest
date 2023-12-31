@@ -19,6 +19,12 @@ export no_proxy=su.bcebos.com,hf-mirror.com,baidu.com,127.0.0.1,0.0.0.0,localhos
 export PPNLP_HOME=/home/weight/ppnlp_home
 export HUGGINGFACE_HUB_CACHE=/home/weight/huggingface_home
 
+log_dir=${root_path}/log
+
+if [ ! -d "$log_dir" ]; then
+    mkdir -p "$log_dir"
+fi
+
 exit_code=0
 
 export http_proxy=${proxy}
