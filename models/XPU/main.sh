@@ -23,12 +23,12 @@ python -m pip config set global.index-url https://mirror.baidu.com/pypi/simple;
 python -m pip config set global.extra-index-url https://pypi.tuna.tsinghua.edu.cn/simple
 python -m pip config set install.trusted-host mirror.baidu.com,pypi.tuna.tsinghua.edu.cn
 
-rm -rf paddlepaddle-*.whl
+rm -rf paddlepaddle_*.whl
 wget -q  https://paddle-device.bj.bcebos.com/develop/xpu/paddlepaddle_xpu-0.0.0-cp39-cp39-linux_x86_64.whl
-pip install paddlepaddle-*.whl --force-reinstall 
+python -m pip install paddlepaddle_*.whl --force-reinstall 
 
 python -c 'import paddle; print(paddle.version.commit)'
-
+python -m pip install ./AutoLog/dist/*.whl
 echo ${REPO}
 
 bash run.sh ${REPO}

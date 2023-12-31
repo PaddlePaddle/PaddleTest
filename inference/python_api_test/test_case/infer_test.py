@@ -236,6 +236,10 @@ class InferenceTest(object):
             None
         """
         self.pd_config.disable_gpu()
+        try:
+            self.pd_config.disable_mkldnn()
+        except AttributeError:
+            pass
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         cuda_visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES")

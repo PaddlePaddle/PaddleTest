@@ -5,9 +5,7 @@
 import os
 import re
 from platform import platform
-import sys
 import logging
-import tarfile
 import argparse
 import numpy as np
 import yaml
@@ -72,11 +70,11 @@ class PaddleNLP_Build(Model_Build):
             os.system("python -m pip uninstall protobuf -y")
             os.system("python -m pip uninstall protobuf -y")
             os.system("python -m pip install protobuf==3.20.2")
-            os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
+            # os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
         else:
             os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall paddlepaddle -y")
-            os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
+            # os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
 
         if re.compile("elease").findall(paddle_whl):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
@@ -93,7 +91,7 @@ class PaddleNLP_Build(Model_Build):
             os.chdir(self.reponame)
             logger.info("installing develop PaddleNLP")
             os.system("python setup.py bdist_wheel")
-            cmd_return = os.system(" python -mxs pip install -U dist/p****.whl")
+            cmd_return = os.system(" python -m pip install -U dist/p****.whl")
 
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
@@ -122,12 +120,17 @@ class PaddleNLP_Build(Model_Build):
                     examples/machine_translation/transformer/configs/transformer.base.yaml'
             )
 
-            from datasets import load_dataset
+            # if platform == "linux_convergence":
+            #     print("pass donwload hf datasets")
+            # else:
+            #     from datasets import load_dataset
 
-            train_squad = load_dataset("squad", split="train", cache_dir="/root/.cache/huggingface/datasets")
-            train_sst2 = load_dataset("glue", "sst2", split="train", cache_dir="/root/.cache/huggingface/datasets")
+            #     train_squad = load_dataset("squad", split="train",
+            #  cache_dir="/root/.cache/huggingface/datasets")
+            #     train_sst2 = load_dataset("glue", "sst2", split="train",
+            #  cache_dir="/root/.cache/huggingface/datasets")
 
-            print("download hf datasets", train_squad, train_sst2)
+            #     print("download hf datasets", train_squad, train_sst2)
 
         if re.compile("CUDA11").findall(self.models_file):
             os.system(
@@ -138,10 +141,12 @@ class PaddleNLP_Build(Model_Build):
         os.system("python -m pip uninstall protobuf -y")
         os.system("python -m pip uninstall protobuf -y")
         os.system("python -m pip install protobuf==3.20.2")
-
+        os.system("python -m pip list")
         import paddle
 
+        # import paddlenlp
         print("paddle final commit", paddle.version.commit)
+        # print("paddlenlp final commit", paddlenlp.version.commit)
         os.system("python -m pip list")
 
         return 0

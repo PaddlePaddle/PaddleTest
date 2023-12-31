@@ -40,11 +40,15 @@ class PaddleScience_Case_Start(object):
 
             # os.environ["FLAGS_prim_all"] = "false"
             # logger.info("set org FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            os.environ["ENABLE_FALL_BACK"] = "False"
             os.environ["FLAGS_use_cinn"] = "0"
             logger.info("set org FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
             if "cinn" in self.case_name:
                 os.environ["FLAGS_use_cinn"] = "1"
+                os.environ["ENABLE_FALL_BACK"] = "False"
                 logger.info("set org FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
+        elif "deepcfd" in self.case_name:
+            os.environ["FLAGS_cudnn_deterministic"] = "True"
         else:
             return 0
 

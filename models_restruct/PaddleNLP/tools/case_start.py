@@ -28,7 +28,8 @@ class PaddleNLP_Case_Start(object):
         """
         执行准备过程
         """
-        if "bert_convergence" in self.qa_yaml_name:
+
+        if "bert_convergence_dy2st" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
@@ -59,7 +60,7 @@ class PaddleNLP_Case_Start(object):
             logger.info("set FLAGS_deny_cinn_ops as {}".format(os.getenv("FLAGS_deny_cinn_ops")))
             logger.info("set FLAGS_nvrtc_compile_to_cubin as {}".format(os.getenv("FLAGS_nvrtc_compile_to_cubin")))
 
-        elif "gpt_convergence" in self.qa_yaml_name:
+        elif "gpt_convergence_dy2st" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
             if self.case_name.split("train_")[-1] == "dy2st_baseline":
@@ -82,7 +83,7 @@ class PaddleNLP_Case_Start(object):
             logger.info("set FLAGS_enable_pir_api as {}".format(os.getenv("FLAGS_enable_pir_api")))
             logger.info("set ENABLE_FALL_BACK as {}".format(os.getenv("ENABLE_FALL_BACK")))
 
-        elif "ernie_convergence" in self.qa_yaml_name:
+        elif "ernie_convergence_dy2st" in self.qa_yaml_name:
             logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
             if self.case_name.split("train_")[-1] == "dy2st_prim":
@@ -96,6 +97,37 @@ class PaddleNLP_Case_Start(object):
             logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
             logger.info("export FLAGS_cudnn_deterministic=1")
             logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+
+        elif "llama_convergence_dy2st" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+
+            if self.case_name.split("train_")[-1] == "dy2st_baseline":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_enable_pir_api"] = "True"
+                os.environ["ENABLE_FALL_BACK"] = "False"
+
+            elif self.case_name.split("train_")[-1] == "dy2st_pir_prim":
+                os.environ["FLAGS_cudnn_deterministic"] = "1"
+                os.environ["FLAGS_enable_pir_api"] = "True"
+                os.environ["FLAGS_prim_all"] = "true"
+                os.environ["ENABLE_FALL_BACK"] = "False"
+
+            logger.info("run type is {}".format(self.case_name.split("train_")[-1]))
+            logger.info("set FLAGS_cudnn_deterministic as {}".format(os.getenv("FLAGS_cudnn_deterministic")))
+            logger.info("set FLAGS_prim_all as {}".format(os.getenv("FLAGS_prim_all")))
+            logger.info("set FLAGS_enable_pir_api as {}".format(os.getenv("FLAGS_enable_pir_api")))
+            logger.info("set ENABLE_FALL_BACK as {}".format(os.getenv("ENABLE_FALL_BACK")))
+        elif "convergence_ir" in self.qa_yaml_name:
+            logger.info("convergence tag is: {}".format(self.case_name.split("train_")[-1]))
+            ir_paddle = "https://paddle-qa.bj.bcebos.com/CompileService/train/v11.7/3.10/pr/ \
+                58990/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl"
+            if self.case_name.split("train_")[-1] == "ir":
+                os.system("python -m pip uninstall paddlepaddle-gpu -y")
+                os.system("python -m pip install {} ".format(ir_paddle))
+                os.environ["FLAGS_enable_pir_in_executor"] = "1"
+                os.environ["ENABLE_FALL_BACK"] = "False"
+            else:
+                logger.info("none ir test")
 
 
 def run():
