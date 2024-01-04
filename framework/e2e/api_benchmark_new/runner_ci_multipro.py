@@ -3,7 +3,7 @@
 # @author Zeref996
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-注意!!!!!!!!
+注意!!!!!!!!!
 修复 self.comment 和 self.wheel_link
 """
 
