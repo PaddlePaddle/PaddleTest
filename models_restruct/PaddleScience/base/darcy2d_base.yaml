@@ -28,10 +28,7 @@ eval:
   -
     name: multi
     cmd: python -m paddle.distributed.launch examples/darcy/darcy2d.py
-<<<<<<< HEAD
-=======
     params:
->>>>>>> e6fa26dcff6902e30a27bb6d4c49bd6d3f6ed715
       - mode=eval
       - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/darcy2d/darcy2d_pretrained.pdparams
     result:
