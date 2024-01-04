@@ -4,7 +4,7 @@
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
 注意!!!!!!!
-修复 self.comment 和 self.wheel_link
+修复 self.core_index、self.comment 和 self.wheel_link
 """
 
 import os
@@ -60,8 +60,9 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         :param baseline: 性能baseline键值对, key为case名, value为性能float
         """
         # 测试控制项
-        self.core_index = args.core_index  # 第一个cpu核序号
-        self.multiprocess_num = 3  # 并行进程数
+        # self.core_index = args.core_index  # 第一个cpu核序号
+        self.core_index = 7
+        self.multiprocess_num = 4  # 并行进程数
         self.loops = 50  # 循环次数
         self.base_times = 1000  # timeit 基础运行时间
         self.default_dtype = "float32"
