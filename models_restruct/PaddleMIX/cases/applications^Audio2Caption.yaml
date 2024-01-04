@@ -1,0 +1,19 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        cmd: rm -rf zh.wav && wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/zh.wav
+      -
+        name: audio2caption
+        # 注意该文件需要提前拷贝到mix库代码根目录中
+        cmd: python audio2caption_generation.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

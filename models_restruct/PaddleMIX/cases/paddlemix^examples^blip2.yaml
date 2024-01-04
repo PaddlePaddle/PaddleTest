@@ -1,0 +1,73 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        cmd: >-
+          rm -rf /root/.paddlemix/datasets/*
+          && wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/benchmark/blip2/coco.tar.gz -P /root/.paddlemix/datasets/
+          && wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/benchmark/blip2/coco_karpathy_test_gt.json  -P /root/.paddlemix/datasets/
+          && cd /root/.paddlemix/datasets/
+          && tar -zxvf coco.tar.gz
+          && apt-get install -y default-jre
+      -
+        name: stage1_single_train
+        cmd: CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_pretrain_stage1.py
+        params:
+          - --per_device_train_batch_size 64
+          - --warmup_steps 100
+          - --num_train_epochs 1
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: stage2_single_train
+        cmd: CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_pretrain_stage2.py
+        params:
+          - --per_device_train_batch_size 64
+          - --warmup_steps 100
+          - --num_train_epochs 1
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval:
+      -
+        name: task_vqa_eval
+        cmd: CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_eval_vqav2_zeroshot.py
+        params:
+          - --per_device_train_batch_size 64
+          - --num_train_epochs 1
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: task_caption_eval
+        cmd: CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_eval_caption.py
+        params:
+          - --per_device_train_batch_size 64
+          - --num_train_epochs 1
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    infer: skipped
+    export: skipped
+    predict:
+      -
+        name: predict
+        cmd: CUDA_VISIBLE_DEVICES=0 python paddlemix/examples/blip2/run_predict.py
+        params:
+          - --per_device_train_batch_size 64
+          - --num_train_epochs 1
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
