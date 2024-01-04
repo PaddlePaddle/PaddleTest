@@ -35,8 +35,8 @@ def test_euler_beam_exit_code():
 
     # 执行命令行命令，运行 darcy2d.py 脚本
     command = f"python{py_version} ../../examples/euler_beam/euler_beam.py \
-               --epochs={epoch_num} \
-               --output_dir={output_dir}"
+               TRAIN.epochs={epoch_num} \
+               output_dir={output_dir}"
 
     process = subprocess.Popen(command, shell=True)
 
