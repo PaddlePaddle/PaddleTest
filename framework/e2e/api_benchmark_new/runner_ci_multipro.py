@@ -168,7 +168,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
-        multiprocess_cases = self.split_list(self.all_cases)
+        multiprocess_cases = self.split_list(lst=self.all_cases, n=self.multiprocess_num)
         processes = []
         result_queue = multiprocessing.Queue()
 
