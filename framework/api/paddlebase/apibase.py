@@ -102,7 +102,7 @@ class APIBase(object):
                 if etype in e:
                     assert True
                 else:
-                    assert False, "异常校验失败,异常类型为" + str(e)
+                    assert False, "异常校验失败,异常类型为" + etype
                 # print(str(e))
         if mode == "python":
             with pytest.raises(etype):
