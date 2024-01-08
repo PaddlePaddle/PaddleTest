@@ -451,7 +451,7 @@ if [[ "${docker_flag}" == "" ]]; then
 	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
-        -e FLAGS_enable_pir_api=${export FLAGS_enable_pir_api} \
+        -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
