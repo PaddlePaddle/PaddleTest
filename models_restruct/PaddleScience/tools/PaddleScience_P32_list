@@ -1,13 +1,1 @@
-examples^lorenz.yaml
-examples^operator_learning^deeponet.yaml
-examples^rossler.yaml
-examples^shock_wave^shock_wave.yaml
-examples^tempoGAN^tempoGAN.yaml
-example^bubble^bubble.yaml
-example^control_arm.yaml
-example^heat_exchanger.yaml
-example^phylstm.yaml
-example^topopt.yaml
-examples^amgnet.yaml
-examples^biharmonic2d^biharmonic2d.yaml
 examples^deephpms.yaml
