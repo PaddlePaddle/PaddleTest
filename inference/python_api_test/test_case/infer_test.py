@@ -17,6 +17,7 @@ import yaml
 import pytest
 import pynvml
 import numpy as np
+import paddle
 import paddle.inference as paddle_infer
 from paddle.inference import PrecisionType, PlaceType
 from paddle.inference import convert_to_mixed_precision
@@ -388,7 +389,16 @@ class InferenceTest(object):
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
-    def gpu_more_bz_test(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=1e-5, gpu_mem=1000):
+    def gpu_more_bz_test(
+        self,
+        input_data_dict: dict,
+        output_data_dict: dict,
+        repeat=1,
+        delta=1e-5,
+        gpu_mem=1000,
+        use_new_executor=False,
+        use_pir=False,
+    ):
         """
         test enable_use_gpu()
         Args:
@@ -400,6 +410,12 @@ class InferenceTest(object):
             None
         """
         self.pd_config.enable_use_gpu(gpu_mem, 0)
+        if use_new_executor:
+            print("use_new_executor!!!")
+            self.pd_config.enable_new_executor()
+        if use_pir:
+            print("use_pir!!!")
+            paddle.set_flags({"FLAGS_enable_pir_in_executor": True})
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
@@ -477,9 +493,6 @@ class InferenceTest(object):
     ):
         """
         test slim model enable_tensorrt_engine()
-        batch_size = 10
-        trt max_batch_size = 10
-        precision_mode = fp32,fp16,int8
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
@@ -603,9 +616,6 @@ class InferenceTest(object):
     ):
         """
         test enable_tensorrt_engine()
-        batch_size = 10
-        trt max_batch_size = 10
-        precision_mode = fp32,fp16,int8
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
@@ -698,9 +708,6 @@ class InferenceTest(object):
     ):
         """
         test enable_tensorrt_engine()
-        max_batch_size = 1-10
-        trt max_batch_size = 10
-        precision_mode = fp32,fp16,int8
         Args:
             input_data_dict(dict): input data constructed as dictionary
             output_data_dict(dict): output data constructed as dictionary
@@ -780,10 +787,6 @@ class InferenceTest(object):
     ):
         """
         test enable_tensorrt_engine()
-        batch_size = 1
-        trt max_batch_size = 4
-        thread_num = 5
-        precision_mode = fp32,fp16,int8
         Multithreading TensorRT predictor
         Args:
             input_data_dict(dict): input data constructed as dictionary
@@ -864,10 +867,6 @@ class InferenceTest(object):
     ):
         """
         test enable_tensorrt_engine()
-        batch_size = 1
-        trt max_batch_size = 1
-        thread_num = 2
-        precision_mode = fp32,fp16,int8
         Multithreading TensorRT predictor
         Args:
             input_data_dict(dict): input data constructed as dictionary
