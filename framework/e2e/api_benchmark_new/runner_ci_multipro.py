@@ -133,28 +133,47 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # 邮件报警
         # self.email = Alarm(storage=self.storage)
 
-    def split_list(self, lst, n):
+    # def split_list(self, lst, n):
+    #     """
+    #     将列表均分为n份
+    #     Args:
+    #         lst (list): 待划分的列表
+    #         n (int): 划分的份数
+    #     Returns:
+    #         res (list): 划分后的列表，其中每个元素为原列表的1/n部分
+    #     """
+    #     if not isinstance(lst, list) or not isinstance(n, int) or len(lst) == 0 or n <= 0:
+    #         return []
+
+    #     quotient, remainder = divmod(len(lst), n)
+    #     res = []
+    #     start = 0
+    #     for i in range(n):
+    #         if i < remainder:
+    #             end = start + quotient + 1
+    #         else:
+    #             end = start + quotient
+    #         res.append(lst[start:end])
+    #         start = end
+    #     return res
+
+    def split_list(lst, n):
         """
-        将列表均分为n份
+        将列表按顺序划分为 n 份
         Args:
             lst (list): 待划分的列表
             n (int): 划分的份数
         Returns:
-            res (list): 划分后的列表，其中每个元素为原列表的1/n部分
+            res (list): 划分后的列表，其中每个元素为原列表的 1/n 部分
         """
         if not isinstance(lst, list) or not isinstance(n, int) or len(lst) == 0 or n <= 0:
             return []
 
         quotient, remainder = divmod(len(lst), n)
-        res = []
-        start = 0
-        for i in range(n):
-            if i < remainder:
-                end = start + quotient + 1
-            else:
-                end = start + quotient
-            res.append(lst[start:end])
-            start = end
+        res = [[] for _ in range(n)]
+        for i, value in enumerate(lst):
+            index = i % n
+            res[index].append(value)
         return res
 
     def _multi_run_main(self, all_cases, loops, base_times, result_queue):
