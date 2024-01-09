@@ -60,8 +60,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         :param baseline: 性能baseline键值对, key为case名, value为性能float
         """
         # 测试控制项
-        # self.core_index = args.core_index  # 第一个cpu核序号
-        self.core_index = 7
+        self.core_index = args.core_index  # 第一个cpu核序号
         self.multiprocess_num = 4  # 并行进程数
         self.loops = 50  # 循环次数
         self.base_times = 1000  # timeit 基础运行时间
@@ -82,23 +81,23 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         # 例行标识
         self.baseline_comment = "baseline_CI_api_benchmark_pr_dev"
-        # self.comment = "CI_api_benchmark_pr_{}_ver_{}".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
-        self.comment = "multipro_naive_test"
+        self.comment = "CI_api_benchmark_pr_{}_ver_{}".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
+        # self.comment = "multipro_naive_test"
         self.routine = 0
         self.ci = 1
         self.uid = -1
 
         # 框架信息
         self.framework = "paddle"
-        # self.wheel_link = (
-        #     "https://xly-devops.bj.bcebos.com/PR/build_whl/{}/{}"
-        #     "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
-        # )
-
         self.wheel_link = (
-            "https://xly-devops.bj.bcebos.com/PR/build_whl/0/8b2b95305d14d57845e9b403da0ec4bf29e45e27"
-            "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl"
+            "https://xly-devops.bj.bcebos.com/PR/build_whl/{}/{}"
+            "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
         )
+
+        # self.wheel_link = (
+        #     "https://xly-devops.bj.bcebos.com/PR/build_whl/0/8b2b95305d14d57845e9b403da0ec4bf29e45e27"
+        #     "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl"
+        # )
 
         # 框架信息callback
         self.commit = paddle.__git_commit__
