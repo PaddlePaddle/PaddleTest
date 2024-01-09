@@ -157,7 +157,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
     #         start = end
     #     return res
 
-    def split_list(lst, n):
+    def split_list(self, lst, n):
         """
         将列表按顺序划分为 n 份
         Args:
