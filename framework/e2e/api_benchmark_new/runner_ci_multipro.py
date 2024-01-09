@@ -340,7 +340,28 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
-        error_dict = self._run_main(all_cases=self.all_cases, loops=self.loops, base_times=self.base_times)
+        multiprocess_cases = self.split_list(lst=list(self.all_cases), n=self.multiprocess_num)
+        processes = []
+        result_queue = multiprocessing.Queue()
+
+        for i, cases_list in enumerate(multiprocess_cases):
+            process = multiprocessing.Process(
+                target=self._multi_run_main, args=(cases_list, self.loops, self.base_times, result_queue)
+            )
+            process.start()
+            os.sched_setaffinity(process.pid, {self.core_index + i})
+            processes.append(process)
+
+        for process in processes:
+            process.join()
+
+        error_dict = {}
+        while not result_queue.empty():
+            result_dict = result_queue.get()
+            error_dict.update(result_dict)
+
+        # error_dict = self._run_main(all_cases=self.all_cases, loops=self.loops, base_times=self.base_times)
+
         # 初始化数据库
         db = CIdb(storage=self.storage)
 
