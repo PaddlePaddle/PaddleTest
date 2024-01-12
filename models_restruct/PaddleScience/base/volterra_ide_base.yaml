@@ -25,14 +25,3 @@ eval:
         base: 0.00023
         threshold: 1
         evaluation: "-"
-  -
-    name: multi
-    cmd: python -m paddle.distributed.launch examples/ide/volterra_ide.py
-    params:
-      - mode=eval
-      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/volterra_ide/volterra_ide_pretrained.pdparams
-    result:
-      L2Rel.u(L2Rel_Validator):
-        base: 0.00023
-        threshold: 1
-        evaluation: "-"

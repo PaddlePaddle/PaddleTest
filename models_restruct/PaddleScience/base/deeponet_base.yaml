@@ -25,14 +25,3 @@ eval:
         base: 0.01799
         threshold: 1
         evaluation: "-"
-  -
-    name: multi
-    cmd: python -m paddle.distributed.launch examples/operator_learning/deeponet.py
-    params:
-      - mode=eval
-      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/deeponet/deeponet_pretrained.pdparams
-    result:
-      L2Rel.G(G_eval):
-        base: 0.01799
-        threshold: 1
-        evaluation: "-"

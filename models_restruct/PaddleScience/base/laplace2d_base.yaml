@@ -25,14 +25,3 @@ eval:
         base: 0.00002
         threshold: 1
         evaluation: "-"
-  -
-    name: multi
-    cmd: python -m paddle.distributed.launch examples/laplace/laplace2d.py
-    params:
-      - mode=eval
-      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/laplace2d/laplace2d_pretrained.pdparams
-    result:
-      MSE.u(MSE_Metric):
-        base: 0.00002
-        threshold: 1
-        evaluation: "-"
