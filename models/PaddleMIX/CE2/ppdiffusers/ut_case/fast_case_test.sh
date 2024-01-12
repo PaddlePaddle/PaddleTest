@@ -26,8 +26,8 @@ fi
 
 exit_code=0
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
+export http_proxy=${mix_proxy}
+export https_proxy=${mix_proxy}
 echo "*******ppdiffusers fast_case_test begin***********"
 (python -m pytest -v tests -n 2 -s) 2>&1 | tee ${log_dir}/fast_case_test.log
 tmp_exit_code=${PIPESTATUS[0]}
