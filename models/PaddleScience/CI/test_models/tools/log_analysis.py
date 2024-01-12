@@ -17,7 +17,7 @@ def get_last_epoch_loss(log_file, epoch_num):
     with open(log_file, "r") as f:
         # 倒序读取日志文件中的每一行
         for line in reversed(list(f)):
-            if last_epoch_str in line and "[Train]" in line and "[Avg]" in line:
+            if last_epoch_str in line and "[Train]" in line:
                 # 如果该行包含是否为最后一个 epoch、是否为 Train 阶段和是否包含 Avg，则解析该行的 loss 值并赋值给 last_loss 变量
                 last_loss = line.split("loss: ")[1].split(",")[0]
                 break  # 解析到最后一个 epoch 的 loss 值后退出循环

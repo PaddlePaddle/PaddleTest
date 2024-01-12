@@ -1,0 +1,33 @@
+case:
+  linux:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict:
+      -
+        name: box_predict
+        path: paddlemix/examples/Sam/
+        cmd: python run_predict.py
+        params:
+          - --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg
+          - --box_prompt  112 118 513 382
+          - --input_type boxs
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: points_predict
+        path: paddlemix/examples/Sam/
+        cmd: python run_predict.py
+        params:
+          - --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg
+          - --points_prompt  362 250
+          - --input_type points
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="

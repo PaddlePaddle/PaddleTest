@@ -75,7 +75,7 @@ def test_disable_gpu():
 @pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu fast_rcnn batch_size = [1] outputs with true val
     """
@@ -122,6 +122,8 @@ def test_gpu_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
+            use_new_executor=True,
+            use_pir=False,
         )
 
 

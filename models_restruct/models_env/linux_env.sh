@@ -262,6 +262,7 @@ export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-0}
 export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-true}
 export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-10}
 export FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir:-}
+export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-False}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -450,6 +451,7 @@ if [[ "${docker_flag}" == "" ]]; then
 	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
+        -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
@@ -566,6 +568,7 @@ if [[ "${docker_flag}" == "" ]]; then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
         echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
+        ehco "@@@export FLAGS_enable_pir_api ${export FLAGS_enable_pir_api}"
         set -x
         # Flag
         export STRICT_MODE=0
@@ -686,6 +689,7 @@ else
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
         echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
+        echo "@@@export FLAGS_enable_pir_api: ${export FLAGS_enable_pir_api}"
 
         set -x
         # Flag
