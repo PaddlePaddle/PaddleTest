@@ -2,3 +2,4 @@ examples^deephpms.yaml
 example^topopt.yaml
 examples^amgnet.yaml
 examples^biharmonic2d^biharmonic2d.yaml
+example^bubble^bubble.yaml
