@@ -48,7 +48,7 @@ else
 fi
 
 # 运行 run_test_comments.sh
-bash ./run_test_comments.sh
+python${py_version} test_comments.py
 exit_code1=$?
 
 # 运行 test_docs.py
