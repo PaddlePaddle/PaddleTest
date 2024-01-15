@@ -72,4 +72,8 @@ def solve(path: str, whitelist: list = []):
 
 
 if __name__ == "__main__":
-    solve("../../../PaddleScience", ["ad.py"])
+    current_dir = os.path.abspath(os.curdir)
+    parent_dir = os.path.dirname(current_dir)
+    grandparent_dir = os.path.dirname(parent_dir)
+    print(f"grandparent_dir: {grandparent_dir}")
+    solve(grandparent_dir, ["ad.py"])
