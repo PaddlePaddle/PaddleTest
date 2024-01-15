@@ -49,8 +49,13 @@ fi
 
 # 运行 run_test_comments.sh
 bash ./run_test_comments.sh
-exit_code=$?
-error_num=$((error_num + exit_code))
+exit_code1=$?
+
+# 运行 test_docs.py
+python${py_version} test_docs.py
+exit_code2=$?
+# 统计退出码之和
+error_num=$((error_num + exit_code1 + exit_code2))
 
 # 判断退出码之和是否为零
 if [ $error_num -ne 0 ]; then
