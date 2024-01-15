@@ -45,7 +45,10 @@ echo "*******lora dreambooth_infer end***********"
 /bin/cp -rf ./* ${work_path}/text_to_image/
 cd ${work_path}/text_to_image/
 # 下载依赖
-bash text_to_image_prepare.sh
+# bash text_to_image_prepare.sh
+export http_proxy=${mix_proxy}
+export https_proxy=${mix_proxy}
+export HF_ENDPOINT=https://hf-mirror.com
 echo "*******lora text_to_image train begin***********"
 (bash text_to_image_train.sh) 2>&1 | tee ${log_dir}/lora_text_to_image_train.log
 tmp_exit_code=${PIPESTATUS[0]}
@@ -56,6 +59,9 @@ else
     echo "lora text_to_image train run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******lora text_to_image train end***********"
+unset HF_ENDPOINT
+unset http_proxy
+unset https_proxy
 
 # lora_text_to_image
 echo "*******lora text_to_image infer begin***********"
