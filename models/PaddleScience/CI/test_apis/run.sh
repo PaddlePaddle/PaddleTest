@@ -46,14 +46,16 @@ if [ ${#error_files[@]} -gt 0 ]; then
 else
     echo "All files passed ."
 fi
-
+echo "===== comments bug num =====" >>  result.txt
 # 运行 run_test_comments.sh
 python${py_version} test_comments.py
 exit_code1=$?
-
+echo ${exit_code1} >>  result.txt
+echo "===== docs bug num =====" >>  result.txt
 # 运行 test_docs.py
 python${py_version} test_docs.py
 exit_code2=$?
+echo ${exit_code2} >>  result.txt
 # 统计退出码之和
 error_num=$((error_num + exit_code1 + exit_code2))
 
