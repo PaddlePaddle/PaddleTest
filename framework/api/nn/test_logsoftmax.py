@@ -108,7 +108,7 @@ def test_logsoftmax5():
     # 算法
     res = x.transpose(2, 0, 1).reshape(4, 6)
     res = np.log((np.exp(res) / sum(np.exp(res))).reshape(4, 2, 3).transpose(1, 2, 0))
-    obj.exception(etype="InvalidArgumentError", data=x, axis=3)
+    obj.exception(etype="InvalidArgument", data=x, axis=3)
 
 
 @pytest.mark.api_nn_LogSoftmax_exception
@@ -120,4 +120,4 @@ def test_logsoftmax6():
     # 算法
     res = x.transpose(2, 0, 1).reshape(4, 6)
     res = np.log((np.exp(res) / sum(np.exp(res))).reshape(4, 2, 3).transpose(1, 2, 0))
-    obj.exception(etype="InvalidArgumentError", data=x, axis="3")
+    obj.exception(etype="InvalidType", data=x, axis="3")

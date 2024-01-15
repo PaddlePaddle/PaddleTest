@@ -67,7 +67,7 @@ def test_disable_gpu():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu batch_size=1-2 swin_transformer outputs with true val
     """
@@ -98,6 +98,8 @@ def test_gpu_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
+            use_new_executor=True,
+            use_pir=False,
         )
 
         del test_suite2  # destroy class to save memory

@@ -156,4 +156,4 @@ def test_index_select9():
     x = np.arange(6).reshape(2, 3).astype("int32")
     index = np.array([0, 2])
     axis = 1.3
-    obj1.exception(mode="c", etype="InvalidArgument", x=x, index=index, axis=axis)
+    obj1.exception(mode="c", etype="InvalidType", x=x, index=index, axis=axis)

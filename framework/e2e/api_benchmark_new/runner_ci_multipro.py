@@ -60,8 +60,7 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         :param baseline: 性能baseline键值对, key为case名, value为性能float
         """
         # 测试控制项
-        # self.core_index = args.core_index  # 第一个cpu核序号
-        self.core_index = 7
+        self.core_index = args.core_index  # 第一个cpu核序号
         self.multiprocess_num = 4  # 并行进程数
         self.loops = 50  # 循环次数
         self.base_times = 1000  # timeit 基础运行时间
@@ -82,23 +81,23 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         # 例行标识
         self.baseline_comment = "baseline_CI_api_benchmark_pr_dev"
-        # self.comment = "CI_api_benchmark_pr_{}_ver_{}".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
-        self.comment = "multipro_naive_test"
+        self.comment = "CI_api_benchmark_pr_{}_ver_{}".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
+        # self.comment = "multipro_naive_test"
         self.routine = 0
         self.ci = 1
         self.uid = -1
 
         # 框架信息
         self.framework = "paddle"
-        # self.wheel_link = (
-        #     "https://xly-devops.bj.bcebos.com/PR/build_whl/{}/{}"
-        #     "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
-        # )
-
         self.wheel_link = (
-            "https://xly-devops.bj.bcebos.com/PR/build_whl/0/8b2b95305d14d57845e9b403da0ec4bf29e45e27"
-            "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl"
+            "https://xly-devops.bj.bcebos.com/PR/build_whl/{}/{}"
+            "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl".format(self.AGILE_PULL_ID, self.AGILE_REVISION)
         )
+
+        # self.wheel_link = (
+        #     "https://xly-devops.bj.bcebos.com/PR/build_whl/0/8b2b95305d14d57845e9b403da0ec4bf29e45e27"
+        #     "/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl"
+        # )
 
         # 框架信息callback
         self.commit = paddle.__git_commit__
@@ -133,28 +132,47 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
         # 邮件报警
         # self.email = Alarm(storage=self.storage)
 
+    # def split_list(self, lst, n):
+    #     """
+    #     将列表均分为n份
+    #     Args:
+    #         lst (list): 待划分的列表
+    #         n (int): 划分的份数
+    #     Returns:
+    #         res (list): 划分后的列表，其中每个元素为原列表的1/n部分
+    #     """
+    #     if not isinstance(lst, list) or not isinstance(n, int) or len(lst) == 0 or n <= 0:
+    #         return []
+
+    #     quotient, remainder = divmod(len(lst), n)
+    #     res = []
+    #     start = 0
+    #     for i in range(n):
+    #         if i < remainder:
+    #             end = start + quotient + 1
+    #         else:
+    #             end = start + quotient
+    #         res.append(lst[start:end])
+    #         start = end
+    #     return res
+
     def split_list(self, lst, n):
         """
-        将列表均分为n份
+        将列表按顺序划分为 n 份
         Args:
             lst (list): 待划分的列表
             n (int): 划分的份数
         Returns:
-            res (list): 划分后的列表，其中每个元素为原列表的1/n部分
+            res (list): 划分后的列表，其中每个元素为原列表的 1/n 部分
         """
         if not isinstance(lst, list) or not isinstance(n, int) or len(lst) == 0 or n <= 0:
             return []
 
         quotient, remainder = divmod(len(lst), n)
-        res = []
-        start = 0
-        for i in range(n):
-            if i < remainder:
-                end = start + quotient + 1
-            else:
-                end = start + quotient
-            res.append(lst[start:end])
-            start = end
+        res = [[] for _ in range(n)]
+        for i, value in enumerate(lst):
+            index = i % n
+            res[index].append(value)
         return res
 
     def _multi_run_main(self, all_cases, loops, base_times, result_queue):
@@ -322,7 +340,28 @@ class ApiBenchmarkCI(ApiBenchmarkBASE):
 
         :return:
         """
-        error_dict = self._run_main(all_cases=self.all_cases, loops=self.loops, base_times=self.base_times)
+        multiprocess_cases = self.split_list(lst=list(self.all_cases), n=self.multiprocess_num)
+        processes = []
+        result_queue = multiprocessing.Queue()
+
+        for i, cases_list in enumerate(multiprocess_cases):
+            process = multiprocessing.Process(
+                target=self._multi_run_main, args=(cases_list, self.loops, self.base_times, result_queue)
+            )
+            process.start()
+            os.sched_setaffinity(process.pid, {self.core_index + i})
+            processes.append(process)
+
+        for process in processes:
+            process.join()
+
+        error_dict = {}
+        while not result_queue.empty():
+            result_dict = result_queue.get()
+            error_dict.update(result_dict)
+
+        # error_dict = self._run_main(all_cases=self.all_cases, loops=self.loops, base_times=self.base_times)
+
         # 初始化数据库
         db = CIdb(storage=self.storage)
 

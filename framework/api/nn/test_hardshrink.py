@@ -91,4 +91,4 @@ def test_hardshrink4():
     x = np.array([-1, -0.01, 2.5])
     threshold = "1"
     # res = np.array([-1, -0.01, 2.5])
-    obj.exception(etype="InvalidArgumentError", data=x, threshold=threshold)
+    obj.exception(etype="InvalidType", data=x, threshold=threshold)
