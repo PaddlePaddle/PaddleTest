@@ -65,20 +65,21 @@ class PaddleScience_Start(object):
         """
         url = "https://paddle-qa.bj.bcebos.com/PaddleScience/datasets/datasets.tar.gz"
         file_name = "datasets.tar.gz"
-        urllib.request.urlretrieve(url, file_name)
-        os.system("tar -zxvf " + file_name + " -C PaddleScience/")
-        try:
-            subprocess.check_call(["python", "-m", "pip", "install", "scikit-image"])
-            logger.info("Install scikit-image success!")
-        except subprocess.CalledProcessError as e:
-            logger.error("Install scikit-image failed. Error code: {}. Output: {}".format(e.returncode, e.output))
+        if not os.path.exists(file_name):
+            urllib.request.urlretrieve(url, file_name)
+            os.system("tar -zxvf " + file_name + " -C PaddleScience/")
+            try:
+                subprocess.check_call(["python", "-m", "pip", "install", "scikit-image"])
+                logger.info("Install scikit-image success!")
+            except subprocess.CalledProcessError as e:
+                logger.error("Install scikit-image failed. Error code: {}. Output: {}".format(e.returncode, e.output))
 
-        try:
-            subprocess.check_call(["python", "-m", "pip", "install", "hdf5storage"])
-            logger.info("Install hdf5storage success!")
-        except subprocess.CalledProcessError as e:
-            logger.error("Install hdf5storage failed. Error code: {}. Output: {}".format(e.returncode, e.output))
-        logger.info("download datasets done!!!!")
+            try:
+                subprocess.check_call(["python", "-m", "pip", "install", "hdf5storage"])
+                logger.info("Install hdf5storage success!")
+            except subprocess.CalledProcessError as e:
+                logger.error("Install hdf5storage failed. Error code: {}. Output: {}".format(e.returncode, e.output))
+            logger.info("download datasets done!!!!")
 
     def build_prepare(self):
         """
