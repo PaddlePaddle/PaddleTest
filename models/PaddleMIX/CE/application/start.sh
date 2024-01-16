@@ -21,7 +21,7 @@ bash prepare.sh
 cd ${work_path}
 
 echo "*******application vision_language_chat begin***********"
-(bash vision_language_chat.py) 2>&1 | tee ${log_dir}/vision_language_chat.log
+(python vision_language_chat.py) 2>&1 | tee ${log_dir}/vision_language_chat.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
