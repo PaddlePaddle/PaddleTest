@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    swin_transformer_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/swin_transformer.tgz"
+    swin_transformer_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.3.2/class/swin_transformer.tgz"
     if not os.path.exists("./swin_transformer/inference.pdiparams"):
         wget.download(swin_transformer_url, out="./")
         tar = tarfile.open("swin_transformer.tgz")
@@ -99,7 +99,7 @@ def test_gpu_more_bz_new_executor():
             repeat=1,
             delta=1e-4,
             use_new_executor=True,
-            use_pir=False,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -108,7 +108,7 @@ def test_gpu_more_bz_new_executor():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_mixed_precision_bz1():
+def test_gpu_mixed_precision_bz1_new_executor():
     """
     compared gpu batch_size=1 swin_transformer mixed_precision outputs with true val
     """
@@ -146,6 +146,8 @@ def test_gpu_mixed_precision_bz1():
             output_data_dict,
             repeat=1,
             delta=0.01,
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory

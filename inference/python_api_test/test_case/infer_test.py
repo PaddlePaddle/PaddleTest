@@ -436,7 +436,16 @@ class InferenceTest(object):
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
 
-    def gpu_more_bz_test_mix(self, input_data_dict: dict, output_data_dict: dict, repeat=1, delta=5e-3, gpu_mem=1000):
+    def gpu_more_bz_test_mix(
+        self,
+        input_data_dict: dict,
+        output_data_dict: dict,
+        repeat=1,
+        delta=5e-3,
+        gpu_mem=1000,
+        use_new_executor=False,
+        use_pir=False,
+    ):
         """
         test enable_use_gpu() in mixed_precision
         Args:
@@ -448,6 +457,12 @@ class InferenceTest(object):
             None
         """
         self.pd_config.enable_use_gpu(gpu_mem, 0)
+        if use_new_executor:
+            print("use_new_executor!!!")
+            self.pd_config.enable_new_executor()
+        if use_pir:
+            print("use_pir!!!")
+            paddle.set_flags({"FLAGS_enable_pir_in_executor": True})
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         input_names = predictor.get_input_names()
