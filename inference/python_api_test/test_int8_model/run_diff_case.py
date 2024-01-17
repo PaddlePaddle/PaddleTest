@@ -103,7 +103,7 @@ quant_model_cases = {
     },
     "BERT_Base": {
         "test_py": "test_bert_infer.py",
-        "configs": [("--model_path", "models/x2paddle_cola_new_calib"), ("--task_name", "afqmc"), ("--batch_size", 1)],
+        "configs": [("--model_path", "models/x2paddle_cola_new_calib"), ("--batch_size", 1)],
     },
     "Deeplabv3-ResNet50": {
         "test_py": "test_segmentation_infer.py",
