@@ -220,7 +220,7 @@ def test_expand17():
     """
     x = np.array([1, 2]).astype(np.int64)
     shape = [[1], [2], [3]]
-    obj.exception(x=x, shape=shape, mode="c", etype="InvalidArgument")
+    obj.exception(x=x, shape=shape, mode="c", etype="InvalidType")
 
 
 # def test_expand18():

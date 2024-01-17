@@ -34,26 +34,44 @@ function DockerImages () {
         "Cuda102")
             echo "Selected Centos: Cuda102"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+            export env_cuda_version="10.2"
+            export env_cudnn_version="7.6.5"
+            export env_trt_version="7.0.0.11"
             ;;
         "Cuda112")
             echo "Selected Centos: Cuda112"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.2-trt8.0-gcc82"
+            export env_cuda_version="11.2"
+            export env_cudnn_version="8.2.1"
+            export env_trt_version="8.0.3.4"
             ;;
         "Cuda116")
             echo "Selected Centos: Cuda116"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4-trt8.4-gcc8.2"
+            export env_cuda_version="11.6"
+            export env_cudnn_version="8.4.0"
+            export env_trt_version="8.4.0.6"
             ;;
         "Cuda117")
             echo "Selected Centos: Cuda117"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"
+            export env_cuda_version="11.7"
+            export env_cudnn_version="8.4.1"
+            export env_trt_version="8.4.2.4"
             ;;
         "Cuda118")
             echo "Selected Centos: Cuda118"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.8-cudnn8.6-trt8.5-gcc8.2"
+            export env_cuda_version="11.8"
+            export env_cudnn_version="8.6.0"
+            export env_trt_version="8.5.3.1"
             ;;
         "Cuda120")
             echo "Selected Centos: Cuda120"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.0-cudnn8.9-trt8.6-gcc12.2"
+            export env_cuda_version="12.0"
+            export env_cudnn_version="8.9.1"
+            export env_trt_version="8.6.1.6"
             ;;
         *)
             DOCKER_EXIT_CODE=101
@@ -65,26 +83,44 @@ function DockerImages () {
         "Cuda102")
             echo "Selected Ubuntu: Cuda102"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+            export env_cuda_version="10.2"
+            export env_cudnn_version="7.6.5"
+            export env_trt_version="7.0.0.11"
             ;;
         "Cuda112")
             echo "Selected Ubuntu: Cuda112"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8.2-trt8.0-gcc82"
+            export env_cuda_version="11.2"
+            export env_cudnn_version="8.2.1"
+            export env_trt_version="8.0.3.4"
             ;;
         "Cuda116")
             echo "Selected Ubuntu: Cuda116"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6-cudnn8.4-trt8.4-gcc82"
+            export env_cuda_version="11.6"
+            export env_cudnn_version="8.4.0"
+            export env_trt_version="8.4.0.6"
             ;;
         "Cuda117")
             echo "Selected Ubuntu: Cuda117"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc82"
+            export env_cuda_version="11.7"
+            export env_cudnn_version="8.4.1"
+            export env_trt_version="8.4.2.4"
             ;;
         "Cuda118")
             echo "Selected Ubuntu: Cuda118"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.8-cudnn8.6-trt8.5-gcc82"
+            export env_cuda_version="11.8"
+            export env_cudnn_version="8.6.0"
+            export env_trt_version="8.5.3.1"
             ;;
         "Cuda120")
             echo "Selected Ubuntu: Cuda120"
             export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.0-cudnn8.9-trt8.6-gcc12.2"
+            export env_cuda_version="12.0"
+            export env_cudnn_version="8.9.1"
+            export env_trt_version="8.6.1.6"
             ;;
         *)
             DOCKER_EXIT_CODE=101
@@ -317,7 +353,8 @@ function Cu117PackageUrlInfo(){
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddlepaddle_gpu-0.0.0-cp39-cp39-linux_x86_64.whl"
             ;;
         "Python310")
-            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"
+            # export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp310-cp310-linux_x86_64.whl"
+            export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-GpuSome-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py310-Compile/latest/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl"
             ;;
         "Python311")
             export paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/${branch_info}-TagBuild-Training-Linux-Gpu-Cuda11.7-Cudnn8-Mkl-Avx-Gcc8.2/latest/paddlepaddle_gpu-0.0.0.post117-cp311-cp311-linux_x86_64.whl"

@@ -1,0 +1,37 @@
+case:
+  linux:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: prepare
+        path: paddlemix/models/groundingdino/csrc/
+        cmd: python setup_ms_deformable_attn_op.py install
+      -
+        name: export
+        path: deploy/groundingdino/
+        cmd: python export.py
+        params:
+          - --dino_type GroundingDino/groundingdino-swint-ogc
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    predict:
+      -
+        name: predict
+        path: deploy/groundingdino/
+        cmd: python predict.py
+        params:
+          - --text_encoder_type GroundingDino/groundingdino-swint-ogc
+          - --model_path output_groundingdino/GroundingDino/groundingdino-swint-ogc
+          - --input_image https://bj.bcebos.com/v1/paddlenlp/models/community/GroundingDino/000000004505.jpg
+          - --output_dir ./groundingdino_predict_output
+          - --prompt "bus"
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="

@@ -1,0 +1,64 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: paddlemix/external_ops/
+        cmd: python setup.py install
+      -
+        name: single
+        path: paddlemix/examples/coca/
+        cmd: python -m paddle.distributed.launch --nproc_per_node 2 run_pretrain_dist.py
+        params:
+          - --dataloader_num_workers=2
+          - --per_device_train_batch_size 1
+          - --per_device_eval_batch_size 1
+          - --model "paddlemix/CoCa/coca_Vit-L-14/"
+          - --warmup_steps 100
+          - --learning_rate 5e-4
+          - --weight_decay 0.05
+          - --adam_beta1 0.9 
+          - --adam_beta2 0.999 
+          - --adam_epsilon 1e-8 
+          - --max_grad_norm 5.0
+          - --num_train_epochs 1
+          - --tensor_parallel_degree 1
+          - --sharding_parallel_degree 2
+          - --sharding "stage2"
+          - --bf16 False
+          - --output_dir "./output"
+          - --logging_steps 1
+          - --do_train
+          - --disable_tqdm True
+          - --save_steps 100
+          - --local_loss true
+          - --gather_with_grad true
+          - --pretrained_text_model "paddlemix/CoCa/coca_Vit-L-14/"
+          - --classification_eval /home/data/imagenet-val/
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval:
+      -
+        name: eval
+        path: paddlemix/examples/coca/
+        cmd: python run_zero_shot_eval.py
+        params:
+          - --per_device_eval_batch_size 1
+          - --dataloader_num_workers=2
+          - --model "paddlemix/CoCa/coca_Vit-L-14"
+          - --fp16 False
+          - --pretrained_text_model coca_Vit-L-14
+          - --classification_eval /home/data/imagenet-val/
+          - --output_dir "output"
+          - --disable_tqdm True
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    infer: skipped
+    export: skipped
+    predict: skipped
