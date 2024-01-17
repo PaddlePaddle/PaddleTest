@@ -65,7 +65,7 @@ def test_mkldnn():
     )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
-    input_data_dict = {"inputs": fake_input}
+    input_data_dict = {"x": fake_input}
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="cpu")
 
     del test_suite  # destroy class to save memory

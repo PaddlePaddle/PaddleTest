@@ -73,7 +73,7 @@ def test_disable_gpu():
 
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu yolov3 batch_size = [1, 2] outputs with true val
     """
