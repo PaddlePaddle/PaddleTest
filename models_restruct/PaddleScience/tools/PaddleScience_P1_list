@@ -10,3 +10,5 @@ examples^fpde^fractional_poisson_2d.yaml
 examples^shock_wave^shock_wave.yaml
 examples^heat_pinn^heat_pinn.yaml
 examples^epnn^epnn.yaml
+example^heat_exchanger.yaml
+example^phylstm.yaml
