@@ -52,6 +52,8 @@ class PaddleScience_Case_Start(object):
         elif "viv" in self.case_name:
             os.system("wget -nc https://paddle-org.bj.bcebos.com/paddlescience/models/viv/viv_pretrained.pdeqn")
             os.system("wget -nc https://paddle-org.bj.bcebos.com/paddlescience/models/viv/viv_pretrained.pdparams")
+        elif "amgnet" in self.case_name:
+            os.system("python3 -m pip install -U pgl")
         else:
             return 0
 
