@@ -9,7 +9,7 @@ import platform
 logger = logging.getLogger("ce")
 
 
-class PaddleOCR_Case_Start(object):
+class PaddleSeg_Case_Start(object):
     """
     自定义环境准备
     """
@@ -42,13 +42,13 @@ def run():
     """
     执行入口
     """
-    model = PaddleOCR_Case_Start()
+    model = PaddleSeg_Case_Start()
     model.build_prepare()
     return 0
 
 
 if __name__ == "__main__":
     # args = None
-    # model = PaddleOCR_Case_Start(args)
+    # model = PaddleSeg_Case_Start(args)
     # model.build_prepare()
     run()
