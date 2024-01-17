@@ -28,7 +28,7 @@ class PaddleOCR_Case_Start(object):
         """
         执行准备过程
         """
-        os.environ["SOT_EXPORT"] = "Layer_cases/{self.case_name}_{self.case_step}"
+        os.environ["SOT_EXPORT"] = f"Layer_cases/{self.qa_yaml_name}_{self.case_name}_{self.case_step}"
         logger.info("set org SOT_EXPORT as {}".format(os.getenv("SOT_EXPORT")))
         # sysstr = platform.system()
         # if sysstr == "Linux":
