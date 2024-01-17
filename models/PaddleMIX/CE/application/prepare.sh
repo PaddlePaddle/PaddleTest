@@ -9,6 +9,7 @@ export https_proxy=${proxy}
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
 pip install -U ppdiffusers
 pip install imageio
+pip install tiktoken
 
 cd ${root_path}/PaddleMIX/
 pip install -r requirements.txt
