@@ -26,7 +26,7 @@ def check_model_exist():
     """
     check model exist
     """
-    resnet50_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.0/class/resnet50.tgz"
+    resnet50_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.3.2/class/resnet50.tgz"
     if not os.path.exists("./resnet50/inference.pdiparams"):
         wget.download(resnet50_url, out="./")
         tar = tarfile.open("resnet50.tgz")

@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    solov2_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.3/detection/solov2.tgz"
+    solov2_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.3.2/detection/solov2.tgz"
     if not os.path.exists("./solov2/model.pdiparams"):
         wget.download(solov2_url, out="./")
         tar = tarfile.open("solov2.tgz")
