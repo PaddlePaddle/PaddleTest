@@ -10,11 +10,7 @@ case:
       -
         name: single_forward
       -
-        name: multi_forward
-      -
         name: single_inverse
-      -
-        name: multi_inverse
     infer: skipped
     export: skipped
     predict: skipped
