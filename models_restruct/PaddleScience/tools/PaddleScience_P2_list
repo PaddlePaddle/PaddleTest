@@ -8,3 +8,5 @@ examples^deephpms^schrodinger.yaml
 examples^tempoGAN^tempoGAN.yaml
 examples^deepcfd^deepcfd.yaml
 example^control_arm.yaml
+example^bubble^bubble.yaml
+example^topopt.yaml
