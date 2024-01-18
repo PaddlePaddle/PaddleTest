@@ -54,7 +54,7 @@ class PaddleScience_Case_Start(object):
             os.system("wget -nc https://paddle-org.bj.bcebos.com/paddlescience/models/viv/viv_pretrained.pdparams")
         elif "amgnet" in self.case_name:
             os.system("python3 --version")
-            os.system("python3 -m pip install -U pgl")
+            os.system("python3.10 -m pip install -U pgl")
         else:
             return 0
 
