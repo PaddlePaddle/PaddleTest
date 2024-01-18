@@ -11,7 +11,7 @@ train:
         evaluation: "-"
 eval:
   -
-    name: single
+    name: viv_single
     cmd: python examples/fsi/viv.py
     params:
       - mode=eval

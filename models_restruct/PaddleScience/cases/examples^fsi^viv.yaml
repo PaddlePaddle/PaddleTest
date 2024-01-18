@@ -6,7 +6,7 @@ case:
         name: single
     eval:
       -
-        name: single
+        name: viv_single
     infer: skipped
     export: skipped
     predict: skipped
