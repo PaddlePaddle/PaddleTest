@@ -20,6 +20,7 @@ import sys
 import subprocess
 
 import pytest
+import numpy as np
 
 from tools.log_analysis import get_last_epoch_loss, get_last_eval_metric
 
@@ -35,8 +36,8 @@ def test_laplace2d_exit_code():
 
     # 执行命令行命令，运行 laplace2d.py 脚本
     command = f"python{py_version} ../../examples/laplace/laplace2d.py \
-                --epochs={epoch_num} \
-                --output_dir={output_dir}"
+                TRAIN.epochs={epoch_num} \
+                output_dir={output_dir}"
     process = subprocess.Popen(command, shell=True)
     # 等待脚本执行完成，并返回退出码
     exit_code = process.wait()
@@ -58,7 +59,7 @@ def test_laplace2d_loss():
     last_loss = get_last_epoch_loss(log_file, epoch_num)
 
     # 断言最后一轮迭代的损失值与基准
-    assert float(last_loss) == base_loss
+    assert np.allclose(float(last_loss), base_loss, rtol=1e-6)
 
 
 def test_laplace2d_metric():
@@ -74,7 +75,7 @@ def test_laplace2d_metric():
     last_metric = get_last_eval_metric(log_file, loss_function)
 
     # 断言最后一轮迭代的评估值与基准
-    assert float(last_metric) == base_metric
+    assert np.allclose(float(last_metric), base_metric, rtol=1e-6)
 
 
 if __name__ == "__main__":

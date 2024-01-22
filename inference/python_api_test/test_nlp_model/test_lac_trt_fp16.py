@@ -66,23 +66,6 @@ def test_lac_trt_fp16():
 
     del test_suite  # destroy class to save memory
 
-    test_suite1 = InferenceTest()
-    test_suite1.load_config(
-        model_file="./lac/inference.pdmodel",
-        params_file="./lac/inference.pdiparams",
-    )
-    test_suite1.trt_more_bz_test(
-        input_data_dict,
-        output_data_dict,
-        delta=1e-5,
-        precision="trt_fp16",
-        dynamic=True,
-        tuned=True,
-        min_subgraph_size=2,
-    )
-
-    del test_suite1  # destroy class to save memory
-
     test_suite2 = InferenceTest()
     test_suite2.load_config(
         model_file="./lac/inference.pdmodel",
@@ -94,6 +77,8 @@ def test_lac_trt_fp16():
         delta=1e-5,
         precision="trt_fp16",
         dynamic=True,
-        tuned=False,
-        min_subgraph_size=2,
+        auto_tuned=True,
+        min_subgraph_size=1,
+        # see comments in test_lac_trt_fp32.py
+        delete_op_list=["transpose_2.tmp_0_slice_0"],
     )

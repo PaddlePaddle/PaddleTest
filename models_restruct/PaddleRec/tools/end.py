@@ -37,8 +37,11 @@ class PaddleRec_End(object):
 
         for file_name in list_dir:
             if "output" in file_name:
-                shutil.rmtree(file_name)
-                logger.info("#### clean data: {}".format(file_name))
+                try:
+                    shutil.rmtree(file_name)
+                    logger.info("#### clean data: {}".format(file_name))
+                except:
+                    logger.info("#### can not clean data: {}".format(file_name))
 
         os.chdir(path_now)
         return 0

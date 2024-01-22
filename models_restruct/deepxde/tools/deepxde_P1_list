@@ -1,0 +1,12 @@
+lulu^examples^pinn_forward^fractional_diffusion_1d.yaml
+lulu^examples^pinn_forward^Beltrami_flow.yaml
+lulu^examples^pinn_inverse^reaction_inverse.yaml
+lulu^examples^pinn_inverse^Lorenz_inverse_forced.yaml
+lulu^examples^pinn_forward^Volterra_IDE.yaml
+lulu^examples^pinn_forward^diffusion_reaction.yaml
+lulu^examples^pinn_inverse^fractional_Poisson_1d_inverse.yaml
+lulu^examples^pinn_forward^fractional_Poisson_3d.yaml
+lulu^examples^pinn_forward^Poisson_Lshape.yaml
+lulu^examples^pinn_forward^fractional_Poisson_1d.yaml
+lulu^examples^pinn_forward^Burgers_RAR.yaml
+lulu^examples^pinn_forward^elasticity_plate.yaml

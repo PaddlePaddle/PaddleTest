@@ -1,0 +1,44 @@
+case:
+  linux:
+    train:
+      -
+        name: FD-GPU
+        path: model_zoo/ernie-m/deploy/python
+        cmd: python seq_cls_infer.py
+        params:
+          - --model_dir ../../finetuned_models/export/model
+          - --device gpu
+          - --backend paddle
+      -
+        name: FD-CPU
+        path: model_zoo/ernie-m/deploy/python
+        cmd: python seq_cls_infer.py
+        params:
+          - --model_dir ../../finetuned_models/export/
+          - --device cpu
+          - --backend paddle
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

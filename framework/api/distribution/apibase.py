@@ -540,12 +540,13 @@ class APIBase(object):
         return numeric_grad
 
     def _get_sigle_grad(self, t, idx, k, n=None):
-        assert isinstance(t, paddle.fluid.framework.Variable), "The first argument t must be Tensor."
+        assert isinstance(t, paddle.static.Variable), "The first argument t must be Tensor."
         assert isinstance(idx, int), "The second argument idx must be an int number."
 
         dtype = t.dtype
         flat_t = paddle.reshape(t, [-1])
         orig = flat_t.__getitem__(idx)
+        orig = paddle.assign(orig)
         flat_t.__setitem__(idx, orig + self.gap)
         x_pos = flat_t.reshape(t.shape).astype(dtype)
         if isinstance(n, int):
@@ -688,7 +689,7 @@ class APIBase(object):
                         logging.info(xyz)
                         for k in xyz:
                             if isinstance(params[k], (list, tuple)) and isinstance(
-                                params[k][0], paddle.fluid.framework.Variable
+                                params[k][0], paddle.static.Variable
                             ):
                                 grad_tmp = []
                                 for i in range(len(params[k])):

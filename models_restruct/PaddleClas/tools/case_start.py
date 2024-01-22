@@ -35,6 +35,9 @@ class PaddleClas_Case_Start(object):
         """
         执行准备过程
         """
+        os.environ["SOT_EXPORT"] = f"Layer_cases/{self.qa_yaml_name}_{self.case_name}_{self.case_step}"
+        logger.info("set org SOT_EXPORT as {}".format(os.getenv("SOT_EXPORT")))
+
         if "dy2st_convergence" in self.qa_yaml_name:
             logger.info("dy2st_convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
@@ -47,7 +50,7 @@ class PaddleClas_Case_Start(object):
             os.environ["NVIDIA_TF32_OVERRIDE"] = "1"
             logger.info("set NVIDIA_TF32_OVERRIDE as {}".format(os.getenv("NVIDIA_TF32_OVERRIDE")))
             logger.info("before set FLAGS_cudnn_deterministic as {}".format(os.getenv("FLAGS_cudnn_deterministic")))
-            os.environ["FLAGS_use_reduce_split_pass"] = "1"
+            # os.environ["FLAGS_use_reduce_split_pass"] = "1" #230607 chenzhuo remove
             logger.info("set FLAGS_use_reduce_split_pass {}".format(os.getenv("FLAGS_use_reduce_split_pass")))
             logger.info("set FLAGS_deny_cinn_ops {}".format(os.getenv("FLAGS_deny_cinn_ops")))
             os.environ["FLAGS_conv_workspace_size_limit"] = "400"

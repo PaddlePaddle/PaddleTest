@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/ode_2nd.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 1.84e-05
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 2.38e-05
+      evaluation: '-'
+      threshold: 1

@@ -1,0 +1,4 @@
+train:
+  name: multi
+  path: ${model_path}
+  cmd: export CUDA_VISIBLE_DEVICES=0; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/s2t/exps/${model_bin}/bin; bash path.sh; bash ${MAIN_ROOT}/utils/parse_options.sh; bash ./local/data.sh; ckpt=${ckpt}; rm -rf exp; bash ./local/train.sh ${conf_path} ${ckpt}

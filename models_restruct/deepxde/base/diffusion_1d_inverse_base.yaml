@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_inverse/diffusion_1d_inverse.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 7.31e-05
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.00112
+      evaluation: '-'
+      threshold: 1

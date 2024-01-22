@@ -8,7 +8,6 @@ import sys
 from apibase import APIBase
 import paddle
 import pytest
-from paddle import fluid
 import numpy as np
 
 sys.path.append("../..")
@@ -25,7 +24,7 @@ class TestRandn(APIBase):
         implement
         """
         self.types = [np.float32, np.float64]
-        self.places = [fluid.CPUPlace()]
+        self.places = [paddle.CPUPlace()]
         # self.debug = True
         # self.static = True
         # enable check grad
@@ -106,7 +105,7 @@ def test_randn5():
     """
     gpu
     """
-    obj.places = [fluid.CUDAPlace(0)]
+    obj.places = [paddle.CUDAPlace(0)]
     obj.seed = 1
     res = np.array([[-0.296278, 2.676448], [-0.14084621, -0.84409523]])
     obj.run(res=res, shape=np.array([2, 2]))

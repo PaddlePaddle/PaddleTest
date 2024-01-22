@@ -77,22 +77,6 @@ def test_trt_fp32_more_bz():
 
         del test_suite  # destroy class to save memory
 
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./vgg11/inference.pdmodel",
-            params_file="./vgg11/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            max_batch_size=batch_size,
-            precision="trt_fp32",
-            dynamic=True,
-            tuned=True,
-        )
-
-        del test_suite1  # destroy class to save memory
-
         test_suite2 = InferenceTest()
         test_suite2.load_config(
             model_file="./vgg11/inference.pdmodel",
@@ -102,8 +86,10 @@ def test_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             max_batch_size=batch_size,
+            min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -131,22 +117,7 @@ def test_jetson_trt_fp32_more_bz():
         input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
-        del test_suite  # destroy class to save memory
-
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./vgg11/inference.pdmodel",
-            params_file="./vgg11/inference.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            max_batch_size=batch_size,
-            precision="trt_fp32",
-            dynamic=True,
-            tuned=True,
-        )
-        del test_suite1  # destroy class to save memory
+        del test_suite  # destroy class to save memory\
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -157,8 +128,10 @@ def test_jetson_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             max_batch_size=batch_size,
+            min_subgraph_size=1,
             precision="trt_fp32",
             dynamic=True,
+            auto_tuned=True,
         )
 
         del test_suite2  # destroy class to save memory

@@ -87,6 +87,14 @@ if %errorlevel% equ 0 (
     %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py310\pyvenv.cfg
     type D:\Windows_env\%reponame%_py310\pyvenv.cfg
 )
+echo %Python_version% | findstr "311" >nul
+if %errorlevel% equ 0 (
+    @REM CALL conda activate %reponame%_py311
+    @REM C:\Python311\Scripts\virtualenv %reponame%_py311
+    CALL D:\Windows_env\%reponame%_py311\Scripts\activate.bat
+    %sed% -i s/"include-system-site-packages = false"/"include-system-site-packages = true"/g D:\Windows_env\%reponame%_py311\pyvenv.cfg
+    type D:\Windows_env\%reponame%_py311\pyvenv.cfg
+)
 
 rem set path
 set "PATH=C:\Program Files\Git\bin;C:\Program Files\Git\cmd;C:\Windows\System32;C:\Windows\SysWOW64;C:\zip_unzip;D:\TensorRT-8.4.1.5\lib;%PATH%"
@@ -108,8 +116,16 @@ echo %AGILE_PIPELINE_NAME% | findstr "\Cuda117" >nul
 if %errorlevel% equ 0 (
     set cuda_version=11.7
 )
+echo %AGILE_PIPELINE_NAME% | findstr "\Cuda118" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=11.8
+)
+echo %AGILE_PIPELINE_NAME% | findstr "\Cuda120" >nul
+if %errorlevel% equ 0 (
+    set cuda_version=12.0
+)
 rem not xly use default cuda_version
-if not defined cuda_version set cuda_version=11.7
+if not defined cuda_version set cuda_version=12.0
 set "PATH=C:\Program Files\NVIDIA Corporation\NVSMI;%PATH%"
 set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\libnvvp;%PATH%"
 set "PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\%cuda_version%\bin;%PATH%"
@@ -137,6 +153,38 @@ if %flag_version% equ 310 (
         if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/develop/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
     )  else  (
         if not defined paddle_whl set paddle_whl="https://paddle-wheel.bj.bcebos.com/release/2.5/windows/windows-cpu-avx-mkl-vs2017/paddlepaddle-0.0.0-cp310-cp310-win_amd64.whl"
+    )
+)
+
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda120-Python311" >nul
+if %errorlevel% equ 0 (
+    set flag_version=120311
+)  else  (
+    set flag_version=0
+)
+echo flag_version %flag_version%
+if %flag_version% equ 120311 (
+    if %flag_branch% equ 1 (
+        if not defined paddle_whl set paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-windows-cuda120-cudnn8-mkl/latest/paddlepaddle_gpu-0.0.0.post120-cp311-cp311-win_amd64.whl"
+
+    )  else  (
+        if not defined paddle_whl set paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-windows-cuda120-cudnn8-mkl/latest/paddlepaddle_gpu-0.0.0.post120-cp311-cp311-win_amd64.whl"
+    )
+)
+
+echo %AGILE_PIPELINE_NAME% | findstr "Cuda118-Python310" >nul
+if %errorlevel% equ 0 (
+    set flag_version=118310
+)  else  (
+    set flag_version=0
+)
+echo flag_version %flag_version%
+if %flag_version% equ 118310 (
+    if %flag_branch% equ 1 (
+        if not defined paddle_whl set paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-Build-windows-cuda118-cudnn8-mkl/latest/paddlepaddle_gpu-0.0.0.post118-cp310-cp310-win_amd64.whl"
+
+    )  else  (
+        if not defined paddle_whl set paddle_whl="https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-Build-windows-cuda118-cudnn8-mkl/latest/paddlepaddle_gpu-0.0.0.post118-cp310-cp310-win_amd64.whl"
     )
 )
 
@@ -213,7 +261,7 @@ if not defined CE_version_name set CE_version_name=TestFrameWork
 if not defined models_name set models_name=models_restruct
 
 rem download CE_Link
-wget -q %CE_Link%
+wget -q %CE_Link% --no-proxy
 unzip -P %CE_pass% %CE_version_name%.zip
 
 rem set proxy

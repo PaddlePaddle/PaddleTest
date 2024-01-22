@@ -5,7 +5,9 @@ pwd;
 if [ -e linux_env_info.sh ];then
     rm -rf linux_env_info.sh
 fi
-wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh --no-proxy
+# 临时使用
+wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh --no-proxy
 source ./linux_env_info.sh
 set +e
 
@@ -71,9 +73,21 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]];then
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
-        linux_env_info_main get_docker_images Ubuntu Cuda117
+        linux_env_info_main get_docker_images Centos Cuda117
     else
         linux_env_info_main get_docker_images Ubuntu Cuda117
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda118" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        linux_env_info_main get_docker_images Centos Cuda118
+    else
+        linux_env_info_main get_docker_images Ubuntu Cuda118
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        linux_env_info_main get_docker_images Centos Cuda120
+    else
+        linux_env_info_main get_docker_images Ubuntu Cuda120
     fi
 else
     if [[ ${Image_version} ]];then
@@ -103,7 +117,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         linux_env_info_main get_wheel_url Cuda102 Python37 Develop
         # cudnn7用的是cudnn8的预测库的包
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.1.3.4"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.0.0.11"}
 
         #230223 stride test
         # export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/xieyunshen/TempPRBuild/50444/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
@@ -111,38 +125,78 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         linux_env_info_main get_wheel_url Cuda102 Python37 Release
         # cudnn7用的是cudnn8的预测库的包
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.1.3.4"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.0.0.11"}
 
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python38" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        linux_env_info_main get_wheel_url Cuda112 Python38 Develop
-        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
+        linux_env_info_main get_wheel_url Cuda112 Python38 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     else
-        linux_env_info_main get_wheel_url Cuda112 Python38 Release
-        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
+        linux_env_info_main get_wheel_url Cuda112 Python38 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python311" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        linux_env_info_main get_wheel_url Cuda112 Python311 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
+    else
+        linux_env_info_main get_wheel_url Cuda112 Python311 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        linux_env_info_main get_wheel_url Cuda116 Python39 Develop
-        export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/develop/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
+        linux_env_info_main get_wheel_url Cuda116 Python39 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/develop/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
     else
-        linux_env_info_main get_wheel_url Cuda116 Python39 Release
-        export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/release/2.5/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
+        linux_env_info_main get_wheel_url Cuda116 Python39 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/release/2.5/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        linux_env_info_main get_wheel_url_covall Cuda116 Python310 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/develop/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
+    else
+        linux_env_info_main get_wheel_url_covall Cuda116 Python310 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/release/2.5/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
-        linux_env_info_main get_wheel_url Cuda117 Python310 Develop
-        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TTensorRT-8.4.2.4"}
-    else
-        linux_env_info_main get_wheel_url Cuda117 Python310 Release
-        export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
+        linux_env_info_main get_wheel_url Cuda117 Python310 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.2.4"}
+    else
+        linux_env_info_main get_wheel_url Cuda117 Python310 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.2.4"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda118" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        linux_env_info_main get_wheel_url Cuda118 Python310 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.5.1.7"}
+    else
+        linux_env_info_main get_wheel_url Cuda118 Python310 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.5.1.7"}
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python311" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        linux_env_info_main get_wheel_url Cuda120 Python311 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
+    else
+        linux_env_info_main get_wheel_url Cuda120 Python311 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
     fi
 else
     if [[ ${paddle_whl} ]];then
@@ -190,17 +244,29 @@ export models_name=${models_name:-models_restruct}  #后面复制使用，和模
 
 #### 二分定位使用
 export binary_search_flag=${binary_search_flag:-False}  #True表示在使用二分定位, main中一些跳出方法不生效
+# 使用大模型分析模型日志
+export is_analysis_logs=${is_analysis_logs:-True}
+export analysis_case=${analysis_case:-None}
 export use_data_cfs=${use_data_cfs:-False}  #False表示不用cfs挂载
 export plot=${plot:-False}  #False表示不自动绘图
 export c_plus_plus_predict=${c_plus_plus_predict:-False}  #False表示不配置 C++预测库
+export PaddleX=${PaddleX:-None}
 
 #cinn编译器
 export FLAGS_use_cinn=${FLAGS_use_cinn:-0}
 export FLAGS_prim_all=${FLAGS_prim_all:-false}
+# new ir
+export FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor:-0}
+export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-0}
+# paddleSOT
+export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-true}
+export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-10}
+export FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir:-}
+export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-False}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
-wget -q ${CE_Link} #需要全局定义
+wget -q ${CE_Link} --no-proxy #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
@@ -209,6 +275,7 @@ export https_proxy=${http_proxy}
 export no_proxy=${no_proxy}
 export AK=${AK} #使用bos_new上传需要
 export SK=${SK}
+export api_key=${api_key}
 export bce_whl_url=${bce_whl_url}
 set -x;
 
@@ -226,6 +293,8 @@ echo "@@@mode: ${mode}"
 echo "@@@docker_flag: ${docker_flag}"
 echo "@@@timeout: ${timeout}"
 echo "@@@binary_search_flag: ${binary_search_flag}"
+echo "@@@is_analysis_logs: ${is_analysis_logs}"
+echo "@@@analysis_case: ${analysis_case}"
 echo "@@@use_data_cfs: ${use_data_cfs}"
 echo "@@@plot: ${plot}"
 echo "@@@c_plus_plus_predict: ${c_plus_plus_predict}"
@@ -234,6 +303,7 @@ echo "@@@TENSORRT_DIR: ${TENSORRT_DIR}"
 
 echo "@@@FLAGS_use_cinn: ${FLAGS_use_cinn}"
 echo "@@@FLAGS_prim_all: ${FLAGS_prim_all}"
+echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
 
 ####之前下载过了直接mv
 if [[ -d "../task" ]];then
@@ -245,7 +315,14 @@ else
 fi
 
 #复制模型相关文件到指定位置
-cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+if [ $PaddleX = True ];then
+  echo "PaddleX is True"
+  cp -r ./task/${models_name}/PaddleX/.  ./${CE_version_name}/
+else
+  echo "PaddleX is False"
+  cp -r ./task/${models_name}/${reponame}/.  ./${CE_version_name}/
+fi
+
 ls ./${CE_version_name}/
 cd ./${CE_version_name}/
 
@@ -253,6 +330,12 @@ cd ./${CE_version_name}/
 if [[ -d "../../${reponame}" ]];then  #前面cd 了 2次所以使用 ../../
     cp -r ../../${reponame} .
     echo "因为 ${reponame} 在根目录存在 使用预先clone或wget的 ${reponame}"
+fi
+
+# PTS
+if [[ -d "../../PTSTools" ]];then
+    cp -r ../../PTSTools .
+    echo "Get PTSTools"
 fi
 
 ####根据agent制定对应卡，记得起agent时文件夹按照release_01 02 03 04名称
@@ -307,6 +390,10 @@ if [[ "${docker_flag}" == "" ]]; then
 
     ####创建docker
     set +x;
+
+    # # 拉取更新镜像
+    # docker pull ${Image_version}
+
     docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
     {
@@ -321,6 +408,7 @@ if [[ "${docker_flag}" == "" ]]; then
         --shm-size=128G \
         -v $(pwd):/workspace \
         -v /ssd2:/ssd2 \
+        -v /mnt:/mnt \
         -e AK=${AK} \
         -e SK=${SK} \
         -e CFS_IP=${CFS_IP} \
@@ -345,9 +433,12 @@ if [[ "${docker_flag}" == "" ]]; then
         -e mode=${mode} \
         -e use_build=${use_build} \
         -e binary_search_flag=${binary_search_flag} \
+        -e is_analysis_logs=${is_analysis_logs} \
+        -e analysis_case=${analysis_case} \
         -e use_data_cfs=${use_data_cfs} \
         -e plot=${plot} \
         -e c_plus_plus_predict=${c_plus_plus_predict} \
+        -e PaddleX=${PaddleX} \
         -e branch=${branch} \
         -e get_repo=${get_repo} \
         -e paddle_whl=${paddle_whl} \
@@ -356,16 +447,24 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
+        -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
+	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+        -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
+        -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
+        -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
+	-e api_key=${api_key} \
+        -e PTS_ENV_VARS=$PTS_ENV_VARS \
+        -e FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir} \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '
-
         ldconfig;
         if [[ `yum --help` =~ "yum" ]];then
             echo "centos"
             yum install nfs-utils -y > install_nfs 2>&1
+            export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
             case ${Python_version} in
             36)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -386,6 +485,14 @@ if [[ "${docker_flag}" == "" ]]; then
             310)
             export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
             export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+            ;;
+            311)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.11.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.11.0/bin/:${PATH}
+            ;;
+            312)
+            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.12.0/lib/:${LD_LIBRARY_PATH}
+            export PATH=/opt/_internal/cpython-3.12.0/bin/:${PATH}
             ;;
             esac
         else
@@ -423,6 +530,18 @@ if [[ "${docker_flag}" == "" ]]; then
             ln -s $(which pip3.10) run_env_py310/pip;
             export PATH=$(pwd)/run_env_py310:${PATH};
             ;;
+            311)
+            mkdir run_env_py311;
+            ln -s $(which python3.11) run_env_py311/python;
+            ln -s $(which pip3.11) run_env_py311/pip;
+            export PATH=$(pwd)/run_env_py311:${PATH};
+            ;;
+            312)
+            mkdir run_env_py312;
+            ln -s $(which python3.12) run_env_py312/python;
+            ln -s $(which pip3.12) run_env_py312/pip;
+            export PATH=$(pwd)/run_env_py312:${PATH};
+            ;;
             esac
         fi
         #挂载数据, 地址特定为mount_path
@@ -437,12 +556,34 @@ if [[ "${docker_flag}" == "" ]]; then
         ls ${mount_path}
         echo "@@@mount_path: ${mount_path}"
 
+	echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+        # FLAGS_enable_pir_in_executor bug
+        if [ $FLAGS_enable_pir_in_executor == 0 ];then
+        echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+        unset FLAGS_enable_pir_in_executor
+        fi
+    echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        # ENABLE_FALL_BACK install
+        if [ $ENABLE_FALL_BACK == True ];then
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
+        echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
+        ehco "@@@export FLAGS_enable_pir_api ${export FLAGS_enable_pir_api}"
+        set -x
+        # Flag
+        export STRICT_MODE=0
+        export SOT_LOG_LEVEL=2
+        export COST_MODEL=False
+        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        fi
+
         nvidia-smi;
         python -c "import sys; print(sys.version_info[:])";
         git --version;
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None}
+
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
     ' &
     wait $!
     exit $?
@@ -452,6 +593,7 @@ else
     export PORT_RANGE=62000:65536
     if [[ `yum --help` =~ "yum" ]];then
         echo "centos"
+        export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
         case ${Python_version} in
         36)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
@@ -472,6 +614,14 @@ else
         310)
         export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
         export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+        ;;
+        311)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.11.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.11.0/bin/:${PATH}
+        ;;
+        312)
+        export LD_LIBRARY_PATH=/opt/_internal/cpython-3.12.0/lib/:${LD_LIBRARY_PATH}
+        export PATH=/opt/_internal/cpython-3.12.0/bin/:${PATH}
         ;;
         esac
     else
@@ -507,6 +657,18 @@ else
         ln -s $(which pip3.10) run_env_py310/pip;
         export PATH=$(pwd)/run_env_py310:${PATH};
         ;;
+        311)
+        mkdir run_env_py311;
+        ln -s $(which python3.11) run_env_py311/python;
+        ln -s $(which pip3.11) run_env_py311/pip;
+        export PATH=$(pwd)/run_env_py311:${PATH};
+        ;;
+        312)
+        mkdir run_env_py312;
+        ln -s $(which python3.12) run_env_py312/python;
+        ln -s $(which pip3.12) run_env_py312/pip;
+        export PATH=$(pwd)/run_env_py312:${PATH};
+        ;;
         esac
     fi
 
@@ -515,10 +677,32 @@ else
     ls ${mount_path}
     echo "@@@mount_path: ${mount_path}"
 
+    echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+    # FLAGS_enable_pir_in_executor bug
+    if [ $FLAGS_enable_pir_in_executor == 0 ];then
+    echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+    unset FLAGS_enable_pir_in_executor
+    fi
+    echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        # ENABLE_FALL_BACK install
+        if [ $ENABLE_FALL_BACK == True ];then
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+        echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
+        echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
+        echo "@@@export FLAGS_enable_pir_api: ${export FLAGS_enable_pir_api}"
+
+        set -x
+        # Flag
+        export STRICT_MODE=0
+        export SOT_LOG_LEVEL=2
+        export COST_MODEL=False
+        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+        fi
+
     nvidia-smi;
     python -c "import sys; print(sys.version_info[:])";
     git --version;
     python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
     python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
 fi

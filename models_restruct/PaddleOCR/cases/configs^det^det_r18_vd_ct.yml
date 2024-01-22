@@ -5,8 +5,10 @@ case:
           -
             name: multi
           -
-            name: amp
+            name: multi_amp
         eval:
+          -
+            name: trained
           -
             name: pretrained
             result:
@@ -14,7 +16,17 @@ case:
                 base: ${eval_base_acc}
                 threshold: 0
                 evaluation: "="
+        infer:
+          -
+            name: trained
+          -
+            name: pretrained
         export:
+          -
+            name: trained
+          -
+            name: pretrained
+        predict:
           -
             name: trained
           -

@@ -93,7 +93,7 @@ def test_floor_divide4():
     x = np.array([[-3], [-11], [-2]])
     y = np.array([[-1], [2], [1]])
     name = None
-    res = np.array([[3], [-5], [-2]])
+    res = np.array([[3], [-6], [-2]])
     obj.run(res=res, x=x, y=y, name=name)
 
 
@@ -105,7 +105,7 @@ def test_floor_divide5():
     x = np.array([[-33], [0], [32]])
     y = np.array([[4], [22], [-17]])
     name = ""
-    res = np.array([[-8], [0], [-1]])
+    res = np.array([[-9], [0], [-2]])
     obj.run(res=res, x=x, y=y, name=name)
 
 

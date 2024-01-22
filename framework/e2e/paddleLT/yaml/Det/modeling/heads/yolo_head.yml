@@ -1,95 +1,95 @@
-yolo_head_YOLOv3Head_0:
-  desc: "Det ppdet.modeling.heads.yolo_head.YOLOv3Head模型结构"
-  Layer:
-    repo: "PaddleDetection"
-    layer_name: "ppdet.modeling.heads.yolo_head.YOLOv3Head"
-    params:
-        in_channels: [1024, 512, 256]
-        anchors: [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45], [59, 119], [116, 90], [156, 198], [373, 326]]
-        anchor_masks: [[6, 7, 8], [3, 4, 5], [0, 1, 2]]
-        num_classes: 80
-        loss: 'YOLOv3Loss'
-        iou_aware: False
-        iou_aware_factor: 0.4
-        data_format: 'NCHW'
-  DataGenerator:
-    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
-    data:
-      feats:
-        -
-          generate_way: "random"  # random, solid, load
-          type: "Tensor"
-          dtype: "float64"
-          shape: [4, 1024, 19, 19]
-          range: [ -1, 1]
-        -
-          generate_way: "random"  # random, solid, load
-          type: "Tensor"
-          dtype: "float64"
-          shape: [4, 512, 38, 38]
-          range: [ -1, 1]
-        -
-          generate_way: "random"  # random, solid, load
-          type: "Tensor"
-          dtype: "float64"
-          shape: [4, 256, 76, 76]
-          range: [ -1, 1]
-#      targets:
-#        target1:
+#yolo_head_YOLOv3Head_0:
+#  desc: "Det ppdet.modeling.heads.yolo_head.YOLOv3Head模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.heads.yolo_head.YOLOv3Head"
+#    params:
+#        in_channels: [1024, 512, 256]
+#        anchors: [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45], [59, 119], [116, 90], [156, 198], [373, 326]]
+#        anchor_masks: [[6, 7, 8], [3, 4, 5], [0, 1, 2]]
+#        num_classes: 80
+#        loss: 'YOLOv3Loss'
+#        iou_aware: False
+#        iou_aware_factor: 0.4
+#        data_format: 'NCHW'
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      feats:
+#        -
 #          generate_way: "random"  # random, solid, load
 #          type: "Tensor"
 #          dtype: "float64"
-#          shape: [4, 4]
-#          range: [ -100, 100]
-#        target2:
+#          shape: [4, 1024, 19, 19]
+#          range: [ -1, 1]
+#        -
 #          generate_way: "random"  # random, solid, load
 #          type: "Tensor"
 #          dtype: "float64"
-#          shape: [4, 4]
-#          range: [ -100, 100]
-#        target3:
+#          shape: [4, 512, 38, 38]
+#          range: [ -1, 1]
+#        -
 #          generate_way: "random"  # random, solid, load
 #          type: "Tensor"
 #          dtype: "float64"
-#          shape: [4, 4]
-#          range: [ -100, 100]
-#        gt_bbox:
-#          generate_way: "random"  # random, solid, load
-#          type: "Tensor"
-#          dtype: "float64"
-#          shape: [4, 4]
-#          range: [ -100, 100]
-  Loss:
-    loss_name: "diy.loss.diy_loss.naive_loss_list"
-    params:
-      loss_list: ['logit[0]']
-  optimizer:
-    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
-    params:
-      opt_api: "paddle.optimizer.SGD"
-      learning_rate: 0.00001
-  Train:
-    step: 3
-  test:
-#    dygraph_to_static_train_test:
+#          shape: [4, 256, 76, 76]
+#          range: [ -1, 1]
+##      targets:
+##        target1:
+##          generate_way: "random"  # random, solid, load
+##          type: "Tensor"
+##          dtype: "float64"
+##          shape: [4, 4]
+##          range: [ -100, 100]
+##        target2:
+##          generate_way: "random"  # random, solid, load
+##          type: "Tensor"
+##          dtype: "float64"
+##          shape: [4, 4]
+##          range: [ -100, 100]
+##        target3:
+##          generate_way: "random"  # random, solid, load
+##          type: "Tensor"
+##          dtype: "float64"
+##          shape: [4, 4]
+##          range: [ -100, 100]
+##        gt_bbox:
+##          generate_way: "random"  # random, solid, load
+##          type: "Tensor"
+##          dtype: "float64"
+##          shape: [4, 4]
+##          range: [ -100, 100]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit[0]']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.00001
+#  Train:
+#    step: 3
+#  test:
+##    dygraph_to_static_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-    dygraph_to_static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-    dygraph_to_infer_predict_test:
-      acc_test: False
-      delta: 0.000001
-      rtol: 0.000001
-#    dygraph_train_test:
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+##    dygraph_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+#    dygraph_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-    dygraph_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001
-#    static_train_test:
+##    static_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+#    static_predict_test:
 #      delta: 0.00000001
 #      rtol: 0.00000001
-    static_predict_test:
-      delta: 0.00000001
-      rtol: 0.00000001

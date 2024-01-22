@@ -1,0 +1,11 @@
+train:
+  -
+    name: single
+    cmd: python examples/heat_pinn/heat_pinn.py
+    params:
+      - TRAIN.epochs=1000
+    result:
+      loss:
+        base: 0.01087
+        threshold: 1
+        evaluation: "-"

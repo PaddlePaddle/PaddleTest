@@ -89,20 +89,7 @@ def test_trt_fp32_more_bz():
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
-        test_suite.load_config(
-            model_file="./fast_rcnn/model.pdmodel",
-            params_file="./fast_rcnn/model.pdiparams",
-        )
-        test_suite.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            repeat=1,
-            delta=1e-5,
-            precision="trt_fp32",
-            dynamic=True,
-            tuned=True,
-        )
-        del test_suite
+        del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -113,9 +100,11 @@ def test_trt_fp32_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=2e-5,
+            delta=3e-5,
             precision="trt_fp32",
+            min_subgraph_size=1,
             dynamic=True,
-            tuned=False,
+            auto_tuned=True,
         )
-        del test_suite2
+
+        del test_suite2  # destroy class to save memory

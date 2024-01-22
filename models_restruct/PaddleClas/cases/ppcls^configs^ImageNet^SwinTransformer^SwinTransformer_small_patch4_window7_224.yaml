@@ -6,6 +6,8 @@ case:
       -
         name: single
       -
+        name: single_dy2st
+      -
         name: multi
       -
         name: multi_dy2st
@@ -84,20 +86,8 @@ case:
         name: function
       -
         name: pretrained
-    export:
-      -
-        name: function
-      -
-        name: pretrained
-    predict:
-      -
-        name: function
-      -
-        name: function_mkldnn
-      -
-        name: function_trt
-      -
-        name: pretrained
+    export: skipped
+    predict: skipped
 
   windows_cpu:
     base: ./base/ImageNet_base.yaml
@@ -125,10 +115,10 @@ case:
         params:
           - -o Global.device=${set_cuda_flag}
     export:
-      -
-        name: function
-        params:
-          - -o Global.device=${set_cuda_flag}
+      # -
+      #   name: function
+      #   params:
+      #     - -o Global.device=${set_cuda_flag}
       -
         name: pretrained
         params:

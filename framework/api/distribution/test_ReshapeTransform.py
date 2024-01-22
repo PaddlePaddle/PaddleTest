@@ -13,8 +13,8 @@ import pytest
 
 class TestReshapeTransform(APIBase):
     """
-        test
-        """
+    test
+    """
 
     def hook(self):
         """
@@ -105,7 +105,7 @@ def test_ReshapeTransform2():
     x = np.ones((1, 2, 3))
     res0 = np.ones((3, 1, 2))
     res1 = np.ones((1, 2, 3))
-    res2 = res3 = np.array([0.0])
+    res2 = res3 = np.array(0.0)
     obj0.run(res=res0, x=x, in_event_shape=(1, 2, 3), out_event_shape=(3, 1, 2))
     obj1.run(res=res1, x=res0, in_event_shape=(1, 2, 3), out_event_shape=(3, 1, 2))
     obj2.run(res=res2, x=x, in_event_shape=(1, 2, 3), out_event_shape=(3, 1, 2))

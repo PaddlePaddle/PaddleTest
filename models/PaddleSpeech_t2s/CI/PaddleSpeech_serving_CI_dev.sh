@@ -6,10 +6,14 @@ echo ${Data_path}
 echo ${paddle_compile}
 echo ${model_flag}
 
-mkdir run_env_py37;
-ln -s $(which python3.7) run_env_py37/python;
-ln -s $(which pip3.7) run_env_py37/pip;
-export PATH=$(pwd)/run_env_py37:${PATH};
+# mkdir run_env_py38;
+# ln -s $(which python3.8) run_env_py38/python;
+# ln -s $(which pip3.8) run_env_py38/pip;
+# export PATH=$(pwd)/run_env_py38:${PATH};
+
+rm -rf /usr/bin/python
+ln -s /usr/bin/python3.8 /usr/bin/python
+
 export http_proxy=${http_proxy}
 export https_proxy=${https_proxy}
 export no_proxy=bcebos.com;
@@ -20,11 +24,11 @@ apt-get install -y libsndfile1
 # if [[ $5 == 'all' ]];then
 #    apt-get install -y sox pkg-config libflac-dev libogg-dev libvorbis-dev libboost-dev swig python3-dev
 # fi
-pushd tools; make virtualenv.done; popd
-if [ $? -ne 0 ];then
-    exit 1
-fi
-source tools/venv/bin/activate
+# pushd tools; make virtualenv.done; popd
+# if [ $? -ne 0 ];then
+#     exit 1
+# fi
+# source tools/venv/bin/activate
 python -m pip install --upgrade pip;
 python -m pip install $4 --no-cache-dir
 python -c "import sys; print('python version:',sys.version_info[:])";
@@ -60,7 +64,7 @@ serverPrintFun(){
 }
 
 displayFun(){
-num=`cat $1 | grep -i "error" | grep -v "received 1000" | wc -l`
+num=`cat $1 | grep -i "error" | grep -v "received 1000" | grep -v 'will raise error in release 2.6'| wc -l`
 if [ "${num}" -gt "0" ];then
 cat $1
 echo -e "\033[31m $2  start failed!\033[0m"|tee -a $log_path/result.log
@@ -90,6 +94,7 @@ python -m pip install .
 
 # urllib3
 python -m pip install -U urllib3==1.26.15
+python -m pip install -U librosa==0.10.0
 
 
 unset http_proxy

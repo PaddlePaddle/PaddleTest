@@ -9,11 +9,9 @@ configs^gfpgan_ffhq1024.yaml
 configs^dcgan_mnist.yaml
 configs^cyclegan_cityscapes.yaml
 configs^iconvsr_reds.yaml
-configs^lapstyle_draft.yaml
 configs^mprnet_deraining.yaml
 configs^ugatit_selfie2anime_light.yaml
 configs^lesrcnn_psnr_x4_div2k.yaml
-configs^lapstyle_rev_first.yaml
 configs^realsr_bicubic_noise_x4_df2k.yaml
 configs^invdn_denoising.yaml
 configs^basicvsr++_vimeo90k_BD.yaml
@@ -23,7 +21,6 @@ configs^animeganv2_pretrain.yaml
 configs^photopen.yaml
 configs^stylegan_v2_256_ffhq.yaml
 configs^mprnet_denoising.yaml
-configs^starganv2_celeba_hq.yaml
 configs^drn_psnr_x4_div2k.yaml
 configs^gpen_256_ffhq.yaml
 configs^prenet.yaml
@@ -37,11 +34,9 @@ configs^pix2pix_cityscapes_2gpus.yaml
 configs^esrgan_psnr_x4_div2k.yaml
 configs^singan_sr.yaml
 configs^firstorder_vox_256.yaml
-configs^aotgan.yaml
 configs^pan_psnr_x4_div2k.yaml
 configs^rcan_rssr_x4.yaml
 configs^cond_dcgan_mnist.yaml
-configs^lapstyle_rev_second.yaml
 configs^edvr_l_wo_tsa.yaml
 configs^realsr_kernel_noise_x4_dped.yaml
 configs^basicvsr++_reds.yaml

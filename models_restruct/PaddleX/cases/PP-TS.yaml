@@ -1,0 +1,21 @@
+case:
+    linux:
+        train:
+          -
+            name: multi_epoch1
+            paddlex:
+            cmd : bash  test_tipc/prepare.sh test_tipc/configs/PP-TS_train_infer_python.txt benchmark_train /mnt/dataset/benchmark_acc/TS; bash  test_tipc/train_benchmark.sh test_tipc/configs/PP-TS_train_infer_python.txt benchmark_train dynamic_bs16_fp32_DP_N1C1_acc1_epoch1
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: multi
+            paddlex:
+            cmd : bash  test_tipc/prepare.sh test_tipc/configs/PP-TS_train_infer_python.txt benchmark_train /mnt/dataset/benchmark_acc/TS; bash  test_tipc/train_benchmark.sh test_tipc/configs/PP-TS_train_infer_python.txt benchmark_train dynamic_bs16_fp32_DP_N1C1_acc1_epoch8
+            result:
+              best_val_0_mae:
+                base: 0.13
+                threshold: 0.005
+                evaluation: "+"

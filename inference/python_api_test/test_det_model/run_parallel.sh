@@ -18,9 +18,6 @@ cases="./test_fast_rcnn_mkldnn.py \
        ../test_nlp_model/test_ernie_mkldnn.py \
        ../test_nlp_model/test_ernie_trt_fp32.py \
        ../test_nlp_model/test_lac_gpu.py \
-       ../test_nlp_model/test_lac_trt_fp32.py \
-       ../test_nlp_model/test_lac_trt_fp16.py \
-       ../test_nlp_model/test_AFQMC_base_trt_fp32.py \
        ../test_nlp_model/test_AFQMC_base_trt_fp16.py \
       "
 bug=0

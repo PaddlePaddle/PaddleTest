@@ -1,19 +1,14 @@
-#!/bin/bash
-mkdir run_env_py37;
-ln -s $(which python3.7) run_env_py37/python;
-ln -s $(which pip3.7) run_env_py37/pip;
-export PATH=$(pwd)/run_env_py37:${PATH};
+!/bin/bash
+python -m pip install --upgrade pip
+python -m pip install --upgrade setuptools
 export http_proxy=${proxy};
 export https_proxy=${proxy};
 export no_proxy=bcebos.com;
 export PYTHONPATH=`pwd`:$PYTHONPATH;
-apt-get update
-apt-get install ffmpeg -y
-python -m pip install pip==20.2.4 --ignore-installed;
 python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
-pip install Cython --ignore-installed;
-pip install cython_bbox --ignore-installed;
-pip install -r requirements.txt --ignore-installed;
+python -m pip install Cython --ignore-installed;
+python -m pip install cython_bbox --ignore-installed;
+python -m pip install -r requirements.txt --ignore-installed;
 python -m pip install requests==2.28.2 --ignore-installed --no-cache-dir
 python -m pip uninstall paddlepaddle-gpu -y
 if [[ ${branch} == 'develop' ]];then
@@ -42,6 +37,7 @@ cd deploy/cpp
 # dynamic c++ compile
 wget ${paddle_inference}
 tar xvf paddle_inference.tgz
+# 跟镜像有关
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
 sed -i "s|WITH_KEYPOINT=OFF|WITH_KEYPOINT=ON|g" scripts/build.sh
 sed -i "s|WITH_MOT=OFF|WITH_MOT=ON|g" scripts/build.sh
@@ -178,11 +174,19 @@ EVAL_MOT_bs2(){
 INFER(){
     export CUDA_VISIBLE_DEVICES=$cudaid1
     mode=infer
-    python tools/infer.py \
-           -c ${config} \
-           --infer_img=${image} \
-           --output_dir=infer_output/${model}/ \
-           -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    if [[ ${model} =~ 'clrnet' ]];then
+        python tools/infer_culane.py \
+            -c ${config} \
+            --infer_img=${image} \
+            --output_dir=infer_output/${model}/ \
+            -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    else
+        python tools/infer.py \
+            -c ${config} \
+            --infer_img=${image} \
+            --output_dir=infer_output/${model}/ \
+            -o weights=https://paddledet.bj.bcebos.com/models/${weight_dir}${model}.pdparams >log/${model}/${model}_${mode}.log 2>&1
+    fi
     print_result
 }
 INFER_MOT(){
@@ -410,13 +414,13 @@ elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
 else
     PYTHON_INFER
 fi
-if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
-    echo -e "The model ${model} not support cpp_infer!"
-elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
-    CPP_INFER_KEYPOINT
-else
-    CPP_INFER
-fi
+# if [[ -n `echo "${model_mot}" | grep -w "${model}"` ]];then
+#     echo -e "The model ${model} not support cpp_infer!"
+# elif [[ -n `echo "${model_keypoint}" | grep -w "${model}"` ]];then
+#     CPP_INFER_KEYPOINT
+# else
+#     CPP_INFER
+# fi
 done
 model='pphuman'
 cd log && mkdir ${model} && cd ..

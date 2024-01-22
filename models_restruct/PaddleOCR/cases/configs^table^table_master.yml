@@ -5,13 +5,24 @@ case:
           -
             name: multi
           -
-            name: amp
+            name: multi_amp
+          - name: single_dy2st
+          - name: multi_dy2st
         export:
           -
             name: trained
           -
             name: pretrained
         predict:
+          -
+            name: trained
+            cmd:  python ppstructure/table/predict_structure.py
+            params:
+              - --table_model_dir="./models_inference/"configs^table^table_master
+              - --table_algorithm=TableMaster
+              - --table_char_dict_path=./ppocr/utils/dict/table_master_structure_dict.txt
+              - --table_max_len=480
+              - --image_dir=ppstructure/docs/table/table.jpg
           -
             name: pretrained
             cmd:  python ppstructure/table/predict_structure.py

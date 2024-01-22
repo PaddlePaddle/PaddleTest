@@ -21,11 +21,12 @@ import sys
 import cv2
 import numpy as np
 import paddle
-from paddleseg.cvlibs import Config as PaddleSegDataConfig
+from paddleseg.cvlibs import Config, SegBuilder
+from paddleseg.cvlibs import config_checker as checker
 from paddleseg.core.infer import reverse_transform
 from paddleseg.utils import metrics
 
-from backend import PaddleInferenceEngine, TensorRTEngine, ONNXRuntimeEngine, Monitor
+from backend.monitor import Monitor
 
 
 def argsparser():
@@ -52,11 +53,12 @@ def argsparser():
     parser.add_argument("--dataset_config", type=str, default=None, help="path of dataset config.")
     parser.add_argument("--benchmark", type=bool, default=False, help="Whether to run benchmark or not.")
     parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt engine or not.")
+    parser.add_argument("--use_l3", type=bool, default=False, help="Whether use L3_cache or not.")
     parser.add_argument(
         "--device",
         type=str,
         default="GPU",
-        choices=["CPU", "GPU"],
+        choices=["CPU", "GPU", "XPU"],
         help="Choose the device you want to run, it can be: CPU/GPU, default is GPU",
     )
     parser.add_argument(
@@ -87,18 +89,21 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     time_max = float("-inf")
     warmup = 20
 
-    use_gpu = True
-    if FLAGS.device == "CPU":
-        use_gpu = False
-    monitor = Monitor(0, use_gpu)
+    use_gpu = True if FLAGS.device == "GPU" else False
+    use_xpu = True if FLAGS.device == "XPU" else False
+
+    monitor = Monitor(0, use_gpu, 0, use_xpu)
 
     if not rerun_flag:
         monitor.start()
     print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
 
     for batch_id, data in enumerate(loader):
-        image = np.array(data[0])
-        label = np.array(data[1]).astype("int64")
+        # print(batch_id)
+        # print(data, type(data))
+        image = np.array(data["img"])
+        label = np.array(data["label"]).astype("int64")
+        trans_info = data["trans_info"]
         ori_shape = np.array(label).shape[-2:]
 
         predictor.prepare_data([image])
@@ -118,13 +123,12 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         if rerun_flag:
             return
 
-        logit = reverse_transform(
-            paddle.to_tensor(outs[0]), ori_shape, eval_dataset.transforms.transforms, mode="bilinear"
-        )
+        logit = reverse_transform(paddle.to_tensor(outs[0]), trans_info, mode="bilinear")
         pred = paddle.to_tensor(logit)
         if len(pred.shape) == 4:  # for humanseg model whose prediction is distribution but not class id
             pred = paddle.argmax(pred, axis=1, keepdim=True, dtype="int32")
 
+        # print(pred, type(pred))
         intersect_area, pred_area, label_area = metrics.calculate_area(
             pred, paddle.to_tensor(label), eval_dataset.num_classes, ignore_index=eval_dataset.ignore_index
         )
@@ -151,6 +155,7 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         if ("result" in monitor_result and "gpu_memory.used" in monitor_result["result"])
         else 0
     )
+    xpu = monitor_result["XPU"] if "XPU" in monitor_result else {}
 
     print("[Benchmark] cpu_mem:{} MB, gpu_mem: {} MB".format(cpu_mem, gpu_mem))
 
@@ -188,8 +193,36 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
             "value": gpu_mem,
             "unit": "MB",
         },
+        "xpu": {
+            "device_name": xpu.get("model", None),
+            "dev_id": xpu.get("dev_id", 0),
+            "L3_used": xpu.get("L3_used", 0),
+            "HBM_used": xpu.get("HBM_used", 0),
+            "use_ratio": xpu.get("use_ratio", 0),
+        },
     }
     print("[Benchmark][final result]{}".format(final_res))
+    benchmark_result = {
+        "model_path": FLAGS.model_path,
+        "model_name": FLAGS.model_name,
+        "repo": "Seg",
+        "batch_size": FLAGS.batch_size,
+        "avg_cost": round(time_avg * 1000, 3),
+        "xpu_stat": final_res["xpu"],
+        "device_name": final_res["xpu"]["device_name"],
+        "HBM_used": final_res["xpu"]["HBM_used"],
+        "l3_used": final_res["xpu"]["L3_used"],
+        "jingdu": round(final_res["jingdu"]["value"], 5),
+        "unit": final_res["jingdu"]["unit"],
+        "precision": FLAGS.precision,
+        "l3_cache": FLAGS.use_l3,
+    }
+    print("======benchmark result======")
+    print(benchmark_result)
+    with open("result.txt", "a+") as f:
+        for key, val in benchmark_result.items():
+            f.write(key + " : " + str(val) + "\n")
+        f.write("\n")
     sys.stdout.flush()
 
 
@@ -197,8 +230,11 @@ def main():
     """
     main func
     """
-    data_cfg = PaddleSegDataConfig(FLAGS.dataset_config)
-    eval_dataset = data_cfg.val_dataset
+    config_checker = checker.ConfigChecker([], allow_update=True)
+    data_cfg = Config(FLAGS.dataset_config, checker=config_checker)
+    builder = SegBuilder(data_cfg)
+
+    eval_dataset = builder.val_dataset
 
     batch_sampler = paddle.io.BatchSampler(eval_dataset, batch_size=1, shuffle=False, drop_last=False)
     eval_loader = paddle.io.DataLoader(eval_dataset, batch_sampler=batch_sampler, num_workers=0, return_list=True)
@@ -207,12 +243,15 @@ def main():
     FLAGS.batch_size = int(FLAGS.total_samples / FLAGS.sample_nums)
 
     if FLAGS.deploy_backend == "paddle_inference":
+        from backend.paddle_inference import PaddleInferenceEngine
+
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
             model_filename=FLAGS.model_filename,
             params_filename=FLAGS.params_filename,
             precision=FLAGS.precision,
             use_trt=FLAGS.use_trt,
+            use_l3=FLAGS.use_l3,
             use_mkldnn=FLAGS.use_mkldnn,
             batch_size=FLAGS.batch_size,
             device=FLAGS.device,
@@ -221,6 +260,8 @@ def main():
             cpu_threads=FLAGS.cpu_threads,
         )
     elif FLAGS.deploy_backend == "tensorrt":
+        from backend.tensorrt import TensorRTEngine
+
         model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
         engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         predictor = TensorRTEngine(
@@ -233,6 +274,8 @@ def main():
             verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
+        from backend.onnxruntime import ONNXRuntimeEngine
+
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
             precision=FLAGS.precision,

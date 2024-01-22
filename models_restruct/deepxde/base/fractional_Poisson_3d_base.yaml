@@ -1,0 +1,15 @@
+train:
+  -
+    name: single
+    cmd: python examples/pinn_forward/fractional_Poisson_3d.py
+    params:
+      - --epochs=2
+    result:
+      loss:
+        base: 2.28e-03
+        threshold: 1
+        evaluation: "-"
+      L2 relative error:
+        base: 0.004991874
+        threshold: 1
+        evaluation: "-"

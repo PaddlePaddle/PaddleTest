@@ -87,8 +87,12 @@ class PaddleClas_End(object):
             #     logger.info("#### clean data inference: {}".format("inference"))
 
             if file_name == "output":
-                del_pdparams = glob.glob(r"output/*/*/*.pdparams")
-                del_pdopt = glob.glob(r"output/*/*/*.pdopt")
+                # del_pdparams = glob.glob(r"output/*/*/*.pdparams")
+                # del_pdopt = glob.glob(r"output/*/*/*.pdopt")
+                del_pdparams_best = glob.glob(r"output/*/best_model/*.pdparams")
+                del_pdopt_best = glob.glob(r"output/*/best_model/*.pdopt")
+                del_pdparams = glob.glob(r"output/*/*.pdparams")
+                del_pdopt = glob.glob(r"output/*/*.pdopt")
                 if del_pdparams != [] and del_pdopt != []:
                     logger.info("#### clean data pdparams: {}".format("pdparams"))
                     for del_name in del_pdparams:
@@ -97,6 +101,11 @@ class PaddleClas_End(object):
                     for del_name in del_pdopt:
                         if "latest" not in del_name:
                             os.remove(del_name)
+                    # 改规则后删除best
+                    for del_name in del_pdparams_best:
+                        os.remove(del_name)
+                    for del_name in del_pdopt_best:
+                        os.remove(del_name)
 
             if file_name == "dataset":
                 del_dataset = glob.glob(r"dataset/*.tar")
@@ -112,8 +121,11 @@ class PaddleClas_End(object):
 
         # kill遗留程序
         logger.info("PID before is {}".format(os.system(f"ps aux| grep '{self.qa_yaml_name}'| grep -v 'main.py'")))
-        cmd_kill = os.system(f"pkill -f {self.qa_yaml_name}| grep -v 'main.py'")
-        logger.info("PID after is {}".format(os.system(f"ps aux| grep '{self.qa_yaml_name}'| grep -v 'main.py''")))
+        cmd_kill = os.system(
+            f"ps aux | grep '{self.qa_yaml_name}' | grep -v 'main.py' | awk '{{print $2}}' | xargs kill -9"
+        )
+        # cmd_kill = os.system(f"pkill -f '{self.qa_yaml_name}'| grep -v 'main.py'") #这样会先执行kill再执行grep没有生效
+        logger.info("PID after is {}".format(os.system(f"ps aux| grep '{self.qa_yaml_name}'| grep -v 'main.py'")))
         # 异常256
         logger.info("cmd_kill is {}".format(cmd_kill))
         return 0

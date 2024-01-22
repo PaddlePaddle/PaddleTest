@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_inverse/brinkman_forchheimer.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 0.000814
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.0214
+      evaluation: '-'
+      threshold: 1

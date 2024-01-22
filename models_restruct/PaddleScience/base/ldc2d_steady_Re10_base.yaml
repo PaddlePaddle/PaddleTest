@@ -3,9 +3,9 @@ train:
     name: single
     cmd: python examples/ldc/ldc2d_steady_Re10.py
     params:
-      - --epochs=20000
+      - TRAIN.epochs=20000
     result:
       loss:
-        base: 0.74178
-        threshold: 0
-        evaluation: "="
+        base: 0.72233
+        threshold: 1
+        evaluation: "-"

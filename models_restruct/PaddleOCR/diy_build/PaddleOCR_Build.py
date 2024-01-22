@@ -126,6 +126,12 @@ class PaddleOCR_Build(Model_Build):
 
             # kie requirements
             os.system("python -m pip install -U  paddlenlp")
+            os.system("python -m pip install -U lanms-neo")
+            # python3.11
+            if sysstr == "Linux" and sys.version == "3.11.3":
+                os.system("apt-get install -y protobuf-compiler")
+                os.system("export pybind11_DIR=/usr/local/lib/python3.11/dist-packages/pybind11/include")
+
             os.system("python -m pip install -r ppstructure/kie/requirements.txt")
             # mac: Downgrade the protobuf package to 3.20.x or lower.
             os.system("python -m pip install -U protobuf==3.20.0")

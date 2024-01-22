@@ -5,13 +5,27 @@ case:
       -
         name: multi
         cmd : python -m paddle.distributed.launch tools/train.py
+        result:
+          loss:
+            base: 2.34
+            threshold: 0.5
+            evaluation: "-"
       -
         name: single
         cmd : python tools/train.py
+        result:
+          loss:
+            base: 2.45
+            threshold: 0.5
+            evaluation: "-"
       -
-        name: amp_multi
+        name: single_amp
       -
-        name: static_multi
+        name: single_dy2st
+      -
+        name: multi_amp
+      -
+        name: multi_dy2st
       -
         name: quant_multi
     eval:
@@ -89,6 +103,3 @@ case:
         cmd: python deploy/python/infer.py
         params:
           - --device cpu
-
-
-function: paddlelas_imagenet_parse

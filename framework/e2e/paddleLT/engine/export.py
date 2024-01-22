@@ -29,17 +29,17 @@ class LayerExport(object):
         self.layer = layer
         self.case = case
 
+        self.model_dtype = self.testing.get("model_dtype")
+        paddle.set_default_dtype(self.model_dtype)
+
         self.layer_name = self.layer.get("Layer").get("layer_name")
         self.layer_param = self.layer.get("Layer").get("params")
         self.net = BuildLayer(layer_name=self.layer_name, layer_param=self.layer_param)
 
         self.data_info = self.layer.get("DataGenerator")
-        self.data = BuildData(data_info=self.data_info).get_single_data()
+        self.data = BuildData(data_info=self.data_info, data_type=self.model_dtype).get_single_data()
 
         self.path = os.path.join(os.getcwd(), "test_prodct", *self.layer_name.split("."))
-
-        self.model_dtype = self.testing.get("model_dtype")
-        paddle.set_default_dtype(self.model_dtype)
 
     def jit_save(self):
         """jit.save(layer)"""

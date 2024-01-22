@@ -167,23 +167,7 @@ def test_trt_fp16_more_bz():
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
-        del test_suite
-
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./yolov3/model.pdmodel",
-            params_file="./yolov3/model.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            repeat=1,
-            delta=6e-2,
-            precision="trt_fp16",
-            dynamic=True,
-            tuned=True,
-        )
-        del test_suite1  # destroy class to save memory
+        del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -197,6 +181,7 @@ def test_trt_fp16_more_bz():
             delta=6e-2,
             precision="trt_fp16",
             dynamic=True,
+            auto_tuned=True,
             det_top_bbox=True,
             det_top_bbox_threshold=0.85,
         )
@@ -255,23 +240,7 @@ def test_jetson_trt_fp16_more_bz():
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
-        del test_suite
-
-        test_suite1 = InferenceTest()
-        test_suite1.load_config(
-            model_file="./yolov3/model.pdmodel",
-            params_file="./yolov3/model.pdiparams",
-        )
-        test_suite1.trt_more_bz_test(
-            input_data_dict,
-            output_data_dict,
-            repeat=1,
-            delta=6e-2,
-            precision="trt_fp16",
-            dynamic=True,
-            tuned=True,
-        )
-        del test_suite1  # destroy class to save memory
+        del test_suite  # destroy class to save memory
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
@@ -283,9 +252,11 @@ def test_jetson_trt_fp16_more_bz():
             output_data_dict,
             repeat=1,
             max_batch_size=10,
+            min_subgraph_size=1,
             delta=6e-2,
             precision="trt_fp16",
             dynamic=True,
+            auto_tuned=True,
             det_top_bbox=True,
             det_top_bbox_threshold=0.85,
         )
