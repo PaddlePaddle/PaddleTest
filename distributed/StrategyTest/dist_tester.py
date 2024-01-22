@@ -79,6 +79,7 @@ class Initializer(object):
             # 如果目录不存在，直接创建
             os.makedirs(self.logdir)
 
+
 class Launcher(object):
     """
     执行shell 命令组件
