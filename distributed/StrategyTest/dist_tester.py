@@ -6,7 +6,7 @@
 ##
 # -----------------------------------------------------------------------------
 # 执行分布式策略组合组件
-# 执行shell 命令组件 ，或者是使用lanuch 模块
+# 执行shell 命令组件 ，或者是使用launch 模块
 # 结果校验器，正则匹配组件
 
 import os
@@ -49,7 +49,7 @@ class Runner(object):
         self.checker = checker
         Initializer(logdir=self.logdir)
     def run(self):
-        l = Lanucher(self.shell_script)
+        l = Launcher(self.shell_script)
         l.launch()
         if self.checker is None:
             c = Checker(self.expect)
@@ -79,7 +79,8 @@ class Initializer(object):
             # 如果目录不存在，直接创建
             os.makedirs(self.logdir)
 
-class Lanucher(object):
+
+class Launcher(object):
     """
     执行shell 命令组件
     """
