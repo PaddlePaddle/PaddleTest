@@ -167,9 +167,12 @@ class Checker(object):
 
 
 if __name__ == '__main__':
+    # parser = argparse.ArgumentParser(description="Distributed Testing Script")
+    # parser.add_argument("--gpus", default="1", help="GPUs to use gpu_number")
+    # args = parser.parse_args()
     #######获取日志信息，用来设置expect######
     # c = Checker(1)
-    # res = c.regex_check(8)
+    # res = c.regex_check(args.gpus)
     # print(res)
     ####################################
     pass
