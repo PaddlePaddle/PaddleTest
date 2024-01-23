@@ -41,8 +41,9 @@ class PaddleClas_Case_Start(object):
         """
         下载预训练模型, 指定路径
         """
-        os.environ["SOT_EXPORT"] = f"Layer_cases/{self.qa_yaml_name}_{self.case_name}_{self.case_step}"
-        logger.info("set org SOT_EXPORT as {}".format(os.getenv("SOT_EXPORT")))
+        if str(os.getenv("SOT_EXPORT_FLAG")) == "True":
+            os.environ["SOT_EXPORT"] = f"Layer_cases/{self.qa_yaml_name}_{self.case_name}_{self.case_step}"
+            logger.info("set org SOT_EXPORT as {}".format(os.getenv("SOT_EXPORT")))
 
         if "dy2st_convergence" in self.qa_yaml_name:
             logger.info("dy2st_convergence tag is: {}".format(self.case_name.split("train_")[-1]))
