@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
-
 # cd ${root_path}/PaddleMIX/ppdiffusers
 # pip install -e .
 # pip install -r requirements.txt
@@ -16,11 +13,12 @@ pip install -r requirements.txt
 python -m pip install --upgrade pip
 pip install -e .
 pip install -r paddlemix/appflow/requirements.txt
+
+export http_proxy=${proxy}
+export https_proxy=${proxy}
 python nltk_data_download.py
-
 pip install git+https://github.com/PaddlePaddle/PaddleSpeech.git
-
-wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/zh.wav
-
 unset http_proxy
 unset https_proxy
+
+wget https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/zh.wav
