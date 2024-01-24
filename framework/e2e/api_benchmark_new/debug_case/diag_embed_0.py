@@ -43,7 +43,7 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.functional.diag_embed"
+api = "paddle.diag_embed"
 all_data = {"input": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1, 1, 1], "range": [-1, 1]}}
 params = {"offset": 0, "dim1": -2, "dim2": -1}
 

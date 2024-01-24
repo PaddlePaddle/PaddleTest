@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    pcpvt_base_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.1/class/pcpvt_base.tgz"
+    pcpvt_base_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.3.2/class/pcpvt_base.tgz"
     if not os.path.exists("./pcpvt_base/inference.pdiparams"):
         wget.download(pcpvt_base_url, out="./")
         tar = tarfile.open("pcpvt_base.tgz")

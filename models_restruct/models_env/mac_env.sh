@@ -106,7 +106,7 @@ export CE_version_name=${CE_version_name:-TestFrameWork}
 export models_name=${models_name:-models_restruct}
 
 ####测试框架下载
-wget -q ${CE_Link} #需要全局定义
+wget -q ${CE_Link} --no-proxy #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export

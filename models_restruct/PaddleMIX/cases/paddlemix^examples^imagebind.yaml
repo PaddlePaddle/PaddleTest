@@ -1,0 +1,21 @@
+case:
+  linux:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict:
+      -
+        name: predict
+        path: paddlemix/examples/imagebind/
+        cmd: python run_predict.py
+        params:
+          - --model_name_or_path imagebind-1.2b/ 
+          - --input_text "A dog."
+          - --input_image https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/dog_image.jpg
+          - --input_audio https://paddlenlp.bj.bcebos.com/models/community/paddlemix/audio-files/wave.wav
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="

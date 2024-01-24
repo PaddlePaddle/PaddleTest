@@ -6,3 +6,8 @@ configs^centerpoint^centerpoint_pillars_02voxel_nuscenes_10sweep.yml
 configs^squeezesegv3^squeezesegv3_rangenet21_semantickitti.yml
 configs^squeezesegv3^squeezesegv3_rangenet53_semantickitti.yml
 configs^centerpoint^centerpoint_voxels_0075voxel_nuscenes_10sweep.yml
+configs^caddn^caddn_ocrnet_hrnet_w18_kitti.yml
+configs^caddn^caddn_deeplabv3p_resnet101_os8_kitti.yml
+configs^iassd^iassd_kitti.yaml
+configs^voxel_rcnn^voxel_rcnn_005voxel_kitti_car.yml
+configs^pv_rcnn^pv_rcnn_005voxel_kitti.yml

@@ -1,0 +1,6 @@
+case:
+    linux:
+        predict:
+          -
+            name: pretrained
+            cmd:  python -m pip install paddleocr paddleclas; paddleocr --image_dir=ppstructure/docs/table/1.png --type=structure --image_orientation=true

@@ -1,0 +1,20 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: ppdiffusers/tests/examples_test/
+        cmd: bash prepare.sh
+      -
+        name: train
+        path: ppdiffusers/tests/examples_test/
+        cmd: bash train.sh
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

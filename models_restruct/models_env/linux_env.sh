@@ -5,9 +5,9 @@ pwd;
 if [ -e linux_env_info.sh ];then
     rm -rf linux_env_info.sh
 fi
-# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh
+# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh --no-proxy
 # 临时使用
-wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh
+wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh --no-proxy
 source ./linux_env_info.sh
 set +e
 
@@ -262,10 +262,12 @@ export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-0}
 export ENABLE_FALL_BACK=${ENABLE_FALL_BACK:-true}
 export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-10}
 export FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir:-}
+export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-False}
+export SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG:-False} #240123 针对泽宇项目设为True
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
-wget -q ${CE_Link} #需要全局定义
+wget -q ${CE_Link} --no-proxy #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
@@ -450,6 +452,8 @@ if [[ "${docker_flag}" == "" ]]; then
 	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
+        -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+        -e SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
 	-e api_key=${api_key} \
@@ -566,6 +570,8 @@ if [[ "${docker_flag}" == "" ]]; then
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
         echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
+        ehco "@@@export FLAGS_enable_pir_api ${export FLAGS_enable_pir_api}"
+        ehco "@@@export SOT_EXPORT_FLAG ${SOT_EXPORT_FLAG}"
         set -x
         # Flag
         export STRICT_MODE=0
@@ -686,6 +692,8 @@ else
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
         echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
         echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
+        echo "@@@export FLAGS_enable_pir_api: ${export FLAGS_enable_pir_api}"
+        echo "@@@export SOT_EXPORT_FLAG: ${SOT_EXPORT_FLAG}"
 
         set -x
         # Flag
