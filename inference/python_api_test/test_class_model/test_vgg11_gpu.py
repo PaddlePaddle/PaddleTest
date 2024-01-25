@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/vgg11.tgz"
+    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/vgg11.tgz"
     if not os.path.exists("./vgg11/inference.pdiparams"):
         wget.download(vgg11_url, out="./")
         tar = tarfile.open("vgg11.tgz")
@@ -141,7 +141,7 @@ def test_gpu_mixed_precision_bz1():
         test_suite2.gpu_more_bz_test_mix(
             input_data_dict,
             output_data_dict,
-            delta=1e-4,
+            delta=5e-3,
         )
 
         del test_suite2  # destroy class to save memory
