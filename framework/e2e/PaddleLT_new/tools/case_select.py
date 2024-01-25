@@ -41,9 +41,9 @@ class CaseSelect(object):
                 else:
                     yaml_list.append(yaml_path)
         return yaml_list
-    
+
     def get_py_list(self, base_path, py_list=[]):
-        """递归寻找文件夹内所有的yml文件路径"""
+        """递归寻找文件夹内所有的子图py文件路径"""
         file_list = os.listdir(base_path)
 
         for file in file_list:
