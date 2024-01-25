@@ -68,6 +68,8 @@ echo "*******textual_inversion multi infer end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/cat-toy
+rm -rf ${work_path}/textual_inversion_cat/*
 
 echo exit_code:${exit_code}
 exit ${exit_code}

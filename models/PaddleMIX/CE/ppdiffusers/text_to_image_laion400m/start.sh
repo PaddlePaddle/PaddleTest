@@ -124,6 +124,9 @@ echo "*******text_to_image_laion400m infer_mscoco end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/data/
+rm -rf ${work_path}/laion400m_pretrain_output_trainer/*
+rm -rf ${work_path}/laion400m_pretrain_output_no_trainer/*
 
 echo exit_code:${exit_code}
 exit ${exit_code}

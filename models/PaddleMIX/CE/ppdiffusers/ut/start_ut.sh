@@ -17,12 +17,12 @@ fi
 cd ${work_path}
 exit_code=0
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
+export http_proxy=${proxy}
+export https_proxy=${proxy}
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 rm -rf tests/pipelines/test_pipelines.py
 rm -rf tests/pipelines/stable_diffusion/test_stable_diffusion_pix2pix_zero.py

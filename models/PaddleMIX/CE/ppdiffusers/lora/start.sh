@@ -28,6 +28,8 @@ else
     echo "lora_dreambooth_train run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******lora dreambooth_train end***********"
+rm -rf ${work_path}/dreambooth/lora_dream_outputs/*
+rm -rf ${work_path}/dreambooth/dogs/
 
 # lora dreambooth_infer
 echo "*******lora dreambooth infer begin***********"
@@ -74,6 +76,7 @@ else
     echo "lora text_to_image infer run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******lora text_to_image infer end***********"
+rm -rf ${work_path}/text_to_image/sd-pokemon-model-lora/*
 
 # # 查看结果
 # cat ${log_dir}/lora_ce_res.log

@@ -71,6 +71,8 @@ echo "*******stable_diffusion multi infer end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/laion400m_pretrain_output_trainer/*
+rm -rf ${work_path}/data/
 
 echo exit_code:${exit_code}
 exit ${exit_code}

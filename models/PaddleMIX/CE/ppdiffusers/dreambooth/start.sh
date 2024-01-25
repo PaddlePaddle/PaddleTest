@@ -92,6 +92,9 @@ echo "*******dreambooth infer_with_class end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/dream_outputs/*
+rm -rf ${work_path}/dream_outputs_with_class/*
+rm -rf ${work_path}/dogs/
 
 echo exit_code:${exit_code}
 exit ${exit_code}
