@@ -1,0 +1,14 @@
+testings:
+  dy_eval:
+    model_dtype: "float32"
+
+  dy2st_eval_cinn:
+    model_dtype: "float32"
+
+compare:
+  -
+    baseline: 'dy_eval'
+    latest: 'dy2st_eval_cinn'
+    precision:
+      delta: 0.000001
+      rtol: 0.0000001
