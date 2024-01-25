@@ -25,16 +25,16 @@ class BuildData(object):
 
     def get_single_data(self):
         """get data"""
-        dataname = self.dataname + '.create_numpy_inputs()'
+        dataname = self.dataname + ".create_numpy_inputs()"
         data = []
         for i in eval(dataname):
             data.append(paddle.to_tensor(i))
 
         return data
-    
+
     def get_single_tensor(self):
         """get data"""
-        dataname = self.dataname + '.create_paddle_inputs()'
+        dataname = self.dataname + ".create_paddle_inputs()"
         data = []
         for i in eval(dataname):
             data.append(paddle.to_tensor(i))

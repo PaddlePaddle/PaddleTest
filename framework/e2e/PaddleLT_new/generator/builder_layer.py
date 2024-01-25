@@ -18,30 +18,7 @@ class BuildLayer(object):
 
     def __init__(self, layerfile):
         """init"""
-        self.layername = layerfile + '.LayerCase'
-
-        # # self.repo = repo
-        # self.layer_name = layer_name
-        # self.layer_param = layer_param
-        # if self.layer_param is not None:
-        #     # 带有**标记的字符串转换为python object
-        #     for k, v in self.layer_param.items():
-        #         if isinstance(v, str):
-        #             if "**" in v:
-        #                 try:
-        #                     tmp = v
-        #                     tmp = tmp.replace("**", "")
-        #                     self.layer_param[k] = eval(tmp)
-        #                 except:
-        #                     self.layer_param[k] = v
-
-    # def get_layer(self):
-    #     """get_layer"""
-    #     if self.layer_param is not None:
-    #         layer = eval(self.layer_name)(**self.layer_param)
-    #     else:
-    #         layer = eval(self.layer_name)()
-    #     return layer
+        self.layername = layerfile + ".LayerCase"
 
     def get_layer(self):
         """get_layer"""
