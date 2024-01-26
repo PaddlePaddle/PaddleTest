@@ -2,7 +2,7 @@
 # 最外层执行脚本设定：环境变量、测试子图文件夹根目录、测试项目yaml
 
 # source set_env.sh $PTS_ENV_VARS  # 设定PTS环境变量
-source set_paddlelt_env.sh # 设定PaddleLT环境变量(docker image, python, wheel_url等默认值)
+source ./set_paddlelt_env.sh # 设定PaddleLT环境变量(docker image, python, wheel_url等默认值)
 
 
 docker_name="PaddleLayerTest_${AGILE_PIPELINE_BUILD_NUMBER}"
