@@ -127,6 +127,8 @@ echo "*******text_to_image_laion400m infer_mscoco end***********"
 rm -rf ${work_path}/data/
 rm -rf ${work_path}/laion400m_pretrain_output_trainer/*
 rm -rf ${work_path}/laion400m_pretrain_output_no_trainer/*
+rm -rf ${work_path}/ldm_pipelines/*
+rm -rf ${work_path}/outputs/*
 
 echo exit_code:${exit_code}
 exit ${exit_code}
