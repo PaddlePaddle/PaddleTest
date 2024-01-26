@@ -32,17 +32,21 @@ class Run(object):
 
     def _test_run(self):
         """run some test"""
+        error_list = []
+        error_count = 0
         for py_file in self.py_list:
             title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
-            if platform.system() == "Windows":
-                pass
-            else:
-                os.system(
-                    "cp -r PaddleLT.py {}.py && "
-                    "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
-                        title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
-                    )
+            exit_code = os.system(
+                "cp -r PaddleLT.py {}.py && "
+                "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
+                    title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
                 )
+            )
+            if exit_code != 0:
+                error_list.append(py_file)
+                error_count += 1
+        if error_count != 0:
+            raise Exception("测试失败，报错子图为: {}".format(error_list))
 
 
 if __name__ == "__main__":
