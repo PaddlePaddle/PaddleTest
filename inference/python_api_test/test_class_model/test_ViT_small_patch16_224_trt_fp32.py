@@ -25,9 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    ViT_small_patch16_224_url = (
-        "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.0/class/ViT_small_patch16_224.tgz"
-    )
+    ViT_small_patch16_224_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/ViT_small_patch16_224.tgz"
     if not os.path.exists("./ViT_small_patch16_224/inference.pdiparams"):
         wget.download(ViT_small_patch16_224_url, out="./")
         tar = tarfile.open("ViT_small_patch16_224.tgz")
@@ -69,7 +67,7 @@ def test_trt_fp32_more_bz():
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
-        input_data_dict = {"inputs": fake_input}
+        input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
@@ -111,7 +109,7 @@ def test_jetson_trt_fp32_more_bz():
         )
         images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
         fake_input = np.array(images_list[0:batch_size]).astype("float32")
-        input_data_dict = {"inputs": fake_input}
+        input_data_dict = {"x": fake_input}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
         del test_suite  # destroy class to save memory
@@ -150,7 +148,7 @@ def test_trt_fp32_bz1_multi_thread():
     )
     images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
     fake_input = np.array(images_list[0:batch_size]).astype("float32")
-    input_data_dict = {"inputs": fake_input}
+    input_data_dict = {"x": fake_input}
     output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
 
     del test_suite  # destroy class to save memory
