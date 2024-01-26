@@ -9,6 +9,7 @@ import os
 import numpy as np
 import paddle
 import diy
+import layercase
 
 # import tool
 import tools.np_tool as tool
