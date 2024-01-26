@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# 最外层执行脚本设定：环境变量、测试子图文件夹根目录、测试项目yaml
 
 test_scene=$1
 source ./set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
-source ./set_docker_env.sh
+source ./set_docker_env.sh # 设定docker环境相关参数
 
 docker_name="PaddleLayerTest_${AGILE_PIPELINE_BUILD_NUMBER}"
 
