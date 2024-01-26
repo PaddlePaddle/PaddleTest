@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export CASE_URL="${CASE_URL:-https://paddle-qa.bj.bcebos.com/PaddleLT/LayerCase/demo_case.tar}"
+export CASE_URL="${CASE_URL:-https://paddle-qa.bj.bcebos.com/PaddleLT/LayerCase/layercase.tar}"
 export CASE_DIR=$(echo $(basename $CASE_URL) | cut -d '.' -f 1) # 设定子图case根目录
 wget -q ${CASE_URL} --no-proxy && tar -xzf ${CASE_DIR}.tar
 export TESTING="${TESTING:-yaml/dy^dy2stcinn_eval.yml}" # 设定测试项目配置yaml

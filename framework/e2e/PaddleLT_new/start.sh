@@ -18,6 +18,7 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
 ldconfig;
 
 ${python_ver} -m pip install -r requirement.txt
+${python_ver} -m pip install ${wheel_url}
 ${python_ver} run.py
 "
 wait $!
