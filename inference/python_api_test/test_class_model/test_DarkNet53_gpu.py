@@ -110,7 +110,6 @@ def test_gpu_more_bz_new_executor():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-@cuda_skip
 def test_gpu_mixed_precision_bz1():
     """
     compared gpu batch_size=1 DarkNet53 mixed_precision outputs with true val
