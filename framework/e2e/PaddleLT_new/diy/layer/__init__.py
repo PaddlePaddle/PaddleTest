@@ -7,5 +7,3 @@ __init__
 import diy.layer.linear
 import diy.layer.VSFD
 import diy.layer.SEBlock
-import diy.layer.all_case
-import diy.layer.demo_case
