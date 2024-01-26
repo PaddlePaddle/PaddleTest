@@ -22,7 +22,6 @@ class Run(object):
         """
         # 获取所有layer.yml文件路径
         self.layer_dir = os.environ.get("CASE_DIR")
-        print("self.layer_dir is: ", self.layer_dir)
         self.py_list = CaseSelect(self.layer_dir).get_py_list(base_path=self.layer_dir)
 
         self.testing = os.environ.get("TESTING")
