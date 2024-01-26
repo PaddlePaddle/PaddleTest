@@ -21,12 +21,8 @@ class LayerTest(object):
     def __init__(self, title, layerfile, testing):
         """ """
         self.title = title
-        # self.yaml = yaml
+
         self.layerfile = layerfile.replace(".py", "").replace("/", ".").lstrip(".")
-
-        # self.case = case
-
-        # 解析layer.yml需要在run中循环执行
 
         # 解析testing.yml
         self.test_config = YamlLoader(yml=testing)
