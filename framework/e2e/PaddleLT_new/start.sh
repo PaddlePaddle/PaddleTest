@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# 最外层执行脚本
 test_scene=$1
 source ./set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
 source ./set_docker_env.sh # 设定docker环境相关参数
