@@ -40,7 +40,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_to_image_generation-alt_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_to_image_generation-alt_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_to_image_generation-alt_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-alt_diffusion end***********"
 
@@ -52,7 +52,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer image_to_image_text_guided_generation-alt_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer image_to_image_text_guided_generation-alt_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer image_to_image_text_guided_generation-alt_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer image_to_image_text_guided_generation-alt_diffusion end***********"
 
@@ -64,7 +64,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer unconditional_audio_generation-audio_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer unconditional_audio_generation-audio_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer unconditional_audio_generation-audio_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer unconditional_audio_generation-audio_diffusion end***********"
 
@@ -76,7 +76,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer image_to_image_text_guided_generation-controlnet run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer image_to_image_text_guided_generation-controlnet run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer image_to_image_text_guided_generation-controlnet run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer image_to_image_text_guided_generation-controlnet end***********"
 
@@ -88,7 +88,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer unconditional_audio_generation-dance_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer unconditional_audio_generation-dance_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer unconditional_audio_generation-dance_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer unconditional_audio_generation-dance_diffusion end***********"
 
@@ -100,7 +100,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer unconditional_image_generation-ddpm run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer unconditional_image_generation-ddpm run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer unconditional_image_generation-ddpm run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer unconditional_image_generation-ddpm end***********"
 
@@ -112,7 +112,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer unconditional_image_generation-ddim run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer unconditional_image_generation-ddim run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer unconditional_image_generation-ddim run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer unconditional_image_generation-ddim end***********"
 
@@ -124,7 +124,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_to_image_generation-latent_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_to_image_generation-latent_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_to_image_generation-latent_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-latent_diffusion end***********"
 
@@ -136,7 +136,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer super_resolution-latent_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer super_resolution-latent_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer super_resolution-latent_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer super_resolution-latent_diffusion end***********"
 
@@ -148,7 +148,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer unconditional_image_generation-latent_diffusion_uncond run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer unconditional_image_generation-latent_diffusion_uncond run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer unconditional_image_generation-latent_diffusion_uncond run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer unconditional_image_generation-latent_diffusion_uncond end***********"
 
@@ -160,7 +160,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer image_guided_image_inpainting-paint_by_example run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer image_guided_image_inpainting-paint_by_example run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer image_guided_image_inpainting-paint_by_example run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer image_guided_image_inpainting-paint_by_example end***********"
 
@@ -172,7 +172,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer unconditional_image_generation-pndm run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer unconditional_image_generation-pndm run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer unconditional_image_generation-pndm run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer unconditional_image_generation-pndm end***********"
 
@@ -184,7 +184,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer image_inpainting-repaint run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer image_inpainting-repaint run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer image_inpainting-repaint run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer image_inpainting-repaint end***********"
 
@@ -196,7 +196,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer unconditional_image_generation-score_sde_ve run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer unconditional_image_generation-score_sde_ve run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer unconditional_image_generation-score_sde_ve run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer unconditional_image_generation-score_sde_ve end***********"
 
@@ -208,7 +208,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_guided_generation-semantic_stable_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_guided_generation-semantic_stable_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_guided_generation-semantic_stable_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_guided_generation-semantic_stable_diffusion end***********"
 
@@ -220,7 +220,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_to_image_generation-stable_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_to_image_generation-stable_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_to_image_generation-stable_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-stable_diffusion end***********"
 
@@ -232,7 +232,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer image_to_image_text_guided_generation-stable_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer image_to_image_text_guided_generation-stable_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer image_to_image_text_guided_generation-stable_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer image_to_image_text_guided_generation-stable_diffusion end***********"
 
@@ -244,7 +244,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_guided_image_inpainting-stable_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_guided_image_inpainting-stable_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_guided_image_inpainting-stable_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_guided_image_inpainting-stable_diffusion end***********"
 
@@ -256,7 +256,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_to_image_generation-stable_diffusion_2 run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_to_image_generation-stable_diffusion_2 run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_to_image_generation-stable_diffusion_2 run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-stable_diffusion_2 end***********"
 
@@ -268,7 +268,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer image_to_image_text_guided_generation-stable_diffusion_2 run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer image_to_image_text_guided_generation-stable_diffusion_2 run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer image_to_image_text_guided_generation-stable_diffusion_2 run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer image_to_image_text_guided_generation-stable_diffusion_2 end***********"
 
@@ -280,7 +280,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_guided_image_inpainting-stable_diffusion_2 run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_guided_image_inpainting-stable_diffusion_2 run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_guided_image_inpainting-stable_diffusion_2 run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_guided_image_inpainting-stable_diffusion_2 end***********"
 
@@ -292,7 +292,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_guided_image_upscaling-stable_diffusion_2 run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_guided_image_upscaling-stable_diffusion_2 run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_guided_image_upscaling-stable_diffusion_2 run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_guided_image_upscaling-stable_diffusion_2 end***********"
 
@@ -304,7 +304,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_to_image_generation-stable_diffusion_safe run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_to_image_generation-stable_diffusion_safe run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_to_image_generation-stable_diffusion_safe run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-stable_diffusion_safe end***********"
 
@@ -316,7 +316,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer unconditional_image_generation-stochastic_karras_ve run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer unconditional_image_generation-stochastic_karras_ve run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer unconditional_image_generation-stochastic_karras_ve run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer unconditional_image_generation-stochastic_karras_ve end***********"
 
@@ -328,7 +328,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_to_image_generation-unclip run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_to_image_generation-unclip run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_to_image_generation-unclip run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-unclip end***********"
 
@@ -340,7 +340,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_to_image_generation-versatile_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_to_image_generation-versatile_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_to_image_generation-versatile_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-versatile_diffusion end***********"
 
@@ -352,7 +352,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer image_variation-versatile_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer image_variation-versatile_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer image_variation-versatile_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer image_variation-versatile_diffusion end***********"
 
@@ -364,7 +364,7 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer dual_text_and_image_guided_generation-versatile_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer dual_text_and_image_guided_generation-versatile_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer dual_text_and_image_guided_generation-versatile_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer dual_text_and_image_guided_generation-versatile_diffusion end***********"
 
@@ -376,6 +376,6 @@ exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
     echo "infer text_to_image_generation-vq_diffusion run success" >>"${log_dir}/infer_res.log"
 else
-    echo "infer text_to_image_generation-vq_diffusion run fail" >>"${log_dir}/infer_res_res.log"
+    echo "infer text_to_image_generation-vq_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-vq_diffusion end***********"
