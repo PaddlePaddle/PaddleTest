@@ -108,6 +108,7 @@ def test_trt_fp16_more_bz():
             need_sort=True,
             det_top_bbox_threshold=0.85,
             check_output_list=["save_infer_model/scale_0.tmp_0", "save_infer_model/scale_1.tmp_0"],
+            delete_op_list=["cast_18.tmp_0"],
         )
 
         del test_suite2  # destroy class to save memory
