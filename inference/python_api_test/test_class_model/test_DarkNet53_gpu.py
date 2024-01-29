@@ -26,7 +26,7 @@ def check_model_exist():
     """
     check model exist
     """
-    DarkNet53_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.0/class/DarkNet53.tgz"
+    DarkNet53_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/DarkNet53.tgz"
     if not os.path.exists("./DarkNet53/inference.pdiparams"):
         wget.download(DarkNet53_url, out="./")
         tar = tarfile.open("DarkNet53.tgz")
@@ -69,7 +69,7 @@ def test_disable_gpu():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu batch_size=1-2 DarkNet53 outputs with true val
     """
@@ -100,22 +100,16 @@ def test_gpu_more_bz():
             input_data_dict,
             output_data_dict,
             delta=1e-5,
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory
 
 
-# skip the DarkNet53 gpu_mixed_precision_case
-if paddle.version.cuda() == "10.2":
-    cuda_skip = pytest.mark.skip(reason="unsupported CUDA version")
-else:
-    cuda_skip = pytest.mark.none
-
-
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-@cuda_skip
 def test_gpu_mixed_precision_bz1():
     """
     compared gpu batch_size=1 DarkNet53 mixed_precision outputs with true val
