@@ -30,6 +30,7 @@ EXIT_CODE=$?
 cp -r report ./PTSTools/LogParseUpload;
 cd ./PTSTools/LogParseUpload;
 ${python_ver} -m pip install -r requirement.txt;
+${python_ver} -m pip install --force-reinstall bce-python-sdk==0.8.92
 unset http_proxy && unset https_proxy;
 
 ${python_ver} upload.py --file_path report --id ${pts_id} --status '成功'
