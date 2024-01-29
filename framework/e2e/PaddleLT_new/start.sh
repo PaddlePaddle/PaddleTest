@@ -19,7 +19,7 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
   ${docker_image} /bin/bash -c "
 ldconfig;
 
-source ./set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
+source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
 source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
 ${python_ver} -m pip install ${wheel_url}
