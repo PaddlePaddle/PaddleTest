@@ -2,7 +2,7 @@
 
 # 最外层执行脚本
 test_scene=$1
-source ./set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
+source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
 source ./set_docker_env.sh # 设定docker环境相关参数
 
 docker_name="PaddleLayerTest_${AGILE_PIPELINE_BUILD_NUMBER}"
@@ -25,5 +25,13 @@ ${python_ver} -m pip install -r requirement.txt
 ${python_ver} -m pip install ${wheel_url}
 ${python_ver} run.py
 "
-wait $!
-exit $?
+EXIT_CODE=$?
+
+cp -r report ./PTSTools/LogParseUpload;
+cd ./PTSTools/LogParseUpload;
+${python_ver} -m pip install -r requirement.txt;
+unset http_proxy && unset https_proxy;
+
+${python_ver} upload.py --file_path report --id ${pts_id} --status '成功'
+
+exit ${EXIT_CODE}
