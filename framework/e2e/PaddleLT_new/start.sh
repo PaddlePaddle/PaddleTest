@@ -35,8 +35,8 @@ unset http_proxy && unset https_proxy;
 ${python_ver} upload.py --file_path report --id ${pts_id} --status '成功'
 exit ${exit_code}
 "
-#EXIT_CODE=$?
+EXIT_CODE=$?
+echo end here
+exit ${EXIT_CODE}
 
-#exit ${EXIT_CODE}
-
-exit ${exit_code}
+# exit ${exit_code}
