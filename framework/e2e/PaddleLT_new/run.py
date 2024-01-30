@@ -45,7 +45,6 @@ class Run(object):
                 error_list.append(py_file)
                 error_count += 1
         if error_count != 0:
-            # raise Exception("测试失败，报错子图为: {}".format(error_list))
             print("测试失败，报错子图为: {}".format(error_list))
             os.system("echo 7 > exit_code.txt")
         else:
