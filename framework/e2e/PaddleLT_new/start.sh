@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -x
 # 最外层执行脚本
 test_scene=$1
 source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
