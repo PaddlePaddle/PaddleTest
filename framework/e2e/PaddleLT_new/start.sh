@@ -25,7 +25,7 @@ source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
 ${python_ver} -m pip install -r ./PTSTools/LogParseUpload/requirement.txt;
 ${python_ver} -m pip install ${wheel_url}
-${python_ver} run.py || export exit_code=7
+${python_ver} run.py || exit_code=7
 
 cp -r report ./PTSTools/LogParseUpload;
 cd ./PTSTools/LogParseUpload;
@@ -35,8 +35,6 @@ unset http_proxy && unset https_proxy;
 ${python_ver} upload.py --file_path report --id ${pts_id} --status '成功'
 exit ${exit_code}
 "
-EXIT_CODE=$?
+exit_code=$?
 echo end here
-exit ${EXIT_CODE}
-
-# exit ${exit_code}
+exit ${exit_code}
