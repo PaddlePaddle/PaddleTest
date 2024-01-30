@@ -46,6 +46,7 @@ class Run(object):
                 error_count += 1
         if error_count != 0:
             raise Exception("测试失败，报错子图为: {}".format(error_list))
+            exit(7)
 
 
 if __name__ == "__main__":
