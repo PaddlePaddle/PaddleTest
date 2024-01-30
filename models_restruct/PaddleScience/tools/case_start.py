@@ -50,8 +50,8 @@ class PaddleScience_Case_Start(object):
         elif "deepcfd" in self.case_name:
             os.environ["FLAGS_cudnn_deterministic"] = "True"
         elif "viv" in self.case_name:
-            os.system("wget -nc https://paddle-org.bj.bcebos.com/paddlescience/models/viv/viv_pretrained.pdeqn")
-            os.system("wget -nc https://paddle-org.bj.bcebos.com/paddlescience/models/viv/viv_pretrained.pdparams")
+            os.system("wget -nc https://paddle-org.bj.bcebos.com/paddlescience/models/viv/viv_pretrained.pdeqn -P ./PaddleScience/")
+            os.system("wget -nc https://paddle-org.bj.bcebos.com/paddlescience/models/viv/viv_pretrained.pdparams -P ./PaddleScience/")
         elif "amgnet" in self.case_name:
             py_v = os.system("python3 --version")
             print(py_v)
