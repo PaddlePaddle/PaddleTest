@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
 # 最外层执行脚本
 test_scene=$1
 source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
@@ -18,7 +17,6 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
   -e "python_ver=${python_ver}" \
   -e "wheel_url=${wheel_url}" \
   ${docker_image} /bin/bash -c "
-set -x
 ldconfig;
 
 source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
