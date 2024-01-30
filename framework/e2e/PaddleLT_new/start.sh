@@ -25,7 +25,7 @@ source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
 ${python_ver} -m pip install -r ./PTSTools/LogParseUpload/requirement.txt;
 ${python_ver} -m pip install ${wheel_url}
-${python_ver} run.py || echo 7 > exit_code.txt
+${python_ver} run.py
 
 cp -r report ./PTSTools/LogParseUpload;
 cd ./PTSTools/LogParseUpload;
