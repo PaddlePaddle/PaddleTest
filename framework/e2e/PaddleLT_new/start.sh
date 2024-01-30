@@ -18,19 +18,22 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
   -e "wheel_url=${wheel_url}" \
   ${docker_image} /bin/bash -c "
 ldconfig;
+set -x
 
 source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
 source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
+${python_ver} -m pip install -r ./PTSTools/LogParseUpload/requirement.txt;
 ${python_ver} -m pip install ${wheel_url}
-${python_ver} run.py
+${python_ver} run.py || exit_code=7
 
 cp -r report ./PTSTools/LogParseUpload;
 cd ./PTSTools/LogParseUpload;
-${python_ver} -m pip install -r requirement.txt;
+#${python_ver} -m pip install -r requirement.txt;
 unset http_proxy && unset https_proxy;
 
 ${python_ver} upload.py --file_path report --id ${pts_id} --status '成功'
+exit ${exit_code}
 "
 EXIT_CODE=$?
 
