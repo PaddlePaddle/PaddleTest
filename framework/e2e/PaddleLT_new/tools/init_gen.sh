@@ -2,7 +2,7 @@
 
 # 获取当前文件夹路径
 cur_path=`pwd`
-case_root=$1
+case_root=$1  # 设为layercase_all或layercase_unique等
 clas_case=${case_root}/Clas_cases
 det_case=${case_root}/Det_cases
 seg_case=${case_root}/Seg_cases
