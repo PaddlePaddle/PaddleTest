@@ -261,7 +261,7 @@ if not defined CE_version_name set CE_version_name=TestFrameWork
 if not defined models_name set models_name=models_restruct
 
 rem download CE_Link
-wget -q %CE_Link%
+wget -q %CE_Link% --no-proxy
 unzip -P %CE_pass% %CE_version_name%.zip
 
 rem set proxy

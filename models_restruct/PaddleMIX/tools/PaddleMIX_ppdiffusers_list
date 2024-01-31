@@ -1,0 +1,9 @@
+ppdiffusers^examples^autoencoder^vae.yaml
+ppdiffusers^examples^controlnet.yaml
+ppdiffusers^examples^dreambooth.yaml
+ppdiffusers^examples^stable_diffusion.yaml
+ppdiffusers^examples^t2i-adapter.yaml
+ppdiffusers^examples^text_to_image_laion400m.yaml
+ppdiffusers^examples^text_to_image.yaml
+ppdiffusers^examples^textual_inversion.yaml
+ppdiffusers^tests^examples_test.yaml

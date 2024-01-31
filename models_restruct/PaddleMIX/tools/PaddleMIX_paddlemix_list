@@ -1,0 +1,13 @@
+deploy^blip2.yaml
+deploy^groundingdino.yaml
+deploy^sam.yaml
+paddlemix^examples^blip2.yaml
+paddlemix^examples^clip.yaml
+paddlemix^examples^coca.yaml
+paddlemix^examples^eva02.yaml
+paddlemix^examples^evaclip.yaml
+paddlemix^examples^groundingdino.yaml
+paddlemix^examples^imagebind.yaml
+paddlemix^examples^minigpt4.yaml
+paddlemix^examples^Sam.yaml
+paddlemix^examples^visualglm.yaml

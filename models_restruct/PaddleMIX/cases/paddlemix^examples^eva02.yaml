@@ -1,0 +1,131 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: paddlemix/external_ops/
+        cmd: python setup.py install
+      -
+        name: down_load_params
+        path: paddlemix/examples/eva02/
+        cmd: wget https://bj.bcebos.com/v1/paddlenlp/models/community/paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14/model_state.pdparams
+      -
+        name: pretrain
+        path: paddlemix/examples/eva02/
+        cmd: python -m paddle.distributed.launch --master "127.0.0.1:8080" --nnodes 1 --nproc_per_node 2 run_eva02_pretrain_dist.py
+        params:
+          - --do_train
+          - --data_path /home/dataset/ILSVRC2012_tiny/train
+          - --model "paddlemix/EVA/EVA02/eva02_Ti_for_pretrain"
+          - --teacher "paddlemix/EVA/EVA01-CLIP-g-14"
+          - --student "paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_p14"
+          - --input_size 224
+          - --drop_path 0.0
+          - --optim "adamw"
+          - --learning_rate 3e-3
+          - --weight_decay 0.05
+          - --adam_beta1 0.9
+          - --adam_beta2 0.98
+          - --adam_epsilon 1e-6
+          - --max_grad_norm 3.0
+          - --lr_scheduler_type cosine
+          - --warmup_lr 1e-6
+          - --min_lr 1e-5
+          - --num_train_epochs 1
+          - --save_epochs 1
+          - --warmup_epochs 1
+          - --per_device_train_batch_size 2
+          - --dataloader_num_workers 2
+          - --output_dir ./output/eva02_Ti_pt_in21k_p14
+          - --logging_dir ./output/eva02_Ti_pt_in21k_p14/tb_log
+          - --logging_steps 10
+          - --accum_freq 1
+          - --dp_degree 1
+          - --tensor_parallel_degree 1
+          - --sharding_parallel_degree 2
+          - --pipeline_parallel_degree 1
+          - --disable_tqdm True
+          - --tensorboard True
+          - --stu_pretrained_model_path None
+          - --tea_pretrained_model_path None
+          - --fp16_opt_level "O1"
+          - --seed 0
+          - --recompute True
+          - --bf16 False
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: finetune
+        path: paddlemix/examples/eva02/
+        cmd: python -m paddle.distributed.launch --master "127.0.0.1:8080" --nnodes 1 --nproc_per_node 1 --ips "127.0.0.1" run_eva02_finetune_dist.py
+        params:
+          - --do_train
+          - --data_path /home/dataset/ILSVRC2012_tiny/train
+          - --eval_data_path /home/dataset/ILSVRC2012_tiny/val
+          - --pretrained_model_path ./model_state.pdparams
+          - --model "paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_ft_in1k_p14"
+          - --input_size 336
+          - --layer_decay 0.9
+          - --drop_path 0.1
+          - --optim "adamw"
+          - --learning_rate 2e-4
+          - --weight_decay 0.05
+          - --adam_beta1 0.9
+          - --adam_beta2 0.999
+          - --adam_epsilon 1e-8
+          - --max_grad_norm 0.0
+          - --lr_scheduler_type cosine
+          - --lr_end 1e-7
+          - --warmup_lr 0.0
+          - --min_lr 0.0
+          - --num_train_epochs 1
+          - --save_epochs 1
+          - --warmup_epochs 0
+          - --per_device_train_batch_size 128
+          - --dataloader_num_workers 2
+          - --output_dir ./output/eva02_Ti_pt_in21k_ft_in1k_p14
+          - --logging_dir ./output/eva02_Ti_pt_in21k_ft_in1k_p14/tb_log
+          - --logging_steps 10
+          - --accum_freq 1
+          - --dp_degree 2
+          - --tensor_parallel_degree 1
+          - --sharding_parallel_degree 2
+          - --pipeline_parallel_degree 1
+          - --disable_tqdm True
+          - --tensorboard True
+          - --recompute True
+          - --fp16_opt_level "O1"
+          - --seed 0
+          - --fp16 False
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval:
+      -
+        name: eval
+        path: paddlemix/examples/eva02/
+        cmd: CUDA_VISIBLE_DEVICES=0 python run_eva02_finetune_eval.py
+        params:
+          - --do_eval
+          - --model "paddlemix/EVA/EVA02/eva02_Ti_pt_in21k_ft_in1k_p14"
+          - --pretrained_model_path None
+          - --eval_data_path /home/dataset/ILSVRC2012_tiny/val
+          - --input_size 336
+          - --per_device_eval_batch_size 128
+          - --dataloader_num_workers 2
+          - --output_dir ./outputs
+          - --recompute True
+          - --fp16 False
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -24,7 +24,7 @@ def check_model_exist():
     """
     check model exist
     """
-    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.0/detection/ppyolo.tgz"
+    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/detection/ppyolo.tgz"
     if not os.path.exists("./ppyolo/model.pdiparams"):
         wget.download(ppyolo_url, out="./")
         tar = tarfile.open("ppyolo.tgz")
@@ -74,7 +74,7 @@ def test_disable_gpu():
 @pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu ppyolo batch_size = [1] outputs with true val
     """
@@ -131,6 +131,8 @@ def test_gpu_more_bz():
             output_data_dict,
             repeat=1,
             delta=3e-4,
+            use_new_executor=True,
+            use_pir=True,
         )
 
 

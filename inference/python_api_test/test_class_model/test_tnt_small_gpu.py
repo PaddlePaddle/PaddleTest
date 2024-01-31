@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    tnt_small_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.2rc/class/TNT_small.tgz"
+    tnt_small_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/TNT_small.tgz"
     if not os.path.exists("./TNT_small/inference.pdiparams"):
         wget.download(tnt_small_url, out="./")
         tar = tarfile.open("TNT_small.tgz")

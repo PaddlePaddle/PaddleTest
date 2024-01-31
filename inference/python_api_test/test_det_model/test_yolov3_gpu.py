@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.1/detection/yolov3.tgz"
+    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/detection/yolov3.tgz"
     if not os.path.exists("./yolov3/model.pdiparams"):
         wget.download(yolov3_url, out="./")
         tar = tarfile.open("yolov3.tgz")
@@ -73,7 +73,7 @@ def test_disable_gpu():
 
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu yolov3 batch_size = [1, 2] outputs with true val
     """
@@ -130,6 +130,8 @@ def test_gpu_more_bz():
             output_data_dict,
             repeat=1,
             delta=3e-4,
+            use_new_executor=True,
+            use_pir=True,
         )
 
 

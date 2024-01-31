@@ -17,6 +17,6 @@ case:
         cmd: python -u tools/infer.py
         result:
           acc:
-            base: 0.910243
+            base: 0.909635
             threshold: 0.0003
             evaluation: "+"

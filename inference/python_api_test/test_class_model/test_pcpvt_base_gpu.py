@@ -68,7 +68,7 @@ def test_disable_gpu():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu batch_size=1-2 pcpvt_base outputs with true val
     """
@@ -99,6 +99,8 @@ def test_gpu_more_bz():
             input_data_dict,
             output_data_dict,
             delta=1e-5,
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -107,7 +109,7 @@ def test_gpu_more_bz():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_mixed_precision_bz1():
+def test_gpu_mixed_precision_bz1_new_executor():
     """
     compared gpu batch_size=1 pcpvt_base mixed_precision outputs with true val
     """
@@ -145,6 +147,8 @@ def test_gpu_mixed_precision_bz1():
             input_data_dict,
             output_data_dict,
             delta=5e-3,
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory

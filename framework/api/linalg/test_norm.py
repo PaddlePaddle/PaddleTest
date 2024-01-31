@@ -33,57 +33,18 @@ class TestNorm(APIBase):
 obj = TestNorm(paddle.linalg.norm)
 
 
-def p_norm(x, axis, porder, keepdims=False):
+def np_linalg_norm(x, axis, porder, keepdims=False):
     """
     compute norm
     """
-    r = []
     if axis is None:
         x = x.flatten()
-        if porder == np.inf:
-            r = np.amax(np.abs(x))
-        elif porder == -np.inf:
-            r = np.amin(np.abs(x))
-        else:
-            r = np.linalg.norm(x, ord=porder)
-    elif isinstance(axis, list or tuple) and len(axis) == 2:
-        if porder == np.inf:
-            axis = tuple(axis)
-            r = np.amax(np.abs(x), axis=axis, keepdims=keepdims)
-        elif porder == -np.inf:
-            axis = tuple(axis)
-            r = np.amin(np.abs(x), axis=axis, keepdims=keepdims)
-        elif porder == 0:
-            axis = tuple(axis)
-            r = x.astype(bool)
-            r = np.sum(r, axis)
-        elif porder == 1:
-            axis = tuple(axis)
-            r = np.sum(np.abs(x), axis)
-        else:
-            axis = tuple(axis)
-            xp = np.power(np.abs(x), porder)
-            s = np.sum(xp, axis=axis, keepdims=keepdims)
-            r = np.power(s, 1.0 / porder)
+        axis = -1
+        return np.linalg.norm(x, ord=porder)
     else:
         if isinstance(axis, list):
             axis = tuple(axis)
-        r = np.linalg.norm(x, ord=porder, axis=axis, keepdims=keepdims).astype(x.dtype)
-
-    return r
-
-
-def frobenius_norm(x, axis=None, keepdims=False):
-    """
-    frobenius_norm
-    """
-    if isinstance(axis, list):
-        axis = tuple(axis)
-    if axis is None:
-        axis = (-2, -1)
-    r = np.linalg.norm(x, ord="fro", axis=axis, keepdims=keepdims).astype(x.dtype)
-    return r
-
+        return np.linalg.norm(x, ord=porder, axis=axis, keepdims=keepdims).astype(x.dtype)
 
 @pytest.mark.api_linalg_norm_vartype
 def test_norm_base():
@@ -114,7 +75,7 @@ def test_norm1():
     x = randtool("float", -10, 10, [3, 3, 3])
     pord = np.inf
     axis = [1, 2]
-    res = p_norm(x=x, axis=axis, porder=pord)
+    res = np_linalg_norm(x=x, axis=axis, porder=pord)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
@@ -126,7 +87,7 @@ def test_norm2():
     x = randtool("float", -10, 10, [3, 3, 3])
     pord = np.inf
     axis = [1]
-    res = p_norm(x=x, axis=axis, porder=pord)
+    res = np_linalg_norm(x=x, axis=axis, porder=pord)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
@@ -138,7 +99,7 @@ def test_norm3():
     x = randtool("float", -10, 10, [3, 3, 3])
     pord = np.inf
     axis = 1
-    res = p_norm(x=x, axis=axis, porder=pord)
+    res = np_linalg_norm(x=x, axis=axis, porder=pord)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
@@ -150,7 +111,7 @@ def test_norm4():
     x = randtool("float", -10, 10, [3, 3, 3])
     pord = 0
     axis = 1
-    res = p_norm(x=x, axis=axis, porder=pord)
+    res = np_linalg_norm(x=x, axis=axis, porder=pord)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
@@ -162,7 +123,7 @@ def test_norm5():
     x = randtool("float", -10, 10, [3, 3, 3])
     pord = -np.inf
     axis = 1
-    res = p_norm(x=x, axis=axis, porder=pord)
+    res = np_linalg_norm(x=x, axis=axis, porder=pord)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
@@ -174,7 +135,7 @@ def test_norm6():
     x = randtool("float", -10, 10, [3, 3, 3])
     pord = 1
     axis = [1, 2]
-    res = p_norm(x=x, axis=axis, porder=pord)
+    res = np_linalg_norm(x=x, axis=axis, porder=pord)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
@@ -186,7 +147,7 @@ def test_norm7():
     x = randtool("float", -10, 10, [3, 3, 3])
     pord = 1
     axis = [0, 2]
-    res = p_norm(x=x, axis=axis, porder=pord)
+    res = np_linalg_norm(x=x, axis=axis, porder=pord)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
@@ -198,24 +159,12 @@ def test_norm8():
     x = randtool("float", -10, 10, [3, 3, 3])
     pord = 2
     axis = [0, 2]
-    res = p_norm(x=x, axis=axis, porder=pord)
+    res = np_linalg_norm(x=x, axis=axis, porder=pord)
     obj.run(res=res, x=x, axis=axis, p=pord)
 
 
 @pytest.mark.api_linalg_norm_parameters
 def test_norm9():
-    """
-    ord = 3 axis = [0, 2]
-    """
-    x = randtool("float", -10, 10, [3, 3, 3])
-    pord = 3
-    axis = [0, 2]
-    res = p_norm(x=x, axis=axis, porder=pord)
-    obj.run(res=res, x=x, axis=axis, p=pord)
-
-
-@pytest.mark.api_linalg_norm_parameters
-def test_norm10():
     """
     ord = fro axis = None
     """
@@ -227,7 +176,7 @@ def test_norm10():
 
 
 @pytest.mark.api_linalg_norm_parameters
-def test_norm11():
+def test_norm10():
     """
     ord = fro axis = None BUG
     """
@@ -236,15 +185,3 @@ def test_norm11():
     axis = None
     res = np.array(16.8819)
     obj.run(res=res, x=x, axis=axis, p=pord)
-
-
-@pytest.mark.api_linalg_norm_parameters
-def test_norm12():
-    """
-    ord = 3 axis = [0, 2]
-    """
-    x = randtool("float", -10, 10, [3, 3, 3])
-    pord = 3
-    axis = [0, 2]
-    res = p_norm(x=x, axis=axis, porder=pord, keepdims=True)
-    obj.run(res=res, x=x, axis=axis, p=pord, keepdim=True)

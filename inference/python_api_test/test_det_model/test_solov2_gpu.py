@@ -74,7 +74,7 @@ def test_disable_gpu():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu solov2 batch_size = [1] outputs with true val
     """
@@ -116,7 +116,14 @@ def test_gpu_more_bz():
             model_file="./solov2/model.pdmodel",
             params_file="./solov2/model.pdiparams",
         )
-        test_suite.gpu_more_bz_test(input_data_dict, output_data_dict, repeat=1, delta=1e-5)
+        test_suite.gpu_more_bz_test(
+            input_data_dict,
+            output_data_dict,
+            repeat=1,
+            delta=1e-5,
+            use_new_executor=True,
+            use_pir=True,
+        )
 
 
 @pytest.mark.win
