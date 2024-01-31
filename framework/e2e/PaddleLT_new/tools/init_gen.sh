@@ -34,7 +34,7 @@ repo_name=$1
 root_dir=$2
 cd ${repo_name}
 if [ -f "__init__.py" ]; then
-    echo "delete clas init ~~~"
+    echo "delete ${repo_name} init ~~~"
     rm "__init__.py"
 fi
 

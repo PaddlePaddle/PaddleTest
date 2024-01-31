@@ -17,9 +17,7 @@ for subdir in */; do
   echo ${subdir%/}
   tmp0=${subdir%/}
   tmp1=$(echo "$tmp0" | sed 's/ppcls\^configs\^ImageNet\^//g; s/_single_dy2st_train//g')
-#   echo ${tmp1}
   tmp2=$(echo "$tmp1" | sed 's/\^/_/g; s/-/_/g')
-#   echo ${tmp2}
   mv ${subdir} ${tmp2}
 
 done
@@ -33,9 +31,7 @@ for subdir in */; do
   echo ${subdir%/}
   tmp0=${subdir%/}
   tmp1=$(echo "$tmp0" | sed 's/configs\^//g; s/_single_dy2st_train//g')
-#   echo ${tmp1}
   tmp2=$(echo "$tmp1" | sed 's/\^/_/g; s/-/_/g')
-#   echo ${tmp2}
   mv ${subdir} ${tmp2}
 
 done
@@ -49,9 +45,7 @@ for subdir in */; do
   echo ${subdir%/}
   tmp0=${subdir%/}
   tmp1=$(echo "$tmp0" | sed 's/configs\^//g; s/_single_dy2st_train//g')
-#   echo ${tmp1}
   tmp2=$(echo "$tmp1" | sed 's/\^/_/g; s/-/_/g')
-#   echo ${tmp2}
   mv ${subdir} ${tmp2}
 
 done
@@ -65,9 +59,7 @@ for subdir in */; do
   echo ${subdir%/}
   tmp0=${subdir%/}
   tmp1=$(echo "$tmp0" | sed 's/configs\^//g; s/_single_dy2st_train//g')
-#   echo ${tmp1}
   tmp2=$(echo "$tmp1" | sed 's/\^/_/g; s/-/_/g')
-#   echo ${tmp2}
   mv ${subdir} ${tmp2}
 
 done
