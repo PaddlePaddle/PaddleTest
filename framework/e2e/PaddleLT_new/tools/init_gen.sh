@@ -2,11 +2,11 @@
 
 # 获取当前文件夹路径
 cur_path=`pwd`
-case_root=layercase_all
-clas_case=layercase_all/Clas_cases
-det_case=layercase_all/Det_cases
-seg_case=layercase_all/Seg_cases
-ocr_case=layercase_all/Ocr_cases
+case_root=$1
+clas_case=${case_root}/Clas_cases
+det_case=${case_root}/Det_cases
+seg_case=${case_root}/Seg_cases
+ocr_case=${case_root}/Ocr_cases
 
 echo case_root is: ${case_root}
 cd ${case_root}
