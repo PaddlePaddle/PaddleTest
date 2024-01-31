@@ -12,7 +12,7 @@ echo case_root is: ${case_root}
 cd ${case_root}
 
 if [ -f "__init__.py" ]; then
-    echo "delete~~~"
+    echo "delete root init ~~~"
     rm "__init__.py"
 fi
 
