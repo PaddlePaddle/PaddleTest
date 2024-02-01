@@ -21,6 +21,11 @@ from paddle.io import DataLoader, DistributedBatchSampler
 from paddle.vision.datasets import MNIST
 from paddle.vision.transforms import ToTensor
 
+def set_random_seed(seed):
+   random.seed(seed)
+   np.random.seed(seed)
+   paddle.seed(seed)
+set_random_seed(33)
 
 
 strategy = fleet.DistributedStrategy()
@@ -41,20 +46,12 @@ fleet.init(is_collective=True, strategy=strategy)
 
 
 
-def set_random_seed(seed, dp_id, rank_id):
-    random.seed(seed)
-    np.random.seed(seed + dp_id)
-    paddle.seed(seed + dp_id + rank_id)
-    print("seed: ", seed)
-    print("rank_id: ", rank_id)
-    print("dp_id: ", dp_id)
 
 hcg = fleet.get_hybrid_communicate_group()
 world_size = hcg.get_model_parallel_world_size()
 dp_id = hcg.get_data_parallel_rank()
 pp_id = hcg.get_stage_id()
 rank_id = dist.get_rank()
-set_random_seed(1024, dp_id, rank_id)
 
 
 class ReshapeHelp(Layer):
