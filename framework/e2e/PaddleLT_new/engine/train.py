@@ -51,6 +51,10 @@ class LayerTrain(object):
 
     def dy_train(self):
         """dygraph train"""
+
+        if not self.net.parameters():
+            return "pass"
+
         reset(self.seed)
 
         # net = self.net.get_layer()
@@ -92,6 +96,10 @@ class LayerTrain(object):
 
     def dy2st_train(self):
         """dy2st train"""
+
+        if not self.net.parameters():
+            return "pass"
+
         reset(self.seed)
 
         # net = self.net.get_layer()
@@ -112,6 +120,10 @@ class LayerTrain(object):
 
     def dy2st_train_cinn(self):
         """dy2st train"""
+
+        if not self.net.parameters():
+            return "pass"
+
         reset(self.seed)
 
         build_strategy = paddle.static.BuildStrategy()
