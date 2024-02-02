@@ -111,17 +111,7 @@ class LayerTest(object):
 
 
 if __name__ == "__main__":
-    # all_dir = "yaml/Det/modeling/backbones/"
-    # last_dir = os.path.basename(all_dir)
-    # base_dir = all_dir.replace(last_dir, "")
-    # yaml = "yaml/Det/modeling/backbones/resnet.yml"
-    # case = "resnet_ConvNormLayer_0"
-    # testing = "yaml/demo_det_testing.yml"
-    # title = yaml.replace(base_dir, "").replace(".yml", ".{}".format(case)).replace("/", ".")
-    # single_test = LayerTest(title=title, yaml=yaml, case=case, testing=testing)
-    # single_test._case_run()
-
-    single_test = LayerTest(
-        title="lzy_naive", layerfile="diy/layer/demo_case/SIR_252.py", testing="yaml/demo_new_testing.yml"
-    )
+    layerfile = "layercase/SIR_108.py"
+    testing = "yaml/dy^infer.yml"
+    single_test = LayerTest(title="lzy_naive", layerfile=layerfile, testing=testing)
     single_test._case_run()

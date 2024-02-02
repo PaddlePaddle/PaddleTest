@@ -26,7 +26,6 @@ class LayerEval(object):
         reset(self.seed)
 
         self.testing = testing
-
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 

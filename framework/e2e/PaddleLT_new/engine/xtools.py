@@ -19,3 +19,4 @@ def reset(seed):
     paddle.disable_static()
     paddle.seed(seed)
     np.random.seed(seed)
+    np.set_printoptions(threshold=10, edgeitems=3)
