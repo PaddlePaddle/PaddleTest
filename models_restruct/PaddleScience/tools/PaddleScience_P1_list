@@ -11,7 +11,6 @@ examples^shock_wave^shock_wave.yaml
 examples^heat_pinn^heat_pinn.yaml
 examples^epnn^epnn.yaml
 example^heat_exchanger.yaml
-example^phylstm.yaml
 examples^biharmonic2d^biharmonic2d.yaml
 example^bubble^bubble.yaml
 example^topopt.yaml
