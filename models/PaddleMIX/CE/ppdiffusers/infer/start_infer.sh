@@ -19,14 +19,14 @@ fi
 /bin/cp -rf ./* ${work_path}
 
 cd ${work_path2}
-export http_proxy=${proxy}
-export https_proxy=${proxy}
+# export http_proxy=${proxy}
+# export https_proxy=${proxy}
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
-unset http_proxy
-unset https_proxy
+# unset http_proxy
+# unset https_proxy
 
 cd ${work_path}
 exit_code=0

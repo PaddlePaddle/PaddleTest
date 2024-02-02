@@ -16,8 +16,8 @@ fi
 cd ${work_path}/
 exit_code=0
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
+# export http_proxy=${proxy}
+# export https_proxy=${proxy}
 # 下载依赖、数据集和权重
 python -m pip install --upgrade pip
 bash prepare.sh

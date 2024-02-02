@@ -45,19 +45,19 @@ else
 fi
 echo "*******ppdiffusers/deploy/sdxl paddle sdxl_inference end***********"
 
-# (python ../utils/test_image_diff.py \
-#     --source_image ./infer_op_raw_fp16/text2img.png \
-#     --target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sdxl_infer_op_raw_fp16/text2img.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_text2img.log
-# python ${cur_path}/annalyse_log_tool.py \
-#     --file_path ${log_dir}/sdxl_test_image_diff_text2img.log
-# tmp_exit_code=$?
-# exit_code=$(($exit_code + ${tmp_exit_code}))
-# if [ ${tmp_exit_code} -eq 0 ]; then
-#     echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img success" >>"${log_dir}/ce_res.log"
-# else
-#     echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img fail" >>"${log_dir}/ce_res.log"
-# fi
-# echo "*******ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img end***********"
+(python ../utils/test_image_diff.py \
+    --source_image ./infer_op_raw_fp16/text2img.png \
+    --target_image https://paddlenlp.bj.bcebos.com/models/community/baicai/sdxl_infer_op_raw_fp16/text2img.png) 2>&1 | tee ${log_dir}/sdxl_test_image_diff_text2img.log
+python ${cur_path}/annalyse_log_tool.py \
+    --file_path ${log_dir}/sdxl_test_image_diff_text2img.log
+tmp_exit_code=$?
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img success" >>"${log_dir}/ce_res.log"
+else
+    echo "ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******ppdiffusers/deploy/sdxl sdxl_test_image_diff_text2img end***********"
 
 (python ../utils/test_image_diff.py \
     --source_image ./infer_op_raw_fp16/img2img.png \
