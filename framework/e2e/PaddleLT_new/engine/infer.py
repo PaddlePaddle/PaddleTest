@@ -3,7 +3,7 @@
 # @author Zeref996
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-jit 方法
+infer 执行器
 """
 
 import os
