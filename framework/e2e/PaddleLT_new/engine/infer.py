@@ -3,7 +3,7 @@
 # @author Zeref996
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-jit 方法
+infer 执行器
 """
 
 import os
@@ -50,8 +50,14 @@ class LayerInfer(object):
 
         predictor.run()
         output_names = predictor.get_output_names()
-        output_handle = predictor.get_output_handle(output_names[0])
-        infer_res = output_handle.copy_to_cpu()
+        if len(output_names) > 1:
+            infer_res = []
+            for i, name in enumerate(output_names):
+                output_handle = predictor.get_output_handle(output_names[i])
+                infer_res.append(output_handle.copy_to_cpu())
+        else:
+            output_handle = predictor.get_output_handle(output_names[0])
+            infer_res = output_handle.copy_to_cpu()
         return infer_res
 
     def paddle_infer_mkldnn(self):
@@ -75,8 +81,14 @@ class LayerInfer(object):
 
         predictor.run()
         output_names = predictor.get_output_names()
-        output_handle = predictor.get_output_handle(output_names[0])
-        infer_res = output_handle.copy_to_cpu()
+        if len(output_names) > 1:
+            infer_res = []
+            for i, name in enumerate(output_names):
+                output_handle = predictor.get_output_handle(output_names[i])
+                infer_res.append(output_handle.copy_to_cpu())
+        else:
+            output_handle = predictor.get_output_handle(output_names[0])
+            infer_res = output_handle.copy_to_cpu()
         return infer_res
 
     def paddle_infer_ort(self):
@@ -99,6 +111,12 @@ class LayerInfer(object):
 
         predictor.run()
         output_names = predictor.get_output_names()
-        output_handle = predictor.get_output_handle(output_names[0])
-        infer_res = output_handle.copy_to_cpu()
+        if len(output_names) > 1:
+            infer_res = []
+            for i, name in enumerate(output_names):
+                output_handle = predictor.get_output_handle(output_names[i])
+                infer_res.append(output_handle.copy_to_cpu())
+        else:
+            output_handle = predictor.get_output_handle(output_names[0])
+            infer_res = output_handle.copy_to_cpu()
         return infer_res
