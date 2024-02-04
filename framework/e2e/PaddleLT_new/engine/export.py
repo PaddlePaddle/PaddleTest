@@ -25,6 +25,9 @@ class LayerExport(object):
         """
         self.seed = 33
         reset(self.seed)
+        self.device = os.environ.get("PLT_SET_DEVICE")
+        paddle.set_device(str(self.device))
+        self.device_id = os.environ.get("PLT_DEVICE_ID")
 
         self.modelpath = layerfile.replace(".py", "").rsplit(".", 1)[0].replace(".", "/")
         self.layername = layerfile.replace(".py", "").rsplit(".", 1)[1].replace(".", "/")

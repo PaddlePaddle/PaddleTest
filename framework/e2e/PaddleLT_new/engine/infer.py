@@ -26,6 +26,9 @@ class LayerInfer(object):
         """
         self.seed = 33
         reset(self.seed)
+        self.device = os.environ.get("PLT_SET_DEVICE")
+        paddle.set_device(str(self.device))
+        self.device_id = os.environ.get("PLT_DEVICE_ID")
 
         self.testing = testing
 
@@ -33,13 +36,43 @@ class LayerInfer(object):
 
         self.path = os.path.join(os.getcwd(), "test_prodct", layerfile.replace(".", "/"))
 
-    def paddle_infer(self):
+    def paddle_infer_gpu(self):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
             return "pass"
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
+        config.enable_use_gpu(1000, int(self.device_id))
+
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        for i, name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(name)
+            input_tmp = self.data[i]
+            input_handle.copy_from_cpu(input_tmp)
+
+        predictor.run()
+        output_names = predictor.get_output_names()
+        if len(output_names) > 1:
+            infer_res = []
+            for i, name in enumerate(output_names):
+                output_handle = predictor.get_output_handle(output_names[i])
+                infer_res.append(output_handle.copy_to_cpu())
+        else:
+            output_handle = predictor.get_output_handle(output_names[0])
+            infer_res = output_handle.copy_to_cpu()
+        return infer_res
+
+    def paddle_infer_cpu(self):
+        """infer load (layer)"""
+        reset(self.seed)
+        if not os.path.exists(self.path + ".pdiparams"):
+            return "pass"
+
+        config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
+
+        config.disable_mkldnn()
 
         predictor = paddle_infer.create_predictor(config)
         input_names = predictor.get_input_names()
