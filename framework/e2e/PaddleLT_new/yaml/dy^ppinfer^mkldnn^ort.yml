@@ -5,7 +5,7 @@ testings:
   jit_save:
     model_dtype: "float32"
 
-  paddle_infer:
+  paddle_infer_gpu:
 
   paddle_infer_mkldnn:
 
@@ -14,7 +14,7 @@ testings:
 compare:
   -
     baseline: 'dy_eval'
-    latest: 'paddle_infer'
+    latest: 'paddle_infer_gpu'
     precision:
       delta: 0.00001
       rtol: 0.000001

@@ -5,6 +5,7 @@
 """
 eval 方法
 """
+import os
 import numpy as np
 import paddle
 from engine.xtools import reset
@@ -24,6 +25,10 @@ class LayerEval(object):
         """
         self.seed = 33
         reset(self.seed)
+
+        self.device = os.environ.get("PLT_SET_DEVICE")
+        paddle.set_device(str(self.device))
+        self.device_id = os.environ.get("PLT_DEVICE_ID")
 
         self.testing = testing
         self.model_dtype = self.testing.get("model_dtype")
