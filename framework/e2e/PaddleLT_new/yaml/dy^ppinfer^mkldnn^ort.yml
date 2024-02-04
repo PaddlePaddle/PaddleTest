@@ -19,13 +19,13 @@ compare:
       delta: 0.00001
       rtol: 0.000001
   -
-    baseline: 'dy_eval'
+    baseline: 'paddle_infer_gpu'
     latest: 'paddle_infer_mkldnn'
     precision:
       delta: 0.00001
       rtol: 0.000001
   -
-    baseline: 'dy_eval'
+    baseline: 'paddle_infer_gpu'
     latest: 'paddle_infer_ort'
     precision:
       delta: 0.00001
