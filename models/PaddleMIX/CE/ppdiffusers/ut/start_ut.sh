@@ -21,7 +21,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
-# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
 export http_proxy=${proxy}
 export https_proxy=${proxy}

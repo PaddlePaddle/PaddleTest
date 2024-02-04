@@ -379,3 +379,6 @@ else
     echo "infer text_to_image_generation-vq_diffusion run fail" >>"${log_dir}/infer_res.log"
 fi
 echo "*******infer text_to_image_generation-vq_diffusion end***********"
+
+echo exit_code:${exit_code}
+exit ${exit_code}

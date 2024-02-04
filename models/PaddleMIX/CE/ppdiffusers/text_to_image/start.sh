@@ -77,7 +77,7 @@ echo "*******text_to_image multi infer end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
-rm -rf ${work_path}//sd-pokemon-model/*
+rm -rf ${work_path}/sd-pokemon-model/*
 
 echo exit_code:${exit_code}
 exit ${exit_code}
