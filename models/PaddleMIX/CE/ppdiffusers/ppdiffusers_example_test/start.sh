@@ -175,7 +175,7 @@ echo "*******examples_test ip_adapter_test end***********"
 
 cd ${cur_path}
 echo ${cur_path}
-work_path=${root_path}/PaddleMIX/ppdiffusers/examples/lcm_trainer
+work_path=${root_path}/PaddleMIX/ppdiffusers/examples/consistency_distillation/lcm_trainer
 echo ${work_path}
 /bin/cp -rf lcm_trainer_test.sh ${work_path}
 
