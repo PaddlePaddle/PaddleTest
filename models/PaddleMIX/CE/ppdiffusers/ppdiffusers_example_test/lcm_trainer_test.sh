@@ -1,11 +1,20 @@
 #!/bin/bash
 
+log_dir=${root_path}/examples_log
+
+if [ ! -d "$log_dir" ]; then
+    mkdir -p "$log_dir"
+fi
+
+exit_code=0
+
 MAX_ITER=50
 MODEL_NAME_OR_PATH="runwayml/stable-diffusion-v1-5"
 IS_SDXL=False
 RESOLUTION=512
 
-python train_lcm.py \
+echo "*******lcm_trainer lora_single_train begin***********"
+(python train_lcm.py \
     --do_train \
     --output_dir "lcm_lora_outputs" \
     --per_device_train_batch_size 2 \
@@ -35,11 +44,20 @@ python train_lcm.py \
     --is_lora True \
     --overwrite_output_dir \
     --fp16 True \
-    --fp16_opt_level O2
+    --fp16_opt_level O2) 2>&1 | tee ${log_dir}/lcm_trainer_lora_single_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "lcm_trainer lora_single_train run success" >>"${log_dir}/ce_res.log"
+else
+    echo "lcm_trainer lora_single_train run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******lcm_trainer lora_single_train end***********"
 
 rm -rf ./lcm_lora_outputs
 
-python -u -m paddle.distributed.launch --gpus "0,1" train_lcm.py \
+echo "*******lcm_trainer lora_multi_train begin***********"
+(python -u -m paddle.distributed.launch --gpus "0,1" train_lcm.py \
     --do_train \
     --output_dir "lcm_lora_n1c2_outputs" \
     --per_device_train_batch_size 2 \
@@ -69,7 +87,15 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_lcm.py \
     --is_lora True \
     --overwrite_output_dir \
     --fp16 True \
-    --fp16_opt_level O2
+    --fp16_opt_level O2) 2>&1 | tee ${log_dir}/lcm_trainer_lora_multi_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "lcm_trainer lora_multi_train run success" >>"${log_dir}/ce_res.log"
+else
+    echo "lcm_trainer lora_multi_train run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******lcm_trainer lora_multi_train end***********"
 
 rm -rf ./lcm_lora_n1c2_outputs
 
@@ -78,7 +104,8 @@ MODEL_NAME_OR_PATH="stabilityai/stable-diffusion-xl-base-1.0"
 IS_SDXL=True
 RESOLUTION=512
 
-python train_lcm.py \
+echo "*******lcm_trainer sdxl_lora_single_train begin***********"
+(python train_lcm.py \
     --do_train \
     --output_dir "lcm_sdxl_lora_outputs" \
     --per_device_train_batch_size 1 \
@@ -106,11 +133,20 @@ python train_lcm.py \
     --lora_rank 64 \
     --is_sdxl ${IS_SDXL} \
     --is_lora True \
-    --overwrite_output_dir
+    --overwrite_output_dir) 2>&1 | tee ${log_dir}/lcm_trainer_sdxl_lora_single_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "lcm_trainer sdxl_lora_single_train run success" >>"${log_dir}/ce_res.log"
+else
+    echo "lcm_trainer sdxl_lora_single_train run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******lcm_trainer sdxl_lora_single_train end***********"
 
 rm -rf ./lcm_sdxl_lora_outputs
 
-python -u -m paddle.distributed.launch --gpus "0,1" train_lcm.py \
+echo "*******lcm_trainer sdxl_lora_multi_train begin***********"
+(python -u -m paddle.distributed.launch --gpus "0,1" train_lcm.py \
     --do_train \
     --output_dir "lcm_sdxl_lora_n1c2_outputs" \
     --per_device_train_batch_size 1 \
@@ -138,7 +174,18 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_lcm.py \
     --lora_rank 64 \
     --is_sdxl ${IS_SDXL} \
     --is_lora True \
-    --overwrite_output_dir
+    --overwrite_output_dir) 2>&1 | tee ${log_dir}/lcm_trainer_sdxl_lora_multi_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "lcm_trainer sdxl_lora_multi_train run success" >>"${log_dir}/ce_res.log"
+else
+    echo "lcm_trainer sdxl_lora_multi_train run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******lcm_trainer sdxl_lora_multi_train end***********"
 
 rm -rf ./lcm_sdxl_lora_n1c2_outputs
 rm -rf ./data/
+
+echo exit_code:${exit_code}
+exit ${exit_code}

@@ -1,6 +1,15 @@
 #!/bin/bash
 
-python -u train_txt2img_laion400m_trainer.py \
+log_dir=${root_path}/examples_log
+
+if [ ! -d "$log_dir" ]; then
+    mkdir -p "$log_dir"
+fi
+
+exit_code=0
+
+echo "*******text_to_image_laion400m single_train begin***********"
+(python -u train_txt2img_laion400m_trainer.py \
     --do_train \
     --output_dir ./laion400m_pretrain_output_trainer \
     --per_device_train_batch_size 1 \
@@ -26,11 +35,20 @@ python -u train_txt2img_laion400m_trainer.py \
     --max_grad_norm -1 \
     --recompute True \
     --overwrite_output_dir \
-    --benchmark True
+    --benchmark True) 2>&1 | tee ${log_dir}/text_to_image_laion400m_single_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "text_to_image_laion400m single_train run success" >>"${log_dir}/ce_res.log"
+else
+    echo "text_to_image_laion400m single_train run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******text_to_image_laion400m single_train end***********"
 
 rm -rf ./laion400m_pretrain_output_trainer
 
-python -u -m paddle.distributed.launch --gpus "0,1" train_txt2img_laion400m_trainer.py \
+echo "*******text_to_image_laion400m multi_train begin***********"
+(python -u -m paddle.distributed.launch --gpus "0,1" train_txt2img_laion400m_trainer.py \
     --do_train \
     --output_dir ./laion400m_pretrain_output_trainer \
     --per_device_train_batch_size 1 \
@@ -56,7 +74,18 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_txt2img_laion400m_trai
     --max_grad_norm -1 \
     --recompute True \
     --overwrite_output_dir \
-    --benchmark True
+    --benchmark True) 2>&1 | tee ${log_dir}/text_to_image_laion400m_multi_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "text_to_image_laion400m multi_train run success" >>"${log_dir}/ce_res.log"
+else
+    echo "text_to_image_laion400m multi_train run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******text_to_image_laion400m multi_train end***********"
 
 rm -rf ./laion400m_pretrain_output_trainer
 rm -rf ./data/
+
+echo exit_code:${exit_code}
+exit ${exit_code}

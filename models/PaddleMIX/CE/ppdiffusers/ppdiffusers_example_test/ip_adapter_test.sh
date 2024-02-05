@@ -1,9 +1,19 @@
 #!/bin/bash
 
+log_dir=${root_path}/examples_log
+
+if [ ! -d "$log_dir" ]; then
+    mkdir -p "$log_dir"
+fi
+
+exit_code=0
+
 export BATCH_SIZE=2
 export MAX_ITER=50
 
-python train_ip_adapter.py \
+
+echo "*******ip_adapter single_train begin***********"
+(python train_ip_adapter.py \
     --do_train \
     --output_dir "outputs_ip_adapter" \
     --per_device_train_batch_size ${BATCH_SIZE} \
@@ -28,11 +38,21 @@ python train_ip_adapter.py \
     --disable_tqdm True \
     --overwrite_output_dir \
     --fp16 True \
-    --fp16_opt_level O2
+    --fp16_opt_level O2) 2>&1 | tee ${log_dir}/ip_adapter_single_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "ip_adapter single_train run success" >>"${log_dir}/ce_res.log"
+else
+    echo "ip_adapter single_train run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******ip_adapter single_train end***********"
 
 rm -rf ./outputs_ip_adapter
 
-python -u -m paddle.distributed.launch --gpus "0,1" train_ip_adapter.py \
+
+echo "*******ip_adapter multi_train begin***********"
+(python -u -m paddle.distributed.launch --gpus "0,1" train_ip_adapter.py \
     --do_train \
     --output_dir "outputs_ip_adapter_n1c2" \
     --per_device_train_batch_size ${BATCH_SIZE} \
@@ -57,7 +77,18 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_ip_adapter.py \
     --disable_tqdm True \
     --overwrite_output_dir \
     --fp16 True \
-    --fp16_opt_level O2
+    --fp16_opt_level O2) 2>&1 | tee ${log_dir}/ip_adapter_multi_train.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "ip_adapter multi_train run success" >>"${log_dir}/ce_res.log"
+else
+    echo "ip_adapter multi_train run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******ip_adapter multi_train end***********"
 
 rm -rf ./outputs_ip_adapter_n1c2
 rm -rf ./data/
+
+echo exit_code:${exit_code}
+exit ${exit_code}
