@@ -20,7 +20,7 @@ exit_code=0
 bash prepare.sh
 # 单机训练
 echo "*******text_to_video_lvdm unconditional_generationsinge_train begin***********"
-(bash unconditional_generation _multi_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_unconditional_generation_singe_train.log
+(bash unconditional_generation_single_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_unconditional_generation_singe_train.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -44,7 +44,7 @@ echo "*******text_to_video_lvdm text2video_generation_single_train end**********
 
 # 多机训练
 echo "*******text_to_video_lvdm unconditional_generation_muti_train begin***********"
-(bash unconditional_generation _multi_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_unconditional_generation_multi_train.log
+(bash unconditional_generation_multi_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_unconditional_generation_multi_train.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then

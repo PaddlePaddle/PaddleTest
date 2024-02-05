@@ -21,43 +21,43 @@ exit_code=0
 bash prepare.sh
 
 # 单机训练
-echo "*******ppdiffusers consistency_distillation/lcm_trainer singe_train begin***********"
-(bash singe_train.sh) 2>&1 | tee ${log_dir}/consistency_distillation_lcm_trainer_singe_train.log
+echo "*******ppdiffusers consistency_distillation/lcm_trainer single_train begin***********"
+(bash single_train.sh) 2>&1 | tee ${log_dir}/consistency_distillation_lcm_trainer_single_train.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers consistency_distillation/lcm_trainer singe_train run success" >>"${log_dir}/ce_res.log"
+    echo "ppdiffusers consistency_distillation/lcm_trainer single_train run success" >>"${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers consistency_distillation/lcm_trainer singe_train run fail" >>"${log_dir}/ce_res.log"
+    echo "ppdiffusers consistency_distillation/lcm_trainer single_train run fail" >>"${log_dir}/ce_res.log"
 fi
-echo "*******ppdiffusers consistency_distillation/lcm_trainer singe_train end***********"
+echo "*******ppdiffusers consistency_distillation/lcm_trainer single_train end***********"
 
-echo "*******ppdiffusers consistency_distillation/lcm_trainer sdxl_singe_train begin***********"
-(bash singe_train_sdxl.sh) 2>&1 | tee ${log_dir}/consistency_distillation_lcm_trainer_sdxl_singe_train.log
+echo "*******ppdiffusers consistency_distillation/lcm_trainer sdxl_single_train begin***********"
+(bash single_train_sdxl.sh) 2>&1 | tee ${log_dir}/consistency_distillation_lcm_trainer_sdxl_singe_train.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers consistency_distillation/lcm_trainer sdxl_singe_train run success" >>"${log_dir}/ce_res.log"
+    echo "ppdiffusers consistency_distillation/lcm_trainer sdxl_single_train run success" >>"${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers consistency_distillation/lcm_trainer sdxl_singe_train run fail" >>"${log_dir}/ce_res.log"
+    echo "ppdiffusers consistency_distillation/lcm_trainer sdxl_single_train run fail" >>"${log_dir}/ce_res.log"
 fi
-echo "*******ppdiffusers consistency_distillation/lcm_trainer sdxl_singe_train end***********"
+echo "*******ppdiffusers consistency_distillation/lcm_trainer sdxl_single_train end***********"
 
 
 # 多机训练
-echo "*******ppdiffusers consistency_distillation/lcm_trainer muti_train begin***********"
-(bash muti_train.sh) 2>&1 | tee ${log_dir}/consistency_distillation_lcm_trainer_muti_train.log
+echo "*******ppdiffusers consistency_distillation/lcm_trainer multi_train begin***********"
+(bash multi_train.sh) 2>&1 | tee ${log_dir}/consistency_distillation_lcm_trainer_multi_train.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers consistency_distillation/lcm_trainer_muti_train run success" >>"${log_dir}/ce_res.log"
+    echo "ppdiffusers consistency_distillation/lcm_trainer_multi_train run success" >>"${log_dir}/ce_res.log"
 else
-    echo "ppdiffusers consistency_distillation/lcm_trainer_muti_train run fail" >>"${log_dir}/ce_res.log"
+    echo "ppdiffusers consistency_distillation/lcm_trainer_multi_train run fail" >>"${log_dir}/ce_res.log"
 fi
-echo "*******consistency_distillation/lcm_trainer muti_train end***********"
+echo "*******consistency_distillation/lcm_trainer multi_train end***********"
 
 echo "*******ppdiffusers consistency_distillation/lcm_trainer sdxl_multi_train begin***********"
-(bash muti_train_sdxl.sh) 2>&1 | tee ${log_dir}/consistency_distillation_lcm_trainer_sdxl_multi_train.log
+(bash multi_train_sdxl.sh) 2>&1 | tee ${log_dir}/consistency_distillation_lcm_trainer_sdxl_multi_train.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
