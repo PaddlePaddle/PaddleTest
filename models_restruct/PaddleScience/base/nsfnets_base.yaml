@@ -1,0 +1,54 @@
+train:
+  -
+    name: single
+    cmd: python examples/nsfnet/VP_NSFNet1.py
+    params:
+      - TRAIN.epochs=110000
+    result:
+      loss:
+        base: 114.69631
+        threshold: 1
+        evaluation: "-"
+eval:
+  -
+    name: single
+    cmd: python examples/nsfnet/VP_NSFNet1.py
+    params:
+      - mode=eval
+      - pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/nsfnet/nsfnet1.pdparams
+    result:
+      loss(Residual):
+        base: 0.13244
+        threshold: 1
+        evaluation: "-"
+      L2R.u(Residual):
+        base: 0.00056
+        threshold: 1
+        evaluation: "-"
+      L2R.v(Residual):
+        base: 0.00399
+        threshold: 1
+        evaluation: "-"
+      L2R.p(Residual):
+        base: 0.01123
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi
+    cmd: python -m paddle.distributed.launch examples/nsfnet/VP_NSFNet1.py
+    params:
+      - mode=eval
+      - pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/nsfnet/nsfnet1.pdparams
+    result:
+      L2R.u(Residual):
+        base: 0.00056
+        threshold: 1
+        evaluation: "-"
+      L2R.v(Residual):
+        base: 0.00399
+        threshold: 1
+        evaluation: "-"
+      L2R.p(Residual):
+        base: 0.01123
+        threshold: 1
+        evaluation: "-"

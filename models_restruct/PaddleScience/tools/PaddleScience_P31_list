@@ -1,1 +1,3 @@
-examples^fsi^viv.yaml
+examples^amgnet.yaml
+examples^nsfnet^nsfnsts.yaml
+example^gpinn^poisson_1d.yaml
