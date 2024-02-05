@@ -2,7 +2,7 @@
 
 exit_code=0
 
-log_dir=${root_path}/log
+log_dir=${root_path}/deploy_log
 
 work_path=$(pwd)
 echo ${work_path}
