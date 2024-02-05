@@ -54,7 +54,7 @@ else
 fi
 echo "*******text_to_video_lvdm unconditional_generation_muti_train end***********"
 
-echo "*******text_to_video_lvdm unconditional_generation_muti_train begin***********"
+echo "*******text_to_video_lvdm text2video_generation_multi_train begin***********"
 (bash text2video_generation_multi_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_text2video_generation_multi_train.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
