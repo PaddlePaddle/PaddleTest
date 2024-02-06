@@ -73,6 +73,7 @@ echo "*******stable_diffusion multi infer end***********"
 # cat ${log_dir}/ce_res.log
 rm -rf ${work_path}/laion400m_pretrain_output_trainer/*
 rm -rf ${work_path}/data/
+rm -rf ${work_path}/CompVis-stable-diffusion-v1-4-paddle-init/*
 
 echo exit_code:${exit_code}
 exit ${exit_code}

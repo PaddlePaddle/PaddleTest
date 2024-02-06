@@ -8,4 +8,4 @@ pipe = KandinskyV22CombinedPipeline.from_pretrained(
 
 prompt = 'A robot pokemon, 4k photo'
 images = pipe(prompt=prompt, negative_prompt=negative_prompt).images
-images[0]
+images[0].save("robot-pokemon_infer_prior.png")

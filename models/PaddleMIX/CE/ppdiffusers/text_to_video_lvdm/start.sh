@@ -67,8 +67,9 @@ echo "*******text_to_video_lvdm text2video_generation_multi_train end***********
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
-rm -rf ${work_path}/cat-toy
-rm -rf ${work_path}/text_to_video_lvdm_cat/*
+rm -rf ${work_path}/sky_timelapse_lvdm/*
+rm -rf ${work_path}/temp/checkpoints_text2video/*
+rm -rf ${work_path}/temp/checkpoints_short/*
 
 echo exit_code:${exit_code}
 exit ${exit_code}
