@@ -3,7 +3,7 @@ train:
     name: single
     cmd: python examples/nsfnet/VP_NSFNet1.py
     params:
-      - TRAIN.epochs=110000
+      - 
     result:
       loss:
         base: 114.69631
