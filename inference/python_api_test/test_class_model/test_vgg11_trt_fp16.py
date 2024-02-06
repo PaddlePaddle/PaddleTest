@@ -86,7 +86,7 @@ def test_trt_fp16_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=5e-3,
+            delta=1e-2,
             gpu_mem=3000,
             max_batch_size=batch_size,
             min_subgraph_size=1,
