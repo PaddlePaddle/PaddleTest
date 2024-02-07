@@ -9,10 +9,6 @@ import paddle
 import diy
 import layercase
 
-# from ppdet.modeling.proposal_generator.target_layer import RBoxAssigner
-
-# import ppcls
-
 
 class BuildLayer(object):
     """BuildLayer"""
