@@ -30,6 +30,8 @@ export https_proxy=${proxy}
 
 exit_code=0
 
+export USE_PPXFORMERS=True
+export RUN_SLOW=True
 echo "*******ppdiffusers ut tests begin***********"
 (python -m pytest -v tests) 2>&1 | tee ${log_dir}/tests_ut.log
 tmp_exit_code=${PIPESTATUS[0]}

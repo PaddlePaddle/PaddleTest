@@ -27,7 +27,7 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_txt2img_laion400m_trai
   --dataloader_num_workers 4 \
   --vae_name_or_path CompVis/stable-diffusion-v1-4/vae \
   --text_encoder_name_or_path CompVis/stable-diffusion-v1-4/text_encoder \
-  --unet_name_or_path ./unet_config.json \
+  --unet_name_or_path ./sd/unet_config.json \
   --file_list ./data/filelist/train.filelist.list \
   --model_max_length 77 \
   --max_grad_norm -1 \
