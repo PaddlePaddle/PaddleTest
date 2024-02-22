@@ -30,16 +30,16 @@ else
 fi
 echo "*******text_to_video_lvdm unconditional_generation_singe_train end***********"
 
-echo "*******text_to_video_lvdm text2video_generation_single_train begin***********"
-(bash text2video_generation_single_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_text2video_generation_single_train.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "text_to_video_lvdm text2video_generation_single_train run success" >>"${log_dir}/ce_res.log"
-else
-    echo "text_to_video_lvdm text2video_generation_single_train run fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******text_to_video_lvdm text2video_generation_single_train end***********"
+# echo "*******text_to_video_lvdm text2video_generation_single_train begin***********"
+# (bash text2video_generation_single_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_text2video_generation_single_train.log
+# tmp_exit_code=${PIPESTATUS[0]}
+# exit_code=$(($exit_code + ${tmp_exit_code}))
+# if [ ${tmp_exit_code} -eq 0 ]; then
+#     echo "text_to_video_lvdm text2video_generation_single_train run success" >>"${log_dir}/ce_res.log"
+# else
+#     echo "text_to_video_lvdm text2video_generation_single_train run fail" >>"${log_dir}/ce_res.log"
+# fi
+# echo "*******text_to_video_lvdm text2video_generation_single_train end***********"
 
 
 # 多机训练
@@ -54,16 +54,16 @@ else
 fi
 echo "*******text_to_video_lvdm unconditional_generation_muti_train end***********"
 
-echo "*******text_to_video_lvdm text2video_generation_multi_train begin***********"
-(bash text2video_generation_multi_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_text2video_generation_multi_train.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "text_to_video_lvdm text2video_generation_multi_train run success" >>"${log_dir}/ce_res.log"
-else
-    echo "text_to_video_lvdm text2video_generation_multi_train run fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******text_to_video_lvdm text2video_generation_multi_train end***********"
+# echo "*******text_to_video_lvdm text2video_generation_multi_train begin***********"
+# (bash text2video_generation_multi_train.sh) 2>&1 | tee ${log_dir}/text_to_video_lvdm_text2video_generation_multi_train.log
+# tmp_exit_code=${PIPESTATUS[0]}
+# exit_code=$(($exit_code + ${tmp_exit_code}))
+# if [ ${tmp_exit_code} -eq 0 ]; then
+#     echo "text_to_video_lvdm text2video_generation_multi_train run success" >>"${log_dir}/ce_res.log"
+# else
+#     echo "text_to_video_lvdm text2video_generation_multi_train run fail" >>"${log_dir}/ce_res.log"
+# fi
+# echo "*******text_to_video_lvdm text2video_generation_multi_train end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log

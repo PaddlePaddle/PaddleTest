@@ -19,6 +19,8 @@ exit_code=0
 
 # 下载依赖、数据集和权重
 bash prepare.sh
+
+export USE_PPXFORMERS=1
 # 单机训练
 echo "*******stable_diffusion singe_train begin***********"
 (bash singe_train.sh) 2>&1 | tee ${log_dir}/stable_diffusion_singe_train.log
