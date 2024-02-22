@@ -23,13 +23,15 @@ pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
+# export http_proxy=${proxy}
+# export https_proxy=${proxy}
 # rm -rf tests/pipelines/test_pipelines.py
 # rm -rf tests/pipelines/stable_diffusion/test_stable_diffusion_pix2pix_zero.py
 
 exit_code=0
 
+export HF_ENDPOINT=https://hf-mirror.com
+export no_proxy=baidu.com,127.0.0.1,0.0.0.0,localhost,bcebos.com,pip.baidu-int.com,mirrors.baidubce.com,repo.baidubce.com,repo.bcm.baidubce.com,pypi.tuna.tsinghua.edu.cn,aistudio.baidu.com
 export USE_PPXFORMERS=True
 export RUN_SLOW=True
 echo "*******ppdiffusers ut tests begin***********"
@@ -42,6 +44,9 @@ else
     echo "ppdiffusers ut tests  run fail" >>"${log_dir}/ut_res.log"
 fi
 echo "*******ppdiffusers ut tests end***********"
+
+# unset http_proxy
+# unset https_proxy
 
 # # 查看结果
 cat ${log_dir}/ut_res.log
