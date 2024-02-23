@@ -144,38 +144,38 @@ echo "*******dreambooth lora_multi_train end***********"
 
 rm -rf ${OUTPUT_DIR}
 
-export OUTPUT_DIR="dreambooth_lora_sdxl_danka"
-export MODEL_NAME="stabilityai/stable-diffusion-xl-base-1.0"
+# export OUTPUT_DIR="dreambooth_lora_sdxl_danka"
+# export MODEL_NAME="stabilityai/stable-diffusion-xl-base-1.0"
 
-echo "*******dreambooth lora_sdxl_single_train begin***********"
-(python train_dreambooth_lora_sdxl.py \
-    --pretrained_model_name_or_path=$MODEL_NAME \
-    --instance_data_dir=$INSTANCE_DIR \
-    --output_dir=$OUTPUT_DIR \
-    --instance_prompt="a photo of sks dog" \
-    --resolution=512 \
-    --train_batch_size=1 \
-    --gradient_accumulation_steps=4 \
-    --learning_rate=1e-4 \
-    --report_to="visualdl" \
-    --lr_scheduler="constant" \
-    --lr_warmup_steps=0 \
-    --max_train_steps=500 \
-    --validation_prompt="A photo of sks dog in a bucket" \
-    --validation_epochs=25 \
-    --seed="0" \
-    --checkpointing_steps=100 \
-    --enable_xformers_memory_efficient_attention) 2>&1 | tee ${log_dir}/dreambooth_lora_sdxl_single_train.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "dreambooth lora_sdxl_single_train run success" >>"${log_dir}/ce_res.log"
-else
-    echo "dreambooth lora_sdxl_single_train run fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******dreambooth lora_sdxl_single_train end***********"
+# echo "*******dreambooth lora_sdxl_single_train begin***********"
+# (python train_dreambooth_lora_sdxl.py \
+#     --pretrained_model_name_or_path=$MODEL_NAME \
+#     --instance_data_dir=$INSTANCE_DIR \
+#     --output_dir=$OUTPUT_DIR \
+#     --instance_prompt="a photo of sks dog" \
+#     --resolution=512 \
+#     --train_batch_size=1 \
+#     --gradient_accumulation_steps=4 \
+#     --learning_rate=1e-4 \
+#     --report_to="visualdl" \
+#     --lr_scheduler="constant" \
+#     --lr_warmup_steps=0 \
+#     --max_train_steps=500 \
+#     --validation_prompt="A photo of sks dog in a bucket" \
+#     --validation_epochs=25 \
+#     --seed="0" \
+#     --checkpointing_steps=100 \
+#     --enable_xformers_memory_efficient_attention) 2>&1 | tee ${log_dir}/dreambooth_lora_sdxl_single_train.log
+# tmp_exit_code=${PIPESTATUS[0]}
+# exit_code=$(($exit_code + ${tmp_exit_code}))
+# if [ ${tmp_exit_code} -eq 0 ]; then
+#     echo "dreambooth lora_sdxl_single_train run success" >>"${log_dir}/ce_res.log"
+# else
+#     echo "dreambooth lora_sdxl_single_train run fail" >>"${log_dir}/ce_res.log"
+# fi
+# echo "*******dreambooth lora_sdxl_single_train end***********"
 
-rm -rf ${OUTPUT_DIR}
+# rm -rf ${OUTPUT_DIR}
 rm -rf ./dogs/
 
 echo exit_code:${exit_code}

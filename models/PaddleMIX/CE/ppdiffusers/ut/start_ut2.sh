@@ -23,8 +23,8 @@ pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
-# export http_proxy=${proxy}
-# export https_proxy=${proxy}
+export http_proxy=${mix_proxy}
+export https_proxy=${mix_proxy}
 # rm -rf tests/pipelines/test_pipelines.py
 # rm -rf tests/pipelines/stable_diffusion/test_stable_diffusion_pix2pix_zero.py
 
@@ -45,8 +45,8 @@ else
 fi
 echo "*******ppdiffusers ut tests end***********"
 
-# unset http_proxy
-# unset https_proxy
+unset http_proxy
+unset https_proxy
 
 # # 查看结果
 cat ${log_dir}/ut_res.log
