@@ -121,13 +121,6 @@ def test_gpu_mixed_precision_bz1_new_executor():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        if not os.path.exists("./DenseNet121/inference_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./DenseNet121/inference.pdmodel",
-                src_params="./DenseNet121/inference.pdiparams",
-                dst_model="./DenseNet121/inference_mixed.pdmodel",
-                dst_params="./DenseNet121/inference_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./DenseNet121/inference.pdmodel",
             params_file="./DenseNet121/inference.pdiparams",
@@ -141,13 +134,14 @@ def test_gpu_mixed_precision_bz1_new_executor():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./DenseNet121/inference_mixed.pdmodel",
-            params_file="./DenseNet121/inference_mixed.pdiparams",
+            model_file="./DenseNet121/inference.pdmodel",
+            params_file="./DenseNet121/inference.pdiparams",
         )
-        test_suite2.gpu_more_bz_test_mix(
+        test_suite2.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             delta=5e-3,
+            precision="fp16",
             use_new_executor=True,
             use_pir=True,
         )

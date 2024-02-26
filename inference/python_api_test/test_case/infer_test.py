@@ -77,10 +77,7 @@ class InferenceTest(object):
         """
         if device == "cpu":
             self.pd_config.disable_gpu()
-            try:
-                self.pd_config.disable_mkldnn()
-            except AttributeError:
-                pass
+            self.pd_config.disable_mkldnn()
         elif device == "gpu":
             self.pd_config.enable_use_gpu(gpu_mem, 0)
         else:
@@ -236,10 +233,7 @@ class InferenceTest(object):
             None
         """
         self.pd_config.disable_gpu()
-        try:
-            self.pd_config.disable_mkldnn()
-        except AttributeError:
-            pass
+        self.pd_config.disable_mkldnn()
         predictor = paddle_infer.create_predictor(self.pd_config)
 
         cuda_visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES")
@@ -265,7 +259,6 @@ class InferenceTest(object):
         output_names = predictor.get_output_names()
         output_handle = predictor.get_output_handle(output_names[0])
         output_data = output_handle.copy_to_cpu()
-
         gpu_max_mem = max([float(i["used(MB)"]) for i in _gpu_mem_lists])
         assert abs(gpu_max_mem - ori_gpu_mem) < 1, "set disable_gpu(), but gpu activity found"
 
@@ -391,6 +384,7 @@ class InferenceTest(object):
         output_data_dict: dict,
         repeat=1,
         delta=1e-5,
+        precision="fp32",
         gpu_mem=1000,
         use_new_executor=False,
         use_pir=False,
@@ -402,10 +396,14 @@ class InferenceTest(object):
             output_data_dict(dict): output data constructed as dictionary
             repeat(int): inference repeat time, set to catch gpu mem
             delta(float): difference threshold between inference outputs and thruth value
+            precision(str): gpu precision mode, [fp32, fp16]
         Returns:
             None
         """
-        self.pd_config.enable_use_gpu(gpu_mem, 0)
+        if precision == "fp32":
+            self.pd_config.enable_use_gpu(gpu_mem, 0)
+        else:
+            self.pd_config.enable_use_gpu(gpu_mem, 0, paddle_infer.PrecisionType.Half)
         if use_new_executor:
             print("use_new_executor!!!")
             self.pd_config.enable_new_executor()
@@ -422,6 +420,7 @@ class InferenceTest(object):
         for i in range(repeat):
             predictor.run()
         output_names = predictor.get_output_names()
+        truth_value_names = list(output_data_dict.keys())
         if use_pir:
             paddle.set_flags({"FLAGS_enable_pir_in_executor": False})
         print("output_names:", output_names)
@@ -429,7 +428,7 @@ class InferenceTest(object):
         for i, output_data_name in enumerate(output_names):
             output_handle = predictor.get_output_handle(output_data_name)
             output_data = output_handle.copy_to_cpu()
-            output_data_truth_val = output_data_dict[output_data_name]
+            output_data_truth_val = output_data_dict[truth_value_names[i]]
             print("output_data_shape:", output_data.shape)
             print("truth_value_shape:", output_data_truth_val.shape)
             diff = sig_fig_compare(output_data, output_data_truth_val, delta)
