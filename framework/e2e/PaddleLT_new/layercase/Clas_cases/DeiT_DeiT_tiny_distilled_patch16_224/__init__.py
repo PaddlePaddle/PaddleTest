@@ -1,0 +1,2 @@
+import layercase.Clas_cases.DeiT_DeiT_tiny_distilled_patch16_224.SIR_92
+import layercase.Clas_cases.DeiT_DeiT_tiny_distilled_patch16_224.SIR_4
