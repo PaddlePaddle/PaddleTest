@@ -93,13 +93,7 @@ def test_gpu_bz1_new_executor():
         model_file="./bert/inference.pdmodel",
         params_file="./bert/inference.pdiparams",
     )
-    test_suite2.gpu_more_bz_test(
-        input_data_dict, 
-        output_data_dict, 
-        delta=1e-5, 
-        use_new_executor=True, 
-        use_pir=False
-    )
+    test_suite2.gpu_more_bz_test(input_data_dict, output_data_dict, delta=1e-5, use_new_executor=True, use_pir=False)
 
     del test_suite2  # destroy class to save memory
 

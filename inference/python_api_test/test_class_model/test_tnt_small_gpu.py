@@ -131,8 +131,8 @@ def test_gpu_mixed_precision_bz1():
             params_file="./TNT_small/inference.pdiparams",
         )
         test_suite2.gpu_more_bz_test(
-            input_data_dict, 
-            output_data_dict, 
+            input_data_dict,
+            output_data_dict,
             delta=5e-3,
             precision="fp16",
         )
