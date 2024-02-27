@@ -450,7 +450,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
         -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
-	    -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e GLOG_vmodule=${GLOG_vmodule} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
@@ -458,7 +458,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
-	    -e api_key=${api_key} \
+	-e api_key=${api_key} \
         -e PTS_ENV_VARS=$PTS_ENV_VARS \
         -e FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir} \
         -w /workspace \
