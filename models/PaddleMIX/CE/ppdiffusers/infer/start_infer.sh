@@ -322,7 +322,7 @@ echo "*******infer unconditional_image_generation-stochastic_karras_ve end******
 
 # Text-to-Image Generation
 echo "*******infer text_to_image_generation-unclip begin***********"
-(python python text_to_image_generation-unclip.py) 2>&1 | tee ${log_dir}/text_to_image_generation-unclip.log
+(python text_to_image_generation-unclip.py) 2>&1 | tee ${log_dir}/text_to_image_generation-unclip.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
