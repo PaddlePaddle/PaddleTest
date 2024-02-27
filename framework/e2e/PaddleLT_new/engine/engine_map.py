@@ -22,7 +22,8 @@ engine_map = {
     "dy2st_eval": LayerEval,
     "dy2st_eval_cinn": LayerEval,
     "jit_save": LayerExport,
-    "paddle_infer": LayerInfer,
+    "paddle_infer_gpu": LayerInfer,
+    "paddle_infer_cpu": LayerInfer,
     "paddle_infer_mkldnn": LayerInfer,
     "paddle_infer_ort": LayerInfer,
 }
