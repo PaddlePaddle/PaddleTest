@@ -264,6 +264,7 @@ export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-10}
 export FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir:-}
 export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-False}
 export SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG:-False} #240123 针对泽宇项目设为True
+export GLOG_vmodule=${GLOG_vmodule:-}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -449,14 +450,15 @@ if [[ "${docker_flag}" == "" ]]; then
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
         -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
-	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+	    -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+        -e GLOG_vmodule=${GLOG_vmodule} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
         -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
         -e SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG} \
         -e FLAGS_prim_all=${FLAGS_prim_all} \
         -e FLAGS_use_cinn=${FLAGS_use_cinn} \
-	-e api_key=${api_key} \
+	    -e api_key=${api_key} \
         -e PTS_ENV_VARS=$PTS_ENV_VARS \
         -e FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir} \
         -w /workspace \
@@ -572,6 +574,7 @@ if [[ "${docker_flag}" == "" ]]; then
         echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
         ehco "@@@export FLAGS_enable_pir_api ${export FLAGS_enable_pir_api}"
         ehco "@@@export SOT_EXPORT_FLAG ${SOT_EXPORT_FLAG}"
+        ehco "@@@export GLOG_vmodule ${GLOG_vmodule}"
         set -x
         # Flag
         export STRICT_MODE=0
@@ -694,6 +697,7 @@ else
         echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
         echo "@@@export FLAGS_enable_pir_api: ${export FLAGS_enable_pir_api}"
         echo "@@@export SOT_EXPORT_FLAG: ${SOT_EXPORT_FLAG}"
+        echo "@@@export GLOG_vmodule: ${GLOG_vmodule}"
 
         set -x
         # Flag
