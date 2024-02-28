@@ -23,6 +23,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
+pip install ligo-segments
 
 cd ${work_path}
 exit_code=0
