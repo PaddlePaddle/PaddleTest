@@ -1,4 +1,0 @@
-import layercase.Det_cases.picodet_legacy_model_picodet_l_416_coco.SIR_17
-import layercase.Det_cases.picodet_legacy_model_picodet_l_416_coco.SIR_75
-import layercase.Det_cases.picodet_legacy_model_picodet_l_416_coco.SIR_296
-import layercase.Det_cases.picodet_legacy_model_picodet_l_416_coco.SIR_205

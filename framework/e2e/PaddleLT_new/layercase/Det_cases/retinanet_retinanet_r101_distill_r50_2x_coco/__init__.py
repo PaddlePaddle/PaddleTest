@@ -1,2 +1,0 @@
-import layercase.Det_cases.retinanet_retinanet_r101_distill_r50_2x_coco.SIR_34
-import layercase.Det_cases.retinanet_retinanet_r101_distill_r50_2x_coco.SIR_42

@@ -1,1 +1,0 @@
-import layercase.Det_cases.gn_cascade_rcnn_r50_fpn_gn_2x_coco.SIR_37

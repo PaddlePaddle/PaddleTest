@@ -1,0 +1,4 @@
+import layercase.sublayer160.Clas_cases.CSWinTransformer_CSWinTransformer_base_384.SIR_116
+import layercase.sublayer160.Clas_cases.CSWinTransformer_CSWinTransformer_base_384.SIR_233
+import layercase.sublayer160.Clas_cases.CSWinTransformer_CSWinTransformer_base_384.SIR_178
+import layercase.sublayer160.Clas_cases.CSWinTransformer_CSWinTransformer_base_384.SIR_283
