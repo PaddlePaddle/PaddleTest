@@ -800,7 +800,7 @@ class InferenceTest(object):
         for i in range(thread_num):
             record_thread = threading.Thread(
                 target=self.run_multi_thread_test_predictor,
-                args=(predictors.retrive(i), input_data_dict, output_data_dict, repeat, delta),
+                args=(predictors.retrieve(i), input_data_dict, output_data_dict, repeat, delta),
             )
             record_thread.start()
             record_thread.join()
@@ -869,7 +869,7 @@ class InferenceTest(object):
         for i in range(thread_num):
             record_thread = threading.Thread(
                 target=self.run_multi_thread_test_predictor,
-                args=(predictors.retrive(i), input_data_dict, output_data_dict, repeat, delta),
+                args=(predictors.retrieve(i), input_data_dict, output_data_dict, repeat, delta),
             )
             record_thread.start()
             record_thread.join()
