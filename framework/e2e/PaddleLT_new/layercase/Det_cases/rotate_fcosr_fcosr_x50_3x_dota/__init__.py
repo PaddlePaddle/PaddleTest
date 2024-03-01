@@ -1,5 +1,0 @@
-import layercase.Det_cases.rotate_fcosr_fcosr_x50_3x_dota.SIR_47
-import layercase.Det_cases.rotate_fcosr_fcosr_x50_3x_dota.SIR_92
-import layercase.Det_cases.rotate_fcosr_fcosr_x50_3x_dota.SIR_35
-import layercase.Det_cases.rotate_fcosr_fcosr_x50_3x_dota.SIR_68
-import layercase.Det_cases.rotate_fcosr_fcosr_x50_3x_dota.SIR_73
