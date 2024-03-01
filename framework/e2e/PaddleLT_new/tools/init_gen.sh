@@ -70,3 +70,7 @@ generateRepoInit ${clas_case} ${cur_path}
 generateRepoInit ${det_case} ${cur_path}
 generateRepoInit ${seg_case} ${cur_path}
 generateRepoInit ${ocr_case} ${cur_path}
+
+
+# 找到layercase路径下的所有__init__.py，把__init__.py中的 layercase. 替换成 layercase.sublayer160
+# find ./layercase -type f -name "__init__.py" -exec sed -i 's/layercase\./layercase.sublayer160./g' {} +
