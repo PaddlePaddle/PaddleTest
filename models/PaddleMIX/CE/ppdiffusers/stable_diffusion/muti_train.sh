@@ -24,13 +24,15 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_txt2img_laion400m_trai
   --save_steps 100 \
   --save_total_limit 20 \
   --seed 23 \
-  --dataloader_num_workers 8 \
-  --pretrained_model_name_or_path ./CompVis-stable-diffusion-v1-4-paddle-init \
+  --dataloader_num_workers 4 \
+  --vae_name_or_path CompVis/stable-diffusion-v1-4/vae \
+  --text_encoder_name_or_path CompVis/stable-diffusion-v1-4/text_encoder \
+  --unet_name_or_path ./sd/unet_config.json \
   --file_list ./data/filelist/train.filelist.list \
   --model_max_length 77 \
   --max_grad_norm -1 \
-  --disable_tqdm True
-# --bf16 True
+  --disable_tqdm True \
+  --bf16 False
 
 # 检查命令是否成功执行
 if [ $? -ne 0 ]; then
