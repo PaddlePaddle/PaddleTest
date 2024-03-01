@@ -409,6 +409,10 @@ class InferenceTest(object):
             self.pd_config.enable_new_executor()
         if use_pir:
             print("use_pir!!!")
+            try:
+                self.pd_config.enable_new_ir()
+            except AttributeError:
+                pass
             paddle.set_flags({"FLAGS_enable_pir_in_executor": True})
         predictor = paddle_infer.create_predictor(self.pd_config)
 
