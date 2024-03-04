@@ -27,7 +27,7 @@ paddle.enable_static()
 @run_priority(level="P0")
 def test_split():
     """test_split"""
-    paddle.set_device("gpu:%d" % paddle.distributed.ParallelEnv().dev_id)
+    paddle.set_device("gpu:%d" % paddle.distributed.get_rank())
     fleet.init(is_collective=True)
     data = paddle.randint(0, 8, shape=[10, 4])
     emb_out = paddle.distributed.split(data, (8, 8), operation="embedding", num_partitions=2)

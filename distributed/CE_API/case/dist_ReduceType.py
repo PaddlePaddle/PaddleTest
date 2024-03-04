@@ -12,7 +12,7 @@
   * Copyright (c) 2024 Baidu.com, Inc. All Rights Reserved
   * @file dist_ReduceType.py
   * @author liujie44@baidu.com
-  * @date 2024-02-20
+  * @date 2024-02-21
   * @brief
   *
   **************************************************************************/
