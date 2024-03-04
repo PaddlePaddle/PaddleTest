@@ -61,23 +61,6 @@ def test_MultiSlotDataGenerator_generate_sample():
     print("test_MultiSlotDataGenerator_generate_sample ... ok")
 
 
-def test_MultiSlotDataGenerator_run_from_memory():
-    """test_MultiSlotDataGenerator_run_from_memory"""
-    mydata = MyData()
-    mydata.run_from_memory()
-
-    print("test_MultiSlotDataGenerator_run_from_memory ... ok")
-
-
-@run_priority(level="P0")
-def test_MultiSlotDataGenerator_run_from_stdin():
-    """test_MultiSlotDataGenerator_run_from_stdin"""
-    mydata = MyData()
-    mydata.run_from_stdin()
-
-    print("test_MultiSlotDataGenerator_run_from_stdin ... ok")
-
-
 def test_MultiSlotDataGenerator_set_batch():
     """test_MultiSlotDataGenerator_set_batch"""
     mydata = MyData()
@@ -89,6 +72,4 @@ def test_MultiSlotDataGenerator_set_batch():
 if __name__ == "__main__":
     test_MultiSlotDataGenerator_generate_batch()
     test_MultiSlotDataGenerator_generate_sample()
-    # test_MultiSlotDataGenerator_run_from_memory()
-    # test_MultiSlotDataGenerator_run_from_stdin()
     test_MultiSlotDataGenerator_set_batch()
