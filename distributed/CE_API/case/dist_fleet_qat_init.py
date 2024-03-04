@@ -18,6 +18,7 @@
   **************************************************************************/
 """
 import paddle
+import paddle.distributed as dist
 import paddle.distributed.fleet as fleet
 import paddle.nn.functional as F
 from utils import run_priority
@@ -32,7 +33,7 @@ optimizer = fleet.distributed_optimizer(optimizer, strategy=strategy)
 
 def run_example_code():
     """run_example_code"""
-    place = paddle.CUDAPlace(0)
+    place = paddle.CUDAPlace(dist.get_rank())
     exe = paddle.static.Executor(place)
     # 1. Define the train program
     data = paddle.static.data(name="X", shape=[None, 1, 28, 28], dtype="float32")
