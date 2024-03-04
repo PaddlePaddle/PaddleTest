@@ -115,13 +115,6 @@ def test_gpu_mixed_precision_bz1():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        if not os.path.exists("./vgg11/inference_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./vgg11/inference.pdmodel",
-                src_params="./vgg11/inference.pdiparams",
-                dst_model="./vgg11/inference_mixed.pdmodel",
-                dst_params="./vgg11/inference_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./vgg11/inference.pdmodel",
             params_file="./vgg11/inference.pdiparams",
@@ -135,13 +128,14 @@ def test_gpu_mixed_precision_bz1():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./vgg11/inference_mixed.pdmodel",
-            params_file="./vgg11/inference_mixed.pdiparams",
+            model_file="./vgg11/inference.pdmodel",
+            params_file="./vgg11/inference.pdiparams",
         )
-        test_suite2.gpu_more_bz_test_mix(
+        test_suite2.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             delta=5e-3,
+            precision="fp16",
         )
 
         del test_suite2  # destroy class to save memory

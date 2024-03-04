@@ -1,3 +1,0 @@
-import layercase.Seg_cases.segmenter_segmenter_vit_small_mask_ade20k_512x512_160k.SIR_66
-import layercase.Seg_cases.segmenter_segmenter_vit_small_mask_ade20k_512x512_160k.SIR_63
-import layercase.Seg_cases.segmenter_segmenter_vit_small_mask_ade20k_512x512_160k.SIR_1

@@ -107,7 +107,8 @@ class LayerTest(object):
                         compare_dict.append(tmp)
         self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_dict))
         if exc > 0:
-            raise Exception("layer测试失败项目汇总: {}".format(compare_dict))
+            print("layer测试失败项目汇总: {}".format(compare_dict))
+            assert False
 
 
 if __name__ == "__main__":
