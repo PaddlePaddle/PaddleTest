@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    GoogLeNet_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.0/class/GoogLeNet.tgz"
+    GoogLeNet_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/GoogLeNet.tgz"
     if not os.path.exists("./GoogLeNet/inference.pdiparams"):
         wget.download(GoogLeNet_url, out="./")
         tar = tarfile.open("GoogLeNet.tgz")
@@ -118,13 +118,6 @@ def test_gpu_mixed_precision_bz1():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        if not os.path.exists("./GoogLeNet/inference_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./GoogLeNet/inference.pdmodel",
-                src_params="./GoogLeNet/inference.pdiparams",
-                dst_model="./GoogLeNet/inference_mixed.pdmodel",
-                dst_params="./GoogLeNet/inference_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./GoogLeNet/inference.pdmodel",
             params_file="./GoogLeNet/inference.pdiparams",
@@ -138,13 +131,14 @@ def test_gpu_mixed_precision_bz1():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./GoogLeNet/inference_mixed.pdmodel",
-            params_file="./GoogLeNet/inference_mixed.pdiparams",
+            model_file="./GoogLeNet/inference.pdmodel",
+            params_file="./GoogLeNet/inference.pdiparams",
         )
-        test_suite2.gpu_more_bz_test_mix(
+        test_suite2.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             delta=0.02,
+            precision="fp16",
         )
 
         del test_suite2  # destroy class to save memory

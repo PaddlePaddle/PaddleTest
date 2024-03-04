@@ -24,7 +24,7 @@ def check_model_exist():
     """
     check model exist
     """
-    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.0/detection/ppyolo.tgz"
+    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/detection/ppyolo.tgz"
     if not os.path.exists("./ppyolo/model.pdiparams"):
         wget.download(ppyolo_url, out="./")
         tar = tarfile.open("ppyolo.tgz")
@@ -74,7 +74,7 @@ def test_disable_gpu():
 @pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu ppyolo batch_size = [1] outputs with true val
     """
@@ -131,6 +131,8 @@ def test_gpu_more_bz():
             output_data_dict,
             repeat=1,
             delta=3e-4,
+            use_new_executor=True,
+            use_pir=True,
         )
 
 
@@ -151,13 +153,6 @@ def test_gpu_mixed_precision_bz1():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        if not os.path.exists("./ppyolo/model_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./ppyolo/model.pdmodel",
-                src_params="./ppyolo/model.pdiparams",
-                dst_model="./ppyolo/model_mixed.pdmodel",
-                dst_params="./ppyolo/model_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./ppyolo/model.pdmodel",
             params_file="./ppyolo/model.pdiparams",
@@ -195,12 +190,13 @@ def test_gpu_mixed_precision_bz1():
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(
-            model_file="./ppyolo/model_mixed.pdmodel",
-            params_file="./ppyolo/model_mixed.pdiparams",
+            model_file="./ppyolo/model.pdmodel",
+            params_file="./ppyolo/model.pdiparams",
         )
         test_suite.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             repeat=1,
             delta=1e-4,
+            precision="fp16",
         )

@@ -1,0 +1,12 @@
+pyyaml
+pymysql
+py_cpuinfo
+psutil
+pynvml
+allure-pytest
+pytest
+pytest-assume
+requests==2.28.2
+wget
+numpy
+pytest-timeout

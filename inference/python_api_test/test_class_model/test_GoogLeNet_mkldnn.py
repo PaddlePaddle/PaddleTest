@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    GoogLeNet_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.0/class/GoogLeNet.tgz"
+    GoogLeNet_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/GoogLeNet.tgz"
     if not os.path.exists("./GoogLeNet/inference.pdiparams"):
         wget.download(GoogLeNet_url, out="./")
         tar = tarfile.open("GoogLeNet.tgz")

@@ -12298,7 +12298,7 @@ det_0:
 diag_embed_0:
   desc: "其在指定的 2D 平面（由 dim1 和 dim2 指定）上的对角线由输入 input 填充"
   paddle:
-    api_name: "paddle.nn.functional.diag_embed"
+    api_name: "paddle.diag_embed"
     inputs:
       input:
         random: true

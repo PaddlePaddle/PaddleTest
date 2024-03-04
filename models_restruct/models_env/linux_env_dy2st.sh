@@ -156,7 +156,7 @@ export models_name=${models_name:-models_restruct}  #后面复制使用，和模
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
-wget -q ${CE_Link}  --no-check-certificate #需要全局定义
+wget -q ${CE_Link}  --no-check-certificate --no-proxy #需要全局定义
 unzip -P ${CE_pass} ${CE_version_name}.zip
 
 ####设置代理  proxy不单独配置 表示默认有全部配置，不用export
