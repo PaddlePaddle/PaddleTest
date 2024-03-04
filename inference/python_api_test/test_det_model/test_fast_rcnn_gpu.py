@@ -75,7 +75,7 @@ def test_disable_gpu():
 @pytest.mark.server
 @pytest.mark.jetson
 @pytest.mark.gpu
-def test_gpu_more_bz():
+def test_gpu_more_bz_new_executor():
     """
     compared gpu fast_rcnn batch_size = [1] outputs with true val
     """
@@ -122,6 +122,8 @@ def test_gpu_more_bz():
             output_data_dict,
             repeat=1,
             delta=1e-4,
+            use_new_executor=True,
+            use_pir=False,
         )
 
 
@@ -141,13 +143,6 @@ def test_gpu_mixed_precision_bz1():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        if not os.path.exists("./fast_rcnn/model_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./fast_rcnn/model.pdmodel",
-                src_params="./fast_rcnn/model.pdiparams",
-                dst_model="./fast_rcnn/model_mixed.pdmodel",
-                dst_params="./fast_rcnn/model_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./fast_rcnn/model.pdmodel",
             params_file="./fast_rcnn/model.pdiparams",
@@ -175,12 +170,13 @@ def test_gpu_mixed_precision_bz1():
         input_data_dict = {"im_shape": im_shape_pool, "image": data, "scale_factor": scale_factor_pool}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(
-            model_file="./fast_rcnn/model_mixed.pdmodel",
-            params_file="./fast_rcnn/model_mixed.pdiparams",
+            model_file="./fast_rcnn/model.pdmodel",
+            params_file="./fast_rcnn/model.pdiparams",
         )
         test_suite.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             repeat=1,
             delta=2e-5,
+            precision="fp16",
         )

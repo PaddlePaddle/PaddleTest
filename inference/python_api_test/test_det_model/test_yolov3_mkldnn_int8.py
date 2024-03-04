@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.1/detection/yolov3.tgz"
+    yolov3_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/detection/yolov3.tgz"
     if not os.path.exists("./yolov3/model.pdiparams"):
         wget.download(yolov3_url, out="./")
         tar = tarfile.open("yolov3.tgz")

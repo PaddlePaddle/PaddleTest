@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    swin_transformer_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/swin_transformer.tgz"
+    swin_transformer_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/swin_transformer.tgz"
     if not os.path.exists("./swin_transformer/inference.pdiparams"):
         wget.download(swin_transformer_url, out="./")
         tar = tarfile.open("swin_transformer.tgz")
