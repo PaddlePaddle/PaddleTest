@@ -17,16 +17,16 @@
   *
   **************************************************************************/
 """
+import random
 import paddle
 from paddle.distributed.fleet.utils import recompute
-import random
 from utils import run_priority
-
 
 paddle.seed(2023)
 
 
 def get_fc_block(block_idx, input_size, is_last=False):
+    """get_fc_block"""
     block_name = "block_" + str(block_idx)
     block = paddle.nn.Sequential(
         (block_name + "_fc_0", paddle.nn.Linear(input_size, input_size, bias_attr=False)),
@@ -43,7 +43,10 @@ def get_fc_block(block_idx, input_size, is_last=False):
 
 
 class Naive_fc_net(paddle.nn.Layer):
+    """Naive_fc_net"""
+
     def __init__(self, input_size=10, recompute_blocks=[1, 3], recompute_kwargs={}):
+        """__init__"""
         super().__init__()
         self.recompute_blocks = recompute_blocks
         self.recompute_kwargs = recompute_kwargs
@@ -55,6 +58,7 @@ class Naive_fc_net(paddle.nn.Layer):
         self.total_func = [self.runfunc0, self.runfunc1, self.runfunc2, self.runfunc3, self.runfunc4]
 
     def forward(self, inputs):
+        """forward"""
         nums = len(self.total_func)
         for i in range(nums):
             if i in self.recompute_blocks:
@@ -65,6 +69,7 @@ class Naive_fc_net(paddle.nn.Layer):
 
 
 def run_model(cuda_state, recompute_block=[], recompute_kwargs={}):
+    """run_model"""
     gen = paddle.seed(10)
     gen.manual_seed(10)
     random.seed(10)

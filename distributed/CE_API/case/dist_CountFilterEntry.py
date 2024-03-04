@@ -40,6 +40,7 @@ def test_CountFilterEntry():
         entry=entry,
         param_attr=paddle.ParamAttr(name="SparseFeatFactors", initializer=paddle.nn.initializer.Uniform()),
     )
+    print(emb)
     print("test_CountFilterEntry ... ok")
 
 

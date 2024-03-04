@@ -36,7 +36,7 @@ def test_load_state_dict():
     sharded_w1 = dist.shard_tensor(w1, mesh, [dist.Shard(0)])
     state_dict = {"w1": sharded_w1}
     dist.save_state_dict(state_dict, ckpt_path)
-    w1_to_load = paddle.zeros_like(w1)
+    # w1_to_load = paddle.zeros_like(w1)
     sharded_w1_to_load = dist.shard_tensor(w1, mesh, [dist.Replicate()])
     state_dict_to_load = {"w1": sharded_w1_to_load}
     dist.load_state_dict(state_dict_to_load, ckpt_path)

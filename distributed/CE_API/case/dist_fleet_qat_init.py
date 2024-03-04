@@ -31,6 +31,7 @@ optimizer = fleet.distributed_optimizer(optimizer, strategy=strategy)
 
 
 def run_example_code():
+    """run_example_code"""
     place = paddle.CUDAPlace(0)
     exe = paddle.static.Executor(place)
     # 1. Define the train program

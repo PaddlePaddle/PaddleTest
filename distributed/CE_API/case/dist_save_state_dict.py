@@ -17,13 +17,13 @@
   *
   **************************************************************************/
 """
-import paddle
-import paddle.distributed as dist
-from utils import run_priority
-
 import os
 
 os.system("rm -rf ./checkpoint")
+
+import paddle
+import paddle.distributed as dist
+from utils import run_priority
 
 dist.init_parallel_env()
 

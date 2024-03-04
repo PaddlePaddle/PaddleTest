@@ -23,7 +23,8 @@ class TestApi(object):
 
     def test_MultiSlotDataGenerator(self):
         """test_MultiSlotDataGenerator"""
-        cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id MultiSlotDataGenerator dist_MultiSlotDataGenerator.py"
+        cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id MultiSlotDataGenerator \
+                dist_MultiSlotDataGenerator.py"
         pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = pro.communicate()
         print(out)

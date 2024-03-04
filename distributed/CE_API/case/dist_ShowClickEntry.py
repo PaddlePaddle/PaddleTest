@@ -30,8 +30,8 @@ def test_ShowClickEntry():
     sparse_feature_dim = 1024
     embedding_size = 64
 
-    shows = paddle.static.data(name="show", shape=[1], dtype="int64")
-    clicks = paddle.static.data(name="click", shape=[1], dtype="int64")
+    # shows = paddle.static.data(name="show", shape=[1], dtype="int64")
+    # clicks = paddle.static.data(name="click", shape=[1], dtype="int64")
     input = paddle.static.data(name="ins", shape=[1], dtype="int64")
 
     entry = paddle.distributed.ShowClickEntry("show", "click")

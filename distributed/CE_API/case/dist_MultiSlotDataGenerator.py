@@ -25,13 +25,19 @@ paddle.enable_static()
 
 
 class MyData(dg.DataGenerator):
+    """MyData"""
+
     def generate_sample(self, line):
+        """generate_sample"""
+
         def local_iter():
             yield ("words", [1, 2, 3, 4])
 
         return local_iter
 
     def generate_batch(self, samples):
+        """generate_batch"""
+
         def local_iter():
             for s in samples:
                 yield ("words", s[1].extend([s[1][0]]))
