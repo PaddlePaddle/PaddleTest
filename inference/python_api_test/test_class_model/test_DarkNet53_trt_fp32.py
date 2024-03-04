@@ -26,7 +26,7 @@ def check_model_exist():
     """
     check model exist
     """
-    DarkNet53_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.0/class/DarkNet53.tgz"
+    DarkNet53_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/DarkNet53.tgz"
     if not os.path.exists("./DarkNet53/inference.pdiparams"):
         wget.download(DarkNet53_url, out="./")
         tar = tarfile.open("DarkNet53.tgz")

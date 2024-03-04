@@ -76,3 +76,5 @@ configs^table^table_mv3.yml
 configs^table^table_master.yml
 configs^table^SLANet.yml
 configs^kie^vi_layoutxlm^ser_vi_layoutxlm_xfund_zh.yml
+configs^det^det_r50_drrg_ctw.yml
+PP-StructureV2.yml

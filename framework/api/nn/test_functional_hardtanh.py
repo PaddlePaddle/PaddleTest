@@ -133,4 +133,4 @@ def test_hardtanh7():
     paddle_max = "-3.3"
     paddle_min = 3.3
     # res = np.minimum(np.maximum(x, paddle_min), paddle_max)
-    obj.exception(etype="InvalidArgumentError", x=x, max=paddle_max, min=paddle_min)
+    obj.exception(etype="InvalidType", x=x, max=paddle_max, min=paddle_min)

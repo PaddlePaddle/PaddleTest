@@ -104,6 +104,7 @@ def test_trt_fp32_more_bz():
             dynamic=True,
             auto_tuned=True,
             min_subgraph_size=5,
+            delete_op_list=["cast_18.tmp_0"],
         )
 
         del test_suite2  # destroy class to save memory
