@@ -50,3 +50,4 @@ python -u -m paddle.distributed.launch --gpus "0,1" train_image_generation_train
     --bf16 ${USE_AMP}
 
 rm -rf ./fastdit_imagenet256
+rf -rf ${OUTPUT_DIR}
