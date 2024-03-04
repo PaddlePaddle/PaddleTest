@@ -73,6 +73,18 @@ class TestApi(object):
         assert str(out).find("Error") == -1
         assert str(err).find("Error") == -1
 
+    def test_collective_broadcast_object_list(self):
+        """test_collective_broadcast_object_list"""
+        cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id broadcast_object_list \
+                dist_collective_broadcast_object_list.py"
+        pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = pro.communicate()
+        print(out)
+        pro.wait()
+        pro.returncode == 0
+        assert str(out).find("Error") == -1
+        assert str(err).find("Error") == -1
+
     def test_collective_broadcast(self):
         """test_collective_broadcast"""
         cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id broadcast dist_collective_broadcast.py"
