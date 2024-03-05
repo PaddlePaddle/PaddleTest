@@ -9,6 +9,7 @@ cases="./test_resnet50_gpu.py \
        ./test_swin_transformer_gpu.py \
        ./test_swin_transformer_trt_fp32.py \
        ./test_tnt_small_gpu.py \
+       ./test_tnt_small_trt_fp32.py \
        ./test_vgg11_gpu.py \
        ./test_vgg11_mkldnn.py \
        ./test_ViT_base_patch16_224_trt_fp32.py \
