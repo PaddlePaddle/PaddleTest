@@ -13,10 +13,10 @@ output_file="./diff.spec"
 diff "$file1" "$file2" > "$output_file"
 
 # 判断diff命令的输出是否为空
-if [ -s "$output_file" ]; then  
-    echo "文件之间存在差异"  
+if [ -s "$output_file" ]; then
+    echo "文件之间存在差异"
     exit 1
-else  
-    echo "文件之间不存在差异"  
+else
+    echo "文件之间不存在差异"
     exit 0
 fi
