@@ -150,7 +150,7 @@ def test_rnncellbase7():
     try:
         obj.get_initial_states(batch_ref=x, dtype=dtype)
     except NotImplementedError as e:
-        if "Please add implementaion for `state_shape` in the used cell." in e.args[0]:
+        if "Please add implementation for `state_shape` in the used cell." in e.args[0]:
             pass
         else:
             raise Exception
@@ -167,7 +167,7 @@ def test_rnncellbase8():
     try:
         obj.get_initial_states(batch_ref=x, shape=shape)
     except NotImplementedError as e:
-        if "Please add implementaion for `state_dtype` in the used cell." in e.args[0]:
+        if "Please add implementation for `state_dtype` in the used cell." in e.args[0]:
             pass
         else:
             raise Exception

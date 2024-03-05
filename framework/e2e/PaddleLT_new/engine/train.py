@@ -5,6 +5,7 @@
 """
 train 方法
 """
+import os
 import numpy as np
 import paddle
 from engine.xtools import reset
@@ -27,6 +28,9 @@ class LayerTrain(object):
         """
         self.seed = 33
         reset(self.seed)
+        self.device = os.environ.get("PLT_SET_DEVICE")
+        paddle.set_device(str(self.device))
+        self.device_id = os.environ.get("PLT_DEVICE_ID")
 
         self.testing = testing
 
@@ -51,6 +55,10 @@ class LayerTrain(object):
 
     def dy_train(self):
         """dygraph train"""
+
+        if not self.net.parameters():
+            return "pass"
+
         reset(self.seed)
 
         # net = self.net.get_layer()
@@ -92,6 +100,10 @@ class LayerTrain(object):
 
     def dy2st_train(self):
         """dy2st train"""
+
+        if not self.net.parameters():
+            return "pass"
+
         reset(self.seed)
 
         # net = self.net.get_layer()
@@ -112,6 +124,10 @@ class LayerTrain(object):
 
     def dy2st_train_cinn(self):
         """dy2st train"""
+
+        if not self.net.parameters():
+            return "pass"
+
         reset(self.seed)
 
         build_strategy = paddle.static.BuildStrategy()

@@ -1,3 +1,4 @@
 pytest-rerunfailures
 pytest
+pytest-timeout
 allure-pytest

@@ -1,9 +1,8 @@
 #!/bin/bash
 
+bash prepare.sh
 export http_proxy=${proxy}
 export https_proxy=${proxy}
-bash prepare.sh
-
 python nltk_data_download.py
 unset http_proxy
 unset https_proxy

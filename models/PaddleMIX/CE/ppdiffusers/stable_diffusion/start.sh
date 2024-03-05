@@ -19,6 +19,8 @@ exit_code=0
 
 # 下载依赖、数据集和权重
 bash prepare.sh
+
+export USE_PPXFORMERS=1
 # 单机训练
 echo "*******stable_diffusion singe_train begin***********"
 (bash singe_train.sh) 2>&1 | tee ${log_dir}/stable_diffusion_singe_train.log
@@ -71,6 +73,9 @@ echo "*******stable_diffusion multi infer end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/laion400m_pretrain_output_trainer/*
+rm -rf ${work_path}/data/
+rm -rf ${work_path}/CompVis-stable-diffusion-v1-4-paddle-init/*
 
 echo exit_code:${exit_code}
 exit ${exit_code}

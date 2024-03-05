@@ -72,43 +72,47 @@ class LayerTest(object):
             tmp["基线事项"] = baseline
             if comparing.get("precision") is not None:
                 self.logger.get_log().info("{} 和 {} 精度(precision)对比验证开始".format(latest, baseline))
-                try:
-                    precision = comparing.get("precision")
-                    base_compare(
-                        result=result,
-                        expect=expect,
-                        res_name=latest,
-                        exp_name=baseline,
-                        logger=self.logger.get_log(),
-                        delta=precision.get("delta"),
-                        rtol=precision.get("rtol"),
-                    )
-                    tmp["precision"] = "passed"
-                    compare_dict.append(tmp)
-                    self.logger.get_log().info("{} 和 {} 精度对比通过~~~".format(latest, baseline))
-                except Exception:
-                    exc += 1
-                    bug_trace = traceback.format_exc()
-                    self.logger.get_log().warn("精度对比异常结果: {}".format(bug_trace))
-                    tmp["precision"] = "failed"
-                    compare_dict.append(tmp)
+                # if result == "pass" or expect == "pass":
+                if isinstance(result, str) or isinstance(expect, str):
+                    if result == "pass" or expect == "pass":
+                        self.logger.get_log().info("result: {} 和 expect: {}".format(result, expect))
+                        tmp["precision"] = "ignore"
+                        compare_dict.append(tmp)
+                        self.logger.get_log().info("{} 和 {} 豁免对比测试---".format(latest, baseline))
+                    else:
+                        exc += 1
+                        self.logger.get_log().warn("{} 和 {} 标记为失败的对比测试---".format(latest, baseline))
+                        tmp["precision"] = "failed"
+                        compare_dict.append(tmp)
+                else:
+                    try:
+                        precision = comparing.get("precision")
+                        base_compare(
+                            result=result,
+                            expect=expect,
+                            res_name=latest,
+                            exp_name=baseline,
+                            logger=self.logger.get_log(),
+                            delta=precision.get("delta"),
+                            rtol=precision.get("rtol"),
+                        )
+                        tmp["precision"] = "passed"
+                        compare_dict.append(tmp)
+                        self.logger.get_log().info("{} 和 {} 精度对比通过~~~".format(latest, baseline))
+                    except Exception:
+                        exc += 1
+                        bug_trace = traceback.format_exc()
+                        self.logger.get_log().warn("精度对比异常结果: {}".format(bug_trace))
+                        tmp["precision"] = "failed"
+                        compare_dict.append(tmp)
         self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_dict))
         if exc > 0:
-            raise Exception("layer测试失败项目汇总: {}".format(compare_dict))
+            print("layer测试失败项目汇总: {}".format(compare_dict))
+            assert False
 
 
 if __name__ == "__main__":
-    # all_dir = "yaml/Det/modeling/backbones/"
-    # last_dir = os.path.basename(all_dir)
-    # base_dir = all_dir.replace(last_dir, "")
-    # yaml = "yaml/Det/modeling/backbones/resnet.yml"
-    # case = "resnet_ConvNormLayer_0"
-    # testing = "yaml/demo_det_testing.yml"
-    # title = yaml.replace(base_dir, "").replace(".yml", ".{}".format(case)).replace("/", ".")
-    # single_test = LayerTest(title=title, yaml=yaml, case=case, testing=testing)
-    # single_test._case_run()
-
-    single_test = LayerTest(
-        title="lzy_naive", layerfile="diy/layer/demo_case/SIR_252.py", testing="yaml/demo_new_testing.yml"
-    )
+    layerfile = "layercase/SIR_108.py"
+    testing = "yaml/dy^infer.yml"
+    single_test = LayerTest(title="lzy_naive", layerfile=layerfile, testing=testing)
     single_test._case_run()

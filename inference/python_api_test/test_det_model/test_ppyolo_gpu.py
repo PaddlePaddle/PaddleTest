@@ -153,13 +153,6 @@ def test_gpu_mixed_precision_bz1():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        if not os.path.exists("./ppyolo/model_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./ppyolo/model.pdmodel",
-                src_params="./ppyolo/model.pdiparams",
-                dst_model="./ppyolo/model_mixed.pdmodel",
-                dst_params="./ppyolo/model_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./ppyolo/model.pdmodel",
             params_file="./ppyolo/model.pdiparams",
@@ -197,12 +190,13 @@ def test_gpu_mixed_precision_bz1():
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(
-            model_file="./ppyolo/model_mixed.pdmodel",
-            params_file="./ppyolo/model_mixed.pdiparams",
+            model_file="./ppyolo/model.pdmodel",
+            params_file="./ppyolo/model.pdiparams",
         )
         test_suite.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             repeat=1,
             delta=1e-4,
+            precision="fp16",
         )

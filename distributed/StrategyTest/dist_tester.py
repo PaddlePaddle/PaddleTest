@@ -100,7 +100,7 @@ class Launcher(object):
 
 
 class Checker(object):
-    def __init__(self, result, logdir="./test_log", pattern=r'loss is: (\d+\.\d+)'):
+    def __init__(self, result, logdir="./test_log", pattern=r'loss is: \[?(\d+\.\d+)\]?'):
         self.expected_result = result
         self.logdir = logdir
         self.pattern = pattern

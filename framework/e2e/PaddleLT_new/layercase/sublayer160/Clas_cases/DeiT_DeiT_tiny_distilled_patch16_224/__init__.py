@@ -1,0 +1,2 @@
+import layercase.sublayer160.Clas_cases.DeiT_DeiT_tiny_distilled_patch16_224.SIR_92
+import layercase.sublayer160.Clas_cases.DeiT_DeiT_tiny_distilled_patch16_224.SIR_4
