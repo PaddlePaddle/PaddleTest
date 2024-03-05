@@ -2,24 +2,21 @@
 unset http_proxy && unset https_proxy
 python -m pip install paddlepaddle-gpu==0.0.0.post118 -f https://www.paddlepaddle.org.cn/whl/linux/gpu/develop.html
 python -c "import paddle;print(paddle.__version__);print(paddle.version.show())"
-cd Paddle && python ./tools/print_signatures.py paddle > get_all_api_new.spec
+python Paddle/tools/print_signatures.py paddle > get_all_api_new.spec
 cat get_all_api_new.spec  | grep "paddle.distributed." > dist_api_list_new.spec
 
-file1="/ce_dist/Paddle/tools/dist_api_list_new.spec"
-file2="/ce_dist/PaddleTest/distributed/CE_API/scripts/dist_api_list_old.spec"
-output_file="/ce_dist/diff.spec"
+file1="./dist_api_list_new.spec"
+file2="./PaddleTest/distributed/CE_API/scripts/dist_api_list_old.spec"
+output_file="./diff.spec"
 
 # 使用diff命令比较文件
-diff_result=$(diff "$file1" "$file2")
+diff "$file1" "$file2" > "$output_file"
 
 # 判断diff命令的输出是否为空
-if [ -n "$diff_result" ]; then
-    # 如果diff命令的输出不为空，表示文件之间存在差异
-    echo "文件之间存在差异" > "$output_file"
-    cat "$output_file"
+if [ -s "$output_file" ]; then  
+    echo "文件之间存在差异"  
     exit 1
-else
-    # 如果diff命令的输出为空，表示文件之间不存在差异
-    echo "文件之间不存在差异" > "$output_file"
+else  
+    echo "文件之间不存在差异"  
     exit 0
 fi
