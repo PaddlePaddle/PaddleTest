@@ -18,6 +18,6 @@ if [ -s "$output_file" ]; then
 else
     echo "文件之间不存在差异"
 fi
-mkdir result_file 
+mkdir result_file
 mv diff.spec result
-mv dist_api_list_new.spec result 
+mv dist_api_list_new.spec result
