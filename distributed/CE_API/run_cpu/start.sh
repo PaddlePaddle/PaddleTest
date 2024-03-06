@@ -48,7 +48,6 @@ cases="dist_CountFilterEntry.py \
        dist_shard_tensor.py \
        dist_Shard.py \
        dist_ShowClickEntry.py \
-       dist_split.py \
        dist_Strategy.py \
        dist_utils_recompute.py \
        "

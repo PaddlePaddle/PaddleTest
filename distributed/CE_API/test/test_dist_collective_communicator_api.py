@@ -9,7 +9,7 @@
 """
 /***************************************************************************
   *
-  * Copyright (c) 2019 Baidu.com, Inc. All Rights Reserved
+  * Copyright (c) 2021 Baidu.com, Inc. All Rights Reserved
   * @file test_dist_collective_communicator_api.py
   * @author liujie44@baidu.com
   * @date 2021-11-09 11:00
