@@ -1,0 +1,4 @@
+import layercase.sublayer1000.Clas_cases.SqueezeNet_SqueezeNet1_0./SIR_2
+import layercase.sublayer1000.Clas_cases.SqueezeNet_SqueezeNet1_0./SIR_3
+import layercase.sublayer1000.Clas_cases.SqueezeNet_SqueezeNet1_0./SIR_0
+import layercase.sublayer1000.Clas_cases.SqueezeNet_SqueezeNet1_0./SIR_1

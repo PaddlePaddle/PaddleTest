@@ -1,0 +1,3 @@
+import layercase.sublayer1000.Seg_cases.danet_danet_resnet50_os8_cityscapes_1024x512_80k./SIR_33
+import layercase.sublayer1000.Seg_cases.danet_danet_resnet50_os8_cityscapes_1024x512_80k./SIR_31
+import layercase.sublayer1000.Seg_cases.danet_danet_resnet50_os8_cityscapes_1024x512_80k./SIR_34

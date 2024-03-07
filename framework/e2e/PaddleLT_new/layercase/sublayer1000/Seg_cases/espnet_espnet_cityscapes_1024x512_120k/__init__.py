@@ -1,0 +1,8 @@
+import layercase.sublayer1000.Seg_cases.espnet_espnet_cityscapes_1024x512_120k./SIR_33
+import layercase.sublayer1000.Seg_cases.espnet_espnet_cityscapes_1024x512_120k./SIR_12
+import layercase.sublayer1000.Seg_cases.espnet_espnet_cityscapes_1024x512_120k./SIR_38
+import layercase.sublayer1000.Seg_cases.espnet_espnet_cityscapes_1024x512_120k./SIR_116
+import layercase.sublayer1000.Seg_cases.espnet_espnet_cityscapes_1024x512_120k./SIR_143
+import layercase.sublayer1000.Seg_cases.espnet_espnet_cityscapes_1024x512_120k./SIR_64
+import layercase.sublayer1000.Seg_cases.espnet_espnet_cityscapes_1024x512_120k./SIR_75
+import layercase.sublayer1000.Seg_cases.espnet_espnet_cityscapes_1024x512_120k./SIR_20

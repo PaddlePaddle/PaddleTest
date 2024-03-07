@@ -1,0 +1,6 @@
+import layercase.sublayer1000.Det_cases.rotate_s2anet_s2anet_conv_2x_dota./SIR_33
+import layercase.sublayer1000.Det_cases.rotate_s2anet_s2anet_conv_2x_dota./SIR_105
+import layercase.sublayer1000.Det_cases.rotate_s2anet_s2anet_conv_2x_dota./SIR_107
+import layercase.sublayer1000.Det_cases.rotate_s2anet_s2anet_conv_2x_dota./SIR_106
+import layercase.sublayer1000.Det_cases.rotate_s2anet_s2anet_conv_2x_dota./SIR_109
+import layercase.sublayer1000.Det_cases.rotate_s2anet_s2anet_conv_2x_dota./SIR_108

@@ -1,0 +1,10 @@
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_37
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_48
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_68
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_78
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_44
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_74
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_61
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_55
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_20
+import layercase.sublayer1000.Clas_cases.PPHGNet_PPHGNet_tiny./SIR_82

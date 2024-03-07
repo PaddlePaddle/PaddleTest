@@ -1,0 +1,3 @@
+import layercase.sublayer1000.Seg_cases.uhrnet_fcn_uhrnetw18_small_cityscapes_1024x512_120k_bs3./SIR_52
+import layercase.sublayer1000.Seg_cases.uhrnet_fcn_uhrnetw18_small_cityscapes_1024x512_120k_bs3./SIR_46
+import layercase.sublayer1000.Seg_cases.uhrnet_fcn_uhrnetw18_small_cityscapes_1024x512_120k_bs3./SIR_40

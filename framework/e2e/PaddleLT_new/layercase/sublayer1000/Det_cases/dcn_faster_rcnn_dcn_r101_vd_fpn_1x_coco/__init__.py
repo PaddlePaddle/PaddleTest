@@ -1,0 +1,6 @@
+import layercase.sublayer1000.Det_cases.dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco./SIR_56
+import layercase.sublayer1000.Det_cases.dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco./SIR_49
+import layercase.sublayer1000.Det_cases.dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco./SIR_44
+import layercase.sublayer1000.Det_cases.dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco./SIR_35
+import layercase.sublayer1000.Det_cases.dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco./SIR_55
+import layercase.sublayer1000.Det_cases.dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco./SIR_71

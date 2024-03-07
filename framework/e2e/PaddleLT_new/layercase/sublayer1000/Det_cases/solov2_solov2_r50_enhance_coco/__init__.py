@@ -1,0 +1,14 @@
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_52
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_37
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_42
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_62
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_56
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_47
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_58
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_105
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_113
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_123
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_133
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_54
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_34
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_enhance_coco./SIR_75

@@ -1,0 +1,6 @@
+import layercase.sublayer1000.Det_cases.yolov3_yolov3_mobilenet_v3_large_ssld_270e_voc./SIR_22
+import layercase.sublayer1000.Det_cases.yolov3_yolov3_mobilenet_v3_large_ssld_270e_voc./SIR_77
+import layercase.sublayer1000.Det_cases.yolov3_yolov3_mobilenet_v3_large_ssld_270e_voc./SIR_31
+import layercase.sublayer1000.Det_cases.yolov3_yolov3_mobilenet_v3_large_ssld_270e_voc./SIR_64
+import layercase.sublayer1000.Det_cases.yolov3_yolov3_mobilenet_v3_large_ssld_270e_voc./SIR_74
+import layercase.sublayer1000.Det_cases.yolov3_yolov3_mobilenet_v3_large_ssld_270e_voc./SIR_71

@@ -1,0 +1,3 @@
+import layercase.sublayer1000.Det_cases.res2net_mask_rcnn_res2net50_vd_26w_4s_fpn_2x_coco./SIR_135
+import layercase.sublayer1000.Det_cases.res2net_mask_rcnn_res2net50_vd_26w_4s_fpn_2x_coco./SIR_130
+import layercase.sublayer1000.Det_cases.res2net_mask_rcnn_res2net50_vd_26w_4s_fpn_2x_coco./SIR_132
