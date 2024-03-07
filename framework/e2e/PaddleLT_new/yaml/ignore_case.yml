@@ -10,3 +10,8 @@ sublayer160:
   - layercase/sublayer160/Seg_cases/segformer_segformer_b2_cityscapes_1024x1024_160k/SIR_64.py
   - layercase/sublayer160/Seg_cases/segformer_segformer_b5_cityscapes_1024x512_160k/SIR_148.py
   - layercase/sublayer160/Seg_cases/segmenter_segmenter_vit_base_linear_ade20k_512x512_160k/SIR_63.py
+
+sublayer1000:
+  - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_12.py # hang住CINN
+  - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_37.py # hang住CINN
+  - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_48.py # hang住CINN
