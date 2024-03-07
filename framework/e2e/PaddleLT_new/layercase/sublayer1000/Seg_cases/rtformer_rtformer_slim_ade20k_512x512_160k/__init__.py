@@ -1,1 +1,1 @@
-import layercase.sublayer1000.Seg_cases.rtformer_rtformer_slim_ade20k_512x512_160k./SIR_42
+import layercase.sublayer1000.Seg_cases.rtformer_rtformer_slim_ade20k_512x512_160k.SIR_42

@@ -1,1 +1,1 @@
-import layercase.sublayer1000.Det_cases.dcn_faster_rcnn_dcn_r50_vd_fpn_2x_coco./SIR_56
+import layercase.sublayer1000.Det_cases.dcn_faster_rcnn_dcn_r50_vd_fpn_2x_coco.SIR_56

@@ -1,3 +1,3 @@
-import layercase.sublayer1000.Det_cases.hrnet_faster_rcnn_hrnetv2p_w18_2x_coco./SIR_58
-import layercase.sublayer1000.Det_cases.hrnet_faster_rcnn_hrnetv2p_w18_2x_coco./SIR_29
-import layercase.sublayer1000.Det_cases.hrnet_faster_rcnn_hrnetv2p_w18_2x_coco./SIR_60
+import layercase.sublayer1000.Det_cases.hrnet_faster_rcnn_hrnetv2p_w18_2x_coco.SIR_58
+import layercase.sublayer1000.Det_cases.hrnet_faster_rcnn_hrnetv2p_w18_2x_coco.SIR_29
+import layercase.sublayer1000.Det_cases.hrnet_faster_rcnn_hrnetv2p_w18_2x_coco.SIR_60

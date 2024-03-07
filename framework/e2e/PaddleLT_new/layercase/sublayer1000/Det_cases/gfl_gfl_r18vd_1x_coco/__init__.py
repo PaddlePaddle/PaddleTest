@@ -1,3 +1,3 @@
-import layercase.sublayer1000.Det_cases.gfl_gfl_r18vd_1x_coco./SIR_150
-import layercase.sublayer1000.Det_cases.gfl_gfl_r18vd_1x_coco./SIR_151
-import layercase.sublayer1000.Det_cases.gfl_gfl_r18vd_1x_coco./SIR_35
+import layercase.sublayer1000.Det_cases.gfl_gfl_r18vd_1x_coco.SIR_150
+import layercase.sublayer1000.Det_cases.gfl_gfl_r18vd_1x_coco.SIR_151
+import layercase.sublayer1000.Det_cases.gfl_gfl_r18vd_1x_coco.SIR_35

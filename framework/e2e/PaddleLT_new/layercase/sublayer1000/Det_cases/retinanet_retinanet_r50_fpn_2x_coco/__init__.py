@@ -1,1 +1,1 @@
-import layercase.sublayer1000.Det_cases.retinanet_retinanet_r50_fpn_2x_coco./SIR_42
+import layercase.sublayer1000.Det_cases.retinanet_retinanet_r50_fpn_2x_coco.SIR_42

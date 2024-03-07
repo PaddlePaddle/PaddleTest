@@ -1,1 +1,1 @@
-import layercase.sublayer1000.Det_cases.solov2_solov2_r50_fpn_3x_coco./SIR_50
+import layercase.sublayer1000.Det_cases.solov2_solov2_r50_fpn_3x_coco.SIR_50

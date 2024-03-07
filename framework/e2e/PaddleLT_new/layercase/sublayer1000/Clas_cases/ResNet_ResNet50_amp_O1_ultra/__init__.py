@@ -1,1 +1,1 @@
-import layercase.sublayer1000.Clas_cases.ResNet_ResNet50_amp_O1_ultra./SIR_28
+import layercase.sublayer1000.Clas_cases.ResNet_ResNet50_amp_O1_ultra.SIR_28

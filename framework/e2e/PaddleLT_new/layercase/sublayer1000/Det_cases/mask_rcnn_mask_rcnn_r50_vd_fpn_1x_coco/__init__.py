@@ -1,1 +1,1 @@
-import layercase.sublayer1000.Det_cases.mask_rcnn_mask_rcnn_r50_vd_fpn_1x_coco./SIR_56
+import layercase.sublayer1000.Det_cases.mask_rcnn_mask_rcnn_r50_vd_fpn_1x_coco.SIR_56

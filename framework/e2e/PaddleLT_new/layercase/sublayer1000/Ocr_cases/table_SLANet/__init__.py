@@ -1,1 +1,1 @@
-import layercase.sublayer1000.Ocr_cases.table_SLANet./SIR_23
+import layercase.sublayer1000.Ocr_cases.table_SLANet.SIR_23

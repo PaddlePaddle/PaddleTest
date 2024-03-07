@@ -1,1 +1,1 @@
-import layercase.sublayer1000.Det_cases.mot_fairmot_fairmot_dla34_30e_1088x608_bytetracker./SIR_79
+import layercase.sublayer1000.Det_cases.mot_fairmot_fairmot_dla34_30e_1088x608_bytetracker.SIR_79
