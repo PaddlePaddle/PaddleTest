@@ -102,6 +102,8 @@ def test_gpu_more_bz():
             output_data_dict,
             repeat=1,
             delta=2e-5,
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -145,6 +147,8 @@ def test_gpu_mixed_precision_bz1():
             repeat=1,
             delta=0.3,
             precision="fp16",
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory
