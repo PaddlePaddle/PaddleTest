@@ -9,7 +9,7 @@
 """
 /***************************************************************************
   *
-  * Copyright (c) 2019 Baidu.com, Inc. All Rights Reserved
+  * Copyright (c) 2021 Baidu.com, Inc. All Rights Reserved
   * @file test_dist_collective_communicator_api.py
   * @author liujie44@baidu.com
   * @date 2021-11-09 11:00
@@ -65,6 +65,18 @@ class TestApi(object):
     def test_collective_barrier(self):
         """test_collective_barrier"""
         cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id barrier dist_collective_barrier.py"
+        pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = pro.communicate()
+        print(out)
+        pro.wait()
+        pro.returncode == 0
+        assert str(out).find("Error") == -1
+        assert str(err).find("Error") == -1
+
+    def test_collective_broadcast_object_list(self):
+        """test_collective_broadcast_object_list"""
+        cmd = "python -m paddle.distributed.launch --devices 0,1 --job_id broadcast_object_list \
+                dist_collective_broadcast_object_list.py"
         pro = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = pro.communicate()
         print(out)
