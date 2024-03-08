@@ -1,0 +1,5 @@
+import layercase.sublayer1000.Det_cases.fcos_fcos_dcn_r50_fpn_1x_coco.SIR_67
+import layercase.sublayer1000.Det_cases.fcos_fcos_dcn_r50_fpn_1x_coco.SIR_110
+import layercase.sublayer1000.Det_cases.fcos_fcos_dcn_r50_fpn_1x_coco.SIR_59
+import layercase.sublayer1000.Det_cases.fcos_fcos_dcn_r50_fpn_1x_coco.SIR_120
+import layercase.sublayer1000.Det_cases.fcos_fcos_dcn_r50_fpn_1x_coco.SIR_92
