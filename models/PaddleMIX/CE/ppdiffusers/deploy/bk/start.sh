@@ -9,7 +9,7 @@ echo ${work_path}
 work_path2=${root_path}/PaddleMIX/ppdiffusers
 echo ${work_path2}
 
-log_dir=${root_path}/log
+log_dir=${root_path}/deploy_log
 
 if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
