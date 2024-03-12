@@ -148,6 +148,14 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python312" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        linux_env_info_main get_wheel_url Cuda112 Python312 Develop ON
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
+    else
+        linux_env_info_main get_wheel_url Cuda112 Python312 Release ON
+        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
+    fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda116 Python39 Develop ON
@@ -264,6 +272,7 @@ export MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE:-10}
 export FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir:-}
 export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-False}
 export SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG:-False} #240123 针对泽宇项目设为True
+export GLOG_vmodule=${GLOG_vmodule:-}
 
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
@@ -393,7 +402,7 @@ if [[ "${docker_flag}" == "" ]]; then
     set +x;
 
     # # 拉取更新镜像
-    # docker pull ${Image_version}
+    docker pull ${Image_version}
 
     docker_name="ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}" #AGILE_JOB_BUILD_ID以每个流水线粒度区分docker名称
     function docker_del()
@@ -450,6 +459,7 @@ if [[ "${docker_flag}" == "" ]]; then
         -e set_cuda=${set_cuda} \
         -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
 	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+        -e GLOG_vmodule=${GLOG_vmodule} \
         -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
         -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
         -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
@@ -572,6 +582,7 @@ if [[ "${docker_flag}" == "" ]]; then
         echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
         ehco "@@@export FLAGS_enable_pir_api ${export FLAGS_enable_pir_api}"
         ehco "@@@export SOT_EXPORT_FLAG ${SOT_EXPORT_FLAG}"
+        ehco "@@@export GLOG_vmodule ${GLOG_vmodule}"
         set -x
         # Flag
         export STRICT_MODE=0
@@ -585,7 +596,9 @@ if [[ "${docker_flag}" == "" ]]; then
         git --version;
         python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
         python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-
+        python -m pip install --ignore-installed six -i https://mirror.baidu.com/pypi/simple
+        python -m pip uninstall -y opencv-python
+        python -m pip config list
         python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
     ' &
     wait $!
@@ -694,6 +707,7 @@ else
         echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
         echo "@@@export FLAGS_enable_pir_api: ${export FLAGS_enable_pir_api}"
         echo "@@@export SOT_EXPORT_FLAG: ${SOT_EXPORT_FLAG}"
+        echo "@@@export GLOG_vmodule: ${GLOG_vmodule}"
 
         set -x
         # Flag
@@ -708,5 +722,8 @@ else
     git --version;
     python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
     python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+    python -m pip install --ignore-installed six -i https://mirror.baidu.com/pypi/simple
+    python -m pip uninstall -y opencv-python
+    python -m pip config list
     python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
 fi
