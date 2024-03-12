@@ -3,7 +3,7 @@
 cur_path=$(pwd)
 echo ${cur_path}
 
-work_path1=${root_path}/PaddleMIX/ppdiffusers/deploy/sd15
+work_path1=${root_path}/PaddleMIX/ppdiffusers/deploy/ipadapter/sd15
 echo ${work_path1}
 
 log_dir=${root_path}/deploy_log
@@ -24,7 +24,7 @@ bash sd15_infer.sh
 exit_code=$(($exit_code + $?))
 
 
-work_path2=${root_path}/PaddleMIX/ppdiffusers/deploy/sdxl
+work_path2=${root_path}/PaddleMIX/ppdiffusers/deploy/ipadapter/sdxl
 echo ${work_path2}
 
 /bin/cp -rf ./* ${work_path2}/
