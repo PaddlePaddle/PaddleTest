@@ -39,7 +39,7 @@ def train():
     # 二、初始化 Fleet 环境
     fleet.init(is_collective=True)
     # 三、构建分布式训练使用的网络模型
-    model = fleet.distributed_model(mnist)
+    model = mnist
     # 设置优化器
     opt = paddle.optimizer.Adam(parameters=mnist.parameters(),learning_rate=0.002)
 

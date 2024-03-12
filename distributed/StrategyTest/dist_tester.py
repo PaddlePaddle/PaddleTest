@@ -75,6 +75,7 @@ class Initializer(object):
             # 如果目录存在，删除并重新创建
             shutil.rmtree(self.logdir)
             os.makedirs(self.logdir)
+            print(f"存在日志目录{self.logdir}, 删除重建")
         else:
             # 如果目录不存在，直接创建
             os.makedirs(self.logdir)
@@ -164,11 +165,18 @@ class Checker(object):
                 print(f"checking {key} result ...")
                 numpy.testing.assert_equal(result.get(key), expect.get(key))
                 print("pass")
+            # sorted_values1 = {k: sorted(v) for k, v in result.items()}
+            # sorted_values2 = {k: sorted(v) for k, v in expect.items()}
+            # if sorted_values1 == sorted_values2:
+            #     print("两个字典的值相同")
+            # else:
+            #     print("两个字典的值不同")
 
 
 if __name__ == '__main__':
+    # import argparse
     # parser = argparse.ArgumentParser(description="Distributed Testing Script")
-    # parser.add_argument("--gpus", default="1", help="GPUs to use gpu_number")
+    # parser.add_argument("--gpus", default="1", type=int, help="GPUs to use gpu_number")
     # args = parser.parse_args()
     #######获取日志信息，用来设置expect######
     # c = Checker(1)
