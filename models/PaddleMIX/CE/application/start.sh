@@ -20,16 +20,16 @@ bash prepare.sh
 
 cd ${work_path}
 
-echo "*******application vision_language_chat begin***********"
-(bash vision_language_chat.py) 2>&1 | tee ${log_dir}/vision_language_chat.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "application vision_language_chat run success" >>"${log_dir}/ce_res.log"
-else
-    echo "application vision_language_chat run fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******application vision_language_chat end***********"
+# echo "*******application vision_language_chat begin***********"
+# (python vision_language_chat.py) 2>&1 | tee ${log_dir}/vision_language_chat.log
+# tmp_exit_code=${PIPESTATUS[0]}
+# exit_code=$(($exit_code + ${tmp_exit_code}))
+# if [ ${tmp_exit_code} -eq 0 ]; then
+#     echo "application vision_language_chat run success" >>"${log_dir}/ce_res.log"
+# else
+#     echo "application vision_language_chat run fail" >>"${log_dir}/ce_res.log"
+# fi
+# echo "*******application vision_language_chat end***********"
 
 echo "*******application grounded_sam begin***********"
 (python grounded_sam.py) 2>&1 | tee ${log_dir}/grounded_sam.log

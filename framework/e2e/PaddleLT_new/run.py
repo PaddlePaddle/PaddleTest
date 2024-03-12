@@ -22,11 +22,15 @@ class Run(object):
         """
         # 获取所有layer.yml文件路径
         # self.layer_dir = os.environ.get("CASE_DIR")
-        self.layer_dir = "layercase"
-        self.py_list = CaseSelect(self.layer_dir).get_py_list(base_path=self.layer_dir)
+        self.layer_dir = os.path.join("layercase", os.environ.get("CASE_DIR"))
+
+        # 获取需要忽略的case
+        self.ignore_list = YamlLoader(yml=os.path.join("yaml", "ignore_case.yml")).yml.get(os.environ.get("CASE_DIR"))
+
+        # 获取待测case
+        self.py_list = CaseSelect(self.layer_dir, self.ignore_list).get_py_list(base_path=self.layer_dir)
 
         self.testing = os.environ.get("TESTING")
-
         self.py_cmd = os.environ.get("python_ver")
         self.report_dir = os.path.join(os.getcwd(), "report")
 

@@ -70,6 +70,8 @@ echo "*******autoencoder_vae multi infer end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/autoencoder_outputs/*
+rm -rf ${work_path}/data/
 
 echo exit_code:${exit_code}
 exit ${exit_code}

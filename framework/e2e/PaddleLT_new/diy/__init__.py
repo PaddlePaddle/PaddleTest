@@ -5,6 +5,5 @@
 __init__
 """
 import diy.data
-import diy.layer
 import diy.loss
 import diy.optimizer

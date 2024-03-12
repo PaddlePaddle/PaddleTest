@@ -17,62 +17,38 @@ fi
 cd ${work_path}
 exit_code=0
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
 pip install pytest safetensors ftfy fastcore opencv-python einops parameterized requests-mock
+pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html
+pip install pytest-xdist
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-rm -rf tests/pipelines/test_pipelines.py
-rm -rf tests/pipelines/stable_diffusion/test_stable_diffusion_pix2pix_zero.py
+
+export http_proxy=${mix_proxy}
+export https_proxy=${mix_proxy}
+# rm -rf tests/pipelines/test_pipelines.py
+# rm -rf tests/pipelines/stable_diffusion/test_stable_diffusion_pix2pix_zero.py
 
 exit_code=0
 
-echo "*******tests/schedulers begin***********"
-(python -m pytest -v tests/schedulers) 2>&1 | tee ${log_dir}/tests_schedulers.log
+export HF_ENDPOINT=https://hf-mirror.com
+export no_proxy=baidu.com,127.0.0.1,0.0.0.0,localhost,bcebos.com,pip.baidu-int.com,mirrors.baidubce.com,repo.baidubce.com,repo.bcm.baidubce.com,pypi.tuna.tsinghua.edu.cn,aistudio.baidu.com
+export USE_PPXFORMERS=True
+export RUN_SLOW=True
+echo "*******ppdiffusers ut tests begin***********"
+(python -m pytest -v tests) 2>&1 | tee ${log_dir}/tests_ut.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "tests/schedulers run success" >>"${log_dir}/ut_res.log"
+    echo "ppdiffusers ut tests  run success" >>"${log_dir}/ut_res.log"
 else
-    echo "tests/schedulers run fail" >>"${log_dir}/ut_res.log"
+    echo "ppdiffusers ut tests  run fail" >>"${log_dir}/ut_res.log"
 fi
-echo "*******tests/schedulers end***********"
+echo "*******ppdiffusers ut tests end***********"
 
-echo "*******tests/others begin***********"
-(python -m pytest -v tests/others) 2>&1 | tee ${log_dir}/tests_others.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "tests/others run success" >>"${log_dir}/ut_res.log"
-else
-    echo "tests/others run fail" >>"${log_dir}/ut_res.log"
-fi
-echo "*******tests/others end***********"
-
-echo "*******tests/models begin***********"
-(python -m pytest -v tests/models) 2>&1 | tee ${log_dir}/tests_models.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "tests/models run success" >>"${log_dir}/ut_res.log"
-else
-    echo "tests/models run fail" >>"${log_dir}/ut_res.log"
-fi
-echo "*******tests/models end***********"
-
-pip install note-seq==0.0.5
-echo "*******tests/pipelines begin***********"
-(python -m pytest -v tests/pipelines) 2>&1 | tee ${log_dir}/tests_pipelines.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "tests/pipelines run success" >>"${log_dir}/ut_res.log"
-else
-    echo "tests/pipelines run fail" >>"${log_dir}/ut_res.log"
-fi
-echo "*******tests/pipelines end***********"
+unset http_proxy
+unset https_proxy
 
 # # 查看结果
 cat ${log_dir}/ut_res.log
