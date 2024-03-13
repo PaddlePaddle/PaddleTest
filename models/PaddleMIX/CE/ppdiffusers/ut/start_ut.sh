@@ -17,6 +17,10 @@ fi
 cd ${work_path}
 exit_code=0
 
+
+export http_proxy=${mix_proxy}
+export https_proxy=${mix_proxy}
+
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
@@ -25,8 +29,6 @@ pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdep
 pip install pytest-xdist
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
-export http_proxy=${mix_proxy}
-export https_proxy=${mix_proxy}
 # rm -rf tests/pipelines/test_pipelines.py
 # rm -rf tests/pipelines/stable_diffusion/test_stable_diffusion_pix2pix_zero.py
 
