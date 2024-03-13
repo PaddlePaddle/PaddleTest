@@ -15,7 +15,7 @@ export USE_PPXFORMERS=False
     --scheduler "ddim" \
     --backend paddle \
     --device gpu \
-    --task_name text2img) 2>&1 | tee ${log_dir}/deploy_ipadapter_sd15_inference_text2img.log
+    --task_name text2img) 2>&1 | tee ${log_dir}/ipadapter_sd15_inference_text2img.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -47,7 +47,7 @@ echo "*******ppdiffusers/deploy/sd15 ipadapter_sd15_inference_img2img end*******
     --scheduler "ddim" \
     --backend paddle \
     --device gpu \
-    --task_name inpaint_legacy) 2>&1 | tee ${log_dir}/sd15_inference_inpaint.log
+    --task_name inpaint_legacy) 2>&1 | tee ${log_dir}/ipadapter_sd15_inference_inpaint.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
