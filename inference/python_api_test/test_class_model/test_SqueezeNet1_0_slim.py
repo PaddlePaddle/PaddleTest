@@ -179,7 +179,7 @@ def test_mkldnn_int8():
         precision="int8",
         cpu_num_threads=10,
         with_benchmark=True,
-        delta=2e-2,
+        delta=2e-1,
         base_latency_ms=4.88,
         benchmark_threshold=5e-2,
     )

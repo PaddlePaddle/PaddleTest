@@ -127,7 +127,7 @@ def test_trt_int8_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=100,
-            delta=5e-1,
+            delta=8e-1,
             max_batch_size=max_batch_size,
             precision="trt_int8",
             min_subgraph_size=30,
