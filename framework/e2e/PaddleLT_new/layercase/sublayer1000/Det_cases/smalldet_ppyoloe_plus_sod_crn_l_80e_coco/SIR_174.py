@@ -1,4 +1,4 @@
-# method:argmax||method:__mul__||method:__add__||method:flatten||method:flatten||api:paddle.tensor.manipulation.gather||method:reshape||method:__gt__||api:paddle.tensor.creation.full_like||api:paddle.tensor.search.where||method:reshape||method:flatten||api:paddle.tensor.manipulation.gather||method:reshape||api:paddle.nn.functional.input.one_hot||api:paddle.tensor.creation.to_tensor||api:paddle.tensor.search.index_select||method:__mul__||method:max||method:__mul__||method:max||method:__add__||method:__truediv__||method:__mul__||method:max||method:unsqueeze||method:__mul__
+# method:argmax||method:__mul__||method:__add__||method:flatten||method:flatten||api:paddle.tensor.manipulation.gather||method:reshape||method:__gt__||api:paddle.tensor.creation.full_like||api:paddle.tensor.search.where||method:reshape||method:flatten||api:paddle.tensor.manipulation.gather||method:reshape||api:paddle.nn.functional.input.one_hot||api:paddle.tensor.search.index_select||method:__mul__||method:max||method:__mul__||method:max||method:__add__||method:__truediv__||method:__mul__||method:max||method:unsqueeze||method:__mul__
 import paddle
 import unittest
 import numpy as np
@@ -32,7 +32,7 @@ class LayerCase(paddle.nn.Layer):
         var_19 = paddle.tensor.manipulation.gather(var_17, var_18, axis=0)
         var_20 = var_19.reshape([1, 3549, 4])
         var_21 = paddle.nn.functional.input.one_hot(var_16, 81)
-        var_22 = paddle.tensor.creation.to_tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79])
+        var_22 = paddle.arange(80)
         var_23 = paddle.tensor.search.index_select(var_21, var_22, axis=-1)
         var_24 = var_5.__mul__(var_0)
         var_25 = var_24.max(axis=-1, keepdim=True)

@@ -1,4 +1,4 @@
-# api:paddle.tensor.creation.to_tensor||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__radd__||method:__add__||method:__add__||method:__radd__||method:__add__||method:__add__||method:__radd__||method:__add__||method:__add__||method:__radd__||method:__add__||method:__add__
+# method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__mul__||method:__add__||method:__radd__||method:__add__||method:__add__||method:__radd__||method:__add__||method:__add__||method:__radd__||method:__add__||method:__add__||method:__radd__||method:__add__||method:__add__
 import paddle
 import unittest
 import numpy as np
@@ -55,7 +55,6 @@ class LayerCase(paddle.nn.Layer):
         var_7,    # (shape: [], dtype: paddle.float32, stop_gradient: False)
         var_8,    # (shape: [], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_9 = paddle.tensor.creation.to_tensor(26.0, dtype='float32')
         var_10 = self.parameter_2.__neg__()
         var_11 = paddle.tensor.ops.exp(var_10)
         var_12 = var_11.__mul__(var_0)
@@ -119,7 +118,7 @@ class LayerCase(paddle.nn.Layer):
         var_70 = var_26.__radd__(0)
         var_71 = var_70.__add__(var_43)
         var_72 = var_71.__add__(var_60)
-        return var_63, var_66, var_69, var_72, var_9
+        return var_63, var_66, var_69, var_72
 
 
 def create_paddle_inputs():
