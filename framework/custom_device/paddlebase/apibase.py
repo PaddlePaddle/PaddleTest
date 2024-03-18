@@ -32,28 +32,28 @@ class APIBase(object):
     def _set_place(self):
         # 设置执行device
         if len(self.places) == 0 and paddle.device.is_compiled_with_cuda() is True:
-            self.places = [paddle.CPUPlace(), paddle.CUDAPlace(0)]
+            self.places = ["cpu", "gpu"]
         elif len(self.places) == 0 and paddle.device.is_compiled_with_custom_device("npu") is True:
-            self.places = [paddle.CPUPlace(), paddle.NPUPlace(0)]
+            self.places = ["cpu", "npu"]
         elif len(self.places) == 0 and paddle.device.is_compiled_with_custom_device("xpu") is True:
-            self.places = [paddle.CPUPlace(), paddle.XPUPlace(0)]
+            self.places = ["cpu", "xpu"]
         elif len(self.places) == 0 and paddle.device.is_compiled_with_custom_device("mlu") is True:
-            self.places = [paddle.CPUPlace(), paddle.MLUPlace(0)]
+            self.places = ["cpu", "mlu"]
         elif len(self.places) == 0 and paddle.device.is_compiled_with_custom_device("dcu") is True:
             # 没有dcu的place啊
-            self.places = [paddle.CPUPlace()]
+            self.places = ["cpu", "dcu"]
         else:
             # default
-            self.places = [paddle.CPUPlace()]
+            self.places = ["cpu"]
 
     def _set_device(self):
-        if isinstance(self.place, paddle.CPUPlace):
+        if self.place == "cpu":
             paddle.set_device("cpu")
-        elif isinstance(self.place, paddle.NPUPlace):
+        elif self.place == "npu":
             paddle.set_device("npu:0")
-        elif isinstance(self.place, paddle.XPUPlace):
+        elif self.place == "xpu":
             paddle.set_device("xpu:0")
-        elif isinstance(self.place, paddle.MLUPlace):
+        elif self.place == "mlu":
             paddle.set_device("mlu:0")  
         else:
             paddle.set_device("gpu:0")
@@ -632,7 +632,7 @@ class APIBase(object):
                         grad = dict(zip(xyz, res[1:]))
                         return res[0], grad
                     else:
-                        exe = paddle.static.Executor(self.place)
+                        exe = paddle.static.Executor()
                         exe.run(startup_program)
                         # print(list(grad_var.values()))
                         # print([output] + list(grad_var.values()))
@@ -675,13 +675,13 @@ class APIBase(object):
                     if self.enable_backward:
                         loss = paddle.mean(output)
                         g = paddle.static.gradients(loss, self.data)
-                        exe = paddle.static.Executor(self.place)
+                        exe = paddle.static.Executor()
                         exe.run(startup_program)
                         res = exe.run(main_program, feed=data, fetch_list=[output, g], return_numpy=True)
                         grad = {"data": res[1]}
                         return res[0], grad
                     else:
-                        exe = paddle.static.Executor(self.place)
+                        exe = paddle.static.Executor()
                         exe.run(startup_program)
                         res = exe.run(main_program, feed=data, fetch_list=[output], return_numpy=True)
                         return res[0]
