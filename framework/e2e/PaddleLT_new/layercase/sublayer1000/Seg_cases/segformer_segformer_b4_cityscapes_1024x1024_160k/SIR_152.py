@@ -21,7 +21,7 @@ class LayerCase(paddle.nn.Layer):
         var_1,    # (shape: [], dtype: paddle.int32, stop_gradient: True)
         var_2,    # (shape: [], dtype: paddle.int32, stop_gradient: True)
     ):
-        var_3 = paddle.tensor.attribute.shape(var_0)
+        var_3 = var_0.shape
         var_4 = var_3.__getitem__(0)
         var_5 = var_3.__getitem__(1)
         var_6 = var_0.transpose([0, 2, 1])

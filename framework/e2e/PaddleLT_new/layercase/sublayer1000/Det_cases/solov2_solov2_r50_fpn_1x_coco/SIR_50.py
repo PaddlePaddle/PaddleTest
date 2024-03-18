@@ -11,10 +11,10 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [1, 256, 25, 38], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_1 = paddle.tensor.attribute.shape(var_0)
+        var_1 = var_0.shape
         var_2 = var_1.__getitem__(-1)
         var_3 = paddle.tensor.creation.linspace(-1, 1, var_2, dtype='float32')
-        var_4 = paddle.tensor.attribute.shape(var_0)
+        var_4 = var_0.shape
         var_5 = var_4.__getitem__(-2)
         var_6 = paddle.tensor.creation.linspace(-1, 1, var_5, dtype='float32')
         out = paddle.tensor.creation.meshgrid([var_6, var_3])
@@ -22,10 +22,10 @@ class LayerCase(paddle.nn.Layer):
         var_8 = out[1]
         var_9 = paddle.tensor.manipulation.unsqueeze(var_8, [0, 1])
         var_10 = paddle.tensor.manipulation.unsqueeze(var_7, [0, 1])
-        var_11 = paddle.tensor.attribute.shape(var_0)
+        var_11 = var_0.shape
         var_12 = var_11.__getitem__(0)
         var_13 = paddle.tensor.manipulation.expand(var_10, shape=[var_12, 1, -1, -1])
-        var_14 = paddle.tensor.attribute.shape(var_0)
+        var_14 = var_0.shape
         var_15 = var_14.__getitem__(0)
         var_16 = paddle.tensor.manipulation.expand(var_9, shape=[var_15, 1, -1, -1])
         var_17 = paddle.tensor.manipulation.concat([var_16, var_13], axis=1)

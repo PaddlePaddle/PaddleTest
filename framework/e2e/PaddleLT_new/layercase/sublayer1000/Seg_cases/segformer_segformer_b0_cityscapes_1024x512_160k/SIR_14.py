@@ -62,7 +62,7 @@ class LayerCase(paddle.nn.Layer):
         var_2,    # (shape: [], dtype: paddle.int32, stop_gradient: True)
     ):
         var_3 = paddle.nn.functional.norm.layer_norm(var_0, normalized_shape=[64], weight=self.parameter_7, bias=self.parameter_1, epsilon=1e-06)
-        var_4 = paddle.tensor.attribute.shape(var_3)
+        var_4 = var_3.shape
         var_5 = var_4.__getitem__(0)
         var_6 = var_4.__getitem__(1)
         var_7 = paddle.nn.functional.common.linear(x=var_3, weight=self.parameter_5, bias=self.parameter_0, name=None)
