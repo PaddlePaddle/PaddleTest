@@ -632,7 +632,11 @@ class APIBase(object):
                         grad = dict(zip(xyz, res[1:]))
                         return res[0], grad
                     else:
+<<<<<<< HEAD
                         exe = paddle.static.Executor()
+=======
+                        exe = paddle.static.Executor(self.place)
+>>>>>>> upstream/develop
                         exe.run(startup_program)
                         # print(list(grad_var.values()))
                         # print([output] + list(grad_var.values()))
@@ -675,13 +679,21 @@ class APIBase(object):
                     if self.enable_backward:
                         loss = paddle.mean(output)
                         g = paddle.static.gradients(loss, self.data)
+<<<<<<< HEAD
                         exe = paddle.static.Executor()
+=======
+                        exe = paddle.static.Executor(self.place)
+>>>>>>> upstream/develop
                         exe.run(startup_program)
                         res = exe.run(main_program, feed=data, fetch_list=[output, g], return_numpy=True)
                         grad = {"data": res[1]}
                         return res[0], grad
                     else:
+<<<<<<< HEAD
                         exe = paddle.static.Executor()
+=======
+                        exe = paddle.static.Executor(self.place)
+>>>>>>> upstream/develop
                         exe.run(startup_program)
                         res = exe.run(main_program, feed=data, fetch_list=[output], return_numpy=True)
                         return res[0]
