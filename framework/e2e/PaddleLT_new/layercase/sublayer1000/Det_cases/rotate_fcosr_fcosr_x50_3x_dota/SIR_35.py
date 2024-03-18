@@ -15,7 +15,7 @@ class LayerCase(paddle.nn.Layer):
         var_3,    # (shape: [1, 256, 16, 16], dtype: paddle.float32, stop_gradient: False)
         var_4,    # (shape: [1, 256, 8, 8], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_5 = paddle.tensor.attribute.shape(var_0)
+        var_5 = var_0.shape
         var_6 = var_5.__getitem__(0)
         var_7 = var_5.__getitem__(1)
         var_8 = var_5.__getitem__(2)
@@ -35,7 +35,7 @@ class LayerCase(paddle.nn.Layer):
         var_21 = var_8.__mul__(var_9)
         var_22 = paddle.tensor.creation.full([1, var_21, 1], 8, dtype='float32')
         var_23 = var_8.__mul__(var_9)
-        var_24 = paddle.tensor.attribute.shape(var_1)
+        var_24 = var_1.shape
         var_25 = var_24.__getitem__(0)
         var_26 = var_24.__getitem__(1)
         var_27 = var_24.__getitem__(2)
@@ -55,7 +55,7 @@ class LayerCase(paddle.nn.Layer):
         var_40 = var_27.__mul__(var_28)
         var_41 = paddle.tensor.creation.full([1, var_40, 1], 16, dtype='float32')
         var_42 = var_27.__mul__(var_28)
-        var_43 = paddle.tensor.attribute.shape(var_2)
+        var_43 var_2.shape
         var_44 = var_43.__getitem__(0)
         var_45 = var_43.__getitem__(1)
         var_46 = var_43.__getitem__(2)
@@ -75,7 +75,7 @@ class LayerCase(paddle.nn.Layer):
         var_59 = var_46.__mul__(var_47)
         var_60 = paddle.tensor.creation.full([1, var_59, 1], 32, dtype='float32')
         var_61 = var_46.__mul__(var_47)
-        var_62 = paddle.tensor.attribute.shape(var_3)
+        var_62 var_3.shape
         var_63 = var_62.__getitem__(0)
         var_64 = var_62.__getitem__(1)
         var_65 = var_62.__getitem__(2)
@@ -95,7 +95,7 @@ class LayerCase(paddle.nn.Layer):
         var_78 = var_65.__mul__(var_66)
         var_79 = paddle.tensor.creation.full([1, var_78, 1], 64, dtype='float32')
         var_80 = var_65.__mul__(var_66)
-        var_81 = paddle.tensor.attribute.shape(var_4)
+        var_81 var_4.shape
         var_82 = var_81.__getitem__(0)
         var_83 = var_81.__getitem__(1)
         var_84 = var_81.__getitem__(2)

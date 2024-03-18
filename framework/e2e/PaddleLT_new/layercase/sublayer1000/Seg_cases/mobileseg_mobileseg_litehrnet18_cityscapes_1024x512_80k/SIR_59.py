@@ -60,14 +60,14 @@ class LayerCase(paddle.nn.Layer):
         var_15 = var_1.__mul__(var_14)
         var_16 = paddle.tensor.manipulation.concat([var_2, var_9], axis=1)
         var_17 = paddle.tensor.manipulation.concat([var_3, var_15], axis=1)
-        var_18 = paddle.tensor.attribute.shape(var_16)
+        var_18 = var_16.shape
         var_19 = var_18.__getitem__(0)
         var_20 = var_18.__getitem__(2)
         var_21 = var_18.__getitem__(3)
         var_22 = paddle.tensor.manipulation.reshape(x=var_16, shape=[var_19, 2, 20, var_20, var_21])
         var_23 = paddle.tensor.linalg.transpose(x=var_22, perm=[0, 2, 1, 3, 4])
         var_24 = paddle.tensor.manipulation.reshape(x=var_23, shape=[var_19, 40, var_20, var_21])
-        var_25 = paddle.tensor.attribute.shape(var_17)
+        var_25 = var_17.shape
         var_26 = var_25.__getitem__(0)
         var_27 = var_25.__getitem__(2)
         var_28 = var_25.__getitem__(3)
