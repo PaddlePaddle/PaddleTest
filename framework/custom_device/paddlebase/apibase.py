@@ -33,13 +33,13 @@ class APIBase(object):
         # 设置执行device
         if len(self.places) == 0 and paddle.device.is_compiled_with_cuda() is True:
             self.places = ["cpu", "gpu"]
-        elif len(self.places) == 0 and paddle.device.is_compiled_with_custom_device("npu") is True:
+        elif len(self.places) == 0 and paddle.device.is_compiled_with_npu() is True:
             self.places = ["cpu", "npu"]
-        elif len(self.places) == 0 and paddle.device.is_compiled_with_custom_device("xpu") is True:
+        elif len(self.places) == 0 and paddle.device.is_compiled_with_xpu() is True:
             self.places = ["cpu", "xpu"]
-        elif len(self.places) == 0 and paddle.device.is_compiled_with_custom_device("mlu") is True:
+        elif len(self.places) == 0 and paddle.device.is_compiled_with_mlu() is True:
             self.places = ["cpu", "mlu"]
-        elif len(self.places) == 0 and paddle.device.is_compiled_with_custom_device("dcu") is True:
+        elif len(self.places) == 0 and paddle.device.is_compiled_with_dcu() is True:
             # 没有dcu的place啊
             self.places = ["cpu", "dcu"]
         else:
