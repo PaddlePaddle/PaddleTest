@@ -14,7 +14,7 @@ unset http_proxy
 unset https_proxy
 set -xe
 
-export repo_name_all=${repo_name_all:-"Paddle PaddleClas PaddleGAN PaddleOCR Paddle3D PaddleSpeech PaddleRec PaddleSlim PaddleDetection PaddleSeg PaddleNLP PaddleMIX"}
+export repo_name_all=${repo_name_all:-"PaddleCustomDevice Paddle PaddleClas PaddleGAN PaddleOCR Paddle3D PaddleSpeech PaddleRec PaddleSlim PaddleDetection PaddleSeg PaddleNLP PaddleMIX"}
 # Paddle  需要包含 PaddlePaddle  release 字段，需要打包 develop release/2.3 release/2.4
 # PaddleClas  需要包含 develop  release 字段，需要打包 develop release/2.3 release/2.4 release/2.5
 # PaddleGAN  需要包含 develop  release 字段，需要打包 develop release/2.1
@@ -26,6 +26,7 @@ export repo_name_all=${repo_name_all:-"Paddle PaddleClas PaddleGAN PaddleOCR Pad
 # PaddleDetection:develop, release2.5
 # PaddleSeg:develop,release2.6
 # PaddleNLP:develop
+# PaddleCustomDevice:develop
 
 function tar_reponame(){
     echo "repo_name is : ${repo_name}"
@@ -221,6 +222,10 @@ do
             && [[ ! $line =~ "upgrade_ppdiffusers0193" ]] \
             && [[ ! $line =~ "release/0.1" ]] \
             && [[ ${repo_name} == "PaddleMIX" ]]; then
+            tar_reponame
+        # PaddleCustomDevice
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+            && [[ ${repo_name} == "PaddleCustomDevice" ]]; then
             tar_reponame
         else
             echo "${repo_name} not other branch to tar"
