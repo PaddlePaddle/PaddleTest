@@ -132,6 +132,7 @@ class LayerTest(object):
                 self.logger.get_log().warn("执行器异常结果: {}".format(bug_trace))
 
         self.logger.get_log().info(res_dict)
+        return res_dict, exc
 
 
 if __name__ == "__main__":
