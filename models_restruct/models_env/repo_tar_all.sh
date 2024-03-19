@@ -225,6 +225,7 @@ do
             tar_reponame
         # PaddleCustomDevice
         elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+            && [[ ! $line =~ "HEAD" ]] \
             && [[ ${repo_name} == "PaddleCustomDevice" ]]; then
             tar_reponame
         else
