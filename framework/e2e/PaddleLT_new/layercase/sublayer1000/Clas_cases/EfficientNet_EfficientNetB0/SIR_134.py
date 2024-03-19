@@ -12,7 +12,7 @@ class LayerCase(paddle.nn.Layer):
         var_0,    # (shape: [11, 192, 7, 7], dtype: paddle.float32, stop_gradient: False)
         var_1,    # (shape: [11, 192, 7, 7], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_2 = paddle.tensor.attribute.shape(var_0)
+        var_2 = var_0.shape
         var_3 = var_2.__getitem__(0)
         var_4 = paddle.tensor.random.rand(shape=[var_3, 1, 1, 1])
         var_5 = var_4.__radd__(0.85)

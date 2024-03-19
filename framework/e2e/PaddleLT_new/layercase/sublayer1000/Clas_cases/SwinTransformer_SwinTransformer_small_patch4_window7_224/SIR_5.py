@@ -19,13 +19,13 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [43, 3136, 96], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_1 = paddle.tensor.attribute.shape(var_0)
+        var_1 = var_0.shape
         var_2 = var_1.__getitem__(0)
         var_3 = var_1.__getitem__(1)
         var_4 = var_1.__getitem__(2)
         var_5 = paddle.nn.functional.norm.layer_norm(var_0, normalized_shape=[96], weight=self.parameter_1, bias=self.parameter_0, epsilon=1e-05)
         var_6 = var_5.reshape([var_2, 56, 56, var_4])
-        var_7 = paddle.tensor.attribute.shape(var_6)
+        var_7 = var_6.shape
         var_8 = var_7.__getitem__(0)
         var_9 = var_7.__getitem__(1)
         var_10 = var_7.__getitem__(2)

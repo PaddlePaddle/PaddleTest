@@ -15,7 +15,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [1, 512, 64, 64], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_1 = paddle.tensor.attribute.shape(var_0)
+        var_1 = var_0.shape
         var_2 = paddle.tensor.manipulation.reshape(var_0, (0, 512, -1,))
         var_3 = paddle.tensor.manipulation.reshape(var_0, (0, 512, -1,))
         var_4 = paddle.tensor.linalg.transpose(var_3, (0, 2, 1,))

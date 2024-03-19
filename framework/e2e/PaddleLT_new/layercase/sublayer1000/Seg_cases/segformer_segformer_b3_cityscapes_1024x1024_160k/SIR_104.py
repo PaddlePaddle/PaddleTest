@@ -42,7 +42,7 @@ class LayerCase(paddle.nn.Layer):
         var_5 = var_4.reshape([var_1, var_2, var_3, 320])
         var_6 = var_5.transpose([0, 3, 1, 2])
         var_7 = paddle.nn.functional.conv._conv_nd(var_6, self.parameter_1, bias=self.parameter_0, stride=[2, 2], padding=[1, 1], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_8 = paddle.tensor.attribute.shape(var_7)
+        var_8 = var_7.shape
         var_9 = var_8.__getitem__(2)
         var_10 = var_8.__getitem__(3)
         var_11 = var_7.flatten(2)

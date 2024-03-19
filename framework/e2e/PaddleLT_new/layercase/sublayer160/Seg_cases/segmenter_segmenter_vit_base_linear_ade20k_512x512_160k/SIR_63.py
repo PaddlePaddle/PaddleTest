@@ -23,7 +23,7 @@ class LayerCase(paddle.nn.Layer):
         var_2 = paddle.nn.functional.common.linear(x=var_0, weight=self.parameter_0, bias=self.parameter_1, name=None)
         var_3 = var_1.__getitem__(0)
         var_4 = var_1.__getitem__(1)
-        var_5 = paddle.tensor.attribute.shape(var_2)
+        var_5 = var_2.shape
         var_6 = var_5.__getitem__(-1)
         var_7 = var_2.reshape((0, var_3, var_4, var_6,))
         var_8 = var_7.transpose((0, 3, 1, 2,))
