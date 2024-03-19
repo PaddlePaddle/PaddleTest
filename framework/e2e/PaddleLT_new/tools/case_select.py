@@ -53,8 +53,14 @@ class CaseSelect(object):
             if os.path.isdir(py_path):
                 self.get_py_list(py_path, py_list)
             else:
-                if not file.endswith(".py") or file.endswith("__init__.py") or py_path in self.ignore_list:
-                    continue
+                if self.ignore_list:
+                    if not file.endswith(".py") or file.endswith("__init__.py") or py_path in self.ignore_list:
+                        continue
+                    else:
+                        py_list.append(py_path)
                 else:
-                    py_list.append(py_path)
+                    if not file.endswith(".py") or file.endswith("__init__.py"):
+                        continue
+                    else:
+                        py_list.append(py_path)
         return py_list
