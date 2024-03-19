@@ -33,7 +33,7 @@ class APIBase(object):
         # 设置执行device
         if len(self.places) == 0 and paddle.device.is_compiled_with_cuda() is True:
             self.places = ["cpu", "gpu"]
-        elif len(self.places) == 0 and paddle.device.is_compiled_with_npu() is True:
+        elif len(self.places) == 0 and paddle.device.is_compiled_with_ipu() is True:
             self.places = ["cpu", "npu"]
         elif len(self.places) == 0 and paddle.device.is_compiled_with_xpu() is True:
             self.places = ["cpu", "xpu"]
