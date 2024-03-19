@@ -43,7 +43,8 @@ class Run(object):
         error_list = []
         for py_file in self.py_list:
             title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
-            perf_dict, exit_code = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
+            single_test = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
+            perf_dict, exit_code = single_test._perf_case_run()
             # title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
             # exit_code = os.system(
             #     "cp -r PaddleLT.py {}.py && "
