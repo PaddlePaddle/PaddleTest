@@ -650,7 +650,6 @@ class APIBase(object):
                             # logging.info("value in xyz is: {}".format(params[k]))
                             # logging.info("loss dtype is: {}".format(loss))
                             grad_var[k] = paddle.static.gradients(loss, params[k])
-                            # logging.info("success~~~")
                         exe = paddle.static.Executor()
                         exe.run(startup_program)
                         # print(list(grad_var.values()))

@@ -11,6 +11,8 @@ from engine.eval import LayerEval
 from engine.export import LayerExport
 from engine.infer import LayerInfer
 
+from engine.eval_bm import LayerEvalBM
+
 # from interpreter.testing_trans import TrainTrans, EvalTrans
 
 
@@ -26,4 +28,6 @@ engine_map = {
     "paddle_infer_cpu": LayerInfer,
     "paddle_infer_mkldnn": LayerInfer,
     "paddle_infer_ort": LayerInfer,
+    "dy_eval_perf": LayerEvalBM,
+    "dy2st_eval_cinn_perf": LayerEvalBM,
 }
