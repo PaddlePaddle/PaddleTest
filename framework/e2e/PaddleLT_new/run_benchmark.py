@@ -11,6 +11,7 @@ import layertest
 import pandas as pd
 from tools.case_select import CaseSelect
 from tools.yaml_loader import YamlLoader
+from tools.res_save import xlsx_save
 
 
 class Run(object):
@@ -68,17 +69,7 @@ class Run(object):
             print("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
-        data = [
-            {"Key": key, "Value": value}
-            for key, sublayer_dict in sublayer_dict.items()
-            for value in sublayer_dict.values()
-        ]
-        # 创建 DataFrame
-        df = pd.DataFrame(data)
-
-        # 将数据写入 Excel 文件
-        excel_file = "output.xlsx"  # 输出的 Excel 文件名
-        df.to_excel(excel_file, index=False)
+        xlsx_save(sublayer_dict)
 
 
 if __name__ == "__main__":
