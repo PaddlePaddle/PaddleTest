@@ -46,7 +46,9 @@ class LayerTest(object):
         return res
 
     def _case_run(self):
-        """"""
+        """
+        用于单个子图精度测试
+        """
         exc = 0
         res_dict = {}
         compare_dict = []
@@ -110,9 +112,30 @@ class LayerTest(object):
             print("layer测试失败项目汇总: {}".format(compare_dict))
             assert False
 
+    def _perf_case_run(self):
+        """
+        用于单个子图性能测试
+        """
+        exc = 0
+        res_dict = {}
+        # compare_dict = []
+        self.logger.get_log().info("测试case名称: {}".format(self.title))
+        for testing in self.testings_list:
+            try:
+                self.logger.get_log().info("性能测试执行器: {}".format(testing))
+                res = self._single_run(testing=testing, layerfile=self.layerfile)
+                res_dict[testing] = res
+            except Exception:
+                bug_trace = traceback.format_exc()
+                exc += 1
+                res_dict[testing] = bug_trace
+                self.logger.get_log().warn("执行器异常结果: {}".format(bug_trace))
+
+        self.logger.get_log().info(res_dict)
+
 
 if __name__ == "__main__":
-    layerfile = "layercase/SIR_108.py"
-    testing = "yaml/dy^infer.yml"
+    layerfile = "./layercase/sublayer1000/Clas_cases/CSWinTransformer_CSWinTransformer_base_384/SIR_1.py"
+    testing = "yaml/dy^dy2stcinn_eval_benchmark.yml"
     single_test = LayerTest(title="lzy_naive", layerfile=layerfile, testing=testing)
     single_test._case_run()
