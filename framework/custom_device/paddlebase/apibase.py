@@ -621,7 +621,7 @@ class APIBase(object):
                         grad_var = {}
                         for k in xyz:
                             grad_var[k] = paddle.static.gradients(loss, params[k])
-                        exe = paddle.static.Executor(self.place)
+                        exe = paddle.static.Executor()
                         exe.run(startup_program)
                         # print(list(grad_var.values()))
                         # print([output] + list(grad_var.values()))
