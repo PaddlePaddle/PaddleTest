@@ -55,7 +55,7 @@ class LayerCase(paddle.nn.Layer):
         var_40 = var_27.__mul__(var_28)
         var_41 = paddle.tensor.creation.full([1, var_40, 1], 16, dtype='float32')
         var_42 = var_27.__mul__(var_28)
-        var_43 var_2.shape
+        var_43 = var_2.shape
         var_44 = var_43.__getitem__(0)
         var_45 = var_43.__getitem__(1)
         var_46 = var_43.__getitem__(2)
@@ -75,7 +75,7 @@ class LayerCase(paddle.nn.Layer):
         var_59 = var_46.__mul__(var_47)
         var_60 = paddle.tensor.creation.full([1, var_59, 1], 32, dtype='float32')
         var_61 = var_46.__mul__(var_47)
-        var_62 var_3.shape
+        var_62 = var_3.shape
         var_63 = var_62.__getitem__(0)
         var_64 = var_62.__getitem__(1)
         var_65 = var_62.__getitem__(2)
@@ -95,7 +95,7 @@ class LayerCase(paddle.nn.Layer):
         var_78 = var_65.__mul__(var_66)
         var_79 = paddle.tensor.creation.full([1, var_78, 1], 64, dtype='float32')
         var_80 = var_65.__mul__(var_66)
-        var_81 var_4.shape
+        var_81 = var_4.shape
         var_82 = var_81.__getitem__(0)
         var_83 = var_81.__getitem__(1)
         var_84 = var_81.__getitem__(2)

@@ -53,7 +53,7 @@ class LayerCase(paddle.nn.Layer):
         var_38 = var_25.__mul__(var_26)
         var_39 = paddle.tensor.creation.full([1, var_38, 1], 16, dtype='float32')
         var_40 = var_25.__mul__(var_26)
-        var_41 var_2.shape
+        var_41 = var_2.shape
         var_42 = var_41.__getitem__(0)
         var_43 = var_41.__getitem__(1)
         var_44 = var_41.__getitem__(2)
