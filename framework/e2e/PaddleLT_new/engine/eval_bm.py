@@ -54,7 +54,7 @@ class LayerEvalBM(object):
 
         total_time_list = []
         # 预热
-        timeit.timeit(lambda: _perf(self.data), number=self.perf_repeat * 0.2)
+        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * 0.2))
         for i in range(self.perf_repeat):
             total_time = timeit.timeit(lambda: _perf(self.data), number=1)
             total_time_list.append(total_time)
@@ -77,7 +77,7 @@ class LayerEvalBM(object):
 
         total_time_list = []
         # 预热
-        timeit.timeit(lambda: _perf(self.data), number=self.perf_repeat * 0.2)
+        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * 0.2))
         for i in range(self.perf_repeat):
             total_time = timeit.timeit(lambda: _perf(self.data), number=1)
             total_time_list.append(total_time)
