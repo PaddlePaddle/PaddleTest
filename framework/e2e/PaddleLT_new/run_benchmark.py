@@ -8,7 +8,6 @@
 import os
 import platform
 import layertest
-import pandas as pd
 from tools.case_select import CaseSelect
 from tools.yaml_loader import YamlLoader
 from tools.res_save import xlsx_save
