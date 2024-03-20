@@ -11,6 +11,7 @@ import layertest
 import pandas as pd
 from tools.case_select import CaseSelect
 from tools.yaml_loader import YamlLoader
+from tools.res_save import xlsx_save
 
 
 class Run(object):
@@ -43,7 +44,8 @@ class Run(object):
         error_list = []
         for py_file in self.py_list:
             title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
-            perf_dict, exit_code = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
+            single_test = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
+            perf_dict, exit_code = single_test._perf_case_run()
             # title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
             # exit_code = os.system(
             #     "cp -r PaddleLT.py {}.py && "
@@ -67,17 +69,7 @@ class Run(object):
             print("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
-        data = [
-            {"Key": key, "Value": value}
-            for key, sublayer_dict in sublayer_dict.items()
-            for value in sublayer_dict.values()
-        ]
-        # 创建 DataFrame
-        df = pd.DataFrame(data)
-
-        # 将数据写入 Excel 文件
-        excel_file = "output.xlsx"  # 输出的 Excel 文件名
-        df.to_excel(excel_file, index=False)
+        xlsx_save(sublayer_dict)
 
 
 if __name__ == "__main__":
