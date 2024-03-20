@@ -11,3 +11,4 @@ wget
 numpy
 pytest-timeout
 pandas
+openpyxl
