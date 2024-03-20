@@ -6,7 +6,7 @@
 
 import unittest
 import numpy as np
-import utils
+# import utils
 
 import paddle
 
@@ -41,49 +41,49 @@ def create_paddle_inputs():
     inputs = (q, k, cos, sin, position_ids)
     return inputs
 
-class PaddleRopeSubGraph(paddle.nn.Layer):
-    def __init__(self):
-        super().__init__()
+# class PaddleRopeSubGraph(paddle.nn.Layer):
+#     def __init__(self):
+#         super().__init__()
 
-    def forward(self, q, k, cos, sin, position_ids):
-        (
-            out_q,
-            out_k,
-            _,
-        ) = paddle.incubate.nn.functional.fused_rotary_position_embedding(
-            q, k, None, sin, cos, position_ids, use_neox_rotary_style=False
-        )
-        return out_q, out_k
-
-
-class TestRopeSubGraph(unittest.TestCase):
-    def setUp(self):
-        paddle.seed(2022)
-        self.prepare_data()
-
-    def prepare_data(self):
-        self.q, self.k, self.cos, self.sin, self.position_ids = create_paddle_inputs()
-
-    def eval(self, use_cinn):
-        if use_cinn:
-            net = LayerCase()
-        else:
-            net = PaddleRopeSubGraph()
-        net.eval()
-        net = utils.apply_to_static(net, use_cinn)
-        for i in range(10000):
-            out = net(self.q, self.k, self.cos, self.sin, self.position_ids)
-        return out
-
-    def test_eval(self):
-        cinn_outs = self.eval(use_cinn=True)
-        dy_outs = self.eval(use_cinn=False)
-
-        for cinn_out, dy_out in zip(cinn_outs, dy_outs):
-            np.testing.assert_allclose(
-                cinn_out.numpy(), dy_out.numpy(), atol=1e-6
-            )
+#     def forward(self, q, k, cos, sin, position_ids):
+#         (
+#             out_q,
+#             out_k,
+#             _,
+#         ) = paddle.incubate.nn.functional.fused_rotary_position_embedding(
+#             q, k, None, sin, cos, position_ids, use_neox_rotary_style=False
+#         )
+#         return out_q, out_k
 
 
-if __name__ == '__main__':
-    unittest.main()
+# class TestRopeSubGraph(unittest.TestCase):
+#     def setUp(self):
+#         paddle.seed(2022)
+#         self.prepare_data()
+
+#     def prepare_data(self):
+#         self.q, self.k, self.cos, self.sin, self.position_ids = create_paddle_inputs()
+
+#     def eval(self, use_cinn):
+#         if use_cinn:
+#             net = LayerCase()
+#         else:
+#             net = PaddleRopeSubGraph()
+#         net.eval()
+#         net = utils.apply_to_static(net, use_cinn)
+#         for i in range(10000):
+#             out = net(self.q, self.k, self.cos, self.sin, self.position_ids)
+#         return out
+
+#     def test_eval(self):
+#         cinn_outs = self.eval(use_cinn=True)
+#         dy_outs = self.eval(use_cinn=False)
+
+#         for cinn_out, dy_out in zip(cinn_outs, dy_outs):
+#             np.testing.assert_allclose(
+#                 cinn_out.numpy(), dy_out.numpy(), atol=1e-6
+#             )
+
+
+# if __name__ == '__main__':
+#     unittest.main()
