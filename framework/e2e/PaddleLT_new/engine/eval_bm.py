@@ -39,7 +39,7 @@ class LayerEvalBM(object):
 
         self.net = BuildLayer(layerfile=layerfile).get_layer()
 
-        self.data = BuildData(layerfile=layerfile).get_single_data()
+        self.data = BuildData(layerfile=layerfile).get_single_tensor()
 
     def dy_eval_perf(self):
         """dygraph eval"""
