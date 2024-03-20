@@ -1,11 +1,14 @@
-import unittest
+# FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1 
+# FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true 
+# FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True 
+# FLAGS_cinn_compile_with_nvrtc=True FLAGS_nvrtc_compile_to_cubin=True 
+# FLAGS_support_reduce_stride_read=1
 
+import unittest
 import numpy as np
 import utils
 
 import paddle
-
-# FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1 FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True FLAGS_cinn_compile_with_nvrtc=True FLAGS_nvrtc_compile_to_cubin=True FLAGS_support_reduce_stride_read=1
 
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
