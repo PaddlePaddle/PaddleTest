@@ -16,15 +16,15 @@ output_file="./result_file/diff.spec"
 > "$file2_dist"
 > "$output_file"
 
-# 逐行读取源文件，并提取空格前的内容  
-while IFS= read -r line; do  
-    # 使用awk提取空格前的部分  
-    echo "$line" | awk '{print $1}' >> "$file1_dist"  
-done < "$file1" 
-while IFS= read -r line; do  
-    # 使用awk提取空格前的部分  
-    echo "$line" | awk '{print $1}' >> "$file2_dist"  
-done < "$file2" 
+# 逐行读取源文件，并提取空格前的内容
+while IFS= read -r line; do
+    # 使用awk提取空格前的部分
+    echo "$line" | awk '{print $1}' >> "$file1_dist"
+done < "$file1"
+while IFS= read -r line; do
+    # 使用awk提取空格前的部分
+    echo "$line" | awk '{print $1}' >> "$file2_dist"
+done < "$file2"
 
 # 使用diff命令比较文件
 diff "$file1_dist" "$file2_dist" > "$output_file"
