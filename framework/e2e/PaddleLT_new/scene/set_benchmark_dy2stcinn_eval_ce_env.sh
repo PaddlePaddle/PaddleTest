@@ -10,6 +10,11 @@ export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
 
+#性能测试专属环境变量
+export PLT_BM_REPEAT="${PLT_BM_REPEAT:-10}"
+export PLT_BM_STATIS="${PLT_BM_STATIS:-trimmean}"
+
+#研发指定环境变量
 export FLAGS_pir_apply_shape_optimization_pass=0
 export FLAGS_enable_pir_api=1
 export FLAGS_prim_enable_dynamic=true
