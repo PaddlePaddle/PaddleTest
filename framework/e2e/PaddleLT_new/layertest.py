@@ -129,9 +129,9 @@ class LayerTest(object):
                 bug_trace = traceback.format_exc()
                 exc += 1
                 res_dict[testing] = bug_trace
-                self.logger.get_log().warn("执行器异常结果: {}".format(bug_trace))
+                self.logger.get_log().warn("性能执行器异常结果: {}".format(bug_trace))
 
-        self.logger.get_log().info(res_dict)
+        self.logger.get_log().info("用例 {} 多执行器性能结果: {}".format(self.title, res_dict))
         return res_dict, exc
 
 
