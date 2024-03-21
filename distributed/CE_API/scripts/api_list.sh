@@ -1,6 +1,6 @@
 # git clone https://github.com/PaddlePaddle/Paddle.git
 unset http_proxy && unset https_proxy
-# python -m pip install paddlepaddle-gpu==0.0.0.post118 -f https://www.paddlepaddle.org.cn/whl/linux/gpu/develop.html
+python -m pip install paddlepaddle-gpu==0.0.0.post118 -f https://www.paddlepaddle.org.cn/whl/linux/gpu/develop.html
 python -c "import paddle;print(paddle.__version__);print(paddle.version.show())"
 python Paddle/tools/print_signatures.py paddle > get_all_api_new.spec
 cat get_all_api_new.spec  | grep "paddle.distributed." > dist_api_list_new.spec
