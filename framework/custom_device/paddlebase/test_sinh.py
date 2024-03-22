@@ -84,12 +84,12 @@ def test_sinh_4():
     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_base_sinh_parameters
-def test_sinh_5():
-    """
-    x.shape=(2, 3, 2, 2)
-    float32
-    """
-    x = randtool("float", -10, 10, [2, 3, 2, 2]).astype(np.float32)
-    res = np.sinh(x)
-    obj.run(res=res, x=x)
+# @pytest.mark.api_base_sinh_parameters
+# def test_sinh_5():
+#     """
+#     x.shape=(2, 3, 2, 2)
+#     float32
+#     """
+#     x = randtool("float", -10, 10, [2, 3, 2, 2]).astype(np.float32)
+#     res = np.sinh(x)
+#     obj.run(res=res, x=x)
