@@ -1,0 +1,6 @@
+testings:
+  dy_eval_perf:
+    model_dtype: "float32"
+
+  dy2st_eval_cinn_perf:
+    model_dtype: "float32"

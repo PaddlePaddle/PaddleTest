@@ -7,6 +7,7 @@ det:
    det_r50_vd_dcn_fce_ctw: https://paddleocr.bj.bcebos.com/contribution/det_r50_dcn_fce_ctw_v2.0_train.tar
    det_r50_vd_pse: https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/det_r50_vd_pse_v2.0_train.tar
    det_mv3_pse: https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/det_mv3_pse_v2.0_train.tar
+   det_r50_drrg_ctw: https://paddleocr.bj.bcebos.com/contribution/det_r50_drrg_ctw_train.tar
 
 rec:
    rec_r34_vd_none_none_ctc: https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_none_none_ctc_v2.0_train.tar

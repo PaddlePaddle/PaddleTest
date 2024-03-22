@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/vgg11.tgz"
+    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/vgg11.tgz"
     if not os.path.exists("./vgg11/inference.pdiparams"):
         wget.download(vgg11_url, out="./")
         tar = tarfile.open("vgg11.tgz")

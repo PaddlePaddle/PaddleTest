@@ -1,0 +1,52 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: ppdiffusers/examples/controlnet/
+        cmd: pip install -r requirements.txt && wget https://paddlenlp.bj.bcebos.com/models/community/junnyu/develop/fill50k.zip && unzip -o fill50k.zip && wget https://user-images.githubusercontent.com/50394665/221844474-fd539851-7649-470e-bded-4d174271cc7f.png
+      -
+        name: single
+        path: ppdiffusers/examples/controlnet/
+        cmd: export FLAGS_conv_workspace_size_limit=4096 && python -u train_txt2img_control_trainer.py
+        params:
+          - --do_train
+          - --output_dir ./sd15_control
+          - --per_device_train_batch_size 1
+          - --gradient_accumulation_steps 1
+          - --learning_rate 1e-5
+          - --weight_decay 0.02
+          - --lr_scheduler_type "constant"
+          - --warmup_steps 0
+          - --sd_locked True
+          - --max_steps 100
+          - --logging_steps 50
+          - --image_logging_steps 50
+          - --save_steps 100
+          - --save_total_limit 2
+          - --seed 23
+          - --dataloader_num_workers 4
+          - --pretrained_model_name_or_path runwayml/stable-diffusion-v1-5
+          - --max_grad_norm -1
+          - --file_path ./fill50k
+          - --recompute True
+          - --overwrite_output_dir
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer:
+      -
+        name: infer
+        path: ppdiffusers/examples/controlnet/
+        # 需要将文件拷贝到case执行的目录
+        cmd: python infer.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    export: skipped
+    predict: skipped

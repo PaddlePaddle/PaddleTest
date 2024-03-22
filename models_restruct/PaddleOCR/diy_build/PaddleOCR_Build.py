@@ -126,6 +126,7 @@ class PaddleOCR_Build(Model_Build):
 
             # kie requirements
             os.system("python -m pip install -U  paddlenlp")
+            os.system("python -m pip install -U lanms-neo")
             # python3.11
             if sysstr == "Linux" and sys.version == "3.11.3":
                 os.system("apt-get install -y protobuf-compiler")

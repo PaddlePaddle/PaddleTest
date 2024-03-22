@@ -1,0 +1,31 @@
+case:
+  linux:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict:
+      -
+        name: prepare
+        path: paddlemix/examples/minigpt4/
+        cmd: wget https://user-images.githubusercontent.com/35913314/242832479-d8070644-4713-465d-9c7e-9585024c1819.png && mv 242832479-d8070644-4713-465d-9c7e-9585024c1819.png example.png && wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/model_state.pdparams && wget https://paddlenlp.bj.bcebos.com/models/community/minigpt4-7b/minigpt4_7b.tar.gz && tar -zxvf minigpt4_7b.tar.gz && mv model_state.pdparams minigpt4_7b/
+      -
+        name: predict
+        path: paddlemix/examples/minigpt4/
+        cmd: python run_predict.py
+        params:
+          - --pretrained_name_or_path minigpt4_7b
+          - --image_path "example.png"
+          - --decode_strategy "greedy_search"
+          - --max_length 300
+          - --num_beams 1
+          - --top_p 1.0
+          - --top_k 0
+          - --repetition_penalty 1.0
+          - --length_penalty 0.0
+          - --temperature 1.0
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
