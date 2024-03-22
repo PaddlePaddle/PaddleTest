@@ -76,9 +76,10 @@ class APIBase(object):
         # no grad var
         self.no_grad_var = []
         # calculate grad delta, You can rewrite these value
-        self.delta = 1e-6
+        self.delta = 1e-3
+        self.grad_delta = 1e-1
         self.gap = 0.001
-        self.rtol = 1e-7
+        self.rtol = 0
         # choose layertypes [functional or classional]
         self._layertypes(func)
         # run hook, use user define vars and initials
@@ -146,8 +147,8 @@ class APIBase(object):
             Assertion
         """
         # 取默认type
-        if np.float64 in self.types:
-            self.dtype = np.float64
+        if np.float32 in self.types:
+            self.dtype = np.float32
         else:
             self.dtype = self.types[0]
         if self.debug:
@@ -202,7 +203,7 @@ class APIBase(object):
                             dygraph_backward_res,
                             grad,
                             mode="dygraph",
-                            delta=self.delta,
+                            delta=self.grad_delta,
                             rtol=self.rtol,
                             no_grad_var=self.no_grad_var,
                         )
@@ -211,7 +212,7 @@ class APIBase(object):
                             static_backward_res,
                             grad,
                             mode="static",
-                            delta=self.delta,
+                            delta=self.grad_delta,
                             rtol=self.rtol,
                             no_grad_var=self.no_grad_var,
                         )
@@ -266,7 +267,7 @@ class APIBase(object):
                             dygraph_backward_res,
                             grad,
                             mode="dygraph",
-                            delta=self.delta,
+                            delta=self.grad_delta,
                             rtol=self.rtol,
                             no_grad_var=self.no_grad_var,
                         )
@@ -275,7 +276,7 @@ class APIBase(object):
                             static_backward_res,
                             grad,
                             mode="static",
-                            delta=self.delta,
+                            delta=self.grad_delta,
                             rtol=self.rtol,
                             no_grad_var=self.no_grad_var,
                         )
@@ -337,7 +338,7 @@ class APIBase(object):
                         dygraph_backward_res,
                         grad,
                         mode="dygraph",
-                        delta=self.delta,
+                        delta=self.grad_delta,
                         rtol=self.rtol,
                         no_grad_var=self.no_grad_var,
                     )
@@ -346,7 +347,7 @@ class APIBase(object):
                         static_backward_res,
                         grad,
                         mode="static",
-                        delta=self.delta,
+                        delta=self.grad_delta,
                         rtol=self.rtol,
                         no_grad_var=self.no_grad_var,
                     )
@@ -394,7 +395,7 @@ class APIBase(object):
                         dygraph_backward_res,
                         grad,
                         mode="dygraph",
-                        delta=self.delta,
+                        delta=self.grad_delta,
                         rtol=self.rtol,
                         no_grad_var=self.no_grad_var,
                     )
@@ -403,7 +404,7 @@ class APIBase(object):
                         static_backward_res,
                         grad,
                         mode="static",
-                        delta=self.delta,
+                        delta=self.grad_delta,
                         rtol=self.rtol,
                         no_grad_var=self.no_grad_var,
                     )
