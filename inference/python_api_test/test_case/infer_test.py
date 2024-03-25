@@ -448,7 +448,6 @@ class InferenceTest(object):
         min_subgraph_size=10,
         precision="fp32",
         use_static=True,
-        use_calib_mode=False,
         dynamic=False,
         shape_range_file="shape_range.pbtxt",
         tuned=False,
@@ -468,7 +467,6 @@ class InferenceTest(object):
             min_subgraph_size(int): min subgraph size
             precision(str): trt precision mode,[fp32,fp16,int8]
             use_static(bool): use static
-            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
@@ -488,7 +486,6 @@ class InferenceTest(object):
                     min_subgraph_size=min_subgraph_size,
                     precision_mode=trt_precision_map[precision],
                     use_static=use_static,
-                    use_calib_mode=use_calib_mode,
                 )
                 self.pd_config.enable_tuned_tensorrt_dynamic_shape()
         else:
@@ -498,7 +495,6 @@ class InferenceTest(object):
                 min_subgraph_size=min_subgraph_size,
                 precision_mode=trt_precision_map[precision],
                 use_static=use_static,
-                use_calib_mode=use_calib_mode,
             )
         if delete_pass_list:
             for ir_pass in delete_pass_list:
@@ -570,7 +566,6 @@ class InferenceTest(object):
         min_subgraph_size=10,
         precision="fp32",
         use_static=True,
-        use_calib_mode=False,
         dynamic=False,
         shape_range_file="shape_range.pbtxt",
         tuned=False,
@@ -592,7 +587,6 @@ class InferenceTest(object):
             min_subgraph_size(int): min subgraph size
             precision(str): trt precision mode,[fp32,fp16,int8]
             use_static(bool): use static
-            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
@@ -612,7 +606,6 @@ class InferenceTest(object):
                     min_subgraph_size=min_subgraph_size,
                     precision_mode=trt_precision_map[precision],
                     use_static=use_static,
-                    use_calib_mode=use_calib_mode,
                 )
                 if auto_tuned:
                     self.pd_config.enable_tuned_tensorrt_dynamic_shape()
@@ -625,7 +618,6 @@ class InferenceTest(object):
                 min_subgraph_size=min_subgraph_size,
                 precision_mode=trt_precision_map[precision],
                 use_static=use_static,
-                use_calib_mode=use_calib_mode,
             )
         if delete_pass_list:
             for ir_pass in delete_pass_list:
@@ -671,7 +663,6 @@ class InferenceTest(object):
         min_subgraph_size=10,
         precision="trt_fp32",
         use_static=False,
-        use_calib_mode=False,
     ):
         """
         test enable_tensorrt_engine()
@@ -687,7 +678,6 @@ class InferenceTest(object):
             min_subgraph_size(int): min subgraph size
             precision(str): trt precision mode,[fp32,fp16,int8]
             use_static(bool): use static
-            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
@@ -704,7 +694,6 @@ class InferenceTest(object):
             min_subgraph_size=min_subgraph_size,
             precision_mode=trt_precision_map[precision],
             use_static=use_static,
-            use_calib_mode=use_calib_mode,
         )
 
         self.pd_config.set_trt_dynamic_shape_info(
@@ -745,7 +734,6 @@ class InferenceTest(object):
         min_subgraph_size=10,
         precision="trt_fp32",
         use_static=True,
-        use_calib_mode=False,
         delete_pass_list=None,
         dynamic=False,
         tuned=False,
@@ -763,7 +751,6 @@ class InferenceTest(object):
             min_subgraph_size(int): min subgraph size
             precision(str): trt precision mode,[fp32,fp16,int8]
             use_static(bool): use static
-            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
@@ -783,7 +770,6 @@ class InferenceTest(object):
                     min_subgraph_size=min_subgraph_size,
                     precision_mode=trt_precision_map[precision],
                     use_static=use_static,
-                    use_calib_mode=use_calib_mode,
                 )
                 self.pd_config.enable_tuned_tensorrt_dynamic_shape()
         else:
@@ -793,7 +779,6 @@ class InferenceTest(object):
                 min_subgraph_size=min_subgraph_size,
                 precision_mode=trt_precision_map[precision],
                 use_static=use_static,
-                use_calib_mode=use_calib_mode,
             )
 
         if delete_pass_list:
@@ -829,7 +814,6 @@ class InferenceTest(object):
         min_subgraph_size=10,
         precision="trt_fp32",
         use_static=False,
-        use_calib_mode=False,
     ):
         """
         test enable_tensorrt_engine()
@@ -846,7 +830,6 @@ class InferenceTest(object):
             min_subgraph_size(int): min subgraph size
             precision(str): trt precision mode,[fp32,fp16,int8]
             use_static(bool): use static
-            use_calib_mode(bool): use calib mode
         Returns:
             None
         """
@@ -862,7 +845,6 @@ class InferenceTest(object):
             min_subgraph_size=min_subgraph_size,
             precision_mode=trt_precision_map[precision],
             use_static=use_static,
-            use_calib_mode=use_calib_mode,
         )
         self.pd_config.set_trt_dynamic_shape_info(
             {names[i]: min_input_shape[i] for i in range(len(names))},

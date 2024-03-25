@@ -139,7 +139,6 @@ def test_trt_int8_more_bz():
             min_subgraph_size=30,
             dynamic=True,
             shape_range_file="./PPLCNet_x1_0_act_qat/shape_range.pbtxt",
-            # use_calib_mode=True,
             with_benchmark=True,
             base_latency_ms=0.74,
             benchmark_threshold=5e-2,
