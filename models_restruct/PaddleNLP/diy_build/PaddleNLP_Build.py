@@ -58,7 +58,6 @@ class PaddleNLP_Build(Model_Build):
         path_now = os.getcwd()
         platform = self.system
         paddle_whl = self.paddle_whl
-        os.environ["no_proxy"] = "bcebos.com,baidu.com,baidu-int.com,org.cn"
         print("set timeout as:", os.environ["timeout"])
         print("set no_proxy as:", os.environ["no_proxy"])
 
