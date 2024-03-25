@@ -17,17 +17,17 @@ from engine.eval_bm import LayerEvalBM
 
 
 engine_map = {
-    "dy_train": LayerTrain,
-    "dy2st_train": LayerTrain,
-    "dy2st_train_cinn": LayerTrain,
-    "dy_eval": LayerEval,
-    "dy2st_eval": LayerEval,
-    "dy2st_eval_cinn": LayerEval,
-    "jit_save": LayerExport,
-    "paddle_infer_gpu": LayerInfer,
-    "paddle_infer_cpu": LayerInfer,
-    "paddle_infer_mkldnn": LayerInfer,
-    "paddle_infer_ort": LayerInfer,
-    "dy_eval_perf": LayerEvalBM,
-    "dy2st_eval_cinn_perf": LayerEvalBM,
+    "dy_train": LayerTrain,  # 动态图训练
+    "dy2st_train": LayerTrain,  # 动转静训练
+    "dy2st_train_cinn": LayerTrain,  # CINN训练
+    "dy_eval": LayerEval,  # 动态图评估
+    "dy2st_eval": LayerEval,  # 动转静评估
+    "dy2st_eval_cinn": LayerEval,  # CINN评估
+    "jit_save": LayerExport,  # 动转静导出
+    "paddle_infer_gpu": LayerInfer,  # gpu预测
+    "paddle_infer_cpu": LayerInfer,  # cpu预测
+    "paddle_infer_mkldnn": LayerInfer,  # cpu mkldnn预测
+    "paddle_infer_ort": LayerInfer,  # ort预测
+    "dy_eval_perf": LayerEvalBM,  # 动态图评估性能
+    "dy2st_eval_cinn_perf": LayerEvalBM,  # CINN评估性能
 }
