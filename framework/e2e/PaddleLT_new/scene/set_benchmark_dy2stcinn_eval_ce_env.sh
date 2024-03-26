@@ -5,7 +5,7 @@
 # export CASE_DIR=$(echo $(basename $CASE_URL) | cut -d '.' -f 1) # 设定子图case根目录
 # wget ${CASE_URL} --no-proxy && tar -xzf ${CASE_DIR}.tar
 
-export CASE_DIR="${CASE_DIR:-perf_monitor,sublayer1000}"
+export CASE_DIR="${CASE_DIR:-perf_monitor}"
 export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项目配置yaml
 export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模型为性能
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
