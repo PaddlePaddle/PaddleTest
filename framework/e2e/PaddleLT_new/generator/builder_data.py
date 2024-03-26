@@ -35,7 +35,7 @@ class BuildData(object):
         dataname = self.dataname + ".create_paddle_inputs()"
         data = []
         for i in eval(dataname):
-            data.append(paddle.to_tensor(i))
+            data.append(i)
 
         return data
 

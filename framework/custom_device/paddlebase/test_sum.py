@@ -98,7 +98,7 @@ def test_sum6():
     """
     x = np.array([[0.8, 0.4], [0.7, 0.9]])
     res = np.sum(x)
-    obj.base(res=res, x=x, dtype="float64")
+    obj.run(res=res, x=x, dtype="float64")
 
 
 @pytest.mark.api_base_sum_parameters
