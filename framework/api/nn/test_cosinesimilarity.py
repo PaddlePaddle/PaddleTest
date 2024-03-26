@@ -235,7 +235,7 @@ def test_cosinesimilarity7():
         cos_sim_func(x1_tensor, x2_tensor)
     except Exception as e:
         # print(e)
-        if "InvalidArgument" in e.args[0]:
+        if "TypeError" in e.args[0]:
             pass
         else:
             raise Exception
