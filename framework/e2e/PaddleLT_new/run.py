@@ -6,11 +6,17 @@
 测试执行器
 """
 import os
+import argparse
 import platform
 import layertest
 from tools.case_select import CaseSelect
 from tools.yaml_loader import YamlLoader
 from tools.res_save import xlsx_save
+
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--mode", type=str, default="precision", help="precision or performance")
+args = parser.parse_args()
 
 
 class Run(object):
@@ -98,4 +104,9 @@ class Run(object):
 
 if __name__ == "__main__":
     tes = Run()
-    tes._test_run()
+    if args.mode == "precision":
+        tes._test_run()
+    elif args.mode == "performance":
+        tes._perf_test_run()
+    else:
+        raise Exception("unknown testing mode, PaddleLayerTest only support test precision or performance")
