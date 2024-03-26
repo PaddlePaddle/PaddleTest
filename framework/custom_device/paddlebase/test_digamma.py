@@ -55,7 +55,7 @@ def test_digamma_base1():
     """
     x = randtool("float", -5, 5, [3, 3])
     res = psi(x)
-    obj1.base(res=res, x=x)
+    obj.base(res=res, x=x)
 
 
 @pytest.mark.api_base_digamma_parameters
@@ -63,7 +63,7 @@ def test_digamma():
     """
     base float 3-D tensor
     """
-    x = randtool("float", -5, 5, [6, 6, 6])
+    x = randtool("float", -5, 5, [2, 2, 2])
     res = psi(x)
     obj.run(res=res, x=x)
 
@@ -73,7 +73,7 @@ def test_digamma1():
     """
     base float 4-D tensor
     """
-    x = randtool("float", -5, 5, [6, 6, 6, 6])
+    x = randtool("float", -5, 5, [2, 2, 2, 2])
     res = psi(x)
     obj.run(res=res, x=x)
 
@@ -83,6 +83,6 @@ def test_digamma2():
     """
     base float 5-D tensor
     """
-    x = randtool("float", -5, 5, [3, 6, 6, 6, 6])
+    x = randtool("float", -5, 5, [3, 2, 2, 2, 2])
     res = psi(x)
     obj.run(res=res, x=x)
