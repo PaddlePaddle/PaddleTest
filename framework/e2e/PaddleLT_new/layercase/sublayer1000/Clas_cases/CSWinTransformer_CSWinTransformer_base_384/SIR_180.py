@@ -11,7 +11,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [12, 288, 192], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_1 = var_0.shape[0] / 2
+        var_1 = var_0.shape[0] // 2
         var_2 = var_0.reshape([var_1, 2, 1, 12, 24, 192])
         var_3 = var_2.transpose([0, 1, 3, 2, 4, 5])
         var_4 = var_3.reshape([var_1, 24, 24, 192])
