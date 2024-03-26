@@ -7,6 +7,7 @@
 
 export CASE_DIR="${CASE_DIR:-perf_monitor,sublayer1000}"
 export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项目配置yaml
+export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模型为性能
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
 

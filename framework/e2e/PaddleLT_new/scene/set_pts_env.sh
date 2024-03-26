@@ -7,6 +7,7 @@
 
 export CASE_DIR="${CASE_DIR:-sublayer160}"
 export TESTING="${TESTING:-yaml/dy^dy2stcinn_eval.yml}" # 设定测试项目配置yaml
+export TESTING_MODE="${TESTING_MODE:-precision}" # 设定测试模型为精度
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
 

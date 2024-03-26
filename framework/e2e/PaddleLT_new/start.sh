@@ -16,7 +16,6 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
   -e "no_proxy=bcebos.com" \
   -e "python_ver=${python_ver}" \
   -e "wheel_url=${wheel_url}" \
-  -e "mode=${mode}" \
   ${docker_image} /bin/bash -c "
 ldconfig;
 
@@ -25,7 +24,7 @@ source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
 ${python_ver} -m pip install -r ./PTSTools/LogParseUpload/requirement.txt;
 ${python_ver} -m pip install ${wheel_url}
-${python_ver} run.py --mode ${mode}
+${python_ver} run.py
 
 cp -r report ./PTSTools/LogParseUpload;
 cd ./PTSTools/LogParseUpload;
