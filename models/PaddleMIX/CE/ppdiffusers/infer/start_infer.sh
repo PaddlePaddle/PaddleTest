@@ -29,6 +29,219 @@ cd ${work_path}
 exit_code=0
 
 
+
+echo "*******infer class_conditional_image_generation-dit begin***********"
+(python class_conditional_image_generation-dit.py) 2>&1 | tee ${log_dir}/class_conditional_image_generation-dit.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer class_conditional_image_generation-dit run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer class_conditional_image_generation-dit run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer class_conditional_image_generation-dit end***********"
+
+
+echo "*******infer class_conditional_image_generation-large_dit_3b begin***********"
+(python class_conditional_image_generation-large_dit_3b.py) 2>&1 | tee ${log_dir}/class_conditional_image_generation-large_dit_3b.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer class_conditional_image_generation-large_dit_3b run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer class_conditional_image_generation-large_dit_3b run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer class_conditional_image_generation-large_dit_3b end***********"
+
+
+echo "*******infer class_conditional_image_generation-large_dit_7b begin***********"
+(python class_conditional_image_generation-large_dit_7b.py) 2>&1 | tee ${log_dir}/class_conditional_image_generation-large_dit_7b.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer class_conditional_image_generation-large_dit_7b run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer class_conditional_image_generation-large_dit_7b run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer class_conditional_image_generation-large_dit_7b end***********"
+
+
+echo "*******infer image_to_video_generation_image_to_video begin***********"
+(python image_to_video_generation_image_to_video.py) 2>&1 | tee ${log_dir}/image_to_video_generation_image_to_video.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer image_to_video_generation_image_to_video run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer image_to_video_generation_image_to_video run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer image_to_video_generation_image_to_video end***********"
+
+
+echo "*******infer image_to_video_generation_stable_video_diffusion begin***********"
+(python image_to_video_generation_stable_video_diffusion.py) 2>&1 | tee ${log_dir}/image_to_video_generation_stable_video_diffusion.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer image_to_video_generation_stable_video_diffusion run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer image_to_video_generation_stable_video_diffusion run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer image_to_video_generation_stable_video_diffusion end***********"
+
+
+echo "*******infer text_to_audio_generation-audio_ldm2 begin***********"
+(python text_to_audio_generation-audio_ldm2.py) 2>&1 | tee ${log_dir}/text_to_audio_generation-audio_ldm2.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_audio_generation-audio_ldm2 run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_audio_generation-audio_ldm2 run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_audio_generation-audio_ldm2 end***********"
+
+echo "*******infer text_to_image_generation-latent_diffusion_uvit_small begin***********"
+(python text_to_image_generation-latent_diffusion_uvit_small.py) 2>&1 | tee ${log_dir}/text_to_image_generation-latent_diffusion_uvit_small.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_image_generation-latent_diffusion_uvit_small run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_image_generation-latent_diffusion_uvit_small run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_image_generation-latent_diffusion_uvit_small end***********"
+
+echo "*******infer text_to_image_generation_consistency_model begin***********"
+(python text_to_image_generation_consistency_model.py) 2>&1 | tee ${log_dir}/text_to_image_generation_consistency_model.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_image_generation_consistency_model run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_image_generation_consistency_model run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_image_generation_consistency_model end***********"
+
+
+echo "*******infer text_to_image_generation_dit begin***********"
+(python text_to_image_generation_dit.py) 2>&1 | tee ${log_dir}/text_to_image_generation_dit.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_image_generation_dit run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_image_generation_dit run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_image_generation_dit end***********"
+
+
+echo "*******infer text_to_image_generation_kandinsky3 begin***********"
+(python text_to_image_generation_kandinsky3.py) 2>&1 | tee ${log_dir}/text_to_image_generation_kandinsky3.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_image_generation_kandinsky3 run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_image_generation_kandinsky3 run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_image_generation_kandinsky3 end***********"
+
+
+
+echo "*******infer text_to_image_generation_wuerstchen begin***********"
+(python text_to_image_generation_wuerstchen.py) 2>&1 | tee ${log_dir}/text_to_image_generation_wuerstchen.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_image_generation_wuerstchen run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_image_generation_wuerstchen run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_image_generation_wuerstchen end***********"
+
+
+echo "*******infer text_to_video_generation-synth begin***********"
+(python text_to_video_generation-synth.py) 2>&1 | tee ${log_dir}/text_to_video_generation-synth.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_video_generation-synth run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_video_generation-synth run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_video_generation-synth end***********"
+
+
+echo "*******infer text_to_video_generation-synth_img2img begin***********"
+(python text_to_video_generation-synth_img2img.py) 2>&1 | tee ${log_dir}/text_to_video_generation-synth_img2img.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_video_generation-synth_img2img run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_video_generation-synth_img2img run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_video_generation-synth_img2img end***********"
+
+echo "*******infer text_to_video_generation-zero begin***********"
+(python text_to_video_generation-zero.py) 2>&1 | tee ${log_dir}/text_to_video_generation-zero.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_video_generation-zero run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_video_generation-zero run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_video_generation-zero end***********"
+
+
+echo "*******infer text_to_video_generation_animediff begin***********"
+(python text_to_video_generation_animediff.py) 2>&1 | tee ${log_dir}/text_to_video_generation_animediff.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer text_to_video_generation_animediff run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer text_to_video_generation_animediff run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer text_to_video_generation_animediff end***********"
+
+echo "*******infer unconditional_audio_generation-audio_diffusion begin***********"
+(python unconditional_audio_generation-audio_diffusion.py) 2>&1 | tee ${log_dir}/unconditional_audio_generation-audio_diffusion.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer unconditional_audio_generation-audio_diffusion run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer unconditional_audio_generation-audio_diffusion run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer unconditional_audio_generation-audio_diffusion end***********"
+
+
+echo "*******infer unconditional_audio_generation-dance_diffusion begin***********"
+(python unconditional_audio_generation-dance_diffusion.py) 2>&1 | tee ${log_dir}/unconditional_audio_generation-dance_diffusion.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer unconditional_audio_generation-dance_diffusion run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer unconditional_audio_generation-dance_diffusion run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer unconditional_audio_generation-dance_diffusion end***********"
+
+
+echo "*******infer video_to_video_generation_video_to_video begin***********"
+(python video_to_video_generation_video_to_video.py) 2>&1 | tee ${log_dir}/video_to_video_generation_video_to_video.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "infer video_to_video_generation_video_to_video run success" >>"${log_dir}/infer_res.log"
+else
+    echo "infer video_to_video_generation_video_to_video run fail" >>"${log_dir}/infer_res.log"
+fi
+echo "*******infer video_to_video_generation_video_to_video end***********"
+
 echo "*******infer dual_text_and_image_guided_generation-versatile_diffusion begin***********"
 (python dual_text_and_image_guided_generation-versatile_diffusion.py) 2>&1 | tee ${log_dir}/dual_text_and_image_guided_generation-versatile_diffusion.log
 tmp_exit_code=${PIPESTATUS[0]}
