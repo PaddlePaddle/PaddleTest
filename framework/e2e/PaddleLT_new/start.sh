@@ -17,13 +17,13 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
   -e "python_ver=${python_ver}" \
   -e "wheel_url=${wheel_url}" \
   ${docker_image} /bin/bash -c "
-set +e
 ldconfig;
 
 source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
 source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
 ${python_ver} -m pip install -r ./PTSTools/LogParseUpload/requirement.txt;
+cp -r ./PTSTools/Uploader/apibm_config.yml .
 ${python_ver} -m pip install ${wheel_url}
 ${python_ver} run.py
 
