@@ -3,8 +3,7 @@
 # @author Zeref996
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-注意!!!!!!!
-修复 self.core_index、self.comment 和 self.wheel_link
+子图db交互模块
 """
 
 import os
