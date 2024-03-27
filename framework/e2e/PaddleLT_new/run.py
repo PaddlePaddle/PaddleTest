@@ -11,7 +11,6 @@ import layertest
 from db.layer_db import LayerBenchmarkDB
 from tools.case_select import CaseSelect
 from tools.yaml_loader import YamlLoader
-from tools.res_save import xlsx_save
 
 
 class Run(object):
