@@ -14,7 +14,9 @@ import platform
 from datetime import datetime
 from db.db import DB
 from db.snapshot import Snapshot
+from strategy.compare import perf_compare
 from tools.logger import Logger
+from tools.res_save import xlsx_save
 
 
 class LayerBenchmarkDB(object):
@@ -85,21 +87,17 @@ class LayerBenchmarkDB(object):
         else:
             raise Exception("unknown framework, PaddleLayerTest only support test PaddlePaddle or Pytorch")
 
-    def latest_insert(self, data_dict):
+    def latest_insert(self, data_dict, error_list):
         """
         插入最新数据
         """
         db = DB(storage=self.storage)
-        baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
-        baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
 
-        baseline_dict = {}
-        for i in baseline_list:
-            baseline_dict[i["case_name"]] = i
-
+        # 插入layer_job
         latest_id = db.insert_job(
             comment=self.comment,
-            env_info=self.env_info,
+            status="running",
+            env_info=json.dumps(self.env_info),
             framework=self.framework,
             commit=self.commit,
             version=self.version,
@@ -113,7 +111,37 @@ class LayerBenchmarkDB(object):
             update_time=self.now_time,
         )
 
-        return latest_id
+        # 插入layer_case
+        for title, perf_dict in data_dict.items():
+            db.insert_case(jid=latest_id, case_name=title, result=json.dumps(perf_dict), create_time=self.now_time)
+
+        if bool(error_list):
+            db.update_job(id=latest_id, status="error", update_time=self.now_time)
+            print("error cases: {}".format(error_list))
+            raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
+        else:
+            db.update_job(id=latest_id, status="done", update_time=self.now_time)
+
+        # 获取baseline用于对比
+        baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+        baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
+
+        baseline_dict = {}
+        for i in baseline_list:
+            baseline_dict[i["case_name"]] = i
+
+        # 性能对比
+        compare_dict = {}
+        for title, perf_dict in data_dict.items():
+            compare_dict[title] = {}
+            for perf_engine, t in perf_dict.items():
+                compare_dict[title][perf_engine + "_latest"] = t
+                compare_dict[title][perf_engine + "_baseline"] = baseline_dict[title][perf_engine]
+                compare_dict[title][perf_engine + "_compare"] = perf_compare(
+                    baseline=baseline_dict[title][perf_engine], latest=t
+                )
+
+        xlsx_save(compare_dict)
 
     def baseline_insert(self, data_dict, error_list):
         """
@@ -133,7 +161,7 @@ class LayerBenchmarkDB(object):
             hardware=self.hardware,
             system=self.system,
             md5_id=self.md5_id,
-            base=0,  # 非基线任务
+            base=1,  # 基线任务
             ci=self.ci,
             create_time=self.now_time,
             update_time=self.now_time,
