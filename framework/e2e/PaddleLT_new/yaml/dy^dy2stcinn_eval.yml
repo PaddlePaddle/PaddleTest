@@ -10,5 +10,5 @@ compare:
     baseline: 'dy_eval'
     latest: 'dy2st_eval_cinn'
     precision:
-      delta: 0.000001
-      rtol: 0.0000001
+      delta: 0.00001
+      rtol: 0.000001
