@@ -130,6 +130,7 @@ class LayerBenchmarkDB(object):
         for i in baseline_list:
             baseline_dict[i["case_name"]] = i
 
+        print("baseline_dict is: ", baseline_dict)
         # 性能对比
         compare_dict = {}
         for title, perf_dict in data_dict.items():
