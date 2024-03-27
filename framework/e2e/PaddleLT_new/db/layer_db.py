@@ -139,7 +139,7 @@ class LayerBenchmarkDB(object):
                 compare_dict[title][perf_engine + "_latest"] = t
                 compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[perf_engine]
                 compare_dict[title][perf_engine + "_compare"] = perf_compare(
-                    baseline=baseline_dict[title][perf_engine], latest=t
+                    baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
                 )
 
         xlsx_save(compare_dict)
