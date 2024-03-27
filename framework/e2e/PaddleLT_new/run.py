@@ -94,7 +94,7 @@ class Run(object):
             print("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
-        xlsx_save(sublayer_dict)
+        # xlsx_save(sublayer_dict)
         layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
         layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
 
