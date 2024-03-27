@@ -151,7 +151,7 @@ class LayerBenchmarkDB(object):
 
         # 插入layer_job
         basleine_id = db.insert_job(
-            comment=self.comment,
+            comment=self.baseline_comment,
             status="running",
             env_info=json.dumps(self.env_info),
             framework=self.framework,
