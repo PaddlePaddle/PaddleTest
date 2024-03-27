@@ -13,6 +13,7 @@ export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
 export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
 
 #性能测试专属环境变量
+export PLT_BM_MODE="${PLT_BM_REPEAT:-latest}"  #基线任务为baseline, 测试任务为latest
 export PLT_BM_REPEAT="${PLT_BM_REPEAT:-10}"
 export PLT_BM_STATIS="${PLT_BM_STATIS:-trimmean}"
 

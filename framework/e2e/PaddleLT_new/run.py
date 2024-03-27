@@ -94,9 +94,14 @@ class Run(object):
             print("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
-        # xlsx_save(sublayer_dict)
+        # 数据库交互
         layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
-        layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
+        if os.environ.get("PLT_BM_MODE") == "baseline":
+            layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
+        elif os.environ.get("PLT_BM_MODE") == "latest":
+            layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
+        else:
+            raise Exception("unknown benchmark mode, PaddleLT benchmark only support baseline mode or latest mode")
 
 
 if __name__ == "__main__":
