@@ -7,10 +7,13 @@
 
 export CASE_DIR="${CASE_DIR:-perf_monitor}"
 export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项目配置yaml
+export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模型为性能
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
+export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
 
 #性能测试专属环境变量
+export PLT_BM_MODE="${PLT_BM_MODE:-latest}"  #基线任务为baseline, 测试任务为latest
 export PLT_BM_REPEAT="${PLT_BM_REPEAT:-10}"
 export PLT_BM_STATIS="${PLT_BM_STATIS:-trimmean}"
 
@@ -34,3 +37,7 @@ echo "TESTING is: ${TESTING}"
 
 echo "PLT_SET_DEVICE is: ${PLT_SET_DEVICE}"
 echo "PLT_DEVICE_ID is: ${PLT_DEVICE_ID}"
+echo "FRAMEWORK is: ${FRAMEWORK}"
+echo "PLT_BM_MODE is: ${PLT_BM_MODE}"
+echo "PLT_BM_REPEAT is: ${PLT_BM_REPEAT}"
+echo "PLT_BM_STATIS is: ${PLT_BM_STATIS}"

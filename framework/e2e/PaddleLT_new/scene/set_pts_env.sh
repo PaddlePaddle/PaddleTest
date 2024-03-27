@@ -7,8 +7,10 @@
 
 export CASE_DIR="${CASE_DIR:-sublayer160}"
 export TESTING="${TESTING:-yaml/dy^dy2stcinn_eval.yml}" # 设定测试项目配置yaml
+export TESTING_MODE="${TESTING_MODE:-precision}" # 设定测试模型为精度
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
+export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
 
 echo "wheel_url is: ${wheel_url}"
 echo "python_ver is: ${python_ver}"
@@ -18,3 +20,4 @@ echo "TESTING is: ${TESTING}"
 
 echo "PLT_SET_DEVICE is: ${PLT_SET_DEVICE}"
 echo "PLT_DEVICE_ID is: ${PLT_DEVICE_ID}"
+echo "FRAMEWORK is: ${FRAMEWORK}"

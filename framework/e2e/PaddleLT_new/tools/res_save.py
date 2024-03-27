@@ -6,6 +6,7 @@
 保存工具
 """
 
+import os
 import pandas as pd
 
 
@@ -38,5 +39,5 @@ def xlsx_save(sublayer_dict):
     df = pd.DataFrame(data)
 
     # 将数据写入 Excel 文件
-    excel_file = "output.xlsx"  # 输出的 Excel 文件名
+    excel_file = os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx"  # 输出的 Excel 文件名
     df.to_excel(excel_file, index=False)
