@@ -8,6 +8,7 @@
 import os
 import platform
 import layertest
+from db.layer_db import LayerBenchmarkDB
 from tools.case_select import CaseSelect
 from tools.yaml_loader import YamlLoader
 from tools.res_save import xlsx_save
@@ -94,6 +95,8 @@ class Run(object):
             os.system("echo 0 > exit_code.txt")
 
         xlsx_save(sublayer_dict)
+        layer_db = LayerBenchmarkDB(storage="apibm_config.yaml")
+        layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
 
 
 if __name__ == "__main__":
