@@ -8,6 +8,7 @@
 """
 
 import os
+import json
 import socket
 import platform
 from datetime import datetime
@@ -124,7 +125,7 @@ class LayerBenchmarkDB(object):
         basleine_id = db.insert_job(
             comment=self.comment,
             status="running",
-            env_info=self.env_info,
+            env_info=json.dumps(self.env_info),
             framework=self.framework,
             commit=self.commit,
             version=self.version,
@@ -140,7 +141,7 @@ class LayerBenchmarkDB(object):
 
         # 插入layer_case
         for title, perf_dict in data_dict.items():
-            db.insert_case(jid=basleine_id, case_name=title, result=perf_dict, create_time=self.now_time)
+            db.insert_case(jid=basleine_id, case_name=title, result=json.dumps(perf_dict), create_time=self.now_time)
 
         if bool(error_list):
             db.update_job(id=basleine_id, status="error", update_time=self.now_time)
