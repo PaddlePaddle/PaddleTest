@@ -40,8 +40,9 @@ class LayerBenchmarkDB(object):
         self.ci = 0
 
         # 框架环境信息
-        self._frame_info()
+        self.framework = os.environ.get("FRAMEWORK")
         self.hardware = os.environ.get("PLT_SET_DEVICE")
+        self._frame_info()
 
         # 机器系统信息
         self.hostname = socket.gethostname()
