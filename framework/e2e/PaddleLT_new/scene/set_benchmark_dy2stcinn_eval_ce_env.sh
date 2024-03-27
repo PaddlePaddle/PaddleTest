@@ -10,6 +10,7 @@ export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项
 export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模型为性能
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
+export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
 
 #性能测试专属环境变量
 export PLT_BM_REPEAT="${PLT_BM_REPEAT:-10}"
