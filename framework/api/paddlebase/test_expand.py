@@ -196,7 +196,7 @@ def test_expand14():
 @pytest.mark.api_base_expand_exception
 def test_expand15():
     """
-    shape.shape >6,c++error
+    expand_shape > 9, C++ error is expected to be raised
     """
     x = np.array([1])
     shape = np.ones([9]).astype(np.int32)
