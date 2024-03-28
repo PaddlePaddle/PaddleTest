@@ -199,7 +199,7 @@ def test_expand15():
     shape.shape >6,c++error
     """
     x = np.array([1])
-    shape = np.ones([7]).astype(np.int32)
+    shape = np.ones([9]).astype(np.int32)
     obj.exception(x=x, shape=shape, mode="c", etype="InvalidArgument")
 
 
