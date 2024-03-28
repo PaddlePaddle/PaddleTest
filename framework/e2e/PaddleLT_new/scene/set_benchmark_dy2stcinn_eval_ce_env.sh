@@ -14,7 +14,7 @@ export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
 
 #性能测试专属环境变量
 export PLT_BM_MODE="${PLT_BM_MODE:-latest}"  #基线任务为baseline, 测试任务为latest
-export PLT_BM_REPEAT="${PLT_BM_REPEAT:-10}"
+export PLT_BM_REPEAT="${PLT_BM_REPEAT:-100}"
 export PLT_BM_STATIS="${PLT_BM_STATIS:-trimmean}"
 
 #研发指定环境变量
