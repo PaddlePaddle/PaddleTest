@@ -19,6 +19,11 @@ for subdir in */; do
     if [ "$subdir" == "deploy/" ]; then
       continue
     fi
+    
+    # 32g显存跑不了
+    if [ "$subdir" == "kandinsky2_2_text_to_image/" ]; then
+      continue
+    fi
 
     start_script_path="$subdir/start.sh"
 

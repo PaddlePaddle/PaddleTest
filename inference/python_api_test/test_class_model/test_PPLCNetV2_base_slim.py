@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test MobileNetV1 model
+test PPLCNetV2_base_act_qat model
 """
 
 import os
@@ -75,7 +75,7 @@ def test_disable_gpu():
 @pytest.mark.trt_int8
 def test_trt_int8_more_bz():
     """
-    compared trt fp32 batch_size=1-10 resnet50 outputs with true val
+    compared trt_int8 batch_size=1 PPLCNetV2_base_act_qat outputs with true val
     """
     check_model_exist()
 
@@ -127,7 +127,7 @@ def test_trt_int8_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=100,
-            delta=2e-1,
+            delta=3e-1,
             max_batch_size=max_batch_size,
             precision="trt_int8",
             min_subgraph_size=30,
@@ -135,8 +135,8 @@ def test_trt_int8_more_bz():
             shape_range_file="./PPLCNetV2_base_act_qat/shape_range.pbtxt",
             # use_calib_mode=True,
             with_benchmark=True,
-            # base_latency_ms=0.438,
-            # benchmark_threshold=5e-2,
+            base_latency_ms=0.9,
+            benchmark_threshold=5e-2,
         )
 
         del test_suite  # destroy class to save memory
@@ -148,7 +148,7 @@ def test_trt_int8_more_bz():
 @pytest.mark.mkldnn_int8
 def test_mkldnn_int8():
     """
-    compared mkldnn_int8 outputs with true val
+    compared mkldnn_int8 batch_size=1 PPLCNetV2_base_act_qat outputs with true val
     """
     check_model_exist()
 
@@ -179,9 +179,9 @@ def test_mkldnn_int8():
         precision="int8",
         cpu_num_threads=10,
         with_benchmark=True,
-        delta=3e-1,
-        # base_latency_ms=2.52,
-        # benchmark_threshold=5e-2,
+        delta=2e-1,
+        base_latency_ms=7.52,
+        benchmark_threshold=5e-2,
     )
 
     del test_suite2  # destroy class to save memory

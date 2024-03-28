@@ -102,23 +102,17 @@ def test_gpu_more_bz():
             output_data_dict,
             repeat=1,
             delta=2e-5,
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory
-
-
-# skip the ocr_det_mv3_db gpu_mixed_precision_case
-if paddle.version.cuda() == "10.2":
-    cuda_skip = pytest.mark.skip(reason="unsupported CUDA version")
-else:
-    cuda_skip = pytest.mark.none
 
 
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
 @pytest.mark.gpu_more
-@cuda_skip
 def test_gpu_mixed_precision_bz1():
     """
     compared trt fp32 batch_size=1 ocr_det_mv3_db outputs with true val
@@ -130,13 +124,6 @@ def test_gpu_mixed_precision_bz1():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        if not os.path.exists("./ocr_det_mv3_db/inference_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./ocr_det_mv3_db/inference.pdmodel",
-                src_params="./ocr_det_mv3_db/inference.pdiparams",
-                dst_model="./ocr_det_mv3_db/inference_mixed.pdmodel",
-                dst_params="./ocr_det_mv3_db/inference_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./ocr_det_mv3_db/inference.pdmodel",
             params_file="./ocr_det_mv3_db/inference.pdiparams",
@@ -150,15 +137,18 @@ def test_gpu_mixed_precision_bz1():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./ocr_det_mv3_db/inference_mixed.pdmodel",
-            params_file="./ocr_det_mv3_db/inference_mixed.pdiparams",
+            model_file="./ocr_det_mv3_db/inference.pdmodel",
+            params_file="./ocr_det_mv3_db/inference.pdiparams",
         )
 
-        test_suite2.gpu_more_bz_test_mix(
+        test_suite2.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             repeat=1,
             delta=0.3,
+            precision="fp16",
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory

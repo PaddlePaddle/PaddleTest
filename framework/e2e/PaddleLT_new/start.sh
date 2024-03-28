@@ -23,6 +23,7 @@ source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变
 source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
 ${python_ver} -m pip install -r ./PTSTools/LogParseUpload/requirement.txt;
+cp -r ./PTSTools/Uploader/apibm_config.yml .
 ${python_ver} -m pip install ${wheel_url}
 ${python_ver} run.py
 

@@ -11,7 +11,6 @@ import paddle
 import diy
 import layercase
 
-# import tool
 import tools.np_tool as tool
 
 
@@ -20,9 +19,7 @@ class BuildData(object):
 
     def __init__(self, layerfile):
         """init"""
-        # self.data_module = data_info["DataGenerator_name"]
         self.dataname = layerfile
-        # self.dtype = data_type
 
     def get_single_data(self):
         """get data"""
@@ -38,7 +35,16 @@ class BuildData(object):
         dataname = self.dataname + ".create_paddle_inputs()"
         data = []
         for i in eval(dataname):
-            data.append(paddle.to_tensor(i))
+            data.append(i)
+
+        return data
+
+    def get_single_numpy(self):
+        """get data"""
+        dataname = self.dataname + ".create_numpy_inputs()"
+        data = []
+        for i in eval(dataname):
+            data.append(i)
 
         return data
 

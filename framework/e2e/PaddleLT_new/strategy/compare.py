@@ -14,8 +14,8 @@ import paddle
 def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1e-10):
     """
     比较函数
-    :param result: 输入值
-    :param expect: 输出值
+    :param result: 待测值
+    :param expect: 基线值
     :param delta: 误差值
     :param rtol: 相对误差
     :return:
@@ -79,3 +79,23 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
         pass
     else:
         raise Exception("expect is unknown data struction in compare_tool!!!")
+
+
+def perf_compare(baseline, latest):
+    """
+    比较函数
+    :param latest: 待测值
+    :param baseline: 基线值
+    :return:
+    """
+    if isinstance(baseline, str) or isinstance(baseline, str):
+        res = "error"
+    else:
+        if baseline == 0 or latest == 0:
+            res = 0
+        else:
+            if latest > baseline:
+                res = (latest / baseline) * -1
+            else:
+                res = baseline / latest
+    return res

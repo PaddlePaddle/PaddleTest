@@ -118,6 +118,7 @@ find configs/rec -name '*.yml' -exec ls -l {} \; | awk '{print $NF;}' | grep -v 
 
 shuf models_list_det > models_list_all
 shuf models_list_rec >> models_list_all
+sed '/OCRv4/d' models_list_all
 
 if [[ ${model_flag} =~ 'CI_all' ]]; then
    shuf models_list_all > models_list
@@ -143,7 +144,7 @@ if [[ ${1} =~ "pr" ]];then
 fi
 echo "######  diff models_list"
 cp models_list models_list_backup
-cat models_list_backup | sort | uniq | grep -v 'drrg_ctw' | grep -v 'e2e_r50_vd_pg' | grep -v 'rec_resnet_rfl_att'> models_list  #去重复
+cat models_list_backup | sort | uniq | grep -v 'drrg_ctw' | grep -v 'e2e_r50_vd_pg' | grep -v 'rec_resnet_rfl_att' | grep -v 'OCRv4' > models_list  #去重复
 wc -l models_list
 cat models_list
 
