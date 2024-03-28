@@ -32,6 +32,8 @@ class LayerEvalBM(object):
         self.device_id = os.environ.get("PLT_DEVICE_ID")
         self.perf_repeat = int(os.environ.get("PLT_BM_REPEAT", "10"))
         self.perf_statis = os.environ.get("PLT_BM_STATIS", "trimmean")
+        self.statis_times = 1000
+        self.statis_round = 6
 
         self.testing = testing
         self.model_dtype = self.testing.get("model_dtype")
@@ -60,6 +62,7 @@ class LayerEvalBM(object):
             total_time_list.append(total_time)
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
+        time_res = round(time_res * self.statis_times, self.statis_round)
         return time_res
 
     def dy2st_eval_cinn_perf(self):
@@ -83,4 +86,5 @@ class LayerEvalBM(object):
             total_time_list.append(total_time)
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
+        time_res = round(time_res * self.statis_times, self.statis_round)
         return time_res
