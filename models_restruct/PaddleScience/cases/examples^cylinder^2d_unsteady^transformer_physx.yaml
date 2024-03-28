@@ -6,7 +6,15 @@ case:
         name: train_enn
       -
         name: train_transformer
-    eval: skipped
+    eval:
+      -
+        name: train_enn_single
+      -
+        name: train_enn_multi
+      -
+        name: train_transformer_single
+      -
+        name: train_transformer_multi
     infer: skipped
     export: skipped
     predict: skipped

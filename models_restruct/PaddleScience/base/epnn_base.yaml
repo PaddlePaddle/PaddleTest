@@ -9,3 +9,50 @@ train:
         base: 0.00473
         threshold: 1
         evaluation: "-"
+eval:
+  -
+    name: single
+    cmd: python examples/epnn/epnn.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/epnn/epnn_pretrained.pdparams
+    result:
+      error(total):
+        base: 3.96903
+        threshold: 1
+        evaluation: "-"
+      error(error_elasto):
+        base: 0.65328
+        threshold: 1
+        evaluation: "-"
+      error(error_plastic):
+        base: 3.04176
+        threshold: 1
+        evaluation: "-"
+      error(error_stress):
+        base: 0.27399
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi
+    cmd: python -m paddle.distributed.launch examples/epnn/epnn.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/epnn/epnn_pretrained.pdparams
+    result:
+      error(total):
+        base: 3.96903
+        threshold: 1
+        evaluation: "-"
+      error(error_elasto):
+        base: 0.65328
+        threshold: 1
+        evaluation: "-"
+      error(error_plastic):
+        base: 3.04176
+        threshold: 1
+        evaluation: "-"
+      error(error_stress):
+        base: 0.27399
+        threshold: 1
+        evaluation: "-"
