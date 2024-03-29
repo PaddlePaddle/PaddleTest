@@ -32,7 +32,8 @@ class LayerEvalBM(object):
         self.device_id = os.environ.get("PLT_DEVICE_ID")
         self.perf_repeat = int(os.environ.get("PLT_BM_REPEAT", "10"))
         self.perf_statis = os.environ.get("PLT_BM_STATIS", "trimmean")
-        self.statis_times = 1000
+        self.timeit_num = int(os.environ.get("TIMEIT_NUM", "10"))
+        self.statis_times = 100
         self.statis_round = 6
 
         self.testing = testing
@@ -56,9 +57,9 @@ class LayerEvalBM(object):
 
         total_time_list = []
         # 预热
-        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * 0.2))
+        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
         for i in range(self.perf_repeat):
-            total_time = timeit.timeit(lambda: _perf(self.data), number=1)
+            total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
             total_time_list.append(total_time)
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
@@ -80,9 +81,9 @@ class LayerEvalBM(object):
 
         total_time_list = []
         # 预热
-        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * 0.2))
+        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
         for i in range(self.perf_repeat):
-            total_time = timeit.timeit(lambda: _perf(self.data), number=1)
+            total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
             total_time_list.append(total_time)
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
