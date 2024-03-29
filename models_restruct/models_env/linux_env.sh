@@ -429,7 +429,7 @@ if [[ "${docker_flag}" == "" ]]; then
     ## 使用修改之前的set_cuda_back
     if [[ "${AGILE_PIPELINE_NAME}" == "DCU" ]];then
         docker run -i  --rm \
-            --name=${docker_name} -v $(pwd):/work --network=host --cap-add=SYS_ADMIN \
+            --name=${docker_name} --network=host --cap-add=SYS_ADMIN \
             --shm-size=128G \
             --group-add video \
             --security-opt seccomp=unconfined \
