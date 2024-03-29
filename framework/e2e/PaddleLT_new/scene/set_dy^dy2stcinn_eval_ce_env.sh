@@ -13,6 +13,7 @@ echo "python_ver is: ${python_ver}"
 echo "CASE_DIR is: ${CASE_DIR}"
 echo "TESTING is: ${TESTING}"
 
+echo "TESTING_MODE is: ${TESTING_MODE}"
 echo "PLT_SET_DEVICE is: ${PLT_SET_DEVICE}"
 echo "PLT_DEVICE_ID is: ${PLT_DEVICE_ID}"
 echo "FRAMEWORK is: ${FRAMEWORK}"
