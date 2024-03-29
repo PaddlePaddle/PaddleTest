@@ -11,6 +11,7 @@ import layertest
 from db.layer_db import LayerBenchmarkDB
 from tools.case_select import CaseSelect
 from tools.yaml_loader import YamlLoader
+from tools.res_save import xlsx_save
 
 
 class Run(object):
@@ -94,13 +95,21 @@ class Run(object):
             os.system("echo 0 > exit_code.txt")
 
         # 数据库交互
-        layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
-        if os.environ.get("PLT_BM_MODE") == "baseline":
-            layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
-        elif os.environ.get("PLT_BM_MODE") == "latest":
-            layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
+        if os.environ.get("PLT_BM_DB") == "insert":  # 存入数据, 作为基线或对比
+            layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
+            if os.environ.get("PLT_BM_MODE") == "baseline":
+                layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
+            elif os.environ.get("PLT_BM_MODE") == "latest":
+                layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
+            else:
+                raise Exception("unknown benchmark mode, PaddleLT benchmark only support baseline mode or latest mode")
+        elif os.environ.get("PLT_BM_DB") == "select":  # 不存数据, 仅对比并生成表格
+            layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
+            layer_db.compare_with_baseline(data_dict=sublayer_dict, error_list=error_list)
+        elif os.environ.get("PLT_BM_DB") == "nonuse":  # 不加载数据库，仅生成表格
+            xlsx_save(sublayer_dict)
         else:
-            raise Exception("unknown benchmark mode, PaddleLT benchmark only support baseline mode or latest mode")
+            Exception("unknown benchmark datebase mode, only support insert, select or nonuse")
 
 
 if __name__ == "__main__":
