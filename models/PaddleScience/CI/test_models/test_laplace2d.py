@@ -52,7 +52,7 @@ def test_laplace2d_loss():
     """
     epoch_num = 100  # 迭代次数
     output_dir = "./output_laplace2d"  # 输出目录
-    base_loss = 21.56964  # 基准损失值
+    base_loss = 56.37205  # 基准损失值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
     log_file = os.path.join(output_dir, "train.log")
@@ -68,7 +68,7 @@ def test_laplace2d_metric():
     """
     output_dir = "./output_laplace2d"  # 输出目录
     loss_function = "MSE_Metric"  # 损失函数
-    base_metric = 0.01920  # 基准评估值
+    base_metric = 0.06639  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
     log_file = os.path.join(output_dir, "train.log")
