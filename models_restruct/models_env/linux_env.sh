@@ -5,9 +5,9 @@ pwd;
 if [ -e linux_env_info.sh ];then
     rm -rf linux_env_info.sh
 fi
-# wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh --no-proxy
+wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh --no-proxy
 # 临时使用
-wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh --no-proxy
+# wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh --no-proxy
 source ./linux_env_info.sh
 set +e
 
@@ -88,6 +88,10 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]];then
         linux_env_info_main get_docker_images Centos Cuda120
     else
         linux_env_info_main get_docker_images Ubuntu Cuda120
+    fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "DCU" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
+        linux_env_info_main get_docker_images Centos DCU
     fi
 else
     if [[ ${Image_version} ]];then
@@ -400,7 +404,14 @@ if [[ "${docker_flag}" == "" ]]; then
     export set_cuda=${set_cuda},${i};
     done
     echo "after set_cuda: $set_cuda"
-
+    # 新硬件指定显卡方式不同
+    if [[ "${AGILE_PIPELINE_NAME}" == "DCU" ]];then
+        array=(${set_cuda//,/ });
+        card0="${array[0]}";
+        card0=$(($card0 + 128));
+        card1="${array[1]}";
+        card1=$(($card1 + 128));
+    fi
     ####创建docker
     set +x;
 
@@ -416,195 +427,390 @@ if [[ "${docker_flag}" == "" ]]; then
     }
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
-    NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
-        --name=${docker_name} --net=host --cap-add=SYS_ADMIN \
-        --shm-size=128G \
-        -v $(pwd):/workspace \
-        -v /ssd2:/ssd2 \
-        -v /mnt:/mnt \
-        -e AK=${AK} \
-        -e SK=${SK} \
-        -e CFS_IP=${CFS_IP} \
-        -e bce_whl_url=${bce_whl_url} \
-        -e PORT_RANGE="62000:65536" \
-        -e no_proxy=${no_proxy} \
-        -e http_proxy=${http_proxy} \
-        -e https_proxy=${https_proxy} \
-        -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
-        -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
-        -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
-        -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
-        -e AGILE_WORKSPACE=${AGILE_WORKSPACE} \
-        -e REPORT_SERVER_PASSWORD=${REPORT_SERVER_PASSWORD} \
-        -e Python_version=${Python_version} \
-        -e models_list=${models_list} \
-        -e models_file=${models_file} \
-        -e system=${system} \
-        -e step=${step} \
-        -e reponame=${reponame} \
-        -e timeout=${timeout} \
-        -e mode=${mode} \
-        -e use_build=${use_build} \
-        -e binary_search_flag=${binary_search_flag} \
-        -e is_analysis_logs=${is_analysis_logs} \
-        -e analysis_case=${analysis_case} \
-        -e use_data_cfs=${use_data_cfs} \
-        -e plot=${plot} \
-        -e c_plus_plus_predict=${c_plus_plus_predict} \
-        -e PaddleX=${PaddleX} \
-        -e branch=${branch} \
-        -e get_repo=${get_repo} \
-        -e paddle_whl=${paddle_whl} \
-        -e paddle_inference=${paddle_inference} \
-        -e TENSORRT_DIR=${TENSORRT_DIR} \
-        -e dataset_org=${dataset_org} \
-        -e dataset_target=${dataset_target} \
-        -e set_cuda=${set_cuda} \
-        -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
-	-e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
-        -e GLOG_vmodule=${GLOG_vmodule} \
-        -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
-        -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
+    if [[ "${AGILE_PIPELINE_NAME}" == "DCU" ]];then
+        docker run -i  --rm \
+            --name=${docker_name} -v $(pwd):/work --network=host --cap-add=SYS_ADMIN \
+            --shm-size=128G \
+            --group-add video \
+            --security-opt seccomp=unconfined \
+            --device=/dev/dri/renderD${card0} \
+            --device=/dev/dri/renderD${card1} \
+            -v $(pwd):/workspace \
+            -v /ssd2:/ssd2 \
+            -v /mnt:/mnt \
+            -e AK=${AK} \
+            -e SK=${SK} \
+            -e CFS_IP=${CFS_IP} \
+            -e bce_whl_url=${bce_whl_url} \
+            -e PORT_RANGE="62000:65536" \
+            -e no_proxy=${no_proxy} \
+            -e http_proxy=${http_proxy} \
+            -e https_proxy=${https_proxy} \
+            -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
+            -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
+            -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
+            -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
+            -e AGILE_WORKSPACE=${AGILE_WORKSPACE} \
+            -e REPORT_SERVER_PASSWORD=${REPORT_SERVER_PASSWORD} \
+            -e Python_version=${Python_version} \
+            -e models_list=${models_list} \
+            -e models_file=${models_file} \
+            -e system=${system} \
+            -e step=${step} \
+            -e reponame=${reponame} \
+            -e timeout=${timeout} \
+            -e mode=${mode} \
+            -e use_build=${use_build} \
+            -e binary_search_flag=${binary_search_flag} \
+            -e is_analysis_logs=${is_analysis_logs} \
+            -e analysis_case=${analysis_case} \
+            -e use_data_cfs=${use_data_cfs} \
+            -e plot=${plot} \
+            -e c_plus_plus_predict=${c_plus_plus_predict} \
+            -e PaddleX=${PaddleX} \
+            -e branch=${branch} \
+            -e get_repo=${get_repo} \
+            -e paddle_whl=${paddle_whl} \
+            -e paddle_inference=${paddle_inference} \
+            -e TENSORRT_DIR=${TENSORRT_DIR} \
+            -e dataset_org=${dataset_org} \
+            -e dataset_target=${dataset_target} \
+            -e set_cuda=${set_cuda} \
+            -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
         -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
-        -e SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG} \
-        -e FLAGS_prim_all=${FLAGS_prim_all} \
-        -e FLAGS_use_cinn=${FLAGS_use_cinn} \
-	-e api_key=${api_key} \
-        -e PTS_ENV_VARS=$PTS_ENV_VARS \
-        -e FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir} \
-	-e FLAGS_use_auto_growth_v2=${FLAGS_use_auto_growth_v2} \
-        -w /workspace \
-        ${Image_version}  \
-        /bin/bash -c '
-        ldconfig;
-        if [[ `yum --help` =~ "yum" ]];then
-            echo "centos"
-            yum install nfs-utils -y > install_nfs 2>&1
-            export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
-            case ${Python_version} in
-            36)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
-            ;;
-            37)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-            ;;
-            38)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-            ;;
-            39)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
-            ;;
-            310)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
-            ;;
-            311)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.11.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.11.0/bin/:${PATH}
-            ;;
-            312)
-            export LD_LIBRARY_PATH=/opt/_internal/cpython-3.12.0/lib/:${LD_LIBRARY_PATH}
-            export PATH=/opt/_internal/cpython-3.12.0/bin/:${PATH}
-            ;;
-            esac
-        else
-            echo "ubuntu"
-            apt-get update > install_update 2>&1
-            apt-get install nfs-common -y > install_nfs 2>&1
-            case ${Python_version} in
-            36)
-            mkdir run_env_py36;
-            ln -s $(which python3.6) run_env_py36/python;
-            ln -s $(which pip3.6) run_env_py36/pip;
-            export PATH=$(pwd)/run_env_py36:${PATH};
-            ;;
-            37)
-            mkdir run_env_py37;
-            ln -s $(which python3.7) run_env_py37/python;
-            ln -s $(which pip3.7) run_env_py37/pip;
-            export PATH=$(pwd)/run_env_py37:${PATH};
-            ;;
-            38)
-            mkdir run_env_py38;
-            ln -s $(which python3.8) run_env_py38/python;
-            ln -s $(which pip3.8) run_env_py38/pip;
-            export PATH=$(pwd)/run_env_py38:${PATH};
-            ;;
-            39)
-            mkdir run_env_py39;
-            ln -s $(which python3.9) run_env_py39/python;
-            ln -s $(which pip3.9) run_env_py39/pip;
-            export PATH=$(pwd)/run_env_py39:${PATH};
-            ;;
-            310)
-            mkdir run_env_py310;
-            ln -s $(which python3.10) run_env_py310/python;
-            ln -s $(which pip3.10) run_env_py310/pip;
-            export PATH=$(pwd)/run_env_py310:${PATH};
-            ;;
-            311)
-            mkdir run_env_py311;
-            ln -s $(which python3.11) run_env_py311/python;
-            ln -s $(which pip3.11) run_env_py311/pip;
-            export PATH=$(pwd)/run_env_py311:${PATH};
-            ;;
-            312)
-            mkdir run_env_py312;
-            ln -s $(which python3.12) run_env_py312/python;
-            ln -s $(which pip3.12) run_env_py312/pip;
-            export PATH=$(pwd)/run_env_py312:${PATH};
-            ;;
-            esac
-        fi
-        #挂载数据, 地址特定为mount_path
-        export mount_path="/workspace/MT_data/${reponame}"
-        if [[ -d ${mount_path} ]];then
-            mv ${mount_path} ${mount_path}_back
-            mkdir -p ${mount_path}
-        else
-            mkdir -p ${mount_path}
-        fi
-        mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
-        ls ${mount_path}
-        echo "@@@mount_path: ${mount_path}"
+            -e GLOG_vmodule=${GLOG_vmodule} \
+            -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
+            -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
+            -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+            -e SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG} \
+            -e FLAGS_prim_all=${FLAGS_prim_all} \
+            -e FLAGS_use_cinn=${FLAGS_use_cinn} \
+        -e api_key=${api_key} \
+            -e PTS_ENV_VARS=$PTS_ENV_VARS \
+            -e FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir} \
+        -e FLAGS_use_auto_growth_v2=${FLAGS_use_auto_growth_v2} \
+            -w /workspace \
+            ${Image_version}  \
+            /bin/bash -c '
+            if [[ `yum --help` =~ "yum" ]];then
+                echo "centos"
+                yum install nfs-utils -y > install_nfs 2>&1
+                export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
+                case ${Python_version} in
+                36)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+                ;;
+                37)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+                ;;
+                38)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+                ;;
+                39)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
+                ;;
+                310)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+                ;;
+                311)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.11.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.11.0/bin/:${PATH}
+                ;;
+                312)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.12.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.12.0/bin/:${PATH}
+                ;;
+                esac
+            else
+                echo "ubuntu"
+                apt-get update > install_update 2>&1
+                apt-get install nfs-common -y > install_nfs 2>&1
+                case ${Python_version} in
+                36)
+                mkdir run_env_py36;
+                ln -s $(which python3.6) run_env_py36/python;
+                ln -s $(which pip3.6) run_env_py36/pip;
+                export PATH=$(pwd)/run_env_py36:${PATH};
+                ;;
+                37)
+                mkdir run_env_py37;
+                ln -s $(which python3.7) run_env_py37/python;
+                ln -s $(which pip3.7) run_env_py37/pip;
+                export PATH=$(pwd)/run_env_py37:${PATH};
+                ;;
+                38)
+                mkdir run_env_py38;
+                ln -s $(which python3.8) run_env_py38/python;
+                ln -s $(which pip3.8) run_env_py38/pip;
+                export PATH=$(pwd)/run_env_py38:${PATH};
+                ;;
+                39)
+                mkdir run_env_py39;
+                ln -s $(which python3.9) run_env_py39/python;
+                ln -s $(which pip3.9) run_env_py39/pip;
+                export PATH=$(pwd)/run_env_py39:${PATH};
+                ;;
+                310)
+                mkdir run_env_py310;
+                ln -s $(which python3.10) run_env_py310/python;
+                ln -s $(which pip3.10) run_env_py310/pip;
+                export PATH=$(pwd)/run_env_py310:${PATH};
+                ;;
+                311)
+                mkdir run_env_py311;
+                ln -s $(which python3.11) run_env_py311/python;
+                ln -s $(which pip3.11) run_env_py311/pip;
+                export PATH=$(pwd)/run_env_py311:${PATH};
+                ;;
+                312)
+                mkdir run_env_py312;
+                ln -s $(which python3.12) run_env_py312/python;
+                ln -s $(which pip3.12) run_env_py312/pip;
+                export PATH=$(pwd)/run_env_py312:${PATH};
+                ;;
+                esac
+            fi
+            #挂载数据, 地址特定为mount_path
+            export mount_path="/workspace/MT_data/${reponame}"
+            if [[ -d ${mount_path} ]];then
+                mv ${mount_path} ${mount_path}_back
+                mkdir -p ${mount_path}
+            else
+                mkdir -p ${mount_path}
+            fi
+            mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
+            ls ${mount_path}
+            echo "@@@mount_path: ${mount_path}"
 
-	echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
-        # FLAGS_enable_pir_in_executor bug
-        if [ $FLAGS_enable_pir_in_executor == 0 ];then
         echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
-        unset FLAGS_enable_pir_in_executor
-        fi
-    echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
-        # ENABLE_FALL_BACK install
-        if [ $ENABLE_FALL_BACK == True ];then
+            # FLAGS_enable_pir_in_executor bug
+            if [ $FLAGS_enable_pir_in_executor == 0 ];then
+            echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+            unset FLAGS_enable_pir_in_executor
+            fi
         echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
-        echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
-        echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
-        ehco "@@@export FLAGS_enable_pir_api ${export FLAGS_enable_pir_api}"
-        ehco "@@@export SOT_EXPORT_FLAG ${SOT_EXPORT_FLAG}"
-        ehco "@@@export GLOG_vmodule ${GLOG_vmodule}"
-        set -x
-        # Flag
-        export STRICT_MODE=0
-        export SOT_LOG_LEVEL=2
-        export COST_MODEL=False
-        python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
-        fi
+            # ENABLE_FALL_BACK install
+            if [ $ENABLE_FALL_BACK == True ];then
+            echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+            echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
+            echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
+            ehco "@@@export FLAGS_enable_pir_api ${export FLAGS_enable_pir_api}"
+            ehco "@@@export SOT_EXPORT_FLAG ${SOT_EXPORT_FLAG}"
+            ehco "@@@export GLOG_vmodule ${GLOG_vmodule}"
+            set -x
+            # Flag
+            export STRICT_MODE=0
+            export SOT_LOG_LEVEL=2
+            export COST_MODEL=False
+            python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+            fi
 
-        nvidia-smi;
-        python -c "import sys; print(sys.version_info[:])";
-        git --version;
-        python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
-        python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
-        python -m pip install --ignore-installed six -i https://mirror.baidu.com/pypi/simple
-        python -m pip uninstall -y opencv-python
-        python -m pip config list
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
-    ' &
+            rocm-smi;
+            python -c "import sys; print(sys.version_info[:])";
+            git --version;
+            python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+            python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+            python -m pip install --ignore-installed six -i https://mirror.baidu.com/pypi/simple
+            python -m pip uninstall -y opencv-python
+            python -m pip config list
+            python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
+        ' &
+    else
+        NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
+            --name=${docker_name} --net=host --cap-add=SYS_ADMIN \
+            --shm-size=128G \
+            -v $(pwd):/workspace \
+            -v /ssd2:/ssd2 \
+            -v /mnt:/mnt \
+            -e AK=${AK} \
+            -e SK=${SK} \
+            -e CFS_IP=${CFS_IP} \
+            -e bce_whl_url=${bce_whl_url} \
+            -e PORT_RANGE="62000:65536" \
+            -e no_proxy=${no_proxy} \
+            -e http_proxy=${http_proxy} \
+            -e https_proxy=${https_proxy} \
+            -e AGILE_PIPELINE_CONF_ID=${AGILE_PIPELINE_CONF_ID} \
+            -e AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID} \
+            -e AGILE_JOB_BUILD_ID=${AGILE_JOB_BUILD_ID} \
+            -e AGILE_PIPELINE_NAME=${AGILE_PIPELINE_NAME} \
+            -e AGILE_WORKSPACE=${AGILE_WORKSPACE} \
+            -e REPORT_SERVER_PASSWORD=${REPORT_SERVER_PASSWORD} \
+            -e Python_version=${Python_version} \
+            -e models_list=${models_list} \
+            -e models_file=${models_file} \
+            -e system=${system} \
+            -e step=${step} \
+            -e reponame=${reponame} \
+            -e timeout=${timeout} \
+            -e mode=${mode} \
+            -e use_build=${use_build} \
+            -e binary_search_flag=${binary_search_flag} \
+            -e is_analysis_logs=${is_analysis_logs} \
+            -e analysis_case=${analysis_case} \
+            -e use_data_cfs=${use_data_cfs} \
+            -e plot=${plot} \
+            -e c_plus_plus_predict=${c_plus_plus_predict} \
+            -e PaddleX=${PaddleX} \
+            -e branch=${branch} \
+            -e get_repo=${get_repo} \
+            -e paddle_whl=${paddle_whl} \
+            -e paddle_inference=${paddle_inference} \
+            -e TENSORRT_DIR=${TENSORRT_DIR} \
+            -e dataset_org=${dataset_org} \
+            -e dataset_target=${dataset_target} \
+            -e set_cuda=${set_cuda} \
+            -e FLAGS_enable_pir_in_executor=${FLAGS_enable_pir_in_executor} \
+        -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+            -e GLOG_vmodule=${GLOG_vmodule} \
+            -e ENABLE_FALL_BACK=${ENABLE_FALL_BACK} \
+            -e MIN_GRAPH_SIZE=${MIN_GRAPH_SIZE} \
+            -e FLAGS_enable_pir_api=${FLAGS_enable_pir_api} \
+            -e SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG} \
+            -e FLAGS_prim_all=${FLAGS_prim_all} \
+            -e FLAGS_use_cinn=${FLAGS_use_cinn} \
+        -e api_key=${api_key} \
+            -e PTS_ENV_VARS=$PTS_ENV_VARS \
+            -e FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir} \
+        -e FLAGS_use_auto_growth_v2=${FLAGS_use_auto_growth_v2} \
+            -w /workspace \
+            ${Image_version}  \
+            /bin/bash -c '
+            ldconfig;
+            if [[ `yum --help` =~ "yum" ]];then
+                echo "centos"
+                yum install nfs-utils -y > install_nfs 2>&1
+                export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
+                case ${Python_version} in
+                36)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
+                ;;
+                37)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
+                ;;
+                38)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
+                ;;
+                39)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
+                ;;
+                310)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
+                ;;
+                311)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.11.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.11.0/bin/:${PATH}
+                ;;
+                312)
+                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.12.0/lib/:${LD_LIBRARY_PATH}
+                export PATH=/opt/_internal/cpython-3.12.0/bin/:${PATH}
+                ;;
+                esac
+            else
+                echo "ubuntu"
+                apt-get update > install_update 2>&1
+                apt-get install nfs-common -y > install_nfs 2>&1
+                case ${Python_version} in
+                36)
+                mkdir run_env_py36;
+                ln -s $(which python3.6) run_env_py36/python;
+                ln -s $(which pip3.6) run_env_py36/pip;
+                export PATH=$(pwd)/run_env_py36:${PATH};
+                ;;
+                37)
+                mkdir run_env_py37;
+                ln -s $(which python3.7) run_env_py37/python;
+                ln -s $(which pip3.7) run_env_py37/pip;
+                export PATH=$(pwd)/run_env_py37:${PATH};
+                ;;
+                38)
+                mkdir run_env_py38;
+                ln -s $(which python3.8) run_env_py38/python;
+                ln -s $(which pip3.8) run_env_py38/pip;
+                export PATH=$(pwd)/run_env_py38:${PATH};
+                ;;
+                39)
+                mkdir run_env_py39;
+                ln -s $(which python3.9) run_env_py39/python;
+                ln -s $(which pip3.9) run_env_py39/pip;
+                export PATH=$(pwd)/run_env_py39:${PATH};
+                ;;
+                310)
+                mkdir run_env_py310;
+                ln -s $(which python3.10) run_env_py310/python;
+                ln -s $(which pip3.10) run_env_py310/pip;
+                export PATH=$(pwd)/run_env_py310:${PATH};
+                ;;
+                311)
+                mkdir run_env_py311;
+                ln -s $(which python3.11) run_env_py311/python;
+                ln -s $(which pip3.11) run_env_py311/pip;
+                export PATH=$(pwd)/run_env_py311:${PATH};
+                ;;
+                312)
+                mkdir run_env_py312;
+                ln -s $(which python3.12) run_env_py312/python;
+                ln -s $(which pip3.12) run_env_py312/pip;
+                export PATH=$(pwd)/run_env_py312:${PATH};
+                ;;
+                esac
+            fi
+            #挂载数据, 地址特定为mount_path
+            export mount_path="/workspace/MT_data/${reponame}"
+            if [[ -d ${mount_path} ]];then
+                mv ${mount_path} ${mount_path}_back
+                mkdir -p ${mount_path}
+            else
+                mkdir -p ${mount_path}
+            fi
+            mount -t nfs4 -o minorversion=1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport ${CFS_IP}:/${reponame} ${mount_path}
+            ls ${mount_path}
+            echo "@@@mount_path: ${mount_path}"
+
+        echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+            # FLAGS_enable_pir_in_executor bug
+            if [ $FLAGS_enable_pir_in_executor == 0 ];then
+            echo "@@@FLAGS_enable_pir_in_executor: ${FLAGS_enable_pir_in_executor}"
+            unset FLAGS_enable_pir_in_executor
+            fi
+        echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+            # ENABLE_FALL_BACK install
+            if [ $ENABLE_FALL_BACK == True ];then
+            echo "@@@ENABLE_FALL_BACK: ${ENABLE_FALL_BACK}"
+            echo "@@@MIN_GRAPH_SIZE: ${MIN_GRAPH_SIZE}"
+            echo "@@@FLAGS_pir_subgraph_saving_dir: ${FLAGS_pir_subgraph_saving_dir}"
+            ehco "@@@export FLAGS_enable_pir_api ${export FLAGS_enable_pir_api}"
+            ehco "@@@export SOT_EXPORT_FLAG ${SOT_EXPORT_FLAG}"
+            ehco "@@@export GLOG_vmodule ${GLOG_vmodule}"
+            set -x
+            # Flag
+            export STRICT_MODE=0
+            export SOT_LOG_LEVEL=2
+            export COST_MODEL=False
+            python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
+            fi
+
+            nvidia-smi;
+            python -c "import sys; print(sys.version_info[:])";
+            git --version;
+            python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+            python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+            python -m pip install --ignore-installed six -i https://mirror.baidu.com/pypi/simple
+            python -m pip uninstall -y opencv-python
+            python -m pip config list
+            python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
+        ' &
+    fi
     wait $!
     exit $?
 else

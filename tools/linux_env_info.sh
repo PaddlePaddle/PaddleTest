@@ -73,6 +73,10 @@ function DockerImages () {
             export env_cudnn_version="8.9.1"
             export env_trt_version="8.6.1.6"
             ;;
+        "DCU")
+            echo "Selected Centos: DCU"
+            export Image_version="registry.baidubce.com/device/paddle-dcu:dtk23.10.1-kylinv10-gcc73-py310"
+            ;;
         *)
             DOCKER_EXIT_CODE=101
             ;;
@@ -447,6 +451,20 @@ function Cu120PackageUrlInfoRecommand(){
     esac
 }
 
+# DCU安装包链接信息
+function DCUPackageUrlInfo(){
+    local branch_info=$1
+    local package_version=$2
+
+    case ${package_version} in
+        "Python310")
+            export paddle_whl="https://paddle-device.bj.bcebos.com/dcu/test/0328/paddlepaddle_rocm-0.0.0-cp310-cp310-linux_x86_64.whl"
+            ;;
+        *)
+            export WHELLINFO_EXITCODE=115
+            ;;
+    esac
+}
 
 # 安装包链接
 function WheelUrlInfo(){
