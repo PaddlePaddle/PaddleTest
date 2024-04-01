@@ -188,4 +188,7 @@ class LayerBenchmarkDB(object):
                     )
 
         # 生成表格
-        xlsx_save(compare_dict)
+        xlsx_save(
+            sublayer_dict=compare_dict,
+            excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
+        )

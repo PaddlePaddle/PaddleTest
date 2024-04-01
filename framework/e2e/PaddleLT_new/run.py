@@ -107,7 +107,10 @@ class Run(object):
             layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
             layer_db.compare_with_baseline(data_dict=sublayer_dict, error_list=error_list)
         elif os.environ.get("PLT_BM_DB") == "nonuse":  # 不加载数据库，仅生成表格
-            xlsx_save(sublayer_dict)
+            xlsx_save(
+                sublayer_dict=sublayer_dict,
+                excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
+            )
         else:
             Exception("unknown benchmark datebase mode, only support insert, select or nonuse")
 
