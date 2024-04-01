@@ -125,16 +125,16 @@ class PaddleOCR_Build(Model_Build):
             #    )
 
             # kie requirements
-            os.system("python -m pip install -U  paddlenlp")
-            os.system("python -m pip install -U lanms-neo")
+            os.system("python -m pip install -U  paddlenlp -i https://mirror.baidu.com/pypi/simple")
+            os.system("python -m pip install -U lanms-neo  -i https://mirror.baidu.com/pypi/simple")
             # python3.11
             if sysstr == "Linux" and sys.version == "3.11.3":
                 os.system("apt-get install -y protobuf-compiler")
                 os.system("export pybind11_DIR=/usr/local/lib/python3.11/dist-packages/pybind11/include")
 
-            os.system("python -m pip install -r ppstructure/kie/requirements.txt")
+            os.system("python -m pip install -r ppstructure/kie/requirements.txt  -i https://mirror.baidu.com/pypi/simple")
             # mac: Downgrade the protobuf package to 3.20.x or lower.
-            os.system("python -m pip install -U protobuf==3.20.0")
+            os.system("python -m pip install -U protobuf==3.20.0  -i https://mirror.baidu.com/pypi/simple")
 
             if sysstr == "Windows":
                 os.environ["PATH"] = "F:\\install\\GnuWin32\\bin;" + os.environ.get("PATH")
@@ -163,8 +163,8 @@ class PaddleOCR_Build(Model_Build):
                 for filename in self.test_model_list:
                     print("filename:{}".format(filename))
                     if "benchmark" in filename:
-                        os.system("python -m pip install -U numpy==1.23.5")
-                        os.system("python -m pip install Polygon3")
+                        os.system("python -m pip install -U numpy==1.23.5  -i https://mirror.baidu.com/pypi/simple")
+                        os.system("python -m pip install Polygon3  -i https://mirror.baidu.com/pypi/simple")
 
             os.chdir(self.test_root_path)
             print("build dataset!")
