@@ -49,7 +49,8 @@ def save_pickle(data, filename):
     """
     保存数据为pickle
     """
-    with open(filename, "wb") as f:
+    save_name = filename + ".pickle"
+    with open(save_name, "wb") as f:
         # 使用pickle的dump函数将列表写入文件
         pickle.dump(data, f)
 
