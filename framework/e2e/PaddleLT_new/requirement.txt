@@ -12,3 +12,6 @@ numpy
 pytest-timeout
 pandas
 openpyxl
+matplotlib
+bce-python-sdk==0.8.74
+protocol

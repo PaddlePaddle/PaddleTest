@@ -16,6 +16,7 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
   -e "no_proxy=bcebos.com" \
   -e "python_ver=${python_ver}" \
   -e "wheel_url=${wheel_url}" \
+  -e "AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID}" \
   ${docker_image} /bin/bash -c "
 ldconfig;
 

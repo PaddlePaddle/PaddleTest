@@ -7,10 +7,14 @@
 """
 import os
 import platform
+from datetime import datetime
 import layertest
 from db.layer_db import LayerBenchmarkDB
 from tools.case_select import CaseSelect
+from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
+from tools.res_save import xlsx_save
+from tools.upload_bos import UploadBos
 
 
 class Run(object):
@@ -46,6 +50,10 @@ class Run(object):
         self.py_cmd = os.environ.get("python_ver")
         self.report_dir = os.path.join(os.getcwd(), "report")
 
+        self.logger = Logger("PaddleLTRun")
+        self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
+        self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     def _test_run(self):
         """run some test"""
         error_list = []
@@ -62,10 +70,12 @@ class Run(object):
                 error_list.append(py_file)
                 error_count += 1
         if error_count != 0:
-            print("测试失败，报错子图为: {}".format(error_list))
+            # print("测试失败，报错子图为: {}".format(error_list))
+            self.logger.get_log().warn("测试失败，报错子图为: {}".format(error_list))
             os.system("echo 7 > exit_code.txt")
         else:
-            print("测试通过，无报错子图-。-")
+            # print("测试通过，无报错子图-。-")
+            self.logger.get_log().info("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
     def _perf_test_run(self):
@@ -87,20 +97,48 @@ class Run(object):
             sublayer_dict[title] = perf_dict
 
         if error_count != 0:
-            print("测试失败，报错子图为: {}".format(error_list))
+            # print("测试失败，报错子图为: {}".format(error_list))
+            self.logger.get_log().warn("测试失败，报错子图为: {}".format(error_list))
             os.system("echo 7 > exit_code.txt")
         else:
-            print("测试通过，无报错子图-。-")
+            # print("测试通过，无报错子图-。-")
+            self.logger.get_log().info("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
         # 数据库交互
-        layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
-        if os.environ.get("PLT_BM_MODE") == "baseline":
-            layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
-        elif os.environ.get("PLT_BM_MODE") == "latest":
-            layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
+        if os.environ.get("PLT_BM_DB") == "insert":  # 存入数据, 作为基线或对比
+            layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
+            if os.environ.get("PLT_BM_MODE") == "baseline":
+                layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
+            elif os.environ.get("PLT_BM_MODE") == "latest":
+                layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
+            else:
+                raise Exception("unknown benchmark mode, PaddleLT benchmark only support baseline mode or latest mode")
+        elif os.environ.get("PLT_BM_DB") == "select":  # 不存数据, 仅对比并生成表格
+            layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
+            layer_db.compare_with_baseline(data_dict=sublayer_dict, error_list=error_list)
+        elif os.environ.get("PLT_BM_DB") == "non-db":  # 不加载数据库，仅生成表格
+            xlsx_save(
+                sublayer_dict=sublayer_dict,
+                excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
+            )
         else:
-            raise Exception("unknown benchmark mode, PaddleLT benchmark only support baseline mode or latest mode")
+            Exception("unknown benchmark datebase mode, only support insert, select or nonuse")
+
+        # 产物上传
+        bos_path = "PaddleLT/PaddleLTBenchmark/{}/build_{}".format(
+            os.environ.get("PLT_BM_DB"), self.AGILE_PIPELINE_BUILD_ID
+        )
+        excel_file = os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx"
+        if os.path.exists(excel_file):
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path=excel_file)
+            self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, excel_file))
+        os.system("tar -czf plot.tar *.png")
+        UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="plot.tar")
+        self.logger.get_log().info("plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "plot.tar"))
+        os.system("tar -czf pickle.tar *.pickle")
+        UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="pickle.tar")
+        self.logger.get_log().info("pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "pickle.tar"))
 
 
 if __name__ == "__main__":

@@ -51,7 +51,7 @@ class LayerBenchmarkDB(object):
         self.system = platform.system()
 
         # 初始化日志
-        self.logger = Logger("LayerBenchmarkCE")
+        self.logger = Logger("LayerBenchmarkDB")
 
     def _frame_info(self):
         """"""
@@ -109,6 +109,10 @@ class LayerBenchmarkDB(object):
             create_time=self.now_time,
             update_time=self.now_time,
         )
+        # 保存job id到txt
+        with open("job_id.txt", "w") as file:
+            file.write(str(latest_id))
+        self.logger.get_log().info("性能测试job_id: {}".format(latest_id))
 
         # 插入layer_case
         for title, perf_dict in data_dict.items():
@@ -116,31 +120,15 @@ class LayerBenchmarkDB(object):
 
         if bool(error_list):
             db.update_job(id=latest_id, status="error", update_time=self.now_time)
-            print("error cases: {}".format(error_list))
-            raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
+            self.logger.get_log().warn("error cases: {}".format(error_list))
+            # print("error cases: {}".format(error_list))
         else:
             db.update_job(id=latest_id, status="done", update_time=self.now_time)
 
-        # 获取baseline用于对比
-        baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
-        baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
+        self.compare_with_baseline(data_dict=data_dict, error_list=error_list)
 
-        baseline_dict = {}
-        for i in baseline_list:
-            baseline_dict[i["case_name"]] = i
-
-        # 性能对比
-        compare_dict = {}
-        for title, perf_dict in data_dict.items():
-            compare_dict[title] = {}
-            for perf_engine, t in perf_dict.items():
-                compare_dict[title][perf_engine + "_latest"] = t
-                compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[perf_engine]
-                compare_dict[title][perf_engine + "_compare"] = perf_compare(
-                    baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
-                )
-
-        xlsx_save(compare_dict)
+        if bool(error_list):
+            raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
 
     def baseline_insert(self, data_dict, error_list):
         """
@@ -165,6 +153,10 @@ class LayerBenchmarkDB(object):
             create_time=self.now_time,
             update_time=self.now_time,
         )
+        # 保存job id到txt
+        with open("job_id.txt", "w") as file:
+            file.write(str(basleine_id))
+        self.logger.get_log().info("性能测试job_id: {}".format(basleine_id))
 
         # 插入layer_case
         for title, perf_dict in data_dict.items():
@@ -172,7 +164,41 @@ class LayerBenchmarkDB(object):
 
         if bool(error_list):
             db.update_job(id=basleine_id, status="error", update_time=self.now_time)
-            print("error cases: {}".format(error_list))
+            self.logger.get_log().warn("error cases: {}".format(error_list))
+            # print("error cases: {}".format(error_list))
             raise Exception("something wrong with layer benchmark job id: {} !!".format(basleine_id))
         else:
             db.update_job(id=basleine_id, status="done", update_time=self.now_time)
+
+    def compare_with_baseline(self, data_dict, error_list):
+        """
+        与基线对比
+        """
+        db = DB(storage=self.storage)
+        # 获取baseline用于对比
+        baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+        baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
+
+        baseline_dict = {}
+        for i in baseline_list:
+            baseline_dict[i["case_name"]] = i
+
+        # 性能对比
+        compare_dict = {}
+        for title, perf_dict in data_dict.items():
+            if title not in error_list:
+                compare_dict[title] = {}
+                for perf_engine, t in perf_dict.items():
+                    compare_dict[title][perf_engine + "_latest"] = t
+                    compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[
+                        perf_engine
+                    ]
+                    compare_dict[title][perf_engine + "_compare"] = perf_compare(
+                        baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
+                    )
+
+        # 生成表格
+        xlsx_save(
+            sublayer_dict=compare_dict,
+            excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
+        )
