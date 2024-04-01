@@ -90,7 +90,7 @@ class LayerEvalBM(object):
             total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
             total_time_list.append(total_time)
 
-        save_pickle(data_list=total_time_list, filename="dy2st_eval_cinn_perf_" + self.layerfile + "_total_time_list")
+        save_pickle(data=total_time_list, filename="dy2st_eval_cinn_perf_" + self.layerfile + "_total_time_list")
         # 画图
         perf_by_step(
             data_list=total_time_list,
