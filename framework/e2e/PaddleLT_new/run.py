@@ -131,11 +131,13 @@ class Run(object):
         )
         excel_file = os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx"
         if os.path.exists(excel_file):
-            UploadBos(bos_path="paddle-qa/{}".format(bos_path), file_path=excel_file)
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path=excel_file)
             self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, excel_file))
         os.system("tar -czf plot.tar *.png")
+        UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="plot.tar")
         self.logger.get_log().info("plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "plot.tar"))
         os.system("tar -czf pickle.tar *.pickle")
+        UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="pickle.tar")
         self.logger.get_log().info("pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "pickle.tar"))
 
 
