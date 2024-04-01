@@ -13,12 +13,9 @@ import paddle
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
         super().__init__()
-        # self.variance_epsilon = 1e-6
-        # self.reduce_num = 4096
 
     def forward(self, x, axis=-1):
-        max_ = paddle.max(x, axis = axis,keepdim = True)
-        output = paddle.exp(x - max_) / paddle.sum(paddle.exp(x - max_), axis = axis, keepdim=True)
+        output = paddle.nn.functional.softmax(x, axis = axis)
         return output
 
 def create_paddle_inputs():

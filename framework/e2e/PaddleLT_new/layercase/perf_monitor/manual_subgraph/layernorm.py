@@ -16,9 +16,8 @@ class LayerCase(paddle.nn.Layer):
         self.variance_epsilon = 1e-6
         self.reduce_num = 4096
     def forward(self, x, weight, bias):
-        mean = paddle.sum(x, axis=-1, keepdim = True) / self.reduce_num
-        var = weight / paddle.sqrt((x - mean).pow(2).sum(-1, keepdim = True)/self.reduce_num + self.variance_epsilon)
-        return var * (x - mean) + bias
+        out = paddle.nn.functional.layer_norm(x, x.shape[-1],  weight, bias, self.variance_epsilon)
+        return out
 
 def create_paddle_inputs():
     shape = [1, 13, 4096]
@@ -62,9 +61,7 @@ class TestRMSNormSubGraph(unittest.TestCase):
 
     def test_train(self):
         cinn_out = self.train(use_cinn=True)
-        # print("DEBUG: cinn_out = ", cinn_out)
         dy_out = self.train(use_cinn=False)
-        # print("DEBUG: dy_out = ", dy_out)
         np.testing.assert_allclose(
             cinn_out.numpy(), dy_out.numpy(), atol=1e-6, rtol=1e-6
         )
