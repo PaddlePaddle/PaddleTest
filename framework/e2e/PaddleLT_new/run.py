@@ -7,12 +7,14 @@
 """
 import os
 import platform
+from datetime import datetime
 import layertest
 from db.layer_db import LayerBenchmarkDB
 from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
 from tools.res_save import xlsx_save
+from tools.upload_bos import UploadBos
 
 
 class Run(object):
@@ -49,6 +51,8 @@ class Run(object):
         self.report_dir = os.path.join(os.getcwd(), "report")
 
         self.logger = Logger("PaddleLTRun")
+        self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
+        self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def _test_run(self):
         """run some test"""
@@ -113,13 +117,26 @@ class Run(object):
         elif os.environ.get("PLT_BM_DB") == "select":  # 不存数据, 仅对比并生成表格
             layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
             layer_db.compare_with_baseline(data_dict=sublayer_dict, error_list=error_list)
-        elif os.environ.get("PLT_BM_DB") == "nonuse":  # 不加载数据库，仅生成表格
+        elif os.environ.get("PLT_BM_DB") == "non-db":  # 不加载数据库，仅生成表格
             xlsx_save(
                 sublayer_dict=sublayer_dict,
                 excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
             )
         else:
             Exception("unknown benchmark datebase mode, only support insert, select or nonuse")
+
+        # 产物上传
+        bos_path = "PaddleLT/PaddleLTBenchmark/{}/build_{}".format(
+            os.environ.get("PLT_BM_DB"), self.AGILE_PIPELINE_BUILD_ID
+        )
+        excel_file = os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx"
+        if os.path.exists(excel_file):
+            UploadBos(bos_path="paddle-qa/{}".format(bos_path), file_path=excel_file)
+            self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, excel_file))
+        os.system("tar -czf plot.tar *.png")
+        self.logger.get_log().info("plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "plot.tar"))
+        os.system("tar -czf pickle.tar *.pickle")
+        self.logger.get_log().info("pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "pickle.tar"))
 
 
 if __name__ == "__main__":
