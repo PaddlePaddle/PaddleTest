@@ -69,12 +69,14 @@ def perf_by_step(data_list, step_scale, filename):
         y_values = data_list[:percent_count]
 
         # 绘制图形
+        plt.clf()
         plt.plot(x_values, y_values, marker="o")  # 使用圆点作为数据点的标记
         plt.xlabel("Step-{}".format(percent_count))  # 设置横坐标轴标签
         plt.ylabel("Time-Consuming")  # 设置纵坐标轴标签
         plt.title(filename)  # 设置图形标题
         plt.grid(True)  # 显示网格线
         plt.savefig("{}_step{}.png".format(filename, percent_count))
+        plt.clf()
 
 
 # 计算四分位范围
