@@ -51,7 +51,7 @@ class LayerBenchmarkDB(object):
         self.system = platform.system()
 
         # 初始化日志
-        self.logger = Logger("LayerBenchmarkCE")
+        self.logger = Logger("LayerBenchmarkDB")
 
     def _frame_info(self):
         """"""
@@ -109,6 +109,10 @@ class LayerBenchmarkDB(object):
             create_time=self.now_time,
             update_time=self.now_time,
         )
+        # 保存job id到txt
+        with open("job_id.txt", "w") as file:
+            file.write(str(latest_id))
+        self.logger.get_log().info("性能测试job_id: {}".format(latest_id))
 
         # 插入layer_case
         for title, perf_dict in data_dict.items():
@@ -116,7 +120,8 @@ class LayerBenchmarkDB(object):
 
         if bool(error_list):
             db.update_job(id=latest_id, status="error", update_time=self.now_time)
-            print("error cases: {}".format(error_list))
+            self.logger.get_log().warn("error cases: {}".format(error_list))
+            # print("error cases: {}".format(error_list))
         else:
             db.update_job(id=latest_id, status="done", update_time=self.now_time)
 
@@ -148,6 +153,10 @@ class LayerBenchmarkDB(object):
             create_time=self.now_time,
             update_time=self.now_time,
         )
+        # 保存job id到txt
+        with open("job_id.txt", "w") as file:
+            file.write(str(basleine_id))
+        self.logger.get_log().info("性能测试job_id: {}".format(basleine_id))
 
         # 插入layer_case
         for title, perf_dict in data_dict.items():
@@ -155,7 +164,8 @@ class LayerBenchmarkDB(object):
 
         if bool(error_list):
             db.update_job(id=basleine_id, status="error", update_time=self.now_time)
-            print("error cases: {}".format(error_list))
+            self.logger.get_log().warn("error cases: {}".format(error_list))
+            # print("error cases: {}".format(error_list))
             raise Exception("something wrong with layer benchmark job id: {} !!".format(basleine_id))
         else:
             db.update_job(id=basleine_id, status="done", update_time=self.now_time)

@@ -10,6 +10,7 @@ import platform
 import layertest
 from db.layer_db import LayerBenchmarkDB
 from tools.case_select import CaseSelect
+from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
 from tools.res_save import xlsx_save
 
@@ -47,6 +48,8 @@ class Run(object):
         self.py_cmd = os.environ.get("python_ver")
         self.report_dir = os.path.join(os.getcwd(), "report")
 
+        self.logger = Logger("PaddleLTRun")
+
     def _test_run(self):
         """run some test"""
         error_list = []
@@ -63,10 +66,12 @@ class Run(object):
                 error_list.append(py_file)
                 error_count += 1
         if error_count != 0:
-            print("测试失败，报错子图为: {}".format(error_list))
+            # print("测试失败，报错子图为: {}".format(error_list))
+            self.logger.get_log().warn("测试失败，报错子图为: {}".format(error_list))
             os.system("echo 7 > exit_code.txt")
         else:
-            print("测试通过，无报错子图-。-")
+            # print("测试通过，无报错子图-。-")
+            self.logger.get_log().info("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
     def _perf_test_run(self):
@@ -88,10 +93,12 @@ class Run(object):
             sublayer_dict[title] = perf_dict
 
         if error_count != 0:
-            print("测试失败，报错子图为: {}".format(error_list))
+            # print("测试失败，报错子图为: {}".format(error_list))
+            self.logger.get_log().warn("测试失败，报错子图为: {}".format(error_list))
             os.system("echo 7 > exit_code.txt")
         else:
-            print("测试通过，无报错子图-。-")
+            # print("测试通过，无报错子图-。-")
+            self.logger.get_log().info("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
         # 数据库交互
