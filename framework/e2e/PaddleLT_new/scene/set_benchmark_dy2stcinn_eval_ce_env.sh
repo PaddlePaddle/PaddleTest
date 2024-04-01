@@ -12,7 +12,7 @@ export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
 export PLT_BM_MODE="${PLT_BM_MODE:-latest}"  #基线任务为baseline, 测试任务为latest
 export PLT_BM_DB="${PLT_BM_DB:-select}"  # insert: 存入数据, 作为基线或对比; select: 不存数据, 仅对比并生成表格; nonuse: 不加载数据库，仅生成表格
 export PLT_BM_REPEAT="${PLT_BM_REPEAT:-1000}"  # 性能测试重复轮次
-export TIMEIT_NUM="${TIMEIT_NUM:-10}"  # timeit number数
+export TIMEIT_NUM="${TIMEIT_NUM:-1}"  # timeit number数
 export PLT_BM_STATIS="${PLT_BM_STATIS:-trimmean}"  # 统计策略trimmean, mean, best, best_top_k
 
 #研发指定环境变量

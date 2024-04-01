@@ -12,3 +12,4 @@ numpy
 pytest-timeout
 pandas
 openpyxl
+matplotlib
