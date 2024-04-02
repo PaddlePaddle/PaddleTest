@@ -52,6 +52,26 @@ def best_top_k(data_list, ratio=0.2):
     return res
 
 
+# list等分
+def split_list(lst, n):
+    """
+    将列表按顺序划分为 n 份
+    Args:
+        lst (list): 待划分的列表
+        n (int): 划分的份数
+    Returns:
+        res (list): 划分后的列表，其中每个元素为原列表的 1/n 部分
+    """
+    if not isinstance(lst, list) or not isinstance(n, int) or len(lst) == 0 or n <= 0:
+        return []
+    quotient, remainder = divmod(len(lst), n)
+    res = [[] for _ in range(n)]
+    for i, value in enumerate(lst):
+        index = i % n
+        res[index].append(value)
+    return res
+
+
 # 作图
 def perf_by_step(data_list, step_scale, filename):
     """
