@@ -1,3 +1,4 @@
+'''test softmax subgraph '''
 # FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1 
 # FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true 
 # FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True 
@@ -11,6 +12,7 @@ import utils
 import paddle
 
 class LayerCase(paddle.nn.Layer):
+    '''this is the softmax layercase'''
     def __init__(self):
         super().__init__()
 
