@@ -18,6 +18,7 @@ from tools.yaml_loader import YamlLoader
 from tools.res_save import xlsx_save
 from tools.upload_bos import UploadBos
 from tools.statistics import split_list
+from tools.alarm import Alarm
 
 
 class Run(object):
@@ -105,6 +106,18 @@ class Run(object):
         os.system("tar -czf pickle.tar *.pickle")
         UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="pickle.tar")
         self.logger.get_log().info("pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "pickle.tar"))
+
+        if os.environ.get("PLT_BM_EMAIL") == "True":
+            alarm = Alarm(storage="apibm_config.yml")
+            alarm.email_send(
+                alarm.receiver,
+                "Paddle CINN子图性能数据",
+                "表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{} \n \
+                plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{} \n \
+                pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(
+                    bos_path, excel_file, bos_path, "plot.tar", bos_path, "pickle.tar"
+                ),
+            )
 
     def _single_pytest_run(self, py_file):
         """run one test"""

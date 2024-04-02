@@ -12,6 +12,7 @@ export MULTI_WORKER="${MULTI_WORKER:-0}"
 #性能测试专属环境变量
 export PLT_BM_MODE="${PLT_BM_MODE:-latest}"  #基线任务为baseline, 测试任务为latest
 export PLT_BM_DB="${PLT_BM_DB:-select}"  # insert: 存入数据, 作为基线或对比; select: 不存数据, 仅对比并生成表格; non-db: 不加载数据库，仅生成表格
+export PLT_BM_EMAIL="${PLT_BM_EMAIL:-False}"  # True: 发送邮件  False: 不发送邮件
 export PLT_BM_REPEAT="${PLT_BM_REPEAT:-1000}"  # 性能测试重复轮次
 export TIMEIT_NUM="${TIMEIT_NUM:-1}"  # timeit number数
 export PLT_BM_STATIS="${PLT_BM_STATIS:-trimmean}"  # 统计策略trimmean, mean, best, best_top_k
