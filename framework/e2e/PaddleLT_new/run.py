@@ -116,6 +116,26 @@ class Run(object):
 
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
+    def _multiprocess_perf_test_run(self):
+        """run some test"""
+        sublayer_dict = {}
+        error_count = 0
+        error_list = []
+        for py_file in self.py_list:
+            title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+            single_test = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
+            perf_dict, exit_code = single_test._perf_case_run()
+
+            # 报错的子图+engine将不会收录进sublayer_dict
+            if exit_code != 0:
+                error_list.append(py_file)
+                error_count += 1
+                continue
+
+            sublayer_dict[title] = perf_dict
+
+        self._exit_code_txt(error_count=error_count, error_list=error_list)
+
     def _perf_test_run(self):
         """run some test"""
         sublayer_dict = {}
