@@ -7,6 +7,7 @@ export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模型为性能
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
 export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
+export MULTI_WORKER="${MULTI_WORKER:-0}"
 
 #性能测试专属环境变量
 export PLT_BM_MODE="${PLT_BM_MODE:-latest}"  #基线任务为baseline, 测试任务为latest
@@ -36,6 +37,7 @@ echo "TESTING_MODE is: ${TESTING_MODE}"
 echo "PLT_SET_DEVICE is: ${PLT_SET_DEVICE}"
 echo "PLT_DEVICE_ID is: ${PLT_DEVICE_ID}"
 echo "FRAMEWORK is: ${FRAMEWORK}"
+echo "MULTI_WORKER is: ${MULTI_WORKER}"
 echo "PLT_BM_MODE is: ${PLT_BM_MODE}"
 echo "PLT_BM_DB is: ${PLT_BM_DB}"
 echo "PLT_BM_REPEAT is: ${PLT_BM_REPEAT}"
