@@ -159,7 +159,7 @@ class Run(object):
     def _multiprocess_perf_test_run(self):
         """run some test"""
 
-        def _queue_run(self, py_list, result_queue):
+        def _queue_run(py_list, result_queue):
             """
             multi run main
             """
