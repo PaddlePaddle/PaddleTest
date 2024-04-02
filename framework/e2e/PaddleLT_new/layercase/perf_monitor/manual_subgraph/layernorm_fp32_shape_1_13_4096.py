@@ -13,6 +13,7 @@ import paddle
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
         super().__init__()
+        self.variance_epsilon = 1e-6
     def forward(self, x, weight, bias):
         out = paddle.nn.functional.layer_norm(x, x.shape[-1],  weight, bias, self.variance_epsilon)
         return out
