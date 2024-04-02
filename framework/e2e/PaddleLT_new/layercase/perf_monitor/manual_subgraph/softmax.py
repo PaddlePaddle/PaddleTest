@@ -56,9 +56,7 @@ class TestSoftmaxSubGraph(unittest.TestCase):
 
     def test_train(self):
         cinn_out = self.train(use_cinn=True)
-        print("DEBUG: cinn_out = ",cinn_out)
         dy_out = self.train(use_cinn=False)
-        print("DEBUG: dy_out = ",dy_out)
         np.testing.assert_allclose(
             cinn_out.numpy(), dy_out.numpy(), atol=1e-6, rtol=1e-6
         )
