@@ -175,7 +175,10 @@ class Run(object):
 if __name__ == "__main__":
     tes = Run()
     if os.environ.get("TESTING_MODE") == "precision":
-        tes._test_run()
+        if os.environ.get("THREAD_WORKER") == "0":
+            tes._test_run()
+        else:
+            tes._multithread_test_run()
     elif os.environ.get("TESTING_MODE") == "performance":
         tes._perf_test_run()
     else:
