@@ -84,7 +84,7 @@ class Run(object):
         error_list = []
         error_count = 0
 
-        with ThreadPoolExecutor(max_workers=os.environ.get("THREAD_WORKER", 13)) as executor:
+        with ThreadPoolExecutor(max_workers=int(os.environ.get("THREAD_WORKER", 13))) as executor:
             # 提交任务给线程池
             futures = [executor.submit(self._single_pytest_run, py_file) for py_file in self.py_list]
 
