@@ -1,0 +1,4 @@
+import layercase.perf245.Clas_cases.Distillation_resnet34_distill_resnet18_afd.SIR_104
+import layercase.perf245.Clas_cases.Distillation_resnet34_distill_resnet18_afd.SIR_70
+import layercase.perf245.Clas_cases.Distillation_resnet34_distill_resnet18_afd.SIR_97
+import layercase.perf245.Clas_cases.Distillation_resnet34_distill_resnet18_afd.SIR_92

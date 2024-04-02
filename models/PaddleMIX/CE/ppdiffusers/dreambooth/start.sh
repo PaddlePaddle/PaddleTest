@@ -32,7 +32,7 @@ echo "*******dreambooth singe_train end***********"
 
 # 单机训练的结果进行推理
 echo "******dreambooth singe infer begin***********"
-(python infer.py 2>&1) | tee ${log_dir}/dreambooth_single_infer.log
+(python infer.py)2>&1 | tee ${log_dir}/dreambooth_single_infer.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -92,6 +92,9 @@ echo "*******dreambooth infer_with_class end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/dream_outputs/*
+rm -rf ${work_path}/dream_outputs_with_class/*
+rm -rf ${work_path}/dogs/
 
 echo exit_code:${exit_code}
 exit ${exit_code}

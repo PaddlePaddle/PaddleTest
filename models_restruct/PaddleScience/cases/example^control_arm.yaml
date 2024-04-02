@@ -1,0 +1,18 @@
+case:
+  linux:
+    base: ./base/control_arm_base.yaml
+    train:
+      -
+        name: single_forward
+      -
+        name: single_inverse
+    eval:
+      -
+        name: single_forward
+      -
+        name: single_inverse
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse
