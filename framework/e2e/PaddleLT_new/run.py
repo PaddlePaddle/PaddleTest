@@ -6,6 +6,7 @@
 测试执行器
 """
 import os
+from concurrent.futures import ThreadPoolExecutor
 import platform
 from datetime import datetime
 import layertest
@@ -54,21 +55,8 @@ class Run(object):
         self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    def _test_run(self):
-        """run some test"""
-        error_list = []
-        error_count = 0
-        for py_file in self.py_list:
-            title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
-            exit_code = os.system(
-                "cp -r PaddleLT.py {}.py && "
-                "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
-                    title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
-                )
-            )
-            if exit_code != 0:
-                error_list.append(py_file)
-                error_count += 1
+    def _exit_code_txt(self, error_count, error_list):
+        """"""
         if error_count != 0:
             # print("测试失败，报错子图为: {}".format(error_list))
             self.logger.get_log().warn("测试失败，报错子图为: {}".format(error_list))
@@ -77,6 +65,56 @@ class Run(object):
             # print("测试通过，无报错子图-。-")
             self.logger.get_log().info("测试通过，无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
+
+    def _single_pytest_run(self, py_file):
+        """run one test"""
+        title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+        exit_code = os.system(
+            "cp -r PaddleLT.py {}.py && "
+            "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
+                title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
+            )
+        )
+        if exit_code != 0:
+            return py_file, exit_code
+        return None, None
+
+    def _multithread_test_run(self):
+        """multithread run some test"""
+        error_list = []
+        error_count = 0
+
+        with ThreadPoolExecutor(max_workers=os.environ.get("THREAD_WORKER", 13)) as executor:
+            # 提交任务给线程池
+            futures = [executor.submit(self._single_pytest_run, py_file) for py_file in self.py_list]
+
+            # 等待任务完成，并收集返回值
+            for future in futures:
+                _py_file, _exit_code = future.result()
+                if _exit_code is not None:
+                    error_list.append(_py_file)
+                    error_count += 1
+
+        self._exit_code_txt(error_count=error_count, error_list=error_list)
+
+    def _test_run(self):
+        """run some test"""
+        error_list = []
+        error_count = 0
+        for py_file in self.py_list:
+            # title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+            # exit_code = os.system(
+            #     "cp -r PaddleLT.py {}.py && "
+            #     "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
+            #         title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
+            #     )
+            # )
+            _py_file, _exit_code = self._single_pytest_run(py_file=py_file)
+            if _exit_code is not None:
+                error_list.append(_py_file)
+                error_count += 1
+
+        self._exit_code_txt(error_count=error_count, error_list=error_list)
 
     def _perf_test_run(self):
         """run some test"""
@@ -96,14 +134,7 @@ class Run(object):
 
             sublayer_dict[title] = perf_dict
 
-        if error_count != 0:
-            # print("测试失败，报错子图为: {}".format(error_list))
-            self.logger.get_log().warn("测试失败，报错子图为: {}".format(error_list))
-            os.system("echo 7 > exit_code.txt")
-        else:
-            # print("测试通过，无报错子图-。-")
-            self.logger.get_log().info("测试通过，无报错子图-。-")
-            os.system("echo 0 > exit_code.txt")
+        self._exit_code_txt(error_count=error_count, error_list=error_list)
 
         # 数据库交互
         if os.environ.get("PLT_BM_DB") == "insert":  # 存入数据, 作为基线或对比
