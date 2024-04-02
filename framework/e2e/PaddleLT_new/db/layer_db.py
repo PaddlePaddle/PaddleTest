@@ -34,7 +34,7 @@ class LayerBenchmarkDB(object):
         self.md5_id = Snapshot().get_md5_id()
 
         # 效率云环境变量
-        self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
+        self.AGILE_PIPELINE_BUILD_ID = int(os.environ.get("AGILE_PIPELINE_BUILD_ID", 0))
 
         # 例行标识
         self.baseline_comment = "baseline_CE_layer_benchmark"
@@ -98,6 +98,7 @@ class LayerBenchmarkDB(object):
             status="running",
             env_info=json.dumps(self.env_info),
             framework=self.framework,
+            agile_pipeline_build_id=self.AGILE_PIPELINE_BUILD_ID,
             commit=self.commit,
             version=self.version,
             hostname=self.hostname,
@@ -142,6 +143,7 @@ class LayerBenchmarkDB(object):
             status="running",
             env_info=json.dumps(self.env_info),
             framework=self.framework,
+            agile_pipeline_build_id=self.AGILE_PIPELINE_BUILD_ID,
             commit=self.commit,
             version=self.version,
             hostname=self.hostname,
