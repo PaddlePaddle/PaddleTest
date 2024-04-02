@@ -1,0 +1,21 @@
+case:
+    linux:
+        train:
+          -
+            name: multi_epoch1
+            paddlex:
+            cmd : bash  test_tipc/prepare.sh test_tipc/configs/PP-PicoDet_s_320_LCNet_train_infer_python.txt benchmark_train /mnt/dataset/benchmark_acc/Det/coco; bash test_tipc/train_benchmark.sh test_tipc/configs/PP-PicoDet_s_320_LCNet_train_infer_python.txt benchmark_train dynamic_bs64_fp32_DP_N1C8_acc1_epoch1
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: multi
+            paddlex:
+            cmd : bash  test_tipc/prepare.sh test_tipc/configs/PP-PicoDet_s_320_LCNet_train_infer_python.txt benchmark_train /mnt/dataset/benchmark_acc/Det/coco; bash test_tipc/train_benchmark.sh test_tipc/configs/PP-PicoDet_s_320_LCNet_train_infer_python.txt benchmark_train dynamic_bs64_fp32_DP_N1C8_acc1_epoch300
+            result:
+              bbox_ap:
+                bbox_ap: 0.291
+                threshold: 0.005
+                evaluation: "+"

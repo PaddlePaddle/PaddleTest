@@ -1,0 +1,20 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/auto_compression/image_classification/
+        cmd: python run.py
+        params:
+          - --config_path='./configs/ResNet50_vd/qat_dis.yaml'
+          - --save_dir='./clas_demo_ResNet50_vd_single_card'
+          - --devices='gpu'
+
+      -
+        name: multi
+        path: example/auto_compression/image_classification/
+        cmd: python -m paddle.distributed.launch run.py
+        params:
+          - --config_path='./configs/ResNet50_vd/qat_dis.yaml'
+          - --save_dir='./clas_demo_ResNet50_vd_multi_card'
+          - --devices='gpu'

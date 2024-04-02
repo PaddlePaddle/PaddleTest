@@ -1,0 +1,15 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/prune
+        cmd: python train.py
+        params:
+          - --model "ResNet50"
+          - --pruned_ratio 0.31
+          - --data "imagenet"
+          - --pretrained_model ../pretrain/ResNet50_pretrained/
+          - --num_epochs 1
+          - --use_gpu True
+          - --batch_size 32

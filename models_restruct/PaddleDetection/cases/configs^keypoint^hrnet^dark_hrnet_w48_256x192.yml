@@ -1,0 +1,52 @@
+case:
+  linux:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: multi
+        cmd : python -m paddle.distributed.launch tools/train.py
+        params:
+          - TrainReader.batch_size=1
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+    api: skipped
+  windows:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: multi
+        cmd : python -m paddle.distributed.launch tools/train.py
+        params:
+          - TrainReader.batch_size=1
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+  mac:
+    base: ./base/normal_base.yml
+    train:
+      -
+        name: single
+        cmd : python tools/train.py
+        params:
+          - TrainReader.batch_size=1
+          - use_gpu=false
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+
+function: paddlelas_imagenet_parse

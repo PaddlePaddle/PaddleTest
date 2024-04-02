@@ -1,0 +1,3 @@
+predict:
+  name: cli
+  cmd: ${cli_cmd}

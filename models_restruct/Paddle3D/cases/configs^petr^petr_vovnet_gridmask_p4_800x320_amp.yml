@@ -1,0 +1,15 @@
+case:
+    linux:
+        base: ./base/3d_base_pretrained_petr.yaml
+        eval:
+          -
+            name: pretrained
+          -
+            name: pretrained_bs1
+        predict:
+          -
+            name: pretrained
+            params:
+              - --model_file exported_model/${model}/petr_inference.pdmodel
+              - --params_file exported_model/${model}/petr_inference.pdiparams
+              - --img_paths data/nuscenes/samples/CAM_FRONT/n008-2018-08-01-15-16-36-0400__CAM_FRONT__1533151061512404.jpg data/nuscenes/samples/CAM_FRONT_RIGHT/n008-2018-08-01-15-16-36-0400__CAM_FRONT_RIGHT__1533151061520482.jpg data/nuscenes/samples/CAM_FRONT_LEFT/n008-2018-08-01-15-16-36-0400__CAM_FRONT_LEFT__1533151061504799.jpg data/nuscenes/samples/CAM_BACK/n008-2018-08-01-15-16-36-0400__CAM_BACK__1533151061537558.jpg data/nuscenes/samples/CAM_BACK_LEFT/n008-2018-08-01-15-16-36-0400__CAM_BACK_LEFT__1533151061547405.jpg data/nuscenes/samples/CAM_BACK_RIGHT/n008-2018-08-01-15-16-36-0400__CAM_BACK_RIGHT__1533151061528113.jpg

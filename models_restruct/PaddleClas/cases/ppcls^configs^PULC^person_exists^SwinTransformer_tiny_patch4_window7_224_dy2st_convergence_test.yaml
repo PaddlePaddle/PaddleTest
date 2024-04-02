@@ -1,0 +1,96 @@
+case:
+  linux_convergence:
+    base: ./base/ImageNet_base_dy2st.yaml
+    train:
+      -
+        name: dy
+      -
+        name: dy2st
+        cmd: python tools/train.py -c ppcls/configs/PULC/person_exists/SwinTransformer_tiny_patch4_window7_224.yaml
+        params:
+          - -o Global.epochs=10
+          - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=1.25e-5
+          - -o Optimizer.lr.eta_min=2.5e-7
+          - -o Optimizer.lr.warmup_start_lr=2.5e-8
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o AMP.scale_loss=128
+          - -o AMP.use_dynamic_loss_scaling=True
+          - -o AMP.level=O2
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/person_exists_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/person_exists_demo_data/val_list.txt
+          - -o Global.start_eval_epoch=1
+          - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_cinn
+        cmd: python tools/train.py -c ppcls/configs/PULC/person_exists/SwinTransformer_tiny_patch4_window7_224.yaml
+        params:
+          - -o Global.epochs=10
+          - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=1.25e-5
+          - -o Optimizer.lr.eta_min=2.5e-7
+          - -o Optimizer.lr.warmup_start_lr=2.5e-8
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o AMP.scale_loss=128
+          - -o AMP.use_dynamic_loss_scaling=True
+          - -o AMP.level=O2
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/person_exists_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/person_exists_demo_data/val_list.txt
+          - -o Global.start_eval_epoch=1
+          - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_cinn
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim
+        cmd: python tools/train.py -c ppcls/configs/PULC/person_exists/SwinTransformer_tiny_patch4_window7_224.yaml
+        params:
+          - -o Global.epochs=10
+          - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=1.25e-5
+          - -o Optimizer.lr.eta_min=2.5e-7
+          - -o Optimizer.lr.warmup_start_lr=2.5e-8
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o AMP.scale_loss=128
+          - -o AMP.use_dynamic_loss_scaling=True
+          - -o AMP.level=O2
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/person_exists_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/person_exists_demo_data/val_list.txt
+          - -o Global.start_eval_epoch=1
+          - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_prim
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim_cinn
+        cmd: python tools/train.py -c ppcls/configs/PULC/person_exists/SwinTransformer_tiny_patch4_window7_224.yaml
+        params:
+          - -o Global.epochs=10
+          - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=1.25e-5
+          - -o Optimizer.lr.eta_min=2.5e-7
+          - -o Optimizer.lr.warmup_start_lr=2.5e-8
+          - -o DataLoader.Train.loader.num_workers=0
+          - -o AMP.scale_loss=128
+          - -o AMP.use_dynamic_loss_scaling=True
+          - -o AMP.level=O2
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/person_exists_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/person_exists_demo_data/val_list.txt
+          - -o Global.start_eval_epoch=1
+          - -o Global.output_dir=output/SwinTransformer_tiny_patch4_window7_224_dy2st_prim_cinn
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+
+function: paddlelas_imagenet_parse

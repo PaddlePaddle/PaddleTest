@@ -1,0 +1,7 @@
+applications^Audio2Caption.yaml
+applications^Audio2Img.yaml
+applications^AudioChat.yaml
+applications^image2image.yaml
+applications^Inpainting.yaml
+applications^MusicGeneration.yaml
+applications^text2image.yaml

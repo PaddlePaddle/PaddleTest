@@ -1,0 +1,6 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/fractional_Poisson_2d.py'
+  loss_standrad: 'e-3'
+  Post-processing:
+    solution_metric_dir: "../standard_data/fractional_Poisson_2d_metric.npy"
+    solution_loss_dir: "../standard_data/fractional_Poisson_2d_loss.npy"

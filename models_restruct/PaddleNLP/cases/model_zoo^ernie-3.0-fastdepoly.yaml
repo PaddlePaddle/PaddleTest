@@ -1,0 +1,61 @@
+case:
+  linux:
+    train:
+      -
+        name: FD-GPU
+        path: model_zoo/ernie-3.0/deploy/python/
+        cmd: python seq_cls_infer.py
+        params:
+          - --model_dir ../../best_models/afqmc/export
+          - --device gpu --backend paddle
+      -
+        name: FD-CPU
+        path: model_zoo/ernie-3.0/deploy/python/
+        cmd: python seq_cls_infer.py
+        params:
+          - --model_dir ../../best_models/afqmc/export
+          - --device cpu --backend paddle
+      -
+        name: Qunt-GPU
+        path: model_zoo/ernie-3.0/deploy/python/
+        cmd: python seq_cls_infer.py
+        params:
+          - --model_dir ../../best_models/afqmc/width_mult_0.75/mse16_1/
+          - --device gpu
+          - --backend tensorrt
+          - --model_prefix int8
+      -
+        name: Qunt-CPU
+        path: model_zoo/ernie-3.0/deploy/python/
+        cmd: python seq_cls_infer.py
+        params:
+          - --model_dir ../../best_models/afqmc/width_mult_0.75/mse16_1/
+          - --device cpu
+          - --backend paddle
+          - --model_prefix int8
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

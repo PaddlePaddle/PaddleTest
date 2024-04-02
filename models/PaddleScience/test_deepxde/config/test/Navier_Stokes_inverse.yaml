@@ -1,0 +1,5 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_inverse/Navier_Stokes_inverse.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/Navier_Stokes_inverse_metric.npy"
+    solution_loss_dir: "../standard_data/Navier_Stokes_inverse_loss.npy"

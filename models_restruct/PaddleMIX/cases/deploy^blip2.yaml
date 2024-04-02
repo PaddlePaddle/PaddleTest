@@ -1,0 +1,28 @@
+case:
+  linux:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: install_req
+        cmd: git clone https://github.com/PaddlePaddle/PaddleNLP.git && cd PaddleNLP && pip install -e . && cd csrc && python setup_cuda.py install
+      -
+        name: get_model
+        path: deploy/blip2/
+        cmd: bash prepare.sh
+    predict:
+      -
+        name: predict
+        path: deploy/blip2/
+        cmd: python predict.py
+        params:
+          - --first_model_path blip2_export/image_encoder
+          - --second_model_path opt-2.7b-infer_static/opt
+          - --image_path https://paddlenlp.bj.bcebos.com/data/images/mugs.png
+          - --prompt "a photo of"
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="

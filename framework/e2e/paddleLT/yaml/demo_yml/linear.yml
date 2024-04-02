@@ -1,0 +1,17 @@
+Linear_0:
+  desc: "test paddle data "
+  Layer:
+    repo: "DIY"
+    layer_name: "diy.layer.linear.Linear"
+    params:
+      in_features: 3
+      out_features: 10
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float32"
+        shape: [2, 3]
+        range: [ -1, 1]

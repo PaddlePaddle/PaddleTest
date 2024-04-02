@@ -1,0 +1,26 @@
+train:
+  name: single
+  cmd: python tools/main.py
+  params:
+    - --config-file ${rd_yaml_path}
+    - -o total_iters=20
+    - snapshot_config.interval=10
+    - log_config.interval=1
+    - output_dir=output
+  result:
+    exit_code:
+      base: 0
+      threshold: 0
+      evaluation: "="
+eval:
+  name: trained
+  cmd: python tools/main.py
+  params:
+    - --config-file ${rd_yaml_path}
+    - --evaluate-only
+    - --load ${eval_trained_model}
+  result:
+    exit_code:
+      base: 0
+      threshold: 0
+      evaluation: "="

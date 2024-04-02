@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Poisson_PointSetOperator_1d.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 3.72e-06
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.000182
+      evaluation: '-'
+      threshold: 1

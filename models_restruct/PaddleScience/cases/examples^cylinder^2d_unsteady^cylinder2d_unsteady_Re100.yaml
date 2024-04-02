@@ -1,0 +1,12 @@
+case:
+  linux:
+    base: ./base/cylinder2d_unsteady_Re100_base.yaml
+    train:
+      -
+        name: single
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse

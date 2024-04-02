@@ -1,0 +1,42 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/auto_compression/detection/
+        cmd: python run.py
+        params:
+          - --config_path=./configs/ppyoloe_l_qat_dis.yaml
+          - --save_dir="./single_output/"
+          - --devices="gpu"
+
+      -
+        name: multi
+        path: example/auto_compression/detection/
+        cmd: python -m paddle.distributed.launch run.py
+        params:
+          - --config_path=./configs/ppyoloe_l_qat_dis.yaml
+          - --save_dir="./multi_output/"
+          - --devices="gpu"
+
+  windows:
+    train:
+      -
+        name: single
+        path: example/auto_compression/detection/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/ppyoloe_l_qat_dis.yaml"
+          - --save_dir="./single_output/"
+          - --devices="gpu"
+
+  mac:
+    train:
+      -
+        name: single
+        path: example/auto_compression/detection/
+        cmd: python run.py
+        params:
+          - --config_path=./configs/ppyoloe_l_qat_dis.yaml
+          - --save_dir="./single_output/"
+          - --devices="cpu"

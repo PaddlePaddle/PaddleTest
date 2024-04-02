@@ -1,0 +1,80 @@
+case:
+  linux:
+    train:
+      -
+        name: run_classifier_clt
+        path: model_zoo/ernie-m/
+        cmd: python -m paddle.distributed.launch --log_dir output_clt run_classifier.py
+        params:
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --device gpu
+          - --task_type cross-lingual-transfer
+          - --model_name_or_path __internal_testing__/ernie-m
+          - --use_test_data True
+          - --test_data_path ../../tests/fixtures/tests_samples/xnli/xnli.jsonl
+          - --output_dir output_clt
+          - --export_model_dir output_clt
+          - --per_device_train_batch_size 8
+          - --save_steps 1
+          - --eval_steps 1
+          - --max_steps 2
+          - --overwrite_output_dir
+          - --remove_unused_columns False
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: run_classifier_tta
+        path: model_zoo/ernie-m/
+        cmd: python -m paddle.distributed.launch --log_dir output_tta run_classifier.py
+        params:
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --device gpu
+          - --task_type translate-train-all
+          - --model_name_or_path __internal_testing__/ernie-m
+          - --use_test_data True
+          - --test_data_path ../../tests/fixtures/tests_samples/xnli/xnli.jsonl
+          - --output_dir output_tta
+          - --export_model_dir output_tta
+          - --per_device_train_batch_size 8
+          - --save_steps 1
+          - --eval_steps 1
+          - --max_steps 2
+          - --overwrite_output_dir
+          - --remove_unused_columns False
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

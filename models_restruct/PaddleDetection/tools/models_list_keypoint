@@ -1,0 +1,15 @@
+configs^keypoint^higherhrnet^higherhrnet_hrnet_w32_512.yml
+configs^keypoint^higherhrnet^higherhrnet_hrnet_w32_512_swahr.yml
+configs^keypoint^higherhrnet^higherhrnet_hrnet_w32_640.yml
+configs^keypoint^lite_hrnet^wider_naive_hrnet_18_256x192_coco.yml
+configs^keypoint^lite_hrnet^lite_hrnet_18_384x288_coco.yml
+configs^keypoint^lite_hrnet^lite_hrnet_30_384x288_coco.yml
+configs^keypoint^lite_hrnet^lite_hrnet_30_256x192_coco.yml
+configs^keypoint^lite_hrnet^lite_hrnet_18_256x192_coco.yml
+configs^keypoint^tiny_pose^tinypose_128x96.yml
+configs^keypoint^tiny_pose^tinypose_256x192.yml
+configs^keypoint^hrnet^dark_hrnet_w32_256x192.yml
+configs^keypoint^hrnet^hrnet_w32_256x192.yml
+configs^keypoint^hrnet^dark_hrnet_w48_256x192.yml
+configs^keypoint^hrnet^dark_hrnet_w32_384x288.yml
+configs^keypoint^hrnet^hrnet_w32_384x288.yml

@@ -1,0 +1,373 @@
+case:
+  linux:
+    train:
+      -
+        name: classification
+        path: model_zoo/ernie-layout
+        cmd: python -u run_cls.py
+        params:
+          - --model_name_or_path ernie-layoutx-base-uncased
+          - --output_dir ./ernie-layoutx-base-uncased/models/rvl_cdip_sampled/
+          - --dataset_name rvl_cdip_sampled
+          - --do_train
+          - --do_eval
+          - --lr_scheduler_type linear
+          - --warmup_ratio 0.05
+          - --weight_decay 0
+          - --eval_steps 2
+          - --save_steps 2
+          - --max_steps 2
+          - --save_total_limit 1
+          - --load_best_model_at_end
+          - --pattern "cls"
+          - --overwrite_cache false
+          - --doc_stride 128
+          - --target_size 1000
+          - --per_device_train_batch_size 8
+          - --per_device_eval_batch_size 8
+          - --learning_rate 1e-5
+          - --preprocessing_num_workers 32
+          - --train_nshard 16
+          - --seed 1000
+          - --metric_for_best_model acc
+          - --greater_is_better true
+          - --overwrite_output_dir
+        result:
+          loss:
+            base: 0.6557
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: ner
+        path: model_zoo/ernie-layout
+        cmd: python -u run_ner.py
+        params:
+          - --model_name_or_path ernie-layoutx-base-uncased
+          - --output_dir ./ernie-layoutx-base-uncased/models/funsd/
+          - --dataset_name funsd
+          - --do_train
+          - --do_eval
+          - --max_steps 2
+          - --eval_steps 2
+          - --save_steps 2
+          - --save_total_limit 1
+          - --seed 1000
+          - --overwrite_output_dir
+          - --load_best_model_at_end
+          - --pattern ner-bio
+          - --preprocessing_num_workers 4
+          - --overwrite_cache false
+          - --doc_stride 128
+          - --target_size 1000
+          - --per_device_train_batch_size 4
+          - --per_device_eval_batch_size 4
+          - --learning_rate 2e-5
+          - --lr_scheduler_type constant
+          - --gradient_accumulation_steps 1
+          - --metric_for_best_model eval_f1
+          - --greater_is_better true
+        result:
+          loss:
+            base: 1.942795
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: mrc
+        path: model_zoo/ernie-layout
+        cmd: python -u run_mrc.py
+        params:
+          - --model_name_or_path ernie-layoutx-base-uncased
+          - --output_dir ./ernie-layoutx-base-uncased/models/docvqa_zh/
+          - --dataset_name xfund_zh
+          - --do_train
+          - --do_eval
+          - --lang "ch"
+          - --lr_scheduler_type linear
+          - --warmup_ratio 0.05
+          - --weight_decay 0
+          - --eval_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --save_total_limit 1
+          - --load_best_model_at_end
+          - --pattern "mrc"
+          - --overwrite_cache false
+          - --doc_stride 128
+          - --target_size 1000
+          - --per_device_train_batch_size 8
+          - --per_device_eval_batch_size 8
+          - --learning_rate 2e-5
+          - --preprocessing_num_workers 32
+          - --save_total_limit 1
+          - --train_nshard 16
+          - --seed 1000
+          - --metric_for_best_model anls
+          - --greater_is_better true
+          - --overwrite_output_dir
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: classification
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type cls
+          - --model_path ./ernie-layoutx-base-uncased/models/rvl_cdip_sampled/
+          - --output_path ./cls_export
+      -
+        name: mrc
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type mrc
+          - --model_path ./ernie-layoutx-base-uncased/models/docvqa_zh/
+          - --output_path ./mrc_export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: ner
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type ner
+          - --model_path ./ernie-layoutx-base-uncased/models/funsd/
+          - --output_path ./ner_export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    predict:
+      -
+        name: prepare
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/document_intelligence/images.zip && unzip images.zip
+      -
+        name: classification
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../cls_export/inference
+          - --lang "en"
+          - --task_type cls
+          - --batch_size 8
+      -
+        name: ner
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../ner_export/inference
+          - --task_type ner
+          - --lang "en"
+          - --batch_size 8
+      -
+        name: mrc
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../mrc_export/inference
+          - --task_type mrc
+          - --lang "ch"
+          - --batch_size 8
+
+  windows:
+    train:
+      -
+        name: classification
+        path: model_zoo/ernie-layout
+        cmd: python -u run_cls.py
+        params:
+          - --model_name_or_path ernie-layoutx-base-uncased
+          - --output_dir ./ernie-layoutx-base-uncased/models/rvl_cdip_sampled/
+          - --dataset_name rvl_cdip_sampled
+          - --do_train
+          - --do_eval
+          - --lr_scheduler_type linear
+          - --warmup_ratio 0.05
+          - --weight_decay 0
+          - --eval_steps 2
+          - --save_steps 2
+          - --max_steps 2
+          - --save_total_limit 1
+          - --load_best_model_at_end
+          - --pattern "cls"
+          - --overwrite_cache false
+          - --doc_stride 128
+          - --target_size 1000
+          - --per_device_train_batch_size 8
+          - --per_device_eval_batch_size 8
+          - --learning_rate 1e-5
+          - --preprocessing_num_workers 32
+          - --train_nshard 16
+          - --seed 1000
+          - --metric_for_best_model acc
+          - --greater_is_better true
+          - --overwrite_output_dir
+        result:
+          loss:
+            base: 0.6557
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: ner
+        path: model_zoo/ernie-layout
+        cmd: python -u run_ner.py
+        params:
+          - --model_name_or_path ernie-layoutx-base-uncased
+          - --output_dir ./ernie-layoutx-base-uncased/models/funsd/
+          - --dataset_name funsd
+          - --do_train
+          - --do_eval
+          - --max_steps 2
+          - --eval_steps 2
+          - --save_steps 2
+          - --save_total_limit 1
+          - --seed 1000
+          - --overwrite_output_dir
+          - --load_best_model_at_end
+          - --pattern ner-bio
+          - --preprocessing_num_workers 4
+          - --overwrite_cache false
+          - --doc_stride 128
+          - --target_size 1000
+          - --per_device_train_batch_size 4
+          - --per_device_eval_batch_size 4
+          - --learning_rate 2e-5
+          - --lr_scheduler_type constant
+          - --gradient_accumulation_steps 1
+          - --metric_for_best_model eval_f1
+          - --greater_is_better true
+        result:
+          loss:
+            base: 1.942795
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: mrc
+        path: model_zoo/ernie-layout
+        cmd: python -u run_mrc.py
+        params:
+          - --model_name_or_path ernie-layoutx-base-uncased
+          - --output_dir ./ernie-layoutx-base-uncased/models/docvqa_zh/
+          - --dataset_name xfund_zh
+          - --do_train
+          - --do_eval
+          - --lang "ch"
+          - --lr_scheduler_type linear
+          - --warmup_ratio 0.05
+          - --weight_decay 0
+          - --eval_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --save_total_limit 1
+          - --load_best_model_at_end
+          - --pattern "mrc"
+          - --overwrite_cache false
+          - --doc_stride 128
+          - --target_size 1000
+          - --per_device_train_batch_size 8
+          - --per_device_eval_batch_size 8
+          - --learning_rate 2e-5
+          - --preprocessing_num_workers 32
+          - --save_total_limit 1
+          - --train_nshard 16
+          - --seed 1000
+          - --metric_for_best_model anls
+          - --greater_is_better true
+          - --overwrite_output_dir
+        result:
+          loss:
+            base: 1
+            threshold: 1
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: classification
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type cls
+          - --model_path ./ernie-layoutx-base-uncased/models/rvl_cdip_sampled/
+          - --output_path ./cls_export
+      -
+        name: mrc
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type mrc
+          - --model_path ./ernie-layoutx-base-uncased/models/docvqa_zh/
+          - --output_path ./mrc_export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+      -
+        name: ner
+        path: model_zoo/ernie-layout
+        cmd: python export_model.py
+        params:
+          - --task_type ner
+          - --model_path ./ernie-layoutx-base-uncased/models/funsd/
+          - --output_path ./ner_export
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    predict:
+      -
+        name: prepare
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: wget https://bj.bcebos.com/paddlenlp/datasets/document_intelligence/images.zip && unzip images.zip
+      -
+        name: classification
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../cls_export/inference
+          - --lang "en"
+          - --task_type cls
+          - --batch_size 8
+      -
+        name: ner
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../ner_export/inference
+          - --task_type ner
+          - --lang "en"
+          - --batch_size 8
+      -
+        name: mrc
+        path: model_zoo/ernie-layout/deploy/python
+        cmd: python infer.py
+        params:
+          - --model_path_prefix ../../mrc_export/inference
+          - --task_type mrc
+          - --lang "ch"
+          - --batch_size 8
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

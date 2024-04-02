@@ -1,0 +1,7 @@
+ResNet50.yaml
+SwinTransformer_base_patch4_window7_224.yaml
+PP-LCNet_x1_0.yaml
+CLIP_vit_base_patch16_224.yaml
+PP-HGNet_small.yaml
+PP-HGNetV2-B4.yaml
+MobileNetV3_small_x1_0.yaml

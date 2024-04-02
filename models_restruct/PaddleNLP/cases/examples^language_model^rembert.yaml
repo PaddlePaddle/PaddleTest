@@ -1,0 +1,45 @@
+case:
+  linux:
+    train:
+      -
+        name: run_thucnews
+        path: examples/language_model/roformer
+        cmd: python -m paddle.distributed.launch run_thucnews.py
+        params:
+          - --model_type roformer
+          - --model_name_or_path roformer-chinese-base
+          - --max_seq_length 256
+          - --batch_size 64
+          - --learning_rate 2e-5
+          - --num_train_epochs 3
+          - --logging_steps 1
+          - --save_steps 2
+          - --output_dir ./thucnews/
+          - --device gpu
+          - --use_amp True
+          - --max_steps 2
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

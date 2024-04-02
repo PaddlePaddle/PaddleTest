@@ -1,0 +1,137 @@
+case:
+  linux:
+    base: ./base/GeneralRecognition_base.yaml
+    train:
+      -
+        name: single
+      -
+        name: multi
+    eval:
+      -
+        name: trained
+      -
+        name: pretrained
+    infer: skipped
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+    predict:
+      -
+        name: trained
+      -
+        name: pretrained
+
+  linux_convergence:
+    base: ./base/GeneralRecognition_base.yaml
+    train:
+      -
+        name: single_convergence
+      -
+        name: multi_convergence
+
+
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
+    # base: ./base/GeneralRecognition_base.yaml
+  #   train:
+  #     -
+  #       name: function
+  #       params:
+  #         - -o Global.device=cpu
+
+  windows:
+    base: ./base/GeneralRecognition_base.yaml
+    train:
+      -
+        name: function
+    eval:
+      -
+        name: function
+      -
+        name: pretrained
+    infer: skipped
+    export:
+      -
+        name: function
+      -
+        name: pretrained
+    predict:
+      -
+        name: function
+      -
+        name: pretrained
+
+  windows_cpu:
+    base: ./base/GeneralRecognition_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    infer: skipped
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+
+  mac:
+    base: ./base/GeneralRecognition_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    infer: skipped
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+
+function: paddlelas_imagenet_parse

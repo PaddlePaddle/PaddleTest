@@ -1,0 +1,14 @@
+case:
+    linux:
+        base: ./base/3d_base_pretrained.yaml
+        eval:
+          -
+            name: pretrained
+          -
+            name: pretrained_bs1
+        predict:
+          -
+            name: pretrained
+            params:
+              - --lidar_file datasets/KITTI/training/velodyne/000000.bin
+              - --num_point_dim 4

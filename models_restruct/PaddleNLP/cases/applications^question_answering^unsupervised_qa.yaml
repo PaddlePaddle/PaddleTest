@@ -1,0 +1,274 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: applications/question_answering/unsupervised_qa
+        cmd: mkdir data &&  cd data && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/source_file.txt  && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/train.json && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/dev.json
+      -
+        name: run_qa_pairs_generation
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u run_qa_pairs_generation.py
+        params:
+          - --source_file_path data/source_file.txt
+          - --target_file_path data/target_file.json
+          - --answer_generation_model_path uie-base-answer-extractor-v1
+          - --question_generation_model_path unimo-text-1.0-question-generation
+          - --filtration_model_path uie-base-qa-filter-v1
+          - --batch_size 8
+          - --a_max_answer_candidates 10
+          - --a_prompt '答案'
+          - --a_position_prob 0.01
+          - --q_num_return_sequences 3
+          - --q_max_question_length 50
+          - --q_decode_strategy sampling
+          - --q_top_k 5
+          - --q_top_p 1
+          - --do_filtration
+          - --f_filtration_position_prob 0.01
+          - --do_debug
+      -
+        name: run_data_preprocess_train
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u run_data_preprocess.py
+        params:
+          - --source_file_path data/train.json
+          - --target_dir data/finetune
+          - --do_answer_prompt
+      -
+        name: run_data_preprocess_dev
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u run_data_preprocess.py
+        params:
+          - --source_file_path data/dev.json
+          - --target_dir data/finetune
+          - --do_answer_prompt
+      -
+        name: answer_extraction_and_roundtrip_filtration_finetune
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u -m paddle.distributed.launch --log_dir log/answer_extraction finetune/answer_extraction_and_roundtrip_filtration/finetune.py
+        params:
+          - --train_path data/finetune/answer_extraction/train.json
+          - --dev_path data/finetune/answer_extraction/dev.json
+          - --save_dir log/answer_extraction/checkpoints
+          - --learning_rate 1e-5
+          - --batch_size 16
+          - --max_seq_len 512
+          - --num_epochs 1
+          - --model uie-base
+          - --seed 1000
+          - --logging_steps 1
+          - --valid_steps 5
+          - --device gpu
+      -
+        name: question_generation_finetune
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u -m paddle.distributed.launch  --log_dir log/question_generation finetune/question_generation/train.py
+        params:
+          - --train_file=data/finetune/question_generation/train.json
+          - --predict_file=data/finetune/question_generation/dev.json
+          - --save_dir=log/question_generation/checkpoints
+          - --output_path=log/question_generation/predict.txt
+          - --dataset_name=dureader_qg
+          - --model_name_or_path="unimo-text-1.0"
+          - --logging_steps=1
+          - --save_steps=100
+          - --epochs=1
+          - --batch_size=16
+          - --learning_rate=1e-5
+          - --warmup_proportion=0.02
+          - --weight_decay=0.01
+          - --max_seq_len=512
+          - --max_target_len=30
+          - --do_train
+          - --do_predict
+          - --max_dec_len=20
+          - --min_dec_len=3
+          - --num_return_sequences=1
+          - --template=1
+          - --device=gpu
+      -
+        name: filtration_finetune
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u -m paddle.distributed.launch --log_dir log/filtration finetune/answer_extraction_and_roundtrip_filtration/finetune.py
+        params:
+          - --train_path=data/finetune/filtration/train.json
+          - --dev_path=data/finetune/filtration/dev.json
+          - --save_dir=log/filtration/checkpoints
+          - --learning_rate=1e-5
+          - --batch_size=16
+          - --max_seq_len=512
+          - --num_epochs=1
+          - --model=uie-base
+          - --seed=1000
+          - --logging_steps=1
+          - --valid_steps=6
+          - --device=gpu
+    eval:
+      -
+        name: answer_extraction
+        path: applications/question_answering/unsupervised_qa
+        cmd: python finetune/answer_extraction_and_roundtrip_filtration/evaluate.py
+        params:
+          - --model_path=log/answer_extraction/checkpoints/model_best
+          - --test_path=data/finetune/answer_extraction/dev.json
+          - --batch_size=16
+          - --max_seq_len=512
+          - --limit=0.01
+      -
+        name: filtration
+        path: applications/question_answering/unsupervised_qa
+        cmd: python finetune/answer_extraction_and_roundtrip_filtration/evaluate.py
+        params:
+          - --model_path=log/filtration/checkpoints/model_best
+          - --test_path=data/finetune/filtration/dev.json
+          - --batch_size=16
+          - --max_seq_len=512
+          - --limit=0.5
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: applications/question_answering/unsupervised_qa
+        cmd: mkdir data &&  cd data && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/source_file.txt  && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/train.json && wget https://paddlenlp.bj.bcebos.com/applications/unsupervised_qa/dev.json
+      -
+        name: run_qa_pairs_generation
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u run_qa_pairs_generation.py
+        params:
+          - --source_file_path data/source_file.txt
+          - --target_file_path data/target_file.json
+          - --answer_generation_model_path uie-base-answer-extractor-v1
+          - --question_generation_model_path unimo-text-1.0-question-generation
+          - --filtration_model_path uie-base-qa-filter-v1
+          - --batch_size 4
+          - --a_max_answer_candidates 10
+          - --a_prompt "答案"
+          - --a_position_prob 0.01
+          - --q_num_return_sequences 3
+          - --q_max_question_length 50
+          - --q_decode_strategy sampling
+          - --q_top_k 5
+          - --q_top_p 1
+          - --do_filtration
+          - --f_filtration_position_prob 0.01
+          - --do_debug
+      -
+        name: run_data_preprocess_train
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u run_data_preprocess.py
+        params:
+          - --source_file_path data/train.json
+          - --target_dir data/finetune
+          - --do_answer_prompt
+      -
+        name: run_data_preprocess_dev
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u run_data_preprocess.py
+        params:
+          - --source_file_path data/dev.json
+          - --target_dir data/finetune
+          - --do_answer_prompt
+      -
+        name: answer_extraction_and_roundtrip_filtration_finetune
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u -m paddle.distributed.launch --log_dir log/answer_extraction finetune/answer_extraction_and_roundtrip_filtration/finetune.py
+        params:
+          - --train_path data/finetune/answer_extraction/train.json
+          - --dev_path data/finetune/answer_extraction/dev.json
+          - --save_dir log/answer_extraction/checkpoints
+          - --learning_rate 1e-5
+          - --batch_size 4
+          - --max_seq_len 512
+          - --num_epochs 1
+          - --model uie-base
+          - --seed 1000
+          - --logging_steps 1
+          - --valid_steps 5
+          - --device gpu
+      -
+        name: question_generation_finetune
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u -m paddle.distributed.launch  --log_dir log/question_generation finetune/question_generation/train.py
+        params:
+          - --train_file=data/finetune/question_generation/train.json
+          - --predict_file=data/finetune/question_generation/dev.json
+          - --save_dir=log/question_generation/checkpoints
+          - --output_path=log/question_generation/predict.txt
+          - --dataset_name=dureader_qg
+          - --model_name_or_path="unimo-text-1.0"
+          - --logging_steps=1
+          - --save_steps=100
+          - --epochs=1
+          - --batch_size=4
+          - --learning_rate=1e-5
+          - --warmup_proportion=0.02
+          - --weight_decay=0.01
+          - --max_seq_len=512
+          - --max_target_len=30
+          - --do_train
+          - --do_predict
+          - --max_dec_len=20
+          - --min_dec_len=3
+          - --num_return_sequences=1
+          - --template=1
+          - --device=gpu
+      -
+        name: filtration_finetune
+        path: applications/question_answering/unsupervised_qa
+        cmd: python -u -m paddle.distributed.launch --log_dir log/filtration finetune/answer_extraction_and_roundtrip_filtration/finetune.py
+        params:
+          - --train_path=data/finetune/filtration/train.json
+          - --dev_path=data/finetune/filtration/dev.json
+          - --save_dir=log/filtration/checkpoints
+          - --learning_rate=1e-5
+          - --batch_size=4
+          - --max_seq_len=512
+          - --num_epochs=1
+          - --model=uie-base
+          - --seed=1000
+          - --logging_steps=1
+          - --valid_steps=6
+          - --device=gpu
+    eval:
+      -
+        name: answer_extraction_evaluate
+        path: applications/question_answering/unsupervised_qa
+        cmd: python finetune/answer_extraction_and_roundtrip_filtration/evaluate.py
+        params:
+          - --model_path=log/answer_extraction/checkpoints/model_best
+          - --test_path=data/finetune/answer_extraction/dev.json
+          - --batch_size=4
+          - --max_seq_len=512
+          - --limit=0.01
+      -
+        name: evaluate_filtration
+        path: applications/question_answering/unsupervised_qa
+        cmd: python finetune/answer_extraction_and_roundtrip_filtration/evaluate.py
+        params:
+          - --model_path=log/filtration/checkpoints/model_best
+          - --test_path=data/finetune/filtration/dev.json
+          - --batch_size=4
+          - --max_seq_len=512
+          - --limit=0.5
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -1,0 +1,5 @@
+configs^petr^petrv2_vovnet_gridmask_p4_800x320.yml
+configs^petr^petr_vovnet_gridmask_p4_800x320_amp.yml
+configs^caddn^caddn_deeplabv3p_resnet101_os8_kitti.yml
+configs^caddn^caddn_ocrnet_hrnet_w18_kitti.yml
+configs^smoke^smoke_dla34_no_dcn_kitti.yml

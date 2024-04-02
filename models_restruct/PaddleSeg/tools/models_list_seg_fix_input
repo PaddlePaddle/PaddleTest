@@ -1,0 +1,3 @@
+configs^rtformer^rtformer_slim_ade20k_512x512_160k.yml
+configs^rtformer^rtformer_slim_cityscapes_1024x512_120k.yml
+configs^dmnet^dmnet_resnet101_os8_cityscapes_1024x512_80k.yml

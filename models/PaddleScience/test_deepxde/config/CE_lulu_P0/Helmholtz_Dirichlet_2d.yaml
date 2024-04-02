@@ -1,0 +1,6 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/Helmholtz_Dirichlet_2d.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/Helmholtz_Dirichlet_2d_metric.npy"
+    solution_loss_dir: "../standard_data/Helmholtz_Dirichlet_2d_loss.npy"
+    run_time: 71.196575

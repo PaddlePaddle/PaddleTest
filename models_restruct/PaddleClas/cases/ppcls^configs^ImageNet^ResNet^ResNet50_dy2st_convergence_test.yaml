@@ -1,0 +1,82 @@
+# all不需要固定随机量
+case:
+  linux_convergence:
+    base: ./base/ImageNet_base_dy2st.yaml
+    train:
+      -
+        name: dy
+      -
+        name: dy2st
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+          - -o DataLoader.Train.sampler.batch_size=256
+          - -o DataLoader.Eval.sampler.batch_size=256
+          - -o DataLoader.Train.loader.num_workers=16
+          - -o DataLoader.Eval.loader.num_workers=16
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_cinn
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+          - -o DataLoader.Train.sampler.batch_size=256
+          - -o DataLoader.Eval.sampler.batch_size=256
+          - -o DataLoader.Train.loader.num_workers=16
+          - -o DataLoader.Eval.loader.num_workers=16
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_prim
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+          - -o DataLoader.Train.sampler.batch_size=256
+          - -o DataLoader.Eval.sampler.batch_size=256
+          - -o DataLoader.Train.loader.num_workers=16
+          - -o DataLoader.Eval.loader.num_workers=16
+          - -o Global.eval_during_train=False
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+      -
+        name: dy2st_prim_cinn
+        params:
+          - -o Global.to_static=True
+          - -o Global.output_dir=output/ResNet50_dy2st_prim_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012_demo_data/val_list.txt
+          - -o Optimizer.lr.name=Cosine
+          - -o Global.use_dali=True
+          - -o DataLoader.Train.sampler.batch_size=256
+          - -o DataLoader.Eval.sampler.batch_size=256
+          - -o DataLoader.Train.loader.num_workers=16
+          - -o DataLoader.Eval.loader.num_workers=16
+        result:
+          loss:
+            base: 6
+            threshold: 1
+            evaluation: "-"
+
+function: paddlelas_imagenet_parse

@@ -1,0 +1,10 @@
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_94
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_68
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_161
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_155
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_122
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_173
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_132
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_112
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_167
+import layercase.sublayer1000.Det_cases.gfl_gflv2_r50_fpn_1x_coco.SIR_149

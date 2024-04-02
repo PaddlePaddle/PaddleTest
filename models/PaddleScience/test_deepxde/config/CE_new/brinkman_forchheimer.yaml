@@ -1,0 +1,5 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_inverse/brinkman_forchheimer.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/brinkman_forchheimer_metric.npy"
+    solution_loss_dir: "../standard_data/brinkman_forchheimer_loss.npy"

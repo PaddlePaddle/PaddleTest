@@ -1,0 +1,69 @@
+# all不需要固定随机量
+case:
+  linux_convergence:
+    base: ./base/ImageNet_base_dy2st.yaml
+    train:
+      -
+        name: dy
+      -
+        name: dy2st
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
+        params:
+          - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=0.1
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+        result:
+          loss:
+            base: 2.2
+            threshold: 0.1
+            evaluation: "-"
+      -
+        name: dy2st_cinn
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
+        params:
+          - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=0.1
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+        result:
+          loss:
+            base: 2.2
+            threshold: 0.1
+            evaluation: "-"
+      -
+        name: dy2st_prim
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
+        params:
+          - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=0.1
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_prim
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+        result:
+          loss:
+            base: 2.2
+            threshold: 0.1
+            evaluation: "-"
+      -
+        name: dy2st_prim_cinn
+        cmd: python tools/train.py -c ppcls/configs/ImageNet/MobileNetV3/MobileNetV3_large_x1_0.yaml
+        params:
+          - -o Global.to_static=True
+          - -o Optimizer.lr.learning_rate=0.1
+          - -o DataLoader.Train.sampler.batch_size=128
+          - -o Global.output_dir=output/MobileNetV3_dy2st_prim_cinn
+          - -o DataLoader.Train.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_train_list.txt
+          - -o DataLoader.Eval.dataset.cls_label_path=dataset/ILSVRC2012/partial_shuf_val_list.txt
+        result:
+          loss:
+            base: 2.2
+            threshold: 0.1
+            evaluation: "-"
+
+function: paddlelas_imagenet_parse

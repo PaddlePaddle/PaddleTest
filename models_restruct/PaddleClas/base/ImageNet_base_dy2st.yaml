@@ -1,0 +1,19 @@
+train:
+  -
+    name: dy
+    cmd: python tools/train.py -c ppcls/configs/ImageNet/ResNet/ResNet50_amp_O2_ultra.yaml
+    params:
+      - -o Global.device=gpu
+      - -o Global.print_batch_step=100
+      - -o Global.epochs=20
+      - -o Global.save_interval=10
+      - -o Global.eval_interval=1
+      - -o Global.eval_during_train=True
+      - -o DataLoader.Train.sampler.shuffle=False
+      - -o Global.seed=1234
+      - -o Optimizer.lr.learning_rate=0.2
+    result:
+      loss:
+        base: 20
+        threshold: 0
+        evaluation: "="

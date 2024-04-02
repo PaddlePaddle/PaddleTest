@@ -1,0 +1,15 @@
+train:
+  -
+    name: single
+    cmd: python examples/pinn_forward/diffusion_reaction.py
+    params:
+      - --epochs=2
+    result:
+      loss:
+        base: 3.72e-04
+        threshold: 1
+        evaluation: "-"
+      metric:
+        base: 0.0022
+        evaluation: '-'
+        threshold: 1

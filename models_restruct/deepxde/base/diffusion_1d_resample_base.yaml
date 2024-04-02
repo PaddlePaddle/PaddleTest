@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/diffusion_1d_resample.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 0.00465
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.0342
+      evaluation: '-'
+      threshold: 1

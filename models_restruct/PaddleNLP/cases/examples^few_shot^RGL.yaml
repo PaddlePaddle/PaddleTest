@@ -1,0 +1,114 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: examples/few_shot/RGL
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/k-shot-glue/rgl-k-shot.zip && unzip rgl-k-shot.zip
+      -
+        name: single
+        path: examples/few_shot/RGL
+        cmd: python rgl.py
+        params:
+          - --dataset SST-2
+          - --data_path ./few-shot-glue/SST-2/16-13/
+          - --max_seq_length 128
+          - --max_steps 2
+          - --logging_step 1
+          - --eval_step 2
+          - --batch_size 4
+          - --alpha 0.1
+          - --seed 13
+          - --learning_rate 1e-5
+          - --template "{'text':'text_a'} It was {'mask'}."
+          - --verbalizer "{'0':'terrible','1':'great'}"
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: examples/few_shot/RGL
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/k-shot-glue/rgl-k-shot.zip && unzip rgl-k-shot.zip
+      -
+        name: train
+        path: examples/few_shot/RGL
+        cmd: python rgl.py
+        params:
+          - --dataset SST-2
+          - --data_path ./few-shot-glue/SST-2/16-13/
+          - --max_seq_length 128
+          - --max_steps 2
+          - --logging_step 1
+          - --eval_step 2
+          - --batch_size 4
+          - --alpha 0.1
+          - --seed 13
+          - --learning_rate 1e-5
+          - --template "{'text':'text_a'} It was {'mask'}."
+          - --verbalizer "{'0':'terrible','1':'great'}"
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train:
+      -
+        name: prepare
+        path: examples/few_shot/RGL
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/k-shot-glue/rgl-k-shot.zip && unzip rgl-k-shot.zip
+      -
+        name: train
+        path: examples/few_shot/RGL
+        cmd: python rgl.py
+        params:
+          - --dataset SST-2
+          - --data_path ./few-shot-glue/SST-2/16-13/
+          - --max_seq_length 128
+          - --max_steps 2
+          - --logging_step 1
+          - --eval_step 2
+          - --batch_size 4
+          - --alpha 0.1
+          - --seed 13
+          - --learning_rate 1e-5
+          - --template "{'text':'text_a'} It was {'mask'}."
+          - --verbalizer "{'0':'terrible','1':'great'}"
+          - --device cpu
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train:
+      -
+        name: prepare
+        path: examples/few_shot/RGL
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/k-shot-glue/rgl-k-shot.zip && unzip rgl-k-shot.zip
+      -
+        name: single
+        path: examples/few_shot/RGL
+        cmd: python rgl.py
+        params:
+          - --dataset SST-2
+          - --data_path ./few-shot-glue/SST-2/16-13/
+          - --max_seq_length 128
+          - --max_steps 2
+          - --logging_step 1
+          - --eval_step 2
+          - --batch_size 4
+          - --alpha 0.1
+          - --seed 13
+          - --learning_rate 1e-5
+          - --template "{'text':'text_a'} It was {'mask'}."
+          - --verbalizer "{'0':'terrible','1':'great'}"
+          - --device cpu
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

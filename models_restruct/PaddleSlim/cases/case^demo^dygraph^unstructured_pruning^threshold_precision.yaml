@@ -1,0 +1,56 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/unstructured_pruning
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --data imagenet
+          - --lr 0.05
+          - --pruning_mode threshold
+          - --threshold 0.01
+          - --batch_size 256
+          - --lr_strategy piecewise_decay
+          - --step_epochs 1 2 3
+          - --num_epochs 20
+          - --test_period 1
+          - --model_period 1
+          - --model_path dy_threshold_models_gpu1
+          - --ce_test True
+        result:
+          acc_top1:
+            base: 0.69472658634
+            threshold: 0.00000001
+            evaluation: "+"
+          acc_top5:
+            base: 0.8974609375
+            threshold: 0.00000001
+            evaluation: "+"
+
+      -
+        name: multi
+        path: demo/dygraph/unstructured_pruning
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --data imagenet
+          - --lr 0.05
+          - --pruning_mode threshold
+          - --threshold 0.01
+          - --batch_size 256
+          - --lr_strategy piecewise_decay
+          - --step_epochs 1 2 3
+          - --num_epochs 20
+          - --test_period 1
+          - --model_period 1
+          - --model_path dy_threshold_models_gpu1
+          - --ce_test True
+        result:
+          acc_top1:
+            base: 0.694726586341
+            threshold: 0.00000001
+            evaluation: "+"
+          acc_top5:
+            base: 0.8974609375
+            threshold: 0.00000001
+            evaluation: "+"

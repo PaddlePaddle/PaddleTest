@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/wave_1d.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 0.599
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.692
+      evaluation: '-'
+      threshold: 1

@@ -1,0 +1,4 @@
+pedestrian_yolov3_darknet
+vehicle_yolov3_darknet
+cascade_rcnn_vit_large_hrfpn_cae_1x_coco
+ppyoloe_crn_l_p2_alpha_largesize_80e_visdrone

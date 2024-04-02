@@ -1,0 +1,12 @@
+examples^lorenz.yaml
+examples^rossler.yaml
+examples^cylinder^2d_unsteady^transformer_physx.yaml
+examples^pipe^poiseuille_flow.yaml
+examples^aneurysm^aneurysm_flow.yaml
+examples^hpinns^holography.yaml
+examples^operator_learning^deeponet.yaml
+examples^ide^volterra_ide.yaml
+examples^fpde^fractional_poisson_2d.yaml
+examples^shock_wave^shock_wave.yaml
+examples^heat_pinn^heat_pinn.yaml
+examples^epnn^epnn.yaml

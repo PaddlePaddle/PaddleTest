@@ -1,0 +1,6 @@
+bert-base-chinese
+ernie_gen_acrostic_poetry
+senta_lstm
+emotion_detection_textcnn
+simnet_bow
+resnet50_vd_imagenet_ssld

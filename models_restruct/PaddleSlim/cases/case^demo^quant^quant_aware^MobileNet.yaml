@@ -1,0 +1,42 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_aware
+        cmd: python train.py
+        params:
+          - --model MobileNet
+          - --pretrained_model ../../pretrain/MobileNetV1_pretrained
+          - --checkpoint_dir ./output/mobilenetv1
+          - --num_epochs 1
+          - --batch_size 16
+          - --use_gpu True
+
+  windows:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_aware
+        cmd: python train.py
+        params:
+          - --model "MobileNet"
+          - --pretrained_model "../../pretrain/MobileNetV1_pretrained"
+          - --checkpoint_dir "./output/mobilenetv1"
+          - --num_epochs 1
+          - --batch_size 16
+          - --use_gpu True
+
+  mac:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_aware
+        cmd: python train.py
+        params:
+          - --model MobileNet
+          - --pretrained_model ../../pretrain/MobileNetV1_pretrained
+          - --checkpoint_dir ./output/mobilenetv1
+          - --num_epochs 1
+          - --batch_size 16
+          - --use_gpu False

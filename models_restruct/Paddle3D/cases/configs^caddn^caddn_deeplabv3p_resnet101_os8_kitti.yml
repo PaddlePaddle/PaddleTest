@@ -1,0 +1,13 @@
+case:
+    linux:
+        base: ./base/3d_base_pretrained.yaml
+        eval:
+          -
+            name: pretrained
+          -
+            name: pretrained_bs1
+        predict:
+          -
+            name: pretrained
+            params:
+              - --img_path datasets/KITTI/training/image_2/000000.png

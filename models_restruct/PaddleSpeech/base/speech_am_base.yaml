@@ -1,0 +1,19 @@
+train:
+  name: multi
+  path: ${model_path}
+  cmd: pwd; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/t2s/exps/${model}; bash path.sh; bash ${MAIN_ROOT}/utils/parse_options.sh; ./local/train.sh ${conf_path} ${train_output_path}
+
+eval:
+  name: synthesize
+  path: ${model_path}
+  cmd:  pwd; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/t2s/exps/${model}; head -10 ./dump/test/norm/metadata.jsonl > ./metadata_10.jsonl; sed -i "s#dump/test/norm/metadata.jsonl#./metadata_10.jsonl#g;s#python3#python#g" ./local/synthesize.sh; ./local/synthesize.sh ${conf_path} ${train_output_path} ${ckpt_name}
+
+export:
+  name: synthesize_e2e
+  path: ${model_path}
+  cmd:  pwd; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/t2s/exps/${model}; bash path; echo ${BIN_DIR}; head -5 ${BIN_DIR}/../sentences.txt > sentences_5.txt; sed -i "s/python3/python/g" ./local/synthesize_e2e.sh; sed -i "s!${BIN_DIR}/../sentences.txt!./sentences_5.txt!g" ./local/synthesize_e2e.sh; ./local/synthesize_e2e.sh ${conf_path} ${train_output_path} ${ckpt_name}
+
+predict:
+  name: inference
+  path: ${model_path}
+  cmd: pwd; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/t2s/exps/${model}; bash path; sed -i "s#python3#python#g;s#${BIN_DIR}/../sentences.txt#./sentences_5.txt#g" ./local/inference.sh; ./local/inference.sh ${train_output_path}

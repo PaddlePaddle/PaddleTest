@@ -1,0 +1,11 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/nas
+        cmd: python sa_nas_mobilenetv2.py
+        params:
+          - --search_steps 1
+          - --retain_epoch 1
+          - --port 8881

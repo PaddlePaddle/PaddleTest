@@ -1,0 +1,74 @@
+case:
+  linux:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: prepare
+        path: applications/text_summarization/finetune
+        cmd: python run_prepare.py
+      -
+        name: train
+        path: applications/text_summarization/finetune
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --do_train
+    eval: skipped
+    infer:
+      -
+        name: trained
+        path: applications/text_summarization/finetune
+        cmd: python predict.py
+        params:
+          - --device gpu
+          - --init_checkpoint_dir ./output/
+    export:
+      -
+        name: trained
+        path: applications/text_summarization/finetune
+        cmd: python export_model.py
+        params:
+          - --export_output_dir ./inference_model/
+    predict:
+      -
+        name: trained
+        path: applications/text_summarization/finetune/deploy/paddle_inference/
+        cmd: python inference_pegasus.py
+        params:
+          - --inference_model_dir ../../inference_model/
+
+  windows:
+    base: ./base/normal_case.yaml
+    train:
+      -
+        name: prepare
+        path: applications/text_summarization/finetune
+        cmd: python run_prepare.py
+      -
+        name: train
+        path: applications/text_summarization/finetune
+        cmd: python -m paddle.distributed.launch train.py
+    eval: skipped
+    infer:
+      -
+        name: trained
+        path: applications/text_summarization/finetune
+        cmd: python predict.py
+        params:
+          - --device gpu
+          - --init_checkpoint_dir ./output/
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

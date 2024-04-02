@@ -1,0 +1,11 @@
+train:
+  -
+    name: single
+    cmd: python examples/ide/volterra_ide.py
+    params:
+      - TRAIN.epochs=10
+    result:
+      loss:
+        base: 0.0001
+        threshold: 1
+        evaluation: "-"

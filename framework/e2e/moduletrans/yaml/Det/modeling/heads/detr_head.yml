@@ -1,0 +1,813 @@
+detr_head_ConvLayer_0:
+  desc: "Det ppdet.modeling.heads.detr_head.MLP模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.heads.detr_head.MLP"
+    params:
+      input_dim: 16
+      hidden_dim: 32
+      output_dim: 16
+      num_layers: 3
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      x:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 16, 16, 16]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+
+detr_head_MultiHeadAttentionMap_0:
+  desc: "Det ppdet.modeling.heads.detr_head.MultiHeadAttentionMap模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.heads.detr_head.MultiHeadAttentionMap"
+    params:
+      query_dim: 32
+      hidden_dim: 32
+      num_heads: 8
+      dropout: 0.
+      bias: True
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      q:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 32, 32]
+        range: [ -1, 1]
+      k:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 32, 64, 64]
+        range: [ -1, 1]
+      mask:
+        generate_way: "random"  # random, solid, load
+        type: "Tensor"
+        dtype: "float64"
+        shape: [4, 1, 1, 64, 64]
+        range: [ -1, 1]
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.00001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+
+#detr_head_MaskHeadFPNConv_0:
+#  desc: "Det ppdet.modeling.heads.detr_head.MaskHeadFPNConv模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.heads.detr_head.MaskHeadFPNConv"
+#    params:
+#      input_dim: 264
+#      fpn_dims: [1024, 512, 256]
+#      context_dim: 256
+#      num_groups: 8
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      x:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float64"
+#        shape: [4, 4096, 256]
+#        range: [ -1, 1]
+#      bbox_attention_map:
+#        generate_way: "random"  # random, solid, load
+#        type: "Tensor"
+#        dtype: "float64"
+#        shape: [4, 32, 8, 64, 64]
+#        range: [ -1, 1]
+#      fpns:
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 1024, 64, 64]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 512, 64, 64]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float64"
+#          shape: [4, 256, 64, 64]
+#          range: [ -1, 1]
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.00001
+#  Train:
+#    step: 3
+#  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+detr_head_DETRHead_0:
+  desc: "Det ppdet.modeling.heads.detr_head.DETRHead模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.heads.detr_head.DETRHead"
+    params:
+      num_classes: 80
+      hidden_dim: 256
+      nhead: 8
+      num_mlp_layers: 3
+      loss: '**ppdet.modeling.losses.DETRLoss(matcher=ppdet.modeling.transformers.matchers.HungarianMatcher())'
+      fpn_dims: []
+      with_mask_head: False
+      use_focal_loss: False
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      out_transformer:
+        !!python/tuple
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [6, 2, 100, 256]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 256, 24, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 256, 24, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 1, 1, 24, 32]
+          range: [ -1, 1]
+      body_feats:
+        -
+          generate_way: "random"
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 2048, 24, 32]
+          range: [ 0, 1]
+      inputs:
+        im_id:
+          generate_way: "solid"  # random, solid, load
+          type: "Tensor"
+          dtype: "int64"
+          value: [ [424481], [277746]]
+        is_crowd:
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0], [0]]
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0], [0], [0], [0], [0], [0], [0], [0], [0]]
+        gt_class:
+          -
+            generate_way: "solid"
+            type: "Tensor"
+            dtype: "int32"
+            value: [[4], [0]]
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0], [71], [71], [26], [41], [71], [71], [71], [71]]
+        gt_bbox:
+          -
+            generate_way: "random"  # random, solid, load
+            type: "Tensor"
+            dtype: "float32"
+            shape: [2, 4]
+            range: [ 0, 1]
+          -
+            generate_way: "random"  # random, solid, load
+            type: "Tensor"
+            dtype: "float32"
+            shape: [9, 4]
+            range: [ 0, 1]
+        curr_iter:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "int64"
+          value: [0, 1]
+        image:
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 3, 768, 1024]
+          range: [ -1, 1]
+        im_shape:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "float32"
+          value: [[576. , 863. ], [768. , 1024.]]
+        scale_factor:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "float32"
+          value: [[1.34894609, 1.34843755], [1.60000002, 1.60000002]]
+        pad_mask:
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 768, 1024]
+          range: [ 0, 1]
+        epoch_id:
+          generate_way: "solid"
+          type: "int"
+          dtype: "int64"
+          value: 0
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit["loss_bbox"] + logit["loss_giou"] + 0.1 * logit["loss_class_aux"] + 0.1 * logit["loss_bbox_aux"] + 0.1 * logit["loss_giou_aux"]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.001
+  Train:
+    step: 3
+  test:
+#    dygraph_to_static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+    dygraph_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+
+detr_head_DETRHead_1:
+  desc: "Det ppdet.modeling.heads.detr_head.DETRHead模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.heads.detr_head.DETRHead"
+    params:
+      num_classes: 80
+      hidden_dim: 256
+      nhead: 8
+      num_mlp_layers: 3
+      loss: '**ppdet.modeling.losses.DETRLoss(matcher=ppdet.modeling.transformers.matchers.HungarianMatcher())'
+      fpn_dims: []
+      with_mask_head: False
+      use_focal_loss: False
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      out_transformer:
+        !!python/tuple
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [6, 2, 100, 256]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 256, 24, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 256, 24, 32]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 1, 1, 24, 32]
+          range: [ -1, 1]
+      body_feats:
+        -
+          generate_way: "random"
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 2048, 24, 32]
+          range: [ 0, 1]
+      inputs:
+        im_id:
+          generate_way: "solid"  # random, solid, load
+          type: "Tensor"
+          dtype: "int64"
+          value: [ [424481], [277746]]
+        is_crowd:
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0], [0]]
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0], [0], [0], [0], [0], [0], [0], [0], [0]]
+        gt_class:
+          -
+            generate_way: "solid"
+            type: "Tensor"
+            dtype: "int32"
+            value: [[4], [0]]
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0], [71], [71], [26], [41], [71], [71], [71], [71]]
+        gt_bbox:
+          -
+            generate_way: "random"  # random, solid, load
+            type: "Tensor"
+            dtype: "float32"
+            shape: [2, 4]
+            range: [ 0, 1]
+          -
+            generate_way: "random"  # random, solid, load
+            type: "Tensor"
+            dtype: "float32"
+            shape: [9, 4]
+            range: [ 0, 1]
+        curr_iter:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "int64"
+          value: [0, 1]
+        image:
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 3, 768, 1024]
+          range: [ -1, 1]
+        im_shape:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "float32"
+          value: [[576. , 863. ], [768. , 1024.]]
+        scale_factor:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "float32"
+          value: [[1.34894609, 1.34843755], [1.60000002, 1.60000002]]
+        pad_mask:
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 768, 1024]
+          range: [ 0, 1]
+        epoch_id:
+          generate_way: "solid"
+          type: "int"
+          dtype: "int64"
+          value: 0
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[0]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+
+#detr_head_DeformableDETRHead_0:
+#  desc: "Det ppdet.modeling.heads.detr_head.DeformableDETRHead模型结构"
+#  Layer:
+#    repo: "PaddleDetection"
+#    layer_name: "ppdet.modeling.heads.detr_head.DeformableDETRHead"
+#    params:
+#      num_classes: 80
+#      hidden_dim: 256
+#      nhead: 8
+#      num_mlp_layers: 3
+#      loss: '**ppdet.modeling.losses.DETRLoss(matcher=ppdet.modeling.transformers.matchers.HungarianMatcher())'
+#  DataGenerator:
+#    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+#    data:
+#      out_transformer:
+#        !!python/tuple
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [6, 2, 300, 256]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [2, 13440, 256]
+#          range: [ -1, 1]
+#        -
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [2, 300, 2]
+#          range: [ -1, 1]
+#      body_feats:
+#        -
+#          generate_way: "random"
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [2, 512, 105, 96]
+#          range: [ 0, 1]
+#        -
+#          generate_way: "random"
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [2, 1024, 53, 48]
+#          range: [ 0, 1]
+#        -
+#          generate_way: "random"
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [2, 2048, 27, 24]
+#          range: [ 0, 1]
+#      inputs:
+#        im_id:
+#          generate_way: "solid"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "int64"
+#          value: [ [424481], [277746]]
+#        is_crowd:
+#          -
+#            generate_way: "solid"  # random, solid, load
+#            type: "Tensor"
+#            dtype: "int32"
+#            value: [[0]]
+#          -
+#            generate_way: "solid"  # random, solid, load
+#            type: "Tensor"
+#            dtype: "int32"
+#            value: [[0], [0], [0], [0], [0], [0], [0], [0], [0]]
+#        gt_class:
+#          -
+#            generate_way: "solid"
+#            type: "Tensor"
+#            dtype: "int32"
+#            value: [[4]]
+#          -
+#            generate_way: "solid"  # random, solid, load
+#            type: "Tensor"
+#            dtype: "int32"
+#            value: [[0], [71], [71], [26], [41], [71], [71], [71], [71]]
+#        gt_bbox:
+#          -
+#            generate_way: "random"  # random, solid, load
+#            type: "Tensor"
+#            dtype: "float32"
+#            shape: [1, 4]
+#            range: [ 0, 1]
+#          -
+#            generate_way: "random"  # random, solid, load
+#            type: "Tensor"
+#            dtype: "float32"
+#            shape: [9, 4]
+#            range: [ 0, 1]
+#        curr_iter:
+#          generate_way: "solid"
+#          type: "Tensor"
+#          dtype: "int64"
+#          value: [0, 1]
+#        image:
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [2, 3, 838, 768]
+#          range: [ -1, 1]
+#        im_shape:
+#          generate_way: "solid"
+#          type: "Tensor"
+#          dtype: "float32"
+#          value: [[838. , 768. ], [544. , 679.]]
+#        scale_factor:
+#          generate_way: "solid"
+#          type: "Tensor"
+#          dtype: "float32"
+#          value: [[2.36925054, 2.37098908], [1.17443871, 1.17319441]]
+#        pad_mask:
+#          generate_way: "random"  # random, solid, load
+#          type: "Tensor"
+#          dtype: "float32"
+#          shape: [2, 838, 768]
+#          range: [ 0, 1]
+#        epoch_id:
+#          generate_way: "solid"
+#          type: "int"
+#          dtype: "int64"
+#          value: 0
+#  Loss:
+#    loss_name: "diy.loss.diy_loss.naive_loss_list"
+#    params:
+#      loss_list: ['logit["loss_bbox"] + logit["loss_giou"] + 0.1 * logit["loss_class_aux"] + 0.1 * logit["loss_bbox_aux"] + 0.1 * logit["loss_giou_aux"]']
+#  optimizer:
+#    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+#    params:
+#      opt_api: "paddle.optimizer.SGD"
+#      learning_rate: 0.001
+#  Train:
+#    step: 3
+#  test:
+##    dygraph_to_static_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    dygraph_to_static_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    dygraph_to_infer_predict_test:
+##      acc_test: False
+##      delta: 0.000001
+##      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+##    dygraph_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    static_train_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+##    static_predict_test:
+##      delta: 0.00000001
+##      rtol: 0.00000001
+
+detr_head_DeformableDETRHead_1:
+  desc: "Det ppdet.modeling.heads.detr_head.DeformableDETRHead模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.heads.detr_head.DeformableDETRHead"
+    params:
+      num_classes: 80
+      hidden_dim: 256
+      nhead: 8
+      num_mlp_layers: 3
+      loss: '**ppdet.modeling.losses.DETRLoss(matcher=ppdet.modeling.transformers.matchers.HungarianMatcher())'
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data:
+      out_transformer:
+        !!python/tuple
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [6, 2, 300, 256]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 13440, 256]
+          range: [ -1, 1]
+        -
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 300, 2]
+          range: [ -1, 1]
+      body_feats:
+        -
+          generate_way: "random"
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 512, 105, 96]
+          range: [ 0, 1]
+        -
+          generate_way: "random"
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 1024, 53, 48]
+          range: [ 0, 1]
+        -
+          generate_way: "random"
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 2048, 27, 24]
+          range: [ 0, 1]
+      inputs:
+        im_id:
+          generate_way: "solid"  # random, solid, load
+          type: "Tensor"
+          dtype: "int64"
+          value: [ [424481], [277746]]
+        is_crowd:
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0]]
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0], [0], [0], [0], [0], [0], [0], [0], [0]]
+        gt_class:
+          -
+            generate_way: "solid"
+            type: "Tensor"
+            dtype: "int32"
+            value: [[4]]
+          -
+            generate_way: "solid"  # random, solid, load
+            type: "Tensor"
+            dtype: "int32"
+            value: [[0], [71], [71], [26], [41], [71], [71], [71], [71]]
+        gt_bbox:
+          -
+            generate_way: "random"  # random, solid, load
+            type: "Tensor"
+            dtype: "float32"
+            shape: [1, 4]
+            range: [ 0, 1]
+          -
+            generate_way: "random"  # random, solid, load
+            type: "Tensor"
+            dtype: "float32"
+            shape: [9, 4]
+            range: [ 0, 1]
+        curr_iter:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "int64"
+          value: [0, 1]
+        image:
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 3, 838, 768]
+          range: [ -1, 1]
+        im_shape:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "float32"
+          value: [[838. , 768. ], [544. , 679.]]
+        scale_factor:
+          generate_way: "solid"
+          type: "Tensor"
+          dtype: "float32"
+          value: [[2.36925054, 2.37098908], [1.17443871, 1.17319441]]
+        pad_mask:
+          generate_way: "random"  # random, solid, load
+          type: "Tensor"
+          dtype: "float32"
+          shape: [2, 838, 768]
+          range: [ 0, 1]
+        epoch_id:
+          generate_way: "solid"
+          type: "int"
+          dtype: "int64"
+          value: 0
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit[0]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+#    dygraph_to_infer_predict_test:
+#      acc_test: False
+#      delta: 0.000001
+#      rtol: 0.000001
+    dygraph_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001

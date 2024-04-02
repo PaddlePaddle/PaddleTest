@@ -1,0 +1,10 @@
+case:
+    linux:
+        train:
+            path: ${model_path}
+            name: multi
+            cmd: pwd; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/t2s/exps/${model}; preprocess_path=preprocessed_ljspeech; train_output_path=output; rm -rf output; python ${BIN_DIR}/train.py --data=${preprocess_path} --output=${train_output_path} --ngpu=2 --opts data.batch_size 2 training.max_iteration 10 training.valid_interval 10 training.save_interval 10
+        eval:
+             path: ${model_path}
+             name: synthesize
+             cmd: pwd; export MAIN_ROOT=`realpath ${PWD}/../../../`; export PATH=${MAIN_ROOT}:${MAIN_ROOT}/utils:${PATH}; export LC_ALL=C; export PYTHONDONTWRITEBYTECODE=; export PYTHONIOENCODING=UTF-8; export PYTHONPATH=${MAIN_ROOT}:${PYTHONPATH}; export BIN_DIR=${MAIN_ROOT}/paddlespeech/t2s/exps/${model}; ln -s /ssd2/ce_data/PaddleSpeech_t2s/mel_test/ ./; input_mel_path=mel_test; ckpt_name=step-10; sed -i "s/python3/python/g" ./local/synthesize.sh; ./local/synthesize.sh ${input_mel_path} ${train_output_path} ${ckpt_name}

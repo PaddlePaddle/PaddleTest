@@ -1,0 +1,3 @@
+import layercase.sublayer1000.Det_cases.retinanet_retinanet_r50_fpn_1x_coco.SIR_42
+import layercase.sublayer1000.Det_cases.retinanet_retinanet_r50_fpn_1x_coco.SIR_33
+import layercase.sublayer1000.Det_cases.retinanet_retinanet_r50_fpn_1x_coco.SIR_34

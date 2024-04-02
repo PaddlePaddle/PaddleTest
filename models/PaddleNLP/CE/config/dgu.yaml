@@ -1,0 +1,327 @@
+MODEL: "dgu" # 模型名
+PRIORITY: P1_Delay # 跑很久
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  model_scripts_path: scripts/dgu/ #脚本的路径
+  model_log_path: log/dgu/
+
+EXEC:
+  exec_cases: [DATA_PROC, TRAIN, INFER]
+  exec_priority: [p0,p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash data_proc.sh
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_udc_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA udc
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_udc_$XPU.log
+
+  -
+    priority: p0
+    tag: linux_dy_udc_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA udc
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_udc_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_dstc2_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA dstc2
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_dstc2_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_dstc2_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA dstc2
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_dstc2_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_atis_slot_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA atis_slot
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_atis_slot_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_atis_slot_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA atis_slot
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_atis_slot_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_atis_intent_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA atis_intent
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_atis_intent_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_atis_intent_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA atis_intent
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_atis_intent_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_mrda_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA mrda
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_mrda_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_mrda_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA mrda
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_mrda_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_swda_gpu1
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'single' $SET_CUDA swda
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_swda_$XPU.log
+
+  -
+    priority: p2
+    tag: linux_dy_swda_gpu2
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: bash train.sh $XPU 'multi' $SET_MULTI_CUDA swda
+
+    kpis: #kpi指标
+      loss:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "-"
+        unit_repr: "s"
+      acc:
+        latest: True
+        kpi_base: 11.921639
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_swda_$XPU.log

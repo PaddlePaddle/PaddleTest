@@ -1,0 +1,5 @@
+senta_bilstm
+senta_bow
+senta_cnn
+senta_gru
+senta_lstm

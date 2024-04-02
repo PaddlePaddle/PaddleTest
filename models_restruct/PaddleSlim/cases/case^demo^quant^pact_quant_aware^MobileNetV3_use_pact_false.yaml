@@ -1,0 +1,18 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/pact_quant_aware
+        cmd: python train.py
+        params:
+          - --model MobileNetV3_large_x1_0
+          - --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained
+          - --num_epochs 1
+          - --batch_size 64
+          - --lr_strategy=piecewise_decay
+          - --l2_decay 1e-5
+          - --lr 0.0001
+          - --step_epochs 2
+          - --use_pact False
+          - --use_gpu True

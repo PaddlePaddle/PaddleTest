@@ -1,0 +1,53 @@
+paddlespeech cls --input ./cat.wav --topk 10
+paddlespeech text --input 今天的天气真不错啊你下午有空吗我想约你一起去吃饭
+paddlespeech asr --input ./zh.wav
+paddlespeech asr --model conformer_aishell --input ./zh.wav
+paddlespeech asr --model conformer_online_aishell --input ./zh.wav
+paddlespeech asr --model conformer_online_wenetspeech --input ./zh.wav
+paddlespeech asr --model conformer_online_multicn --input ./zh.wav
+paddlespeech asr --model transformer_librispeech --lang en --input ./en.wav
+paddlespeech asr --model deepspeech2offline_aishell --input ./zh.wav
+paddlespeech asr --model deepspeech2online_wenetspeech --input ./zh.wav
+paddlespeech asr --model deepspeech2online_aishell --input ./zh.wav
+paddlespeech asr --model deepspeech2offline_librispeech --lang en --input ./en.wav
+paddlespeech asr --model conformer_online_wenetspeech --num_decoding_left_chunks 3 --input ./zh.wav
+paddlespeech tts --input "你好，欢迎使用百度飞桨深度学习框架！"
+paddlespeech tts --am speedyspeech_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！"
+paddlespeech tts --voc mb_melgan_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！"
+paddlespeech tts --voc style_melgan_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！"
+paddlespeech tts --voc pwgan_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！"
+paddlespeech tts --am fastspeech2_aishell3 --voc pwgan_aishell3 --input "你好，欢迎使用百度飞桨深度学习框架！" --spk_id 0
+paddlespeech tts --am fastspeech2_aishell3 --voc hifigan_aishell3 --input "你好，欢迎使用百度飞桨深度学习框架！" --spk_id 0
+paddlespeech tts --am fastspeech2_ljspeech --voc pwgan_ljspeech --lang en --input "Life was like a box of chocolates, you never know what you're gonna get."
+paddlespeech tts --am fastspeech2_ljspeech --voc hifigan_ljspeech --lang en --input "Life was like a box of chocolates, you never know what you're gonna get."
+paddlespeech tts --am fastspeech2_vctk --voc pwgan_vctk --input "Life was like a box of chocolates, you never know what you're gonna get." --lang en --spk_id 0
+paddlespeech tts --am fastspeech2_vctk --voc hifigan_vctk --input "Life was like a box of chocolates, you never know what you're gonna get." --lang en --spk_id 0
+paddlespeech tts --am tacotron2_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！"
+paddlespeech tts --am tacotron2_csmsc --voc wavernn_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！"
+paddlespeech tts --am tacotron2_ljspeech --voc pwgan_ljspeech --lang en --input "Life was like a box of chocolates, you never know what you're gonna get."
+paddlespeech tts --am fastspeech2_mix --voc hifigan_csmsc --lang mix --input "热烈欢迎您在 Discussions 中提交问题，并在 Issues 中指出发现的 bug。此外，我们非常希望您参与到 Paddle Speech 的开发中！" --spk_id 174 --output mix_spk174.wav
+paddlespeech tts --am fastspeech2_mix --voc hifigan_aishell3 --lang mix --input "热烈欢迎您在 Discussions 中提交问题，并在 Issues 中指出发现的 bug。此外，我们非常希望您参与到 Paddle Speech 的开发中！" --spk_id 174 --output mix_spk174_aishell3.wav
+paddlespeech tts --am fastspeech2_mix --voc pwgan_csmsc --lang mix --input "我们的声学模型使用了 Fast Speech Two, 声码器使用了 Parallel Wave GAN and Hifi GAN." --spk_id 175 --output mix_spk175_pwgan.wav
+paddlespeech tts --am fastspeech2_mix --voc hifigan_csmsc --lang mix --input "我们的声学模型使用了 Fast Speech Two, 声码器使用了 Parallel Wave GAN and Hifi GAN." --spk_id 175 --output mix_spk175.wav
+paddlespeech st --input ./en.wav
+paddlespeech vector --task spk --input 85236145389.wav
+echo -e "1 欢迎光临。\n2 谢谢惠顾。" | paddlespeech tts
+paddlespeech vector --task spk --input vec.job
+echo -e "demo3 85236145389.wav \n demo4 85236145389.wav" | paddlespeech vector --task spk
+paddlespeech asr --input ./zh.wav | paddlespeech text --task punc
+paddlespeech tts --input "你好，欢迎使用百度飞桨深度学习框架！" --output default.wav --use_onnx True
+paddlespeech tts --am speedyspeech_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！" --output ss.wav --use_onnx True
+paddlespeech tts --voc mb_melgan_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！" --output mb.wav --use_onnx True
+paddlespeech tts --voc pwgan_csmsc --input "你好，欢迎使用百度飞桨深度学习框架！" --output pwgan.wav --use_onnx True
+paddlespeech tts --am fastspeech2_aishell3 --voc pwgan_aishell3 --input "你好，欢迎使用百度飞桨深度学习框架！" --spk_id 0 --output aishell3_fs2_pwgan.wav --use_onnx True
+paddlespeech tts --am fastspeech2_aishell3 --voc hifigan_aishell3 --input "你好，欢迎使用百度飞桨深度学习框架！" --spk_id 0 --output aishell3_fs2_hifigan.wav --use_onnx True
+paddlespeech tts --am fastspeech2_ljspeech --voc pwgan_ljspeech --lang en --input "Life was like a box of chocolates, you never know what you're gonna get." --output lj_fs2_pwgan.wav --use_onnx True
+paddlespeech tts --am fastspeech2_ljspeech --voc hifigan_ljspeech --lang en --input "Life was like a box of chocolates, you never know what you're gonna get." --output lj_fs2_hifigan.wav --use_onnx True
+paddlespeech tts --am fastspeech2_vctk --voc pwgan_vctk --input "Life was like a box of chocolates, you never know what you're gonna get." --lang en --spk_id 0 --output vctk_fs2_pwgan.wav --use_onnx True
+paddlespeech tts --am fastspeech2_vctk --voc hifigan_vctk --input "Life was like a box of chocolates, you never know what you're gonna get." --lang en --spk_id 0 --output vctk_fs2_hifigan.wav --use_onnx True
+paddlespeech stats --task asr
+paddlespeech stats --task tts
+paddlespeech stats --task cls
+paddlespeech stats --task text
+paddlespeech stats --task vector
+paddlespeech stats --task st

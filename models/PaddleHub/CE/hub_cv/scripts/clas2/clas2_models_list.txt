@@ -1,0 +1,2 @@
+resnet50_vd_animals
+resnet50_vd_wildanimals

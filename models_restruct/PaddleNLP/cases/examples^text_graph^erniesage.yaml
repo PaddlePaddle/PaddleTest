@@ -1,0 +1,66 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: examples/text_graph/erniesage
+        cmd: python ./preprocessing/dump_graph.py
+        params:
+          - --conf ./config/erniesage_link_prediction.yaml
+      -
+        name: train
+        path: examples/text_graph/erniesage
+        cmd: python -m paddle.distributed.launch link_prediction.py
+        params:
+          - --conf ./config/erniesage_link_prediction.yaml
+    eval:
+      -
+        name: train
+        path: examples/text_graph/erniesage
+        cmd: python -m paddle.distributed.launch link_prediction.py
+        params:
+          - --conf ./config/erniesage_link_prediction.yaml
+          - --do_predict
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: examples/text_graph/erniesage
+        cmd: python ./preprocessing/dump_graph.py
+        params:
+          - --conf ./config/erniesage_link_prediction.yaml
+      -
+        name: train
+        path: examples/text_graph/erniesage
+        cmd: python -m paddle.distributed.launch link_prediction.py
+        params:
+          - --conf ./config/erniesage_link_prediction.yaml
+    eval:
+      -
+        name: train
+        path: examples/text_graph/erniesage
+        cmd: python -m paddle.distributed.launch link_prediction.py
+        params:
+          - --conf ./config/erniesage_link_prediction.yaml
+          - --do_predict
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -1,0 +1,21 @@
+case:
+  linux:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+        result:
+          loss:
+            base: 0.31668967
+            threshold: 0.0003
+            evaluation: "-"
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+        result:
+          prediction:
+            base: 0.0189
+            threshold: 0.0003
+            evaluation: "+"

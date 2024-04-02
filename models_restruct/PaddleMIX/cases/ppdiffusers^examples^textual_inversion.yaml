@@ -1,0 +1,46 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: ppdiffusers/examples/textual_inversion/
+        cmd: wget https://paddle-qa.bj.bcebos.com/PaddleMIX/cat_toy_images.tar.gz && tar -zxvf cat_toy_images.tar.gz
+      -
+        name: single_train
+        path: ppdiffusers/examples/textual_inversion/
+        cmd: python -u train_textual_inversion.py
+        params:
+          - --pretrained_model_name_or_path="CompVis/stable-diffusion-v1-4"
+          - --train_data_dir="cat_toy_images"
+          - --learnable_property="object"
+          - --placeholder_token="<cat-toy>"
+          - --initializer_token="toy"
+          - --resolution=512
+          - --train_batch_size=1
+          - --gradient_accumulation_steps=4
+          - --max_train_steps=100
+          - --learning_rate=5.0e-04
+          - --scale_lr
+          - --lr_scheduler="constant"
+          - --lr_warmup_steps=0
+          - --seed 42
+          - --output_dir="textual_inversion_cat"
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    eval: skipped
+    infer:
+      -
+        name: infer
+        path: ppdiffusers/examples/textual_inversion/
+        # 需要将文件拷贝到case执行的目录
+        cmd: python infer_with_output.py
+        result:
+          exit_code:
+            base: 0
+            threshold: 0
+            evaluation: "="
+    export: skipped
+    predict: skipped

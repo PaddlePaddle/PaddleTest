@@ -1,0 +1,9 @@
+configs^faster_rcnn^faster_rcnn_r101_fpn_1x_coco.yml
+configs^keypoint^hrnet^dark_hrnet_w48_256x192.yml
+configs^picodet^legacy_model^picodet_s_320_voc.yml
+configs^ppyolo^ppyolov2_r50vd_dcn_voc.yml
+configs^sniper^ppyolo_r50vd_dcn_1x_sniper_visdrone.yml
+configs^sniper^ppyolo_r50vd_dcn_1x_visdrone.yml
+configs^ssd^ssd_r34_70e_coco.yml
+configs^yolov3^yolov3_darknet53_270e_voc.yml
+configs^yolov3^yolov3_darknet53_original_270e_coco.yml

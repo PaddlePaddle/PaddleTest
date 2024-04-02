@@ -1,0 +1,2 @@
+chinese_text_detection_db_mobile
+chinese_text_detection_db_server

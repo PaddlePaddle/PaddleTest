@@ -1,0 +1,19 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/pruning
+        cmd: python train.py
+        params:
+          - --model="mobilenet_v1"
+          - --data "imagenet"
+          - --pruned_ratio=0.3125
+          - --lr=0.1
+          - --num_epochs=1
+          - --test_period=1
+          - --step_epochs 30 60 90
+          - --l2_decay=3e-5
+          - --lr_strategy="piecewise_decay"
+          - --criterion="fpgm"
+          - --model_path="./fpgm_mobilenetv1_models"

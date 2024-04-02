@@ -1,0 +1,2 @@
+models^multitask^mmoe^config_bigdata.yaml
+models^rank^dnn^config_bigdata.yaml

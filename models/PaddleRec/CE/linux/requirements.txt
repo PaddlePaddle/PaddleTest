@@ -1,0 +1,5 @@
+PyYAML
+scipy
+sklearn
+faiss-cpu
+faiss-gpu

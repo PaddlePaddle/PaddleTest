@@ -1,0 +1,64 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python fine_tune.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+          - --recon_level=region-wise
+          - --save_dir=region_ptq_out
+          - --devices="gpu"
+          - --epochs=2
+
+      -
+        name: multi
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python fine_tune.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+          - --recon_level=layer-wise
+          - --save_dir=layer_ptq_out
+          - --devices="gpu"
+          - --epochs=2
+
+    eval:
+      -
+        name: single
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python eval.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+
+      -
+        name: multi
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python eval.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+
+  windows:
+    train:
+      -
+        name: single
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python fine_tune.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+          - --recon_level=layer-wise
+          - --save_dir=layer_ptq_out
+          - --epochs=2
+
+  mac:
+    train:
+      -
+        name: single
+        path: example/post_training_quantization/pytorch_yolo_series/
+        cmd: python fine_tune.py
+        params:
+          - --config_path=./configs/yolov6s_fine_tune.yaml
+          - --recon_level=layer-wise
+          - --save_dir=layer_ptq_out
+          - --epochs=2
+          - --devices="cpu"

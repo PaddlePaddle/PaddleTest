@@ -1,0 +1,14 @@
+batch_size: 128
+
+val_dataset:
+  type: Dataset
+  dataset_root: dataset/portrait14k_val
+  val_path: dataset/portrait14k_val/val.txt
+  num_classes: 2
+  transforms:
+  - type: PaddingByAspectRatio
+    aspect_ratio: 1.77777778
+  - type: Resize
+    target_size: [398, 224]
+  - type: Normalize
+  mode: val

@@ -1,0 +1,26 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/quantization/ptq/classification/
+        cmd: python ptq.py
+        params:
+          - --data=${ilsvrc2012_data_path}
+          - --model=resnet50
+          - --activation_observer='mse'
+          - --weight_observer='mse_channel_wise'
+          - --quant_batch_num=10
+          - --quant_batch_size=10
+          - --output_dir="output_ptq_mse_resnet50"
+        result:
+          top1:
+            base: 76.00
+            threshold: 0.005
+            evaluation: "+"
+          top5:
+            base: 93.50
+            threshold: 0.005
+            evaluation: "+"
+
+function: paddleslim_quat_ptq_parse

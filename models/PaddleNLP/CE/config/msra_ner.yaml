@@ -1,0 +1,201 @@
+MODEL: "msra_ner" # 模型名
+PRIORITY: P2
+GIT:
+  addr: $REPO_PaddleNLP
+  path: $ROOT_PATH/models_repo
+  branch: $BASE_BRANCH
+
+
+VARIABLES:
+  scripts_path: scripts
+  model_scripts_path: scripts/msra_ner/ #脚本的路径
+  model_log_path: log/msra_ner/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN,INFER,EVAL]
+  exec_priority: [p0,p1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+DATA_PROC:
+  -
+    priority: p0
+    tag: linux_download_data
+    run:
+      -
+        path: $ROOT_PATH/$scripts_path
+        cmd: bash run_nlp_all_case.sh msra_ner gpu linux $SET_CUDA $SET_MULTI_CUDA CE
+
+TRAIN: # 训练步骤
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.840970
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      recall:
+        latest: True
+        kpi_base: 0.875749
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      f1:
+        latest: True
+        kpi_base: 0.858007
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_single_$XPU.log
+  -
+    priority: p0
+    tag: linux_dy_gpu2
+
+
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.862350
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      recall:
+        latest: True
+        kpi_base: 0.889783
+        threshold: 0.08
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      f1:
+        latest: True
+        kpi_base: 0.875852
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_multi_$XPU.log
+
+  -
+    priority: p0
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat $XPU
+
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.841227
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      recall:
+        latest: True
+        kpi_base: 0.890344
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      f1:
+        latest: True
+        kpi_base: 0.874954
+        threshold: 0.05
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/train_$XPU.log
+
+INFER:
+  -
+    priority: p0
+    tag: linux_dy_gpu1
+
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+  -
+    priority: p1
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+        CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat $XPU
+    kpis:
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/infer_$XPU.log
+
+EVAL:
+  - #可以有多步
+    priority: p1
+    tag: linux_dy_gpu1
+
+    kpis: #kpi指标
+      precision:
+        latest: True
+        kpi_base: 0.602226
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      recall:
+        latest: True
+        kpi_base: 0.658121
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+      f1:
+        latest: True
+        kpi_base: 0.628934
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: "s"
+    output: $ROOT_PATH/$model_log_path/eval_$XPU.log
+
+  - #可以有多步
+    priority: p1
+    tag: win_dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: eval.bat $XPU
+    kpis: #kpi指标
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/eval_$XPU.log

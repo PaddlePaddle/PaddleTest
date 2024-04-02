@@ -1,0 +1,13 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: ce_tests/dygraph/quant
+        cmd: python ./src/ptq.py
+        params:
+          - --arch=resnet50
+          - --data=../../../demo/data/ILSVRC2012
+          - --quant_batch_num=10
+          - --quant_batch_size=10
+          - --output_dir=./resnet50/output_ptq

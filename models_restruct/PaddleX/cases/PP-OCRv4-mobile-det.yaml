@@ -1,0 +1,21 @@
+case:
+    linux:
+        train:
+          -
+            name: multi_epoch1
+            paddlex:
+            cmd : bash  test_tipc/prepare.sh test_tipc/configs/ch_PP-OCRv4_det_train_infer_python.txt benchmark_train /mnt/dataset/benchmark_acc/OCR_det; bash  test_tipc/train_benchmark.sh test_tipc/configs/ch_PP-OCRv4_det_train_infer_python.txt benchmark_train dynamic_bs8_fp32_DP_N1C8_acc1_epoch1
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: multi
+            paddlex:
+            cmd : bash  test_tipc/prepare.sh test_tipc/configs/ch_PP-OCRv4_det_train_infer_python.txt benchmark_train /mnt/dataset/benchmark_acc/OCR_det; bash  test_tipc/train_benchmark.sh test_tipc/configs/ch_PP-OCRv4_det_train_infer_python.txt benchmark_train dynamic_bs8_fp32_DP_N1C8_acc1_epoch200
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.005
+                evaluation: "+"

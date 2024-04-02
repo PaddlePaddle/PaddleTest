@@ -1,0 +1,54 @@
+case:
+  linux:
+    train:
+      -
+        name: clone_kytea
+        path: examples/language_model/xlm
+        cmd: git clone https://github.com/neubig/kytea.git
+      -
+        name: build_kytea
+        path: examples/language_model/xlm/kytea
+        cmd: autoreconf -i && ./configure --prefix=$HOME/local && make && make install
+      -
+        name: train_xnli
+        path: examples/language_model/xlm
+        cmd: python xnli_train.py
+        params:
+          - --batch_size 8
+          - --model_name_or_path xlm-mlm-tlm-xnli15-1024
+          - --save_steps 2
+          - --output_dir outputs
+          - --logging_steps 1
+          - --max_steps 2
+    eval:
+      -
+        name: eval_xnli
+        path: examples/language_model/xlm
+        cmd: python xnli_eval.py
+        params:
+          - --batch_size 8
+          - --model_name_or_path outputs/best_model
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

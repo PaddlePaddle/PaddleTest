@@ -1,0 +1,95 @@
+case:
+  linux:
+    train:
+      -
+        name: dygraph
+        path: models/recall/mind
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+      -
+        name: static
+        path: models/recall/mind
+        cmd: python -u ../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+
+    infer:
+      -
+        name: dygraph
+        path: models/recall/mind
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+      -
+        name: static
+        path: models/recall/mind
+        cmd: python -u static_infer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+
+  mac:
+    train:
+      -
+        name: dygraph
+        path: models/recall/mind
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
+      -
+        name: static
+        path: models/recall/mind
+        cmd: python -u ../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
+
+    infer:
+      -
+        name: dygraph
+        path: models/recall/mind
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml
+      -
+        name: static
+        path: models/recall/mind
+        cmd: python -u static_infer.py
+        params:
+          - -m config.yaml
+
+  windows:
+    train:
+      -
+        name: dygraph
+        path: models/recall/mind
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+      -
+        name: static
+        path: models/recall/mind
+        cmd: python -u ../../../tools/static_trainer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+
+    infer:
+      -
+        name: dygraph
+        path: models/recall/mind
+        cmd: python -u infer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+      -
+        name: static
+        path: models/recall/mind
+        cmd: python -u static_infer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True

@@ -1,0 +1,140 @@
+tacotron2:
+    category: am
+    data_path: new_tacotron2
+    model_path: examples/csmsc/tts0
+    ckpt_name: snapshot_iter_153.pdz
+
+speedyspeech:
+    category: am
+    data_path: speedyspeech
+    model_path: examples/csmsc/tts2
+    ckpt_name: snapshot_iter_153.pdz
+
+fastspeech2:
+    category: am
+    data_path: fastspeech2
+    model_path: examples/csmsc/tts3
+    ckpt_name: snapshot_iter_153.pdz
+
+transformer_tts:
+    category: am
+    data_path: transformer_tts
+    model_path: examples/ljspeech/tts1
+    ckpt_name: snapshot_iter_1612.pdz
+
+parallelwave_gan:
+    category: voc
+    data_path: pwg
+    model_path: examples/csmsc/voc1
+    ckpt_name: snapshot_iter_10.pdz
+
+multi_band_melgan:
+    category: voc
+    data_path: pwg
+    model_path: examples/csmsc/voc3
+    ckpt_name: snapshot_iter_10.pdz
+
+style_melgan:
+    category: voc
+    data_path: pwg
+    model_path: examples/csmsc/voc4
+    ckpt_name: snapshot_iter_10.pdz
+
+hifigan:
+    category: voc
+    data_path: pwg
+    model_path: examples/csmsc/voc5
+    ckpt_name: snapshot_iter_10.pdz
+
+wavernn:
+    category: voc
+    data_path: pwg
+    model_path: examples/csmsc/voc6
+    ckpt_name: snapshot_iter_10.pdz
+
+waveflow:
+    category: voc
+    data_path: preprocessed_ljspeech
+    model_path: examples/ljspeech/voc0
+    ckpt_name: step-10
+
+deepspeech2:
+    category: asr
+    model_path: examples/tiny/asr0
+    model_bin: deepspeech2
+    model_yml: conf/deepspeech2.yaml
+    ckpt: deepspeech2
+conformer:
+    category: asr
+    model_path: examples/tiny/asr1
+    model_bin: u2
+    model_yml: conf/transformer.yaml
+    ckpt: transformer
+tal_cs:
+    category: asr
+    model_path: examples/tal_cs/asr1
+    model_bin: u2
+    model_yml: conf/conformer.yaml
+    ckpt: conformer
+
+
+cli:
+paddlespeech_cli_1: paddlespeech cls --input ./cat.wav --topk 10
+paddlespeech_cli_2: paddlespeech text --input '今天的天气真不错啊你下午有空吗我想约你一起去吃饭'
+paddlespeech_cli_3: paddlespeech asr --input ./zh.wav
+paddlespeech_cli_4: paddlespeech asr --model conformer_aishell --input ./zh.wav
+paddlespeech_cli_5: paddlespeech asr --model conformer_online_aishell --input ./zh.wav
+paddlespeech_cli_6: paddlespeech asr --model conformer_online_wenetspeech --input ./zh.wav
+paddlespeech_cli_7: paddlespeech asr --model conformer_online_multicn --input ./zh.wav
+paddlespeech_cli_8: paddlespeech asr --model transformer_librispeech --lang en --input ./en.wav
+paddlespeech_cli_9: paddlespeech asr --model deepspeech2offline_aishell --input ./zh.wav
+paddlespeech_cli_10: paddlespeech asr --model deepspeech2online_wenetspeech --input ./zh.wav
+paddlespeech_cli_11: paddlespeech asr --model deepspeech2online_aishell --input ./zh.wav
+paddlespeech_cli_12: paddlespeech asr --model deepspeech2offline_librispeech --lang en --input ./en.wav
+paddlespeech_cli_13: paddlespeech asr --model conformer_online_wenetspeech --num_decoding_left_chunks 3 --input ./zh.wav
+paddlespeech_cli_14: paddlespeech asr --lang zh --model conformer_u2pp_online_wenetspeech --input zh.wav
+paddlespeech_cli_15: paddlespeech tts --input '你好，欢迎使用百度飞桨深度学习框架!'
+paddlespeech_cli_16: paddlespeech tts --am speedyspeech_csmsc --input '你好，欢迎使用百度飞桨深度学习框架!'
+paddlespeech_cli_17: paddlespeech tts --voc mb_melgan_csmsc --input '你好，欢迎使用百度飞桨深度学习框架!'
+paddlespeech_cli_18: paddlespeech tts --voc style_melgan_csmsc --input '你好，欢迎使用百度飞桨深度学习框架！'
+paddlespeech_cli_19: paddlespeech tts --voc pwgan_csmsc --input '你好，欢迎使用百度飞桨深度学习框架！'
+paddlespeech_cli_20: paddlespeech tts --am fastspeech2_aishell3 --voc pwgan_aishell3 --input '你好，欢迎使用百度飞桨深度学习框架！' --spk_id 0
+paddlespeech_cli_21: paddlespeech tts --am fastspeech2_aishell3 --voc hifigan_aishell3 --input '你好，欢迎使用百度飞桨深度学习框架！' --spk_id 0
+paddlespeech_cli_22: paddlespeech tts --am fastspeech2_ljspeech --voc pwgan_ljspeech --lang en --input 'Life was like a box of chocolates, you never know what you are gonna get.'
+paddlespeech_cli_23: paddlespeech tts --am fastspeech2_ljspeech --voc hifigan_ljspeech --lang en --input 'Life was like a box of chocolates, you never know what you are gonna get.'
+paddlespeech_cli_24: paddlespeech tts --am fastspeech2_vctk --voc pwgan_vctk --input 'Life was like a box of chocolates, you never know what you are gonna get.' --lang en --spk_id 0
+paddlespeech_cli_25: paddlespeech tts --am fastspeech2_vctk --voc hifigan_vctk --input 'Life was like a box of chocolates, you never know what you are gonna get.' --lang en --spk_id 0
+paddlespeech_cli_26: paddlespeech tts --am tacotron2_csmsc --input '你好，欢迎使用百度飞桨深度学习框架！'
+paddlespeech_cli_27: paddlespeech tts --am tacotron2_csmsc --voc wavernn_csmsc --input '你好，欢迎使用百度飞桨深度学习框架！'
+paddlespeech_cli_28: paddlespeech tts --am tacotron2_ljspeech --voc pwgan_ljspeech --lang en --input 'Life was like a box of chocolates, you never know what you are gonna get.'
+paddlespeech_cli_29: paddlespeech tts --am fastspeech2_mix --voc hifigan_csmsc --lang mix --input '热烈欢迎您在 Discussions 中提交问题，并在 Issues 中指出发现的 bug。此外，我们非常希望您参与到 Paddle Speech 的开发中！' --spk_id 174 --output mix_spk174.wav
+paddlespeech_cli_30: paddlespeech tts --am fastspeech2_mix --voc hifigan_aishell3 --lang mix --input '热烈欢迎您在 Discussions 中提交问题，并在 Issues 中指出发现的 bug。此外，我们非常希望您参与到 Paddle Speech 的开发中！' --spk_id 174 --output mix_spk174_aishell3.wav
+paddlespeech_cli_31: paddlespeech tts --am fastspeech2_mix --voc pwgan_csmsc --lang mix --input '我们的声学模型使用了 Fast Speech Two, 声码器使用了 Parallel Wave GAN and Hifi GAN.' --spk_id 175 --output mix_spk175_pwgan.wav
+paddlespeech_cli_32: paddlespeech tts --am fastspeech2_mix --voc hifigan_csmsc --lang mix --input '我们的声学模型使用了 Fast Speech Two, 声码器使用了 Parallel Wave GAN and Hifi GAN.' --spk_id 175 --output mix_spk175.wav
+paddlespeech_cli_33: paddlespeech st --input ./en.wav
+paddlespeech_cli_34: paddlespeech vector --task spk --input 85236145389.wav
+paddlespeech_cli_35: echo '1 欢迎光临。\n2 谢谢惠顾。' | paddlespeech tts
+paddlespeech_cli_36: paddlespeech vector --task spk --input vec.job
+paddlespeech_cli_37: echo 'demo3 85236145389.wav \n demo4 85236145389.wav' | paddlespeech vector --task spk
+paddlespeech_cli_38: paddlespeech asr --input ./zh.wav | paddlespeech text --task punc
+paddlespeech_cli_39: paddlespeech tts --input '你好，欢迎使用百度飞桨深度学习框架！' --output default.wav --use_onnx True
+paddlespeech_cli_40: paddlespeech tts --am speedyspeech_csmsc --input '你好，欢迎使用百度飞桨深度学习框架'！ --output ss.wav --use_onnx True
+paddlespeech_cli_41: paddlespeech tts --voc mb_melgan_csmsc --input '你好，欢迎使用百度飞桨深度学习框架！' --output mb.wav --use_onnx True
+paddlespeech_cli_42: paddlespeech tts --voc pwgan_csmsc --input '你好，欢迎使用百度飞桨深度学习框架！' --output pwgan.wav --use_onnx True
+paddlespeech_cli_43: paddlespeech tts --am fastspeech2_aishell3 --voc pwgan_aishell3 --input '你好，欢迎使用百度飞桨深度学习框架！' --spk_id 0 --output aishell3_fs2_pwgan.wav --use_onnx True
+paddlespeech_cli_44: paddlespeech tts --am fastspeech2_aishell3 --voc hifigan_aishell3 --input '你好，欢迎使用百度飞桨深度学习框架!' --spk_id 0 --output aishell3_fs2_hifigan.wav --use_onnx True
+paddlespeech_cli_45: paddlespeech tts --am fastspeech2_ljspeech --voc pwgan_ljspeech --lang en --input 'Life was like a box of chocolates, you never know what you are gonna get.' --output lj_fs2_pwgan.wav --use_onnx True
+paddlespeech_cli_46: paddlespeech tts --am fastspeech2_ljspeech --voc hifigan_ljspeech --lang en --input 'Life was like a box of chocolates, you never know what you are gonna get.' --output lj_fs2_hifigan.wav --use_onnx True
+paddlespeech_cli_47: paddlespeech tts --am fastspeech2_vctk --voc pwgan_vctk --input 'Life was like a box of chocolates, you never know what you are gonna get.' --lang en --spk_id 0 --output vctk_fs2_pwgan.wav --use_onnx True
+paddlespeech_cli_48: paddlespeech tts --am fastspeech2_vctk --voc hifigan_vctk --input 'Life was like a box of chocolates, you never know what you are gonna get.' --lang en --spk_id 0 --output vctk_fs2_hifigan.wav --use_onnx True
+paddlespeech_cli_49: paddlespeech stats --task asr
+paddlespeech_cli_50: paddlespeech stats --task tts
+paddlespeech_cli_51: paddlespeech stats --task cls
+paddlespeech_cli_52: paddlespeech stats --task text
+paddlespeech_cli_53: paddlespeech stats --task vector
+paddlespeech_cli_54: paddlespeech stats --task st
+paddlespeech_cli_55: paddlespeech whisper --task transcribe --input ./zh.wav
+paddlespeech_cli_56: paddlespeech whisper --task translate --input ./zh.wav
+paddlespeech_cli_57: paddlespeech ssl --task asr --lang en --input ./en.wav
+paddlespeech_cli_58: paddlespeech ssl --task vector --lang en --input ./en.wav
+paddlespeech_cli_59: paddlespeech asr --model conformer_talcs --lang zh_en --codeswitch True --input ./ch_zh_mix.wav

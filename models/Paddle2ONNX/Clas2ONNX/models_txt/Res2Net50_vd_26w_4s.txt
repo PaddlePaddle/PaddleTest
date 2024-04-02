@@ -1,0 +1,6 @@
+model_name::Res2Net50_vd_26w_4s
+yaml::ClasForONNX/ppcls/configs/ImageNet/Res2Net/Res2Net50_vd_26w_4s.yaml
+pretrain_link::https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/Res2Net50_vd_26w_4s_pretrained.pdparams
+opt_ver::11
+atol::1e-5
+rtol::1e-8

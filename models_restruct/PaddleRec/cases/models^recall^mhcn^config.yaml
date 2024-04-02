@@ -1,0 +1,55 @@
+case:
+  linux:
+    train:
+      -
+        name: dygraph
+        path: models/recall/mhcn
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+
+    infer:
+      -
+        name: dygraph
+        path: models/recall/mhcn
+        cmd: python infer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+
+  mac:
+    train:
+      -
+        name: dygraph
+        path: models/recall/mhcn
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
+
+    infer:
+      -
+        name: dygraph
+        path: models/recall/mhcn
+        cmd: python infer.py
+        params:
+          - -m config.yaml
+
+  windows:
+    train:
+      -
+        name: dygraph
+        path: models/recall/mhcn
+        cmd: python -u ../../../tools/trainer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True
+
+    infer:
+      -
+        name: dygraph
+        path: models/recall/mhcn
+        cmd: python infer.py
+        params:
+          - -m config.yaml
+          - -o runner.use_gpu=True

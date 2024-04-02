@@ -1,0 +1,10 @@
+alexnet_imagenet
+darknet53_imagenet
+densenet161_imagenet
+googlenet_imagenet
+mobilenet_v2_imagenet
+resnet_v2_50_imagenet
+se_resnext101_32x4d_imagenet
+shufflenet_v2_imagenet
+vgg19_imagenet
+xception71_imagenet

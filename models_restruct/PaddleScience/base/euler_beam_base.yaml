@@ -1,0 +1,22 @@
+train:
+  -
+    name: single
+    cmd: python examples/euler_beam/euler_beam.py
+    params:
+      - TRAIN.epochs=10000
+    result:
+      loss:
+        base: 0.00006
+        threshold: 1
+        evaluation: "-"
+  -
+    name: dy2st
+    cmd: python examples/euler_beam/euler_beam.py
+    params:
+      - to_static=True
+      - TRAIN.epochs=10000
+    result:
+      loss:
+        base: 0.00002
+        threshold: 1
+        evaluation: "-"

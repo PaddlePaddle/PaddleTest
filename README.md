@@ -1,0 +1,48 @@
+# PaddleTest
+## 目录结构
+```
+.    -------------------------------------> 项目根目录
+├── README.md
+│
+├── distributed/ -------------------------> 分布式测试case
+│
+├── framework/   -------------------------> 主框架Paddle测试case
+│
+├── inference/   -------------------------> 预测相关测试case
+│
+├── lite/        -------------------------> Lite相关测试case
+│
+└── models/      -------------------------> 模型相关的测试case
+```
+
+
+## 如何贡献
+### 代码审查
+代码审查包括两部分，一个是基于现有开源代码格式规范的审查，通过pre-commit来审查，另一个是基于自定义要求的审查，在`tools/codestyle`下。
+
+pre-commit审核主要是三种，包括`black`,`flake8`,`pylint`，在CI阶段代码审查执行。本地运行方式是安装pre-commit，一个简单的方法是用python3+使用`pip install pre-commit`来安装。
+执行方式`pre-commit run --file [your code file]`，`black`会自动调整代码格式和一些简单的规范错误。具体规范配置请见根目录`.pre-commit-config.yaml`文件。
+
+### 合入规范
+合入**必须**要求通过全部CI检测，原则上禁止强行Merge，如果有Pylint代码格式阻塞，可以讨论是否禁止某一条规范生效，**必须**要求一个QA Reviewer，禁止出现敏感代码。
+
+### CI 触发规则
++ 默认触发全部CI任务
++ 只触发某一个CI任务，需要在commit信息中添加相应的关键字
+
+|CI任务名称|关键字|效果|
+|---|---|---|
+|linux-ci|notest,test=linux_ci|只触发linux-ci任务，其余均不触发|
+|linux-inference-ci|notest,test=linux_inference_ci|只触发linux-inference-ci任务，其余均不触发|
+|CodeStyle|notest,test=codestyle|只触发CodeStyle任务，其余均不触发|
+
+### CI任务分类触发
++ 框架内容合入不触发linux-inference-ci任务
++ 预测内容合入不触发linux-ci任务
++ 模型内容合入不触发linux-ci任务和linux-inference-ci任务
+
+|任务类型|关键字|效果|
+|---|---|---|
+|框架任务|run_mode=framework|linux-inference-ci任务不执行|
+|预测任务|run_mode=inference|linux-ci任务不执行|
+|模型任务|run_mode=model|linux-ci任务与linux-inference-ci任务不执行|

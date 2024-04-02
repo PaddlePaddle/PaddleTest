@@ -1,0 +1,70 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: model_zoo/ernie-1.0/
+        cmd: mkdir data && cd data && wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/wudao_200g_sample_ernie-1.0-base-zh_ids.npy && wget -q https://paddlenlp.bj.bcebos.com/models/transformers/data_tools/wudao_200g_sample_ernie-1.0-base-zh_idx.npz
+      -
+        name: pretrain
+        path: model_zoo/ernie-1.0/
+        cmd: python -m paddle.distributed.launch --log_dir ./log run_pretrain.py
+        params:
+          - --model_type "ernie"
+          - --model_name_or_path "ernie-1.0"
+          - --input_dir ./data
+          - --output_dir ./output
+          - --split 949,50,1
+          - --max_seq_len 512
+          - --binary_head true
+          - --micro_batch_size 4
+          - --use_amp true
+          - --fp16_opt_level "O1"
+          - --use_recompute false
+          - --max_lr 0.0001
+          - --min_lr 0.00001
+          - --max_steps 2
+          - --save_steps 2
+          - --checkpoint_steps 2
+          - --decay_steps 3900000
+          - --weight_decay 0.01
+          - --warmup_rate 0.01
+          - --grad_clip 1.0
+          - --logging_freq 1
+          - --num_workers 3
+          - --eval_freq 1000
+          - --device "gpu"
+          - --share_folder true
+          - --hidden_dropout_prob 0.1
+          - --attention_probs_dropout_prob 0.1
+          - --seed 1234
+        result:
+          loss:
+            base: 1.456469
+            threshold: 0.01
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Laplace_disk.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 7.07e-08
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 0.000207
+      evaluation: '-'
+      threshold: 1

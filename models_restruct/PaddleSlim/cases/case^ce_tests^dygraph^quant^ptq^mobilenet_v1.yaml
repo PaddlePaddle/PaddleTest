@@ -1,0 +1,13 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: ce_tests/dygraph/quant
+        cmd: python ./src/ptq.py
+        params:
+          - --arch=mobilenet_v1
+          - --data=../../../demo/data/ILSVRC2012
+          - --quant_batch_num=10
+          - --quant_batch_size=10
+          - --output_dir=./mobilenet_v1/output_ptq

@@ -1,0 +1,11 @@
+train:
+  -
+    name: single
+    cmd: python examples/aneurysm/aneurysm_flow.py
+    params:
+      - --epochs=10
+    result:
+      loss:
+        base: 0.00443
+        threshold: 1
+        evaluation: "-"

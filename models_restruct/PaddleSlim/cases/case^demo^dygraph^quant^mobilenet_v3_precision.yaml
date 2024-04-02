@@ -1,0 +1,48 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/quant
+        cmd: python train.py
+        params:
+          - --lr=0.001
+          - --use_pact=True
+          - --l2_decay=2e-5
+          - --ls_epsilon=0.1
+          - --num_epochs 30
+          - --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained
+          - --use_gpu True
+          - --ce_test=True
+        result:
+          acc_top1:
+            base: 0.657602
+            threshold: 0
+            evaluation: "="
+          acc_top5:
+            base: 0.876202
+            threshold: 0
+            evaluation: "="
+
+      -
+        name: multi
+        path: demo/dygraph/quant
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --lr=0.001
+          - --use_pact=True
+          - --l2_decay=2e-5
+          - --ls_epsilon=0.1
+          - --num_epochs 30
+          - --pretrained_model ../../pretrain/MobileNetV3_large_x1_0_ssld_pretrained
+          - --use_gpu True
+          - --ce_test=True
+        result:
+          acc_top1:
+            base: 0.566331
+            threshold: 0
+            evaluation: "="
+          acc_top5:
+            base: 0.80311
+            threshold: 0
+            evaluation: "="

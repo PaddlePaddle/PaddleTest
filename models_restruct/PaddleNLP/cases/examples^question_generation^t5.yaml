@@ -1,0 +1,90 @@
+case:
+  linux:
+    train:
+      -
+        name: multi
+        path: examples/question_generation/t5
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --model_name_or_path=t5-base
+          - --dataset_name=squad
+          - --output_dir=output
+          - --logging_steps=1
+          - --save_steps=2
+          - --train_batch_size=2
+          - --eval_batch_size=32
+          - --max_steps 2
+    eval:
+      -
+        name: eval
+        path: examples/question_generation/t5
+        cmd:  python predict.py
+        params:
+          - --model_name_or_path=./checkpoints/model_2
+          - --dataset_name=squad
+          - --output_path=generate.txt
+          - --max_source_length=1024
+          - --max_target_length=142
+          - --decode_strategy=greedy_search
+          - --top_k=2
+          - --top_p=1.0
+          - --num_beams=1
+          - --length_penalty=0.0
+          - --batch_size=16
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: single
+        path: examples/question_generation/t5
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --model_name_or_path=t5-base
+          - --dataset_name=squad
+          - --output_dir=output
+          - --logging_steps=1
+          - --save_steps=2
+          - --train_batch_size=2
+          - --eval_batch_size=16
+          - --max_steps 2
+    eval:
+      -
+        name: eval
+        path: examples/question_generation/t5
+        cmd:  python predict.py
+        params:
+          - --model_name_or_path=./checkpoints/model_2
+          - --dataset_name=squad
+          - --output_path=generate.txt
+          - --max_source_length=1024
+          - --max_target_length=142
+          - --decode_strategy=greedy_search
+          - --top_k=2
+          - --top_p=1.0
+          - --num_beams=1
+          - --length_penalty=0.0
+          - --batch_size=16
+          - --seed=42
+          - --ignore_pad_token_for_loss
+          - --logging_steps=20
+          - --device=gpu
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

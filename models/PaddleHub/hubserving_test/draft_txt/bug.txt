@@ -1,0 +1,289 @@
+barometer_reader
+
+安装requirement耗时太长
+
+
+cyrillic_ocr_db_crnn_mobile
+
+++++++++++++++++++++++ cyrillic_ocr_db_crnn_mobile serving Success!!!++++++++++++++++++++++
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:943: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  collections.MutableMapping.register(ParseResults)
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:3226: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  elif isinstance( exprs, collections.Iterable ):
+/usr/local/lib/python3.7/site-packages/setuptools/depends.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+Download
+
+Traceback (most recent call last):
+  File "/usr/local/bin/hub", line 8, in <module>
+    sys.exit(execute())
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/commands/utils.py", line 78, in execute
+    status = 0 if com['_entry']().execute(sys.argv[idx:]) else 1
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/commands/serving.py", line 352, in execute
+    self.start_serving()
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/commands/serving.py", line 245, in start_serving
+    self.start_single_app_with_args()
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/commands/serving.py", line 221, in start_single_app_with_args
+    self.preinstall_modules()
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/commands/serving.py", line 152, in preinstall_modules
+    m = hub.Module(**init_args)
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/module/module.py", line 395, in __new__
+    **kwargs)
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/module/module.py", line 493, in init_with_name
+    ignore_env_mismatch=ignore_env_mismatch)
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/module/manager.py", line 190, in install
+    return self._install_from_name(name, version, ignore_env_mismatch)
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/module/manager.py", line 265, in _install_from_name
+    return self._install_from_url(item['url'])
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/module/manager.py", line 255, in _install_from_url
+    for file, ds, ts in utils.download_with_progress(url, _tdir):
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/utils/utils.py", line 222, in download_with_progress
+    res = requests.get(url, stream=True)
+  File "/usr/local/lib/python3.7/site-packages/requests/api.py", line 76, in get
+    return request('get', url, params=params, **kwargs)
+  File "/usr/local/lib/python3.7/site-packages/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/local/lib/python3.7/site-packages/requests/sessions.py", line 528, in request
+    prep = self.prepare_request(req)
+  File "/usr/local/lib/python3.7/site-packages/requests/sessions.py", line 466, in prepare_request
+    hooks=merge_hooks(request.hooks, self.hooks),
+  File "/usr/local/lib/python3.7/site-packages/requests/models.py", line 316, in prepare
+    self.prepare_url(url, params)
+  File "/usr/local/lib/python3.7/site-packages/requests/models.py", line 390, in prepare_url
+    raise MissingSchema(error)
+requests.exceptions.MissingSchema: Invalid URL '': No schema supplied. Perhaps you meant http://?
+
+
+
+deeplabv3p_resnet50_cityscapes
+deeplabv3p_resnet50_voc
+fcn_hrnetw18_cityscapes
+fcn_hrnetw18_voc
+fcn_hrnetw48_cityscapes
+fcn_hrnetw48_voc
+hardnet_cityscapes
+ocrnet_hrnetw18_cityscapes
+ocrnet_hrnetw18_voc
+unet_cityscapes
+
+++++++++++++++++++++++ deeplabv3p_resnet50_cityscapes start predicting !!!++++++++++++++++++++++
+127.0.0.1 - - [22/Feb/2022 12:44:49] "POST /predict/deeplabv3p_resnet50_cityscapes HTTP/1.1" 200 -
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:943: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  collections.MutableMapping.register(ParseResults)
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:3226: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  elif isinstance( exprs, collections.Iterable ):
+/usr/local/lib/python3.7/site-packages/setuptools/depends.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+hubserving_py/test_deeplabv3p_resnet50_cityscapes.py:14: DeprecationWarning: tostring() is deprecated. Use tobytes() instead.
+  return base64.b64encode(data.tostring()).decode('utf8')
+Traceback (most recent call last):
+  File "hubserving_py/test_deeplabv3p_resnet50_cityscapes.py", line 28, in <module>
+    mask = base64_to_cv2(r.json()["results"][0])
+IndexError: string index out of range
+
+
+deeplabv3p_xception65_humanseg
+
+++++++++++++++++++++++ deeplabv3p_xception65_humanseg start predicting !!!++++++++++++++++++++++
+  File "hubserving_py/test_deeplabv3p_xception65_humanseg.py", line 22
+    rgba = np.concatenate((org_im, np.expand_dims(mask, axis=2)), axis=2)
+       ^
+SyntaxError: invalid syntax
+
+
+deepspeech2_aishell
+deepspeech2_librispeech
+
+[33m[2022-02-22 12:50:40,111] [ WARNING][0m - Some errors occurred while installing dependent packages. Detailed error information can be found in the /root/.paddlehub/log/20220222.log.[0m
+[31m[2022-02-22 12:50:40,117] [   ERROR][0m - No module named 'swig_decoders'[0m
+[32m[2022-02-22 12:50:40,117] [    INFO][0m - The module requires additional dependencies: swig_decoders. please install via:
+'git clone https://github.com/PaddlePaddle/DeepSpeech.git && cd DeepSpeech && git reset --hard b53171694e7b87abe7ea96870b2f4d8e0e2b1485 && cd deepspeech/decoders/ctcdecoder/swig && sh setup.sh'[0m
+
+
+deepvoice3_ljspeech
+deepvoice3_ljspeech
+transformer_tts_ljspeech
+
+
+  File "/root/.paddlehub/modules/deepvoice3_ljspeech/module.py", line 20, in <module>
+    import nltk
+ModuleNotFoundError: No module named 'nltk'
+
+
+u2_conformer_aishell
+u2_conformer_wenetspeech
+
+
+  File "/root/.paddlehub/modules/u2_conformer_aishell/deepspeech/utils/log.py", line 19, in <module>
+    from loguru import logger
+ModuleNotFoundError: No module named 'loguru'
+
+
+u2_conformer_librispeech
+
+
+  File "/root/.paddlehub/modules/u2_conformer_librispeech/module.py", line 21, in <module>
+    from paddleaudio import load, save_wav
+ModuleNotFoundError: No module named 'paddleaudio'
+
+
+
+ernie_gen
+
+File "/usr/local/lib/python3.7/site-packages/paddlehub/commands/serving.py", line 155, in preinstall_modules
+    raise RuntimeError("{} cannot be use for " "predicting".format(key))
+RuntimeError: ernie_gen cannot be use for predicting
+
+
+ernie_tiny_couplet
+
+  File "/usr/local/lib/python3.7/site-packages/paddlehub/compat/paddle_utils.py", line 220, in runner
+    return func(*args, **kwargs)
+  File "/root/.paddlehub/modules/ernie_tiny_couplet/module.py", line 36, in _initialize
+    inputs, outputs, program = self.module.context(
+  File "/usr/local/lib/python3.7/site-packages/paddle/fluid/dygraph/layers.py", line 1110, in __getattr__
+    return object.__getattribute__(self, name)
+AttributeError: 'ErnieTiny' object has no attribute 'context'
+
+
+fastspeech2_baker
+fastspeech2_ljspeech
+
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/root/.paddlehub/modules/fastspeech2_baker/module.py", line 24, in <module>
+    from parakeet.frontend.zh_frontend import Frontend
+ModuleNotFoundError: No module named 'parakeet'
+
+
+glove_wiki2014-gigaword_target_word-word_dim100_en
+glove_wiki2014-gigaword_target_word-word_dim200_en
+glove_wiki2014-gigaword_target_word-word_dim300_en
+glove_wiki2014-gigaword_target_word-word_dim50_en
+w2v_sikuquanshu_target_word-bigram_dim300
+w2v_sikuquanshu_target_word-word_dim300
+
+++++++++++++++++++++++ glove_wiki2014-gigaword_target_word-word_dim200_en start predicting !!!++++++++++++++++++++++
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:943: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  collections.MutableMapping.register(ParseResults)
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:3226: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  elif isinstance( exprs, collections.Iterable ):
+/usr/local/lib/python3.7/site-packages/setuptools/depends.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+{'msg': 'Word "中国" is not in vocab. Please check your inputs.', 'results': '', 'status': '101'}
+
+
+hrnet40_imagenet
+hrnet44_imagenet
+hrnet48_imagenet
+hrnet48_imagenet_ssld
+repvgg_b1_imagenet
+repvgg_b2_imagenet
+repvgg_b2g4_imagenet
+repvgg_b3g4_imagenet
+solov2
+
+++++++++++++++++++++++ hrnet40_imagenet start predicting !!!++++++++++++++++++++++
+127.0.0.1 - - [22/Feb/2022 15:16:36] "POST /predict/hrnet40_imagenet HTTP/1.1" 200 -
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:943: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  collections.MutableMapping.register(ParseResults)
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:3226: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  elif isinstance( exprs, collections.Iterable ):
+/usr/local/lib/python3.7/site-packages/setuptools/depends.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+hubserving_py/test_hrnet40_imagenet.py:10: DeprecationWarning: tostring() is deprecated. Use tobytes() instead.
+  return base64.b64encode(data.tostring()).decode('utf8')
+Traceback (most recent call last):
+  File "hubserving_py/test_hrnet40_imagenet.py", line 22, in <module>
+    data =r.json()["results"]['data']
+TypeError: string indices must be integers
+
+
+lac
+
+++++++++++++++++++++++ lac start predicting !!!++++++++++++++++++++++
+127.0.0.1 - - [22/Feb/2022 15:36:58] "POST /predict/lac HTTP/1.1" 200 -
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:943: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  collections.MutableMapping.register(ParseResults)
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:3226: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  elif isinstance( exprs, collections.Iterable ):
+/usr/local/lib/python3.7/site-packages/setuptools/depends.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+{
+    "msg": "cut() got an unexpected keyword argument 'texts'",
+    "results": "",
+    "status": "101"
+}
+
+
+photo_restoration
+realsr
+
+++++++++++++++++++++++ photo_restoration start predicting !!!++++++++++++++++++++++
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:943: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  collections.MutableMapping.register(ParseResults)
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:3226: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  elif isinstance( exprs, collections.Iterable ):
+/usr/local/lib/python3.7/site-packages/setuptools/depends.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+Traceback (most recent call last):
+  File "hubserving_py/test_photo_restoration.py", line 18, in <module>
+    data = {'images':cv2_to_base64(org_im), 'model_select': ['Colorization', 'SuperResolution']}
+  File "hubserving_py/test_photo_restoration.py", line 9, in cv2_to_base64
+    data = cv2.imencode('.jpg', image)[1]
+cv2.error: OpenCV(4.4.0) /tmp/pip-req-build-xgme2194/opencv/modules/imgcodecs/src/loadsave.cpp:919: error: (-215:Assertion failed) !image.empty() in function 'imencode'
+
+
+plato-mini
+rtb3
+w2v_zhihu_target_word-bigram_dim300
+
+++++++++++++++++++++++ plato-mini start predicting !!!++++++++++++++++++++++
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:943: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  collections.MutableMapping.register(ParseResults)
+/usr/local/lib/python3.7/site-packages/pkg_resources/_vendor/pyparsing.py:3226: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  elif isinstance( exprs, collections.Iterable ):
+/usr/local/lib/python3.7/site-packages/setuptools/depends.py:2: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+{'msg': 'Module plato_mini is not available.', 'results': '', 'status': '111'}
+
+
+
+senta_bilstm
+senta_bow
+senta_gru
+
+  import imp
+{
+    "msg": "\n\n--------------------------------------\nC++ Traceback (most recent call last):\n--------------------------------------\n0   paddle::AnalysisPredictor::Run(std::vector<paddle::PaddleTensor, std::allocator<paddle::PaddleTensor> > const&, std::vector<paddle::PaddleTensor, std::allocator<paddle::PaddleTensor> >*, int)\n1   paddle::AnalysisPredictor::SetFeed(std::vector<paddle::PaddleTensor, std::allocator<paddle::PaddleTensor> > const&, paddle::framework::Scope*)\n2   paddle::PaddleTensorToLoDTensor(paddle::PaddleTensor const&, phi::DenseTensor*, phi::Place const&)\n3   paddle::platform::DeviceContextPool::Get(phi::Place const&)\n4   std::__future_base::_Deferred_state<std::thread::_Invoker<std::tuple<paddle::platform::EmplaceDeviceContext<paddle::platform::CUDADeviceContext>(std::map<phi::Place, std::shared_future<std::unique_ptr<phi::DeviceContext, std::default_delete<phi::DeviceContext> > >, std::less<phi::Place>, std::allocator<std::pair<phi::Place const, std::shared_future<std::unique_ptr<phi::DeviceContext, std::default_delete<phi::DeviceContext> > > > > >*, phi::Place)::{lambda()#1}> >, std::unique_ptr<phi::DeviceContext, std::default_delete<phi::DeviceContext> > >::_M_complete_async()\n5   std::__future_base::_State_baseV2::_M_do_set(std::function<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> ()>*, bool*)\n6   std::_Function_handler<std::unique_ptr<std::__future_base::_Result_base, std::__future_base::_Result_base::_Deleter> (), std::__future_base::_Task_setter<std::unique_ptr<std::__future_base::_Result<std::unique_ptr<phi::DeviceContext, std::default_delete<phi::DeviceContext> > >, std::__future_base::_Result_base::_Deleter>, std::thread::_Invoker<std::tuple<paddle::platform::EmplaceDeviceContext<paddle::platform::CUDADeviceContext>(std::map<phi::Place, std::shared_future<std::unique_ptr<phi::DeviceContext, std::default_delete<phi::DeviceContext> > >, std::less<phi::Place>, std::allocator<std::pair<phi::Place const, std::shared_future<std::unique_ptr<phi::DeviceContext, std::default_delete<phi::DeviceContext> > > > > >*, phi::Place)::{lambda()#1}> >, std::unique_ptr<phi::DeviceContext, std::default_delete<phi::DeviceContext> > > >::_M_invoke(std::_Any_data const&)\n7   paddle::platform::CUDADeviceContext::CUDADeviceContext(phi::GPUPlace)\n8   phi::GPUContext::PartialInitWithoutAllocator()\n9   phi::GPUContext::Impl::InitDNNHandle()\n10  phi::enforce::EnforceNotMet::EnforceNotMet(phi::ErrorSummary const&, char const*, int)\n11  phi::enforce::GetCurrentTraceBackString[abi:cxx11](bool)\n\n----------------------\nError Message Summary:\n----------------------\nExternalError: CUDNN error(4), CUDNN_STATUS_INTERNAL_ERROR. \n  [Hint: 'CUDNN_STATUS_INTERNAL_ERROR'.  An internal cuDNN operation failed.  ] (at /paddle/paddle/phi/backends/gpu/gpu_context.cc:459)\n",
+    "results": "",
+    "status": "101"
+}
+
+
+w2v_baidu_encyclopedia_context_word-ngram_1-2_dim300
+w2v_baidu_encyclopedia_context_word-ngram_1-3_dim300
+w2v_baidu_encyclopedia_context_word-ngram_2-2_dim300
+在server端报错：
+
+----------------------
+Error Message Summary:
+----------------------
+ResourceExhaustedError:
+
+Out of memory error on GPU 0. Cannot allocate 7.786898GB memory on GPU 0, 13.949951GB memory has been allocated and available memory is only 1.831787GB.
+
+Please check whether there is any other process using GPU 0.
+1. If yes, please stop them, or start PaddlePaddle on another GPU.
+2. If no, please try one of the following suggestions:
+   1) Decrease the batch size of your model.
+   2) FLAGS_fraction_of_gpu_memory_to_use is 0.92 now, please set it to a higher value but less than 1.0.
+      The command is `export FLAGS_fraction_of_gpu_memory_to_use=xxx`.
+
+ (at /paddle/paddle/fluid/memory/detail/system_allocator.cc:160)
+. (at /paddle/paddle/fluid/imperative/tracer.cc:280)
+
+
+w2v_baidu_encyclopedia_context_word-wordPosition_dim300
+w2v_baidu_encyclopedia_target_word-ngram_2-2_dim300
+启动server，下载耗时过长。

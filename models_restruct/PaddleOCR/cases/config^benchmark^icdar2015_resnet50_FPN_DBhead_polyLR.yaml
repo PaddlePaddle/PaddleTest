@@ -1,0 +1,91 @@
+case:
+    linux:
+        train:
+          -
+            name: dygraph2static_baseline
+            path: benchmark/PaddleOCR_DBNet
+            cmd : export FLAGS_prim_all=False; python tools/train.py
+            params:
+              - -c config/icdar2015_resnet50_FPN_DBhead_polyLR.yaml
+              - -o trainer.log_iter=1
+              - trainer.enable_eval=True
+              - dataset.train.loader.shuffle=false
+              - arch.backbone.pretrained=False
+              - trainer.to_static=true
+              - trainer.use_gpu=True
+              - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_baseline
+              - amp=None
+              - dataset.train.loader.batch_size=8
+              - trainer.epochs=200
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: dygraph2static_prim
+            path: benchmark/PaddleOCR_DBNet
+            cmd : export FLAGS_prim_all=True; python tools/train.py
+            params:
+              - -c config/icdar2015_resnet50_FPN_DBhead_polyLR.yaml
+              - -o trainer.log_iter=1
+              - trainer.enable_eval=True
+              - dataset.train.loader.shuffle=false
+              - arch.backbone.pretrained=False
+              - trainer.to_static=true
+              - trainer.use_gpu=True
+              - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_prim
+              - amp=None
+              - dataset.train.loader.batch_size=8
+              - trainer.epochs=200
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: dygraph2static_amp
+            path: benchmark/PaddleOCR_DBNet
+            cmd : export FLAGS_prim_all=False; python tools/train.py
+            params:
+              - -c config/icdar2015_resnet50_FPN_DBhead_polyLR.yaml
+              - -o trainer.log_iter=1
+              - trainer.enable_eval=True
+              - dataset.train.loader.shuffle=false
+              - arch.backbone.pretrained=False
+              - trainer.to_static=true
+              - trainer.use_gpu=True
+              - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_amp
+              - dataset.train.loader.batch_size=8
+              - trainer.epochs=200
+              - amp.scale_loss=1024.0
+              - amp.use_dynamic_loss_scaling=True
+              - amp.amp_level=O2
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"
+          -
+            name: dygraph2static_amp_prim
+            path: benchmark/PaddleOCR_DBNet
+            cmd : export FLAGS_prim_all=True; python tools/train.py
+            params:
+              - -c config/icdar2015_resnet50_FPN_DBhead_polyLR.yaml
+              - -o trainer.log_iter=1
+              - trainer.enable_eval=True
+              - dataset.train.loader.shuffle=false
+              - arch.backbone.pretrained=False
+              - trainer.to_static=true
+              - trainer.use_gpu=True
+              - trainer.output_dir=./test_tipc/output/det_res50_db/benchmark_train/to_static_train_amp_prim
+              - dataset.train.loader.batch_size=8
+              - trainer.epochs=200
+              - amp.scale_loss=1024.0
+              - amp.use_dynamic_loss_scaling=True
+              - amp.amp_level=O2
+            result:
+              hmean:
+                base: 0.77
+                threshold: 0.01
+                evaluation: "+"

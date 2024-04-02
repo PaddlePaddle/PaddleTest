@@ -1,0 +1,59 @@
+case:
+  linux:
+    train:
+      -
+        name: train
+        path: examples/text_matching/sentence_transformers
+        cmd: python -m paddle.distributed.launch  train.py
+        params:
+          - --device gpu
+          - --save_dir ./checkpoints
+          - --epoch 1
+    eval:
+      -
+        name: eval
+        path: examples/text_matching/sentence_transformers
+        cmd: python predict.py
+        params:
+          - --device gpu
+          - --params_path ./checkpoints/model_7000/model_state.pdparams
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: train
+        path: examples/text_matching/sentence_transformers
+        cmd: python -m paddle.distributed.launch  train.py
+        params:
+          - --device gpu
+          - --save_dir ./checkpoints
+          - --epoch 1
+    eval:
+      -
+        name: train
+        path: examples/text_matching/sentence_transformers
+        cmd: python predict.py
+        params:
+          - --device gpu
+          - --params_path ./checkpoints/model_7000/model_state.pdparams
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -1,0 +1,3 @@
+configs^msvsr_reds.yaml
+configs^pix2pix_cityscapes.yaml
+configs^cyclegan_horse2zebra.yaml

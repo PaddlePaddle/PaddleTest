@@ -1,0 +1,12 @@
+case^demo^dygraph^post_quant^mobilenet_v3_precision.yaml
+case^demo^dygraph^pruning^Resnet34_precision.yaml
+case^demo^dygraph^quant^mobilenet_v1_precision.yaml
+case^demo^dygraph^quant^mobilenet_v3_precision.yaml
+case^demo^dygraph^unstructured_pruning^ratio_precision.yaml
+case^demo^dygraph^unstructured_pruning^threshold_precision.yaml
+case^demo^prune^Resnet34_precision.yaml
+case^demo^quant^pact_quant_aware^MobileNetV3_use_pact_precision.yaml
+case^demo^quant^quant_aware^MobileNet_precision.yaml
+case^demo^quant^quant_post^MobileNetV1_precision.yaml
+case^demo^unstructured_prune^ratio_precision.yaml
+case^demo^unstructured_prune^threshold_precision.yaml

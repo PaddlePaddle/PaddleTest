@@ -1,0 +1,11 @@
+configs^sr^sr_telescope.yml
+configs^sr^sr_tsrn_transformer_strock.yml
+configs^e2e^e2e_r50_vd_pg.yml
+configs^cls^cls_mv3.yml
+configs^table^table_master.yml
+configs^table^SLANet_ch.yml
+configs^table^SLANet.yml
+configs^kie^layoutlm_series^ser_layoutxlm_xfund_zh.yml
+configs^kie^layoutlm_series^re_layoutxlm_xfund_zh.yml
+configs^kie^vi_layoutxlm^ser_vi_layoutxlm_xfund_zh.yml
+configs^kie^vi_layoutxlm^re_vi_layoutxlm_xfund_zh.yml

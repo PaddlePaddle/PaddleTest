@@ -1,0 +1,59 @@
+case:
+  linux:
+    train:
+      -
+        name: download
+        path: examples/machine_translation/transformer
+        cmd: wget -q https://paddle-qa.bj.bcebos.com/paddlenlp/WMT14.en-de.partial.tar.gz && tar -xzvf WMT14.en-de.partial.tar.gz
+      -
+        name: pretrain
+        path: examples/machine_translation/transformer
+        cmd: python train.py
+        params:
+          - --config ./configs/transformer.base.yaml
+          - --train_file ./WMT14.en-de.partial/train.tok.clean.bpe.en ./WMT14.en-de.partial/train.tok.clean.bpe.de
+          - --dev_file ./WMT14.en-de.partial/dev.tok.bpe.en ./WMT14.en-de.partial/dev.tok.bpe.de
+          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708
+          - --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"
+    eval: skipped
+    infer: skipped
+    export:
+      -
+        name: export
+        path: examples/machine_translation/transformer
+        cmd:  python export_model.py
+        params:
+          - --config ./configs/transformer.base.yaml
+          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708
+          - --bos_token "<s>" --eos_token "<e>"
+    predict:
+      -
+        name: predict
+        path: examples/machine_translation/transformer
+        cmd:  python ./deploy/python/inference.py
+        params:
+          - --config ./configs/transformer.base.yaml
+          - --profile
+          - --test_file ./WMT14.en-de.partial/test.tok.bpe.en ./WMT14.en-de.partial/test.tok.bpe.de
+          - --vocab_file ./WMT14.en-de.partial/vocab_all.bpe.33708
+          - --unk_token "<unk>" --bos_token "<s>" --eos_token "<e>"
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

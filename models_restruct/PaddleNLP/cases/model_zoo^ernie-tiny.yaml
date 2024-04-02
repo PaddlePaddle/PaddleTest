@@ -1,0 +1,118 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: model_zoo/ernie-tiny/data
+        cmd: wget https://paddle-qa.bj.bcebos.com/paddlenlp/ernie-tiny.tar.gz && tar -xzvf ernie-tiny.tar.gz && cp -r ernie-tiny/* ./
+      -
+        name: fintune
+        path: model_zoo/ernie-tiny/
+        cmd: python run_train.py
+        params:
+          - --device gpu
+          - --logging_steps 1
+          - --max_steps 2
+          - --save_steps 2
+          - --eval_steps 1
+          - --model_name_or_path ernie-3.0-tiny-nano-v2-zh
+          - --max_vocab_size 6000
+          - --output_dir output/BS64_LR5e-5_EPOCHS30
+          - --train_path data/train.txt
+          - --dev_path data/dev.txt
+          - --intent_label_path data/intent_label.txt
+          - --slot_label_path data/slot_label.txt
+          - --label_names  'intent_label' 'slot_label'
+          - --weight_decay 0.01
+          - --warmup_ratio 0.1
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --input_dtype "int32"
+          - --overwrite_output_dir
+          - --save_total_limit 1
+          - --metric_for_best_model eval_accuracy
+        result:
+          loss:
+            base: 1
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: compress
+        path: model_zoo/ernie-tiny/
+        cmd: python run_train.py
+        params:
+          - --do_compress
+          - --strategy 'dynabert+qat'
+          - --num_train_epochs 1
+          - --model_name_or_path ./output/BS64_LR5e-5_EPOCHS30/checkpoint-2
+          - --output_dir ./output/BS64_LR5e-5_EPOCHS30/
+          - --max_seq_length 16
+          - --per_device_eval_batch_size 64
+          - --per_device_train_batch_size  64
+          - --learning_rate 5e-5
+          - --train_path data/train.txt
+          - --dev_path data/dev.txt
+          - --intent_label_path ./data/intent_label.txt
+          - --slot_label_path ./data/slot_label.txt
+          - --label_names  'intent_label' 'slot_label'
+          - --weight_decay 0.01
+          - --warmup_ratio 0.1
+          - --input_dtype "int32"
+          - --device gpu
+          - --logging_steps 1
+          - --max_steps 100
+          - --save_steps 100
+          - --eval_steps 100
+          - --disable_tqdm True
+          - --save_total_limit 1
+          - --metric_for_best_model eval_accuracy
+        result:
+          loss:
+            base: 1.456469
+            threshold: 0.01
+            evaluation: "="
+    eval:
+      -
+        name: eval
+        path: model_zoo/ernie-tiny/
+        cmd: python run_eval.py
+        params:
+          - --device gpu
+          - --model_name_or_path output/BS64_LR5e-5_EPOCHS30/checkpoint-2/
+          - --infer_prefix output/BS64_LR5e-5_EPOCHS30/infer_model
+          - --output_dir ./
+          - --test_path data/dev.txt
+          - --intent_label_path data/intent_label.txt
+          - --slot_label_path data/slot_label.txt
+          - --max_seq_length 16
+          - --per_device_eval_batch_size 512
+          - --do_eval
+        result:
+          loss:
+            base: 1.456469
+            threshold: 0.01
+            evaluation: "="
+    infer: skipped
+    export: skipped
+    predict: skipped
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

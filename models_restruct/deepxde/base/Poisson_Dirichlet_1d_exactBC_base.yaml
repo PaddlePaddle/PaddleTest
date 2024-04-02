@@ -1,0 +1,14 @@
+train:
+- cmd: python examples/pinn_forward/Poisson_Dirichlet_1d_exactBC.py
+  name: single
+  params:
+  - --epochs=2
+  result:
+    loss:
+      base: 4.92e-05
+      evaluation: '-'
+      threshold: 1
+    metric:
+      base: 5.71e-06
+      evaluation: '-'
+      threshold: 1

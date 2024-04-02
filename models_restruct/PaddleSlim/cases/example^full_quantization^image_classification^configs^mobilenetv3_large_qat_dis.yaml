@@ -1,0 +1,43 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/full_quantization/image_classification/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/mobilenetv3_large_qat_dis.yaml"
+          - --save_dir="./full_quant_save_quant_mobilev3_single_card/"
+          - --devices="gpu"
+
+      -
+        name: multi
+
+        path: example/full_quantization/image_classification/
+        cmd: python -m paddle.distributed.launch run.py
+        params:
+          - --config_path="./configs/mobilenetv3_large_qat_dis.yaml"
+          - --save_dir="./full_quant_save_quant_mobilev3_multi_card/"
+          - --devices="gpu"
+
+  windows:
+    train:
+      -
+        name: single
+        path: example/full_quantization/image_classification/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/mobilenetv3_large_qat_dis.yaml"
+          - --save_dir="./full_quant_save_quant_mobilev3_single_card/"
+          - --devices="gpu"
+
+  mac:
+    train:
+      -
+        name: single
+        path: example/full_quantization/image_classification/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/mobilenetv3_large_qat_dis.yaml"
+          - --save_dir="./full_quant_save_quant_mobilev3_single_card/"
+          - --devices="cpu"

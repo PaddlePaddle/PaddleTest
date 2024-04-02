@@ -1,0 +1,62 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python quant_post.py
+        params:
+          - --model_path ../../pretrain/MobileNetV1_infer
+          - --save_path ./quant_model/hist_bc_adaround/MobileNetV1
+          - --algo hist
+          - --bias_correction True
+          - --round_type=adaround
+
+    eval:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python eval.py
+        params:
+          - --model_path ./quant_model/hist_bc_adaround/MobileNetV1
+
+  windows:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python quant_post.py
+        params:
+          - --model_path "../../pretrain/MobileNetV1_infer"
+          - --save_path "./quant_model/hist_bc_adaround/MobileNetV1"
+          - --algo "hist"
+          - --bias_correction True
+
+    eval:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python eval.py
+        params:
+          - --model_path ./quant_model/hist_bc_adaround/MobileNetV1
+
+  mac:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python quant_post.py
+        params:
+          - --model_path ../../pretrain/MobileNetV1_infer
+          - --save_path ./quant_model/hist_bc_adaround/MobileNetV1
+          - --algo hist
+          - --bias_correction True
+          - --use_gpu False
+    eval:
+      -
+        name: single
+        path: demo/quant/quant_post
+        cmd: python eval.py
+        params:
+          - --model_path ./quant_model/hist_bc_adaround/MobileNetV1
+          - --use_gpu False

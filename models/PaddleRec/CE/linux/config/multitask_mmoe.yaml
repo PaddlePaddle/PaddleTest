@@ -1,0 +1,832 @@
+MODEL: "multitask_mmoe" # 模型名
+PRIORITY: P0
+GIT:
+  addr: $REPO_PaddleRec
+  path: $ROOT_PATH/PaddleRec
+  branch: $rec_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: scripts/multitask/ #脚本的路径
+  model_log_path: log/multitask_mmoe/
+
+EXEC:
+  exec_cases: [DATA_PROC,TRAIN,INFER]
+  exec_priority: [p0]
+  exec_tag: $EXEC_TAG
+#测试套
+DATA_PROC:
+  -
+    tag: linux_down_data
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh data_proc.sh census
+
+TRAIN: # 训练步骤
+  -
+    tag: linux_dy_gpu1
+    priority: p0  # dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu1 multitask_mmoe_linux_dy_gpu1
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992821
+        threshold: 0.003
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_dy_gpu1.log
+  -
+    tag: linux_dy_gpu2  # dy_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu2 multitask_mmoe_linux_dy_gpu2
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_dy_gpu2.log
+  -
+    tag: linux_dy_cpu   # dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_cpu multitask_mmoe_linux_dy_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.930556
+        threshold: 0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.19380978
+        threshold: 0.0001
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_dy_cpu.log
+
+  -
+    tag: linux_st_gpu1  # st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu1 multitask_mmoe_linux_st_gpu1
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_st_gpu1.log
+  -
+    tag: linux_st_gpu2  # st_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu2 multitask_mmoe_linux_st_gpu2
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_st_gpu2.log
+
+  -
+    tag: linux_st_cpu # st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_cpu multitask_mmoe_linux_st_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.56970165
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      cost:
+        latest: True
+        kpi_base: 0.30295599
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_st_cpu.log
+
+  - # mmoe模型单卡动态图训练step
+    tag: linux_dy_gpu1_con
+    priority: p0  # dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_dy_gpu1_con multitask_mmoe_linux_dy_gpu1_con
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_dy_gpu1_con.log
+
+  - # mmoe模型静态图单卡训练step
+    tag: linux_st_gpu1_con
+    priority: p0  # dy_gpu1
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh linux_st_gpu1_con multitask_mmoe_linux_st_gpu1_con
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_linux_st_gpu1_con.log
+# mac train(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_dy_cpu multitask_mmoe_mac_dy_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.5
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 9.21024
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh train.sh mac_st_cpu multitask_mmoe_mac_st_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.56893004
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      cost:
+        latest: True
+        kpi_base: 0.30378443
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_mac_st_cpu.log
+# win train(small data)
+  -
+    tag: win_dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_dy_gpu multitask_mmoe_win_dy_gpu mmoe
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.615741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.30295599
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_dy_cpu multitask_mmoe_win_dy_cpu mmoe
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.615741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.30295599
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_st_gpu multitask_mmoe_win_st_gpu mmoe
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.615741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.30295599
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: train.bat win_st_cpu multitask_mmoe_win_st_cpu mmoe
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.615741
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      loss:
+        latest: True
+        kpi_base: 0.30295599
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_win_st_cpu.log
+
+INFER:
+  - #可以有多步
+    tag: linux_dy_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu1 multitask_mmoe_infer_linux_dy_gpu1
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.991536
+        threshold: 0.003
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_dy_gpu1.log
+  -
+    tag: linux_dy_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu2 multitask_mmoe_infer_linux_dy_gpu2
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_dy_gpu2.log
+  -
+    tag: linux_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_cpu multitask_mmoe_infer_linux_dy_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.958333
+        threshold: 0
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_dy_cpu.log
+  - #可以有多步
+    tag: linux_st_gpu1
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu1 multitask_mmoe_infer_linux_st_gpu1
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_st_gpu1.log
+  -
+    tag: linux_st_gpu2
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_MULTI_CUDA  #取值为None，则不设置
+
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu2 multitask_mmoe_infer_linux_st_gpu2
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_st_gpu2.log
+  -
+    tag: linux_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_cpu multitask_mmoe_infer_linux_st_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.6103877
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_st_cpu.log
+
+  -
+    tag: linux_dy_gpu1_con
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_dy_gpu1_con multitask_mmoe_infer_linux_dy_gpu1_con
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_dy_gpu1_con.log
+
+  -
+    tag: linux_st_gpu1_con
+    priority: p0
+    env: #去掉，自动调度
+      CUDA_VISIBLE_DEVICES: $SET_CUDA  #取值为None，则不设置
+    run:
+      - path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh linux_st_gpu1_con multitask_mmoe_infer_linux_st_gpu1_con
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.992199
+        threshold: 0.02
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_linux_st_gpu1_con.log
+# mac infer(small data)
+  -
+    tag: mac_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_dy_cpu multitask_mmoe_infer_mac_dy_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.5
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_mac_dy_cpu.log
+
+  -
+    tag: mac_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: sh infer.sh mac_st_cpu multitask_mmoe_infer_mac_st_cpu
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.609953703
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/S_multitask_mmoe_infer_mac_st_cpu.log
+# win infer(small data)
+  -
+    tag: win_dy_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_dy_gpu multitask_mmoe_infer_win_dy_gpu mmoe
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.750000
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_win_dy_gpu.log
+
+  -
+    tag: win_dy_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_dy_cpu multitask_mmoe_infer_win_dy_cpu mmoe
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.750000
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_win_dy_cpu.log
+
+  -
+    tag: win_st_gpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_st_gpu multitask_mmoe_infer_win_st_gpu mmoe
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.750000
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_win_st_gpu.log
+
+  -
+    tag: win_st_cpu
+    priority: p0
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: infer.bat win_st_cpu multitask_mmoe_infer_win_st_cpu mmoe
+
+    kpis: #kpi指标
+      auc_marital:
+        latest: True
+        kpi_base: 0.750000
+        threshold: 0.001
+        actived: True
+        evaluation: "+"
+        unit_repr: None
+      exit_code:
+        latest: True
+        kpi_base: 0
+        threshold: 0
+        actived: True
+        evaluation: "-"
+        unit_repr: None
+
+    output: $ROOT_PATH/$model_log_path/multitask_mmoe_infer_win_st_cpu.log

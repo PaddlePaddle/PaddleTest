@@ -1,0 +1,145 @@
+MODEL: "rec_french_lite_train" # 模型名
+PRIORITY: P1
+GIT:
+  addr: $REPO_PaddleOCR
+  path: $ROOT_PATH/PaddleOCR
+  branch: $ocr_BRANCH
+
+ENV:
+  PADDLE_ON_MODEL_CE: $PADDLE_ON_MODEL_CE
+
+VARIABLES:
+  model_scripts_path: ./ #脚本的路径
+  model_log_path: log
+
+EXEC:
+  exec_cases: [FUNCTION,TRAIN,EVAL,INFER,EXPORT,PREDICT]
+  exec_priority: [P1]
+  exec_tag: $EXEC_TAG
+
+#测试套
+FUNCTION: # 训练步骤，开头只跑一次
+  -
+    priority: P1
+    tag: win_function_test
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: dir
+
+  -
+    priority: P1
+    tag: win_cpu_function_test
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: dir
+
+TRAIN: # 训练步骤
+  -
+    priority: P1
+    tag: train_win_gpu
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/rec/multi_language/rec_french_lite_train.yml train_win_gpu
+
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/rec_french_lite_train_train.log
+
+  -
+    priority: P1
+    tag: train_win_cpu
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/rec/multi_language/rec_french_lite_train.yml train_win_cpu
+
+    kpis: #kpi指标
+      training_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/rec_french_lite_train_train.log
+
+EVAL: # 训练步骤
+  -
+    priority: P1
+    tag: eval_win
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/rec/multi_language/rec_french_lite_train.yml eval_win
+    kpis: #kpi指标
+      eval_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/rec_french_lite_train_eval.log
+
+EXPORT: # 训练步骤
+  -
+    priority: P1
+    tag: export_win
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/rec/multi_language/rec_french_lite_train.yml export_win
+    kpis: #kpi指标
+      export_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/rec_french_lite_train_export.log
+
+INFER: # 训练步骤
+  -
+    priority: P1
+    tag: infer_win
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/rec/multi_language/rec_french_lite_train.yml infer_win
+    kpis: #kpi指标
+      infer_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/rec_french_lite_train_infer.log
+
+PREDICT: # 训练步骤
+  -
+    priority: P1
+    tag: predict_win
+    run:
+      -
+        path: $ROOT_PATH/$model_scripts_path
+        cmd: grep_win_log.bat configs/rec/multi_language/rec_french_lite_train.yml predict_win
+    kpis: #kpi指标
+      predict_exit_code:
+        latest: True
+        kpi_base: 0.0
+        threshold: 0.0
+        actived: True
+        evaluation: "="
+        unit_repr: None
+    output: $ROOT_PATH/$model_log_path/rec_french_lite_train_predict.log

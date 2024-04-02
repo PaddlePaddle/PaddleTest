@@ -1,0 +1,8 @@
+sentencepiece==0.1.95
+regex
+tqdm==4.57.0
+jieba
+seqeval
+attrdict
+h5py
+paddlenlp >= 2.0.0rc5

@@ -1,0 +1,78 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: examples/text_matching/simnet
+        cmd: wget https://bj.bcebos.com/paddlenlp/data/simnet_vocab.txt
+      -
+        name: train
+        path: examples/text_matching/simnet
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --vocab_path="./simnet_vocab.txt"
+          - --device=gpu
+          - --network=lstm
+          - --lr=5e-4
+          - --batch_size=64
+          - --epochs=1
+          - --save_dir="./checkpoints"
+    eval:
+      -
+        name: train
+        path: examples/text_matching/simnet
+        cmd: python predict.py
+        params:
+          - --vocab_path="./simnet_vocab.txt"
+          - --device=gpu
+          - --network=lstm
+          - --params_path="./checkpoints/final.pdparams"
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: examples/text_matching/simnet
+        cmd: wget https://bj.bcebos.com/paddlenlp/data/simnet_vocab.txt
+      -
+        name: train
+        path: examples/text_matching/simnet
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --vocab_path="./simnet_vocab.txt"
+          - --device=gpu
+          - --network=lstm
+          - --lr=5e-4
+          - --batch_size=64
+          - --epochs=1
+          - --save_dir="./checkpoints"
+    eval:
+      -
+        name: train
+        path: examples/text_matching/simnet
+        cmd: python predict.py
+        params:
+          - --vocab_path="./simnet_vocab.txt"
+          - --device=gpu
+          - --network=lstm
+          - --params_path="./checkpoints/final.pdparams"
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -1,0 +1,13 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/quant/quant_aware
+        cmd: python train.py
+        params:
+          - --model ResNet34
+          - --pretrained_model ../../pretrain/ResNet34_pretrained
+          - --checkpoint_dir ./output/ResNet34
+          - --num_epochs 1
+          - --use_gpu True

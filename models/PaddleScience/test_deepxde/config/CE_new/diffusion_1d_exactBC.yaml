@@ -1,0 +1,5 @@
+- test: 0
+  Dir: '../../deepxde/examples/pinn_forward/diffusion_1d_exactBC.py'
+  Post-processing:
+    solution_metric_dir: "../standard_data/diffusion_1d_exactBC_metric.npy"
+    solution_loss_dir: "../standard_data/diffusion_1d_exactBC_loss.npy"

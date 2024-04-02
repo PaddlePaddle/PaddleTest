@@ -1,0 +1,48 @@
+case:
+  linux:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+        params:
+          - -o mode=train
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+        params:
+          - -o mode=test
+
+  mac:
+    base: ./base/train_infer_with_cpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+        params:
+          - -o mode=train
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u tools/infer.py
+        params:
+          - -o mode=test
+
+  # windows:
+  #   base: ./base/train_infer_with_gpu_base.yaml
+  #   train:
+  #     -
+  #       name: dygraph
+  #       cmd: python -u tools/trainer.py
+  #       params:
+  #         - -o mode=train
+
+  #   infer:
+  #     -
+  #       name: dygraph
+  #       cmd: python -u tools/infer.py
+  #       params:
+  #         - -o mode=test

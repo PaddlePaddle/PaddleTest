@@ -1,0 +1,52 @@
+case:
+  linux:
+    train:
+      -
+        name: multi
+        path: examples/text_summarization/bart
+        cmd: python -m paddle.distributed.launch run_summarization.py
+        params:
+          - --dataset_name=cnn_dailymail
+          - --max_target_length=142
+          - --logging_steps=1
+          - --save_steps=1
+          - --train_batch_size=1
+          - --model_name_or_path=bart-base
+          - --output_dir=output
+          - --max_steps 1
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict:
+      -
+        name: faster
+        path: examples/text_summarization/bart
+        cmd: python generate.py
+        params:
+          - --dataset_name=cnn_dailymail
+          - --model_name_or_path=bart-base
+          - --logging_steps=100
+          - --train_batch_size=2
+          - --eval_batch_size=16
+          - --output_dir=output
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

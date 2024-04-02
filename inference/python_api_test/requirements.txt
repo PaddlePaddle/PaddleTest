@@ -1,0 +1,7 @@
+wget
+psutil
+pytest
+pynvml==11.0.0
+opencv-python==4.6.0.66
+dataclasses ; python_version == "3.6"
+sentencepiece==0.1.96

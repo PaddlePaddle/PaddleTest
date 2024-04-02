@@ -1,0 +1,60 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: demo/dygraph/pruning
+        cmd: python train.py
+        params:
+          - --model="resnet34"
+          - --data="imagenet"
+          - --pruned_ratio=0.25
+          - --batch_size=128
+          - --num_epochs=30
+          - --lr_strategy="cosine_decay"
+          - --criterion="fpgm"
+          - --model_path="./fpgm_resnet34_multi_models"
+          - --use_gpu True
+          - --ce_test=True
+        result:
+          loss:
+            base: 12.2101
+            threshold: 0
+            evaluation: "="
+          # acc_top1:
+          #   base: 0.734
+          #   threshold: 0
+          #   evaluation: "="
+          # acc_top5:
+          #   base: 0.886
+          #   threshold: 0
+          #   evaluation: "="
+
+      -
+        name: multi
+        path: demo/dygraph/pruning
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --model="resnet34"
+          - --data="imagenet"
+          - --pruned_ratio=0.25
+          - --batch_size=128
+          - --num_epochs=30
+          - --lr_strategy="cosine_decay"
+          - --criterion="fpgm"
+          - --model_path="./fpgm_resnet34_multi_models"
+          - --use_gpu True
+          - --ce_test=True
+        result:
+          loss:
+            base: 10.8690
+            threshold: 0
+            evaluation: "="
+          # acc_top1:
+          #   base: 0.216
+          #   threshold: 0
+          #   evaluation: "="
+          # acc_top5:
+          #   base: 0.474
+          #   threshold: 0
+          #   evaluation: "="

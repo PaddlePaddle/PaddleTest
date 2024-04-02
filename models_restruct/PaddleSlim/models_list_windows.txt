@@ -1,0 +1,17 @@
+case^demo^quant^pact_quant_aware^MobileNetV3_use_pact.yaml
+case^demo^dygraph^post_quant^mobilenet_v3.yaml
+example^auto_compression^nlp^configs^ernie3.0^afqmc.yaml
+example^full_quantization^image_classification^configs^mobilenetv3_large_qat_dis.yaml
+example^post_training_quantization^pytorch_yolo_series^configs^yolov6s_fine_tune.yaml
+example^auto_compression^image_classification^configs^MobileNetV1^qat_dis.yaml
+case^demo^prune^MobileNetV2.yaml
+case^demo^dygraph^quant^mobilenet_v1.yaml
+case^demo^quant^quant_post^hist_onnx_format_false.yaml
+example^auto_compression^detection^configs^ppyoloe_l_qat_dis.yaml
+case^demo^prune^MobileNetV1.yaml
+case^demo^distillation^ResNet50_vd_MobileNet.yaml
+case^demo^quant^quant_post^hist_onnx_format_true.yaml
+case^demo^dygraph^pruning^mobilenet_v2.yaml
+case^demo^quant^quant_aware^MobileNet.yaml
+example^auto_compression^semantic_segmentation^configs^pp_liteseg^pp_liteseg_qat.yaml
+case^demo^unstructured_prune^threshold.yaml

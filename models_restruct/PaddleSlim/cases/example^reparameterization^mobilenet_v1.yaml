@@ -1,0 +1,18 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/reparameterization/
+        cmd: python train.py
+        params:
+          - --num_epochs=2
+          - --data_dir=${ilsvrc2012_data_path}
+
+      -
+        name: multi
+        path: example/reparameterization/
+        cmd: python -m paddle.distributed.launch train.py
+        params:
+          - --num_epochs=2
+          - --data_dir=${ilsvrc2012_data_path}

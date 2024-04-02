@@ -1,0 +1,37 @@
+case:
+  linux:
+    train:
+      -
+        name: single
+        path: example/auto_compression/nlp/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
+          - --save_dir="./save_afqmc_ERNIE_pruned"
+
+    eval:
+      -
+        name: single
+        path: example/auto_compression/nlp/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
+          - --eval True
+  windows:
+    train:
+      -
+        name: single
+        path: example/auto_compression/nlp/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
+          - --save_dir="./save_afqmc_ERNIE_pruned"
+
+    eval:
+      -
+        name: single
+        path: example/auto_compression/nlp/
+        cmd: python run.py
+        params:
+          - --config_path="./configs/ernie3.0/afqmc.yaml"
+          - --eval True

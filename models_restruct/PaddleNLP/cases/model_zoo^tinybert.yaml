@@ -1,0 +1,101 @@
+case:
+  linux:
+    train:
+      -
+        name: glue
+        path: examples/benchmark/glue
+        cmd: python -u run_glue.py
+        params:
+          - --model_type bert
+          - --model_name_or_path bert-base-uncased
+          - --task_name SST-2
+          - --max_seq_length 128
+          - --batch_size 32
+          - --learning_rate 3e-5
+          - --max_steps 2
+          - --logging_steps 1
+          - --save_steps 2
+          - --output_dir ../../../model_zoo/tinybert/SST-2/
+          - --device gpu
+        result:
+          loss:
+            base: 0.7093085
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: intermediate_distill
+        path: model_zoo/tinybert/
+        cmd:  python task_distill.py
+        params:
+          - --model_type tinybert
+          - --student_model_name_or_path tinybert-6l-768d-v2
+          - --task_name SST-2
+          - --intermediate_distill
+          - --max_seq_length 64
+          - --batch_size 32
+          - --T 1
+          - --teacher_model_type bert
+          -  --teacher_path ./SST-2/sst-2_ft_model_2.pdparams
+          - --learning_rate 5e-5
+          - --num_train_epochs 1
+          - --max_steps 1
+          - --logging_steps 1
+          - --save_steps 1
+          - --output_dir ./mid/SST-2/
+          - --device gpu
+        result:
+        acc:
+          base: 23.300615
+          threshold: 1
+          evaluation: "="
+      -
+        name: distill_ped
+        path: model_zoo/tinybert/
+        cmd:  python task_distill.py
+        params:
+          - --model_type tinybert
+          - --student_model_name_or_path ./mid/SST-2/intermediate_distill_model_final.pdparams
+          - --task_name SST-2
+          - --max_seq_length 64
+          - --batch_size 32
+          - --T 1
+          - --teacher_model_type bert
+          -  --teacher_path ./SST-2/sst-2_ft_model_2.pdparams
+          - --learning_rate 3e-5
+          - --num_train_epochs 1
+          - --max_steps 1
+          - --logging_steps 1
+          - --save_steps 1
+          - --output_dir ./ped/SST-2/
+          - --device gpu
+        result:
+        acc:
+          base: 0.6926295
+          threshold: 0.01
+          evaluation: "="
+
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

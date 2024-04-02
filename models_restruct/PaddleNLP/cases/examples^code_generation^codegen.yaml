@@ -1,0 +1,66 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: examples/code_generation/codegen
+        cmd: wget https://paddle-qa.bj.bcebos.com/paddlenlp/codegen.tar.gz && tar -xzvf codegen.tar.gz
+      -
+        name: multi
+        path: examples/code_generation/codegen
+        cmd:   python -m paddle.distributed.launch run_clm.py
+        params:
+          - --model_name_or_path Salesforce/codegen-350M-mono
+          - --block_size 512
+          - --output_dir output
+          - --train_file ./codegen/train.json
+          - --validation_file ./codegen/test.json
+          - --num_train_epochs 5
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --device gpu
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: examples/code_generation/codegen
+        cmd: wget https://paddle-qa.bj.bcebos.com/paddlenlp/codegen.tar.gz && tar -xzvf codegen.tar.gz
+      -
+        name: single
+        path: examples/code_generation/codegen
+        cmd: python -m paddle.distributed.launch run_clm.py
+        params:
+          - --model_name_or_path Salesforce/codegen-350M-mono
+          - --block_size 32
+          - --output_dir output
+          - --train_file ./codegen/train.json
+          - --validation_file ./codegen/test.json
+          - --num_train_epochs 5
+          - --logging_steps 1
+          - --save_steps 1
+          - --max_steps 1
+          - --device gpu
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

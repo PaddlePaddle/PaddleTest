@@ -1,0 +1,36 @@
+case:
+  linux:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u ./models/multitask/metaheac/infer.py
+
+  mac:
+    base: ./base/train_infer_with_cpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u ./models/multitask/metaheac/infer.py
+
+  windows:
+    base: ./base/train_infer_with_gpu_base.yaml
+    train:
+      -
+        name: dygraph
+        cmd: python -u tools/trainer.py
+
+    infer:
+      -
+        name: dygraph
+        cmd: python -u ./models/multitask/metaheac/infer.py

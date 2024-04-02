@@ -1,0 +1,100 @@
+case:
+  linux:
+    train:
+      -
+        name: data_prepare
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: mkdir data && cd data && wget https://bj.bcebos.com/v1/paddlenlp/data/ext_data.tar.gz && tar -xzvf ext_data.tar.gz && wget https://bj.bcebos.com/v1/paddlenlp/data/cls_data.tar.gz && tar -xzvf cls_data.tar.gz && wget https://paddle-qa.bj.bcebos.com/paddlenlp/aos_tes.txt
+      -
+        name: checkpoints_prepare_ext
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: mkdir ./checkpoints/ && cd checkpoints && mkdir ext_checkpoints &&  cd ext_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_ext.pdparams && mv best_ext.pdparams best.pdparams
+      -
+        name: checkpoints_prepare_cls
+        path: applications/sentiment_analysis/ASO_analysis/checkpoints
+        cmd: mkdir cls_checkpoints && cd cls_checkpoints && wget https://bj.bcebos.com/paddlenlp/models/best_cls.pdparams && mv best_cls.pdparams best.pdparams
+    eval:
+      -
+        name: eval
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: python predict.py
+        params:
+          - --ext_model_path "./checkpoints/ext_checkpoints/best.pdparams"
+          - --cls_model_path "./checkpoints/cls_checkpoints/best.pdparams"
+          - --test_path "./data/aos_tes.txt"
+          - --ext_label_path "./data/ext_data/label.dict"
+          - --cls_label_path "./data/cls_data/label.dict"
+          - --save_path "./data/sentiment_results.json"
+          - --batch_size 8
+          - --ext_max_seq_len 512
+          - --cls_max_seq_len 256
+    infer: skipped
+    export:
+      -
+        name: extraction
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: sh run_export_model.sh extraction
+      -
+        name: classification
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: sh run_export_model.sh classification
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: data_prepare
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: mkdir data && cd data && wget https://bj.bcebos.com/v1/paddlenlp/data/ext_data.tar.gz && tar -xzvf ext_data.tar.gz && wget https://bj.bcebos.com/v1/paddlenlp/data/cls_data.tar.gz && tar -xzvf cls_data.tar.gz && wget https://paddle-qa.bj.bcebos.com/paddlenlp/aos_tes.txt
+      -
+        name: mkdir_checkpoints
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: mkdir checkpoints && cd checkpoints && mkdir ext_checkpoints cls_checkpoints
+      -
+        name: checkpoints_prepare_ext
+        path: applications/sentiment_analysis/ASO_analysis/checkpoints/ext_checkpoints
+        cmd:  wget https://bj.bcebos.com/paddlenlp/models/best_ext.pdparams && ren best_ext.pdparams best.pdparams
+      -
+        name: checkpoints_prepare_cls
+        path: applications/sentiment_analysis/ASO_analysis/checkpoints/cls_checkpoints
+        cmd: wget https://bj.bcebos.com/paddlenlp/models/best_cls.pdparams && ren best_cls.pdparams best.pdparams
+    eval:
+      -
+        name: eval
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: python predict.py
+        params:
+          - --ext_model_path "./checkpoints/ext_checkpoints/best.pdparams"
+          - --cls_model_path "./checkpoints/cls_checkpoints/best.pdparams"
+          - --test_path "./data/aos_tes.txt"
+          - --ext_label_path "./data/ext_data/label.dict"
+          - --cls_label_path "./data/cls_data/label.dict"
+          - --save_path "./data/sentiment_results.json"
+          - --batch_size 8
+          - --ext_max_seq_len 512
+          - --cls_max_seq_len 256
+    infer: skipped
+    export:
+      -
+        name: extraction
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: sh run_export_model.sh extraction
+      -
+        name: classification
+        path: applications/sentiment_analysis/ASO_analysis/
+        cmd: sh run_export_model.sh classification
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

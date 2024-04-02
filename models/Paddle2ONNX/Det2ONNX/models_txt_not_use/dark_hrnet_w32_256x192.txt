@@ -1,0 +1,8 @@
+model_name::hrnet
+yaml::DetForONNX/configs/keypoint/hrnet/dark_hrnet_w32_256x192.yml
+pretrain_link::https://paddledet.bj.bcebos.com/models/keypoint/dark_hrnet_w32_256x192.pdparams
+model_type::KeyPoint
+opt_ver::11
+opt_ver::11
+atol::3e-4
+rtol::1e-8

@@ -1,0 +1,144 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: model_zoo/uie
+        cmd: mkdir data && cd data && wget https://bj.bcebos.com/paddlenlp/datasets/uie/doccano_ext.json
+      -
+        name: doccano
+        path: model_zoo/uie
+        cmd: python doccano.py
+        params:
+            - --doccano_file ./data/doccano_ext.json
+            - --task_type ext
+            - --save_dir ./data
+            - --splits 0.8 0.2 0
+            - --schema_lang ch
+      -
+        name: multi
+        path: model_zoo/uie
+        cmd: python -u -m paddle.distributed.launch  finetune.py
+        params:
+          - --device gpu
+          - --logging_steps 2
+          - --save_steps 2
+          - --eval_steps 2
+          - --seed 42
+          - --model_name_or_path uie-base
+          - --output_dir ./checkpoint/model_best
+          - --train_path data/train.txt
+          - --dev_path data/dev.txt
+          - --max_seq_length 512
+          - --per_device_eval_batch_size 2
+          - --per_device_train_batch_size  2
+          - --num_train_epochs 100
+          - --learning_rate 1e-5
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --export_model_dir ./checkpoint/model_best
+          - --label_names 'start_positions' 'end_positions'
+          - --overwrite_output_dir
+          - --disable_tqdm True
+          - --metric_for_best_model eval_f1
+          - --load_best_model_at_end  True
+          - --save_total_limit 1
+          - --max_steps 2
+        result:
+          loss:
+            base: 0.003937
+            threshold: 0.01
+            evaluation: "="
+    eval:
+      -
+        name: eval
+        path: model_zoo/uie
+        cmd:  python evaluate.py
+        params:
+          - --model_path ./checkpoint/model_best
+          - --test_path ./data/dev.txt
+          - --batch_size 16
+          - --max_seq_len 512
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: prepare
+        path: model_zoo/uie
+        cmd: mkdir data && cd data && wget https://bj.bcebos.com/paddlenlp/datasets/uie/doccano_ext.json
+      -
+        name: doccano
+        path: model_zoo/uie
+        cmd: python doccano.py
+        params:
+            - --doccano_file ./data/doccano_ext.json
+            - --task_type ext
+            - --save_dir ./data
+            - --splits 0.8 0.2 0
+            - --schema_lang ch
+      -
+        name: finetune
+        path: model_zoo/uie
+        cmd: python -u -m paddle.distributed.launch  finetune.py
+        params:
+          - --device gpu
+          - --logging_steps 2
+          - --save_steps 2
+          - --eval_steps 2
+          - --seed 42
+          - --model_name_or_path uie-base
+          - --output_dir ./checkpoint/model_best
+          - --train_path data/train.txt
+          - --dev_path data/dev.txt
+          - --max_seq_length 512
+          - --per_device_eval_batch_size 4
+          - --per_device_train_batch_size  4
+          - --num_train_epochs 100
+          - --learning_rate 1e-5
+          - --do_train
+          - --do_eval
+          - --do_export
+          - --export_model_dir ./checkpoint/model_best
+          - --label_names "start_positions" "end_positions"
+          - --overwrite_output_dir
+          - --disable_tqdm True
+          - --metric_for_best_model eval_f1
+          - --load_best_model_at_end  True
+          - --save_total_limit 1
+          - --max_steps 2
+        result:
+          loss:
+            base: 0.003937
+            threshold: 0.01
+            evaluation: "="
+    eval:
+      -
+        name: eval
+        path: model_zoo/uie
+        cmd:  python evaluate.py
+        params:
+          - --model_path ./checkpoint/model_best
+          - --test_path ./data/dev.txt
+          - --batch_size 16
+          - --max_seq_len 512
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

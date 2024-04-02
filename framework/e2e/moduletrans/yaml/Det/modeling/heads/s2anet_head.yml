@@ -1,0 +1,61 @@
+s2anet_head_S2ANetHead_0:
+  desc: "Det ppdet.modeling.heads.s2anet_head.S2ANetHead模型结构"
+  Layer:
+    repo: "PaddleDetection"
+    layer_name: "ppdet.modeling.heads.s2anet_head.S2ANetHead"
+    params:
+      stacked_convs: 2
+      feat_in: 256
+      feat_out: 256
+      num_classes: 9
+      anchor_strides: [8, 16, 32, 64, 128]
+      anchor_scales: [4]
+      anchor_ratios: [1.0]
+      target_means: 0.0
+      target_stds: 1.0
+      align_conv_type: 'AlignConv'
+      align_conv_size: 3
+      use_sigmoid_cls: True
+      anchor_assign: "**RBoxAssigner()"
+      reg_loss_weight: [1.0, 1.0, 1.0, 1.0, 1.05]
+      cls_loss_weight: [1.05, 1.0]
+      reg_loss_type: 'l1'
+      nms_pre: 2000
+      nms: "**ppdet.modeling.layers.MultiClassNMS()"
+  DataGenerator:
+    DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
+    data: "ground_truth.ppdet.modeling.heads.s2anet_head.S2ANetHead.s2anet_head_S2ANetHead_0"
+  Loss:
+    loss_name: "diy.loss.diy_loss.naive_loss_list"
+    params:
+      loss_list: ['logit["loss"]']
+  optimizer:
+    optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+    params:
+      opt_api: "paddle.optimizer.SGD"
+      learning_rate: 0.000001
+  Train:
+    step: 3
+  test:
+    dygraph_to_static_train_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_static_predict_test:
+      delta: 0.00000001
+      rtol: 0.00000001
+    dygraph_to_infer_predict_test:
+      acc_test: False
+      delta: 0.000001
+      rtol: 0.000001
+#    dygraph_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    dygraph_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    static_train_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001
+#    static_predict_test:
+#      delta: 0.00000001
+#      rtol: 0.00000001

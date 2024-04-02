@@ -1,0 +1,63 @@
+testings:
+  dy_train:
+    model_dtype: "float32"
+    Loss:
+#      loss_name: "diy.loss.diy_loss.naive_loss_list"
+#      params:
+#        loss_list: ['logit']
+      loss_name: "diy.loss.diy_loss.mean_loss"
+    optimizer:
+      optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+      params:
+        opt_api: "paddle.optimizer.SGD"
+        learning_rate: 0.00001
+    step: 3
+  #  threshold:
+  #    delta: 0.00000001
+  #    rtol: 0.00000001
+
+  dy2st_train:
+    model_dtype: "float32"
+    Loss:
+#      loss_name: "diy.loss.diy_loss.naive_loss_list"
+#      params:
+#        loss_list: ['logit']
+      loss_name: "diy.loss.diy_loss.mean_loss"
+    optimizer:
+      optimizer_name: "diy.optimizer.diy_opt.naive_opt"
+      params:
+        opt_api: "paddle.optimizer.SGD"
+        learning_rate: 0.00001
+    step: 3
+
+  dy_eval:
+    model_dtype: "float32"
+
+  dy2st_eval:
+    model_dtype: "float32"
+
+  jit_save:
+    model_dtype: "float32"
+
+  paddle_infer:
+
+
+compare:
+  -
+    baseline: 'dy_train'
+    latest: 'dy2st_train'
+    precision:
+      delta: 0.00000001
+      rtol: 0.00000001
+  -
+    baseline: 'dy_eval'
+    latest: 'dy2st_eval'
+    precision:
+      delta: 0.00000001
+      rtol: 0.00000001
+  -
+    baseline: 'dy_eval'
+    latest: 'paddle_infer'
+    precision:
+      delta: 0.00000001
+      rtol: 0.00000001

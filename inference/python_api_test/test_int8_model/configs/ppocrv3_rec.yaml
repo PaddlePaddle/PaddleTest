@@ -1,0 +1,40 @@
+Global:
+  model_type: rec
+  algorithm: SVTR
+  character_dict_path: ./configs/ppocr_keys_v1.txt
+  max_text_length: &max_text_length 25
+  use_space_char: true
+
+PostProcess:
+  name: CTCLabelDecode
+
+Metric:
+  name: RecMetric
+  main_indicator: acc
+  ignore_space: False
+
+Eval:
+  dataset:
+    name: SimpleDataSet
+    data_dir: ./test_set_rec
+    label_file_list:
+    - ./test_list_rec.txt
+    transforms:
+    - DecodeImage:
+        img_mode: BGR
+        channel_first: false
+    - MultiLabelEncode:
+    - RecResizeImg:
+        image_shape: [3, 48, 320]
+    - KeepKeys:
+        keep_keys:
+        - image
+        - label_ctc
+        - label_sar
+        - length
+        - valid_ratio
+  loader:
+    shuffle: false
+    drop_last: false
+    batch_size_per_card: 64
+    num_workers: 0

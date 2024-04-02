@@ -1,0 +1,207 @@
+case:
+  linux:
+    train:
+      -
+        name: classifier
+        path: model_zoo/ernie-doc
+        cmd: python -m paddle.distributed.launch --log_dir hyp run_classifier.py
+        params:
+          - --epochs 15
+          - --layerwise_decay 0.7
+          - --learning_rate 5e-5
+          - --batch_size 2
+          - --save_steps 2
+          - --max_steps 2
+          - --dataset hyp
+          - --output_dir hyp
+      -
+        name: mrc
+        path: model_zoo/ernie-doc
+        cmd: python -m paddle.distributed.launch  --log_dir cmrc2018 run_mrc.py
+        params:
+          - --batch_size 2
+          - --layerwise_decay 0.8
+          - --dropout 0.2
+          - --learning_rate 4.375e-5
+          - --save_steps 2
+          - --max_steps 2
+          - --dataset cmrc2018
+          - --output_dir cmrc2018
+      -
+        name: mcq
+        path: model_zoo/ernie-doc/
+        cmd: python -m paddle.distributed.launch --log_dir c3 run_mcq.py
+        params:
+          - --learning_rate 6.5e-5
+          - --epochs 1
+          - --save_steps 2
+          - --max_steps 2
+          - --output_dir c3
+      -
+        name: semantic_matching
+        path: model_zoo/ernie-doc/
+        cmd: python -m paddle.distributed.launch --log_dir cail run_semantic_matching.py
+        params:
+          - --epochs 1
+          - --layerwise_decay 0.8
+          - --learning_rate 1.25e-5
+          - --batch_size 2
+          - --save_steps 2
+          - --max_steps 2
+          - --output_dir cail
+      -
+        name: sequence_labeling
+        path: model_zoo/ernie-doc/
+        cmd: python -m paddle.distributed.launch  --log_dir msra run_sequence_labeling.py
+        params:
+          - --learning_rate 3e-5
+          - --epochs 1
+          - --save_steps 2
+          - --max_steps 2
+          - --output_dir msra
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: dureader_robust
+        path: model_zoo/ernie-doc/
+        cmd: python -m paddle.distributed.launch  --log_dir dureader_robust run_mrc.py
+        params:
+          - --model_name_or_path ernie-doc-base-zh
+          - --dataset dureader_robust
+          - --batch_size 2
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows:
+    train:
+      -
+        name: classifier
+        path: model_zoo/ernie-doc
+        cmd: python -m paddle.distributed.launch --log_dir hyp run_classifier.py
+        params:
+          - --epochs 15
+          - --layerwise_decay 0.7
+          - --learning_rate 5e-5
+          - --batch_size 2
+          - --save_steps 2
+          - --max_steps 2
+          - --dataset hyp
+          - --output_dir hyp
+        result:
+          loss:
+            base: 0.755012
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: mrc
+        path: model_zoo/ernie-doc
+        cmd: python -m paddle.distributed.launch  --log_dir cmrc2018 run_mrc.py
+        params:
+          - --batch_size 2
+          - --layerwise_decay 0.8
+          - --dropout 0.2
+          - --learning_rate 4.375e-5
+          - --save_steps 2
+          - --max_steps 2
+          - --dataset cmrc2018
+          - --output_dir cmrc2018
+        result:
+          loss:
+            base: 6.28685
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: mcq
+        path: model_zoo/ernie-doc/
+        cmd: python -m paddle.distributed.launch --log_dir c3 run_mcq.py
+        params:
+          - --learning_rate 6.5e-5
+          - --epochs 1
+          - --save_steps 2
+          - --max_steps 2
+          - --output_dir c3
+        result:
+          loss:
+            base: 1.456469
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: semantic_matching
+        path: model_zoo/ernie-doc/
+        cmd: python -m paddle.distributed.launch --log_dir cail run_semantic_matching.py
+        params:
+          - --epochs 1
+          - --layerwise_decay 0.8
+          - --learning_rate 1.25e-5
+          - --batch_size 2
+          - --save_steps 2
+          - --max_steps 2
+          - --output_dir cail
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: sequence_labeling
+        path: model_zoo/ernie-doc/
+        cmd: python -m paddle.distributed.launch  --log_dir msra run_sequence_labeling.py
+        params:
+          - --learning_rate 3e-5
+          - --epochs 1
+          - --save_steps 2
+          - --max_steps 2
+          - --batch_size 2
+          - --output_dir msra
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+      -
+        name: dureader_robust
+        path: model_zoo/ernie-doc/
+        cmd: python -m paddle.distributed.launch  --log_dir dureader_robust run_mrc.py
+        params:
+          - --model_name_or_path ernie-doc-base-zh
+          - --dataset dureader_robust
+          - --batch_size 2
+          - --save_steps 2
+          - --max_steps 2
+          - --logging_steps 1
+        result:
+          loss:
+            base: 0.995620
+            threshold: 0.01
+            evaluation: "="
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  windows_cpu:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+  mac:
+    train: skipped
+    eval: skipped
+    infer: skipped
+    export: skipped
+    predict: skipped

@@ -1,0 +1,70 @@
+train:
+  name: multi
+  cmd:  export no_proxy=bcebos.com; python -m paddle.distributed.launch tools/train.py
+  params:
+    - --config ${rd_yaml_path}
+    - --num_workers 2
+    - --log_interval 50
+    - --save_interval 5000
+  result:
+    total_loss:
+      base: ${train_base_loss}
+      threshold: ${train_threshold}
+      evaluation: "-"
+
+eval:
+  -
+    name: pretrained
+    cmd:  python tools/evaluate.py
+    params:
+      - --config ${rd_yaml_path}
+      - --num_workers 2
+      - --model ${model}/model.pdparams
+    ${eval_key}:
+        base: ${eval_base_acc}
+        threshold: 0.1
+        evaluation: "+"
+  -
+    name: pretrained_bs1
+    cmd:  python tools/evaluate.py
+    params:
+      - --config ${rd_yaml_path}
+      - --num_workers 2
+      - --model ${model}/model.pdparams
+      - --batch_size 1
+    result:
+      ${eval_key}:
+        base: ${eval_base_acc}
+        threshold: 0.1
+        evaluation: "+"
+
+export:
+  name: pretrained
+  cmd: python tools/export.py
+  params:
+    - --config ${rd_yaml_path}
+    - --model ${model}/model.pdparams
+    - --save_dir ./exported_model/${model}
+  result:
+    exit_code:
+      base: 0
+      threshold: 0
+      evaluation: "="
+
+predict:
+  -
+    name: pretrained
+    cmd: python deploy/${category}/python/infer.py
+    params:
+      - --model_file exported_model/${model}/${category}.pdmodel
+      - --params_file exported_model/${model}/${category}.pdiparams
+  -
+    name: pretrained_C
+    params:
+      - --model_file exported_model/${model}/${category}.pdmodel
+      - --params_file exported_model/${model}/${category}.pdiparams
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+      evaluation: "="

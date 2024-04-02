@@ -1,0 +1,171 @@
+case:
+  linux:
+    base: ./base/Products_base.yaml
+    train:
+      -
+        name: single
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+          - -o DataLoader.Train.sampler.batch_size=64
+          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
+          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
+      -
+        name: multi
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+          - -o DataLoader.Train.sampler.batch_size=64
+          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
+          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
+    eval:
+      -
+        name: trained
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+      -
+        name: pretrained
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+      infer: skipped
+    export:
+      -
+        name: trained
+      -
+        name: pretrained
+    predict:
+      -
+        name: trained
+      -
+        name: pretrained
+
+  linux_convergence:
+    base: ./base/Products_base.yaml
+    train:
+      -
+        name: single_convergence
+      -
+        name: multi_convergence
+
+
+  # linux_cpu:  #暂时只写了cpu，一般不会有人用cpu_eval
+    # base: ./base/Products_base.yaml
+  #   train:
+  #     -
+  #       name: function
+  #       params:
+  #         - -o Global.device=cpu
+
+  windows:
+    base: ./base/Products_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+          - -o DataLoader.Train.sampler.batch_size=64
+          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
+          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
+    eval:
+      -
+        name: function
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+      -
+        name: pretrained
+        params:
+          - -o DataLoader.Eval.sampler.batch_size=64
+    infer: skipped
+    export:
+      -
+        name: function
+      -
+        name: pretrained
+    predict:
+      -
+        name: function
+      -
+        name: pretrained
+
+  windows_cpu:
+    base: ./base/Products_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=64
+          - -o DataLoader.Train.sampler.batch_size=64
+          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
+          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=64
+      -
+        name: pretrained
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=64
+    infer: skipped
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+
+  mac:
+    base: ./base/Products_base.yaml
+    train:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=64
+          - -o DataLoader.Train.sampler.batch_size=64
+          - -o DataLoader.Train.dataset.image_root=./dataset/Inshop/
+          - -o DataLoader.Train.dataset.cls_label_path=./dataset/Inshop/train_list.txt
+    eval:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=64
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+          - -o DataLoader.Eval.sampler.batch_size=64
+    infer: skipped
+    export:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+    predict:
+      -
+        name: function
+        params:
+          - -o Global.device=${set_cuda_flag}
+      -
+        name: pretrained
+        params:
+          - -o Global.device=${set_cuda_flag}
+
+function: paddlelas_imagenet_parse
