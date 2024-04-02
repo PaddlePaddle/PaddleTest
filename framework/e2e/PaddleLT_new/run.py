@@ -157,7 +157,10 @@ class Run(object):
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
     def _multiprocess_perf_test_run(self):
-        """run some test"""
+        """
+        multiprocess run some test
+        需要处理cpu绑核以及gpu并行
+        """
 
         def _queue_run(py_list, result_queue):
             """
