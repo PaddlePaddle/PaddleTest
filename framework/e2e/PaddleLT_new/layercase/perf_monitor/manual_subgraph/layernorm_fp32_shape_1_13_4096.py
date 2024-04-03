@@ -30,6 +30,17 @@ def create_paddle_inputs():
     inputs = (x, weight, bias)
     return inputs
 
+def create_numpy_inputs():
+    shape = [1, 13, 4096]
+    # x = paddle.uniform(shape, dtype="float32", min=-0.5, max=0.5)
+    x = np.random.uniform(low=-0.5, high=0.5, size=(1, 13, 4096))
+    # weight = paddle.ones(shape=[shape[-1]], dtype="float32")
+    weight = np.ones((4096), dtype="float32")
+    # bias = paddle.ones(shape=[shape[-1]], dtype="float32")
+    bias = np.ones((4096), dtype="float32")
+    inputs = (x, weight, bias)
+    return inputs
+
 
 # class PaddleLayernormSubGraph(paddle.nn.Layer):
 #     def __init__(self):
@@ -68,4 +79,4 @@ def create_paddle_inputs():
 
 
 # if __name__ == '__main__':
-#     unittest.main()
+    # unittest.main()
