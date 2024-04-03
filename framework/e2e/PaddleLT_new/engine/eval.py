@@ -35,36 +35,36 @@ class LayerEval(object):
         paddle.set_default_dtype(self.model_dtype)
 
         self.layerfile = layerfile
+        self.data = BuildData(layerfile=self.layerfile).get_single_data()
 
-    def _net_data(self):
+    def _net_instant(self):
         """get net and data"""
         reset(self.seed)
         net = BuildLayer(layerfile=self.layerfile).get_layer()
-        data = BuildData(layerfile=self.layerfile).get_single_data()
-        return net, data
+        return net
 
     def dy_eval(self):
         """dygraph eval"""
-        net, data = self._net_data()
+        net = self._net_instant()
         # net.eval()
-        logit = net(*data)
+        logit = net(*self.data)
         return logit
 
     def dy2st_eval(self):
         """dy2st eval"""
-        net, data = self._net_data()
+        net = self._net_instant()
         st_net = paddle.jit.to_static(net, full_graph=True)
         # net.eval()
-        logit = st_net(*data)
+        logit = st_net(*self.data)
         return logit
 
     def dy2st_eval_cinn(self):
         """dy2st eval"""
-        net, data = self._net_data()
+        net = self._net_instant()
 
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
         # net.eval()
-        logit = cinn_net(*data)
+        logit = cinn_net(*self.data)
         return logit
