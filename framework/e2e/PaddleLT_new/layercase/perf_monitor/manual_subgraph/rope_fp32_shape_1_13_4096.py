@@ -1,14 +1,16 @@
-# FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1 
-# FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true 
-# FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True 
-# FLAGS_cinn_compile_with_nvrtc=True FLAGS_nvrtc_compile_to_cubin=True 
+# FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1
+# FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true
+# FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True
+# FLAGS_cinn_compile_with_nvrtc=True FLAGS_nvrtc_compile_to_cubin=True
 # FLAGS_support_reduce_stride_read=1
 
 import unittest
 import numpy as np
+
 # import utils
 
 import paddle
+
 
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
@@ -29,17 +31,27 @@ class LayerCase(paddle.nn.Layer):
         x2 = x[..., x.shape[-1] // 2 :]
         return paddle.concat([-x2, x1], axis=-1)  # shape is the same as x
 
+
 def create_paddle_inputs():
     q = paddle.randn([13, 2048, 32, 128], dtype="float32")
     k = paddle.randn([13, 2048, 32, 128], dtype="float32")
     cos = paddle.randn([1, 2048, 1, 128], dtype="float32")
     sin = paddle.randn([1, 2048, 1, 128], dtype="float32")
-    position_ids = paddle.randint(
-        high=2048, shape=[13, 2048], dtype="int64"
-    )
+    position_ids = paddle.randint(high=2048, shape=[13, 2048], dtype="int64")
 
     inputs = (q, k, cos, sin, position_ids)
     return inputs
+
+
+# def create_numpy_inputs():
+#     q = np.random.normal(size=(13, 2048, 32, 128)).astype("float32")
+#     k = np.random.normal(size=(13, 2048, 32, 128)).astype("float32")
+#     cos = np.random.normal(size=(1, 2048, 1, 128)).astype("float32")
+#     sin = np.random.normal(size=(1, 2048, 1, 128)).astype("float32")
+#     position_ids = np.random.normal(0, 2048, size=(13, 2048)).astype("int64")
+#     inputs = (q, k, cos, sin, position_ids)
+#     return inputs
+
 
 # class PaddleRopeSubGraph(paddle.nn.Layer):
 #     def __init__(self):
@@ -86,4 +98,4 @@ def create_paddle_inputs():
 
 
 # if __name__ == '__main__':
-#     unittest.main()
+# unittest.main()
