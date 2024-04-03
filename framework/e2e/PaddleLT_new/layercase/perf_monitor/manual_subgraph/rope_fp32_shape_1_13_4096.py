@@ -43,14 +43,14 @@ def create_paddle_inputs():
     return inputs
 
 
-def create_numpy_inputs():
-    q = np.random.normal(size=(13, 2048, 32, 128)).astype("float32")
-    k = np.random.normal(size=(13, 2048, 32, 128)).astype("float32")
-    cos = np.random.normal(size=(1, 2048, 1, 128)).astype("float32")
-    sin = np.random.normal(size=(1, 2048, 1, 128)).astype("float32")
-    position_ids = np.random.normal(0, 2048, size=(13, 2048)).astype("int64")
-    inputs = (q, k, cos, sin, position_ids)
-    return inputs
+# def create_numpy_inputs():
+#     q = np.random.normal(size=(13, 2048, 32, 128)).astype("float32")
+#     k = np.random.normal(size=(13, 2048, 32, 128)).astype("float32")
+#     cos = np.random.normal(size=(1, 2048, 1, 128)).astype("float32")
+#     sin = np.random.normal(size=(1, 2048, 1, 128)).astype("float32")
+#     position_ids = np.random.normal(0, 2048, size=(13, 2048)).astype("int64")
+#     inputs = (q, k, cos, sin, position_ids)
+#     return inputs
 
 
 # class PaddleRopeSubGraph(paddle.nn.Layer):

@@ -34,34 +34,37 @@ class LayerEval(object):
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 
-        self.net = BuildLayer(layerfile=layerfile).get_layer()
+        self.layerfile = layerfile
 
-        self.data = BuildData(layerfile=layerfile).get_single_data()
+    def _net_data(self):
+        """get net and data"""
+        reset(self.seed)
+        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        data = BuildData(layerfile=self.layerfile).get_single_data()
+        return net, data
 
     def dy_eval(self):
         """dygraph eval"""
-        reset(self.seed)
-
-        # self.net.eval()
-        logit = self.net(*self.data)
+        net, data = self._net_data()
+        # net.eval()
+        logit = net(*data)
         return logit
 
     def dy2st_eval(self):
         """dy2st eval"""
-        reset(self.seed)
-
-        net = paddle.jit.to_static(self.net, full_graph=True)
+        net, data = self._net_data()
+        st_net = paddle.jit.to_static(net, full_graph=True)
         # net.eval()
-        logit = net(*self.data)
+        logit = st_net(*data)
         return logit
 
     def dy2st_eval_cinn(self):
         """dy2st eval"""
-        reset(self.seed)
+        net, data = self._net_data()
 
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
-        net = paddle.jit.to_static(self.net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
         # net.eval()
-        logit = net(*self.data)
+        logit = cinn_net(*data)
         return logit

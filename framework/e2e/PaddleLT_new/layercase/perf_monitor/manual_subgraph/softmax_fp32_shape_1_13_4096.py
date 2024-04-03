@@ -29,10 +29,10 @@ def create_paddle_inputs():
     return inputs
 
 
-def create_numpy_inputs():
-    x = np.random.uniform(low=-0.5, high=0.5, size=(1, 13, 4096))
-    inputs = x
-    return inputs
+# def create_numpy_inputs():
+#     x = np.random.uniform(low=-0.5, high=0.5, size=(1, 13, 4096))
+#     inputs = x
+#     return inputs
 
 
 # class PaddleSoftmaxSubGraphNet(paddle.nn.Layer):

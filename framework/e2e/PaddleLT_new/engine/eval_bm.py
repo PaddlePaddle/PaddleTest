@@ -44,17 +44,17 @@ class LayerEvalBM(object):
         paddle.set_default_dtype(self.model_dtype)
 
         self.layerfile = layerfile
-        self.net = BuildLayer(layerfile=layerfile).get_layer()
 
-        # self.data = BuildData(layerfile=layerfile).get_single_tensor()
-        self.data = BuildData(layerfile=layerfile).get_single_data()
+    def _net_data(self):
+        """get net and data"""
+        reset(self.seed)
+        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        data = BuildData(layerfile=self.layerfile).get_single_tensor()
+        return net, data
 
     def dy_eval_perf(self):
         """dygraph eval"""
-        reset(self.seed)
-
-        # self.net.eval()
-        net = self.net
+        net, data = self._net_data()
 
         def _perf(input_data):
             logit = net(*input_data)
@@ -62,9 +62,9 @@ class LayerEvalBM(object):
 
         total_time_list = []
         # 预热
-        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
+        timeit.timeit(lambda: _perf(data), number=int(self.perf_repeat * self.timeit_num * 0.2))
         for i in range(self.perf_repeat):
-            total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
+            total_time = timeit.timeit(lambda: _perf(data), number=self.timeit_num)
             total_time_list.append(total_time)
 
         save_pickle(data_list=total_time_list, filename="dy_eval_perf_" + self.layerfile)
@@ -74,22 +74,22 @@ class LayerEvalBM(object):
 
     def dy2st_eval_cinn_perf(self):
         """dy2st eval"""
-        reset(self.seed)
+        net, data = self._net_data()
 
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
-        net = paddle.jit.to_static(self.net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
 
         # net.eval()
         def _perf(input_data):
-            logit = net(*input_data)
+            logit = cinn_net(*input_data)
             return logit
 
         total_time_list = []
         # 预热
-        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
+        timeit.timeit(lambda: _perf(data), number=int(self.perf_repeat * self.timeit_num * 0.2))
         for i in range(self.perf_repeat):
-            total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
+            total_time = timeit.timeit(lambda: _perf(data), number=self.timeit_num)
             total_time_list.append(total_time)
 
         save_pickle(data=total_time_list, filename="dy2st_eval_cinn_perf_" + self.layerfile + "_total_time_list")
