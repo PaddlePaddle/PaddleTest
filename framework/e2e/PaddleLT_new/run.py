@@ -175,10 +175,11 @@ class Run(object):
         需要处理cpu绑核以及gpu并行
         """
 
-        def _queue_run(py_list, result_queue):
+        def _queue_run(py_list, device_id, result_queue):
             """
             multi run main
             """
+            os.environ["CUDA_VISIBLE_DEVICES"] = os.environ.get("PLT_DEVICE_ID") + device_id
             sublayer_dict = {}
             error_count = 0
             error_list = []
@@ -204,7 +205,7 @@ class Run(object):
         result_queue = multiprocessing.Queue()
 
         for i, cases_list in enumerate(multiprocess_cases):
-            process = multiprocessing.Process(target=_queue_run, args=(cases_list, result_queue))
+            process = multiprocessing.Process(target=_queue_run, args=(cases_list, i, result_queue))
             process.start()
             # os.sched_setaffinity(process.pid, {self.core_index + i})
             processes.append(process)

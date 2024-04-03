@@ -4,7 +4,6 @@ export wheel_url="${wheel_url:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/D
 export python_ver="${python_ver:-python3.8}"
 export docker_type="${docker_type:-Ubuntu}"
 export cuda_ver="${cuda_ver:-cuda11.2}"
-export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-6,7}"
 
 if [[ "${docker_type}" == "Ubuntu" ]];then
     case ${cuda_ver} in
@@ -75,4 +74,3 @@ else
 fi
 
 echo "docker image: ${docker_image}"
-echo "CUDA_VISIBLE_DEVICES: ${CUDA_VISIBLE_DEVICES}"

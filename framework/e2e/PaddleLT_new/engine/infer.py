@@ -20,15 +20,16 @@ class LayerInfer(object):
     构建Layer预测的通用类
     """
 
-    def __init__(self, testing, layerfile, device_id):
+    # def __init__(self, testing, layerfile, device_id):
+    def __init__(self, testing, layerfile):
         """
         初始化
         """
         self.seed = 33
         reset(self.seed)
         self.device = os.environ.get("PLT_SET_DEVICE")
-        paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
-        # self.device_id = os.environ.get("PLT_DEVICE_ID")
+        paddle.set_device(str(self.device))
+        # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
 
         self.testing = testing
 
