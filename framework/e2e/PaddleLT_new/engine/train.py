@@ -22,15 +22,15 @@ class LayerTrain(object):
     """
 
     # def __init__(self, testing, case, layer):
-    def __init__(self, testing, layerfile):
+    def __init__(self, testing, layerfile, device_id):
         """
         初始化
         """
         self.seed = 33
         reset(self.seed)
         self.device = os.environ.get("PLT_SET_DEVICE")
-        paddle.set_device(str(self.device))
-        self.device_id = os.environ.get("PLT_DEVICE_ID")
+        paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
+        # self.device_id = os.environ.get("PLT_DEVICE_ID")
 
         self.testing = testing
 

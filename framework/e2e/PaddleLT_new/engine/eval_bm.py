@@ -22,7 +22,7 @@ class LayerEvalBM(object):
     """
 
     # def __init__(self, testing, case, layer):
-    def __init__(self, testing, layerfile):
+    def __init__(self, testing, layerfile, device_id):
         """
         初始化
         """
@@ -30,8 +30,8 @@ class LayerEvalBM(object):
         reset(self.seed)
 
         self.device = os.environ.get("PLT_SET_DEVICE")
-        paddle.set_device(str(self.device))
-        self.device_id = os.environ.get("PLT_DEVICE_ID")
+        paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
+        # self.device_id = os.environ.get("PLT_DEVICE_ID")
         self.perf_repeat = int(os.environ.get("PLT_BM_REPEAT", "100"))
         self.perf_statis = os.environ.get("PLT_BM_STATIS", "trimmean")
         self.timeit_num = int(os.environ.get("TIMEIT_NUM", "1"))
