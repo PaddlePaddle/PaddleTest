@@ -30,7 +30,7 @@ class LayerEvalBM(object):
         reset(self.seed)
 
         self.device = os.environ.get("PLT_SET_DEVICE")
-        paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
+        paddle.set_device("{}:{}".format(str(self.device), str(device_id + 1)))
         # self.device_id = os.environ.get("PLT_DEVICE_ID")
         self.perf_repeat = int(os.environ.get("PLT_BM_REPEAT", "100"))
         self.perf_statis = os.environ.get("PLT_BM_STATIS", "trimmean")
