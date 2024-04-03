@@ -75,3 +75,4 @@ else
 fi
 
 echo "docker image: ${docker_image}"
+echo "CUDA_VISIBLE_DEVICES: ${CUDA_VISIBLE_DEVICES}"
