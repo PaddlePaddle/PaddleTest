@@ -1,14 +1,16 @@
-# FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1 
-# FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true 
-# FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True 
-# FLAGS_cinn_compile_with_nvrtc=True FLAGS_nvrtc_compile_to_cubin=True 
+# FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1
+# FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true
+# FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True
+# FLAGS_cinn_compile_with_nvrtc=True FLAGS_nvrtc_compile_to_cubin=True
 # FLAGS_support_reduce_stride_read=1
 
 import unittest
 import numpy as np
+
 # import utils
 
 import paddle
+
 
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
@@ -18,6 +20,7 @@ class LayerCase(paddle.nn.Layer):
     def forward(self, x, weight, bias):
         out = paddle.nn.functional.layer_norm(x, x.shape[-1], weight, bias, self.variance_epsilon)
         return out
+
 
 def create_paddle_inputs():
     shape = [1, 13, 4096]
@@ -29,6 +32,7 @@ def create_paddle_inputs():
     bias.stop_gradient = False
     inputs = (x, weight, bias)
     return inputs
+
 
 def create_numpy_inputs():
     shape = [1, 13, 4096]
@@ -79,4 +83,4 @@ def create_numpy_inputs():
 
 
 # if __name__ == '__main__':
-    # unittest.main()
+# unittest.main()
