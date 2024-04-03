@@ -46,7 +46,8 @@ class LayerEvalBM(object):
         self.layerfile = layerfile
         self.net = BuildLayer(layerfile=layerfile).get_layer()
 
-        self.data = BuildData(layerfile=layerfile).get_single_tensor()
+        # self.data = BuildData(layerfile=layerfile).get_single_tensor()
+        self.data = BuildData(layerfile=layerfile).get_single_data()
 
     def dy_eval_perf(self):
         """dygraph eval"""
