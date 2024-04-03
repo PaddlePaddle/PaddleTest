@@ -179,7 +179,7 @@ class Run(object):
             """
             multi run main
             """
-            os.environ["CUDA_VISIBLE_DEVICES"] = os.environ.get("PLT_DEVICE_ID") + device_id
+            os.environ["CUDA_VISIBLE_DEVICES"] = os.environ.get("PLT_DEVICE_ID") + str(device_id)
             sublayer_dict = {}
             error_count = 0
             error_list = []
