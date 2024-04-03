@@ -61,10 +61,6 @@ def test_trt_fp16_more_bz():
     batch_size_pool = [1]
     max_batch_size = 2
     for batch_size in batch_size_pool:
-        try:
-            shutil.rmtree(f"{file_path}/_opt_cache")  # delete trt serialized cache
-        except Exception as e:
-            print("no need to delete trt serialized cache")
 
         test_suite = InferenceTest()
         test_suite.load_config(
