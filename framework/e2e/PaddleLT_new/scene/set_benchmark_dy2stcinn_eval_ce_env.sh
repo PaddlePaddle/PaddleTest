@@ -5,7 +5,8 @@ export CASE_DIR="${CASE_DIR:-perf_monitor}"
 export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项目配置yaml
 export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模型为性能
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
-export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
+export PLT_DEVICE_ID="${PLT_DEVICE_ID:-6}"
+export CUDA_VISIBLE_DEVICES="${PLT_DEVICE_ID:-6}"
 export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
 export MULTI_WORKER="${MULTI_WORKER:-0}"
 
@@ -33,6 +34,7 @@ echo "wheel_url is: ${wheel_url}"
 echo "python_ver is: ${python_ver}"
 echo "CASE_DIR is: ${CASE_DIR}"
 echo "TESTING is: ${TESTING}"
+echo "CUDA_VISIBLE_DEVICES is: ${CUDA_VISIBLE_DEVICES}"
 
 echo "TESTING_MODE is: ${TESTING_MODE}"
 echo "PLT_SET_DEVICE is: ${PLT_SET_DEVICE}"

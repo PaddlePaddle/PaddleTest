@@ -18,7 +18,7 @@ class LayerExport(object):
     构建Layer导出的通用类
     """
 
-    # def __init__(self, testing, case, layer):
+    # def __init__(self, testing, layerfile, device_id):
     def __init__(self, testing, layerfile):
         """
         初始化
@@ -27,7 +27,7 @@ class LayerExport(object):
         reset(self.seed)
         self.device = os.environ.get("PLT_SET_DEVICE")
         paddle.set_device(str(self.device))
-        self.device_id = os.environ.get("PLT_DEVICE_ID")
+        # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
 
         self.modelpath = layerfile.replace(".py", "").rsplit(".", 1)[0].replace(".", "/")
         self.layername = layerfile.replace(".py", "").rsplit(".", 1)[1].replace(".", "/")

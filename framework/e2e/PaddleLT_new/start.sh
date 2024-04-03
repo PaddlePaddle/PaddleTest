@@ -17,7 +17,6 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
   -e "python_ver=${python_ver}" \
   -e "wheel_url=${wheel_url}" \
   -e "AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID}" \
-  -e "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}" \
   ${docker_image} /bin/bash -c "
 ldconfig;
 
