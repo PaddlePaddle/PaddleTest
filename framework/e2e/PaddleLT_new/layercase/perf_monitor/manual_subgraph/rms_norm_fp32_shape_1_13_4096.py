@@ -1,14 +1,16 @@
-# FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1 
-# FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true 
-# FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True 
-# FLAGS_cinn_compile_with_nvrtc=True FLAGS_nvrtc_compile_to_cubin=True 
+# FLAGS_pir_apply_shape_optimization_pass=0 FLAGS_enable_pir_api=1
+# FLAGS_prim_enable_dynamic=true FLAGS_prim_all=true
+# FLAGS_cinn_new_group_scheduler=1 FLAGS_group_schedule_tiling_first=1 FLAGS_cinn_bucket_compile=True
+# FLAGS_cinn_compile_with_nvrtc=True FLAGS_nvrtc_compile_to_cubin=True
 # FLAGS_support_reduce_stride_read=1
 
 import unittest
 import numpy as np
+
 # import utils
 
 import paddle
+
 
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
@@ -18,10 +20,9 @@ class LayerCase(paddle.nn.Layer):
 
     def forward(self, hidden_states, weight):
         variance = hidden_states.pow(2).sum(-1, keepdim=True) / self.reduce_num
-        hidden_states = (
-            paddle.rsqrt(variance + self.variance_epsilon) * hidden_states
-        )
+        hidden_states = paddle.rsqrt(variance + self.variance_epsilon) * hidden_states
         return hidden_states * weight
+
 
 def create_paddle_inputs():
     shape = [1, 13, 4096]
@@ -32,6 +33,14 @@ def create_paddle_inputs():
 
     inputs = (x, weight)
     return inputs
+
+
+# def create_numpy_inputs():
+#     shape = [1, 13, 4096]
+#     x = np.random.uniform(low=-0.5, high=0.5, size=(1, 13, 4096))
+#     weight = np.ones((4096), dtype="float32")
+#     inputs = (x, weight)
+#     return inputs
 
 
 # class PaddleRMSNormSubGraph(paddle.nn.Layer):
@@ -78,4 +87,4 @@ def create_paddle_inputs():
 
 
 # if __name__ == '__main__':
-#     unittest.main()
+# unittest.main()

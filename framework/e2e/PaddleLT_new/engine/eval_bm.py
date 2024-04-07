@@ -44,16 +44,17 @@ class LayerEvalBM(object):
         paddle.set_default_dtype(self.model_dtype)
 
         self.layerfile = layerfile
-        self.net = BuildLayer(layerfile=layerfile).get_layer()
+        self.data = BuildData(layerfile=self.layerfile).get_single_tensor()
 
-        self.data = BuildData(layerfile=layerfile).get_single_tensor()
+    def _net_instant(self):
+        """get net and data"""
+        reset(self.seed)
+        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        return net
 
     def dy_eval_perf(self):
         """dygraph eval"""
-        reset(self.seed)
-
-        # self.net.eval()
-        net = self.net
+        net = self._net_instant()
 
         def _perf(input_data):
             logit = net(*input_data)
@@ -73,15 +74,15 @@ class LayerEvalBM(object):
 
     def dy2st_eval_cinn_perf(self):
         """dy2st eval"""
-        reset(self.seed)
+        net = self._net_instant()
 
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
-        net = paddle.jit.to_static(self.net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
 
         # net.eval()
         def _perf(input_data):
-            logit = net(*input_data)
+            logit = cinn_net(*input_data)
             return logit
 
         total_time_list = []
