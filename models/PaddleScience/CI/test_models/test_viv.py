@@ -79,6 +79,30 @@ def test_viv_metric():
     # 断言最后一轮迭代的评估值与基准
     assert np.allclose(float(last_metric), base_metric, rtol=1e-6)
 
+def test_viv_export():
+    """
+    测试函数：测试 viv.py 脚本的导出结果
+    """
+    py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.8
+    command = f"python{py_version} ../../examples/fsi/viv.py mode=export"
+    process = subprocess.Popen(command, shell=True)
+
+    # 等待脚本执行完成，并返回退出码
+    exit_code = process.wait()
+
+    # 断言退出码为 0
+    assert exit_code == 0
+
+def test_viv_infer():
+    """
+    测试函数：测试 viv.py 脚本的推理结果
+    """
+    py_version = os.getenv("py_version", "3.8")  # Python 版本号，从环境变量中获取，默认值为3.8
+    command = f"python{py_version} ../../examples/fsi/viv.py mode=infer"
+    process = subprocess.Popen(command, shell=True)
+    # 等待脚本执行完成，并返回退出码
+    exit_code = process.wait()
+    # 断言退出码为 0
 
 if __name__ == "__main__":
     os.system("cp ../../examples/fsi/VIV_Training_Neta100.mat ./")

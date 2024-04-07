@@ -1,5 +1,5 @@
 import os
-
+import sys
 
 def check_single_file_linenum_consistent(file: str):
     with open(file) as f:
@@ -53,6 +53,6 @@ def check_linenum_consistent_recursively(path: str):
         check_single_file_linenum_consistent(path)
     return
 
-
 if __name__ == "__main__":
     check_linenum_consistent_recursively("../../docs")
+    
