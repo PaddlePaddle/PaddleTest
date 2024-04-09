@@ -15,7 +15,8 @@ import argparse
 import numpy as np
 import yaml
 import psutil
-import cpuinfo
+
+# import cpuinfo
 
 from paddle.inference import Config
 from paddle.inference import create_predictor
