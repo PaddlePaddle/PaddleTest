@@ -1,0 +1,7 @@
+numpy
+pandas==1.5.3
+pyyaml
+psutil
+openpyxl
+
+py-cpuinfo
