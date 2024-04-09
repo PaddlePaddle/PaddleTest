@@ -232,7 +232,8 @@ def get_backend(backend):
 
 def parse_time(time_data, result_dict):
     """parse time"""
-    time_data = np.sort(np.array(time_data))[25:75]
+    # time_data = np.sort(np.array(time_data))[25:75]
+    time_data = np.sort(np.array(time_data))
     # print(time_data)
     # print(f"方差：{np.var(time_data * 1000)}")
     # print(f"标准差：{np.std(time_data * 1000)}")
@@ -268,8 +269,8 @@ class BenchmarkRunner:
         self.params = args
         self.out_diff = {}
         self.cpu_results = []
-        self.warmup_times = 50
-        self.run_times = 100
+        self.warmup_times = 0
+        self.run_times = 1
         self.time_data = []
         self.h2d_time = []
         self.d2h_time = []
