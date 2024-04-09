@@ -127,7 +127,6 @@ class PaddleInferenceEngine(object):
                     min_subgraph_size=min_subgraph_size,
                     precision_mode=precision_map[precision],
                     use_static=True,
-                    use_calib_mode=False,
                 )
 
         # enable shared memory

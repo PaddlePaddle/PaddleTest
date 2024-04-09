@@ -65,7 +65,6 @@ def init_predictor(model_path):
         min_subgraph_size=5,
         precision_mode=PrecisionType.Half,
         use_static=False,
-        use_calib_mode=False,
     )
 
     min_batch = 1
