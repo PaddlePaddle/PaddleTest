@@ -1,0 +1,7 @@
+input_data:
+  data: [./npy/3x224x224_2.npy]
+input_shape:
+  '0':
+    dtype: [float32]
+    shape:
+    - [-1, 2, 224, 224]
