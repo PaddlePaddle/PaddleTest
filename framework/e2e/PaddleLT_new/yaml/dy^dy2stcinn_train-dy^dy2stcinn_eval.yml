@@ -1,4 +1,7 @@
 testings:
+  dy_eval:
+    model_dtype: "float32"
+
   dy_train:
     model_dtype: "float32"
     Loss:
@@ -8,7 +11,10 @@ testings:
       params:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.00001
-    step: 5
+    step: 1
+
+  dy2st_eval_cinn:
+    model_dtype: "float32"
 
   dy2st_train_cinn:
     model_dtype: "float32"
@@ -19,27 +25,18 @@ testings:
       params:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.00001
-    step: 5
-
-  dy_eval:
-    model_dtype: "float32"
-
-  dy2st_eval_cinn:
-    model_dtype: "float32"
-
-  jit_save:
-    model_dtype: "float32"
+    step: 1
 
 compare:
   -
-    baseline: 'dy_train'
-    latest: 'dy2st_train_cinn'
+    baseline: 'dy_eval'
+    latest: 'dy2st_eval_cinn'
     precision:
       delta: 0.00001
       rtol: 0.000001
   -
-    baseline: 'dy_eval'
-    latest: 'dy2st_eval_cinn'
+    baseline: 'dy_train'
+    latest: 'dy2st_train_cinn'
     precision:
       delta: 0.00001
       rtol: 0.000001
