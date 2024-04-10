@@ -10,8 +10,9 @@ from engine.train import LayerTrain
 from engine.eval import LayerEval
 from engine.export import LayerExport
 from engine.infer import LayerInfer
-
 from engine.eval_bm import LayerEvalBM
+
+from engine.torcheval import TorchLayerEval
 
 # from interpreter.testing_trans import TrainTrans, EvalTrans
 
@@ -30,4 +31,6 @@ engine_map = {
     "paddle_infer_ort": LayerInfer,  # ort预测
     "dy_eval_perf": LayerEvalBM,  # 动态图评估性能
     "dy2st_eval_cinn_perf": LayerEvalBM,  # CINN评估性能
+
+    "torch_dy_eval": TorchLayerEval,
 }
