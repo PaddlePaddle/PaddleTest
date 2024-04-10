@@ -99,7 +99,7 @@ class LayerTrain(object):
                 opt.clear_grad()
 
         data_grad = self._get_data_grad(data)
-        return logit, data_grad
+        return [logit, data_grad]
 
     # def dy_train_dl(self):
     #     """dygraph train with dataloader"""
@@ -149,7 +149,7 @@ class LayerTrain(object):
                 opt.clear_grad()
 
         data_grad = self._get_data_grad(data)
-        return logit, data_grad
+        return [logit, data_grad]
 
     def dy2st_train_cinn(self):
         """dy2st train"""
@@ -178,4 +178,4 @@ class LayerTrain(object):
                 opt.clear_grad()
 
         data_grad = self._get_data_grad(data)
-        return logit, data_grad
+        return [logit, data_grad]
