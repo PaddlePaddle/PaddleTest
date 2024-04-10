@@ -10,10 +10,7 @@ from engine.train import LayerTrain
 from engine.eval import LayerEval
 from engine.export import LayerExport
 from engine.infer import LayerInfer
-
 from engine.eval_bm import LayerEvalBM
-
-# from interpreter.testing_trans import TrainTrans, EvalTrans
 
 
 engine_map = {
