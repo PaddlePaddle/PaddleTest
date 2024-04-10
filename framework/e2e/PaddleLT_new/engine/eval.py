@@ -18,7 +18,7 @@ class LayerEval(object):
     构建Layer评估的通用类
     """
 
-    # def __init__(self, testing, case, layer):
+    # def __init__(self, testing, layerfile, device_id):
     def __init__(self, testing, layerfile):
         """
         初始化
@@ -28,40 +28,43 @@ class LayerEval(object):
 
         self.device = os.environ.get("PLT_SET_DEVICE")
         paddle.set_device(str(self.device))
-        self.device_id = os.environ.get("PLT_DEVICE_ID")
+        # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
 
         self.testing = testing
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 
-        self.net = BuildLayer(layerfile=layerfile).get_layer()
+        self.layerfile = layerfile
+        self.data = BuildData(layerfile=self.layerfile).get_single_data()
 
-        self.data = BuildData(layerfile=layerfile).get_single_data()
+    def _net_instant(self):
+        """get net and data"""
+        reset(self.seed)
+        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        return net
 
     def dy_eval(self):
         """dygraph eval"""
-        reset(self.seed)
-
-        # self.net.eval()
-        logit = self.net(*self.data)
+        net = self._net_instant()
+        # net.eval()
+        logit = net(*self.data)
         return logit
 
     def dy2st_eval(self):
         """dy2st eval"""
-        reset(self.seed)
-
-        net = paddle.jit.to_static(self.net, full_graph=True)
+        net = self._net_instant()
+        st_net = paddle.jit.to_static(net, full_graph=True)
         # net.eval()
-        logit = net(*self.data)
+        logit = st_net(*self.data)
         return logit
 
     def dy2st_eval_cinn(self):
         """dy2st eval"""
-        reset(self.seed)
+        net = self._net_instant()
 
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
-        net = paddle.jit.to_static(self.net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
         # net.eval()
-        logit = net(*self.data)
+        logit = cinn_net(*self.data)
         return logit

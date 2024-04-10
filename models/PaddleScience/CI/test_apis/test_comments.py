@@ -70,6 +70,23 @@ def solve(path: str, whitelist: list = []):
         bracket_check_file(path, "[", "]")
         bracket_check_file(path, "{", "}")
 
+def get_all_files(folder_path):
+    files_list = []  # 保存文件名的列表
+
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            files_list.append(file_path)
+
+    return files_list
 
 if __name__ == "__main__":
-    solve("../../../PaddleScience", ["ad.py"])
+    current_dir = os.path.abspath(os.curdir)
+    parent_dir = os.path.dirname(current_dir)
+    grandparent_dir = os.path.dirname(parent_dir)
+    print(f"grandparent_dir: {grandparent_dir}")
+    folder_path = f'{grandparent_dir}/jointContribution/'  # 文件夹路径
+    files_list = get_all_files(folder_path)  # 获取文件夹下所有文件
+    # print(f"files_list: {files_list}")
+    files_list.append("ad.py")
+    solve(grandparent_dir, files_list)

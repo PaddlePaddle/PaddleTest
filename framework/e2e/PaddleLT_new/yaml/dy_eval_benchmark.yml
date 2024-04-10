@@ -1,0 +1,3 @@
+testings:
+  dy_eval_perf:
+    model_dtype: "float32"

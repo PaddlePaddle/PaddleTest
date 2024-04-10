@@ -10,3 +10,8 @@ requests==2.28.2
 wget
 numpy
 pytest-timeout
+pandas
+openpyxl
+matplotlib
+bce-python-sdk==0.8.74
+protocol

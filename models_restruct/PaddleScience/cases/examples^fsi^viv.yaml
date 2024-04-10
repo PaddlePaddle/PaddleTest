@@ -4,7 +4,9 @@ case:
     train:
       -
         name: single
-    eval: skipped
+    eval:
+      -
+        name: viv_single
     infer: skipped
     export: skipped
     predict: skipped

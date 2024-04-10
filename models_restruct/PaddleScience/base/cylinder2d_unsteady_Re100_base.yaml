@@ -9,3 +9,46 @@ train:
         base: 0.01407
         threshold: 1
         evaluation: "-"
+eval:
+  -
+    name: single
+    cmd: python examples/cylinder/2d_unsteady/cylinder2d_unsteady_Re100.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/cylinder2d_unsteady_Re100/cylinder2d_unsteady_Re100_pretrained.pdparams
+    result:
+      loss(Residual):
+        base: 0.00398
+        threshold: 1
+        evaluation: "-"
+      MSE.continuity(Residual):
+        base: 0.00126
+        threshold: 1
+        evaluation: "-"
+      MSE.momentum_x(Residual):
+        base: 0.00151
+        threshold: 1
+        evaluation: "-"
+      MSE.momentum_y(Residual):
+        base: 0.00120
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi
+    cmd: python -m paddle.distributed.launch examples/cylinder/2d_unsteady/cylinder2d_unsteady_Re100.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/cylinder2d_unsteady_Re100/cylinder2d_unsteady_Re100_pretrained.pdparams
+    result:
+      MSE.continuity(Residual):
+        base: 0.00126
+        threshold: 1
+        evaluation: "-"
+      MSE.momentum_x(Residual):
+        base: 0.00151
+        threshold: 1
+        evaluation: "-"
+      MSE.momentum_y(Residual):
+        base: 0.00120
+        threshold: 1
+        evaluation: "-"

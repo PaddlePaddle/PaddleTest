@@ -1,0 +1,50 @@
+train:
+  -
+    name: single
+    cmd: python examples/heat_exchanger/heat_exchanger.py
+    params:
+      - TRAIN.epochs=10
+    result:
+      loss:
+        base: 2683.93994
+        threshold: 1
+        evaluation: "-"
+eval:
+  -
+    name: single
+    cmd: python examples/heat_exchanger/heat_exchanger.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/HEDeepONet/HEDeepONet_pretrained.pdparams
+    result:
+      MSE.heat_boundary(interior_mse):
+        base: 0.52005
+        threshold: 1
+        evaluation: "-"
+      MSE.cold_boundary(interior_mse):
+        base: 0.16590
+        threshold: 1
+        evaluation: "-"
+      MSE.wall(interior_mse):
+        base: 0.01203
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi
+    cmd: python -m paddle.distributed.launch examples/heat_exchanger/heat_exchanger.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/HEDeepONet/HEDeepONet_pretrained.pdparams
+    result:
+      MSE.heat_boundary(interior_mse):
+        base: 0.52005
+        threshold: 1
+        evaluation: "-"
+      MSE.cold_boundary(interior_mse):
+        base: 0.16590
+        threshold: 1
+        evaluation: "-"
+      MSE.wall(interior_mse):
+        base: 0.01203
+        threshold: 1
+        evaluation: "-"

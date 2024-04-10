@@ -29,6 +29,8 @@ exit_code=$(($exit_code + $?))
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/model_state.pdparams minigpt4_7b/
+rm -rf ${work_path}/model_state.pdparams minigpt4_13b/
 
 echo exit_code:${exit_code}
 exit ${exit_code}

@@ -37,11 +37,9 @@ ignore_case_dir = {
         "test_CELU.py",
         "test_initializer_truncated_normal_new.py",
         "test_initializer_truncated_normal.py",
+        "test_cosinesimilarity.py",
     ],
     "paddlebase": [
-        "test_fill_diagonal_tensor.py",
-        "test_multiplex.py",
-        "test_log.py",
     ],
     "optimizer": [],
     "distribution": [],

@@ -24,14 +24,14 @@ tar -xvf ILSVRC2012_tiny.tar
 
 cd ${root_path}/PaddleMIX/
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
+# export http_proxy=${proxy}
+# export https_proxy=${proxy}
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install einops
 pip install -e .
-unset http_proxy
-unset https_proxy
+# unset http_proxy
+# unset https_proxy
 
 cd ${work_path}
 
