@@ -5,7 +5,7 @@ pwd;
 if [ -e linux_env_info.sh ];then
     rm -rf linux_env_info.sh
 fi
-wget -q https://raw.githubusercontent.com/PaddlePaddle/PaddleTest/develop/tools/linux_env_info.sh --no-proxy
+wget -q https://raw.githubusercontent.com/plusNew001/PaddleTest/develop/tools/linux_env_info.sh --no-proxy
 # 临时使用
 # wget -q https://paddle-qa.bj.bcebos.com/PaddleMT/linux_env_info.sh --no-proxy
 source ./linux_env_info.sh
