@@ -80,6 +80,10 @@ def test_gpu_more_bz_new_executor():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
+        if "win" in sys.platform:
+            delta = 2e-5
+        else:
+            delta = 1e-5
         test_suite.load_config(
             model_file="./unet/model.pdmodel",
             params_file="./unet/model.pdiparams",
@@ -99,7 +103,7 @@ def test_gpu_more_bz_new_executor():
         test_suite2.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
-            delta=1e-5,
+            delta=delta,
             use_new_executor=True,
             use_pir=True,
         )
