@@ -52,7 +52,7 @@ class LayerTrain(object):
         # self.loss = BuildLoss(loss_name=self.loss_name, loss_param=self.loss_param)
 
     def _get_instant(self):
-        """get net and data"""
+        """get data, net, optimizer, loss"""
         reset(self.seed)
 
         data = BuildData(layerfile=self.layerfile).get_single_data()
@@ -66,6 +66,13 @@ class LayerTrain(object):
         loss_param = self.testing.get("Loss").get("params")
         loss = BuildLoss(loss_name=loss_name, loss_param=loss_param)
         return data, net, optimizer, loss
+
+    def _get_data_grad(self, data):
+        """记录list[inputs...]中的input.grad并生成list[input.grad...]"""
+        data_grad = []
+        for i in data:
+            data_grad.append(i.grad)
+        return data_grad
 
     def dy_train(self):
         """dygraph train"""
@@ -90,7 +97,9 @@ class LayerTrain(object):
             if net.parameters():
                 opt.step()
                 opt.clear_grad()
-        return logit, data.gradient()
+
+        data_grad = self._get_data_grad(data)
+        return logit, data_grad
 
     # def dy_train_dl(self):
     #     """dygraph train with dataloader"""
@@ -138,7 +147,9 @@ class LayerTrain(object):
             if st_net.parameters():
                 opt.step()
                 opt.clear_grad()
-        return logit, data.gradient()
+
+        data_grad = self._get_data_grad(data)
+        return logit, data_grad
 
     def dy2st_train_cinn(self):
         """dy2st train"""
@@ -165,4 +176,6 @@ class LayerTrain(object):
             if st_net.parameters():
                 opt.step()
                 opt.clear_grad()
-        return logit, data.gradient()
+
+        data_grad = self._get_data_grad(data)
+        return logit, data_grad

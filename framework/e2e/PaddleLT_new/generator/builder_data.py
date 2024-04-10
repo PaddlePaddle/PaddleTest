@@ -26,7 +26,7 @@ class BuildData(object):
         dataname = self.dataname + ".create_numpy_inputs()"
         data = []
         for i in eval(dataname):
-            data.append(paddle.to_tensor(i))
+            data.append(paddle.to_tensor(i, stop_gradient=False))
 
         return data
 
