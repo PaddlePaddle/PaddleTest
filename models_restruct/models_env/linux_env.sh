@@ -405,7 +405,7 @@ if [[ "${docker_flag}" == "" ]]; then
     done
     echo "after set_cuda: $set_cuda"
     # 新硬件指定显卡方式不同
-    if [[ "${AGILE_PIPELINE_NAME}" == "DCU" ]];then
+    if [[ "${AGILE_PIPELINE_NAME}" =~ "DCU" ]];then
         array=(${set_cuda//,/ });
         card0="${array[0]}";
         card0=$(($card0 + 128));
@@ -427,7 +427,7 @@ if [[ "${docker_flag}" == "" ]]; then
     }
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
-    if [[ "${AGILE_PIPELINE_NAME}" == "DCU" ]];then
+    if [[ "${AGILE_PIPELINE_NAME}" =~ "DCU" ]];then
         docker run -i  --rm \
             --name=${docker_name} --network=host --cap-add=SYS_ADMIN \
             --shm-size=128G \
