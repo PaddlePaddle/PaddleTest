@@ -92,6 +92,8 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]];then
 elif [[ ${AGILE_PIPELINE_NAME} =~ "DCU" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
         linux_env_info_main get_docker_images Centos DCU
+    else
+        linux_env_info_main get_docker_images Ubuntu DCU
     fi
 else
     if [[ ${Image_version} ]];then
