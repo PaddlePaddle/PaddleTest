@@ -51,7 +51,7 @@ class LayerTest(object):
         """
         exc = 0
         res_dict = {}
-        compare_dict = []
+        compare_res_list = []
         self.logger.get_log().info("测试case名称: {}".format(self.title))
         for testing in self.testings_list:
             try:
@@ -68,7 +68,7 @@ class LayerTest(object):
             tmp = {}
             latest = comparing.get("latest")
             baseline = comparing.get("baseline")
-            result = res_dict[latest]
+            result = res_dict[latest]  # result is dict
             expect = res_dict[baseline]
             tmp["待测事项"] = latest
             tmp["基线事项"] = baseline
@@ -79,37 +79,60 @@ class LayerTest(object):
                     if result == "pass" or expect == "pass":
                         self.logger.get_log().info("result: {} 和 expect: {}".format(result, expect))
                         tmp["precision"] = "ignore"
-                        compare_dict.append(tmp)
+                        compare_res_list.append(tmp)
                         self.logger.get_log().info("{} 和 {} 豁免对比测试---".format(latest, baseline))
                     else:
                         exc += 1
                         self.logger.get_log().warn("{} 和 {} 标记为失败的对比测试---".format(latest, baseline))
                         tmp["precision"] = "failed"
-                        compare_dict.append(tmp)
+                        compare_res_list.append(tmp)
                 else:
-                    try:
-                        precision = comparing.get("precision")
-                        base_compare(
-                            result=result,
-                            expect=expect,
-                            res_name=latest,
-                            exp_name=baseline,
-                            logger=self.logger.get_log(),
-                            delta=precision.get("delta"),
-                            rtol=precision.get("rtol"),
-                        )
+                    # try:
+                    #     precision = comparing.get("precision")
+                    #     base_compare(
+                    #         result=result,
+                    #         expect=expect,
+                    #         res_name=latest,
+                    #         exp_name=baseline,
+                    #         logger=self.logger.get_log(),
+                    #         delta=precision.get("delta"),
+                    #         rtol=precision.get("rtol"),
+                    #     )
+                    #     tmp["precision"] = "passed"
+                    #     compare_res_list.append(tmp)
+                    #     self.logger.get_log().info("{} 和 {} 精度对比通过~~~".format(latest, baseline))
+                    # except Exception:
+                    #     exc += 1
+                    #     bug_trace = traceback.format_exc()
+                    #     self.logger.get_log().warn("精度对比异常结果: {}".format(bug_trace))
+                    #     tmp["precision"] = "failed"
+                    #     compare_res_list.append(tmp)
+
+                    precision = comparing.get("precision")
+                    compare_res = base_compare(
+                        result=result,
+                        expect=expect,
+                        res_name=latest,
+                        exp_name=baseline,
+                        logger=self.logger.get_log(),
+                        delta=precision.get("delta"),
+                        rtol=precision.get("rtol"),
+                    )
+
+                    if not compare_res:
                         tmp["precision"] = "passed"
-                        compare_dict.append(tmp)
+                        compare_res_list.append(tmp)
                         self.logger.get_log().info("{} 和 {} 精度对比通过~~~".format(latest, baseline))
-                    except Exception:
+                    else:
                         exc += 1
                         bug_trace = traceback.format_exc()
                         self.logger.get_log().warn("精度对比异常结果: {}".format(bug_trace))
                         tmp["precision"] = "failed"
-                        compare_dict.append(tmp)
-        self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_dict))
+                        compare_res_list.append(tmp)
+
+        self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_res_list))
         if exc > 0:
-            print("layer测试失败项目汇总: {}".format(compare_dict))
+            print("layer测试失败项目汇总: {}".format(compare_res_list))
             assert False
 
     def _perf_case_run(self):
@@ -118,7 +141,7 @@ class LayerTest(object):
         """
         exc = 0
         res_dict = {}
-        # compare_dict = []
+        # compare_res_list = []
         self.logger.get_log().info("测试case名称: {}".format(self.title))
         for testing in self.testings_list:
             try:

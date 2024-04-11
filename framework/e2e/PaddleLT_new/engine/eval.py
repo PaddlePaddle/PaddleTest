@@ -48,7 +48,7 @@ class LayerEval(object):
         net = self._net_instant()
         # net.eval()
         logit = net(*self.data)
-        return logit
+        return {"logit": logit}
 
     def dy2st_eval(self):
         """dy2st eval"""
@@ -56,7 +56,7 @@ class LayerEval(object):
         st_net = paddle.jit.to_static(net, full_graph=True)
         # net.eval()
         logit = st_net(*self.data)
-        return logit
+        return {"logit": logit}
 
     def dy2st_eval_cinn(self):
         """dy2st eval"""
@@ -67,4 +67,4 @@ class LayerEval(object):
         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
         # net.eval()
         logit = cinn_net(*self.data)
-        return logit
+        return {"logit": logit}
