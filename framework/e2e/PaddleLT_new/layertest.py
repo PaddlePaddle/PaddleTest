@@ -125,10 +125,9 @@ class LayerTest(object):
                         self.logger.get_log().info("{} 和 {} 精度对比通过~~~".format(latest, baseline))
                     else:
                         exc += 1
-                        bug_trace = traceback.format_exc()
-                        self.logger.get_log().warn("精度对比异常结果: {}".format(bug_trace))
                         tmp["precision"] = "failed"
                         compare_res_list.append(tmp)
+                        self.logger.get_log().warn("{} 和 {} 精度对比失败！！".format(latest, baseline))
 
         self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_res_list))
         if exc > 0:
