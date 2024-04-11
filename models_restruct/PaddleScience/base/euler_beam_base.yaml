@@ -13,6 +13,7 @@ train:
     name: dy2st
     cmd: python examples/euler_beam/euler_beam.py
     params:
+      - +prim=True
       - to_static=True
       - TRAIN.epochs=10000
     result:
