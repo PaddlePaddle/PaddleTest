@@ -71,7 +71,7 @@ class LayerTrain(object):
         """记录list[inputs...]中的input.grad并生成list[input.grad...]"""
         data_grad = []
         for i in data:
-            data_grad.append(i.grad + 1.0)
+            data_grad.append(i.grad)
         return data_grad
 
     def dy_train(self):
