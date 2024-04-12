@@ -43,7 +43,7 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
             np.testing.assert_allclose(actual=result, desired=expect, atol=delta, rtol=rtol, equal_nan=True)
 
             if result.dtype != expect.dtype:
-                logger.error(
+                logger.warn(
                     "Different output data types! res type is: {}, and expect type is: {}".format(
                         result.dtype, expect.dtype
                     )
@@ -53,7 +53,7 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
             assert result.dtype == expect.dtype
         except Exception:
             exc_dict[res_name] = traceback.format_exc()
-            logger.error(traceback.format_exc())
+            logger.warn(traceback.format_exc())
 
     elif isinstance(expect, dict):
         for k, v in expect.items():
