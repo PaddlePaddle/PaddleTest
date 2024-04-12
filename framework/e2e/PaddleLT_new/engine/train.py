@@ -73,6 +73,13 @@ class LayerTrain(object):
         for i in data:
             data_grad.append(i.grad)
         return data_grad
+    
+    def _debug_get_data_grad(self, data):
+        """记录list[inputs...]中的input.grad并生成list[input.grad...]"""
+        data_grad = []
+        for i in data:
+            data_grad.append(i.grad + 1)
+        return data_grad
 
     def dy_train(self):
         """dygraph train"""
@@ -177,5 +184,5 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
-        data_grad = self._get_data_grad(data)
+        data_grad = self._debug_get_data_grad(data)
         return {"logit": logit, "data_grad": data_grad}
