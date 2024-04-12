@@ -178,4 +178,4 @@ class LayerTrain(object):
                 opt.clear_grad()
 
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        return {"logit": logit, "data_grad": data_grad + 1.0}
