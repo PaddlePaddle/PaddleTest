@@ -44,7 +44,7 @@ def get_last_eval_metric(log_file, loss_function):
                 #     last_metric = match.group(2)
                 # else:
                 #     last_metric = "-1"
-                last_metric = line.split("loss({}): ".format(loss_function))[1].split(",")[0]
+                last_metric = line.split("{}/loss: ".format(loss_function))[1].split(",")[0]
                 break
 
     return last_metric
@@ -69,7 +69,7 @@ def get_last_eval_metric_for_darcy(log_file, loss_function):
                 #     last_metric = match.group(2)
                 # else:
                 #     last_metric = "-1"
-                last_metric = line.split("loss({}): ".format(loss_function))[1].split(",")[0]
+                last_metric = line.split("{}/loss: ".format(loss_function))[1].split(",")[0]
                 break
 
     return last_metric
