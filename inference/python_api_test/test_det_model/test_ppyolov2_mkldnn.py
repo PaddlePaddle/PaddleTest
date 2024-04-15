@@ -46,10 +46,11 @@ def test_config():
     test_suite.config_test()
 
 
+# fused_softplus is about to be removed, test_more_bz_mkldnn uses fused_softplus and is disabled
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.mkldnn
-def test_more_bz_mkldnn():
+def _test_more_bz_mkldnn():
     """
     compared mkldnn ppyolov2 batch_size = [1] outputs with true val
     """
