@@ -181,6 +181,9 @@ function VersionExitJudgment () {
             "Cuda120")
                 echo "everything works fine."
                 ;;
+            "DCU")
+                echo "everything works fine."
+                ;;
             *)
             echo "Cuda Version is incorrect!!!"
             ;;
