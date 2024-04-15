@@ -182,7 +182,7 @@ function VersionExitJudgment () {
                 echo "everything works fine."
                 ;;
             "DCU")
-                echo "everything works fine."
+                echo "DCU everything works fine."
                 ;;
             *)
             echo "Cuda Version is incorrect from VersionExitJudgment!!!"
@@ -465,6 +465,8 @@ function DCUPackageUrlInfo(){
 
     case ${package_version} in
         "Python310")
+            export paddle_whl="https://paddle-device.bj.bcebos.com/dcu/test/0328/paddlepaddle_rocm-0.0.0-cp310-cp310-linux_x86_64.whl"
+        "Inference")
             export paddle_whl="https://paddle-device.bj.bcebos.com/dcu/test/0328/paddlepaddle_rocm-0.0.0-cp310-cp310-linux_x86_64.whl"
             ;;
         *)
