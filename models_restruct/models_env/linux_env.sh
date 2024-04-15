@@ -212,6 +212,16 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
         export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
     fi
+elif [[ ${AGILE_PIPELINE_NAME} =~ "DCU" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
+    if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
+        linux_env_info_main get_wheel_url DCU Python310 Develop ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
+        # export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
+    else
+        linux_env_info_main get_wheel_url DCU Python310 Release ON
+        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
+        # export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
+    fi
 else
     if [[ ${paddle_whl} ]];then
         paddle_whl=${paddle_whl}
