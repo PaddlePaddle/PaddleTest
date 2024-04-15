@@ -185,7 +185,7 @@ function VersionExitJudgment () {
                 echo "everything works fine."
                 ;;
             *)
-            echo "Cuda Version is incorrect!!!"
+            echo "Cuda Version is incorrect from VersionExitJudgment!!!"
             ;;
         esac
 
@@ -204,7 +204,7 @@ function VersionExitJudgment () {
                 echo "everything works fine."
                 ;;
             "Python310")
-                echo "everything works fine."
+                echo "python 310 everything works fine."
                 ;;
             "Python311")
                 echo "everything works fine."
