@@ -7,11 +7,12 @@ runner
 """
 
 import logging
+import traceback
 import numpy as np
 import paddle
 
 
-def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1e-10):
+def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1e-10, exc_dict={}):
     """
     比较函数
     :param result: 待测值
@@ -38,17 +39,34 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
         #     # logger.error("{} is: {}".format(res_name, result))
         #     logger.error("{} and {} has diff! max diff: {}".format(exp_name, res_name, np.amax(diff)))
 
-        np.testing.assert_allclose(actual=result, desired=expect, atol=delta, rtol=rtol, equal_nan=True)
+        try:
+            np.testing.assert_allclose(actual=result, desired=expect, atol=delta, rtol=rtol, equal_nan=True)
 
-        if result.dtype != expect.dtype:
-            logger.error(
-                "Different output data types! res type is: {}, and expect type is: {}".format(
-                    result.dtype, expect.dtype
+            if result.dtype != expect.dtype:
+                logger.warn(
+                    "Different output data types! res type is: {}, and expect type is: {}".format(
+                        result.dtype, expect.dtype
+                    )
                 )
+            # assert res
+            assert result.shape == expect.shape
+            assert result.dtype == expect.dtype
+        except Exception:
+            exc_dict[res_name] = traceback.format_exc()
+            logger.warn(traceback.format_exc())
+
+    elif isinstance(expect, dict):
+        for k, v in expect.items():
+            base_compare(
+                result=result[k],
+                expect=expect[k],
+                res_name=res_name + "[{}]".format(str(k)),
+                exp_name=exp_name + "[{}]".format(str(k)),
+                logger=logger,
+                delta=delta,
+                rtol=rtol,
+                exc_dict=exc_dict,
             )
-        # assert res
-        assert result.shape == expect.shape
-        assert result.dtype == expect.dtype
     elif isinstance(expect, list) or isinstance(expect, tuple):
         for i, element in enumerate(expect):
             if isinstance(result, (np.generic, np.ndarray)) or isinstance(result, paddle.Tensor):
@@ -62,6 +80,7 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
                     logger=logger,
                     delta=delta,
                     rtol=rtol,
+                    exc_dict=exc_dict,
                 )
             else:
                 base_compare(
@@ -72,6 +91,7 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
                     logger=logger,
                     delta=delta,
                     rtol=rtol,
+                    exc_dict=exc_dict,
                 )
     elif isinstance(expect, (bool, int, float)):
         assert expect == result
@@ -79,6 +99,8 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
         pass
     else:
         raise Exception("expect is unknown data struction in compare_tool!!!")
+
+    return exc_dict
 
 
 def perf_compare(baseline, latest):
@@ -99,3 +121,28 @@ def perf_compare(baseline, latest):
             else:
                 res = baseline / latest
     return res
+
+
+if __name__ == "__main__":
+    from tools.logger import Logger
+
+    result = {
+        "logit": [paddle.to_tensor([1.0]), paddle.to_tensor([1.0])],
+        "data_grad": [paddle.to_tensor([0.0]), paddle.to_tensor([0.0])],
+    }
+    expect = {
+        "logit": [paddle.to_tensor([0.0]), paddle.to_tensor([0.0])],
+        "data_grad": [paddle.to_tensor([1.0]), paddle.to_tensor([1.0])],
+    }
+    res = base_compare(
+        result,
+        expect,
+        res_name="dy_train",
+        exp_name="dy_train",
+        logger=Logger("PaddleLT").get_log(),
+        delta=1e-10,
+        rtol=1e-10,
+        exc_dict={},
+    )
+    print("#############" * 3)
+    print("res is: ", res)

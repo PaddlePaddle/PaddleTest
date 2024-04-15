@@ -3,12 +3,12 @@
 # 最外层测试入口, 通过环境变量设定测试相关的一切信息(除了docker/whl/py以外)
 export CASE_DIR="${CASE_DIR:-perf_monitor}"
 export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项目配置yaml
-export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模型为性能
-export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
-export PLT_DEVICE_ID="${PLT_DEVICE_ID:-6}"
+export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模式为性能
+export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}" # 硬件
+export PLT_DEVICE_ID="${PLT_DEVICE_ID:-6}"  # 设备编号
 export CUDA_VISIBLE_DEVICES="${PLT_DEVICE_ID:-6}"
-export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
-export MULTI_WORKER="${MULTI_WORKER:-0}"
+export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"  # 框架种类
+export MULTI_WORKER="${MULTI_WORKER:-0}"  # 并行数
 
 #性能测试专属环境变量
 export PLT_BM_MODE="${PLT_BM_MODE:-latest}"  #基线任务为baseline, 测试任务为latest
