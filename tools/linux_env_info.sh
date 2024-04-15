@@ -126,6 +126,10 @@ function DockerImages () {
             export env_cudnn_version="8.9.1"
             export env_trt_version="8.6.1.6"
             ;;
+        "DCU")
+            echo "Selected Centos: DCU"
+            export Image_version="registry.baidubce.com/device/paddle-dcu:dtk23.10.1-kylinv10-gcc73-py310"
+            ;;
         *)
             DOCKER_EXIT_CODE=101
             ;;
@@ -533,6 +537,12 @@ function WheelUrlInfo(){
             Cu120PackageUrlInfoRecommand ${branch_info} ${python_version}
             if [[ "${infer_package}" != "OFF" ]];then
                 Cu120PackageUrlInfoRecommand ${branch_info} Inference
+            fi
+            ;;
+        "DCU")
+            DCUPackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                DCUPackageUrlInfo ${branch_info} Inference
             fi
             ;;
         *)
