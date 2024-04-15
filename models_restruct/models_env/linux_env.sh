@@ -496,6 +496,7 @@ if [[ "${docker_flag}" == "" ]]; then
             /bin/bash -c '
             if [[ `yum --help` =~ "yum" ]];then
                 echo "centos"
+                rocm-smi
                 yum install nfs-utils -y > install_nfs 2>&1
                 export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
                 case ${Python_version} in
@@ -612,11 +613,11 @@ if [[ "${docker_flag}" == "" ]]; then
             python -m pip install git+https://github.com/PaddlePaddle/PaddleSOT@develop
             fi
 
-            rocm-smi;
+            rocm-smi
             python -c "import sys; print(sys.version_info[:])";
             git --version;
-            python -m pip install --user -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
-            python -m pip install --user -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
+            python -m pip install -U pip  -i https://mirror.baidu.com/pypi/simple #升级pip
+            python -m pip install -U -r requirements.txt  -i https://mirror.baidu.com/pypi/simple #预先安装依赖包
             python -m pip install --ignore-installed six -i https://mirror.baidu.com/pypi/simple
             python -m pip uninstall -y opencv-python
             python -m pip config list
