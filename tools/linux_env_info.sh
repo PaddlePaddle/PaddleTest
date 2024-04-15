@@ -647,6 +647,12 @@ function WheelUrlInfoAll(){
                 Cu120PackageUrlInfoAll ${branch_info} Inference
             fi
             ;;
+        "DCU")
+            DCUPackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                DCUPackageUrlInfo ${branch_info} Inference
+            fi
+            ;;
         *)
             WHELLINFO_EXITCODE=115
             ;;
