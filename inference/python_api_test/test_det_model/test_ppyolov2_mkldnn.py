@@ -46,7 +46,7 @@ def test_config():
     test_suite.config_test()
 
 
-# fused_softplus is about to be removed, test_more_bz_mkldnn uses fused_softplus and is disabled
+# fluid operator fused_softplus is about to be removed, test_more_bz_mkldnn uses fused_softplus and is disabled
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.mkldnn
