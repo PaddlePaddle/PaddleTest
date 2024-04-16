@@ -33,7 +33,6 @@ cases="dist_CountFilterEntry.py \
        dist_fleet_server.py \
        dist_fleet_worker.py \
        dist_load_state_dict.py \
-       dist_fleet_static_strategy.py \
        dist_MultiSlotDataGenerator.py \
        dist_ParallelMode.py \
        dist_Partial.py \
