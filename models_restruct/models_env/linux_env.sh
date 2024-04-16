@@ -508,85 +508,8 @@ if [[ "${docker_flag}" == "" ]]; then
                 echo "centos"
                 rocm-smi
                 yum install nfs-utils -y > install_nfs 2>&1
-                export LD_LIBRARY_PATH=/usr/lib:${LD_LIBRARY_PATH}
-                case ${Python_version} in
-                36)
-                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.6.0/lib/:${LD_LIBRARY_PATH}
-                export PATH=/opt/_internal/cpython-3.6.0/bin/:${PATH}
-                ;;
-                37)
-                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.7.0/lib/:${LD_LIBRARY_PATH}
-                export PATH=/opt/_internal/cpython-3.7.0/bin/:${PATH}
-                ;;
-                38)
-                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.8.0/lib/:${LD_LIBRARY_PATH}
-                export PATH=/opt/_internal/cpython-3.8.0/bin/:${PATH}
-                ;;
-                39)
-                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.9.0/lib/:${LD_LIBRARY_PATH}
-                export PATH=/opt/_internal/cpython-3.9.0/bin/:${PATH}
-                ;;
-                310)
-                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.10.0/lib/:${LD_LIBRARY_PATH}
-                export PATH=/opt/_internal/cpython-3.10.0/bin/:${PATH}
-                ;;
-                311)
-                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.11.0/lib/:${LD_LIBRARY_PATH}
-                export PATH=/opt/_internal/cpython-3.11.0/bin/:${PATH}
-                ;;
-                312)
-                export LD_LIBRARY_PATH=/opt/_internal/cpython-3.12.0/lib/:${LD_LIBRARY_PATH}
-                export PATH=/opt/_internal/cpython-3.12.0/bin/:${PATH}
-                ;;
-                esac
             else
                 echo "ubuntu"
-                apt-get update > install_update 2>&1
-                apt-get install nfs-common -y > install_nfs 2>&1
-                case ${Python_version} in
-                36)
-                mkdir run_env_py36;
-                ln -s $(which python3.6) run_env_py36/python;
-                ln -s $(which pip3.6) run_env_py36/pip;
-                export PATH=$(pwd)/run_env_py36:${PATH};
-                ;;
-                37)
-                mkdir run_env_py37;
-                ln -s $(which python3.7) run_env_py37/python;
-                ln -s $(which pip3.7) run_env_py37/pip;
-                export PATH=$(pwd)/run_env_py37:${PATH};
-                ;;
-                38)
-                mkdir run_env_py38;
-                ln -s $(which python3.8) run_env_py38/python;
-                ln -s $(which pip3.8) run_env_py38/pip;
-                export PATH=$(pwd)/run_env_py38:${PATH};
-                ;;
-                39)
-                mkdir run_env_py39;
-                ln -s $(which python3.9) run_env_py39/python;
-                ln -s $(which pip3.9) run_env_py39/pip;
-                export PATH=$(pwd)/run_env_py39:${PATH};
-                ;;
-                310)
-                mkdir run_env_py310;
-                ln -s $(which python3.10) run_env_py310/python;
-                ln -s $(which pip3.10) run_env_py310/pip;
-                export PATH=$(pwd)/run_env_py310:${PATH};
-                ;;
-                311)
-                mkdir run_env_py311;
-                ln -s $(which python3.11) run_env_py311/python;
-                ln -s $(which pip3.11) run_env_py311/pip;
-                export PATH=$(pwd)/run_env_py311:${PATH};
-                ;;
-                312)
-                mkdir run_env_py312;
-                ln -s $(which python3.12) run_env_py312/python;
-                ln -s $(which pip3.12) run_env_py312/pip;
-                export PATH=$(pwd)/run_env_py312:${PATH};
-                ;;
-                esac
             fi
             #挂载数据, 地址特定为mount_path
             export mount_path="/workspace/MT_data/${reponame}"
@@ -631,6 +554,7 @@ if [[ "${docker_flag}" == "" ]]; then
             python -m pip install --ignore-installed six -i https://mirror.baidu.com/pypi/simple
             python -m pip uninstall -y opencv-python
             python -m pip config list
+            python -c "import paddle; paddle.utils.run_check()"
             python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --is_analysis_logs=${is_analysis_logs:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
         ' &
     else
