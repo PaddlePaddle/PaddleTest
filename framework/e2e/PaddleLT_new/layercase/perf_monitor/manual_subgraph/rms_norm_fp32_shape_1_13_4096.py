@@ -6,9 +6,6 @@
 
 import unittest
 import numpy as np
-
-# import utils
-
 import paddle
 
 
@@ -65,6 +62,16 @@ def create_paddle_inputs():
 
 #     def prepare_data(self):
 #         self.x, self.weight = create_paddle_inputs()
+    
+#     def apply_to_static(net, use_cinn, input_spec=None):
+#         build_strategy = paddle.static.BuildStrategy()
+#         build_strategy.build_cinn_pass = use_cinn
+#         return paddle.jit.to_static(
+#             net,
+#             input_spec=input_spec,
+#             build_strategy=build_strategy,
+#             full_graph=True,
+#         )
 
 #     def train(self, use_cinn):
 #         if use_cinn:
@@ -72,7 +79,7 @@ def create_paddle_inputs():
 #         else:
 #             net = PaddleRMSNormSubGraph()
 #         net.eval()
-#         net = utils.apply_to_static(net, use_cinn)
+#         net = apply_to_static(net, use_cinn)
 #         for i in range(10000):
 #             out = net(self.x, self.weight)
 #         return out
