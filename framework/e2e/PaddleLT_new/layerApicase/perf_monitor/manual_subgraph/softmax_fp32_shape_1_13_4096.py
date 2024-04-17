@@ -9,7 +9,7 @@ import numpy as np
 import paddle
 
 
-class LayerApiCase(paddle.nn.Layer):
+class LayerCase(paddle.nn.Layer):
     def __init__(self):
         super().__init__()
 
