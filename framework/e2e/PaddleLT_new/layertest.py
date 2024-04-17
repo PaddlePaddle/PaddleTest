@@ -132,7 +132,8 @@ class LayerTest(object):
         self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_res_list))
         if exc > 0:
             print("layer测试失败项目汇总: {}".format(compare_res_list))
-            assert False
+            raise Exception("用例 {} 测试未通过".format(self.title))
+            # assert False
 
     def _perf_case_run(self):
         """
