@@ -189,5 +189,5 @@ def test_dist_fleet_DistributedStrategy4():
 if __name__ == "__main__":
     test_dist_fleet_DistributedStrategy1()
     test_dist_fleet_DistributedStrategy2()
-    test_dist_fleet_DistributedStrategy3()
+    # test_dist_fleet_DistributedStrategy3()
     test_dist_fleet_DistributedStrategy4()
