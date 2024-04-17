@@ -32,10 +32,10 @@ class Run(object):
         """
         # 获取所有layer.yml文件路径
         # self.layer_dir = os.path.join("layercase", os.environ.get("CASE_DIR"))
-        self.layer_dir = [os.path.join("layercase", item) for item in os.environ.get("CASE_DIR").split(",")]
+        # self.layer_dir = [os.path.join("layercase", item) for item in os.environ.get("CASE_DIR").split(",")]
+        self.layer_dir = [item for item in os.environ.get("CASE_DIR").split(",")]
 
         # 获取需要忽略的case
-        # self.ignore_list = YamlLoader(yml=os.path.join("yaml", "ignore_case.yml")).yml.get(os.environ.get("CASE_DIR"))
         self.ignore_list = YamlLoader(yml=os.path.join("yaml", "ignore_case.yml")).yml.get(os.environ.get("TESTING"))
 
         # 获取测试集

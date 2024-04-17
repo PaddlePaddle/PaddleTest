@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 最外层测试入口, 通过环境变量设定测试相关的一切信息(除了docker/whl/py以外)
-export CASE_DIR="${CASE_DIR:-sublayer160}"
+export CASE_DIR="${CASE_DIR:-layercase/sublayer1000}"
 export TESTING="${TESTING:-yaml/dy^dy2stcinn_train.yml}" # 设定测试项目配置yaml
 export TESTING_MODE="${TESTING_MODE:-precision}" # 设定测试模型为精度
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 最外层测试入口, 通过环境变量设定测试相关的一切信息(除了docker/whl/py以外)
-export CASE_DIR="${CASE_DIR:-perf_monitor}"
+export CASE_DIR="${CASE_DIR:-layercase/perf_monitor}"
 export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项目配置yaml
 export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模式为性能
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}" # 硬件
