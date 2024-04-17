@@ -53,6 +53,7 @@ class LayerTest(object):
         res_dict = {}
         compare_res_list = []
         self.logger.get_log().info("测试case名称: {}".format(self.title))
+        fail_testing_list = []
         for testing in self.testings_list:
             try:
                 self.logger.get_log().info("测试执行器: {}".format(testing))
@@ -62,7 +63,13 @@ class LayerTest(object):
                 bug_trace = traceback.format_exc()
                 exc += 1
                 res_dict[testing] = bug_trace
+                fail_testing_list.append(testing)
                 self.logger.get_log().warn("执行器异常结果: {}".format(bug_trace))
+
+        if exc > 0:
+            self.logger.get_log().warn("layer测试失败项目汇总: {}".format(fail_testing_list))
+            self.logger.get_log().warn("用例 {} 测试未通过".format(self.title))
+            raise Exception(bug_trace)
 
         for comparing in self.compare_list:
             tmp = {}
@@ -131,9 +138,9 @@ class LayerTest(object):
 
         self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_res_list))
         if exc > 0:
-            print("layer测试失败项目汇总: {}".format(compare_res_list))
-            raise Exception("用例 {} 测试未通过".format(self.title))
-            # assert False
+            self.logger.get_log().warn("layer精度对比异常汇总: {}".format(compare_res_list))
+            # raise Exception("用例 {} 测试未通过".format(self.title))
+            assert False
 
     def _perf_case_run(self):
         """
