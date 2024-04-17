@@ -509,6 +509,7 @@ if [[ "${docker_flag}" == "" ]]; then
                 echo "centos"
                 rocm-smi
                 yum install nfs-utils -y > install_nfs 2>&1
+                export LD_LIBRARY_PATH=/opt/dtk-23.10.1/lib/:${LD_LIBRARY_PATH}
             else
                 echo "ubuntu"
             fi
