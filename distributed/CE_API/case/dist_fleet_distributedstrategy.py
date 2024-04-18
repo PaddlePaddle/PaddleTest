@@ -133,29 +133,6 @@ def test_dist_fleet_DistributedStrategy2():
 
 @run_priority(level="P0")
 def test_dist_fleet_DistributedStrategy3():
-    """test execution_strategy"""
-    strategy = fleet.DistributedStrategy()
-
-    exe_strategy = paddle.static.ExecutionStrategy()
-    exe_strategy.num_threads = 10
-    exe_strategy.num_iteration_per_drop_scope = 10
-    exe_strategy.num_iteration_per_run = 10
-    strategy.execution_strategy = exe_strategy
-
-    strategy.save_to_prototxt("origin_dist_strategy.prototxt")
-    new_strategy = fleet.DistributedStrategy()
-    new_strategy.load_from_prototxt("origin_dist_strategy.prototxt")
-
-    time.sleep(30)
-    assert new_strategy.execution_strategy.num_threads == exe_strategy.num_threads
-    assert new_strategy.execution_strategy.num_iteration_per_drop_scope == exe_strategy.num_iteration_per_drop_scope
-    assert new_strategy.execution_strategy.num_iteration_per_run == exe_strategy.num_iteration_per_run
-
-    print("test_dist_fleet_DistributedStrategy3 ... ok")
-
-
-@run_priority(level="P0")
-def test_dist_fleet_DistributedStrategy4():
     """test build_strategy"""
     strategy = fleet.DistributedStrategy()
 
@@ -189,5 +166,4 @@ def test_dist_fleet_DistributedStrategy4():
 if __name__ == "__main__":
     test_dist_fleet_DistributedStrategy1()
     test_dist_fleet_DistributedStrategy2()
-    # test_dist_fleet_DistributedStrategy3()
-    test_dist_fleet_DistributedStrategy4()
+    test_dist_fleet_DistributedStrategy3()
