@@ -12,6 +12,7 @@ import platform
 from datetime import datetime
 import layertest
 from db.layer_db import LayerBenchmarkDB
+from strategy.compare import perf_compare_dict
 from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
@@ -77,12 +78,22 @@ class Run(object):
             if os.environ.get("PLT_BM_MODE") == "baseline":
                 layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
             elif os.environ.get("PLT_BM_MODE") == "latest":
-                layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
+                compare_dict = layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
+                xlsx_save(
+                    sublayer_dict=compare_dict,
+                    excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
+                )
             else:
                 raise Exception("unknown benchmark mode, PaddleLT benchmark only support baseline mode or latest mode")
         elif os.environ.get("PLT_BM_DB") == "select":  # 不存数据, 仅对比并生成表格
             layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
-            layer_db.compare_with_baseline(data_dict=sublayer_dict, error_list=error_list)
+            baseline_dict = layer_db.get_baseline_dict()
+            # layer_db.compare_with_baseline(data_dict=sublayer_dict, error_list=error_list)
+            compare_dict = perf_compare_dict(baseline_dict, sublayer_dict, error_list)
+            xlsx_save(
+                sublayer_dict=compare_dict,
+                excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
+            )
         elif os.environ.get("PLT_BM_DB") == "non-db":  # 不加载数据库，仅生成表格
             xlsx_save(
                 sublayer_dict=sublayer_dict,
