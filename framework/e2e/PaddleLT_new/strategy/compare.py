@@ -167,8 +167,8 @@ def perf_compare_dict(baseline_dict, data_dict, error_list, baseline_layer_type,
 
                 compare_dict[layer_case] = {}
                 for perf_engine, t in perf_dict.items():
-                    compare_dict[layer_case][perf_engine + "_" + latest_layer_type + "_latest"] = t
-                    compare_dict[layer_case][perf_engine + "_" + baseline_layer_type + "_baseline"] = json.loads(
+                    compare_dict[layer_case][perf_engine + "^" + latest_layer_type + "^latest"] = t
+                    compare_dict[layer_case][perf_engine + "^" + baseline_layer_type + "^baseline"] = json.loads(
                         baseline_dict[baseline_title]["result"]
                     )[perf_engine]
                     compare_dict[layer_case][perf_engine + "_compare"] = perf_compare(
