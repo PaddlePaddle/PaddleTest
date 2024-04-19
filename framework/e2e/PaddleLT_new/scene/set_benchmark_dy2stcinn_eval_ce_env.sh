@@ -33,6 +33,7 @@ export FLAGS_support_reduce_stride_read=1
 
 echo "wheel_url is: ${wheel_url}"
 echo "python_ver is: ${python_ver}"
+echo "CASE_TYPE is: ${CASE_TYPE}"
 echo "CASE_DIR is: ${CASE_DIR}"
 echo "TESTING is: ${TESTING}"
 echo "CUDA_VISIBLE_DEVICES is: ${CUDA_VISIBLE_DEVICES}"
