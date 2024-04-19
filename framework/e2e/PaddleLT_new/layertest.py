@@ -49,6 +49,7 @@ class LayerTest(object):
         """
         用于单个子图精度测试
         """
+        exc_func = 0
         exc = 0
         res_dict = {}
         compare_res_list = []
@@ -61,12 +62,12 @@ class LayerTest(object):
                 res_dict[testing] = res
             except Exception:
                 bug_trace = traceback.format_exc()
-                exc += 1
+                exc_func += 1
                 res_dict[testing] = bug_trace
                 fail_testing_list.append(testing)
                 self.logger.get_log().warn("执行器异常结果: {}".format(bug_trace))
 
-        if exc > 0:
+        if exc_func > 0:
             self.logger.get_log().warn("layer测试失败项目汇总: {}".format(fail_testing_list))
             self.logger.get_log().warn("用例 {} 测试未通过".format(self.title))
             raise Exception(bug_trace)
@@ -137,7 +138,7 @@ class LayerTest(object):
                         self.logger.get_log().warn("{} 和 {} 精度对比失败！！".format(latest, baseline))
 
         self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_res_list))
-        if exc > 0:
+        if exc + exc_func > 0:
             self.logger.get_log().warn("layer精度对比异常汇总: {}".format(compare_res_list))
             # raise Exception("用例 {} 测试未通过".format(self.title))
             assert False
