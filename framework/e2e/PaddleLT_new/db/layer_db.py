@@ -51,6 +51,9 @@ class LayerBenchmarkDB(object):
         self.hostname = socket.gethostname()
         self.system = platform.system()
 
+        # 子图种类信息
+        self.layer_type = os.environ.get("CASE_TYPE")
+
         # 初始化日志
         self.logger = Logger("LayerBenchmarkDB")
 
@@ -143,12 +146,14 @@ class LayerBenchmarkDB(object):
         """
         # 获取baseline用于对比
         db = DB(storage=self.storage)
-        baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+        baseline_job = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+        baseline_id = baseline_job["id"]
+        baseline_layer_type = baseline_job["layer_type"]
         baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
         baseline_dict = {}
         for i in baseline_list:
             baseline_dict[i["case_name"]] = i
-        return baseline_dict
+        return baseline_dict, baseline_layer_type
 
     def baseline_insert(self, data_dict, error_list):
         """

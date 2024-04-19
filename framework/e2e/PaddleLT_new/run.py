@@ -34,9 +34,8 @@ class Run(object):
         # 获取所有layer.yml文件路径
         # self.layer_dir = os.path.join("layercase", os.environ.get("CASE_DIR"))
         # self.layer_dir = [os.path.join("layercase", item) for item in os.environ.get("CASE_DIR").split(",")]
-        self.layer_dir = [
-            os.path.join(os.environ.get("CASE_TYPE"), item) for item in os.environ.get("CASE_DIR").split(",")
-        ]
+        self.layer_type = os.environ.get("CASE_TYPE")
+        self.layer_dir = [os.path.join(self.layer_type, item) for item in os.environ.get("CASE_DIR").split(",")]
 
         # 获取需要忽略的case
         self.ignore_list = YamlLoader(yml=os.path.join("yaml", "ignore_case.yml")).yml.get(os.environ.get("TESTING"))
@@ -81,9 +80,13 @@ class Run(object):
                 layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
             elif os.environ.get("PLT_BM_MODE") == "latest":
                 layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
-                baseline_dict = layer_db.get_baseline_dict()
+                baseline_dict, baseline_layer_type = layer_db.get_baseline_dict()
                 compare_dict = perf_compare_dict(
-                    baseline_dict=baseline_dict, data_dict=sublayer_dict, error_list=error_list
+                    baseline_dict=baseline_dict,
+                    data_dict=sublayer_dict,
+                    error_list=error_list,
+                    baseline_layer_type=baseline_layer_type,
+                    latest_layer_type=self.layer_type,
                 )
                 xlsx_save(
                     sublayer_dict=compare_dict,
@@ -93,10 +96,14 @@ class Run(object):
                 raise Exception("unknown benchmark mode, PaddleLT benchmark only support baseline mode or latest mode")
         elif os.environ.get("PLT_BM_DB") == "select":  # 不存数据, 仅对比并生成表格
             layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
-            baseline_dict = layer_db.get_baseline_dict()
+            baseline_dict, baseline_layer_type = layer_db.get_baseline_dict()
             # layer_db.compare_with_baseline(data_dict=sublayer_dict, error_list=error_list)
             compare_dict = perf_compare_dict(
-                baseline_dict=baseline_dict, data_dict=sublayer_dict, error_list=error_list
+                baseline_dict=baseline_dict,
+                data_dict=sublayer_dict,
+                error_list=error_list,
+                baseline_layer_type=baseline_layer_type,
+                latest_layer_type=self.layer_type,
             )
             xlsx_save(
                 sublayer_dict=compare_dict,

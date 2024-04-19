@@ -220,8 +220,8 @@ class DB(object):
         ]
         res = self.select(table="layer_job", condition_list=condition_list)
         baseline_job = res[-1]
-        job_id = baseline_job["id"]
-        return job_id
+        # job_id = baseline_job["id"]
+        return baseline_job
 
     def show_list(self, table):
         """返回table中的列list"""
