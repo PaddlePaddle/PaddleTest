@@ -131,15 +131,8 @@ class LayerBenchmarkDB(object):
         else:
             db.update_job(id=latest_id, status="done", update_time=self.now_time)
 
-        # self.compare_with_baseline(data_dict=data_dict, error_list=error_list)
-        # baseline_dict = self.get_baseline_dict()
-
-        # compare_dict = perf_compare_dict(baseline_dict=baseline_dict, data_dict=data_dict, error_list=error_list)
-
         if bool(error_list):
             raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
-
-        # return data_dict
 
     def get_baseline_dict(self):
         """

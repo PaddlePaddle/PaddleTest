@@ -157,14 +157,10 @@ def perf_compare_dict(baseline_dict, data_dict, error_list, baseline_layer_type,
     compare_dict = {}
     for title, perf_dict in data_dict.items():
         if title not in error_list:
-            # head, tail = title.split('^', 1)
-            # baseline_title = '^'.join(["layercase", tail])
             layer_case = title.split("^", 1)[1]
-            print("layer_case is: ", layer_case)
             baseline_title = "^".join([baseline_layer_type, layer_case])
             layer_title = "^".join([latest_layer_type, layer_case])
             if baseline_title in baseline_dict and layer_title in data_dict:
-
                 compare_dict[layer_case] = {}
                 for perf_engine, t in perf_dict.items():
                     compare_dict[layer_case][perf_engine + "^" + latest_layer_type + "^latest"] = t
