@@ -144,9 +144,7 @@ def perf_compare(baseline, latest):
 #     return compare_dict
 
 
-def perf_compare_dict(
-    baseline_dict, data_dict, error_list, baseline_layer_type="layercase", latest_layer_type="layercase"
-):
+def perf_compare_dict(baseline_dict, data_dict, error_list, baseline_layer_type, latest_layer_type):
     """
     生成对比dict
     :param data_dict: 待测字典
