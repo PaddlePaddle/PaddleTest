@@ -13,7 +13,7 @@ import subprocess
 import numpy as np
 from layertest import LayerTest
 from strategy.compare import perf_compare
-from tools.logger import Logger
+from tools.logger import Logger, save_pickle
 
 
 def get_commits(start, end):
@@ -161,9 +161,10 @@ if __name__ == "__main__":
     start_commit = "9d5f31687cce16a976256723a70df4550085d685"  # 成功commit
     end_commit = "7139309b30f65c8bb8fb0e427b194c265e955c87"  # 失败commit
     commits = get_commits(start=start_commit, end=end_commit)
+    save_pickle(data=commits, filename="candidate_commits.pickle")
     print("the candidate commits is {}".format(commits))
-    os.chdir(cur_path)
 
+    os.chdir(cur_path)
     final_commit = BinarySearch(
         commit_list=commits,
         title="PrecisionBS",
