@@ -162,6 +162,7 @@ def perf_compare_dict(
             # head, tail = title.split('^', 1)
             # baseline_title = '^'.join(["layercase", tail])
             layer_case = title.split("^", 1)[1]
+            print("layer_case is: ", layer_case)
             baseline_title = "^".join([baseline_layer_type, layer_case])
             layer_title = "^".join([latest_layer_type, layer_case])
             if baseline_title in baseline_dict and layer_title in data_dict:

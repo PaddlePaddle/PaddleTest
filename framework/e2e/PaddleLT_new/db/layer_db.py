@@ -13,7 +13,8 @@ import platform
 from datetime import datetime
 from db.db import DB
 from db.snapshot import Snapshot
-from strategy.compare import perf_compare, perf_compare_dict
+
+# from strategy.compare import perf_compare
 from tools.logger import Logger
 from tools.res_save import xlsx_save
 
@@ -127,14 +128,14 @@ class LayerBenchmarkDB(object):
             db.update_job(id=latest_id, status="done", update_time=self.now_time)
 
         # self.compare_with_baseline(data_dict=data_dict, error_list=error_list)
-        baseline_dict = self.get_baseline_dict()
+        # baseline_dict = self.get_baseline_dict()
 
-        compare_dict = perf_compare_dict(baseline_dict=baseline_dict, data_dict=data_dict, error_list=error_list)
+        # compare_dict = perf_compare_dict(baseline_dict=baseline_dict, data_dict=data_dict, error_list=error_list)
 
         if bool(error_list):
             raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
 
-        return compare_dict
+        # return data_dict
 
     def get_baseline_dict(self):
         """
