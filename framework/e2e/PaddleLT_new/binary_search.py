@@ -100,10 +100,10 @@ class BinarySearch(object):
             exc += 1
 
         if exc > 0:
-            self.logger.get_log().info(f"执行失败commit: {commit_id}")
+            self.logger.get_log().info(f"{self.testing_mode}执行失败commit: {commit_id}")
             return False
         else:
-            self.logger.get_log().info(f"执行成功commit: {commit_id}")
+            self.logger.get_log().info(f"{self.testing_mode}执行成功commit: {commit_id}")
             return True
 
     def _performance_debug(self, commit_id):
@@ -118,10 +118,10 @@ class BinarySearch(object):
         compare_res = perf_compare(baseline, latest)
         fluctuate_rate = 0.15
         if exc > 0 or compare_res < decay_rate - fluctuate_rate:
-            self.logger.get_log().info(f"执行失败commit: {commit_id}")
+            self.logger.get_log().info(f"{self.testing_mode}执行失败commit: {commit_id}")
             return False
         else:
-            self.logger.get_log().info(f"执行成功commit: {commit_id}")
+            self.logger.get_log().info(f"{self.testing_mode}执行成功commit: {commit_id}")
             return True
 
     def _commit_locate(self, commits):
