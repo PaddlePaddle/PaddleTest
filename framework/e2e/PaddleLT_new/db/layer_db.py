@@ -13,7 +13,8 @@ import platform
 from datetime import datetime
 from db.db import DB
 from db.snapshot import Snapshot
-from strategy.compare import perf_compare
+
+# from strategy.compare import perf_compare
 from tools.logger import Logger
 from tools.res_save import xlsx_save
 
@@ -49,6 +50,9 @@ class LayerBenchmarkDB(object):
         # 机器系统信息
         self.hostname = socket.gethostname()
         self.system = platform.system()
+
+        # 子图种类信息
+        self.layer_type = os.environ.get("CASE_TYPE")
 
         # 初始化日志
         self.logger = Logger("LayerBenchmarkDB")
@@ -99,6 +103,7 @@ class LayerBenchmarkDB(object):
             env_info=json.dumps(self.env_info),
             framework=self.framework,
             agile_pipeline_build_id=self.AGILE_PIPELINE_BUILD_ID,
+            layer_type=self.layer_type,
             commit=self.commit,
             version=self.version,
             hostname=self.hostname,
@@ -126,10 +131,23 @@ class LayerBenchmarkDB(object):
         else:
             db.update_job(id=latest_id, status="done", update_time=self.now_time)
 
-        self.compare_with_baseline(data_dict=data_dict, error_list=error_list)
-
         if bool(error_list):
             raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
+
+    def get_baseline_dict(self):
+        """
+        获取baseline dict
+        """
+        # 获取baseline用于对比
+        db = DB(storage=self.storage)
+        baseline_job = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+        baseline_id = baseline_job["id"]
+        baseline_layer_type = baseline_job["layer_type"]
+        baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
+        baseline_dict = {}
+        for i in baseline_list:
+            baseline_dict[i["case_name"]] = i
+        return baseline_dict, baseline_layer_type
 
     def baseline_insert(self, data_dict, error_list):
         """
@@ -144,6 +162,7 @@ class LayerBenchmarkDB(object):
             env_info=json.dumps(self.env_info),
             framework=self.framework,
             agile_pipeline_build_id=self.AGILE_PIPELINE_BUILD_ID,
+            layer_type=self.layer_type,
             commit=self.commit,
             version=self.version,
             hostname=self.hostname,
@@ -172,35 +191,54 @@ class LayerBenchmarkDB(object):
         else:
             db.update_job(id=basleine_id, status="done", update_time=self.now_time)
 
-    def compare_with_baseline(self, data_dict, error_list):
-        """
-        与基线对比
-        """
-        db = DB(storage=self.storage)
-        # 获取baseline用于对比
-        baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
-        baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
+    # def compare_with_baseline(self, data_dict, error_list):
+    #     """
+    #     与基线对比
+    #     """
+    #     db = DB(storage=self.storage)
+    #     # 获取baseline用于对比
+    #     baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+    #     baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
 
-        baseline_dict = {}
-        for i in baseline_list:
-            baseline_dict[i["case_name"]] = i
+    #     baseline_dict = {}
+    #     for i in baseline_list:
+    #         baseline_dict[i["case_name"]] = i
 
-        # 性能对比
-        compare_dict = {}
-        for title, perf_dict in data_dict.items():
-            if title not in error_list:
-                compare_dict[title] = {}
-                for perf_engine, t in perf_dict.items():
-                    compare_dict[title][perf_engine + "_latest"] = t
-                    compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[
-                        perf_engine
-                    ]
-                    compare_dict[title][perf_engine + "_compare"] = perf_compare(
-                        baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
-                    )
+    #     # 性能对比
+    #     # compare_dict = {}
+    #     # for title, perf_dict in data_dict.items():
+    #     #     if title not in error_list:
+    #     #         compare_dict[title] = {}
+    #     #         for perf_engine, t in perf_dict.items():
+    #     #             compare_dict[title][perf_engine + "_latest"] = t
+    #     #             compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[
+    #     #                 perf_engine
+    #     #             ]
+    #     #             compare_dict[title][perf_engine + "_compare"] = perf_compare(
+    #     #                 baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
+    #     #             )
+    #     compare_dict = {}
+    #     for title, perf_dict in data_dict.items():
+    #         if title not in error_list:
+    #             compare_dict[title] = {}
+    #             # path = "layercase/sublayer/aspdiaopi"
+    #             # new_content = "newdir"
+    #             # # 使用 split() 方法将路径分割成两部分，并取第一个部分
+    #             head, tail = title.split('^', 1)
+    #             # 使用 join() 方法将新的内容和原路径的第二部分拼接起来
+    #             baseline_title = '^'.join(["layercase", tail])
+    #             for perf_engine, t in perf_dict.items():
+    #                 compare_dict[title][perf_engine + "_latest"] = t
+    #                 compare_dict[title][perf_engine + "_baseline"] =
+    #                   json.loads(baseline_dict[baseline_title]["result"])[
+    #                     perf_engine
+    #                 ]
+    #                 compare_dict[title][perf_engine + "_compare"] = perf_compare(
+    #                     baseline=json.loads(baseline_dict[baseline_title]["result"])[perf_engine], latest=t
+    #                 )
 
-        # 生成表格
-        xlsx_save(
-            sublayer_dict=compare_dict,
-            excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
-        )
+    #     # 生成表格
+    #     xlsx_save(
+    #         sublayer_dict=compare_dict,
+    #         excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
+    #     )

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 最外层测试入口, 通过环境变量设定测试相关的一切信息(除了docker/whl/py以外)
-export CASE_TYPE="${CASE_TYPE:-layercase}"
+export CASE_TYPE="${CASE_TYPE:-layerApicase}"
 export CASE_DIR="${CASE_DIR:-perf_monitor}"
 export TESTING="${TESTING:-yaml/dy2stcinn_eval_benchmark.yml}" # 设定测试项目配置yaml
 export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模式为性能
@@ -22,8 +22,6 @@ export PLT_BM_STATIS="${PLT_BM_STATIS:-trimmean}"  # 统计策略trimmean, mean,
 #研发指定环境变量
 export FLAGS_pir_apply_shape_optimization_pass=0
 export FLAGS_enable_pir_api=1
-export FLAGS_prim_enable_dynamic=true
-export FLAGS_prim_all=true
 export FLAGS_cinn_new_group_scheduler=1
 export FLAGS_group_schedule_tiling_first=1
 export FLAGS_cinn_bucket_compile=True

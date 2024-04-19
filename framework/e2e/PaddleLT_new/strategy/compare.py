@@ -6,6 +6,7 @@
 runner
 """
 
+import json
 import logging
 import traceback
 import numpy as np
@@ -108,7 +109,7 @@ def perf_compare(baseline, latest):
     比较函数
     :param latest: 待测值
     :param baseline: 基线值
-    :return:
+    :return: 比例值
     """
     if isinstance(baseline, str) or isinstance(baseline, str):
         res = "error"
@@ -121,6 +122,55 @@ def perf_compare(baseline, latest):
             else:
                 res = baseline / latest
     return res
+
+
+# def perf_compare_dict(baseline_dict, data_dict, error_list, baseline_layer="layercase", latest_layer="layercase"):
+#     """
+#     生成对比dict
+#     """
+#     # 性能对比
+#     compare_dict = {}
+#     for title, perf_dict in data_dict.items():
+#         if title not in error_list:
+#             compare_dict[title] = {}
+#             for perf_engine, t in perf_dict.items():
+#                 compare_dict[title][perf_engine + "_latest"] = t
+#                 compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[
+#                     perf_engine
+#                 ]
+#                 compare_dict[title][perf_engine + "_compare"] = perf_compare(
+#                     baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
+#                 )
+#     return compare_dict
+
+
+def perf_compare_dict(baseline_dict, data_dict, error_list, baseline_layer_type, latest_layer_type):
+    """
+    生成对比dict
+    :param data_dict: 待测字典
+    :param baseline_dict: 基线字典
+    :param error_list: list[报错子图case]
+    :param baseline_layer_type: 基线子图种类，例如layercase、layerApicase
+    :param latest_layer_type: 待测子图种类，例如layercase、layerApicase
+    :return: 比较字典
+    """
+    compare_dict = {}
+    for title, perf_dict in data_dict.items():
+        if title not in error_list:
+            layer_case = title.split("^", 1)[1]
+            baseline_title = "^".join([baseline_layer_type, layer_case])
+            layer_title = "^".join([latest_layer_type, layer_case])
+            if baseline_title in baseline_dict and layer_title in data_dict:
+                compare_dict[layer_case] = {}
+                for perf_engine, t in perf_dict.items():
+                    compare_dict[layer_case][perf_engine + "^" + latest_layer_type + "^latest"] = t
+                    compare_dict[layer_case][perf_engine + "^" + baseline_layer_type + "^baseline"] = json.loads(
+                        baseline_dict[baseline_title]["result"]
+                    )[perf_engine]
+                    compare_dict[layer_case][perf_engine + "^compare"] = perf_compare(
+                        baseline=json.loads(baseline_dict[baseline_title]["result"])[perf_engine], latest=t
+                    )
+    return compare_dict
 
 
 if __name__ == "__main__":

@@ -149,6 +149,7 @@ class DB(object):
         env_info,
         framework,
         agile_pipeline_build_id,
+        layer_type,
         commit,
         version,
         hostname,
@@ -167,6 +168,7 @@ class DB(object):
             "env_info": env_info,
             "framework": framework,
             "agile_pipeline_build_id": agile_pipeline_build_id,
+            "layer_type": layer_type,
             "commit": commit,
             "version": version,
             "hostname": hostname,
@@ -220,8 +222,8 @@ class DB(object):
         ]
         res = self.select(table="layer_job", condition_list=condition_list)
         baseline_job = res[-1]
-        job_id = baseline_job["id"]
-        return job_id
+        # job_id = baseline_job["id"]
+        return baseline_job
 
     def show_list(self, table):
         """返回table中的列list"""

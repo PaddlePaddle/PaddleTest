@@ -7,6 +7,7 @@ layer builder
 
 import paddle
 import diy
+import layerApicase
 import layercase
 
 
