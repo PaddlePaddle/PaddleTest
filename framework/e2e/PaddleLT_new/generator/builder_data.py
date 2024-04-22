@@ -7,10 +7,15 @@ data builder
 
 import os
 import numpy as np
-import paddle
-import diy
-import layerApicase
-import layercase
+
+if os.environ.get("FRAMEWORK") == "PaddlePaddle":
+    import paddle
+    import diy
+    import layerApicase
+    import layercase
+elif os.environ.get("FRAMEWORK") == "PyTorch":
+    import torch
+    import layerTorchcase
 
 import tools.np_tool as tool
 

@@ -42,9 +42,9 @@ class LayerTest(object):
         :return:
         """
         if os.environ.get("FRAMEWORK") == "PaddlePaddle":
-            from engine.engine_map import engine_map
+            from engine.paddle_engine_map import engine_map
         elif os.environ.get("FRAMEWORK") == "PyTorch":
-            from engine.torchengine_map import engine_map
+            from engine.torch_engine_map import engine_map
         layer_test = engine_map[testing](testing=self.testings.get(testing), layerfile=layerfile)
         res = getattr(layer_test, testing)()
         return res

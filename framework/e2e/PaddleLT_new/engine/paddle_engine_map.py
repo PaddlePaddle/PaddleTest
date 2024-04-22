@@ -6,14 +6,14 @@
 engine 查表
 """
 
-from engine.train import LayerTrain
-from engine.eval import LayerEval
-from engine.export import LayerExport
-from engine.infer import LayerInfer
-from engine.eval_bm import LayerEvalBM
+from engine.paddle_train import LayerTrain
+from engine.paddle_eval import LayerEval
+from engine.paddle_export import LayerExport
+from engine.paddle_infer import LayerInfer
+from engine.paddle_eval_bm import LayerEvalBM
 
 
-engine_map = {
+paddle_engine_map = {
     "dy_train": LayerTrain,  # 动态图训练
     "dy2st_train": LayerTrain,  # 动转静训练
     "dy2st_train_cinn": LayerTrain,  # CINN训练
