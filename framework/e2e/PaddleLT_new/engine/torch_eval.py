@@ -8,7 +8,7 @@ eval 方法
 import os
 import numpy as np
 import torch
-from engine.xtools import reset
+from engine.torch_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 
@@ -32,23 +32,23 @@ class TorchLayerEval(object):
         self.testing = testing
         self.model_dtype = self.testing.get("model_dtype")
 
-    #     paddle.set_default_dtype(self.model_dtype)
+        # torch.set_default_dtype(self.model_dtype) # torch不支持字符串dtype, 测试框架暂时没兼容
 
-    #     self.layerfile = layerfile
-    #     self.data = BuildData(layerfile=self.layerfile).get_single_data()
+        self.layerfile = layerfile
+        self.data = BuildData(layerfile=self.layerfile).get_single_data()
 
-    # def _net_instant(self):
-    #     """get net and data"""
-    #     reset(self.seed)
-    #     net = BuildLayer(layerfile=self.layerfile).get_layer()
-    #     return net
+    def _net_instant(self):
+        """get net and data"""
+        reset(self.seed)
+        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        return net
 
-    # def dy_eval(self):
-    #     """dygraph eval"""
-    #     net = self._net_instant()
-    #     # net.eval()
-    #     logit = net(*self.data)
-    #     return logit
+    def dy_eval(self):
+        """dygraph eval"""
+        net = self._net_instant()
+        # net.eval()
+        logit = net(*self.data)
+        return {"logit": logit}
 
     # def dy2st_eval(self):
     #     """dy2st eval"""
@@ -56,7 +56,7 @@ class TorchLayerEval(object):
     #     st_net = paddle.jit.to_static(net, full_graph=True)
     #     # net.eval()
     #     logit = st_net(*self.data)
-    #     return logit
+    #     return {"logit": logit}
 
     # def dy2st_eval_cinn(self):
     #     """dy2st eval"""
@@ -67,4 +67,4 @@ class TorchLayerEval(object):
     #     cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
     #     # net.eval()
     #     logit = cinn_net(*self.data)
-    #     return logit
+    #     return {"logit": logit}

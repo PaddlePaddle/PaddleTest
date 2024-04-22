@@ -59,7 +59,7 @@ class LayerBenchmarkDB(object):
 
     def _frame_info(self):
         """"""
-        if os.environ.get("FRAMEWORK") == "PaddlePaddle":
+        if os.environ.get("FRAMEWORK") == "paddle":
             import paddle
 
             self.commit = paddle.__git_commit__
@@ -80,7 +80,7 @@ class LayerBenchmarkDB(object):
                 }
             else:
                 raise Exception("unknown hardware, PaddleLayerTest only support test cpu or gpu")
-        elif os.environ.get("FRAMEWORK") == "PyTorch":
+        elif os.environ.get("FRAMEWORK") == "torch":
             import torch
 
             self.commit = torch.__git_commit__

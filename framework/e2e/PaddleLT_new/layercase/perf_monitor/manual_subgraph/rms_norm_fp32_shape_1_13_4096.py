@@ -21,7 +21,7 @@ class LayerCase(paddle.nn.Layer):
         return hidden_states * weight
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     shape = [1, 13, 4096]
     x = paddle.uniform(shape, dtype="float32", min=-0.5, max=0.5)
     x.stop_gradient = False
@@ -61,7 +61,7 @@ def create_paddle_inputs():
 #         self.prepare_data()
 
 #     def prepare_data(self):
-#         self.x, self.weight = create_paddle_inputs()
+#         self.x, self.weight = create_tensor_inputs()
     
 #     def apply_to_static(net, use_cinn, input_spec=None):
 #         build_strategy = paddle.static.BuildStrategy()

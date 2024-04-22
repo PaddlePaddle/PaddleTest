@@ -7,10 +7,15 @@ data builder
 
 import os
 import numpy as np
-import paddle
-import diy
-import layerApicase
-import layercase
+
+if os.environ.get("FRAMEWORK") == "paddle":
+    import paddle
+    import diy
+    import layerApicase
+    import layercase
+elif os.environ.get("FRAMEWORK") == "torch":
+    import torch
+    import layerTorchcase
 
 import tools.np_tool as tool
 
@@ -27,13 +32,16 @@ class BuildData(object):
         dataname = self.dataname + ".create_numpy_inputs()"
         data = []
         for i in eval(dataname):
-            data.append(paddle.to_tensor(i, stop_gradient=False))
+            if os.environ.get("FRAMEWORK") == "paddle":
+                data.append(paddle.to_tensor(i, stop_gradient=False))
+            elif os.environ.get("FRAMEWORK") == "torch":
+                data.append(torch.tensor(i, requires_grad=True))
 
         return data
 
     def get_single_tensor(self):
         """get data"""
-        dataname = self.dataname + ".create_paddle_inputs()"
+        dataname = self.dataname + ".create_tensor_inputs()"
         data = []
         for i in eval(dataname):
             data.append(i)

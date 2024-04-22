@@ -7,7 +7,8 @@
 """
 import os
 import traceback
-from engine.engine_map import engine_map
+
+# from engine.engine_map import engine_map
 from strategy.compare import base_compare
 from tools.yaml_loader import YamlLoader
 from tools.logger import Logger
@@ -40,8 +41,11 @@ class LayerTest(object):
         :param testing: 'dy_train', 'dy_eval'...
         :return:
         """
+        if os.environ.get("FRAMEWORK") == "paddle":
+            from engine.paddle_engine_map import paddle_engine_map as engine_map
+        elif os.environ.get("FRAMEWORK") == "torch":
+            from engine.torch_engine_map import torch_engine_map as engine_map
         layer_test = engine_map[testing](testing=self.testings.get(testing), layerfile=layerfile)
-
         res = getattr(layer_test, testing)()
         return res
 
@@ -167,7 +171,7 @@ class LayerTest(object):
 
 
 if __name__ == "__main__":
-    layerfile = "./layercase/sublayer1000/Det_cases/ppyolo_ppyolov2_r50vd_dcn_365e_coco/SIR_76.py"
-    testing = "yaml/dy^dy2stcinn_eval_benchmark.yml"
+    layerfile = "./layerTorchcase/demo/SIR_101.py"
+    testing = "yaml/dy_eval.yml"
     single_test = LayerTest(title="lzy_naive", layerfile=layerfile, testing=testing)
-    single_test._perf_case_run()
+    single_test._case_run()

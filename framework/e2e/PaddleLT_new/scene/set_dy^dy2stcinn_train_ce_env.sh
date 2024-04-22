@@ -8,7 +8,7 @@ export TESTING_MODE="${TESTING_MODE:-precision}" # 设定测试模型为精度
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-6}"
 export CUDA_VISIBLE_DEVICES="${PLT_DEVICE_ID:-6}"
-export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"
+export FRAMEWORK="${FRAMEWORK:-paddle}"
 export MULTI_WORKER="${MULTI_WORKER:-0}"
 
 echo "wheel_url is: ${wheel_url}"

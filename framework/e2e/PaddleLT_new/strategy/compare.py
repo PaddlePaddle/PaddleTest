@@ -6,11 +6,21 @@
 runner
 """
 
+import os
 import json
 import logging
 import traceback
 import numpy as np
-import paddle
+
+framework = ""
+if os.environ.get("FRAMEWORK") == "paddle":
+    import paddle
+
+    framework = "paddle"
+elif os.environ.get("FRAMEWORK") == "torch":
+    import torch
+
+    framework = "torch"
 
 
 def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1e-10, exc_dict={}):
@@ -27,11 +37,21 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
     if isinstance(expect, str):
         raise Exception("expect is exception !!!")
 
-    if isinstance(expect, paddle.Tensor) or isinstance(expect, np.ndarray):
-        if isinstance(result, paddle.Tensor):
-            result = result.numpy()
-        if isinstance(expect, paddle.Tensor):
-            expect = expect.numpy()
+    if isinstance(expect, eval(f"{framework}.Tensor")) or isinstance(expect, np.ndarray):
+        if isinstance(result, eval(f"{framework}.Tensor")):
+            if framework == "torch":
+                result = result.detach().numpy()
+            elif framework == "paddle":
+                result = result.numpy()
+            else:
+                result = result.numpy()
+        if isinstance(expect, eval(f"{framework}.Tensor")):
+            if framework == "torch":
+                expect = expect.detach().numpy()
+            elif framework == "paddle":
+                expect = expect.numpy()
+            else:
+                expect = expect.numpy()
         # res = np.allclose(result, expect, atol=delta, rtol=rtol, equal_nan=True)
         # # 出错打印错误数据
         # if res is False:
@@ -70,7 +90,7 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
             )
     elif isinstance(expect, list) or isinstance(expect, tuple):
         for i, element in enumerate(expect):
-            if isinstance(result, (np.generic, np.ndarray)) or isinstance(result, paddle.Tensor):
+            if isinstance(result, (np.generic, np.ndarray)) or isinstance(result, eval(f"{framework}.Tensor")):
                 if i > 0:
                     break
                 base_compare(

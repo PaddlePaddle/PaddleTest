@@ -29,7 +29,7 @@ class LayerCase(paddle.nn.Layer):
         return paddle.concat([-x2, x1], axis=-1)  # shape is the same as x
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     q = paddle.randn([13, 2048, 32, 128], dtype="float32")
     k = paddle.randn([13, 2048, 32, 128], dtype="float32")
     cos = paddle.randn([1, 2048, 1, 128], dtype="float32")
@@ -71,7 +71,7 @@ def create_paddle_inputs():
 #         self.prepare_data()
 
 #     def prepare_data(self):
-#         self.q, self.k, self.cos, self.sin, self.position_ids = create_paddle_inputs()
+#         self.q, self.k, self.cos, self.sin, self.position_ids = create_tensor_inputs()
     
 #     def apply_to_static(net, use_cinn, input_spec=None):
 #         build_strategy = paddle.static.BuildStrategy()

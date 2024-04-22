@@ -120,7 +120,7 @@ class LayerCase(paddle.nn.Layer):
         return var_100, var_101, var_23, var_42, var_61, var_80, var_99
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[1, 256, 128, 128], dtype=paddle.float32),
         paddle.rand(shape=[1, 256, 64, 64], dtype=paddle.float32),
@@ -144,7 +144,7 @@ def create_numpy_inputs():
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
