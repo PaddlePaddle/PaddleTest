@@ -165,7 +165,8 @@ class BinarySearch(object):
 
 if __name__ == "__main__":
     cur_path = os.getcwd()
-    # os.system("rm -rf paddle && git clone -b develop http://github.com/paddlepaddle/paddle.git")
+    if not os.path.exists("paddle"):
+        os.system("git clone -b develop http://github.com/paddlepaddle/paddle.git")
     os.chdir(os.path.join(cur_path, "paddle"))
     start_commit = "f651ac5cf387c56488b52fcc6456a63e9eb73086"  # 成功commit
     end_commit = "9d5f31687cce16a976256723a70df4550085d685"  # 失败commit
@@ -177,7 +178,7 @@ if __name__ == "__main__":
     final_commit = BinarySearch(
         commit_list=commits,
         title="PrecisionBS",
-        layerfile="./layercase/perf_monitor/manual_subgraph/layernorm_fp32_shape_1_13_4096.py",
+        layerfile="./layercase/sublayer1000/Clas_cases/CSWinTransformer_CSWinTransformer_base_384/SIR_5.py",
         testing="yaml/dy^dy2stcinn_eval.yml",
         perf_decay=None,  # ["dy2st_eval_cinn_perf", 0.042814, -0.3]
         test_obj=LayerTest,
