@@ -171,7 +171,7 @@ class LayerTest(object):
 
 
 if __name__ == "__main__":
-    layerfile = "./layercase/sublayer1000/Det_cases/ppyolo_ppyolov2_r50vd_dcn_365e_coco/SIR_76.py"
-    testing = "yaml/dy^dy2stcinn_eval_benchmark.yml"
+    layerfile = "./layerTorchcase/demo/SIR_101.py"
+    testing = "yaml/dy_eval.yml"
     single_test = LayerTest(title="lzy_naive", layerfile=layerfile, testing=testing)
-    single_test._perf_case_run()
+    single_test._case_run()
