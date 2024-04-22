@@ -104,8 +104,8 @@ class BinarySearch(object):
             os.system(f"rm {self.title}.py")
         exit_code = os.system(
             f"cp -r PaddleLT.py {self.title}.py && "
-            "{self.py_cmd} -m pytest {self.title}.py --title={self.title} "
-            "--layerfile={self.layerfile} --testing={self.testing}"
+            f"{self.py_cmd} -m pytest {self.title}.py --title={self.title} "
+            f"--layerfile={self.layerfile} --testing={self.testing}"
         )
 
         if exit_code > 0:
