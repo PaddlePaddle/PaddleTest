@@ -39,9 +39,19 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
 
     if isinstance(expect, eval(f"{framework}.Tensor")) or isinstance(expect, np.ndarray):
         if isinstance(result, eval(f"{framework}.Tensor")):
-            result = result.numpy()
+            if framework == "torch":
+                result = result.detach().numpy()
+            elif framework == "paddle":
+                result = result.numpy()
+            else:
+                result = result.numpy()
         if isinstance(expect, eval(f"{framework}.Tensor")):
-            expect = expect.numpy()
+            if framework == "torch":
+                expect = expect.detach().numpy()
+            elif framework == "paddle":
+                expect = expect.numpy()
+            else:
+                expect = expect.numpy()
         # res = np.allclose(result, expect, atol=delta, rtol=rtol, equal_nan=True)
         # # 出错打印错误数据
         # if res is False:
