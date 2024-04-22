@@ -100,8 +100,10 @@ class BinarySearch(object):
         # except Exception:
         #     exc += 1
 
+        if os.path.exists(f"{self.title}.py"):
+            os.system(f"rm {self.title}.py")
         exit_code = os.system(
-            f"rm {self.title} && cp -r PaddleLT.py {self.title}.py && "
+            f"cp -r PaddleLT.py {self.title}.py && "
             "{self.py_cmd} -m pytest {self.title}.py --title={self.title} "
             "--layerfile={self.layerfile} --testing={self.testing}"
         )
