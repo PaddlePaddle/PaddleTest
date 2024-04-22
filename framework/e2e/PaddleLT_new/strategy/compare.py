@@ -6,17 +6,18 @@
 runner
 """
 
+import os
 import json
 import logging
 import traceback
 import numpy as np
 
 framework = ""
-if framework == "paddle":
+if os.environ.get("FRAMEWORK") == "paddle":
     import paddle
 
     framework = "paddle"
-elif framework == "torch":
+elif os.environ.get("FRAMEWORK") == "torch":
     import torch
 
     framework = "torch"
