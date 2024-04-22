@@ -167,7 +167,7 @@ if __name__ == "__main__":
     cur_path = os.getcwd()
     # os.system("rm -rf paddle && git clone -b develop http://github.com/paddlepaddle/paddle.git")
     os.chdir(os.path.join(cur_path, "paddle"))
-    start_commit = "7139309b30f65c8bb8fb0e427b194c265e955c87"  # 成功commit
+    start_commit = "f651ac5cf387c56488b52fcc6456a63e9eb73086"  # 成功commit
     end_commit = "9d5f31687cce16a976256723a70df4550085d685"  # 失败commit
     commits = get_commits(start=start_commit, end=end_commit)
     save_pickle(data=commits, filename="candidate_commits.pickle")
@@ -178,7 +178,7 @@ if __name__ == "__main__":
         commit_list=commits,
         title="PrecisionBS",
         layerfile="./layercase/perf_monitor/manual_subgraph/layernorm_fp32_shape_1_13_4096.py",
-        testing="yaml/dy^dy2stcinn_eval_benchmark.yml",
+        testing="yaml/dy^dy2stcinn_eval.yml",
         perf_decay=None,  # ["dy2st_eval_cinn_perf", 0.042814, -0.3]
         test_obj=LayerTest,
     )._commit_locate(commits)
