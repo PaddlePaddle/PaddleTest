@@ -94,13 +94,19 @@ class BinarySearch(object):
         """
         精度debug
         """
-        exc = 0
-        try:
-            self.test_obj(title=self.title, layerfile=self.layerfile, testing=self.testing)._case_run()
-        except Exception:
-            exc += 1
+        # exc = 0
+        # try:
+        #     self.test_obj(title=self.title, layerfile=self.layerfile, testing=self.testing)._case_run()
+        # except Exception:
+        #     exc += 1
 
-        if exc > 0:
+        exit_code = os.system(
+            f"rm {self.title} && cp -r PaddleLT.py {self.title}.py && "
+            "{self.py_cmd} -m pytest {self.title}.py --title={self.title} "
+            "--layerfile={self.layerfile} --testing={self.testing}"
+        )
+
+        if exit_code > 0:
             self.logger.get_log().info(f"{self.testing_mode}执行失败commit: {commit_id}")
             return False
         else:
