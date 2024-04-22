@@ -68,6 +68,13 @@ class LayerEvalBM(object):
             total_time_list.append(total_time)
 
         save_pickle(data=total_time_list, filename="dy_eval_perf_" + self.layerfile)
+        # 画图
+        perf_by_step(
+            data_list=total_time_list,
+            step_scale=[0.1, 0.5, 1],
+            filename="dy2st_eval_cinn_perf_" + self.layerfile + "_by_step",
+        )
+
         time_res = eval(self.perf_statis)(data_list=total_time_list)
         time_res = round(time_res * self.statis_times, self.statis_round)
         return time_res
