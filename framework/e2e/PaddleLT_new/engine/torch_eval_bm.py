@@ -16,7 +16,7 @@ from tools.res_save import save_pickle
 from tools.statistics import trimmean, mean, best, best_top_k, perf_by_step
 
 
-class LayerEvalBM(object):
+class TorchLayerEvalBM(object):
     """
     构建Layer评估的性能通用类
     """
