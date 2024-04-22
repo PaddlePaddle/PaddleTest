@@ -6,11 +6,11 @@
 engine 查表
 """
 
-from engine.torcheval import TorchLayerEval
+from engine.torch_eval import TorchLayerEval
 
 # from interpreter.testing_trans import TrainTrans, EvalTrans
 
 
 engine_map = {
-    "torch_dy_eval": TorchLayerEval,
+    "dy_eval": TorchLayerEval,
 }
