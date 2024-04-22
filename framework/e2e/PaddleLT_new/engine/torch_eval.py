@@ -32,7 +32,7 @@ class TorchLayerEval(object):
         self.testing = testing
         self.model_dtype = self.testing.get("model_dtype")
 
-        torch.set_default_dtype(self.model_dtype)
+        # torch.set_default_dtype(self.model_dtype) # torch不支持字符串dtype, 测试框架暂时没兼容
 
         self.layerfile = layerfile
         self.data = BuildData(layerfile=self.layerfile).get_single_data()
