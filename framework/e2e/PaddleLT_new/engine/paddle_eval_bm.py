@@ -9,7 +9,7 @@ import os
 import timeit
 import numpy as np
 import paddle
-from engine.xtools import reset
+from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 from tools.res_save import save_pickle

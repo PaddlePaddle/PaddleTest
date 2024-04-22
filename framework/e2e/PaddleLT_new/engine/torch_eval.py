@@ -8,7 +8,7 @@ eval 方法
 import os
 import numpy as np
 import torch
-from engine.xtools import reset
+from engine.torch_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 
