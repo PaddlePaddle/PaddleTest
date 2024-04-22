@@ -15,7 +15,9 @@ def reset(seed):
     :param seed: 随机种子
     :return:
     """
-    torch.random.seed(seed)
+    torch.random.manual_seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
     np.random.seed(seed)
     np.set_printoptions(threshold=5, edgeitems=3)
 
