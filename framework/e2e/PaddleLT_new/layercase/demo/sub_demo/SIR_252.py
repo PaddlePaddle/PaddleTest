@@ -51,7 +51,7 @@ class LayerCase(paddle.nn.Layer):
         return var_3, var_4, var_5
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     """
     paddle tensor
     """

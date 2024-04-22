@@ -32,10 +32,10 @@ class TorchLayerEval(object):
         self.testing = testing
         self.model_dtype = self.testing.get("model_dtype")
 
-    #     paddle.set_default_dtype(self.model_dtype)
+        torch.set_default_dtype(self.model_dtype)
 
-    #     self.layerfile = layerfile
-    #     self.data = BuildData(layerfile=self.layerfile).get_single_data()
+        self.layerfile = layerfile
+        self.data = BuildData(layerfile=self.layerfile).get_single_data()
 
     def _net_instant(self):
         """get net and data"""

@@ -8,7 +8,7 @@ export TESTING_MODE="${TESTING_MODE:-performance}" # 设定测试模式为性能
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}" # 硬件
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-6}"  # 设备编号
 export CUDA_VISIBLE_DEVICES="${PLT_DEVICE_ID:-6}"
-export FRAMEWORK="${FRAMEWORK:-PaddlePaddle}"  # 框架种类
+export FRAMEWORK="${FRAMEWORK:-paddle}"  # 框架种类
 export MULTI_WORKER="${MULTI_WORKER:-0}"  # 并行数
 
 #性能测试专属环境变量

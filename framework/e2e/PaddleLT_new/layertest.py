@@ -41,9 +41,9 @@ class LayerTest(object):
         :param testing: 'dy_train', 'dy_eval'...
         :return:
         """
-        if os.environ.get("FRAMEWORK") == "PaddlePaddle":
+        if os.environ.get("FRAMEWORK") == "paddle":
             from engine.paddle_engine_map import engine_map
-        elif os.environ.get("FRAMEWORK") == "PyTorch":
+        elif os.environ.get("FRAMEWORK") == "torch":
             from engine.torch_engine_map import engine_map
         layer_test = engine_map[testing](testing=self.testings.get(testing), layerfile=layerfile)
         res = getattr(layer_test, testing)()
