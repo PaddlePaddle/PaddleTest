@@ -7,7 +7,8 @@
 """
 import os
 import traceback
-from engine.engine_map import engine_map
+
+# from engine.engine_map import engine_map
 from strategy.compare import base_compare
 from tools.yaml_loader import YamlLoader
 from tools.logger import Logger
@@ -40,8 +41,11 @@ class LayerTest(object):
         :param testing: 'dy_train', 'dy_eval'...
         :return:
         """
+        if os.environ.get("FRAMEWORK") == "PaddlePaddle":
+            from engine.engine_map import engine_map
+        elif os.environ.get("FRAMEWORK") == "PyTorch":
+            from engine.torchengine_map import engine_map
         layer_test = engine_map[testing](testing=self.testings.get(testing), layerfile=layerfile)
-
         res = getattr(layer_test, testing)()
         return res
 
