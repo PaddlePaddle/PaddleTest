@@ -29,7 +29,7 @@ class TorchLayerEvalBM(object):
         reset(self.seed)
 
         self.device = os.environ.get("PLT_SET_DEVICE")
-        torch.set_device(str(self.device))
+        torch.device(str(self.device))
 
         self.perf_repeat = int(os.environ.get("PLT_BM_REPEAT", "100"))
         self.perf_statis = os.environ.get("PLT_BM_STATIS", "trimmean")
