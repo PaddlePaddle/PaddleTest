@@ -72,7 +72,9 @@ class Run(object):
             self.logger.get_log().warning(f"报错为core dumps的子图数量为: {len(core_dumps_list)}")
             self.logger.get_log().warning(f"报错不为core dumps的异常子图数量为: {len(error_list)-len(core_dumps_list)}")
             self.logger.get_log().warning("请注意, 由于程序崩溃, core dumps的子图不会出现在allure报告中")
-            self.logger.get_log().info("测试子图总数 = 下方回调'total'个数(allure报告中case总数) + core dump崩溃子图数")
+            self.logger.get_log().info(
+                "『测试子图总数』 = 『下方回调'total'个数(allure报告中case总数)』 + 『core dump崩溃子图数』, 请核对case数目以保证测试无遗漏"
+            )
             os.system("echo 7 > exit_code.txt")
         else:
             self.logger.get_log().info(f"测试子图总数为: {len(self.py_list)}")
