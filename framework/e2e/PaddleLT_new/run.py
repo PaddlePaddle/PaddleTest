@@ -66,13 +66,16 @@ class Run(object):
         core_dumps_list = self._core_dumps_case_count(report_path=self.report_dir)
         if error_count != 0 or not core_dumps_list:
             self.logger.get_log().warning("测试失败, 下面进行bug分类统计: ")
-            self.logger.get_log().warning(f"报错不为core dumps的异常子图数量为: {len(error_list)}")
             self.logger.get_log().warning(f"报错为core dumps的子图有: {core_dumps_list}")
-            self.logger.get_log().warning(
-                f"报错为core dumps的子图数量为: {len(core_dumps_list)} 请注意, core dumps的子图不会出现在allure报告中"
-            )
+            self.logger.get_log().info(f"测试子图总数为: {len(self.py_list)}")
+            self.logger.get_log().warning(f"报错子图总数为: {len(error_list)}")
+            self.logger.get_log().warning(f"报错为core dumps的子图数量为: {len(core_dumps_list)}")
+            self.logger.get_log().warning(f"报错不为core dumps的异常子图数量为: {len(error_list)-len(core_dumps_list)}")
+            self.logger.get_log().warning("请注意, 由于程序崩溃, core dumps的子图不会出现在allure报告中")
+            self.logger.get_log().info("测试子图总数 = 下方回调'total'个数(allure报告中case总数) + core dump崩溃子图数")
             os.system("echo 7 > exit_code.txt")
         else:
+            self.logger.get_log().info(f"测试子图总数为: {len(self.py_list)}")
             self.logger.get_log().info("测试通过, 无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
