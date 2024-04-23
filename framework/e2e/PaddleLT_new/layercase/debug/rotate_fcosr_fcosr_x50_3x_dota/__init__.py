@@ -1,0 +1,14 @@
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_33
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_62
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_56
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_63
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_57
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_47
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_73
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_53
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_68
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_44
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_50
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_35
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_41
+import layercase.debug.rotate_fcosr_fcosr_x50_3x_dota.SIR_92
