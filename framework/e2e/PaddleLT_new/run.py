@@ -290,7 +290,7 @@ class Run(object):
         allure_case_list = []
         for json_file in os.listdir(report_path):
             if json_file.endswith("-result.json"):
-                layer_name = JSONLoader(json_file).json_dict()["name"]
+                layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["name"]
                 allure_case_list.append(layer_name.replace("^", "/") + ".py")
 
         all_case_list = []
