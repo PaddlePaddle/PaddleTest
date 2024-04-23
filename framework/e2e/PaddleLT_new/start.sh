@@ -32,5 +32,6 @@ cp -r report ./PTSTools/LogParseUpload;
 cd ./PTSTools/LogParseUpload;
 unset http_proxy && unset https_proxy;
 
+echo 以下开始pts的pytest-allure回调
 ${python_ver} upload.py --file_path report --id ${pts_id} --status '成功'
 "
