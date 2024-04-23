@@ -29,7 +29,3 @@ class JSONLoader(object):
         except json.JSONDecodeError:
             print(f"Error decoding JSON file '{self.file_path}'.")
             return None
-
-
-# json_dict = JSONLoader("report/5474788e-df83-4016-8eec-389b6e10f9ef-result.json").json_dict()
-# print("json_dict is: ", json_dict)
