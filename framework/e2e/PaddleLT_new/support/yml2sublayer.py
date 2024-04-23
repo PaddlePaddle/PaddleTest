@@ -49,7 +49,7 @@ all_cases = list(yaml_loader.get_all_case_name())
 # print("all_cases is: ", len(all_cases))
 # exit(0)
 
-case_path = "api_case"  # 生成case文件夹路径
+case_path = "nn_sublayer"  # 生成case文件夹路径
 if not os.path.exists(case_path):
     os.system(f"mkdir {case_path}")
 
@@ -225,13 +225,12 @@ class LayerCase(paddle.nn.Layer):
 
     def __init__(self):
         super(LayerCase, self).__init__()
-        self.func = {func}({layer_params})
 
     def forward(self, {inputs_k}):
         \"\"\"
         forward
         \"\"\"
-        out = {func}({inputs_k}, {layer_params})
+        out = {func}({inputs_k} {layer_params})
         return out
 
 
