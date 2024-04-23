@@ -16,6 +16,7 @@ from strategy.compare import perf_compare_dict
 from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
+from tools.json_loader import JSONLoader
 from tools.res_save import xlsx_save
 from tools.upload_bos import UploadBos
 from tools.statistics import split_list
@@ -62,13 +63,15 @@ class Run(object):
 
     def _exit_code_txt(self, error_count, error_list):
         """"""
-        if error_count != 0:
-            # print("测试失败，报错子图为: {}".format(error_list))
-            self.logger.get_log().warn("测试失败，报错子图为: {}".format(error_list))
+        core_dumps_list = self._core_dumps_case_count(report_path=self.report)
+        if error_count != 0 and not core_dumps_list:
+            self.logger.get_log().warn("测试失败, 下面进行bug分类统计: ")
+            self.logger.get_log().warn(f"报错非core dumps的异常子图数量为: {len(error_list)}")
+            self.logger.get_log().warn(f"报错为core dumps的子图有: {core_dumps_list}")
+            self.logger.get_log().warn(f"报错为core dumps的子图数量为: {len(core_dumps_list)}")
             os.system("echo 7 > exit_code.txt")
         else:
-            # print("测试通过，无报错子图-。-")
-            self.logger.get_log().info("测试通过，无报错子图-。-")
+            self.logger.get_log().info("测试通过, 无报错子图-。-")
             os.system("echo 0 > exit_code.txt")
 
     def _db_interact(self, sublayer_dict, error_list):
@@ -275,6 +278,34 @@ class Run(object):
 
         self._db_interact(sublayer_dict=sublayer_dict, error_list=error_list)
         self._bos_upload()
+
+    def _core_dumps_case_count(self, report_path):
+        """
+        统计allure报告中无法展示的, core dumps程序崩溃的case
+        """
+        # 性能测试无allure report, 直接返回空
+        if not os.path.exists(report_path):
+            return []
+
+        allure_case_list = []
+        for json_file in os.listdir(report_path):
+            if json_file.endswith("-result.json"):
+                layer_name = JSONLoader(json_file).json_dict()["name"]
+                allure_case_list.append(layer_name.replace("^", "/") + ".py")
+
+        all_case_list = []
+        # 将./layercase/sublayer1000/Det_cases/gfl_gflv2_r50_fpn_1x_coco/SIR_173.py
+        # 转换为layercase^sublayer1000^Det_cases^gfl_gflv2_r50_fpn_1x_coco^SIR_173
+        for py_file in self.py_list:
+            all_case_list.append(py_file)
+
+        # 如果allure报告中不包含某个case, 说明这个case出现了core dumps
+        core_dumps_list = []
+        for case in all_case_list:
+            if case not in allure_case_list:
+                core_dumps_list.append(case)
+
+        return core_dumps_list
 
 
 if __name__ == "__main__":
