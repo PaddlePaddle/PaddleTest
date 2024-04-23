@@ -173,6 +173,7 @@ for case in all_cases:  # case by case写入子图
         with open(f"{case_path}/{case}_class.py", "w") as file:
             file.write(
                 f"""\
+import numpy as np
 import paddle
 
 
@@ -217,6 +218,7 @@ def create_numpy_inputs():
         with open(f"{case_path}/{case}_func.py", "w") as file:
             file.write(
                 f"""\
+import numpy as np
 import paddle
 
 
