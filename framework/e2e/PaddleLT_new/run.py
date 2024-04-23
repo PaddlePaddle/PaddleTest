@@ -64,12 +64,13 @@ class Run(object):
     def _exit_code_txt(self, error_count, error_list):
         """"""
         core_dumps_list = self._core_dumps_case_count(report_path=self.report_dir)
-        self.logger.get_log().info(f"core_dumps_list is: {core_dumps_list}")
         if error_count != 0 or not core_dumps_list:
-            self.logger.get_log().warn("测试失败, 下面进行bug分类统计: ")
-            self.logger.get_log().warn(f"报错不为core dumps的异常子图数量为: {len(error_list)}")
-            self.logger.get_log().warn(f"报错为core dumps的子图有: {core_dumps_list}")
-            self.logger.get_log().warn(f"报错为core dumps的子图数量为: {len(core_dumps_list)}. core dumps的子图不会出现在allure报告中")
+            self.logger.get_log().warning("测试失败, 下面进行bug分类统计: ")
+            self.logger.get_log().warning(f"报错不为core dumps的异常子图数量为: {len(error_list)}")
+            self.logger.get_log().warning(f"报错为core dumps的子图有: {core_dumps_list}")
+            self.logger.get_log().warning(
+                f"报错为core dumps的子图数量为: {len(core_dumps_list)} 请注意, core dumps的子图不会出现在allure报告中"
+            )
             os.system("echo 7 > exit_code.txt")
         else:
             self.logger.get_log().info("测试通过, 无报错子图-。-")
