@@ -72,7 +72,10 @@ for case in all_cases:  # case by case写入子图
         in_params = case_info["info"]["paddle"]["params"]
         for k, v in in_params.items():
             if not isinstance(v, dict):
-                layer_params += f"{k}={v}, "
+                if isinstance(v, str):
+                    layer_params += f"{k}='{v}', "
+                else:
+                    layer_params += f"{k}={v}, "
             else:
                 if v["random"] and v["type"] == "Tensor":
                     if "range" in v.keys():
@@ -82,31 +85,31 @@ for case in all_cases:  # case by case写入子图
                         low = -1
                         high = 1
                     if v["dtype"] == "int":
-                        layer_params += f"paddle.to_tensor(np.random.randint({low}, {high}, {v['shape']}), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor(np.random.randint({low}, {high}, {v['shape']}), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "int32":
-                        layer_params += f"paddle.to_tensor(np.random.randint({low}, {high}, {v['shape']}).astype('int32'), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor(np.random.randint({low}, {high}, {v['shape']}).astype('int32'), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "int64":
-                        layer_params += f"paddle.to_tensor(np.random.randint({low}, {high}, {v['shape']}).astype('int64'), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor(np.random.randint({low}, {high}, {v['shape']}).astype('int64'), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "float":
-                        layer_params += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "float16":
-                        layer_params += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}).astype('float16'), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}).astype('float16'), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "float32":
-                        layer_params += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}).astype('float32'), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}).astype('float32'), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "float64":
-                        layer_params += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}).astype('float64'), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}).astype('float64'), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "bfloat16":
-                        layer_params += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}).astype('bfloat16'), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}).astype('bfloat16'), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "complex64":
-                        layer_params += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}) + ({low} + ({high} - {low}) * np.random.random({v['shape']})) * 1j).astype(np.complex64), dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}) + ({low} + ({high} - {low}) * np.random.random({v['shape']})) * 1j).astype(np.complex64), dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "complex":
-                        layer_params += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}) + ({low} + ({high} - {low}) * np.random.random({v['shape']})) * 1j, dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}) + ({low} + ({high} - {low}) * np.random.random({v['shape']})) * 1j, dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] in "complex128":
-                        layer_params += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}) + ({low} + ({high} - {low}) * np.random.random({v['shape']})) * 1j, dtype='{v['dtype']}', stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}) + ({low} + ({high} - {low}) * np.random.random({v['shape']})) * 1j, dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "bool":
-                        layer_params += f"paddle.to_tensor(np.random.randint(0, 2, {v['shape']}).astype('bool'), dtype={v['dtype']}), stop_gradient=False), "
+                        layer_params += f"{k}=paddle.to_tensor(np.random.randint(0, 2, {v['shape']}).astype('bool'), dtype='{v['dtype']}'), stop_gradient=False), "
                 elif not v["random"] and v["type"] == "Tensor":
-                    layer_params += f"paddle.to_tensor({v['value']}, dtype={v['dtype']}, stop_gradient=False), "
+                    layer_params += f"{k}=paddle.to_tensor({v['value']}, dtype='{v['dtype']}', stop_gradient=False), "
 
     np_inputs = ""
     tensor_inputs = ""
@@ -159,9 +162,9 @@ for case in all_cases:  # case by case写入子图
                         tensor_inputs += f"paddle.to_tensor({low} + ({high} - {low}) * np.random.random({v['shape']}) + ({low} + ({high} - {low}) * np.random.random({v['shape']})) * 1j, dtype='{v['dtype']}', stop_gradient=False), "
                     elif v["dtype"] == "bool":
                         np_inputs += f"np.random.randint(0, 2, {v['shape']}).astype('bool'), "
-                        tensor_inputs += f"paddle.to_tensor(np.random.randint(0, 2, {v['shape']}).astype('bool'), dtype={v['dtype']}), stop_gradient=False), "
+                        tensor_inputs += f"paddle.to_tensor(np.random.randint(0, 2, {v['shape']}).astype('bool'), dtype='{v['dtype']}'), stop_gradient=False), "
                 elif not v["random"] and v["type"] == "Tensor":
-                    np_inputs += f"paddle.to_tensor({v['value']}, dtype={v['dtype']}, stop_gradient=False), "
+                    np_inputs += f"paddle.to_tensor({v['value']}, dtype='{v['dtype']}', stop_gradient=False), "
             else:
                 np_inputs = v
 
