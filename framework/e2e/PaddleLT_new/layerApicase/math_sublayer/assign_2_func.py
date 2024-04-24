@@ -15,7 +15,7 @@ class LayerCase(paddle.nn.Layer):
         """
         forward
         """
-        out = paddle.assign(x,  output=paddle.to_tensor(np.random.randint(0, 2, [2, 3, 4, 4]).astype('bool'), dtype='bool'), stop_gradient=False), )
+        out = paddle.assign(x,  output=paddle.to_tensor(np.random.randint(0, 2, [2, 3, 4, 4]).astype('bool'), dtype='bool', stop_gradient=False), )
         return out
 
 
