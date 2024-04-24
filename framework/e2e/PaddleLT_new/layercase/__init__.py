@@ -4,3 +4,4 @@ import layercase.perf_monitor
 import layercase.perf245
 import layercase.demo
 import layercase.debug
+import layercase.end2end
