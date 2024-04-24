@@ -23,7 +23,7 @@ def create_tensor_inputs():
     """
     paddle tensor
     """
-    inputs = ()
+    inputs = (paddle.to_tensor([[[2, 4, -2], [2, 0, 2]], [[1, -4, -2], [2, 1, 2]]], dtype='int32', stop_gradient=False), paddle.to_tensor([[[2, 4, -1], [2, 1, 3]], [[1, -4, -2], [2, 0, 2]]], dtype='int32', stop_gradient=False), )
     return inputs
 
 
@@ -31,6 +31,6 @@ def create_numpy_inputs():
     """
     numpy array
     """
-    inputs = (paddle.to_tensor([[[2, 4, -2], [2, 0, 2]], [[1, -4, -2], [2, 1, 2]]], dtype='int32', stop_gradient=False), paddle.to_tensor([[[2, 4, -1], [2, 1, 3]], [[1, -4, -2], [2, 0, 2]]], dtype='int32', stop_gradient=False), )
+    inputs = (np.array([[[2, 4, -2], [2, 0, 2]], [[1, -4, -2], [2, 1, 2]]]).astype('int32'), np.array([[[2, 4, -1], [2, 1, 3]], [[1, -4, -2], [2, 0, 2]]]).astype('int32'), )
     return inputs
 
