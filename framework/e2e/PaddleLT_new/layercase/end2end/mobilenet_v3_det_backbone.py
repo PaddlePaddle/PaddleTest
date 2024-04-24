@@ -274,7 +274,7 @@ class LayerCase(nn.Layer):
             norm_type='bn',
             norm_decay=0.0,
             freeze_norm=False):
-        super(MobileNetV3, self).__init__()
+        super(LayerCase, self).__init__()
         if isinstance(feature_maps, Integral):
             feature_maps = [feature_maps]
         if norm_type == 'sync_bn' and freeze_norm:
