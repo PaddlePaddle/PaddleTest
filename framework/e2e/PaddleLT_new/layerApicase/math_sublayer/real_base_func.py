@@ -23,7 +23,7 @@ def create_tensor_inputs():
     """
     paddle tensor
     """
-    inputs = (paddle.to_tensor(-10 + (10 - -10) * np.random.random([2, 3, 4, 4]) + (-10 + (10 - -10) * np.random.random([2, 3, 4, 4])) * 1j).astype(np.complex64), dtype='complex64', stop_gradient=False), )
+    inputs = (paddle.to_tensor((-10 + (10 - -10) * np.random.random([2, 3, 4, 4]) + (-10 + (10 - -10) * np.random.random([2, 3, 4, 4])) * 1j).astype(np.complex64), dtype='complex64', stop_gradient=False), )
     return inputs
 
 
