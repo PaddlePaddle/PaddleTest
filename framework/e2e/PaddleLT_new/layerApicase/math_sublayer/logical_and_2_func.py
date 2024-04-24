@@ -23,7 +23,7 @@ def create_tensor_inputs():
     """
     paddle tensor
     """
-    inputs = (paddle.to_tensor(np.random.randint(0, 2, [1, 2]).astype('bool'), dtype='bool'), stop_gradient=False), paddle.to_tensor(np.random.randint(0, 2, [2, 2]).astype('bool'), dtype='bool'), stop_gradient=False), )
+    inputs = (paddle.to_tensor(np.random.randint(0, 2, [1, 2]).astype('bool'), dtype='bool', stop_gradient=False), paddle.to_tensor(np.random.randint(0, 2, [2, 2]).astype('bool'), dtype='bool', stop_gradient=False), )
     return inputs
 
 
