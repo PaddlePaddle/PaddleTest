@@ -79,7 +79,9 @@ class ExtraBlock(nn.Layer):
             out_channels=out_channels,
             kernel_size=kernel_size,
             stride=stride,
-            padding=padding)
+            # padding=padding
+            padding='SAME'
+            )
 
     def forward(self, inputs):
         out = self.conv0(inputs)
