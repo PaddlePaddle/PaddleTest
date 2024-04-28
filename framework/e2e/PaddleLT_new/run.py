@@ -88,7 +88,7 @@ class Run(object):
             layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
             if os.environ.get("PLT_BM_MODE") == "baseline":
                 layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
-            elif os.environ.get("PLT_BM_MODE") == "latest_ce":
+            elif os.environ.get("PLT_BM_MODE") == "latest_as_baseline":
                 baseline_dict, baseline_layer_type = layer_db.get_baseline_dict()
                 compare_dict = perf_compare_dict(
                     baseline_dict=baseline_dict,
