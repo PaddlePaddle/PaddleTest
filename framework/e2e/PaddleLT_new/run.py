@@ -87,6 +87,19 @@ class Run(object):
         if os.environ.get("PLT_BM_DB") == "insert":  # 存入数据, 作为基线或对比
             layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
             if os.environ.get("PLT_BM_MODE") == "baseline":
+                baseline_dict, baseline_layer_type = layer_db.get_baseline_dict()
+                compare_dict = perf_compare_dict(
+                    baseline_dict=baseline_dict,
+                    data_dict=sublayer_dict,
+                    error_list=error_list,
+                    baseline_layer_type=baseline_layer_type,
+                    latest_layer_type=self.layer_type,
+                )
+                xlsx_save(
+                    sublayer_dict=compare_dict,
+                    excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
+                )
+                # 先比较, 再更新baseline
                 layer_db.baseline_insert(data_dict=sublayer_dict, error_list=error_list)
             elif os.environ.get("PLT_BM_MODE") == "latest":
                 layer_db.latest_insert(data_dict=sublayer_dict, error_list=error_list)
