@@ -64,7 +64,7 @@ class Run(object):
     def _exit_code_txt(self, error_count, error_list):
         """"""
         core_dumps_list = self._core_dumps_case_count(report_path=self.report_dir)
-        if error_count != 0 or not core_dumps_list:
+        if error_count != 0 or core_dumps_list:
             self.logger.get_log().warning("测试失败, 下面进行bug分类统计: ")
             self.logger.get_log().warning(f"报错为core dumps的子图有: {core_dumps_list}")
             self.logger.get_log().info(f"测试子图总数为: {len(self.py_list)}")
