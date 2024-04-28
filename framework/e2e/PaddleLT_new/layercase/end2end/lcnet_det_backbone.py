@@ -143,9 +143,9 @@ class SEModule(nn.Layer):
         return x
 
 
-class LCNet(nn.Layer):
+class LayerCase(nn.Layer):
     def __init__(self, scale=1.0, feature_maps=[3, 4, 5], act='hard_swish'):
-        super(LCNet, self).__init__()
+        super(LayerCase, self).__init__()
         self.scale = scale
         self.feature_maps = feature_maps
 

@@ -6,6 +6,7 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle.nn import AdaptiveAvgPool2D, Linear
 from paddle.nn.initializer import Uniform
+from paddle.regularizer import L2Decay
 
 from numbers import Integral
 
