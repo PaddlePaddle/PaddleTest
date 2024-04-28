@@ -1,3 +1,4 @@
+import numpy as np
 import paddle.nn as nn
 
 from layercase.end2end.resnet_det_backbone import LayerCase as ResNet

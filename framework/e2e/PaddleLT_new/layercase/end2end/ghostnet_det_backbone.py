@@ -1,3 +1,4 @@
+import numpy as np
 import math
 import paddle
 from paddle import ParamAttr

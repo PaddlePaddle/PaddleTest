@@ -1,3 +1,4 @@
+import numpy as np
 import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle import ParamAttr

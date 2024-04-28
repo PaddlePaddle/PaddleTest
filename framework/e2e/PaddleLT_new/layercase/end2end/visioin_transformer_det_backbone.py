@@ -1,9 +1,10 @@
+import numpy as np
 import math
 
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
-import numpy as np
+
 from paddle.nn.initializer import Constant
 
 from paddle.nn.initializer import TruncatedNormal, Constant, Assign

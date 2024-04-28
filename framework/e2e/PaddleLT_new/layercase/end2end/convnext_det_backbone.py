@@ -1,10 +1,9 @@
+import numpy as np
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle import ParamAttr
 from paddle.nn.initializer import Constant
-
-import numpy as np
 
 from paddle.nn.initializer import TruncatedNormal, Constant, Assign
 
