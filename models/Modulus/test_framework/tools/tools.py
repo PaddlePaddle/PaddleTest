@@ -23,7 +23,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
     model_location = model_json[model_name]
     model_file = model_location.split("/")[-1]
     model_path = model_location.rsplit("/", 1)[0]
-    os.system("export CUDA_VISIBLE_DEVICES=3")
+    os.system("export CUDA_VISIBLE_DEVICES=7")
     if extra_parameters == 'training.max_steps=100':
         os.environ['debug'] = '1'
     if run_mode == 'dynamic':
@@ -32,7 +32,9 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
         subprocess.run(["git", "stash"])    
-        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])    
+        subprocess.run(["git", "checkout", "modified_paddle_dy2st"]) 
+        print("\n modified_paddle_dy2st commit:")
+        subprocess.run(["git", "rev-parse", "HEAD"])   
         os.chdir(current_dir)
 
         os.environ['loss_monitor'] = '1'
@@ -47,7 +49,9 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
         subprocess.run(["git", "stash"])
-        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])    
+        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
+        print("\n modified_paddle_dy2st commit:")
+        subprocess.run(["git", "rev-parse", "HEAD"])
         os.chdir(current_dir)
 
         os.environ['loss_monitor'] = '1'
@@ -67,7 +71,9 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
         subprocess.run(["git", "stash"])
-        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])    
+        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
+        print("\n modified_paddle_dy2st commit:")
+        subprocess.run(["git", "rev-parse", "HEAD"]) 
         os.chdir(current_dir)
 
         os.environ['loss_monitor'] = '1'
@@ -87,7 +93,9 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
         subprocess.run(["git", "stash"])
-        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])    
+        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
+        print("\n modified_paddle_dy2st commit:")
+        subprocess.run(["git", "rev-parse", "HEAD"])
         os.chdir(current_dir)
 
         os.environ['loss_monitor'] = '1'
@@ -110,8 +118,13 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         subprocess.run(["git", "stash"])
         # 执行 git checkout modified_torch 命令
         subprocess.run(["git", "checkout", "modified_torch"])
+        os.system("rm -rf ./outputs")
+        print("\n modified_torch commit:")
+        subprocess.run(["git", "rev-parse", "HEAD"])
+        print("\n paddlepaddle commit:")
+        os.system('python -c "import paddle; paddle.version.show()"')
         os.chdir(current_dir)
-        os.environ['save_init_weight_data'] ='1'
+        os.environ['save_init_weight_data'] ='True'
     else:
         raise ValueError("模型运行方式错误：只能选择 动态图、动转静、动转静+prim、动转静+prim+cinn")
     # 创建日志目录
