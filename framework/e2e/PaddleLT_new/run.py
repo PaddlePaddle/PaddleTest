@@ -162,12 +162,10 @@ class Run(object):
             alarm = Alarm(storage="apibm_config.yml")
             alarm.email_send(
                 alarm.receiver,
-                "Paddle CINN子图性能数据",
-                "表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{} \n \
-                plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{} \n \
-                pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(
-                    bos_path, excel_file, bos_path, "plot.tar", bos_path, "pickle.tar"
-                ),
+                f"Paddle {self.layer_type}子图性能数据",
+                "表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file} \n \
+                plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar \n \
+                pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
 
     def _single_pytest_run(self, py_file):
@@ -300,6 +298,7 @@ class Run(object):
 
         self._db_interact(sublayer_dict=sublayer_dict, error_list=error_list)
         self._bos_upload()
+        self._pts_callback(error_count)
 
     def _core_dumps_case_count(self, report_path):
         """
@@ -328,6 +327,27 @@ class Run(object):
                 core_dumps_list.append(case)
 
         return core_dumps_list
+
+    def _pts_callback(self, error_count):
+        """
+        用于性能任务回调pts. 精度任务通过start.sh最后的命令回调
+        """
+        pts_id = os.environ.get("pts_id")
+        bos_path = "PaddleLT/PaddleLTBenchmark/{}/build_{}".format(
+            os.environ.get("PLT_BM_DB"), self.AGILE_PIPELINE_BUILD_ID
+        )
+        excel_file = os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx"
+        report_url = f"https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file}"
+
+        success_count = len(self.py_list) - error_count
+        if error_count > 0:
+            status = "失败"
+            result = f"success:{success_count} fail:{error_count}"
+        else:
+            status = "成功"
+            result = f"success:{success_count} fail:{error_count}"
+
+        os.system(f"bash ./callback.sh '{pts_id}' '{status}' '{result}' '{report_url}'")
 
 
 if __name__ == "__main__":
