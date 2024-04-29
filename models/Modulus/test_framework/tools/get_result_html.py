@@ -19,9 +19,9 @@ def get_html(json_data,html_data):
                 atol = data[model_name][sub_key][sub_sub_key]['atol']
                 rtol = data[model_name][sub_key][sub_sub_key]['rtol']
                 if data[model_name][sub_key][sub_sub_key]['status'] == 'Failed':
-                    html_content += '<td style="background-color:red;">' + 'atol: ' + str(atol) + ' \n ' + 'rotl:' + str(rtol) + '</td>'
+                    html_content += '<td style="background-color:red;">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
                 elif data[model_name][sub_key][sub_sub_key]['status'] == 'Success':
-                    html_content += '<td style="background-color:green;">' + 'atol: ' + str(atol) + ' \n ' + 'rotl:' + str(rtol) + '</td>'
+                    html_content += '<td style="background-color:green;">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
         html_content += '</tr>\n'
 
     html_content += '</table>'
