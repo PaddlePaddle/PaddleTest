@@ -23,7 +23,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
     model_location = model_json[model_name]
     model_file = model_location.split("/")[-1]
     model_path = model_location.rsplit("/", 1)[0]
-    os.system("export CUDA_VISIBLE_DEVICES=7")
+    os.system("export CUDA_VISIBLE_DEVICES=0")
     if extra_parameters == 'training.max_steps=100':
         os.environ['debug'] = '1'
     if run_mode == 'dynamic':
