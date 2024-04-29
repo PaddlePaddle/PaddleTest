@@ -12,50 +12,43 @@ import paddle
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
         super().__init__()
-        self.variance_epsilon = 1e-6
 
-    def forward(self, x, weight, bias):
-        out = paddle.nn.functional.layer_norm(x, x.shape[-1], weight, bias, self.variance_epsilon)
-        return out
+    def forward(self, x, axis=-1):
+        output = paddle.nn.functional.softmax(x, axis=axis)
+        return output
 
 
 def create_tensor_inputs():
-    shape = [1, 13, 4096]
+    shape = [128, 128, 768]
     x = paddle.uniform(shape, dtype="float32", min=-0.5, max=0.5)
     x.stop_gradient = False
-    weight = paddle.ones(shape=[shape[-1]], dtype="float32")
-    weight.stop_gradient = False
-    bias = paddle.ones(shape=[shape[-1]], dtype="float32")
-    bias.stop_gradient = False
-    inputs = (x, weight, bias)
+    inputs = x
     return inputs
 
 
 # def create_numpy_inputs():
-#     shape = [1, 13, 4096]
 #     x = np.random.uniform(low=-0.5, high=0.5, size=(1, 13, 4096))
-#     weight = np.ones((4096), dtype="float32")
-#     bias = np.ones((4096), dtype="float32")
-#     inputs = (x, weight, bias)
+#     inputs = x
 #     return inputs
 
 
-# class PaddleLayernormSubGraph(paddle.nn.Layer):
+# class PaddleSoftmaxSubGraphNet(paddle.nn.Layer):
 #     def __init__(self):
 #         super().__init__()
-#         self.variance_epsilon = 1e-6
-#     def forward(self, x, weight, bias):
-#         out = paddle.nn.functional.layer_norm(x, x.shape[-1],  weight, bias, self.variance_epsilon)
+#         self.fn = paddle.nn.functional.softmax
+
+#     def forward(self, x, axis=-1):
+#         out = self.fn(x, axis=axis)
 #         return out
 
 
-# class TestRMSNormSubGraph(unittest.TestCase):
+# class TestSoftmaxSubGraph(unittest.TestCase):
 #     def setUp(self):
 #         paddle.seed(2022)
 #         self.prepare_data()
 
 #     def prepare_data(self):
-#         self.x, self.weight, self.bias = create_tensor_inputs()
+#         self.x = create_tensor_inputs()
     
 #     def apply_to_static(self, net, use_cinn, input_spec=None):
 #         build_strategy = paddle.static.BuildStrategy()
@@ -71,11 +64,11 @@ def create_tensor_inputs():
 #         if use_cinn:
 #             net = LayerCase()
 #         else:
-#             net = PaddleLayernormSubGraph()
+#             net = PaddleSoftmaxSubGraphNet()
 #         net.eval()
 #         net = self.apply_to_static(net, use_cinn)
 #         for i in range(10000):
-#             out = net(self.x, self.weight, self.bias)
+#             out = net(self.x)
 #         return out
 
 #     def test_train(self):
@@ -87,4 +80,4 @@ def create_tensor_inputs():
 
 
 # if __name__ == '__main__':
-# unittest.main()
+#     unittest.main()

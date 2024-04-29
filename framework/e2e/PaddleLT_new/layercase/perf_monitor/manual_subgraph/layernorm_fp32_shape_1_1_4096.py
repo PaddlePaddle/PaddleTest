@@ -20,7 +20,7 @@ class LayerCase(paddle.nn.Layer):
 
 
 def create_tensor_inputs():
-    shape = [1, 13, 4096]
+    shape = [1, 1, 4096]
     x = paddle.uniform(shape, dtype="float32", min=-0.5, max=0.5)
     x.stop_gradient = False
     weight = paddle.ones(shape=[shape[-1]], dtype="float32")
@@ -58,6 +58,8 @@ def create_tensor_inputs():
 #         self.x, self.weight, self.bias = create_tensor_inputs()
     
 #     def apply_to_static(self, net, use_cinn, input_spec=None):
+#         print("DEBUG use_cinn: ", use_cinn)
+#         print("DEBUG net: ", net)
 #         build_strategy = paddle.static.BuildStrategy()
 #         build_strategy.build_cinn_pass = use_cinn
 #         return paddle.jit.to_static(
@@ -87,4 +89,4 @@ def create_tensor_inputs():
 
 
 # if __name__ == '__main__':
-# unittest.main()
+#     unittest.main()

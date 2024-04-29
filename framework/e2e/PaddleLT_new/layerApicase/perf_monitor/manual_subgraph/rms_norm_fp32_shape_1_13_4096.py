@@ -66,7 +66,7 @@ def create_tensor_inputs():
 #     def prepare_data(self):
 #         self.x, self.weight = create_tensor_inputs()
     
-#     def apply_to_static(net, use_cinn, input_spec=None):
+#     def apply_to_static(self, net, use_cinn, input_spec=None):
 #         build_strategy = paddle.static.BuildStrategy()
 #         build_strategy.build_cinn_pass = use_cinn
 #         return paddle.jit.to_static(
@@ -82,7 +82,7 @@ def create_tensor_inputs():
 #         else:
 #             net = PaddleRMSNormSubGraph()
 #         net.eval()
-#         net = apply_to_static(net, use_cinn)
+#         net = self.apply_to_static(net, use_cinn)
 #         for i in range(10000):
 #             out = net(self.x, self.weight)
 #         return out
@@ -97,4 +97,4 @@ def create_tensor_inputs():
 
 
 # if __name__ == '__main__':
-# unittest.main()
+    # unittest.main()

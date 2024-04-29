@@ -30,11 +30,11 @@ class LayerCase(paddle.nn.Layer):
 
 
 def create_tensor_inputs():
-    q = paddle.randn([13, 2048, 32, 128], dtype="float32")
-    k = paddle.randn([13, 2048, 32, 128], dtype="float32")
-    cos = paddle.randn([1, 2048, 1, 128], dtype="float32")
-    sin = paddle.randn([1, 2048, 1, 128], dtype="float32")
-    position_ids = paddle.randint(high=2048, shape=[13, 2048], dtype="int64")
+    q = paddle.randn([1, 2048, 8, 96], dtype="float32")
+    k = paddle.randn([1, 2048, 8, 96], dtype="float32")
+    cos = paddle.randn([1, 2048, 1, 96], dtype="float32")
+    sin = paddle.randn([1, 2048, 1, 96], dtype="float32")
+    position_ids = paddle.randint(high = 2048, shape=[1, 2048], dtype="int64")
 
     inputs = (q, k, cos, sin, position_ids)
     return inputs
@@ -73,7 +73,7 @@ def create_tensor_inputs():
 #     def prepare_data(self):
 #         self.q, self.k, self.cos, self.sin, self.position_ids = create_tensor_inputs()
     
-#     def apply_to_static(net, use_cinn, input_spec=None):
+#     def apply_to_static(self, net, use_cinn, input_spec=None):
 #         build_strategy = paddle.static.BuildStrategy()
 #         build_strategy.build_cinn_pass = use_cinn
 #         return paddle.jit.to_static(
@@ -89,7 +89,7 @@ def create_tensor_inputs():
 #         else:
 #             net = PaddleRopeSubGraph()
 #         net.eval()
-#         net = apply_to_static(net, use_cinn)
+#         net = self.apply_to_static(net, use_cinn)
 #         for i in range(10000):
 #             out = net(self.q, self.k, self.cos, self.sin, self.position_ids)
 #         return out
@@ -105,4 +105,4 @@ def create_tensor_inputs():
 
 
 # if __name__ == '__main__':
-# unittest.main()
+#     unittest.main()
