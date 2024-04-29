@@ -20,7 +20,7 @@ def email_send(sender, receivers, subject, content):
         return e
 if __name__ == '__main__':
     sender = 'suijiaxin@baidu.com'
-    receivers = ['suijiaxin@baidu.com']
+    receivers = ['suijiaxin@baidu.com', 'hesensen@baidu.com']
     subject = 'Modulus Test'
     with open('./html_result/index.html', 'r', encoding='utf-8') as f:
         content = f.read()
