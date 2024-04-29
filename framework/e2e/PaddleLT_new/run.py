@@ -347,7 +347,7 @@ class Run(object):
             status = "成功"
             result = f"success:{success_count} fail:{error_count}"
 
-        os.system(f"bash ./callback.sh {pts_id} {status} {result} {report_url}")
+        os.system(f"bash ./callback.sh '{pts_id}' '{status}' '{result}' '{report_url}'")
 
 
 if __name__ == "__main__":
