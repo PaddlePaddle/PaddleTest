@@ -174,5 +174,5 @@ def test_dy2st_prim(model_name):
 if __name__ == "__main__":
     current_date = datetime.now()
     code = pytest.main(["--json=test.json", f"--html=report_{current_date}.html", sys.argv[0]])
-    get_html("./test_data.json","./html_result.html")
+    get_html("./test_data.json","./index.html")
     sys.exit(code)

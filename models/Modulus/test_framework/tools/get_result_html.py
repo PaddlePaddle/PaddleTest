@@ -33,5 +33,5 @@ def get_html(json_data,html_data):
 
 if __name__ == '__main__':
     json_data = './test_data.json'
-    html_data = './html_result.html'
+    html_data = './index.html'
     get_html(json_data, html_data)
