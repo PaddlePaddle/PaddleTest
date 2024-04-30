@@ -127,12 +127,9 @@ class LayerBenchmarkDB(object):
         if bool(error_list):
             db.update_job(id=latest_id, status="error", update_time=self.now_time)
             self.logger.get_log().warn("error cases: {}".format(error_list))
-            # print("error cases: {}".format(error_list))
+            # raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
         else:
             db.update_job(id=latest_id, status="done", update_time=self.now_time)
-
-        if bool(error_list):
-            raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
 
     def get_baseline_dict(self):
         """
@@ -186,59 +183,6 @@ class LayerBenchmarkDB(object):
         if bool(error_list):
             db.update_job(id=basleine_id, status="error", update_time=self.now_time)
             self.logger.get_log().warn("error cases: {}".format(error_list))
-            # print("error cases: {}".format(error_list))
-            raise Exception("something wrong with layer benchmark job id: {} !!".format(basleine_id))
+            # raise Exception("something wrong with layer benchmark job id: {} !!".format(basleine_id))
         else:
             db.update_job(id=basleine_id, status="done", update_time=self.now_time)
-
-    # def compare_with_baseline(self, data_dict, error_list):
-    #     """
-    #     与基线对比
-    #     """
-    #     db = DB(storage=self.storage)
-    #     # 获取baseline用于对比
-    #     baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
-    #     baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
-
-    #     baseline_dict = {}
-    #     for i in baseline_list:
-    #         baseline_dict[i["case_name"]] = i
-
-    #     # 性能对比
-    #     # compare_dict = {}
-    #     # for title, perf_dict in data_dict.items():
-    #     #     if title not in error_list:
-    #     #         compare_dict[title] = {}
-    #     #         for perf_engine, t in perf_dict.items():
-    #     #             compare_dict[title][perf_engine + "_latest"] = t
-    #     #             compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[
-    #     #                 perf_engine
-    #     #             ]
-    #     #             compare_dict[title][perf_engine + "_compare"] = perf_compare(
-    #     #                 baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
-    #     #             )
-    #     compare_dict = {}
-    #     for title, perf_dict in data_dict.items():
-    #         if title not in error_list:
-    #             compare_dict[title] = {}
-    #             # path = "layercase/sublayer/aspdiaopi"
-    #             # new_content = "newdir"
-    #             # # 使用 split() 方法将路径分割成两部分，并取第一个部分
-    #             head, tail = title.split('^', 1)
-    #             # 使用 join() 方法将新的内容和原路径的第二部分拼接起来
-    #             baseline_title = '^'.join(["layercase", tail])
-    #             for perf_engine, t in perf_dict.items():
-    #                 compare_dict[title][perf_engine + "_latest"] = t
-    #                 compare_dict[title][perf_engine + "_baseline"] =
-    #                   json.loads(baseline_dict[baseline_title]["result"])[
-    #                     perf_engine
-    #                 ]
-    #                 compare_dict[title][perf_engine + "_compare"] = perf_compare(
-    #                     baseline=json.loads(baseline_dict[baseline_title]["result"])[perf_engine], latest=t
-    #                 )
-
-    #     # 生成表格
-    #     xlsx_save(
-    #         sublayer_dict=compare_dict,
-    #         excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
-    #     )

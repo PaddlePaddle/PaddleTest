@@ -33,8 +33,6 @@ class Run(object):
         init
         """
         # 获取所有layer.yml文件路径
-        # self.layer_dir = os.path.join("layercase", os.environ.get("CASE_DIR"))
-        # self.layer_dir = [os.path.join("layercase", item) for item in os.environ.get("CASE_DIR").split(",")]
         self.layer_type = os.environ.get("CASE_TYPE")
         self.layer_dir = [os.path.join(self.layer_type, item) for item in os.environ.get("CASE_DIR").split(",")]
 
@@ -118,7 +116,10 @@ class Run(object):
                     excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
                 )
             else:
-                raise Exception("unknown benchmark mode, PaddleLT benchmark only support baseline mode or latest mode")
+                raise Exception(
+                    "unknown benchmark mode, PaddleLT benchmark only support "
+                    "baseline mode, latest_as_baseline mode or latest mode"
+                )
         elif os.environ.get("PLT_BM_DB") == "select":  # 不存数据, 仅对比并生成表格
             layer_db = LayerBenchmarkDB(storage="apibm_config.yml")
             baseline_dict, baseline_layer_type = layer_db.get_baseline_dict()
@@ -204,13 +205,6 @@ class Run(object):
         error_list = []
         error_count = 0
         for py_file in self.py_list:
-            # title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
-            # exit_code = os.system(
-            #     "cp -r PaddleLT.py {}.py && "
-            #     "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
-            #         title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
-            #     )
-            # )
             _py_file, _exit_code = self._single_pytest_run(py_file=py_file)
             if _exit_code is not None:
                 error_list.append(_py_file)
