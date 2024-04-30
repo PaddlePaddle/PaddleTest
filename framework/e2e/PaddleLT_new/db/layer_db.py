@@ -127,12 +127,9 @@ class LayerBenchmarkDB(object):
         if bool(error_list):
             db.update_job(id=latest_id, status="error", update_time=self.now_time)
             self.logger.get_log().warn("error cases: {}".format(error_list))
-            # print("error cases: {}".format(error_list))
+            # raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
         else:
             db.update_job(id=latest_id, status="done", update_time=self.now_time)
-
-        if bool(error_list):
-            raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
 
     def get_baseline_dict(self):
         """

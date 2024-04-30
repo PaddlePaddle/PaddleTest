@@ -12,7 +12,7 @@ export FRAMEWORK="${FRAMEWORK:-paddle}"  # 框架种类
 export MULTI_WORKER="${MULTI_WORKER:-0}"  # 并行数
 
 #性能测试专属环境变量
-export PLT_BM_MODE="${PLT_BM_MODE:-latest}"  #基线任务为baseline, 测试任务为latest
+export PLT_BM_MODE="${PLT_BM_MODE:-latest}"  #基线任务为baseline, 测试任务为latest, 测试并设为新基线任务为latest_as_baseline
 export PLT_BM_DB="${PLT_BM_DB:-select}"  # insert: 存入数据, 作为基线或对比; select: 不存数据, 仅对比并生成表格; non-db: 不加载数据库，仅生成表格
 export PLT_BM_EMAIL="${PLT_BM_EMAIL:-False}"  # True: 发送邮件  False: 不发送邮件
 export PLT_BM_REPEAT="${PLT_BM_REPEAT:-1000}"  # 性能测试重复轮次
