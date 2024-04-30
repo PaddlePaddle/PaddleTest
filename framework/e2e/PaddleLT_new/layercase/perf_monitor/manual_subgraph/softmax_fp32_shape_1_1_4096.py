@@ -22,7 +22,7 @@ def create_tensor_inputs():
     shape = [1, 1, 4096]
     x = paddle.uniform(shape, dtype="float32", min=-0.5, max=0.5)
     x.stop_gradient = False
-    inputs = x
+    inputs = (x, )
     return inputs
 
 
