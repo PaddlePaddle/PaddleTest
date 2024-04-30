@@ -228,3 +228,9 @@ yaml/dy^dy2stcinn_eval_benchmark.yml:
   - layerApicase/math_sublayer/unsqueeze__base_func.py
   - layerApicase/nn_sublayer/conv3d_transpose_5_func.py
   - layerApicase/nn_sublayer/relu__func.py
+
+yaml/dy2stcinn_eval_benchmark.yml:
+  - layerApicase/perf_monitor/manual_subgraph/softmax_fp32_shape_128_128_768.py  # 显存溢出
+  - layerApicase/perf_monitor/manual_subgraph/softmax_fp32_shape_128_12_128_128.py  # 显存溢出
+  - layercase/perf_monitor/manual_subgraph/softmax_fp32_shape_128_128_768.py  # 显存溢出
+  - layercase/perf_monitor/manual_subgraph/softmax_fp32_shape_128_12_128_128.py  # 显存溢出
