@@ -8,7 +8,7 @@ cases="test_dist_auto_api.py \
        test_dist_collective_communicator_api.py \
        test_dist_collective_stream_communicator_api.py \
        test_dist_countfilterentry.py \
-       test_dist_rpc \
+       test_dist_rpc.py \
        test_dist_data_load.py  \
        test_dist_distattr.py \
        test_dist_dtensor_from_fn.py \
