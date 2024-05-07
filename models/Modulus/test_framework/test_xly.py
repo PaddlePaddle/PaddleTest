@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from tools.tools import run_model, plot_kpi_curves, log_parse
 from tools.get_result_html import get_html
+from tools.send_email import email_send
+
 test_data = {}
 model_list = ["examples-annular_ring-annular_ring-annular_ring"]
 @pytest.mark.parametrize("model_name", model_list)
@@ -177,4 +179,10 @@ if __name__ == "__main__":
     if not os.path.exists("html_result"):
         os.makedirs("html_result")  
     get_html("./test_data.json","./html_result/index.html")
+    sender = 'suijiaxin@baidu.com'
+    receivers = ['suijiaxin@baidu.com']
+    subject = 'Modulus Test'
+    with open('./html_result/index.html', 'r', encoding='utf-8') as f:
+        content = f.read()
+    email_send(sender, receivers, subject, content)
     sys.exit(code)
