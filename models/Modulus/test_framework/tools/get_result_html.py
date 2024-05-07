@@ -7,8 +7,8 @@ def get_html(json_data,html_data):
     with open(json_data, 'r', encoding='utf-8') as f:
         data = json.load(f)
     html_content = '<!DOCTYPE html>\n<html lang="zh">\n<head>\n<meta charset="UTF-8">\n<title>测试结果</title>\n</head>\n<body>\n'
-    html_content += '<table border="1">\n<tr><th></th><th>动态图</th><th></th><th>动转静</th><th></th><th>动转静+组合算子</th><th></th></tr>\n'
-    html_content += '<tr><td> </td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td></tr>\n'
+    html_content += '<table border="1">\n<tr><th></th><th>动态图</th><th></th><th>动转静</th><th></th><th>动转静+组合算子</th><th></th><th>动转静+组合算子+编译器</th><th></th></tr>\n'
+    html_content += '<tr><td> </td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td></tr>\n'
     for model_name in data.keys():
         html_content += '<tr><td>' + model_name + '</td>'
         for sub_key in data[model_name].keys():
