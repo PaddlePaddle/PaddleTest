@@ -232,6 +232,6 @@ if __name__ == "__main__":
     current_date = datetime.now()
     code = pytest.main(["--json=test.json", f"--html=report.html", sys.argv[0]])
     if not os.path.exists("html_result"):
-        os.makedirs("html_result")  
+        os.makedirs("html_result") 
     get_html("./test_data.json","./html_result/index.html")
     sys.exit(code)
