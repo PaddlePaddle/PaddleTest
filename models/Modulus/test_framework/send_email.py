@@ -25,3 +25,4 @@ if __name__ == '__main__':
     with open('./html_result/index.html', 'r', encoding='utf-8') as f:
         content = f.read()
     email_send(sender, receivers, subject, content)
+    print('send success')
