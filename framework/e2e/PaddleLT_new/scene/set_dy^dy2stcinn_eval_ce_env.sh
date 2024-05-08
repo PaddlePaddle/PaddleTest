@@ -11,6 +11,8 @@ export CUDA_VISIBLE_DEVICES="${PLT_DEVICE_ID:-6}"
 export FRAMEWORK="${FRAMEWORK:-paddle}"
 export MULTI_WORKER="${MULTI_WORKER:-0}"
 
+export PLT_SPEC_USE_MULTI="${PLT_SPEC_USE_MULTI:-False}"
+
 echo "wheel_url is: ${wheel_url}"
 echo "python_ver is: ${python_ver}"
 echo "CASE_TYPE is: ${CASE_TYPE}"
@@ -23,3 +25,5 @@ echo "PLT_SET_DEVICE is: ${PLT_SET_DEVICE}"
 echo "PLT_DEVICE_ID is: ${PLT_DEVICE_ID}"
 echo "FRAMEWORK is: ${FRAMEWORK}"
 echo "MULTI_WORKER is: ${MULTI_WORKER}"
+
+echo "PLT_SPEC_USE_MULTI is: ${PLT_SPEC_USE_MULTI}"
