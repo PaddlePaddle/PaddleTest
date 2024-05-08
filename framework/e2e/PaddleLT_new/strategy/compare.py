@@ -77,17 +77,31 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
             logger.warn(traceback.format_exc())
 
     elif isinstance(expect, dict):
-        for k, v in expect.items():
-            base_compare(
-                result=result[k],
-                expect=expect[k],
-                res_name=res_name + "[{}]".format(str(k)),
-                exp_name=exp_name + "[{}]".format(str(k)),
-                logger=logger,
-                delta=delta,
-                rtol=rtol,
-                exc_dict=exc_dict,
-            )
+        if "multi_result" in result:
+            # 专用于多个结果比较, 例如多种inputspec. 只有result会有多个结果, 想法expect固定为一个
+            for i, logit_dict in enumerate(result["multi_result"]):
+                base_compare(
+                    result=logit_dict,
+                    expect=expect,
+                    res_name=res_name + f"multi_result[{i}]",
+                    exp_name=exp_name,
+                    logger=logger,
+                    delta=delta,
+                    rtol=rtol,
+                    exc_dict=exc_dict,
+                )
+        else:
+            for k, v in expect.items():
+                base_compare(
+                    result=result[k],
+                    expect=expect[k],
+                    res_name=res_name + "[{}]".format(str(k)),
+                    exp_name=exp_name + "[{}]".format(str(k)),
+                    logger=logger,
+                    delta=delta,
+                    rtol=rtol,
+                    exc_dict=exc_dict,
+                )
     elif isinstance(expect, list) or isinstance(expect, tuple):
         for i, element in enumerate(expect):
             if isinstance(result, (np.generic, np.ndarray)) or isinstance(result, eval(f"{framework}.Tensor")):
