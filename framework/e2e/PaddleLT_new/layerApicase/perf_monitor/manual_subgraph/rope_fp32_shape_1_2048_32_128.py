@@ -14,27 +14,16 @@ class LayerCase(paddle.nn.Layer):
         super().__init__()
 
     def forward(self, q, k, cos, sin, position_ids):
-        cos = cos.squeeze(axis=[0, 2])  # [seq_len, dim]
-        sin = sin.squeeze(axis=[0, 2])  # [seq_len, dim]
-
-        cos = cos[position_ids].unsqueeze(2)  # [bs, seq_len, 1, dim]
-        sin = sin[position_ids].unsqueeze(2)  # [bs, seq_len, 1, dim]
-        q_embed = (q * cos) + (self.rotate_half(q) * sin)
-        k_embed = (k * cos) + (self.rotate_half(k) * sin)
+        q_embed, k_embed ,_ = paddle.incubate.nn.functional.fused_rotary_position_embedding(q = q,k = k, sin = sin, cos=cos, position_ids = position_ids,use_neox_rotary_style=False)
         return q_embed, k_embed
-
-    def rotate_half(self, x):
-        x1 = x[..., : x.shape[-1] // 2]
-        x2 = x[..., x.shape[-1] // 2 :]
-        return paddle.concat([-x2, x1], axis=-1)  # shape is the same as x
 
 
 def create_tensor_inputs():
-    q = paddle.randn([13, 2048, 32, 128], dtype="float32")
-    k = paddle.randn([13, 2048, 32, 128], dtype="float32")
+    q = paddle.randn([1, 2048, 32, 128], dtype="float32")
+    k = paddle.randn([1, 2048, 32, 128], dtype="float32")
     cos = paddle.randn([1, 2048, 1, 128], dtype="float32")
     sin = paddle.randn([1, 2048, 1, 128], dtype="float32")
-    position_ids = paddle.randint(high=2048, shape=[13, 2048], dtype="int64")
+    position_ids = paddle.randint(high = 2048, shape=[1, 2048], dtype="int64")
 
     inputs = (q, k, cos, sin, position_ids)
     return inputs
@@ -73,7 +62,7 @@ def create_tensor_inputs():
 #     def prepare_data(self):
 #         self.q, self.k, self.cos, self.sin, self.position_ids = create_tensor_inputs()
     
-#     def apply_to_static(net, use_cinn, input_spec=None):
+#     def apply_to_static(self, net, use_cinn, input_spec=None):
 #         build_strategy = paddle.static.BuildStrategy()
 #         build_strategy.build_cinn_pass = use_cinn
 #         return paddle.jit.to_static(
@@ -89,8 +78,8 @@ def create_tensor_inputs():
 #         else:
 #             net = PaddleRopeSubGraph()
 #         net.eval()
-#         net = apply_to_static(net, use_cinn)
-#         for i in range(10000):
+#         net = self.apply_to_static(net, use_cinn)
+#         for i in range(1):
 #             out = net(self.q, self.k, self.cos, self.sin, self.position_ids)
 #         return out
 
@@ -105,4 +94,4 @@ def create_tensor_inputs():
 
 
 # if __name__ == '__main__':
-# unittest.main()
+#     unittest.main()

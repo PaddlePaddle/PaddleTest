@@ -13,21 +13,22 @@ class LayerCase(paddle.nn.Layer):
     def __init__(self):
         super().__init__()
         self.variance_epsilon = 1e-6
+        self.reduce_num = 4096
 
-    def forward(self, x, weight, bias):
-        out = paddle.nn.functional.layer_norm(x, x.shape[-1], weight, bias, self.variance_epsilon)
-        return out
+    def forward(self, hidden_states, weight):
+        variance = hidden_states.pow(2).sum(-1, keepdim=True) / self.reduce_num
+        hidden_states = paddle.rsqrt(variance + self.variance_epsilon) * hidden_states
+        return hidden_states * weight
 
 
 def create_tensor_inputs():
-    shape = [1, 13, 4096]
+    shape = [1, 1, 4096]
     x = paddle.uniform(shape, dtype="float32", min=-0.5, max=0.5)
     x.stop_gradient = False
     weight = paddle.ones(shape=[shape[-1]], dtype="float32")
     weight.stop_gradient = False
-    bias = paddle.ones(shape=[shape[-1]], dtype="float32")
-    bias.stop_gradient = False
-    inputs = (x, weight, bias)
+
+    inputs = (x, weight)
     return inputs
 
 
@@ -35,18 +36,23 @@ def create_tensor_inputs():
 #     shape = [1, 13, 4096]
 #     x = np.random.uniform(low=-0.5, high=0.5, size=(1, 13, 4096))
 #     weight = np.ones((4096), dtype="float32")
-#     bias = np.ones((4096), dtype="float32")
-#     inputs = (x, weight, bias)
+#     inputs = (x, weight)
 #     return inputs
 
 
-# class PaddleLayernormSubGraph(paddle.nn.Layer):
+# class PaddleRMSNormSubGraph(paddle.nn.Layer):
 #     def __init__(self):
 #         super().__init__()
 #         self.variance_epsilon = 1e-6
-#     def forward(self, x, weight, bias):
-#         out = paddle.nn.functional.layer_norm(x, x.shape[-1],  weight, bias, self.variance_epsilon)
-#         return out
+
+#     def forward(self, hidden_states, weight):
+#         return paddle.incubate.nn.functional.fused_rms_norm(
+#             x=hidden_states,
+#             norm_weight=weight,
+#             norm_bias=None,
+#             epsilon=self.variance_epsilon,
+#             begin_norm_axis=2,
+#         )
 
 
 # class TestRMSNormSubGraph(unittest.TestCase):
@@ -55,7 +61,7 @@ def create_tensor_inputs():
 #         self.prepare_data()
 
 #     def prepare_data(self):
-#         self.x, self.weight, self.bias = create_tensor_inputs()
+#         self.x, self.weight = create_tensor_inputs()
     
 #     def apply_to_static(self, net, use_cinn, input_spec=None):
 #         build_strategy = paddle.static.BuildStrategy()
@@ -71,15 +77,16 @@ def create_tensor_inputs():
 #         if use_cinn:
 #             net = LayerCase()
 #         else:
-#             net = PaddleLayernormSubGraph()
+#             net = PaddleRMSNormSubGraph()
 #         net.eval()
 #         net = self.apply_to_static(net, use_cinn)
 #         for i in range(10000):
-#             out = net(self.x, self.weight, self.bias)
+#             out = net(self.x, self.weight)
 #         return out
 
 #     def test_train(self):
 #         cinn_out = self.train(use_cinn=True)
+
 #         dy_out = self.train(use_cinn=False)
 #         np.testing.assert_allclose(
 #             cinn_out.numpy(), dy_out.numpy(), atol=1e-6, rtol=1e-6
@@ -87,4 +94,4 @@ def create_tensor_inputs():
 
 
 # if __name__ == '__main__':
-# unittest.main()
+#     unittest.main()
