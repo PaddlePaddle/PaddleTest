@@ -57,11 +57,15 @@ class BuildData(object):
 
         return data
 
-    # def get_single_inputspec(self):
-    #     """get single inputspec"""
-    #     spec_list = []
-    #     for k, v in self.data.items():
-    #         if v["type"] == "Tensor":
-    #             spec_tmp = paddle.static.InputSpec(shape=v["shape"], dtype=v["dtype"], name=k)
-    #             spec_list.append(spec_tmp)
-    #     return spec_list
+    def get_single_input_and_spec(self):
+        """get single inputspec"""
+        spec_list = []
+        data = self.get_single_data()
+        for v in data:
+            if isinstance(v, paddle.Tensor):
+                input_shape = tuple([-1] * len(v.shape))
+                spec_tmp = paddle.static.InputSpec(
+                    shape=input_shape, dtype=v.dtype, name=None, stop_gradient=v.stop_gradient
+                )
+                spec_list.append(spec_tmp)
+        return data, spec_list
