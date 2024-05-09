@@ -3,7 +3,7 @@ python -m pip install --upgrade pip
 python -m pip install --upgrade setuptools
 export http_proxy=${proxy};
 export https_proxy=${proxy};
-export no_proxy=bcebos.com;
+export no_proxy=${no_proxy};
 export PYTHONPATH=`pwd`:$PYTHONPATH;
 python -m pip install pyparsing==2.4.7 --ignore-installed --no-cache-dir
 python -m pip install Cython --ignore-installed;
