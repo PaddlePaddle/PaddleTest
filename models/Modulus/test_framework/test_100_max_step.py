@@ -20,6 +20,7 @@ with open('./model.json', 'r', encoding='utf-8') as f:
     for key in test_json.keys():
         model_list.append(key)
 @pytest.mark.parametrize("model_name", model_list)
+@pytest.mark.timeout(1800)
 def test_dynamic(model_name):
     # 初始化测试数据
     if model_name not in test_data:
@@ -79,6 +80,7 @@ def test_dynamic(model_name):
 
 
 @pytest.mark.parametrize("model_name", model_list)
+@pytest.mark.timeout(1800)
 def test_dy2st(model_name):
     if model_name not in test_data:
         test_data[model_name]={}
@@ -132,6 +134,7 @@ def test_dy2st(model_name):
     np.testing.assert_allclose(dy2st_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
+@pytest.mark.timeout(1800)
 def test_dy2st_prim(model_name):
     if model_name not in test_data:
         test_data[model_name]={}
@@ -184,6 +187,7 @@ def test_dy2st_prim(model_name):
     np.testing.assert_allclose(dy2st_prim_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
+@pytest.mark.timeout(1800)
 def test_dy2st_prim_cinn(model_name):
     if model_name not in test_data:
         test_data[model_name]={}
