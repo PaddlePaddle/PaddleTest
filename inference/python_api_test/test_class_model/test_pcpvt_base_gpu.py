@@ -100,7 +100,7 @@ def test_gpu_more_bz_new_executor():
             output_data_dict,
             delta=1e-5,
             use_new_executor=True,
-            use_pir=False,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory
@@ -109,7 +109,7 @@ def test_gpu_more_bz_new_executor():
 @pytest.mark.win
 @pytest.mark.server
 @pytest.mark.gpu
-def test_gpu_mixed_precision_bz1():
+def test_gpu_mixed_precision_bz1_new_executor():
     """
     compared gpu batch_size=1 pcpvt_base mixed_precision outputs with true val
     """
@@ -120,13 +120,6 @@ def test_gpu_mixed_precision_bz1():
     batch_size_pool = [1]
     for batch_size in batch_size_pool:
         test_suite = InferenceTest()
-        if not os.path.exists("./pcpvt_base/inference_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./pcpvt_base/inference.pdmodel",
-                src_params="./pcpvt_base/inference.pdiparams",
-                dst_model="./pcpvt_base/inference_mixed.pdmodel",
-                dst_params="./pcpvt_base/inference_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./pcpvt_base/inference.pdmodel",
             params_file="./pcpvt_base/inference.pdiparams",
@@ -140,13 +133,16 @@ def test_gpu_mixed_precision_bz1():
 
         test_suite2 = InferenceTest()
         test_suite2.load_config(
-            model_file="./pcpvt_base/inference_mixed.pdmodel",
-            params_file="./pcpvt_base/inference_mixed.pdiparams",
+            model_file="./pcpvt_base/inference.pdmodel",
+            params_file="./pcpvt_base/inference.pdiparams",
         )
-        test_suite2.gpu_more_bz_test_mix(
+        test_suite2.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             delta=5e-3,
+            precision="fp16",
+            use_new_executor=True,
+            use_pir=True,
         )
 
         del test_suite2  # destroy class to save memory

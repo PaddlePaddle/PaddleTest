@@ -44,6 +44,7 @@ fi
 echo "*******paddlemix appflow test_inpainting end***********"
 
 export RUN_SLOW_TEST=True
+rm -rf ${PPMIX_HOME}/models/GroundingDino/groundingdino-swint-ogc/
 echo "*******export RUN_SLOW_TEST=True paddlemix appflow test_cviw begin***********"
 (python test_cviw.py) 2>&1 | tee ${log_dir}/test_cviw_2.log
 tmp_exit_code=${PIPESTATUS[0]}

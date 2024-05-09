@@ -70,6 +70,9 @@ echo "*******t2i-adapter multi infer end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/sd15_openpose/*
+rm -rf ${work_path}/data/
+rm -rf ${work_path}/data_demo/
 
 echo exit_code:${exit_code}
 exit ${exit_code}

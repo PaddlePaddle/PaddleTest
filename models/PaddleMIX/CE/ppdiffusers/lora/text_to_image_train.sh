@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export http_proxy=${proxy}
-export https_proxy=${proxy}
-
 export MODEL_NAME="runwayml/stable-diffusion-v1-5"
 export DATASET_NAME="lambdalabs/pokemon-blip-captions"
 export OUTPUT_DIR="sd-pokemon-model-lora"

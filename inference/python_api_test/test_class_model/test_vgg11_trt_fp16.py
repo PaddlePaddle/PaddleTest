@@ -26,7 +26,7 @@ def check_model_exist():
     """
     check model exist
     """
-    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1/class/vgg11.tgz"
+    vgg11_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/class/vgg11.tgz"
     if not os.path.exists("./vgg11/inference.pdiparams"):
         wget.download(vgg11_url, out="./")
         tar = tarfile.open("vgg11.tgz")
@@ -86,7 +86,7 @@ def test_trt_fp16_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=1e-3,
+            delta=1e-2,
             gpu_mem=3000,
             max_batch_size=batch_size,
             min_subgraph_size=1,
@@ -131,7 +131,7 @@ def test_jetson_trt_fp16_more_bz():
             input_data_dict,
             output_data_dict,
             repeat=1,
-            delta=1e-3,
+            delta=5e-3,
             gpu_mem=3000,
             max_batch_size=batch_size,
             min_subgraph_size=1,

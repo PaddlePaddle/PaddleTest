@@ -49,6 +49,10 @@ class PaddleScience_Case_Start(object):
                 logger.info("set org FLAGS_use_cinn as {}".format(os.getenv("FLAGS_use_cinn")))
         elif "deepcfd" in self.case_name:
             os.environ["FLAGS_cudnn_deterministic"] = "True"
+        elif "amgnet" in self.case_name:
+            py_v = os.system("python3 --version")
+            print(py_v)
+            os.system("python3.10 -m pip install -U pgl")
         else:
             return 0
 

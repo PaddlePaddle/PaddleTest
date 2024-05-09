@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.0/detection/ppyolo.tgz"
+    ppyolo_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/detection/ppyolo.tgz"
     if not os.path.exists("./ppyolo/model.pdiparams"):
         wget.download(ppyolo_url, out="./")
         tar = tarfile.open("ppyolo.tgz")

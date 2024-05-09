@@ -18,8 +18,9 @@ cd ${work_path}
 exit_code=0
 
 # 单机训练
-export http_proxy=${proxy}
-export https_proxy=${proxy}
+export http_proxy=${mix_proxy}
+export https_proxy=${mix_proxy}
+export HF_ENDPOINT=https://hf-mirror.com
 echo "*******text_to_image singe_train begin***********"
 (bash single_train.sh) 2>&1 | tee ${log_dir}/text_to_image_singe_train.log
 tmp_exit_code=${PIPESTATUS[0]}
@@ -30,6 +31,7 @@ else
     echo "text_to_image singe_train run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******text_to_image singe_train end***********"
+unset HF_ENDPOINT
 unset http_proxy
 unset https_proxy
 
@@ -75,6 +77,7 @@ echo "*******text_to_image multi infer end***********"
 
 # # 查看结果
 # cat ${log_dir}/ce_res.log
+rm -rf ${work_path}/sd-pokemon-model/*
 
 echo exit_code:${exit_code}
 exit ${exit_code}

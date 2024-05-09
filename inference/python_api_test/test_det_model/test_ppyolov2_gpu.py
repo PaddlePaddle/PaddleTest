@@ -25,7 +25,7 @@ def check_model_exist():
     """
     check model exist
     """
-    ppyolov2_url = "https://paddle-qa.bj.bcebos.com/inference_model_clipped/2.1.0/detection/ppyolov2.tgz"
+    ppyolov2_url = "https://paddle-qa.bj.bcebos.com/inference_model/2.6/detection/ppyolov2.tgz"
     if not os.path.exists("./ppyolov2/model.pdiparams"):
         wget.download(ppyolov2_url, out="./")
         tar = tarfile.open("ppyolov2.tgz")
@@ -150,13 +150,6 @@ def test_gpu_mixed_precision_bz1():
     for batch_size in batch_size_pool:
 
         test_suite = InferenceTest()
-        if not os.path.exists("./ppyolov2/model_mixed.pdmodel"):
-            test_suite.convert_to_mixed_precision_model(
-                src_model="./ppyolov2/model.pdmodel",
-                src_params="./ppyolov2/model.pdiparams",
-                dst_model="./ppyolov2/model_mixed.pdmodel",
-                dst_params="./ppyolov2/model_mixed.pdiparams",
-            )
         test_suite.load_config(
             model_file="./ppyolov2/model.pdmodel",
             params_file="./ppyolov2/model.pdiparams",
@@ -194,14 +187,15 @@ def test_gpu_mixed_precision_bz1():
         # output_data_dict = {"save_infer_model/scale_0.tmp_1": scale_0, "save_infer_model/scale_1.tmp_1": scale_1}
         output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
         test_suite.load_config(
-            model_file="./ppyolov2/model_mixed.pdmodel",
-            params_file="./ppyolov2/model_mixed.pdiparams",
+            model_file="./ppyolov2/model.pdmodel",
+            params_file="./ppyolov2/model.pdiparams",
         )
         test_suite.gpu_more_bz_test(
             input_data_dict,
             output_data_dict,
             repeat=1,
             delta=1e-4,
+            precision="fp16",
         )
 
 
