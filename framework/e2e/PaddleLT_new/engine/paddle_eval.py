@@ -54,13 +54,13 @@ class LayerEval(object):
     def _net_input_and_spec(self):
         """get inputspec"""
         reset(self.seed)
-        data, input_spec = BuildLayer(layerfile=self.layerfile).get_single_input_and_spec()
+        data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_spec()
         return data, input_spec
 
     def _net_input_and_multi_spec(self):
         """get multi inputspec"""
         reset(self.seed)
-        data, multi_input_spec = BuildLayer(layerfile=self.layerfile).get_single_input_and_multi_spec()
+        data, multi_input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_multi_spec()
         return data, multi_input_spec
 
     def dy_eval(self):
