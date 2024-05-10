@@ -13,6 +13,7 @@ def get_html(json_data,html_data):
                     <ul>\
                         <li>本次例行模型运行pytest测试报告见：<a href="https://paddle-qa.bj.bcebos.com/Modulus/{AGILE_JOB_BUILD_ID}/report.tar.gz">下载链接</a></li>\
                         <li>本次例行模型的具体测试日志见：<a href="https://paddle-qa.bj.bcebos.com/Modulus/{AGILE_JOB_BUILD_ID}/logs.tar.gz">下载链接</a></li>\
+                        <li>本次例行模型的全部文件和产物见：<a href="https://paddle-qa.bj.bcebos.com/Modulus/{AGILE_JOB_BUILD_ID}/modulus-sym.tar.gz">下载链接</a></li>\
                     </ul>\
                     <h2>精度对齐数据列表</h2>\
                     <p>*精度对齐列表中红色表示未通过，其中N/A表示功能测试未通过，没有精度数据</p>\
