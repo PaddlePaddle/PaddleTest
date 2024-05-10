@@ -172,12 +172,14 @@ class Run(object):
     def _single_pytest_run(self, py_file):
         """run one test"""
         title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+        self.logger.get_log().info(f"开始测试子图 {title}, 准备执行pytest命令~~")
         exit_code = os.system(
             "cp -r PaddleLT.py {}.py && "
             "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
                 title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
             )
         )
+        self.logger.get_log().info(f"完成测试子图 {title}, 完成执行pytest命令~~")
         if exit_code != 0:
             return py_file, exit_code
         return None, None
