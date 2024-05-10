@@ -50,7 +50,7 @@ class LayerCase(paddle.nn.Layer):
 def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[1, 2, 3549], dtype=paddle.float32),
-        paddle.randint(low=0, high=10, shape=[1, 1], dtype=paddle.int32),
+        paddle.randint(low=0, high=10, shape=[1, 1], dtype=paddle.int64),
         paddle.randint(low=0, high=10, shape=[1, 2, 1], dtype=paddle.int32),
         paddle.rand(shape=[1, 3549], dtype=paddle.float32),
         paddle.rand(shape=[1, 2, 4], dtype=paddle.float32),
@@ -63,7 +63,7 @@ def create_tensor_inputs():
 def create_numpy_inputs():
     inputs = (
         np.random.random(size=[1, 2, 3549]).astype('float32'),
-        np.random.randint(low=0, high=10, size=[1, 1], dtype='int32'),
+        np.random.randint(low=0, high=10, size=[1, 1], dtype='int64'),
         np.random.randint(low=0, high=10, size=[1, 2, 1], dtype='int32'),
         np.random.random(size=[1, 3549]).astype('float32'),
         np.random.random(size=[1, 2, 4]).astype('float32'),
