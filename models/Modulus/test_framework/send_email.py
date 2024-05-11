@@ -20,8 +20,8 @@ def email_send(sender, receivers, subject, content):
         return e
 if __name__ == '__main__':
     sender = 'suijiaxin@baidu.com'
-    receivers = ['suijiaxin@baidu.com', 'hesensen@baidu.com']
-    subject = 'Modulus Test'
+    receivers = ['suijiaxin@baidu.com', 'hesensen@baidu.com', 'chenxiaoxu02@baidu.com', 'chenxi67@baidu.com', 'chenyaowen02@baidu.com', 'chenzhuo13@baidu.com', 'gaotiezhu@baidu.com', 'liuhongyu02@baidu.com', 'tianchao04@baidu.com', 'wanghao107@baidu.com', 'xiongkun03@baidu.com', 'xuxiaojian@baidu.com', 'zhangliujie@baidu.com', 'zhangyanbo02@baidu.com', 'huxiaoguang@baidu.com']
+    subject = 'Modulus  CE Test'
     with open('./html_result/index.html', 'r', encoding='utf-8') as f:
         content = f.read()
     email_send(sender, receivers, subject, content)
