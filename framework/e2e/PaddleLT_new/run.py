@@ -164,9 +164,9 @@ class Run(object):
             alarm.email_send(
                 alarm.receiver,
                 f"Paddle {self.layer_type}子图性能数据",
-                "表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file} \n \
-                plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar \n \
-                pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
+                f"表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file}\n"
+                f"plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar\n"
+                f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
 
     def _single_pytest_run(self, py_file):
