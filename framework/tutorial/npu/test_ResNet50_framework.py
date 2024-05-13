@@ -6,12 +6,10 @@ from paddle.vision.models import resnet50
 paddle.set_device("npu")
 
 # 2. 定义数据集、数据预处理方法与 DataLoader
-transform = transforms.Compose([
-    transforms.Resize(224),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-])
-train_set = paddle.vision.datasets.Cifar10(mode='train', transform=transform)
+transform = transforms.Compose(
+    [transforms.Resize(224), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+)
+train_set = paddle.vision.datasets.Cifar10(mode="train", transform=transform)
 train_loader = paddle.io.DataLoader(train_set, batch_size=256, num_workers=8)
 
 # 3. 定义网络结构
@@ -33,10 +31,10 @@ for epoch in range(10):
         loss.backward()
         # 8. 更新参数
         optimizer.step()
-        print('Epoch %d, Iter %d, Loss: %.5f' % (epoch + 1, batch_idx + 1, loss))
-print('Finished Training')
+        print("Epoch %d, Iter %d, Loss: %.5f" % (epoch + 1, batch_idx + 1, loss))
+print("Finished Training")
 
-test_dataset = paddle.vision.datasets.Cifar10(mode='test', transform=transform)
+test_dataset = paddle.vision.datasets.Cifar10(mode="test", transform=transform)
 
 # 测试5张图片效果
 for i in range(5):
