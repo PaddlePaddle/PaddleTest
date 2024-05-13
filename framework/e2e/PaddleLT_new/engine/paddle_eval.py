@@ -60,6 +60,12 @@ class LayerEval(object):
         data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_spec()
         return data, input_spec
 
+    def _net_input_and_static_spec(self):
+        """get static inputspec"""
+        reset(self.seed)
+        data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_static_spec()
+        return data, input_spec
+
     def _net_input_and_multi_spec(self):
         """get multi inputspec"""
         reset(self.seed)
@@ -106,7 +112,7 @@ class LayerEval(object):
 
         if self.use_multispec == "True":
             # 如果不使用动态InputSpec都会报错, 则直接抛出异常跳过后续测试
-            data, input_spec = self._net_input_and_spec()
+            data, input_spec = self._net_input_and_static_spec()
             Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
             cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
             # net.eval()
