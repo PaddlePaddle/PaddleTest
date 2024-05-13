@@ -105,6 +105,13 @@ class LayerEval(object):
         build_strategy.build_cinn_pass = True
 
         if self.use_multispec == "True":
+            # 如果不使用动态InputSpec都会报错, 则直接抛出异常跳过后续测试
+            data, input_spec = self._net_input_and_spec()
+            cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
+            # net.eval()
+            logit = cinn_net(*data)
+
+            # 开始测试动态InputSpec
             data, spec_gen = self._net_input_and_multi_spec()
             loops = 90
             i = 0
