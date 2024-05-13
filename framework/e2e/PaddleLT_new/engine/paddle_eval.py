@@ -6,11 +6,14 @@
 eval 方法
 """
 import os
+import traceback
 import numpy as np
 import paddle
 from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
+
+from tools.logger import Logger
 
 
 class LayerEval(object):
@@ -60,8 +63,14 @@ class LayerEval(object):
     def _net_input_and_multi_spec(self):
         """get multi inputspec"""
         reset(self.seed)
-        data, multi_input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_multi_spec()
-        return data, multi_input_spec
+        data, spec_gen = BuildData(layerfile=self.layerfile).get_single_input_and_multi_spec()
+        return data, spec_gen
+
+    # def _net_input_and_multi_spec_legacy(self):
+    #     """get multi inputspec"""
+    #     reset(self.seed)
+    #     data, multi_input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_multi_spec_legacy()
+    #     return data, multi_input_spec
 
     def dy_eval(self):
         """dygraph eval"""
@@ -96,18 +105,52 @@ class LayerEval(object):
         build_strategy.build_cinn_pass = True
 
         if self.use_multispec == "True":
-            data, multi_input_spec = self._net_input_and_multi_spec()
-            multi_result = []
-            for i, input_spec in enumerate(multi_input_spec):
-                cinn_net = paddle.jit.to_static(
-                    net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec
-                )
-                logit = cinn_net(*data)
-                multi_result.append({"logit": logit})
-            return {"multi_result": multi_result}
+            data, spec_gen = self._net_input_and_multi_spec()
+            loops = 90
+            i = 0
+            # for i in range(loops):
+            for inputspec in spec_gen.next():
+                try:
+                    Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {inputspec}")
+                    cinn_net = paddle.jit.to_static(
+                        net, build_strategy=build_strategy, full_graph=True, input_spec=inputspec
+                    )
+                    logit = cinn_net(*data)
+                    return {"logit": logit}
+                except Exception:
+                    bug_trace = traceback.format_exc()
+                i += 1
+                if i > loops:
+                    break
+            Logger("dy2st_eval_cinn_inputspec").get_log().warn(f"经过{loops}轮迭代测试, 动态InputSpec测试均失败。")
+            raise Exception(bug_trace)
         else:
             data, input_spec = self._net_input_and_spec()
             cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
             # net.eval()
             logit = cinn_net(*data)
             return {"logit": logit}
+
+    # def dy2st_eval_cinn_inputspec_legacy(self):
+    #     """dy2st eval"""
+    #     net = self._net_instant()
+    #     build_strategy = paddle.static.BuildStrategy()
+    #     build_strategy.build_cinn_pass = True
+
+    #     if self.use_multispec == "True":
+    #         data, multi_input_spec = self._net_input_and_multi_spec_legacy()
+    #         multi_result = []
+    #         for i, input_spec in enumerate(multi_input_spec):
+    #             cinn_net = paddle.jit.to_static(
+    #                 net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec
+    #             )
+    #             logit = cinn_net(*data)
+    #             multi_result.append({"logit": logit})
+    #         return {"multi_result": multi_result}
+    #     else:
+    #         data, input_spec = self._net_input_and_spec()
+    #         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy,
+    #                                         full_graph=True, input_spec=input_spec)
+    #         # net.eval()
+    #         logit = cinn_net(*data)
+    #         return {"logit": logit}
