@@ -31,12 +31,12 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        subprocess.run(["git", "stash"])    
-        subprocess.run(["git", "checkout", "modified_paddle_dy2st"]) 
-        print("\n modified_paddle_dy2st commit:")
-        subprocess.run(["git", "rev-parse", "HEAD"])   
+        # subprocess.run(["git", "stash"])    
+        # subprocess.run(["git", "checkout", "modified_paddle_dy2st"]) 
+        # print("\n modified_paddle_dy2st commit:")
+        # subprocess.run(["git", "rev-parse", "HEAD"])
+        checkout_branch('modified_paddle_dy2st')
         os.chdir(current_dir)
-
         os.environ['loss_monitor'] = '1'
         os.environ['loss_monitor_pytorch_paddle'] = '1'
         os.environ['to_static'] = 'False'
@@ -48,12 +48,12 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        subprocess.run(["git", "stash"])
-        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
-        print("\n modified_paddle_dy2st commit:")
-        subprocess.run(["git", "rev-parse", "HEAD"])
+        # subprocess.run(["git", "stash"])
+        # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
+        # print("\n modified_paddle_dy2st commit:")
+        # subprocess.run(["git", "rev-parse", "HEAD"])
+        checkout_branch('modified_paddle_dy2st')
         os.chdir(current_dir)
-
         os.environ['loss_monitor'] = '1'
         os.environ['loss_monitor_pytorch_paddle'] = '1'
         os.environ['to_static'] = 'True'
@@ -70,12 +70,12 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        subprocess.run(["git", "stash"])
-        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
-        print("\n modified_paddle_dy2st commit:")
-        subprocess.run(["git", "rev-parse", "HEAD"]) 
+        # subprocess.run(["git", "stash"])
+        # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
+        # print("\n modified_paddle_dy2st commit:")
+        # subprocess.run(["git", "rev-parse", "HEAD"]) 
+        checkout_branch('modified_paddle_dy2st')
         os.chdir(current_dir)
-
         os.environ['loss_monitor'] = '1'
         os.environ['loss_monitor_pytorch_paddle'] = '1'
         os.environ['to_static'] = 'True'
@@ -92,10 +92,11 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        subprocess.run(["git", "stash"])
-        subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
-        print("\n modified_paddle_dy2st commit:")
-        subprocess.run(["git", "rev-parse", "HEAD"])
+        # subprocess.run(["git", "stash"])
+        # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
+        # print("\n modified_paddle_dy2st commit:")
+        # subprocess.run(["git", "rev-parse", "HEAD"])
+        checkout_branch('modified_paddle_dy2st')
         os.chdir(current_dir)
 
         os.environ['loss_monitor'] = '1'
@@ -115,14 +116,15 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        subprocess.run(["git", "stash"])
-        # 执行 git checkout modified_torch 命令
-        subprocess.run(["git", "checkout", "modified_torch"])
-        os.system("rm -rf ./outputs")
-        print("\n modified_torch commit:")
-        subprocess.run(["git", "rev-parse", "HEAD"])
-        print("\n paddlepaddle commit:")
-        os.system('python -c "import paddle; paddle.version.show()"')
+        # subprocess.run(["git", "stash"])
+        # # 执行 git checkout modified_torch 命令
+        # subprocess.run(["git", "checkout", "modified_torch"])
+        # os.system("rm -rf ./outputs")
+        # print("\n modified_torch commit:")
+        # subprocess.run(["git", "rev-parse", "HEAD"])
+        # print("\n paddlepaddle commit:")
+        # os.system('python -c "import paddle; paddle.version.show()"')
+        checkout_branch('modified_torch')
         os.chdir(current_dir)
         os.environ['save_init_weight_data'] ='True'
     else:
@@ -144,6 +146,26 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
     exit_code = process.wait()
     os.chdir(current_dir)
     return exit_code
+
+def checkout_branch(branch_name):
+    """
+    切换到指定分支
+    """
+    subprocess.run(["git", "stash"])
+    subprocess.run(["git", "checkout", branch_name])
+    os.system("rm -rf ./outputs")
+    print(f"\n {branch_name} commit:")
+    subprocess.run(["git", "rev-parse", "HEAD"])
+    if branch_name == 'modified_torch':
+        print("\n paddlepaddle commit:")
+        os.system('python -c "import paddle; paddle.version.show()"')
+    elif branch_name == 'modified_paddle':
+        if not os.path.exists("examples_sym.zip"):
+            os.system("wget https://paddle-org.bj.bcebos.com/paddlescience/datasets/modulus/examples_sym.zip")
+        if not os.path.exists("examples_sym"):
+            os.system("unzip examples_sym.zip")
+        os.system("unalias cp 2>/dev/null")
+        os.system("cp -r -f -v ./examples_sym/examples/* ./examples/)
 
 def plot_kpi_curves(model_name, model_data,run_mode):
     """
