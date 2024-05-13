@@ -20,7 +20,7 @@ net_loss = paddle.nn.CrossEntropyLoss()
 optimizer = paddle.optimizer.Adam(learning_rate=0.001, parameters=net.parameters())
 
 net.train()
-for epoch in range(10):
+for epoch in range(1):
     for batch_idx, data in enumerate(train_loader, start=0):
         inputs, labels = data
         optimizer.clear_grad()
