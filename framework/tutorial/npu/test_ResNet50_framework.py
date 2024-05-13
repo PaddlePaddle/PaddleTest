@@ -4,14 +4,15 @@
 """
 test_ResNet50_framework.py
 """
+import random
 import paddle
 from paddle.vision import transforms
 from paddle.vision.models import resnet50
 import numpy as np
-import random
 
 # 1. 设定运行设备为npu
 paddle.set_device("npu")
+
 
 def set_random_seed(seed):
     """
@@ -20,6 +21,7 @@ def set_random_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
     paddle.seed(seed)
+
 
 set_random_seed(33)
 max_iter = 10
