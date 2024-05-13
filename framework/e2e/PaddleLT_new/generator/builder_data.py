@@ -200,16 +200,3 @@ class SpecStrategy:
         for input_info in self.inputs_info:
             strategy.append(input_info.maybe_specs())
         return strategy
-
-
-# inputs_info = [
-#     SpecInfoMeta(shape=(5, 6, 32, 32), dtype=paddle.float32, stop_gradient=False),
-#     SpecInfoMeta(shape=(2, 80, 64, 64), dtype=paddle.float32, stop_gradient=False),
-#     SpecInfoMeta(shape=(10, 20, 48, 48), dtype=paddle.float32, stop_gradient=False),
-# ]
-
-# gen = SpecStrategy(inputs_info)
-# i = 0
-# for tmp in gen.next():
-#     print(f"step{i}: inputspec is {tmp}")
-#     i += 1
