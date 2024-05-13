@@ -7,9 +7,22 @@ test_ResNet50_framework.py
 import paddle
 from paddle.vision import transforms
 from paddle.vision.models import resnet50
+import numpy as np
+import random
 
 # 1. 设定运行设备为npu
 paddle.set_device("npu")
+
+def set_random_seed(seed):
+    """
+    随机数种子设置
+    """
+    random.seed(seed)
+    np.random.seed(seed)
+    paddle.seed(seed)
+
+set_random_seed(33)
+max_iter = 10
 
 # 2. 定义数据集、数据预处理方法与 DataLoader
 transform = transforms.Compose(
@@ -38,6 +51,10 @@ for epoch in range(1):
         # 8. 更新参数
         optimizer.step()
         print("Epoch %d, Iter %d, Loss: %.5f" % (epoch + 1, batch_idx + 1, loss))
+                if iter == max_iter:
+            break
+        else:
+            iter += 1
 print("Finished Training")
 
 test_dataset = paddle.vision.datasets.Cifar10(mode="test", transform=transform)
