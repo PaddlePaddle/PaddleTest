@@ -99,27 +99,6 @@ class LayerTest(object):
                         tmp["precision"] = "failed"
                         compare_res_list.append(tmp)
                 else:
-                    # try:
-                    #     precision = comparing.get("precision")
-                    #     base_compare(
-                    #         result=result,
-                    #         expect=expect,
-                    #         res_name=latest,
-                    #         exp_name=baseline,
-                    #         logger=self.logger.get_log(),
-                    #         delta=precision.get("delta"),
-                    #         rtol=precision.get("rtol"),
-                    #     )
-                    #     tmp["precision"] = "passed"
-                    #     compare_res_list.append(tmp)
-                    #     self.logger.get_log().info("{} 和 {} 精度对比通过~~~".format(latest, baseline))
-                    # except Exception:
-                    #     exc += 1
-                    #     bug_trace = traceback.format_exc()
-                    #     self.logger.get_log().warn("精度对比异常结果: {}".format(bug_trace))
-                    #     tmp["precision"] = "failed"
-                    #     compare_res_list.append(tmp)
-
                     precision = comparing.get("precision")
                     compare_res = base_compare(
                         result=result,

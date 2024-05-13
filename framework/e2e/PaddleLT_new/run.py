@@ -164,20 +164,22 @@ class Run(object):
             alarm.email_send(
                 alarm.receiver,
                 f"Paddle {self.layer_type}子图性能数据",
-                "表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file} \n \
-                plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar \n \
-                pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
+                f"表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file}\n"
+                f"plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar\n"
+                f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
 
     def _single_pytest_run(self, py_file):
         """run one test"""
         title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+        self.logger.get_log().info(f"开始测试子图 {title}, 准备执行pytest命令~~")
         exit_code = os.system(
             "cp -r PaddleLT.py {}.py && "
             "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
                 title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
             )
         )
+        self.logger.get_log().info(f"完成测试子图 {title}, 完成执行pytest命令~~")
         if exit_code != 0:
             return py_file, exit_code
         return None, None
