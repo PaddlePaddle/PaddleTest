@@ -138,7 +138,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
                 jit=false \
                 jit_use_nvfuser=false \
                 graph.func_arch=false \
-                graph.func_arch_allow_partial_hessian=false\
+                graph.func_arch_allow_partial_hessian=false \
                 {extra_parameters} >{log_dir}/{model_name}_{run_mode}.log"
     process = subprocess.Popen(command, shell=True)
     exit_code = process.wait()
