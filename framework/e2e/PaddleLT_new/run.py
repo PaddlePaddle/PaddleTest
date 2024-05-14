@@ -310,8 +310,13 @@ class Run(object):
         allure_case_list = []
         for json_file in os.listdir(report_path):
             if json_file.endswith("-result.json"):
-                layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["name"]
-                allure_case_list.append(layer_name.replace("^", "/") + ".py")
+                # layerE2Ecase中allure报告需要抓取的关键字, 与其他子图不一样
+                if self.layer_type == "layerE2Ecase":
+                    layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["labels"][-1]["value"]
+                    allure_case_list.append(layer_name.replace(".", "/") + ".py")
+                else:
+                    layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["name"]
+                    allure_case_list.append(layer_name.replace("^", "/") + ".py")
 
         all_case_list = []
         # 将./layercase/sublayer1000/Det_cases/gfl_gflv2_r50_fpn_1x_coco/SIR_173.py
