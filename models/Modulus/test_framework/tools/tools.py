@@ -58,6 +58,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['loss_monitor_pytorch_paddle'] = '1'
         os.environ['to_static'] = 'True'
         os.environ['FLAGS_prim_all'] = 'False'
+        os.environ['FLAGS_use_cinn'] = 'False'
         os.environ['FLAGS_enable_pir_in_executor'] = 'true'
         os.environ['FLAGS_enable_pir_api'] = 'True'
         os.environ['FLAGS_cinn_bucket_compile'] = 'True'
@@ -78,8 +79,10 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.chdir(current_dir)
         os.environ['loss_monitor'] = '1'
         os.environ['loss_monitor_pytorch_paddle'] = '1'
+        os.environ['FLAGS_prim_vjp_skip_default_ops'] = 'False'
         os.environ['to_static'] = 'True'
         os.environ['FLAGS_prim_all'] = 'True'
+        os.environ['FLAGS_use_cinn'] = 'False'
         os.environ['FLAGS_enable_pir_in_executor'] = 'true'
         os.environ['FLAGS_enable_pir_api'] = 'True'
         os.environ['FLAGS_cinn_bucket_compile'] = 'True'
