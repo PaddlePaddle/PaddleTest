@@ -104,6 +104,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
 
         os.environ['loss_monitor'] = '1'
         os.environ['loss_monitor_pytorch_paddle'] = '1'
+        os.environ['FLAGS_prim_vjp_skip_default_ops'] = 'False'
         os.environ['to_static'] = 'True'
         os.environ['FLAGS_use_cinn'] = 'True'
         os.environ['FLAGS_prim_all'] = 'True'
