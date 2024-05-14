@@ -173,7 +173,7 @@ class Run(object):
         """run one test"""
         title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
         self.logger.get_log().info(f"开始测试子图 {title}, 准备执行pytest命令~~")
-        if self.layer_type == "LayerE2Ecase":
+        if self.layer_type == "layerE2Ecase":
             exit_code = os.system(f"{self.py_cmd} -m pytest {py_file} --alluredir={self.report_dir}")
         else:
             exit_code = os.system(
