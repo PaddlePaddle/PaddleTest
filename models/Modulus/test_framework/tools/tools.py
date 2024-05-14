@@ -165,7 +165,7 @@ def checkout_branch(branch_name):
         if not os.path.exists("examples_sym"):
             os.system("unzip examples_sym.zip")
         os.system("unalias cp 2>/dev/null")
-        os.system("cp -r -f -v ./examples_sym/examples/* ./examples/)
+        os.system("cp -r -f -v ./examples_sym/examples/* ./examples/")
 
 def plot_kpi_curves(model_name, model_data,run_mode):
     """
