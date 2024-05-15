@@ -66,7 +66,7 @@ class LayerTest(object):
                 res = self._single_run(testing=testing, layerfile=self.layerfile)
                 res_dict[testing] = res
                 if os.environ.get("PLT_SAVE_GT") == "True":  # 开启gt保存
-                    gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), self.testings)
+                    gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
                     if not os.path.exists(gt_path):
                         os.makedirs(gt_path)
                     save_pickle(res, os.path.join(gt_path, self.title + ".pickle"))
