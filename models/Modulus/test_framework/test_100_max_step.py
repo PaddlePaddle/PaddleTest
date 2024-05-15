@@ -65,10 +65,10 @@ def test_dynamic(model_name):
     # assert diff_dynamic_all < 1e-5
     dynamic_kpi_avg = np.mean(dynamic_kpi)
     pytorch_kpi_avg = np.mean(pytorch_kpi)
-    test_data[model_name]["dynamic"]["L2"]["atol"] = np.abs(dynamic_kpi[0] - pytorch_kpi[0])/pytorch_kpi[0]
-    test_data[model_name]["dynamic"]["L2"]["rtol"] = np.abs(dynamic_kpi[0] - pytorch_kpi[0])
-    test_data[model_name]["dynamic"]["L4"]["atol"] = np.abs(dynamic_kpi_avg - pytorch_kpi_avg)/pytorch_kpi_avg
-    test_data[model_name]["dynamic"]["L4"]["rtol"] = np.abs(dynamic_kpi_avg - pytorch_kpi_avg)
+    test_data[model_name]["dynamic"]["L2"]["rtol"] = np.abs(dynamic_kpi[0] - pytorch_kpi[0])/pytorch_kpi[0]
+    test_data[model_name]["dynamic"]["L2"]["atol"] = np.abs(dynamic_kpi[0] - pytorch_kpi[0])
+    test_data[model_name]["dynamic"]["L4"]["rtol"] = np.abs(dynamic_kpi_avg - pytorch_kpi_avg)/pytorch_kpi_avg
+    test_data[model_name]["dynamic"]["L4"]["atol"] = np.abs(dynamic_kpi_avg - pytorch_kpi_avg)
     if test_data[model_name]["dynamic"]["L2"]["atol"] < 1e-5 and test_data[model_name]["dynamic"]["L2"]["rtol"] < 1.3e-6:
         test_data[model_name]["dynamic"]["L2"]["status"] = "Success"
     if test_data[model_name]["dynamic"]["L4"]["atol"] < 1e-5 and test_data[model_name]["dynamic"]["L4"]["rtol"] < 1.3e-6:
@@ -120,10 +120,10 @@ def test_dy2st(model_name):
     # assert diff_dy2st_all < 1e-5
     dy2st_kpi_avg = np.mean(dy2st_kpi)
     pytorch_kpi_avg = np.mean(pytorch_kpi)
-    test_data[model_name]["dy2st"]["L2"]["atol"] = np.abs(dy2st_kpi[0] - pytorch_kpi[0])/pytorch_kpi[0]
-    test_data[model_name]["dy2st"]["L2"]["rtol"] = np.abs(dy2st_kpi[0] - pytorch_kpi[0])
-    test_data[model_name]["dy2st"]["L4"]["atol"] = np.abs(dy2st_kpi_avg - pytorch_kpi_avg)/pytorch_kpi_avg
-    test_data[model_name]["dy2st"]["L4"]["rtol"] = np.abs(dy2st_kpi_avg - pytorch_kpi_avg)
+    test_data[model_name]["dy2st"]["L2"]["rtol"] = np.abs(dy2st_kpi[0] - pytorch_kpi[0])/pytorch_kpi[0]
+    test_data[model_name]["dy2st"]["L2"]["atol"] = np.abs(dy2st_kpi[0] - pytorch_kpi[0])
+    test_data[model_name]["dy2st"]["L4"]["rtol"] = np.abs(dy2st_kpi_avg - pytorch_kpi_avg)/pytorch_kpi_avg
+    test_data[model_name]["dy2st"]["L4"]["atol"] = np.abs(dy2st_kpi_avg - pytorch_kpi_avg)
     if test_data[model_name]["dy2st"]["L2"]["atol"] < 1e-5 and test_data[model_name]["dy2st"]["L2"]["rtol"] < 1.3e-6:
         test_data[model_name]["dy2st"]["L2"]["status"] = "Success"
     if test_data[model_name]["dy2st"]["L4"]["atol"] < 1e-5 and test_data[model_name]["dy2st"]["L4"]["rtol"] < 1.3e-6:
@@ -173,10 +173,10 @@ def test_dy2st_prim(model_name):
     # assert diff_prim_all < 1e-5
     dy2st_prim_kpi_avg = np.mean(dy2st_prim_kpi)
     pytorch_kpi_avg = np.mean(pytorch_kpi)
-    test_data[model_name]["dy2st_prim"]["L2"]["atol"] = np.abs(dy2st_prim_kpi[0] - pytorch_kpi[0])/pytorch_kpi[0]
-    test_data[model_name]["dy2st_prim"]["L2"]["rtol"] = np.abs(dy2st_prim_kpi[0] - pytorch_kpi[0])
-    test_data[model_name]["dy2st_prim"]["L4"]["atol"] = np.abs(dy2st_prim_kpi_avg - pytorch_kpi_avg)/pytorch_kpi_avg
-    test_data[model_name]["dy2st_prim"]["L4"]["rtol"] = np.abs(dy2st_prim_kpi_avg - pytorch_kpi_avg)
+    test_data[model_name]["dy2st_prim"]["L2"]["rtol"] = np.abs(dy2st_prim_kpi[0] - pytorch_kpi[0])/pytorch_kpi[0]
+    test_data[model_name]["dy2st_prim"]["L2"]["atol"] = np.abs(dy2st_prim_kpi[0] - pytorch_kpi[0])
+    test_data[model_name]["dy2st_prim"]["L4"]["rtol"] = np.abs(dy2st_prim_kpi_avg - pytorch_kpi_avg)/pytorch_kpi_avg
+    test_data[model_name]["dy2st_prim"]["L4"]["atol"] = np.abs(dy2st_prim_kpi_avg - pytorch_kpi_avg)
     if test_data[model_name]["dy2st_prim"]["L2"]["atol"] < 1e-5 and test_data[model_name]["dy2st_prim"]["L2"]["rtol"] < 1.3e-6:
         test_data[model_name]["dy2st_prim"]["L2"]["status"] = "Success"
     if test_data[model_name]["dy2st_prim"]["L4"]["atol"] < 1e-5 and test_data[model_name]["dy2st_prim"]["L4"]["rtol"] < 1.3e-6:
@@ -219,10 +219,10 @@ def test_dy2st_prim_cinn(model_name):
     plot_kpi_curves(model_name, kpi_loss, 'dy2st_prim_cinn')
     dy2st_prim_cinn_kpi_avg = np.mean(dy2st_prim_cinn_kpi)
     pytorch_kpi_avg = np.mean(pytorch_kpi)
-    test_data[model_name]["dy2st_prim_cinn"]["L2"]["atol"] = np.abs(dy2st_prim_cinn_kpi[0] - pytorch_kpi[0])/pytorch_kpi[0]
-    test_data[model_name]["dy2st_prim_cinn"]["L2"]["rtol"] = np.abs(dy2st_prim_cinn_kpi[0] - pytorch_kpi[0])
-    test_data[model_name]["dy2st_prim_cinn"]["L4"]["atol"] = np.abs(dy2st_prim_cinn_kpi_avg - pytorch_kpi_avg)/pytorch_kpi_avg
-    test_data[model_name]["dy2st_prim_cinn"]["L4"]["rtol"] = np.abs(dy2st_prim_cinn_kpi_avg - pytorch_kpi_avg)
+    test_data[model_name]["dy2st_prim_cinn"]["L2"]["rtol"] = np.abs(dy2st_prim_cinn_kpi[0] - pytorch_kpi[0])/pytorch_kpi[0]
+    test_data[model_name]["dy2st_prim_cinn"]["L2"]["atol"] = np.abs(dy2st_prim_cinn_kpi[0] - pytorch_kpi[0])
+    test_data[model_name]["dy2st_prim_cinn"]["L4"]["rtol"] = np.abs(dy2st_prim_cinn_kpi_avg - pytorch_kpi_avg)/pytorch_kpi_avg
+    test_data[model_name]["dy2st_prim_cinn"]["L4"]["atol"] = np.abs(dy2st_prim_cinn_kpi_avg - pytorch_kpi_avg)
     if test_data[model_name]["dy2st_prim_cinn"]["L2"]["atol"] < 1e-5 and test_data[model_name]["dy2st_prim_cinn"]["L2"]["rtol"] < 1.3e-6:
         test_data[model_name]["dy2st_prim_cinn"]["L2"]["status"] = "Success"
     if test_data[model_name]["dy2st_prim_cinn"]["L4"]["atol"] < 1e-5 and test_data[model_name]["dy2st_prim_cinn"]["L4"]["rtol"] < 1.3e-6:
