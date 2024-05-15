@@ -1,17 +1,34 @@
 #/bin/bash
+set +x
 CODE_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}")/" && pwd )"
-EXIT_CODE=0
+TUTORIALS_EXIT_CODE=0
 
 function run_npu_tutorials(){
+    echo "=======Npu Tutorials Test:======="
+    failed_cases=''
     cd ${CODE_ROOT}/npu
     for file in $(find ./ -name "test*");do
         echo "=======Tutorials: ${file}======="
         python ${file}
         if [ $? -ne 0 ]; then
-            EXIT_CODE=8
+            TUTORIALS_EXIT_CODE=8
+            if [[ "${failed_cases}" == "" ]];then
+                failed_cases="${file}"
+            else
+                failed_cases="${failed_cases}
+${file}"
+            fi
         fi
     done
-    exit ${EXIT_CODE}
+    if [[ "${TUTORIALS_EXIT_CODE}" != "0" ]];then
+        echo "=======The Following Tutorials Tests Failed======="
+        echo "${failed_cases}"
+        echo "--------------------------------------------------"
+        echo "The github address of the case is:"
+        echo "https://github.com/PaddlePaddle/PaddleTest/blob/develop/framework/tutorial/npu"
+        echo "=================================================="
+    fi
+    exit ${TUTORIALS_EXIT_CODE}
 }
 
 function print_usage(){
