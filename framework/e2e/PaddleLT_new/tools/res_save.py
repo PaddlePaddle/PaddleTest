@@ -7,7 +7,9 @@
 """
 
 import os
+import tarfile
 import pickle
+import wget
 import pandas as pd
 
 
@@ -51,3 +53,32 @@ def load_pickle(filename):
         loaded_data = pickle.load(f)
 
     return loaded_data
+
+
+def wget_sth(gt_url):
+    """
+    下载
+    """
+    wget.download(gt_url)
+
+
+def create_tar_gz(file_path, source_dir):
+    """
+    创建一个gzip压缩的tar文件(.tar.gz)
+
+    :param file_path: 输出的.tgz文件名
+    :param source_dir: 要打包的源目录
+    """
+    with tarfile.open(file_path, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
+
+
+def extract_tar_gz(file_path, extract_path="./"):
+    """
+    解压.tar.gz文件
+
+    :param file_path: .tar.gz文件的路径
+    :param extract_path: 解压到的目标路径
+    """
+    with tarfile.open(file_path, "r:gz") as tar_ref:
+        tar_ref.extractall(extract_path)

@@ -17,7 +17,7 @@ from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
 from tools.json_loader import JSONLoader
-from tools.res_save import xlsx_save
+from tools.res_save import xlsx_save, wget_sth, create_tar_gz, extract_tar_gz
 from tools.upload_bos import UploadBos
 from tools.statistics import split_list
 from tools.alarm import Alarm
@@ -58,6 +58,13 @@ class Run(object):
         self.logger = Logger("PaddleLTRun")
         self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        plt_gt_download_url = os.environ.get("PLT_GT_DOWNLOAD_URL")
+        if not plt_gt_download_url == "None":
+            self.logger.get_log().info(f"下载plt_gt的url为: {plt_gt_download_url}")
+            wget_sth(url=plt_gt_download_url)
+            plt_gt_tgz = plt_gt_download_url.split("/")[-1]
+            extract_tar_gz(file_path=plt_gt_tgz, extract_path="plt_gt")
 
     def _exit_code_txt(self, error_count, error_list):
         """"""
@@ -143,8 +150,20 @@ class Run(object):
         else:
             Exception("unknown benchmark datebase mode, only support insert, select or nonuse")
 
-    def _bos_upload(self):
-        """产物上传"""
+    def _gt_upload(self):
+        """精度groundtruth上传"""
+        if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
+            self.logger.get_log().info(f"上传plt_gt的路径为: {os.environ.get('PLT_GT_UPLOAD_URL')}")
+            create_tar_gz(
+                file_path=f"{os.environ.get('PLT_SET_DEVICE')}.tgz",
+                source_dir=f"plt_gt/{os.environ.get('PLT_SET_DEVICE')}",
+            )
+            UploadBos().upload_to_bos(
+                bos_path=os.environ.get("PLT_GT_UPLOAD_URL"), file_path=f"{os.environ.get('PLT_SET_DEVICE')}.tgz"
+            )
+
+    def _perf_upload(self):
+        """性能表格/图表/原始数据上传"""
         bos_path = "PaddleLT/PaddleLTBenchmark/{}/build_{}".format(
             os.environ.get("PLT_BM_DB"), self.AGILE_PIPELINE_BUILD_ID
         )
@@ -203,6 +222,7 @@ class Run(object):
                     error_list.append(_py_file)
                     error_count += 1
 
+        self._gt_upload()
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
     def _test_run(self):
@@ -215,6 +235,7 @@ class Run(object):
                 error_list.append(_py_file)
                 error_count += 1
 
+        self._gt_upload()
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
     def _multiprocess_perf_test_run(self):
@@ -273,7 +294,7 @@ class Run(object):
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
         self._db_interact(sublayer_dict=sublayer_dict, error_list=error_list)
-        self._bos_upload()
+        self._perf_upload()
 
     def _perf_test_run(self):
         """run some test"""
@@ -296,7 +317,7 @@ class Run(object):
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
         self._db_interact(sublayer_dict=sublayer_dict, error_list=error_list)
-        self._bos_upload()
+        self._perf_upload()
         self._pts_callback(error_count)
 
     def _core_dumps_case_count(self, report_path):
