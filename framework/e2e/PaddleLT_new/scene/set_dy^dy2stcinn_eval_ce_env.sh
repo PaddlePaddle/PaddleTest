@@ -12,6 +12,7 @@ export FRAMEWORK="${FRAMEWORK:-paddle}"
 export MULTI_WORKER="${MULTI_WORKER:-0}"
 
 export PLT_SPEC_USE_MULTI="${PLT_SPEC_USE_MULTI:-False}"
+export PLT_SAVE_GT="${PLT_SAVE_GT:-False}"
 
 echo "wheel_url is: ${wheel_url}"
 echo "python_ver is: ${python_ver}"
@@ -27,3 +28,4 @@ echo "FRAMEWORK is: ${FRAMEWORK}"
 echo "MULTI_WORKER is: ${MULTI_WORKER}"
 
 echo "PLT_SPEC_USE_MULTI is: ${PLT_SPEC_USE_MULTI}"
+echo "PLT_SAVE_GT is: ${PLT_SAVE_GT}"

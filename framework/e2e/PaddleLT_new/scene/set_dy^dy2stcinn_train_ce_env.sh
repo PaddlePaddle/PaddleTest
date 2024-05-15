@@ -3,7 +3,7 @@
 # 最外层测试入口, 通过环境变量设定测试相关的一切信息(除了docker/whl/py以外)
 export CASE_TYPE="${CASE_TYPE:-layercase}"
 export CASE_DIR="${CASE_DIR:-sublayer1000}"
-export TESTING="${TESTING:-yaml/dy^dy2stcinn_train.yml}" # 设定测试项目配置yaml
+export TESTING="${TESTING:-yaml/dy^dy2stcinn_eval.yml}" # 设定测试项目配置yaml
 export TESTING_MODE="${TESTING_MODE:-precision}" # 设定测试模型为精度
 export PLT_SET_DEVICE="${PLT_SET_DEVICE:-gpu}"
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-6}"
@@ -12,6 +12,7 @@ export FRAMEWORK="${FRAMEWORK:-paddle}"
 export MULTI_WORKER="${MULTI_WORKER:-0}"
 
 export PLT_SPEC_USE_MULTI="${PLT_SPEC_USE_MULTI:-False}"
+export PLT_SAVE_GT="${PLT_SAVE_GT:-False}"
 
 echo "wheel_url is: ${wheel_url}"
 echo "python_ver is: ${python_ver}"
@@ -27,3 +28,4 @@ echo "FRAMEWORK is: ${FRAMEWORK}"
 echo "MULTI_WORKER is: ${MULTI_WORKER}"
 
 echo "PLT_SPEC_USE_MULTI is: ${PLT_SPEC_USE_MULTI}"
+echo "PLT_SAVE_GT is: ${PLT_SAVE_GT}"
