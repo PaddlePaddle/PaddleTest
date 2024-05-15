@@ -1,0 +1,14 @@
+testings:
+  dy_eval:
+    model_dtype: "float32"
+
+compare:
+  -
+    baseline:
+      gt_dir: 'plt_gt'
+      device: 'gpu'
+      testing: 'dy_eval'
+    latest: 'dy_eval'
+    precision:
+      delta: 0.00001
+      rtol: 0.000001
