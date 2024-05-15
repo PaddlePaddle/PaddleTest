@@ -12,7 +12,7 @@ import traceback
 from strategy.compare import base_compare
 from tools.yaml_loader import YamlLoader
 from tools.logger import Logger
-from tools.res_save import save_pickle, load_pickle
+from tools.res_save import save_tensor, load_tensor
 
 
 class LayerTest(object):
@@ -69,7 +69,7 @@ class LayerTest(object):
                     gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
                     if not os.path.exists(gt_path):
                         os.makedirs(gt_path)
-                    save_pickle(res, os.path.join(gt_path, self.title + ".pickle"))
+                    save_tensor(res, os.path.join(gt_path, self.title))
             except Exception:
                 bug_trace = traceback.format_exc()
                 exc_func += 1
@@ -90,8 +90,8 @@ class LayerTest(object):
                 baseline_info = comparing.get("baseline")
                 gt_dir = baseline_info.get("plt_gt")
                 baseline_testing = baseline_info.get("testing")
-                gt_path = os.path.join(gt_dir, baseline_testing, self.title + ".pickle")
-                baseline = load_pickle(gt_path)
+                gt_path = os.path.join(gt_dir, baseline_testing, self.title)
+                baseline = load_tensor(gt_path)
             else:  # 使用self.testings_list项目的测试结果作为基线
                 baseline = comparing.get("baseline")
             result = res_dict[latest]  # result is dict

@@ -33,6 +33,39 @@ def xlsx_save(sublayer_dict, excel_file):
     df.to_excel(excel_file, index=False)
 
 
+def save_tensor(data, filename):
+    """
+    保存Tensor数据
+    """
+    save_name = filename + ".tensor"
+
+    if os.environ.get("FRAMEWORK") == "paddle":
+        import paddle
+
+        paddle.save(data, save_name)
+    elif os.environ.get("FRAMEWORK") == "torch":
+        import torch
+
+        torch.save(data, save_name)
+
+
+def load_tensor(data, filename):
+    """
+    加载Tensor数据
+    """
+    load_name = filename + ".tensor"
+
+    if os.environ.get("FRAMEWORK") == "paddle":
+        import paddle
+
+        data = paddle.load(load_name)
+    elif os.environ.get("FRAMEWORK") == "torch":
+        import torch
+
+        data = torch.load(load_name)
+    return data
+
+
 # list 保存/加载 为pickle
 def save_pickle(data, filename):
     """
