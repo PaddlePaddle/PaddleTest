@@ -36,6 +36,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
         checkout_branch('modified_paddle_dy2st')
+        download_datasets()
         os.chdir(current_dir)
         os.environ['loss_monitor'] = '1'
         os.environ['loss_monitor_pytorch_paddle'] = '1'
@@ -53,6 +54,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
         checkout_branch('modified_paddle_dy2st')
+        download_datasets()
         os.chdir(current_dir)
         os.environ['loss_monitor'] = '1'
         os.environ['loss_monitor_pytorch_paddle'] = '1'
@@ -76,6 +78,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"]) 
         checkout_branch('modified_paddle_dy2st')
+        download_datasets()
         os.chdir(current_dir)
         os.environ['loss_monitor'] = '1'
         os.environ['loss_monitor_pytorch_paddle'] = '1'
@@ -100,6 +103,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
         checkout_branch('modified_paddle_dy2st')
+        download_datasets()
         os.chdir(current_dir)
 
         os.environ['loss_monitor'] = '1'
@@ -129,6 +133,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # print("\n paddlepaddle commit:")
         # os.system('python -c "import paddle; paddle.version.show()"')
         checkout_branch('modified_torch')
+        download_datasets()
         os.chdir(current_dir)
         os.environ['save_init_weight_data'] ='True'
     else:
@@ -170,6 +175,14 @@ def checkout_branch(branch_name):
             os.system("unzip examples_sym.zip")
         os.system("unalias cp 2>/dev/null")
         os.system("cp -r -f -v ./examples_sym/examples/* ./examples/")
+
+def download_datasets():
+    """
+    在torch运行之前部分模型需要下载必要的数据集
+    """
+    if not os.path.exists("./examples/darcy/datasets"):
+        os.system("wget https://paddle-qa.bj.bcebos.com/benchmark/pretrained/Darcy_241.tar.gz")
+        os.system("tar -xf Darcy_241.tar.gz -C ./examples/darcy/datasets")
 
 def plot_kpi_curves(model_name, model_data,run_mode):
     """
