@@ -31,6 +31,35 @@ ${file}"
     exit ${TUTORIALS_EXIT_CODE}
 }
 
+function run_tutorials(){
+    platform=$1
+    echo "=======${platform} Tutorials Test:======="
+    failed_cases=''
+    cd ${CODE_ROOT}/${platform}
+    for file in $(find ./ -name "test*");do
+        echo "=======Tutorials: ${file}======="
+        python ${file}
+        if [ $? -ne 0 ]; then
+            TUTORIALS_EXIT_CODE=8
+            if [[ "${failed_cases}" == "" ]];then
+                failed_cases="${file}"
+            else
+                failed_cases="${failed_cases}
+${file}"
+            fi
+        fi
+    done
+    if [[ "${TUTORIALS_EXIT_CODE}" != "0" ]];then
+        echo "=======The Following Tutorials Tests Failed======="
+        echo "${failed_cases}"
+        echo "--------------------------------------------------"
+        echo "The github address of the case is:"
+        echo "https://github.com/PaddlePaddle/PaddleTest/blob/develop/framework/tutorial/${platform}"
+        echo "=================================================="
+    fi
+    exit ${TUTORIALS_EXIT_CODE}
+}
+
 function print_usage(){
     echo -e "\n${RED}Usage${NONE}:
     ${BOLD}${SCRIPT_NAME}${NONE} [OPTION]"
@@ -47,7 +76,16 @@ function main() {
     local args=("$@")
     case $CMD in
         run_npu_tutorials)
-            run_npu_tutorials
+            run_tutorials npu
+            ;;
+        run_xpu_tutorials)
+            run_tutorials xpu
+            ;;
+        run_dcu_tutorials)
+            run_tutorials dcu
+            ;;
+        run_mlu_tutorials)
+            run_tutorials mlu
             ;;
         *)
             print_usage
