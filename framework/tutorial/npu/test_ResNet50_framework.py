@@ -10,7 +10,6 @@ from paddle.vision import transforms
 from paddle.vision.models import resnet50
 import numpy as np
 
-
 # 1. 设定运行设备为npu
 paddle.set_device("npu")
 
