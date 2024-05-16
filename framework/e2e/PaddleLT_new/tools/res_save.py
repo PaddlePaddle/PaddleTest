@@ -105,8 +105,6 @@ def download_sth(gt_url, output_path):
     :param gt_url: 文件URL
     :param output_path: 文件保存路径
     """
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
     with requests.get(gt_url, stream=True) as r:
         r.raise_for_status()
         with open(output_path, "wb") as f:

@@ -64,9 +64,11 @@ class Run(object):
         if not plt_gt_download_url == "None":
             self.logger.get_log().info(f"下载plt_gt的url为: {plt_gt_download_url}")
             plt_gt_device = plt_gt_download_url.split("/")[-1]
-            if not os.path.exists(os.path.join("plt_gt_baseline", plt_gt_device)):
-                os.makedirs(os.path.join("plt_gt_baseline", plt_gt_device))
+            # if not os.path.exists(os.path.join("plt_gt_baseline", plt_gt_device)):
+            #     os.makedirs(os.path.join("plt_gt_baseline", plt_gt_device))
             for testing in YamlLoader(yml=self.testing).get_junior_name("testings"):
+                if not os.path.exists(os.path.join("plt_gt_baseline", plt_gt_device, testing)):
+                    os.makedirs(os.path.join("plt_gt_baseline", plt_gt_device, testing))
                 for py_file in self.py_list:
                     case_name = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
                     gt_url = f"{plt_gt_download_url}/{testing}/{case_name}.tensor"
