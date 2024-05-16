@@ -69,7 +69,7 @@ class Run(object):
             for testing in YamlLoader(yml=self.testing).get_junior_name("testings"):
                 for py_file in self.py_list:
                     case_name = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
-                    gt_url = plt_gt_download_url + f"/{plt_gt_device}/{testing}/{case_name}.tensor"
+                    gt_url = f"{plt_gt_download_url}/{testing}/{case_name}.tensor"
                     download_sth(gt_url=gt_url, output_path=os.path.join("plt_gt_baseline", plt_gt_device, testing))
 
     def _exit_code_txt(self, error_count, error_list):
