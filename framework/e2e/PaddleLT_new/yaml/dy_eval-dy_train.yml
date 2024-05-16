@@ -1,0 +1,20 @@
+testings:
+  dy_eval:
+    model_dtype: "float32"
+
+  dy_train:
+    model_dtype: "float32"
+
+compare:
+  -
+    baseline: 'dy_eval'
+    latest: 'dy_eval'
+    precision:
+      delta: 0.00001
+      rtol: 0.000001
+  -
+    baseline: 'dy_train'
+    latest: 'dy_train'
+    precision:
+      delta: 0.00001
+      rtol: 0.000001
