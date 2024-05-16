@@ -51,7 +51,7 @@ def save_tensor(data, filename):
         torch.save(data, save_name)
 
 
-def load_tensor(data, filename):
+def load_tensor(filename):
     """
     加载Tensor数据
     """
