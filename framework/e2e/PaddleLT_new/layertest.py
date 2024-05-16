@@ -12,6 +12,7 @@ import traceback
 from strategy.compare import base_compare
 from tools.yaml_loader import YamlLoader
 from tools.logger import Logger
+from tools.res_save import save_tensor, load_tensor
 
 
 class LayerTest(object):
@@ -64,6 +65,11 @@ class LayerTest(object):
                 self.logger.get_log().info("测试执行器: {}".format(testing))
                 res = self._single_run(testing=testing, layerfile=self.layerfile)
                 res_dict[testing] = res
+                if os.environ.get("PLT_SAVE_GT") == "True":  # 开启gt保存
+                    gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
+                    if not os.path.exists(gt_path):
+                        os.makedirs(gt_path)
+                    save_tensor(res, os.path.join(gt_path, self.title))
             except Exception:
                 bug_trace = traceback.format_exc()
                 exc_func += 1
@@ -79,9 +85,20 @@ class LayerTest(object):
         for comparing in self.compare_list:
             tmp = {}
             latest = comparing.get("latest")
-            baseline = comparing.get("baseline")
+            # if "baseline" not in comparing or comparing["baseline"] is None:
+            if isinstance(comparing.get("baseline"), dict):  # 加载plt_gt_baseline中的真值作为基线
+                baseline_info = comparing.get("baseline")
+                # gt_dir = baseline_info.get("gt_dir")
+                gt_dir = "plt_gt_baseline"
+                gt_device = baseline_info.get("device")
+                baseline = baseline_info.get("testing")
+                gt_path = os.path.join(gt_dir, gt_device, baseline, self.title)
+                expect = load_tensor(gt_path)
+            else:  # 使用res_dict中的测试结果作为基线
+                baseline = comparing.get("baseline")
+                expect = res_dict[baseline]
             result = res_dict[latest]  # result is dict
-            expect = res_dict[baseline]
+            # expect = res_dict[baseline]
             tmp["待测事项"] = latest
             tmp["基线事项"] = baseline
             if comparing.get("precision") is not None:

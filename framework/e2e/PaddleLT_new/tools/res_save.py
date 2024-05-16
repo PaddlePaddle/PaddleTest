@@ -7,7 +7,11 @@
 """
 
 import os
+import shutil
+import tarfile
 import pickle
+import requests
+import wget
 import pandas as pd
 
 
@@ -31,6 +35,39 @@ def xlsx_save(sublayer_dict, excel_file):
     df.to_excel(excel_file, index=False)
 
 
+def save_tensor(data, filename):
+    """
+    保存Tensor数据
+    """
+    save_name = filename + ".tensor"
+
+    if os.environ.get("FRAMEWORK") == "paddle":
+        import paddle
+
+        paddle.save(data, save_name)
+    elif os.environ.get("FRAMEWORK") == "torch":
+        import torch
+
+        torch.save(data, save_name)
+
+
+def load_tensor(filename):
+    """
+    加载Tensor数据
+    """
+    load_name = filename + ".tensor"
+
+    if os.environ.get("FRAMEWORK") == "paddle":
+        import paddle
+
+        data = paddle.load(load_name)
+    elif os.environ.get("FRAMEWORK") == "torch":
+        import torch
+
+        data = torch.load(load_name)
+    return data
+
+
 # list 保存/加载 为pickle
 def save_pickle(data, filename):
     """
@@ -51,3 +88,46 @@ def load_pickle(filename):
         loaded_data = pickle.load(f)
 
     return loaded_data
+
+
+def wget_sth(gt_url):
+    """
+    下载
+    """
+    wget.download(gt_url)
+
+
+def download_sth(gt_url, output_path):
+
+    """
+    下载文件到指定路径
+
+    :param gt_url: 文件URL
+    :param output_path: 文件保存路径
+    """
+    with requests.get(gt_url, stream=True) as r:
+        r.raise_for_status()
+        with open(output_path, "wb") as f:
+            shutil.copyfileobj(r.raw, f)
+
+
+def create_tar_gz(file_path, source_dir):
+    """
+    创建一个gzip压缩的tar文件(.tar.gz)
+
+    :param file_path: 输出的.tgz文件名
+    :param source_dir: 要打包的源目录
+    """
+    with tarfile.open(file_path, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
+
+
+def extract_tar_gz(file_path, extract_path="./"):
+    """
+    解压.tar.gz文件
+
+    :param file_path: .tar.gz文件的路径
+    :param extract_path: 解压到的目标路径
+    """
+    with tarfile.open(file_path, "r:gz") as tar_ref:
+        tar_ref.extractall(extract_path)
