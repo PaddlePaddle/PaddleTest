@@ -93,6 +93,32 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
         os.environ['load_data'] = 'True'
+    elif run_mode == 'dy2st_prim_cse':
+        # 获取当前工作目录
+        current_dir = os.getcwd()
+        # 切换到上一级目录
+        os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
+        # subprocess.run(["git", "stash"])
+        # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
+        # print("\n modified_paddle_dy2st commit:")
+        # subprocess.run(["git", "rev-parse", "HEAD"]) 
+        checkout_branch('modified_paddle_dy2st')
+        download_datasets()
+        os.chdir(current_dir)
+        os.environ['loss_monitor'] = '1'
+        os.environ['loss_monitor_pytorch_paddle'] = '1'
+        os.environ['FLAGS_prim_vjp_skip_default_ops'] = 'False'
+        os.environ['to_static'] = 'True'
+        os.environ['FLAGS_prim_all'] = 'True'
+        os.environ['FLAGS_use_cinn'] = 'False'
+        os.environ['FLAGS_enable_pir_in_executor'] = 'true'
+        os.environ['FLAGS_enable_pir_api'] = 'True'
+        os.environ['FLAGS_cinn_bucket_compile'] = 'True'
+        os.environ['FLAGS_group_schedule_tiling_first'] = '1'
+        os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
+        os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
+        os.environ['FLAGS_enable_cse_in_dy2st'] = '1'
+        os.environ['load_data'] = 'True'
     elif run_mode == 'dy2st_prim_cinn':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -118,6 +144,33 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_group_schedule_tiling_first'] = '1'
         os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
+        os.environ['load_data'] = 'True'
+    elif run_mode == 'dy2st_prim_cinn_cse':
+        # 获取当前工作目录
+        current_dir = os.getcwd()
+        # 切换到上一级目录
+        os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
+        # subprocess.run(["git", "stash"])
+        # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
+        # print("\n modified_paddle_dy2st commit:")
+        # subprocess.run(["git", "rev-parse", "HEAD"])
+        checkout_branch('modified_paddle_dy2st')
+        download_datasets()
+        os.chdir(current_dir)
+
+        os.environ['loss_monitor'] = '1'
+        os.environ['loss_monitor_pytorch_paddle'] = '1'
+        os.environ['FLAGS_prim_vjp_skip_default_ops'] = 'False'
+        os.environ['to_static'] = 'True'
+        os.environ['FLAGS_use_cinn'] = 'True'
+        os.environ['FLAGS_prim_all'] = 'True'
+        os.environ['FLAGS_enable_pir_in_executor'] = 'true'
+        os.environ['FLAGS_enable_pir_api'] = 'True'
+        os.environ['FLAGS_cinn_bucket_compile'] = 'True'
+        os.environ['FLAGS_group_schedule_tiling_first'] = '1'
+        os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
+        os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
+        os.environ['FLAGS_enable_cse_in_dy2st'] = '1'
         os.environ['load_data'] = 'True'
     elif run_mode =='pytorch':
         # 获取当前工作目录

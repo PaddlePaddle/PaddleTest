@@ -18,7 +18,7 @@ def get_html(json_data,html_data):
                     <h2>精度对齐数据列表</h2>\
                     <p>*精度对齐列表中红色表示未通过，其中N/A表示功能测试未通过，没有精度数据</p>\
                     <p>QA说明：此报告为天级别例行，有问题请联系suijiaxin</p>'
-    html_content += '<table border="1">\n<tr><th></th><th>动态图</th><th></th><th>动转静</th><th></th><th>动转静+组合算子</th><th></th><th>动转静+组合算子+编译器</th><th></th></tr>\n'
+    html_content += '<table border="1">\n<tr><th></th><th>动态图</th><th></th><th>动转静</th><th></th><th>动转静+组合算子</th><th></th><th>动转静+组合算子+cse</th><th></th><th>动转静+组合算子+编译器+cse</th><th></th></tr>\n'
     html_content += '<tr><td> </td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td></tr>\n'
     for model_name in data.keys():
         html_content += '<tr><td>' + model_name + '</td>'
