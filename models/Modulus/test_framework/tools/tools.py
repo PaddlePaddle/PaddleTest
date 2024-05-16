@@ -181,6 +181,7 @@ def download_datasets():
     在torch运行之前部分模型需要下载必要的数据集
     """
     if not os.path.exists("./examples/darcy/datasets"):
+        os.system("mkdir -p ./examples/darcy/datasets")
         os.system("wget https://paddle-qa.bj.bcebos.com/benchmark/pretrained/Darcy_241.tar.gz")
         os.system("tar -xf Darcy_241.tar.gz -C ./examples/darcy/datasets")
 
