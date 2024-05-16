@@ -31,7 +31,7 @@ transform = transforms.Compose(
     [transforms.Resize(224), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
 )
 train_set = paddle.vision.datasets.Cifar10(mode="train", transform=transform)
-train_loader = paddle.io.DataLoader(train_set, batch_size=256, num_workers=8)
+train_loader = paddle.io.DataLoader(train_set, batch_size=128, num_workers=8)
 
 # 3. 定义网络结构
 net = resnet50(num_classes=10)
