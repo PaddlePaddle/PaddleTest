@@ -85,6 +85,7 @@ class LayerTest(object):
         for comparing in self.compare_list:
             tmp = {}
             latest = comparing.get("latest")
+            baseline = comparing.get("baseline")
             # if "baseline" not in comparing or comparing["baseline"] is None:
             if isinstance(comparing.get("baseline"), dict):  # 加载plt_gt_baseline中的真值作为基线
                 baseline_info = comparing.get("baseline")
@@ -94,10 +95,12 @@ class LayerTest(object):
                 baseline_testing = baseline_info.get("testing")
                 gt_path = os.path.join(gt_dir, gt_device, baseline_testing, self.title)
                 baseline = load_tensor(gt_path)
-            else:  # 使用self.testings_list项目的测试结果作为基线
-                baseline = comparing.get("baseline")
+                expect = baseline
+            else:  # 使用res_dict中的测试结果作为基线
+                # baseline = comparing.get("baseline")
+                expect = res_dict[baseline]
             result = res_dict[latest]  # result is dict
-            expect = res_dict[baseline]
+            # expect = res_dict[baseline]
             tmp["待测事项"] = latest
             tmp["基线事项"] = baseline
             if comparing.get("precision") is not None:
