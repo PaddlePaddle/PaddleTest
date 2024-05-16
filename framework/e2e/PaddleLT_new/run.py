@@ -66,7 +66,7 @@ class Run(object):
             plt_gt_device = plt_gt_download_url.split("/")[-1]
             if not os.path.exists(os.path.join("plt_gt_baseline", plt_gt_device)):
                 os.makedirs(os.path.join("plt_gt_baseline", plt_gt_device))
-            for testing, _ in self.testing.items():
+            for testing in YamlLoader(yml=self.testing).get_junior_name("testings"):
                 for py_file in self.py_list():
                     case_name = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
                     gt_url = plt_gt_download_url + f"/{plt_gt_device}/{testing}/{case_name}.tensor"
