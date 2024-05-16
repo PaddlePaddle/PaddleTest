@@ -94,8 +94,7 @@ class LayerTest(object):
                 gt_device = baseline_info.get("device")
                 baseline_testing = baseline_info.get("testing")
                 gt_path = os.path.join(gt_dir, gt_device, baseline_testing, self.title)
-                baseline = load_tensor(gt_path)
-                expect = baseline
+                expect = load_tensor(gt_path)
             else:  # 使用res_dict中的测试结果作为基线
                 # baseline = comparing.get("baseline")
                 expect = res_dict[baseline]
