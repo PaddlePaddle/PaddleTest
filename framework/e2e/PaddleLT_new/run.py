@@ -17,7 +17,7 @@ from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
 from tools.json_loader import JSONLoader
-from tools.res_save import xlsx_save, wget_sth, create_tar_gz, extract_tar_gz
+from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz
 from tools.upload_bos import UploadBos
 from tools.statistics import split_list
 from tools.alarm import Alarm
@@ -59,12 +59,18 @@ class Run(object):
         self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        # 下载ground truth用于跨硬件测试
         plt_gt_download_url = os.environ.get("PLT_GT_DOWNLOAD_URL")
         if not plt_gt_download_url == "None":
             self.logger.get_log().info(f"下载plt_gt的url为: {plt_gt_download_url}")
-            wget_sth(url=plt_gt_download_url)
-            plt_gt_tgz = plt_gt_download_url.split("/")[-1]
-            extract_tar_gz(file_path=plt_gt_tgz, extract_path="plt_gt")
+            plt_gt_device = plt_gt_download_url.split("/")[-1]
+            if not os.path.exists(os.path.join("plt_gt_baseline", plt_gt_device)):
+                os.makedirs(os.path.join("plt_gt_baseline", plt_gt_device))
+            for testing, _ in self.testing.items():
+                for py_file in self.py_list():
+                    case_name = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+                    gt_url = plt_gt_download_url + f"/{plt_gt_device}/{testing}/{case_name}.tensor"
+                    download_sth(gt_url=gt_url, output_path=os.path.join("plt_gt_baseline", plt_gt_device, testing))
 
     def _exit_code_txt(self, error_count, error_list):
         """"""
@@ -152,15 +158,19 @@ class Run(object):
 
     def _gt_upload(self):
         """精度groundtruth上传"""
-        if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
+        upload_url = os.environ.get("PLT_GT_UPLOAD_URL")
+        _upload = UploadBos()
+        if not upload_url == "None":
             self.logger.get_log().info(f"上传plt_gt的路径为: {os.environ.get('PLT_GT_UPLOAD_URL')}")
-            create_tar_gz(
-                file_path=f"{os.environ.get('PLT_SET_DEVICE')}.tgz",
-                source_dir=f"plt_gt/{os.environ.get('PLT_SET_DEVICE')}",
-            )
-            UploadBos().upload_to_bos(
-                bos_path=os.environ.get("PLT_GT_UPLOAD_URL"), file_path=f"{os.environ.get('PLT_SET_DEVICE')}.tgz"
-            )
+            for device in os.listdir("plt_gt"):
+                device_path = os.path.join("plt_gt", device)
+                for testing in os.listdir(device_path):
+                    testing_path = os.path.join(device_path, testing)
+                    for tensor in os.listdir(testing_path):
+                        _upload.upload_to_bos(
+                            bos_path=os.path.join(upload_url, device, testing),
+                            file_path=os.path.join(testing_path, tensor),
+                        )
 
     def _perf_upload(self):
         """性能表格/图表/原始数据上传"""

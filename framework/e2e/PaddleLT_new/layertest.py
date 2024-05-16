@@ -86,11 +86,13 @@ class LayerTest(object):
             tmp = {}
             latest = comparing.get("latest")
             # if "baseline" not in comparing or comparing["baseline"] is None:
-            if isinstance(comparing.get("baseline"), dict):  # 加载plt_gt中的真值作为基线
+            if isinstance(comparing.get("baseline"), dict):  # 加载plt_gt_baseline中的真值作为基线
                 baseline_info = comparing.get("baseline")
-                gt_dir = baseline_info.get("plt_gt")
+                # gt_dir = baseline_info.get("gt_dir")
+                gt_dir = "plt_gt_baseline"
+                gt_device = baseline_info.get("device")
                 baseline_testing = baseline_info.get("testing")
-                gt_path = os.path.join(gt_dir, baseline_testing, self.title)
+                gt_path = os.path.join(gt_dir, gt_device, baseline_testing, self.title)
                 baseline = load_tensor(gt_path)
             else:  # 使用self.testings_list项目的测试结果作为基线
                 baseline = comparing.get("baseline")

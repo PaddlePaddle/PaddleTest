@@ -7,8 +7,10 @@
 """
 
 import os
+import shutil
 import tarfile
 import pickle
+import requests
 import wget
 import pandas as pd
 
@@ -93,6 +95,22 @@ def wget_sth(gt_url):
     下载
     """
     wget.download(gt_url)
+
+
+def download_sth(gt_url, output_path):
+
+    """
+    下载文件到指定路径
+
+    :param gt_url: 文件URL
+    :param output_path: 文件保存路径
+    """
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+    with requests.get(gt_url, stream=True) as r:
+        r.raise_for_status()
+        with open(output_path, "wb") as f:
+            shutil.copyfileobj(r.raw, f)
 
 
 def create_tar_gz(file_path, source_dir):
