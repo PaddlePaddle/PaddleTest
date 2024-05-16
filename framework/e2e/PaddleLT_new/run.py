@@ -71,6 +71,7 @@ class Run(object):
                     os.makedirs(os.path.join("plt_gt_baseline", plt_gt_device, testing))
                 for py_file in self.py_list:
                     case_name = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+                    self.logger.get_log().info(f"开始下载plt_gt: {case_name}")
                     gt_url = f"{plt_gt_download_url}/{testing}/{case_name}.tensor"
                     download_sth(
                         gt_url=gt_url,
