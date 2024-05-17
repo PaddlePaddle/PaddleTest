@@ -15,6 +15,8 @@ from generator.builder_data import BuildData
 
 from tools.logger import Logger
 
+from tools.res_save import save_tensor
+
 
 class LayerEval(object):
     """
@@ -120,7 +122,7 @@ class LayerEval(object):
 
             # 开始测试动态InputSpec
             data, spec_gen = self._net_input_and_multi_spec()
-            loops = 90
+            loops = (16**9) * 2
             i = 0
             # for i in range(loops):
             for inputspec in spec_gen.next():
@@ -130,6 +132,9 @@ class LayerEval(object):
                         net, build_strategy=build_strategy, full_graph=True, input_spec=inputspec
                     )
                     logit = cinn_net(*data)
+                    if os.environ.get("PLT_SAVE_SPEC") == "True":
+                        case_name = self.layerfile.replace(".py", "").replace("/", "^").replace(".", "^")
+                        save_tensor(data=inputspec, filename=os.path.join("inputspec_save", f"{case_name}.inputspec"))
                     return {"logit": logit}
                 except Exception:
                     bug_trace = traceback.format_exc()
