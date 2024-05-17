@@ -24,6 +24,12 @@ class LayerCase(paddle.nn.Layer):
         return var_8, var_9
 
 
+
+def create_inputspec(): 
+    inputspec = ( 
+    )
+    return inputspec
+
 def create_tensor_inputs():
     inputs = (
     )

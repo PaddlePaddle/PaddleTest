@@ -28,7 +28,9 @@ def insert_before_function(filename, function_name, content_to_insert):
         file.writelines(new_lines)
 
 
-inputspec_files = glob.glob(os.path.join("inputspec_save", "*.inputspec.tensor"))
+inputspec_dir = "inputspec_dy2st"
+
+inputspec_files = glob.glob(os.path.join(f"{inputspec_dir}", "*.inputspec.tensor"))
 for file in inputspec_files:
     spec_tuple = paddle.load(file)
 
@@ -40,4 +42,9 @@ for file in inputspec_files:
     inputspec_str += "    )\n"
     inputspec_str += "    return inputspec\n"
 
-    insert_before_function(filename="SIR_87.py", function_name="create_tensor_inputs", content_to_insert=inputspec_str)
+    # layercase^sublayer1000^Clas_cases^CSWinTransformer_CSWinTransformer_base_384^SIR_1.inputspec.tensor
+    sublayer_file = file.replace(".inputspec.tensor", "").replace("^", "/").replace(f"{inputspec_dir}/", "") + ".py"
+    print(f"开始写入: {sublayer_file}")
+    insert_before_function(
+        filename=sublayer_file, function_name="create_tensor_inputs", content_to_insert=inputspec_str
+    )

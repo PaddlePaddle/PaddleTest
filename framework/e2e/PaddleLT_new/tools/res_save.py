@@ -15,10 +15,22 @@ import wget
 import pandas as pd
 
 
+def dict_key_fix(sublayer_dict, old_substr, new_substr):
+    """
+    字典中key改名
+    """
+    new_dict = {}
+    for key, value in sublayer_dict.items():
+        new_key = key.replace(old_substr, new_substr)
+        new_dict[new_key] = value
+    return new_dict
+
+
 def xlsx_save(sublayer_dict, excel_file):
     """
     子图保存到excel
     """
+    sublayer_dict = dict_key_fix(sublayer_dict, "perf_monitor^manual_subgraph^", "")
     data = []
 
     # 遍历嵌套字典，提取数据并添加到列表中

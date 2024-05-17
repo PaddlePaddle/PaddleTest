@@ -123,6 +123,12 @@ class LayerCase(paddle.nn.Layer):
         return var_98, var_95, var_16, var_35, var_54, var_73, var_92, var_97
 
 
+
+def create_inputspec(): 
+    inputspec = ( 
+    )
+    return inputspec
+
 def create_tensor_inputs():
     inputs = (
     )

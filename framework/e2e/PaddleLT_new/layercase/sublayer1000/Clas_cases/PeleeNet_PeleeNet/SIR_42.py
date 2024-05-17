@@ -26,6 +26,13 @@ class LayerCase(paddle.nn.Layer):
         return var_4
 
 
+
+def create_inputspec(): 
+    inputspec = ( 
+        paddle.static.InputSpec(shape=(-1, -1, -1, -1), dtype=paddle.float32, stop_gradient=False), 
+    )
+    return inputspec
+
 def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[11, 704, 7, 7], dtype=paddle.float32),

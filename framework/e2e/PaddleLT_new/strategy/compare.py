@@ -138,7 +138,7 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
     return exc_dict
 
 
-def perf_compare(baseline, latest):
+def perf_compare_legacy(baseline, latest):
     """
     比较函数
     :param latest: 待测值
@@ -158,24 +158,24 @@ def perf_compare(baseline, latest):
     return res
 
 
-# def perf_compare_dict(baseline_dict, data_dict, error_list, baseline_layer="layercase", latest_layer="layercase"):
-#     """
-#     生成对比dict
-#     """
-#     # 性能对比
-#     compare_dict = {}
-#     for title, perf_dict in data_dict.items():
-#         if title not in error_list:
-#             compare_dict[title] = {}
-#             for perf_engine, t in perf_dict.items():
-#                 compare_dict[title][perf_engine + "_latest"] = t
-#                 compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[
-#                     perf_engine
-#                 ]
-#                 compare_dict[title][perf_engine + "_compare"] = perf_compare(
-#                     baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
-#                 )
-#     return compare_dict
+def perf_compare(baseline, latest):
+    """
+    比较函数
+    :param latest: 待测值
+    :param baseline: 基线值
+    :return: 比例值
+    """
+    if isinstance(baseline, str) or isinstance(baseline, str):
+        res = "error"
+    else:
+        if baseline == 0 or latest == 0:
+            res = 0
+        else:
+            if latest > baseline:
+                res = (latest - baseline) / baseline * -1
+            else:
+                res = (baseline - latest) / latest
+    return "{:.2f}%".format(res * 100)
 
 
 def perf_compare_dict(baseline_dict, data_dict, error_list, baseline_layer_type, latest_layer_type):
