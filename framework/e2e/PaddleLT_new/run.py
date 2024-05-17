@@ -61,7 +61,7 @@ class Run(object):
 
         # 下载ground truth用于跨硬件测试
         plt_gt_download_url = os.environ.get("PLT_GT_DOWNLOAD_URL")
-        if not plt_gt_download_url == "None":
+        if not plt_gt_download_url == "None" and os.environ.get("TESTING_MODE") == "precision":
             self.logger.get_log().info(f"下载plt_gt的url为: {plt_gt_download_url}")
             plt_gt_device = plt_gt_download_url.split("/")[-1]
             # if not os.path.exists(os.path.join("plt_gt_baseline", plt_gt_device)):
