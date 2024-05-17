@@ -15,20 +15,32 @@ import wget
 import pandas as pd
 
 
+def dict_key_fix(sublayer_dict, old_substr, new_substr):
+    """
+    字典中key改名
+    """
+    new_dict = {}
+    for key, value in sublayer_dict.items():
+        new_key = key.replace(old_substr, new_substr)
+        new_dict[new_key] = value
+    return new_dict
+
+
 def xlsx_save(sublayer_dict, excel_file):
     """
     子图保存到excel
     """
+    dict_key_fix(sublayer_dict, "perf_monitor^manual_subgraph^", "")
     data = []
 
     # 遍历嵌套字典，提取数据并添加到列表中
     for key, sub_dict in sublayer_dict.items():
-        print("key is: ", key)
-        print("sub_dict is: ", sub_dict)
+        # print("key is: ", key)
+        # print("sub_dict is: ", sub_dict)
         row = {"sub_layer": key}
         for subkey, value in sub_dict.items():
-            print("subkey is: ", subkey)
-            print("value is: ", value)
+            # print("subkey is: ", subkey)
+            # print("value is: ", value)
             row[subkey] = value
         data.append(row)
 
