@@ -122,7 +122,7 @@ class LayerEval(object):
 
             # 开始测试动态InputSpec
             data, spec_gen = self._net_input_and_multi_spec()
-            loops = 90
+            loops = (16**9) * 2
             i = 0
             # for i in range(loops):
             for inputspec in spec_gen.next():
