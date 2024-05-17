@@ -175,7 +175,7 @@ def perf_compare(baseline, latest):
                 res = (latest - baseline) / baseline * -1
             else:
                 res = (baseline - latest) / latest
-    return res
+    return "{:.2f}%".format(res * 100)
 
 
 def perf_compare_dict(baseline_dict, data_dict, error_list, baseline_layer_type, latest_layer_type):
