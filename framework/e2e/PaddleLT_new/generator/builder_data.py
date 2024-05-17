@@ -74,13 +74,16 @@ class BuildData(object):
         """get single inputspec"""
         spec_list = []
         data = self.get_single_data()
-        for v in data:
-            if isinstance(v, paddle.Tensor):
-                input_shape = tuple([-1] * len(v.shape))
-                spec_tmp = paddle.static.InputSpec(
-                    shape=input_shape, dtype=v.dtype, name=None, stop_gradient=v.stop_gradient
-                )
-                spec_list.append(spec_tmp)
+        if hasattr(eval(self.dataname), "create_inputspec"):  # 如果子图case中包含inputspec, 则直接使用接口获取
+            spec_list = eval(self.dataname + ".create_inputspec()")
+        else:
+            for v in data:
+                if isinstance(v, paddle.Tensor):
+                    input_shape = tuple([-1] * len(v.shape))
+                    spec_tmp = paddle.static.InputSpec(
+                        shape=input_shape, dtype=v.dtype, name=None, stop_gradient=v.stop_gradient
+                    )
+                    spec_list.append(spec_tmp)
         return data, spec_list
 
     def get_single_input_and_multi_spec(self):
