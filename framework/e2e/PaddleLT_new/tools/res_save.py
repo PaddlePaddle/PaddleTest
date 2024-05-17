@@ -23,8 +23,12 @@ def xlsx_save(sublayer_dict, excel_file):
 
     # 遍历嵌套字典，提取数据并添加到列表中
     for key, sub_dict in sublayer_dict.items():
+        print("key is: ", key)
+        print("sub_dict is: ", sub_dict)
         row = {"sub_layer": key}
         for subkey, value in sub_dict.items():
+            print("subkey is: ", subkey)
+            print("value is: ", value)
             row[subkey] = value
         data.append(row)
 
