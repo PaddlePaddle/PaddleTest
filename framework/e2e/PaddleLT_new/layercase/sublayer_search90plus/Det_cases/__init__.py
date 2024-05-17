@@ -8,7 +8,7 @@ current_dir = os.path.dirname(__file__)
 folders = glob.glob(os.path.join(current_dir, '*'))  
   
 # 过滤出文件夹（排除文件）  
-folders = [folder for folder in folders if os.path.isdir(folder)]
+folders = [folder for folder in folders if os.path.isdir(folder) and not os.path.basename(folder) == '__pycache__']
 
 # 动态导入所有 .py 文件
 for folder in folders:
