@@ -1,2 +1,1 @@
-examples^amgnet.yaml
-examples^nsfnet^nsfnsts.yaml
+examples^fpde^fractional_poisson_2d.yaml

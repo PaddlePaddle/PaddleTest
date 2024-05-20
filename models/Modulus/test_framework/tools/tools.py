@@ -140,6 +140,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_prim_all'] = 'True'
         os.environ['FLAGS_enable_pir_in_executor'] = 'true'
         os.environ['FLAGS_enable_pir_api'] = 'True'
+        os.unsetenv('FLAGS_enable_cse_in_dy2st')
         os.environ['FLAGS_cinn_bucket_compile'] = 'True'
         os.environ['FLAGS_group_schedule_tiling_first'] = '1'
         os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
