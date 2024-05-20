@@ -69,7 +69,7 @@ def test_viv_metric():
     测试函数：测试 viv.py 脚本的评估值
     """
     output_dir = "./output_viv"  # 输出目录
-    loss_function = "eta_mse"  # 损失函数``
+    loss_function = "eta_l2"  # 损失函数``
     base_metric = 0.0763  # 基准评估值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的评估值
