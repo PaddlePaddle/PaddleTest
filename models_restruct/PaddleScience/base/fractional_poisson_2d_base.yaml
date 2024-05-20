@@ -1,9 +1,9 @@
 train:
   -
     name: single
-    cmd: python examples/fpde/fractional_poisson_2d.py
+    cmd: python 
     params:
-      -  
+      - examples/fpde/fractional_poisson_2d.py
     result:
       loss:
         base: 0.00025
