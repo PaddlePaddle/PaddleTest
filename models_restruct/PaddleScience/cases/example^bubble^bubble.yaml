@@ -3,7 +3,7 @@ case:
     base: ./base/bubble_flow_base.yaml
     train:
       -
-        name: single
+        name: single_train
     eval:
       -
         name: single

@@ -1,6 +1,6 @@
 train:
   -
-    name: single
+    name: single_train
     cmd: python examples/bubble/bubble.py
     params:
       - TRAIN.epochs=10000
