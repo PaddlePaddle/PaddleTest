@@ -1,14 +1,14 @@
 testings:
-  dy_eval:
+  dy_train:
     model_dtype: "float32"
-  
-  dy_dp_eval:
+
+  dy_dp_train:
     model_dtype: "float32"
 
 compare:
   -
-    baseline: 'dy_eval'
-    latest: 'dy_dp_eval'
+    baseline: 'dy_train'
+    latest: 'dy_dp_train'
     precision:
       delta: 0.00001
       rtol: 0.000001
