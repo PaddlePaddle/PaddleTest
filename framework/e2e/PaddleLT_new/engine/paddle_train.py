@@ -138,33 +138,39 @@ class LayerTrain(object):
     def dy_dp_train(self):
         """dygraph data parallel train"""
         from paddle.distributed import fleet
+        import paddle.distributed as dist
 
-        fleet.init(is_collective=True)
+        def _dy_dp_train():
+            """dygraph data parallel train"""
+            fleet.init(is_collective=True)
 
-        data = self._net_input()
-        net = self._net_instant()
-        dp_net = fleet.distributed_model(net)
-        optimizer = self._net_optimizer()
-        loss = self._net_loss()
+            data = self._net_input()
+            net = self._net_instant()
+            dp_net = fleet.distributed_model(net)
+            optimizer = self._net_optimizer()
+            loss = self._net_loss()
 
-        net.train()
+            net.train()
 
-        # 构建optimizer用于训练
-        if net.parameters():
-            opt = optimizer.get_opt(net=net)
-            opt = fleet.distributed_optimizer(opt)
+            # 构建optimizer用于训练
+            if net.parameters():
+                opt = optimizer.get_opt(net=net)
+                opt = fleet.distributed_optimizer(opt)
 
-        for epoch in range(self.step):
-            logit = dp_net(*data)
-            # 构建loss用于训练
-            dy_loss = loss.get_loss(logit)
-            dy_loss.backward()
-            if dp_net.parameters():
-                opt.step()
-                opt.clear_grad()
+            for epoch in range(self.step):
+                logit = dp_net(*data)
+                # 构建loss用于训练
+                dy_loss = loss.get_loss(logit)
+                dy_loss.backward()
+                if dp_net.parameters():
+                    opt.step()
+                    opt.clear_grad()
 
-        data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+            data_grad = self._get_data_grad(data)
+            return {"logit": logit, "data_grad": data_grad}
+
+        logit_dict = dist.spawn(_dy_dp_train)
+        return logit_dict
 
     # def dy_train_dl(self):
     #     """dygraph train with dataloader"""
