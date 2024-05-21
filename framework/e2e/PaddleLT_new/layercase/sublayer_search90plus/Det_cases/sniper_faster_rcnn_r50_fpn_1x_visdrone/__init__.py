@@ -12,4 +12,4 @@ for py_file in py_files:
     # 获取文件名（不含扩展名）
     module_name = os.path.basename(py_file)[:-3]
     # 导入模块
-    __import__('layercase.sublayer_search90plus.Det_cases.sniper_faster_rcnn_r50_fpn_1x_sniper_visdrone.' + module_name, globals(), locals(), [])
+    __import__('layercase.sublayer_search90plus.Det_cases.sniper_faster_rcnn_r50_fpn_1x_visdrone.' + module_name, globals(), locals(), [])

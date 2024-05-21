@@ -39,33 +39,67 @@ class LayerTrain(object):
         self.layerfile = layerfile
         self.step = self.testing.get("step")
 
-        # self.net = BuildLayer(layerfile=layerfile).get_layer()
-
-        # self.data = BuildData(layerfile=layerfile).get_single_data()
-
-        # self.optimizer_name = self.testing.get("optimizer").get("optimizer_name")
-        # self.optimizer_param = self.testing.get("optimizer").get("params")
-        # self.optimizer = BuildOptimizer(optimizer_name=self.optimizer_name, optimizer_param=self.optimizer_param)
-
-        # self.loss_name = self.testing.get("Loss").get("loss_name")
-        # self.loss_param = self.testing.get("Loss").get("params")
-        # self.loss = BuildLoss(loss_name=self.loss_name, loss_param=self.loss_param)
-
-    def _get_instant(self):
-        """get data, net, optimizer, loss"""
+    def _net_input(self):
+        """get input"""
         reset(self.seed)
-
         data = BuildData(layerfile=self.layerfile).get_single_data()
-        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        return data
 
+    def _net_instant(self):
+        """get net"""
+        reset(self.seed)
+        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        return net
+
+    def _net_optimizer(self):
+        """get optimizer"""
+        reset(self.seed)
         optimizer_name = self.testing.get("optimizer").get("optimizer_name")
         optimizer_param = self.testing.get("optimizer").get("params")
         optimizer = BuildOptimizer(optimizer_name=optimizer_name, optimizer_param=optimizer_param)
+        return optimizer
 
+    def _net_loss(self):
+        """get net"""
+        reset(self.seed)
         loss_name = self.testing.get("Loss").get("loss_name")
         loss_param = self.testing.get("Loss").get("params")
         loss = BuildLoss(loss_name=loss_name, loss_param=loss_param)
-        return data, net, optimizer, loss
+        return loss
+
+    def _net_input_and_spec(self):
+        """get input and inputspec"""
+        reset(self.seed)
+        data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_spec()
+        return data, input_spec
+
+    def _net_input_and_static_spec(self):
+        """get input and static inputspec"""
+        reset(self.seed)
+        data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_static_spec()
+        return data, input_spec
+
+    def _net_input_and_multi_spec(self):
+        """get input and multi inputspec"""
+        reset(self.seed)
+        data, spec_gen = BuildData(layerfile=self.layerfile).get_single_input_and_multi_spec()
+        return data, spec_gen
+
+    # def _get_instant(self):
+    #     """get data, net, optimizer, loss"""
+    #     reset(self.seed)
+
+    #     data = BuildData(layerfile=self.layerfile).get_single_data()
+    #     net = BuildLayer(layerfile=self.layerfile).get_layer()
+
+    #     optimizer_name = self.testing.get("optimizer").get("optimizer_name")
+    #     optimizer_param = self.testing.get("optimizer").get("params")
+    #     optimizer = BuildOptimizer(optimizer_name=optimizer_name, optimizer_param=optimizer_param)
+
+    #     loss_name = self.testing.get("Loss").get("loss_name")
+    #     loss_param = self.testing.get("Loss").get("params")
+    #     loss = BuildLoss(loss_name=loss_name, loss_param=loss_param)
+    #     return data, net, optimizer, loss
 
     def _get_data_grad(self, data):
         """记录list[inputs...]中的input.grad并生成list[input.grad...]"""
@@ -76,11 +110,11 @@ class LayerTrain(object):
 
     def dy_train(self):
         """dygraph train"""
-
-        # if not self.net.parameters():
-        #     return "pass"
-
-        data, net, optimizer, loss = self._get_instant()
+        # data, net, optimizer, loss = self._get_instant()
+        data = self._net_input()
+        net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
 
         net.train()
         # print(self.net.parameters()) 打印参数parameters
@@ -95,6 +129,37 @@ class LayerTrain(object):
             dy_loss = loss.get_loss(logit)
             dy_loss.backward()
             if net.parameters():
+                opt.step()
+                opt.clear_grad()
+
+        data_grad = self._get_data_grad(data)
+        return {"logit": logit, "data_grad": data_grad}
+
+    def dy_dp_train(self):
+        """dygraph data parallel train"""
+        from paddle.distributed import fleet
+
+        fleet.init(is_collective=True)
+
+        data = self._net_input()
+        net = self._net_instant()
+        dp_net = fleet.distributed_model(net)
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
+
+        net.train()
+
+        # 构建optimizer用于训练
+        if net.parameters():
+            opt = optimizer.get_opt(net=net)
+            opt = fleet.distributed_optimizer(opt)
+
+        for epoch in range(self.step):
+            logit = dp_net(*data)
+            # 构建loss用于训练
+            dy_loss = loss.get_loss(logit)
+            dy_loss.backward()
+            if dp_net.parameters():
                 opt.step()
                 opt.clear_grad()
 
@@ -125,12 +190,13 @@ class LayerTrain(object):
     def dy2st_train(self):
         """dy2st train"""
 
-        if not self.net.parameters():
-            return "pass"
+        # if not self.net.parameters():
+        #     return "pass"
 
-        reset(self.seed)
-
-        data, net, optimizer, loss = self._get_instant()
+        data = self._net_input()
+        net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
 
         net.train()
         st_net = paddle.jit.to_static(net, full_graph=True)
@@ -152,12 +218,11 @@ class LayerTrain(object):
         return {"logit": logit, "data_grad": data_grad}
 
     def dy2st_train_cinn(self):
-        """dy2st train"""
-
-        # if not self.net.parameters():
-        #     return "pass"
-
-        data, net, optimizer, loss = self._get_instant()
+        """dy2st cinn train"""
+        data = self._net_input()
+        net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
 
         net.train()
         build_strategy = paddle.static.BuildStrategy()
@@ -174,6 +239,34 @@ class LayerTrain(object):
             dy_loss = loss.get_loss(logit)
             dy_loss.backward()
             if st_net.parameters():
+                opt.step()
+                opt.clear_grad()
+
+        data_grad = self._get_data_grad(data)
+        return {"logit": logit, "data_grad": data_grad}
+
+    def dy2st_train_cinn_inputspec(self):
+        """dy2st cinn train with inputspec"""
+        data, input_spec = self._net_input_and_spec()
+        net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
+
+        net.train()
+        build_strategy = paddle.static.BuildStrategy()
+        build_strategy.build_cinn_pass = True
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
+
+        # 构建optimizer用于训练
+        if cinn_net.parameters():
+            opt = optimizer.get_opt(net=cinn_net)
+
+        for epoch in range(self.step):
+            logit = cinn_net(*data)
+            # 构建loss用于训练
+            dy_loss = loss.get_loss(logit)
+            dy_loss.backward()
+            if cinn_net.parameters():
                 opt.step()
                 opt.clear_grad()
 

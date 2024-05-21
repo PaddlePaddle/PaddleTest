@@ -165,8 +165,8 @@ class Run(object):
     def _gt_upload(self):
         """精度groundtruth上传"""
         upload_url = os.environ.get("PLT_GT_UPLOAD_URL")
-        _upload = UploadBos()
         if not upload_url == "None":
+            _upload = UploadBos()
             self.logger.get_log().info(f"上传plt_gt的路径为: {os.environ.get('PLT_GT_UPLOAD_URL')}")
             for device in os.listdir("plt_gt"):
                 device_path = os.path.join("plt_gt", device)
@@ -238,7 +238,8 @@ class Run(object):
                     error_list.append(_py_file)
                     error_count += 1
 
-        self._gt_upload()
+        if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
+            self._gt_upload()
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
     def _test_run(self):
@@ -251,7 +252,8 @@ class Run(object):
                 error_list.append(_py_file)
                 error_count += 1
 
-        self._gt_upload()
+        if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
+            self._gt_upload()
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
     def _multiprocess_perf_test_run(self):

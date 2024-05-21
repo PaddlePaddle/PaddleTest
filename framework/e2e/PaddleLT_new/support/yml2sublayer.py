@@ -66,7 +66,7 @@ for case in all_cases:  # case by case写入子图
     # 'shape': [10, 3], 'range': [-1, 1]}, 'padding_idx': -1, 'sparse': True}}}, 'name': 'embedding_base'}
 
     func = case_info["info"]["paddle"]["api_name"]
-    if case_info["info"]["paddle"]["api_name"].endswith('_'):
+    if case_info["info"]["paddle"]["api_name"].endswith("_"):
         stop_gradient = True
     else:
         stop_gradient = False
@@ -169,7 +169,9 @@ for case in all_cases:  # case by case写入子图
                         tensor_inputs += f"paddle.to_tensor(np.random.randint(0, 2, {v['shape']}).astype('bool'), dtype='{v['dtype']}', stop_gradient={stop_gradient}), "
                 elif not v["random"] and v["type"] == "Tensor":
                     np_inputs += f"np.array({v['value']}).astype('{v['dtype']}'), "
-                    tensor_inputs += f"paddle.to_tensor({v['value']}, dtype='{v['dtype']}', stop_gradient={stop_gradient}), "
+                    tensor_inputs += (
+                        f"paddle.to_tensor({v['value']}, dtype='{v['dtype']}', stop_gradient={stop_gradient}), "
+                    )
             else:
                 np_inputs = v
 
