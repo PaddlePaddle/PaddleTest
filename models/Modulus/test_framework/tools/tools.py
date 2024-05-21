@@ -43,7 +43,9 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['to_static'] = 'False'
         os.environ['FLAGS_use_cinn'] = 'False'
         os.environ['FLAGS_prim_all'] = 'False'
+        os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
+        os.unsetenv('FLAGS_enable_cse_in_dy2st')
     elif run_mode == 'dy2st':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -67,7 +69,9 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_group_schedule_tiling_first'] = '1'
         os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
+        os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
+        os.unsetenv('FLAGS_enable_cse_in_dy2st')
     elif run_mode == 'dy2st_prim':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -92,7 +96,9 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_group_schedule_tiling_first'] = '1'
         os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
+        os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
+        os.unsetenv('FLAGS_enable_cse_in_dy2st')
     elif run_mode == 'dy2st_prim_cse':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -118,6 +124,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
         os.environ['FLAGS_enable_cse_in_dy2st'] = '1'
+        os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
     elif run_mode == 'dy2st_prim_cinn':
         # 获取当前工作目录
@@ -140,12 +147,13 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_prim_all'] = 'True'
         os.environ['FLAGS_enable_pir_in_executor'] = 'true'
         os.environ['FLAGS_enable_pir_api'] = 'True'
-        os.unsetenv('FLAGS_enable_cse_in_dy2st')
         os.environ['FLAGS_cinn_bucket_compile'] = 'True'
         os.environ['FLAGS_group_schedule_tiling_first'] = '1'
         os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
+        os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
+        os.unsetenv('FLAGS_enable_cse_in_dy2st')
     elif run_mode == 'dy2st_prim_cinn_cse':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -172,6 +180,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_cinn_new_group_scheduler'] = '1'
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
         os.environ['FLAGS_enable_cse_in_dy2st'] = '1'
+        os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
     elif run_mode =='pytorch':
         # 获取当前工作目录
