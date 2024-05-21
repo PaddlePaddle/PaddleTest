@@ -135,6 +135,37 @@ class LayerTrain(object):
         data_grad = self._get_data_grad(data)
         return {"logit": logit, "data_grad": data_grad}
 
+    def dy_dp_train(self):
+        """dygraph data parallel train"""
+        from paddle.distributed import fleet
+
+        fleet.init(is_collective=True)
+
+        data = self._net_input()
+        net = self._net_instant()
+        dp_net = fleet.distributed_model(net)
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
+
+        net.train()
+
+        # 构建optimizer用于训练
+        if net.parameters():
+            opt = optimizer.get_opt(net=net)
+            opt = fleet.distributed_optimizer(opt)
+
+        for epoch in range(self.step):
+            logit = dp_net(*data)
+            # 构建loss用于训练
+            dy_loss = loss.get_loss(logit)
+            dy_loss.backward()
+            if dp_net.parameters():
+                opt.step()
+                opt.clear_grad()
+
+        data_grad = self._get_data_grad(data)
+        return {"logit": logit, "data_grad": data_grad}
+
     # def dy_train_dl(self):
     #     """dygraph train with dataloader"""
     #     reset(self.seed)
