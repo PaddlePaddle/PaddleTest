@@ -67,3 +67,47 @@ eval:
         base: 0
         threshold: 0
         evaluation: "="
+export: 
+  -
+    name: single_Ma2.0
+    cmd: python examples/shock_wave/shock_wave.py
+    params:
+      - mode=export
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+   -
+    name: single_Ma0.728
+    cmd: python examples/shock_wave/shock_wave.py
+    params:
+      - -cn=shock_wave_Ma0.728
+      - mode=export
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+infer:
+  -
+    name: single_Ma2.0
+    cmd: python examples/shock_wave/shock_wave.py
+    params:
+      - mode=infer
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+  -
+    name: single_Ma0.728
+    cmd: python examples/shock_wave/shock_wave.py
+    params:
+    - -cn=shock_wave_Ma0.728
+    - mode=infer
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

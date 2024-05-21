@@ -1,0 +1,26 @@
+case:
+  linux:
+    base: ./base/nlsmb_base.yaml
+    train:
+      -
+        name: single_optical_soliton
+      -
+        name: single_optical_rogue_wave
+    eval:
+      -
+        name: single_optical_soliton
+      -
+        name: single_optical_rogue_wave
+    predict: skipped
+    export:
+      -
+        name: single_optical_soliton
+      -
+        name: single_optical_rogue_wave
+    infer:
+      -
+        name: single_optical_soliton
+      -
+        name: single_optical_rogue_wave
+
+function: paddlelas_imagenet_parse
