@@ -28,7 +28,7 @@ def insert_before_function(filename, function_name, content_to_insert):
         file.writelines(new_lines)
 
 
-inputspec_dir = "inputspec_dy2st_2"
+inputspec_dir = "inputspec_dy2st_3"
 
 inputspec_files = glob.glob(os.path.join(f"{inputspec_dir}", "*.inputspec.tensor"))
 for file in inputspec_files:
@@ -44,7 +44,7 @@ for file in inputspec_files:
 
     # layercase^sublayer1000^Clas_cases^CSWinTransformer_CSWinTransformer_base_384^SIR_1.inputspec.tensor
     sublayer_file = (
-        file.replace("sublayer_search90plus", "sublayer1000")
+        file.replace("sublayer_search90plusplus", "sublayer1000")
         .replace(".inputspec.tensor", "")
         .replace("^", "/")
         .replace(f"{inputspec_dir}/", "")
