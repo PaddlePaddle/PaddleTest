@@ -51,25 +51,25 @@ class LayerEval(object):
         return data
 
     def _net_instant(self):
-        """get net and data"""
+        """get net"""
         reset(self.seed)
         net = BuildLayer(layerfile=self.layerfile).get_layer()
         return net
 
     def _net_input_and_spec(self):
-        """get inputspec"""
+        """get input and inputspec"""
         reset(self.seed)
         data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_spec()
         return data, input_spec
 
     def _net_input_and_static_spec(self):
-        """get static inputspec"""
+        """get input and static inputspec"""
         reset(self.seed)
         data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_static_spec()
         return data, input_spec
 
     def _net_input_and_multi_spec(self):
-        """get multi inputspec"""
+        """get input and multi inputspec"""
         reset(self.seed)
         data, spec_gen = BuildData(layerfile=self.layerfile).get_single_input_and_multi_spec()
         return data, spec_gen
@@ -96,7 +96,7 @@ class LayerEval(object):
         return {"logit": logit}
 
     def dy2st_eval_cinn(self):
-        """dy2st eval"""
+        """dy2st cinn eval"""
         net = self._net_instant()
 
         build_strategy = paddle.static.BuildStrategy()
@@ -107,7 +107,7 @@ class LayerEval(object):
         return {"logit": logit}
 
     def dy2st_eval_cinn_inputspec(self):
-        """dy2st eval"""
+        """dy2st cinn eval with inputspec"""
         net = self._net_instant()
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
