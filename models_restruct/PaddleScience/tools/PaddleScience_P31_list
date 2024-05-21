@@ -1,1 +1,2 @@
-examples^laplace^laplace2d.yaml
+examples^nlsmb.yaml
+example^bubble^bubble.yaml

@@ -36,7 +36,7 @@ eval:
     cmd: python examples/NLS-MB/NLS-MB_optical_rogue_wave.py
     params:
       - mode=eval
-      -EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/NLS-MB/NLS-MB_rogue_wave_pretrained.pdparams
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/NLS-MB/NLS-MB_rogue_wave_pretrained.pdparams
     result:
       Residual/loss:
         base: 0.00001
