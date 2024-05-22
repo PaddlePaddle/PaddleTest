@@ -15,3 +15,4 @@ examples^biharmonic2d^biharmonic2d.yaml
 example^bubble^bubble.yaml
 example^topopt.yaml
 example^gpinn^poisson_1d.yaml
+examples^nlsmb.yaml
