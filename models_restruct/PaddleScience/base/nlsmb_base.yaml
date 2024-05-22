@@ -5,7 +5,7 @@ train:
     params:
       - TRAIN.epochs=50000
     result:
-      Residual/loss:
+      loss:
         base: 0.000001
         threshold: 1
         evaluation: "-"
@@ -15,7 +15,7 @@ train:
     params:
       - TRAIN.epochs=50000
     result:
-      Residual/loss:
+      loss:
         base: 0.00001
         threshold: 1
         evaluation: "-"
