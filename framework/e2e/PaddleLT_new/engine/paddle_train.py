@@ -15,6 +15,8 @@ from generator.builder_data import BuildData
 from generator.builder_optimizer import BuildOptimizer
 from generator.builder_loss import BuildLoss
 
+from tools.logger import Logger
+
 
 class LayerTrain(object):
     """
@@ -248,6 +250,7 @@ class LayerTrain(object):
     def dy2st_train_cinn_inputspec(self):
         """dy2st cinn train with inputspec"""
         data, input_spec = self._net_input_and_spec()
+        Logger("dy2st_train_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
         net = self._net_instant()
         optimizer = self._net_optimizer()
         loss = self._net_loss()
