@@ -11,7 +11,7 @@ export CUDA_VISIBLE_DEVICES="${PLT_DEVICE_ID:-6}"
 export FRAMEWORK="${FRAMEWORK:-paddle}"
 export MULTI_WORKER="${MULTI_WORKER:-0}"
 
-export PLT_PYTEST_TIMEOUT="${PLT_PYTEST_TIMEOUT:-600}"  # 超时10分钟则判为失败
+export PLT_PYTEST_TIMEOUT="${PLT_PYTEST_TIMEOUT:-600}"  # 超时10分钟则判为失败. 设置为None则不限时
 export PLT_SPEC_USE_MULTI="${PLT_SPEC_USE_MULTI:-False}"  # 开启动态InputSpec搜索遍历
 export PLT_SAVE_SPEC="${PLT_SAVE_SPEC:-False}"  # 是否保存InputSpec搜索遍历结果
 export PLT_SAVE_GT="${PLT_SAVE_GT:-False}"  # 是否保存精度ground truth, 也就是plt_gt
