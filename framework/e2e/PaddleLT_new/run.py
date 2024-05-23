@@ -209,14 +209,29 @@ class Run(object):
         title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
         self.logger.get_log().info(f"开始测试子图 {title}, 准备执行pytest命令~~")
         if self.layer_type == "layerE2Ecase":
-            exit_code = os.system(f"{self.py_cmd} -m pytest {py_file} --alluredir={self.report_dir}")
-        else:
-            exit_code = os.system(
-                "cp -r PaddleLT.py {}.py && "
-                "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
-                    title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
+            if os.environ.get("PLT_PYTEST_TIMEOUT") == "None":
+                exit_code = os.system(f"{self.py_cmd} -m pytest {py_file} --alluredir={self.report_dir}")
+            else:
+                timeout = os.environ.get("PLT_PYTEST_TIMEOUT")
+                exit_code = os.system(
+                    f"{self.py_cmd} -m pytest {py_file} --alluredir={self.report_dir} --timeout={timeout}"
                 )
-            )
+        else:
+            if os.environ.get("PLT_PYTEST_TIMEOUT") == "None":
+                exit_code = os.system(
+                    "cp -r PaddleLT.py {}.py && "
+                    "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
+                        title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
+                    )
+                )
+            else:
+                timeout = os.environ.get("PLT_PYTEST_TIMEOUT")
+                exit_code = os.system(
+                    "cp -r PaddleLT.py {}.py && "
+                    "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}".format(
+                        title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout
+                    )
+                )
         self.logger.get_log().info(f"完成测试子图 {title}, 完成执行pytest命令~~")
         if exit_code != 0:
             return py_file, exit_code
