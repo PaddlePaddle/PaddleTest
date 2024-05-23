@@ -48,3 +48,25 @@ eval:
         base: 0.9974
         threshold: 1
         evaluation: "-"
+export: 
+  -
+    name: single
+    cmd: python examples/tempoGAN/tempoGAN.py
+    params:
+      - mode=export
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+infer:
+  -
+    name: single
+    cmd: python examples/tempoGAN/tempoGAN.py
+    params:
+      - mode=infer
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

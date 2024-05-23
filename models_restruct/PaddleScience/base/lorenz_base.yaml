@@ -66,3 +66,26 @@ eval:
         base: 0.05444
         threshold: 1
         evaluation: "-"
+export: 
+  -
+    name: single
+    cmd: python examples/lorenz/train_transformer.py
+    params:
+      - mode=export
+      - EMBEDDING_MODEL_PATH=https://paddle-org.bj.bcebos.com/paddlescience/models/lorenz/lorenz_pretrained.pdparams
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+infer:
+  -
+    name: single
+    cmd: python examples/lorenz/train_transformer.py
+    params:
+      - mode=infer
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

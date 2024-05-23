@@ -15,8 +15,12 @@ case:
         name: train_transformer_eval_single
       -
         name: train_transformer_eval_multi
-    infer: skipped
-    export: skipped
     predict: skipped
+    export:
+      -
+        name: single
+    infer:
+      -
+        name: single
 
 function: paddlelas_imagenet_parse
