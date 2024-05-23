@@ -145,6 +145,7 @@ class LayerEval(object):
             raise Exception(bug_trace)
         else:
             data, input_spec = self._net_input_and_spec()
+            Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
             cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
             # net.eval()
             logit = cinn_net(*data)
