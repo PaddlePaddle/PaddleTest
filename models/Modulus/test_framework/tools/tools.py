@@ -35,7 +35,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"]) 
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
-        checkout_branch('modified_paddle_dy2st')
+        checkout_branch('modified_paddle_dy2st', model_name)
         download_datasets()
         os.chdir(current_dir)
         os.environ['loss_monitor'] = '1'
@@ -55,7 +55,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
-        checkout_branch('modified_paddle_dy2st')
+        checkout_branch('modified_paddle_dy2st', model_name)
         download_datasets()
         os.chdir(current_dir)
         os.environ['loss_monitor'] = '1'
@@ -81,7 +81,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"]) 
-        checkout_branch('modified_paddle_dy2st')
+        checkout_branch('modified_paddle_dy2st', model_name)
         download_datasets()
         os.chdir(current_dir)
         os.environ['loss_monitor'] = '1'
@@ -108,7 +108,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"]) 
-        checkout_branch('modified_paddle_dy2st')
+        checkout_branch('modified_paddle_dy2st', model_name)
         download_datasets()
         os.chdir(current_dir)
         os.environ['loss_monitor'] = '1'
@@ -135,7 +135,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
-        checkout_branch('modified_paddle_dy2st')
+        checkout_branch('modified_paddle_dy2st', model_name)
         download_datasets()
         os.chdir(current_dir)
 
@@ -163,7 +163,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
-        checkout_branch('modified_paddle_dy2st')
+        checkout_branch('modified_paddle_dy2st', model_name)
         download_datasets()
         os.chdir(current_dir)
 
@@ -195,7 +195,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # subprocess.run(["git", "rev-parse", "HEAD"])
         # print("\n paddlepaddle commit:")
         # os.system('python -c "import paddle; paddle.version.show()"')
-        checkout_branch('modified_torch')
+        checkout_branch('modified_torch', model_name)
         download_datasets()
         os.chdir(current_dir)
         os.environ['save_init_weight_data'] ='True'
@@ -213,13 +213,13 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
                 jit_use_nvfuser=false \
                 graph.func_arch=false \
                 graph.func_arch_allow_partial_hessian=false \
-                {extra_parameters} >{log_dir}/{model_name}_{run_mode}.log"
+                {extra_parameters} >{log_dir}/{model_name}_{run_mode}.log 2>&1"
     process = subprocess.Popen(command, shell=True)
     exit_code = process.wait()
     os.chdir(current_dir)
     return exit_code
 
-def checkout_branch(branch_name):
+def checkout_branch(branch_name, model_name="lime"):
     """
     切换到指定分支
     """
@@ -231,7 +231,7 @@ def checkout_branch(branch_name):
     if branch_name == 'modified_torch':
         print("\n paddlepaddle commit:")
         os.system('python -c "import paddle; paddle.version.show()"')
-    elif branch_name == 'modified_paddle':
+    elif branch_name == 'modified_paddle' and "lime" in model_name:
         if not os.path.exists("examples_sym.zip"):
             os.system("wget https://paddle-org.bj.bcebos.com/paddlescience/datasets/modulus/examples_sym.zip")
         if not os.path.exists("examples_sym"):
