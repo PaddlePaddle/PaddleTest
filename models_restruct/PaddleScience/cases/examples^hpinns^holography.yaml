@@ -7,8 +7,6 @@ case:
     eval:
       -
         name: single
-      -
-        name: multi
     predict: skipped
     export:
       -
