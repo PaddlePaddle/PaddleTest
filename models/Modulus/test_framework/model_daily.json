@@ -46,8 +46,5 @@
     "examples-waveguide-cavity_2D-waveguide2D_TMz": "examples/waveguide/cavity_2D/waveguide2D_TMz.py",
     "examples-waveguide-cavity_3D-waveguide3D": "examples/waveguide/cavity_3D/waveguide3D.py",
     "examples-waveguide-slab_2D-slab_2D": "examples/waveguide/slab_2D/slab_2D.py",
-    "examples-waveguide-slab_3D-slab_3D": "examples/waveguide/slab_3D/slab_3D.py",
-    "examples-annular_ring-annular_ring_hardBC-annular_ring_hardBC": "examples/annular_ring/annular_ring_hardBC/annular_ring_hardBC.py",
-    "examples-three_fin_3d-three_fin_flow": "examples/three_fin_3d/three_fin_flow.py",
-    "examples-helmholtz-helmholtz_hardBC": "examples/helmholtz/helmholtz_hardBC.py"
+    "examples-waveguide-slab_3D-slab_3D": "examples/waveguide/slab_3D/slab_3D.py"
 }

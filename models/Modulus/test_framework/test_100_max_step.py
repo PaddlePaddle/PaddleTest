@@ -13,7 +13,7 @@ from tools.get_result_html import get_html
 
 test_data = {}
 model_list = []
-with open('./model.json', 'r', encoding='utf-8') as f:
+with open('./model_daily.json', 'r', encoding='utf-8') as f:
     # 读取JSON数据
     test_json = json.load(f)
     # 遍历 JSON 对象获取所有的键
