@@ -30,8 +30,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         # 获取当前工作目录
         current_dir = os.getcwd()
         # 切换到上一级目录
-        os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        # subprocess.run(["git", "stash"])    
+        os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))  
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"]) 
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
@@ -51,7 +50,6 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        # subprocess.run(["git", "stash"])
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
@@ -77,7 +75,6 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        # subprocess.run(["git", "stash"])
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"]) 
@@ -104,7 +101,6 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        # subprocess.run(["git", "stash"])
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"]) 
@@ -131,7 +127,6 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        # subprocess.run(["git", "stash"])
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
@@ -159,7 +154,6 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        # subprocess.run(["git", "stash"])
         # subprocess.run(["git", "checkout", "modified_paddle_dy2st"])
         # print("\n modified_paddle_dy2st commit:")
         # subprocess.run(["git", "rev-parse", "HEAD"])
@@ -187,7 +181,6 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         current_dir = os.getcwd()
         # 切换到上一级目录
         os.chdir(os.path.abspath(os.path.join(current_dir, os.pardir)))
-        # subprocess.run(["git", "stash"])
         # # 执行 git checkout modified_torch 命令
         # subprocess.run(["git", "checkout", "modified_torch"])
         # os.system("rm -rf ./outputs")
@@ -223,7 +216,7 @@ def checkout_branch(branch_name, model_name="lime"):
     """
     切换到指定分支
     """
-    subprocess.run(["git", "stash"])
+    subprocess.run(["git", "checkout", "--", "examples/README.md"])
     subprocess.run(["git", "checkout", branch_name])
     os.system("rm -rf ./outputs")
     print(f"\n {branch_name} commit:")
@@ -231,13 +224,13 @@ def checkout_branch(branch_name, model_name="lime"):
     if branch_name == 'modified_torch':
         print("\n paddlepaddle commit:")
         os.system('python -c "import paddle; paddle.version.show()"')
-    elif branch_name == 'modified_paddle' and "lime" in model_name:
-        if not os.path.exists("examples_sym.zip"):
-            os.system("wget https://paddle-org.bj.bcebos.com/paddlescience/datasets/modulus/examples_sym.zip")
-        if not os.path.exists("examples_sym"):
-            os.system("unzip examples_sym.zip")
-        os.system("unalias cp 2>/dev/null")
-        os.system("cp -r -f -v ./examples_sym/examples/* ./examples/")
+    # elif branch_name == 'modified_paddle' and "lime" in model_name:
+    #     if not os.path.exists("examples_sym.zip"):
+    #         os.system("wget https://paddle-org.bj.bcebos.com/paddlescience/datasets/modulus/examples_sym.zip")
+    #     if not os.path.exists("examples_sym"):
+    #         os.system("unzip examples_sym.zip")
+    #     os.system("unalias cp 2>/dev/null")
+    #     os.system("cp -r -f -v ./examples_sym/examples/* ./examples/")
 
 def download_datasets():
     """
