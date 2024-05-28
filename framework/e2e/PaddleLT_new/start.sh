@@ -14,6 +14,7 @@ nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --n
   -e "http_proxy=${http_proxy}" \
   -e "https_proxy=${https_proxy}" \
   -e "no_proxy=bcebos.com" \
+  -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "python_ver=${python_ver}" \
   -e "wheel_url=${wheel_url}" \
   -e "AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID}" \
