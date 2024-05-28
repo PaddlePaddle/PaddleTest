@@ -422,15 +422,15 @@ fi
 #     CPP_INFER
 # fi
 done
-model='pphuman'
-cd log && mkdir ${model} && cd ..
-PPHuman
-model='pphuman_reid'
-cd log && mkdir ${model} && cd ..
-PPHuman_reid
-model='ppvehicle'
-cd log && mkdir ${model} && cd ..
-PPVehicle
+#model='pphuman'
+#cd log && mkdir ${model} && cd ..
+#PPHuman
+#model='pphuman_reid'
+#cd log && mkdir ${model} && cd ..
+#PPHuman_reid
+#model='ppvehicle'
+#cd log && mkdir ${model} && cd ..
+#PPVehicle
 if [ "${err_sign}" = true ];then
     exit 1
 fi
