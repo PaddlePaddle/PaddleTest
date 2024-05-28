@@ -18,10 +18,17 @@ def email_send(sender, receivers, subject, content):
         return True
     except smtplib.SMTPException as e:
         return e
-if __name__ == '__main__':
-    sender = 'suijiaxin@baidu.com'
-    receivers = ['suijiaxin@baidu.com', 'hesensen@baidu.com']
-    subject = 'Modulus Test'
+def send_email(sender, receivers, subject):
+    """
+    send
+    """
     with open('./html_result/index.html', 'r', encoding='utf-8') as f:
         content = f.read()
     email_send(sender, receivers, subject, content)
+    print('send success')
+
+if __name__ == '__main__':
+    sender = 'auto_send@baidu.com'
+    receivers = ['suijiaxin@baidu.com']
+    subject = 'Modulus CE Test'
+    send_email(sender, receivers, subject)

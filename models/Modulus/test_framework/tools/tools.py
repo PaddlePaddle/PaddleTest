@@ -5,6 +5,7 @@ import sys
 import time
 import subprocess
 import pytest
+import allure
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -209,9 +210,19 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
                 {extra_parameters} >{log_dir}/{model_name}_{run_mode}.log 2>&1"
     process = subprocess.Popen(command, shell=True)
     exit_code = process.wait()
+    diy_allure(f'{log_dir}/{model_name}_{run_mode}.log', f'{model_name}_{run_mode}')
     os.chdir(current_dir)
     return exit_code
 
+def diy_allure(log_file_path, log_name):
+    # 读取日志文件内容
+    log_content = ''
+    if os.path.exists(log_file_path):
+        with open(log_file_path, 'r') as file:
+            log_content = file.read()
+    # 将日志文件内容附加到测试步骤中
+    allure.attach(log_content, name=log_name, attachment_type=allure.attachment_type.TEXT)
+    return 0
 def checkout_branch(branch_name, model_name="lime"):
     """
     切换到指定分支
