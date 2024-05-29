@@ -151,7 +151,7 @@ do
             && [[ ${repo_name} == "Paddle3D" ]]; then
             tar_reponame
         # PaddleNLP
-        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]] || [[ $line =~ "refactor-training-loop" ]]) \
             && [[ ! $line =~ "HEAD" ]] \
             && [[ ! $line =~ "release/2.0" ]] \
             && [[ ! $line =~ "release/2.1" ]] \
