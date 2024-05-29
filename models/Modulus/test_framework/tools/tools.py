@@ -210,11 +210,11 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
                 {extra_parameters} >{log_dir}/{model_name}_{run_mode}.log 2>&1"
     process = subprocess.Popen(command, shell=True)
     exit_code = process.wait()
-    diy_allure(f'{log_dir}/{model_name}_{run_mode}.log', f'{model_name}_{run_mode}')
+    diy_allure(f'{log_dir}/{model_name}_{run_mode}.log', f'{model_name}_{run_mode}', model_name)
     os.chdir(current_dir)
     return exit_code
 
-def diy_allure(log_file_path, log_name):
+def diy_allure(log_file_path, log_name, model_name="others"):
     # 读取日志文件内容
     log_content = ''
     if os.path.exists(log_file_path):
@@ -222,6 +222,7 @@ def diy_allure(log_file_path, log_name):
             log_content = file.read()
     # 将日志文件内容附加到测试步骤中
     allure.attach(log_content, name=log_name, attachment_type=allure.attachment_type.TEXT)
+    allure.dynamic.sub_suite(model_name)
     return 0
 def checkout_branch(branch_name, model_name="lime"):
     """
