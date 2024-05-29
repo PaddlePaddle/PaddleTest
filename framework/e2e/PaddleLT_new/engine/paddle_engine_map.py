@@ -17,6 +17,7 @@ paddle_engine_map = {
     "dy_train": LayerTrain,  # 动态图训练
     "dy_dp_train": LayerTrain,
     "dy2st_train": LayerTrain,  # 动转静训练
+    "dy2st_train_inputspec": LayerTrain,  # 动转静训练+动态inputspec
     "dy2st_train_cinn": LayerTrain,  # CINN训练
     "dy2st_train_cinn_inputspec": LayerTrain,  # CINN训练+动态inputspec
     "dy_eval": LayerEval,  # 动态图评估
