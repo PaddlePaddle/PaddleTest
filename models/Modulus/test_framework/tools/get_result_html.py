@@ -1,11 +1,14 @@
 import json
 import os
-def get_html(json_data,html_data):
+def get_html(json_data,html_data,env_json="../env_json.json"):
     """
     将测试结果以html格式写入文件
     """
     with open(json_data, 'r', encoding='utf-8') as f:
         data = json.load(f)
+    with open(env_json, 'r', encoding='utf-8') as f:
+        env_data = json.load(f)
+    stringified_data = '<br>'.join([f"{str(key)}: {str(value)}" for key, value in env_data.items()])
     html_content = '<!DOCTYPE html>\n<html lang="zh">\n<head>\n<meta charset="UTF-8">\n<title>测试结果</title>\n</head>\n<body>\n'
     AGILE_JOB_BUILD_ID = os.getenv("AGILE_JOB_BUILD_ID")
     html_content += f'<h2>报告说明</h2>\
@@ -15,6 +18,8 @@ def get_html(json_data,html_data):
                         <li>本次例行模型的具体测试日志见：<a href="https://paddle-qa.bj.bcebos.com/Modulus/{AGILE_JOB_BUILD_ID}/logs.tar.gz">下载链接</a></li>\
                         <li>本次例行模型的全部文件和产物见：<a href="https://paddle-qa.bj.bcebos.com/Modulus/{AGILE_JOB_BUILD_ID}/modulus-sym.tar.gz">下载链接</a></li>\
                     </ul>\
+                    <h2>测试环境</h2>\
+                    <p>{stringified_data}</p>\
                     <h2>精度对齐数据列表</h2>\
                     <p>*精度对齐列表中红色表示未通过，其中N/A表示功能测试未通过，没有精度数据</p>\
                     <p>QA说明：此报告为天级别例行，有问题请联系suijiaxin</p>'

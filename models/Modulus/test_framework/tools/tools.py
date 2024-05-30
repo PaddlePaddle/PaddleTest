@@ -228,14 +228,26 @@ def checkout_branch(branch_name, model_name="lime"):
     """
     切换到指定分支
     """
+    if os.path.exists('env_json.json'):
+        with open('env_json.json', 'r', encoding='utf-8') as f:
+            env_json = json.load(f)
+    else:
+        env_json = {}
+
     subprocess.run(["git", "checkout", "--", "examples/README.md"])
     subprocess.run(["git", "checkout", branch_name])
     os.system("rm -rf ./outputs")
     print(f"\n {branch_name} commit:")
-    subprocess.run(["git", "rev-parse", "HEAD"])
+    git_output = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+    print(git_output)
+    env_json[f'{branch_name}_commit'] = git_output
     if branch_name == 'modified_torch':
+        paddle_version_output = os.popen('python -c "import paddle; paddle.version.show()"').read().strip()
         print("\n paddlepaddle commit:")
-        os.system('python -c "import paddle; paddle.version.show()"')
+        print(paddle_version_output)
+        env_json[f'PaddlePaddle'] = paddle_version_output
+    with open("env_json.json", "w") as f:
+        json.dump(env_json, f, indent=4)
     # elif branch_name == 'modified_paddle' and "lime" in model_name:
     #     if not os.path.exists("examples_sym.zip"):
     #         os.system("wget https://paddle-org.bj.bcebos.com/paddlescience/datasets/modulus/examples_sym.zip")
