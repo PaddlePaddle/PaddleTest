@@ -15,6 +15,7 @@ def get_html(json_data,html_data,env_json="../env_json.json"):
                     <p>此邮件为Modulus天级别监控邮件，目前进行动态图、动转静、动转静+组合算子、动转静+组合算子+编译器监控，监控粒度为L2和L4，由于模型运行时间较久，暂未监控L6级别。</p>\
                     <ul>\
                         <li>本次例行模型运行pytest测试报告见：<a href="https://paddle-qa.bj.bcebos.com/Modulus/{AGILE_JOB_BUILD_ID}/report.tar.gz">下载链接</a></li>\
+                        <li>本次例行模型运行allure测试报告见：<a href="https://xly.bce.baidu.com/ipipe/ipipe-report/report/{AGILE_JOB_BUILD_ID}/test/">下载链接</a></li>\
                         <li>本次例行模型的具体测试日志见：<a href="https://paddle-qa.bj.bcebos.com/Modulus/{AGILE_JOB_BUILD_ID}/logs.tar.gz">下载链接</a></li>\
                         <li>本次例行模型的全部文件和产物见：<a href="https://paddle-qa.bj.bcebos.com/Modulus/{AGILE_JOB_BUILD_ID}/modulus-sym.tar.gz">下载链接</a></li>\
                     </ul>\
