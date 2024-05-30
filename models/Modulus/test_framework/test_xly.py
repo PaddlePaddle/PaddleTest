@@ -12,8 +12,10 @@ from datetime import datetime
 from tools.tools import run_model, plot_kpi_curves, log_parse
 from tools.get_result_html import get_html
 from tools.send_email import send_email
+
 test_data = {}
-model_list = ["examples-annular_ring-annular_ring-annular_ring", "examples-annular_ring-annular_ring_equation_instancing-annular_ring"]
+model_list = ["annular_ring^annular_ring^annular_ring", "annular_ring^annular_ring_equation_instancing^annular_ring"]
+project_dir = os.getcwd()
 # with open('./model_daily.json', 'r', encoding='utf-8') as f:
 #     # 读取JSON数据
 #     test_json = json.load(f)
@@ -21,7 +23,10 @@ model_list = ["examples-annular_ring-annular_ring-annular_ring", "examples-annul
 #     for key in test_json.keys():
 #         model_list.append(key)
 @pytest.mark.parametrize("model_name", model_list)
+@allure.title("动态图")
 def test_dynamic(model_name):
+    # 切换到项目根目录
+    os.chdir(project_dir)
     # 初始化测试数据
     if model_name not in test_data:
         test_data[model_name]={}
@@ -37,7 +42,6 @@ def test_dynamic(model_name):
         json.dump(test_data, file, ensure_ascii=False, indent=4)
     # 执行torch
     pytorch_exit = run_model(model_name, 'pytorch')
-    
     assert pytorch_exit == 0
     # 执行动态图
     dynamic_exit = run_model(model_name, 'dynamic')
@@ -81,7 +85,10 @@ def test_dynamic(model_name):
 
 
 @pytest.mark.parametrize("model_name", model_list)
+@allure.title("动转静")
 def test_dy2st(model_name):
+    # 切换到项目根目录
+    os.chdir(project_dir)
     if model_name not in test_data:
         test_data[model_name]={}
     if "dy2st" not in test_data[model_name]:
@@ -134,7 +141,10 @@ def test_dy2st(model_name):
     np.testing.assert_allclose(dy2st_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
+@allure.title("动转静+组合算子")
 def test_dy2st_prim(model_name):
+    # 切换到项目根目录
+    os.chdir(project_dir)
     if model_name not in test_data:
         test_data[model_name]={}
     if "dy2st_prim"not in test_data[model_name]:
@@ -186,7 +196,10 @@ def test_dy2st_prim(model_name):
     np.testing.assert_allclose(dy2st_prim_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
+@allure.title("动转静+组合算子+CSE")
 def test_dy2st_prim_cse(model_name):
+    # 切换到项目根目录
+    os.chdir(project_dir)
     if model_name not in test_data:
         test_data[model_name]={}
     if "dy2st_prim_cse"not in test_data[model_name]:
@@ -238,7 +251,10 @@ def test_dy2st_prim_cse(model_name):
     np.testing.assert_allclose(dy2st_prim_cse_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
+@allure.title("动转静+组合算子+CINN")
 def test_dy2st_prim_cinn(model_name):
+    # 切换到项目根目录
+    os.chdir(project_dir)
     if model_name not in test_data:
         test_data[model_name]={}
     if "dy2st_prim_cinn"not in test_data[model_name]:
@@ -283,7 +299,10 @@ def test_dy2st_prim_cinn(model_name):
     np.testing.assert_allclose(dy2st_prim_cinn_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
+@allure.title("动转静+组合算子+CINN+CSE")
 def test_dy2st_prim_cinn_cse(model_name):
+    # 切换到项目根目录
+    os.chdir(project_dir)
     if model_name not in test_data:
         test_data[model_name]={}
     if "dy2st_prim_cinn_cse"not in test_data[model_name]:

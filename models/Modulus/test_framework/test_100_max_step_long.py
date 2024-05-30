@@ -5,11 +5,13 @@ import sys
 import time
 import subprocess
 import pytest
+import allure
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 from tools.tools import run_model, plot_kpi_curves, log_parse
 from tools.get_result_html import get_html
+from tools.send_email import send_email
 
 test_data = {}
 model_list = []
@@ -21,7 +23,7 @@ with open('./model_long_time.json', 'r', encoding='utf-8') as f:
     for key in test_json.keys():
         model_list.append(key)
 @pytest.mark.parametrize("model_name", model_list)
-@pytest.mark.timeout(1800)
+@allure.title("动态图")
 def test_dynamic(model_name):
     # 切换到项目根目录
     os.chdir(project_dir)
@@ -83,7 +85,7 @@ def test_dynamic(model_name):
 
 
 @pytest.mark.parametrize("model_name", model_list)
-@pytest.mark.timeout(1800)
+@allure.title("动转静")
 def test_dy2st(model_name):
     # 切换到项目根目录
     os.chdir(project_dir)
@@ -139,7 +141,7 @@ def test_dy2st(model_name):
     np.testing.assert_allclose(dy2st_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
-@pytest.mark.timeout(1800)
+@allure.title("动转静+组合算子")
 def test_dy2st_prim(model_name):
     # 切换到项目根目录
     os.chdir(project_dir)
@@ -194,7 +196,7 @@ def test_dy2st_prim(model_name):
     np.testing.assert_allclose(dy2st_prim_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
-@pytest.mark.timeout(1800)
+@allure.title("动转静+组合算子+CSE")
 def test_dy2st_prim_cse(model_name):
     # 切换到项目根目录
     os.chdir(project_dir)
@@ -249,7 +251,7 @@ def test_dy2st_prim_cse(model_name):
     np.testing.assert_allclose(dy2st_prim_cse_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
-@pytest.mark.timeout(1800)
+@allure.title("动转静+组合算子+CINN")
 def test_dy2st_prim_cinn(model_name):
     # 切换到项目根目录
     os.chdir(project_dir)
@@ -297,7 +299,7 @@ def test_dy2st_prim_cinn(model_name):
     np.testing.assert_allclose(dy2st_prim_cinn_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
 @pytest.mark.parametrize("model_name", model_list)
-@pytest.mark.timeout(1800)
+@allure.title("动转静+组合算子+CINN+CSE")
 def test_dy2st_prim_cinn_cse(model_name):
     # 切换到项目根目录
     os.chdir(project_dir)
@@ -346,8 +348,9 @@ def test_dy2st_prim_cinn_cse(model_name):
 
 if __name__ == "__main__":
     current_date = datetime.now()
-    code = pytest.main(["--json=test.json", f"--html=report.html", sys.argv[0]])
+    code = pytest.main(["--json=test.json", "--alluredir=./allure", "--html=report.html", sys.argv[0]])
     if not os.path.exists("html_result"):
         os.makedirs("html_result") 
     get_html("./test_data.json","./html_result/index.html")
+    send_email('auto_send@baidu.com',['suijiaxin@baidu.com', 'hesensen@baidu.com', 'chenxiaoxu02@baidu.com', 'chenxi67@baidu.com', 'chenyaowen02@baidu.com', 'chenzhuo13@baidu.com', 'gaotiezhu@baidu.com', 'liuhongyu02@baidu.com', 'tianchao04@baidu.com', 'wanghao107@baidu.com', 'xiongkun03@baidu.com', 'xuxiaojian@baidu.com', 'zhangliujie@baidu.com', 'zhangyanbo02@baidu.com', 'huxiaoguang@baidu.com', 'zhengtianyu@baidu.com'],'Modulus 天级别例行测试报告')
     sys.exit(code)
