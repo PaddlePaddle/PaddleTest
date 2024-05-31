@@ -11,6 +11,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [2], dtype: paddle.int64, stop_gradient: True)
     ):
+        var_0.stop_gradient = True
         var_1 = var_0.__getitem__(0)
         var_2 = var_1.__truediv__(640)
         var_3 = var_0.__getitem__(1)
@@ -22,7 +23,7 @@ class LayerCase(paddle.nn.Layer):
 
 def create_inputspec(): 
     inputspec = ( 
-        paddle.static.InputSpec(shape=(-1,), dtype=paddle.int64, stop_gradient=False), 
+        paddle.static.InputSpec(shape=(-1,), dtype=paddle.int64, stop_gradient=True), 
     )
     return inputspec
 

@@ -14,6 +14,7 @@ class LayerCase(paddle.nn.Layer):
         var_2,    # (shape: [16], dtype: paddle.float32, stop_gradient: True)
     ):
         var_3 = var_1.cast('int64')
+        var_3.stop_gradient = True
         var_4 = var_3.__add__(1)
         var_5 = var_4.cast('float32')
         var_6 = var_5.__sub__(var_1)
