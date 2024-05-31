@@ -34,9 +34,15 @@ class BuildData(object):
         data = []
         for i in eval(dataname):
             if os.environ.get("FRAMEWORK") == "paddle":
-                data.append(paddle.to_tensor(i, stop_gradient=False))
+                if i.dtype == np.int64 or i.dtype == np.int32:
+                    data.append(paddle.to_tensor(i, stop_gradient=True))
+                else:
+                    data.append(paddle.to_tensor(i, stop_gradient=False))
             elif os.environ.get("FRAMEWORK") == "torch":
-                data.append(torch.tensor(i, requires_grad=True))
+                if i.dtype == np.int64 or i.dtype == np.int32:
+                    data.append(torch.tensor(i, requires_grad=False))
+                else:
+                    data.append(torch.tensor(i, requires_grad=True))
 
         return data
 
