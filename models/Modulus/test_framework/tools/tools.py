@@ -222,7 +222,7 @@ def diy_allure(log_file_path, log_name, model_name="others"):
             log_content = file.read()
     # 将日志文件内容附加到测试步骤中
     allure.attach(log_content, name=log_name, attachment_type=allure.attachment_type.TEXT)
-    allure.dynamic.sub_suite(model_name)
+    allure.dynamic.sub_suite(model_name.replace("^", "/")
     return 0
 def checkout_branch(branch_name, model_name="lime"):
     """
