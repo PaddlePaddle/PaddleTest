@@ -1,6 +1,6 @@
 import json
 import os
-def get_html(json_data,html_data,env_json="../env_json.json",model_class="../model_class.json"):
+def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_class.json"):
     """
     将测试结果以html格式写入文件
     """
@@ -41,7 +41,7 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="../mod
                     html_content += '<td style="background-color:red;">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
                 elif data[model_name][sub_key][sub_sub_key]['status'] == 'Success':
                     html_content += '<td style="background-color:green;">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
-                html_content += '<td>' + model_class[model_name] + '</td>'
+        html_content += '<td>' + model_class[model_name] + '</td>'
         html_content += '</tr>\n'
 
     html_content += '</table>'
@@ -52,6 +52,6 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="../mod
     print("HTML 表格已生成！")
 
 if __name__ == '__main__':
-    json_data = '../test_data.json'
+    json_data = './test_data.json'
     html_data = './index.html'
     get_html(json_data, html_data)
