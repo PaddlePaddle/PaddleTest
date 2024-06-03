@@ -45,7 +45,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_prim_all'] = 'False'
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
-        os.environ ['FLAGS_enable_cse_in_dy2st']=0
+        os.environ ['FLAGS_enable_cse_in_dy2st']= '0'
     elif run_mode == 'dy2st':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -70,7 +70,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
-        os.environ ['FLAGS_enable_cse_in_dy2st']=0
+        os.environ ['FLAGS_enable_cse_in_dy2st']= '0'
     elif run_mode == 'dy2st_prim':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -96,7 +96,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
-        os.environ ['FLAGS_enable_cse_in_dy2st']=0
+        os.environ ['FLAGS_enable_cse_in_dy2st']= '0'
     elif run_mode == 'dy2st_prim_cse':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -149,7 +149,7 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_nvrtc_compile_to_cubin'] = 'True'
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
-        os.environ ['FLAGS_enable_cse_in_dy2st']=0
+        os.environ ['FLAGS_enable_cse_in_dy2st']= '0'
     elif run_mode == 'dy2st_prim_cinn_cse':
         # 获取当前工作目录
         current_dir = os.getcwd()
