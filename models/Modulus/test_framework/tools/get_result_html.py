@@ -1,6 +1,6 @@
 import json
 import os
-def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_class.json"):
+def get_html(json_data,html_data,env_json="../env_json.json",model_class="../model_class.json"):
     """
     将测试结果以html格式写入文件
     """
