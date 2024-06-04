@@ -10,9 +10,21 @@ case:
       -
         name: single_forward
       -
+        name: multi_forward
+      -
         name: single_inverse
-    infer: skipped
-    export: skipped
+      -
+        name: multi_inverse
     predict: skipped
+    export:
+      -
+        name: single_forward
+      -
+        name: single_inverse
+    infer:
+      -
+        name: single_forward
+      -
+        name: single_inverse
 
 function: paddlelas_imagenet_parse

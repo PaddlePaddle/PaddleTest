@@ -7,12 +7,17 @@ import numpy as np
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
         super().__init__()
+
     def forward(
         self,
-        var_0,    # (shape: [1002], dtype: paddle.int64, stop_gradient: True)
-        var_1,    # (shape: [1002], dtype: paddle.int32, stop_gradient: True)
-        var_2,    # (shape: [2], dtype: paddle.int32, stop_gradient: True)
+        var_0,  # (shape: [1002], dtype: paddle.int64, stop_gradient: True)
+        var_1,  # (shape: [1002], dtype: paddle.int32, stop_gradient: True)
+        var_2,  # (shape: [2], dtype: paddle.int32, stop_gradient: True)
     ):
+        var_0.stop_gradient = True
+        var_1.stop_gradient = True
+        var_2.stop_gradient = True
+
         var_3 = paddle.tensor.manipulation.gather(var_2, var_0)
         var_4 = var_1.__eq__(0)
         var_5 = paddle.tensor.creation.ones_like(var_3)
@@ -25,14 +30,14 @@ class LayerCase(paddle.nn.Layer):
         return var_11
 
 
-
-def create_inputspec(): 
-    inputspec = ( 
-        paddle.static.InputSpec(shape=(-1,), dtype=paddle.int64, stop_gradient=False), 
-        paddle.static.InputSpec(shape=(-1,), dtype=paddle.int32, stop_gradient=False), 
-        paddle.static.InputSpec(shape=(-1,), dtype=paddle.int32, stop_gradient=False), 
+def create_inputspec():
+    inputspec = (
+        paddle.static.InputSpec(shape=(-1,), dtype=paddle.int64, stop_gradient=True),
+        paddle.static.InputSpec(shape=(-1,), dtype=paddle.int32, stop_gradient=True),
+        paddle.static.InputSpec(shape=(-1,), dtype=paddle.int32, stop_gradient=True),
     )
     return inputspec
+
 
 def create_tensor_inputs():
     inputs = (
@@ -45,9 +50,9 @@ def create_tensor_inputs():
 
 def create_numpy_inputs():
     inputs = (
-        np.random.randint(low=0, high=10, size=[1002], dtype='int64'),
-        np.random.randint(low=0, high=10, size=[1002], dtype='int32'),
-        np.random.randint(low=0, high=10, size=[2], dtype='int32'),
+        np.random.randint(low=0, high=10, size=[1002], dtype="int64"),
+        np.random.randint(low=0, high=10, size=[1002], dtype="int32"),
+        np.random.randint(low=0, high=10, size=[2], dtype="int32"),
     )
     return inputs
 
@@ -56,9 +61,10 @@ class TestLayer(unittest.TestCase):
     def setUp(self):
         self.inputs = create_tensor_inputs()
         self.net = LayerCase()
+
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.set_flags({"FLAGS_prim_all": with_prim})
             if with_cinn:
                 build_strategy = paddle.static.BuildStrategy()
                 build_strategy.build_cinn_pass = True
@@ -68,6 +74,7 @@ class TestLayer(unittest.TestCase):
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs
+
     def test_ast_prim_cinn(self):
         st_out = self.train(self.net, to_static=True)
         cinn_out = self.train(self.net, to_static=True, with_prim=True, with_cinn=True)
@@ -75,5 +82,5 @@ class TestLayer(unittest.TestCase):
             np.testing.assert_allclose(st.numpy(), cinn.numpy(), atol=1e-8)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

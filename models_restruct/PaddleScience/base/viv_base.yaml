@@ -25,3 +25,25 @@ eval:
         base: 4.635014192899689e-06
         threshold: 1
         evaluation: "-"
+export: 
+  -
+    name: single
+    cmd: python examples/fsi/viv.py
+    params:
+      - mode=export
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+infer:
+  -
+    name: single
+    cmd: python examples/fsi/viv.py
+    params:
+      - mode=infer
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

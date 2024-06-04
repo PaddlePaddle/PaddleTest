@@ -70,3 +70,26 @@ eval:
         base: 1.09294
         threshold: 1
         evaluation: "-"
+export: 
+  -
+    name: single
+    cmd: python examples/cylinder/2d_unsteady/transformer_physx/train_transformer.py
+    params:
+      - mode=export
+      - EMBEDDING_MODEL_PATH=https://paddle-org.bj.bcebos.com/paddlescience/models/cylinder/cylinder_pretrained.pdparams
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="
+infer:
+  -
+    name: single
+    cmd: python examples/cylinder/2d_unsteady/transformer_physx/train_transformer.py
+    params:
+      - mode=infer
+    result:
+      exit_code:
+        base: 0
+        threshold: 0
+        evaluation: "="

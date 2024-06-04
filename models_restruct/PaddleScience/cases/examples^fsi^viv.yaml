@@ -7,8 +7,12 @@ case:
     eval:
       -
         name: viv_single
-    infer: skipped
-    export: skipped
     predict: skipped
+    export:
+      -
+        name: single
+    infer:
+      -
+        name: single
 
 function: paddlelas_imagenet_parse
