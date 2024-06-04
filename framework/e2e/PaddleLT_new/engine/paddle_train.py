@@ -302,3 +302,32 @@ class LayerTrain(object):
 
         data_grad = self._get_data_grad(data)
         return {"logit": logit, "data_grad": data_grad}
+
+    def dy2st_train_cinn_static_inputspec(self):
+        """dy2st cinn train with inputspec"""
+        data, input_spec = self._net_input_and_static_spec()
+        Logger("dy2st_train_cinn_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
+        net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
+
+        net.train()
+        build_strategy = paddle.static.BuildStrategy()
+        build_strategy.build_cinn_pass = True
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
+
+        # 构建optimizer用于训练
+        if cinn_net.parameters():
+            opt = optimizer.get_opt(net=cinn_net)
+
+        for epoch in range(self.step):
+            logit = cinn_net(*data)
+            # 构建loss用于训练
+            dy_loss = loss.get_loss(logit)
+            dy_loss.backward()
+            if cinn_net.parameters():
+                opt.step()
+                opt.clear_grad()
+
+        data_grad = self._get_data_grad(data)
+        return {"logit": logit, "data_grad": data_grad}
