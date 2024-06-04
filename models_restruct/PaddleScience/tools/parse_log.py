@@ -27,7 +27,7 @@ def paddlelas_imagenet_parse(log_content, kpi_name):
                     kpi_value_all.append(class_ids)
             else:
                 # 使用正则表达式匹配KPI名称和对应的数值，将提取到的数值添加到kpi_value_all中
-                if kpi_name + ":" in line:
+                if kpi_name + ":" in line and "[Train]" in line:
                     regexp = r"%s:\s*([0-9.]+)" % re.escape(kpi_name)  # 修改正则表达式以支持带有"."的KPI名称
                     r = re.findall(regexp, line)
                     if len(r) > 0:

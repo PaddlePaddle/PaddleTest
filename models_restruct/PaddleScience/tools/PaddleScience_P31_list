@@ -1,2 +1,2 @@
-examples^amgnet.yaml
-examples^nsfnet^nsfnsts.yaml
+examples^nlsmb.yaml
+example^bubble^bubble.yaml

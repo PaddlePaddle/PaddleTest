@@ -1,0 +1,5 @@
+{
+    "annular_ring^annular_ring_hardBC^annular_ring_hardBC": "examples/annular_ring/annular_ring_hardBC/annular_ring_hardBC.py",
+    "three_fin_3d^three_fin_flow": "examples/three_fin_3d/three_fin_flow.py",
+    "helmholtz^helmholtz_hardBC": "examples/helmholtz/helmholtz_hardBC.py"
+}

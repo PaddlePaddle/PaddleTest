@@ -135,7 +135,7 @@ function DockerImages () {
             export env_cuda_version="12.3"
             export env_cudnn_version="9.0.0"
             export env_trt_version="8.6.1.6"
-            ;;   
+            ;;
         *)
             DOCKER_EXIT_CODE=101
             ;;
@@ -187,8 +187,11 @@ function VersionExitJudgment () {
             "Cuda120")
                 echo "everything works fine."
                 ;;
+            "DCU")
+                echo "DCU everything works fine."
+                ;;
             *)
-            echo "Cuda Version is incorrect!!!"
+            echo "Cuda Version is incorrect from VersionExitJudgment!!!"
             ;;
         esac
 
@@ -207,7 +210,7 @@ function VersionExitJudgment () {
                 echo "everything works fine."
                 ;;
             "Python310")
-                echo "everything works fine."
+                echo "python 310 everything works fine."
                 ;;
             "Python311")
                 echo "everything works fine."
@@ -461,6 +464,23 @@ function Cu120PackageUrlInfoRecommand(){
     esac
 }
 
+# DCU安装包链接信息
+function DCUPackageUrlInfo(){
+    local branch_info=$1
+    local package_version=$2
+
+    case ${package_version} in
+        "Python310")
+            export paddle_whl="https://paddle-device.bj.bcebos.com/dcu/test/0328/paddlepaddle_rocm-0.0.0-cp310-cp310-linux_x86_64.whl"
+            ;;
+        "Inference")
+            export paddle_whl="https://paddle-device.bj.bcebos.com/dcu/test/0328/paddlepaddle_rocm-0.0.0-cp310-cp310-linux_x86_64.whl"
+            ;;
+        *)
+            export WHELLINFO_EXITCODE=115
+            ;;
+    esac
+}
 
 # 安装包链接
 function WheelUrlInfo(){
@@ -529,6 +549,12 @@ function WheelUrlInfo(){
             Cu120PackageUrlInfoRecommand ${branch_info} ${python_version}
             if [[ "${infer_package}" != "OFF" ]];then
                 Cu120PackageUrlInfoRecommand ${branch_info} Inference
+            fi
+            ;;
+        "DCU")
+            DCUPackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                DCUPackageUrlInfo ${branch_info} Inference
             fi
             ;;
         *)
@@ -641,6 +667,12 @@ function WheelUrlInfoAll(){
             Cu120PackageUrlInfoAll ${branch_info} ${python_version}
             if [[ "${infer_package}" != "OFF" ]];then
                 Cu120PackageUrlInfoAll ${branch_info} Inference
+            fi
+            ;;
+        "DCU")
+            DCUPackageUrlInfo ${branch_info} ${python_version}
+            if [[ "${infer_package}" != "OFF" ]];then
+                DCUPackageUrlInfo ${branch_info} Inference
             fi
             ;;
         *)
