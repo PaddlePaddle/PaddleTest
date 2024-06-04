@@ -13,7 +13,8 @@ import platform
 from datetime import datetime
 from db.db import DB
 from db.snapshot import Snapshot
-from strategy.compare import perf_compare
+
+# from strategy.compare import perf_compare
 from tools.logger import Logger
 from tools.res_save import xlsx_save
 
@@ -34,7 +35,7 @@ class LayerBenchmarkDB(object):
         self.md5_id = Snapshot().get_md5_id()
 
         # 效率云环境变量
-        self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
+        self.AGILE_PIPELINE_BUILD_ID = int(os.environ.get("AGILE_PIPELINE_BUILD_ID", 0))
 
         # 例行标识
         self.baseline_comment = "baseline_CE_layer_benchmark"
@@ -50,12 +51,15 @@ class LayerBenchmarkDB(object):
         self.hostname = socket.gethostname()
         self.system = platform.system()
 
+        # 子图种类信息
+        self.layer_type = os.environ.get("CASE_TYPE")
+
         # 初始化日志
-        self.logger = Logger("LayerBenchmarkCE")
+        self.logger = Logger("LayerBenchmarkDB")
 
     def _frame_info(self):
         """"""
-        if os.environ.get("FRAMEWORK") == "PaddlePaddle":
+        if os.environ.get("FRAMEWORK") == "paddle":
             import paddle
 
             self.commit = paddle.__git_commit__
@@ -76,7 +80,7 @@ class LayerBenchmarkDB(object):
                 }
             else:
                 raise Exception("unknown hardware, PaddleLayerTest only support test cpu or gpu")
-        elif os.environ.get("FRAMEWORK") == "PyTorch":
+        elif os.environ.get("FRAMEWORK") == "torch":
             import torch
 
             self.commit = torch.__git_commit__
@@ -98,6 +102,8 @@ class LayerBenchmarkDB(object):
             status="running",
             env_info=json.dumps(self.env_info),
             framework=self.framework,
+            agile_pipeline_build_id=self.AGILE_PIPELINE_BUILD_ID,
+            layer_type=self.layer_type,
             commit=self.commit,
             version=self.version,
             hostname=self.hostname,
@@ -109,6 +115,10 @@ class LayerBenchmarkDB(object):
             create_time=self.now_time,
             update_time=self.now_time,
         )
+        # 保存job id到txt
+        with open("job_id.txt", "w") as file:
+            file.write(str(latest_id))
+        self.logger.get_log().info("性能测试job_id: {}".format(latest_id))
 
         # 插入layer_case
         for title, perf_dict in data_dict.items():
@@ -116,31 +126,25 @@ class LayerBenchmarkDB(object):
 
         if bool(error_list):
             db.update_job(id=latest_id, status="error", update_time=self.now_time)
-            print("error cases: {}".format(error_list))
-            raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
+            self.logger.get_log().warn("error cases: {}".format(error_list))
+            # raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
         else:
             db.update_job(id=latest_id, status="done", update_time=self.now_time)
 
+    def get_baseline_dict(self):
+        """
+        获取baseline dict
+        """
         # 获取baseline用于对比
-        baseline_id = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+        db = DB(storage=self.storage)
+        baseline_job = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+        baseline_id = baseline_job["id"]
+        baseline_layer_type = baseline_job["layer_type"]
         baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
-
         baseline_dict = {}
         for i in baseline_list:
             baseline_dict[i["case_name"]] = i
-
-        # 性能对比
-        compare_dict = {}
-        for title, perf_dict in data_dict.items():
-            compare_dict[title] = {}
-            for perf_engine, t in perf_dict.items():
-                compare_dict[title][perf_engine + "_latest"] = t
-                compare_dict[title][perf_engine + "_baseline"] = json.loads(baseline_dict[title]["result"])[perf_engine]
-                compare_dict[title][perf_engine + "_compare"] = perf_compare(
-                    baseline=json.loads(baseline_dict[title]["result"])[perf_engine], latest=t
-                )
-
-        xlsx_save(compare_dict)
+        return baseline_dict, baseline_layer_type
 
     def baseline_insert(self, data_dict, error_list):
         """
@@ -154,6 +158,8 @@ class LayerBenchmarkDB(object):
             status="running",
             env_info=json.dumps(self.env_info),
             framework=self.framework,
+            agile_pipeline_build_id=self.AGILE_PIPELINE_BUILD_ID,
+            layer_type=self.layer_type,
             commit=self.commit,
             version=self.version,
             hostname=self.hostname,
@@ -165,6 +171,10 @@ class LayerBenchmarkDB(object):
             create_time=self.now_time,
             update_time=self.now_time,
         )
+        # 保存job id到txt
+        with open("job_id.txt", "w") as file:
+            file.write(str(basleine_id))
+        self.logger.get_log().info("性能测试job_id: {}".format(basleine_id))
 
         # 插入layer_case
         for title, perf_dict in data_dict.items():
@@ -172,7 +182,7 @@ class LayerBenchmarkDB(object):
 
         if bool(error_list):
             db.update_job(id=basleine_id, status="error", update_time=self.now_time)
-            print("error cases: {}".format(error_list))
-            raise Exception("something wrong with layer benchmark job id: {} !!".format(basleine_id))
+            self.logger.get_log().warn("error cases: {}".format(error_list))
+            # raise Exception("something wrong with layer benchmark job id: {} !!".format(basleine_id))
         else:
             db.update_job(id=basleine_id, status="done", update_time=self.now_time)
