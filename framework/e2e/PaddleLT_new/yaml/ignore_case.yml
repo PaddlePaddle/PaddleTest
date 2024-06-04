@@ -230,6 +230,7 @@ yaml/dy^dy2stcinn_eval_inputspec.yml:
   - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_12.py # hang住CINN
   - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_37.py # hang住CINN
   - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_48.py # hang住CINN
+  - layercase/sublayer1000/Det_cases/ppyolo_ppyolo_r50vd_dcn_1x_coco/SIR_58.py # hang住CINN
   - layercase/sublayer1000/Det_cases/keypoint_higherhrnet_higherhrnet_hrnet_w32_640/SIR_47.py
   - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r50_vd_fpn_2x_coco/SIR_71.py
   - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_x101_vd_64x4d_fpn_2x_coco/SIR_71.py
@@ -470,6 +471,7 @@ yaml/dy^dy2stcinn_train_inputspec.yml:
   - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_12.py # hang住CINN
   - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_37.py # hang住CINN
   - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_48.py # hang住CINN
+  - layercase/sublayer1000/Det_cases/ppyolo_ppyolo_r50vd_dcn_1x_coco/SIR_58.py # hang住CINN
   - layercase/sublayer1000/Det_cases/keypoint_higherhrnet_higherhrnet_hrnet_w32_640/SIR_47.py
   - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r50_vd_fpn_2x_coco/SIR_71.py
   - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_x101_vd_64x4d_fpn_2x_coco/SIR_71.py
