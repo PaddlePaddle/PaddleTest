@@ -26,6 +26,7 @@ ${DEVICES} ${CUDA_SO} -v ${PWD}:/workspace \
   /bin/bash -c "
 ldconfig;
 
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/:/usr/local/lib/
 source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
 source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
