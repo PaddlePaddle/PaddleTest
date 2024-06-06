@@ -247,6 +247,7 @@ class Run(object):
                         try:
                             stdout, stderr = proc.communicate(timeout=60)
                             exit_code = proc.returncode
+                            self.logger.get_log().warn(f" 11 {py_file} Command failed with return code {exit_code}")
                             # 如果进程正常结束，stdout 和 stderr 将包含输出
                             if stdout:
                                 self.logger.get_log().info(stdout.decode())  # 注意：输出是字节串，需要解码为字符串
