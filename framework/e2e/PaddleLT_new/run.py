@@ -7,8 +7,6 @@
 """
 import os
 import subprocess
-import signal
-import threading
 from subprocess import TimeoutExpired
 import multiprocessing
 from concurrent.futures import ThreadPoolExecutor
