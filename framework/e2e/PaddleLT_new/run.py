@@ -235,73 +235,40 @@ class Run(object):
                     os.environ.get("TESTING") == "yaml/dy^dy2stcinn_train_inputspec.yml"
                     or os.environ.get("TESTING") == "yaml/dy^dy2stcinn_eval_inputspec.yml"
                 ):
-                    if os.environ.get("TIME_DEBUG") == "True":
-                        self.logger.get_log().info(f"{py_file} 进入subprocess 另一执行模式, 加入超时限制")
-                        cmd = (
-                            "cp -r PaddleLT.py {}.py && "
-                            "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
-                        ).format(title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout)
-                        # 使用subprocess执行命令并设置超时
-                        proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    # self.logger.get_log().info(f"{py_file} 进入subprocess 另一执行模式, 加入超时限制")
+                    cmd = (
+                        "cp -r PaddleLT.py {}.py && "
+                        "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
+                    ).format(title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout)
+                    # 使用subprocess执行命令并设置超时
+                    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-                        try:
-                            stdout, stderr = proc.communicate(timeout=60)
-                            exit_code = proc.returncode
-                            self.logger.get_log().warn(f" 11 {py_file} Command failed with return code {exit_code}")
-                            # 如果进程正常结束，stdout 和 stderr 将包含输出
-                            if stdout:
-                                self.logger.get_log().info(stdout.decode())  # 注意：输出是字节串，需要解码为字符串
-                            if stderr:
-                                self.logger.get_log().warn(stderr.decode())  # 注意：错误输出也是字节串，需要解码为字符串
-                            if exit_code != 0:
-                                self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
-                        except subprocess.TimeoutExpired:
-                            self.logger.get_log().warn(f"{py_file} Command timed out after 60 seconds")
-                            proc.terminate()  # 发送 SIGTERM 信号到进程
+                    try:
+                        stdout, stderr = proc.communicate(timeout=float(timeout))
+                        exit_code = proc.returncode
+                        self.logger.get_log().warning(f"{py_file} Command failed with return code {exit_code}")
+                        # 如果进程正常结束，stdout 和 stderr 将包含输出
+                        if stdout:
+                            self.logger.get_log().info(stdout.decode())  # 注意：输出是字节串，需要解码为字符串
+                        if stderr:
+                            self.logger.get_log().warning(stderr.decode())  # 注意：错误输出也是字节串，需要解码为字符串
+                        if exit_code != 0:
+                            self.logger.get_log().warning(f"{py_file} Command failed with return code {exit_code}")
+                    except subprocess.TimeoutExpired:
+                        self.logger.get_log().warning(f"{py_file} Command timed out after {timeout} seconds")
+                        proc.terminate()  # 发送 SIGTERM 信号到进程
 
-                            # proc.kill()
-                            # stdout, stderr = proc.communicate()  # 读取可能的输出
-                            # # 记录超时错误
-                            # self.logger.get_log().warn(f"{py_file} Command timed out after 60 seconds")
+                        # proc.kill()
+                        # stdout, stderr = proc.communicate()  # 读取可能的输出
+                        # # 记录超时错误
+                        # self.logger.get_log().warn(f"{py_file} Command timed out after 60 seconds")
 
-                            # # 如果需要，可以记录被终止进程的输出
-                            # if stdout:
-                            #     self.logger.get_log().info(stdout.decode())
-                            # if stderr:
-                            #     self.logger.get_log().warn(stderr.decode())
-                            exit_code = -1
-
-                    else:
-                        self.logger.get_log().info(f"{py_file} 进入subprocess执行模式, 加入超市限制")
-                        cmd = (
-                            "cp -r PaddleLT.py {}.py && "
-                            "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
-                        ).format(title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout)
-                        # 使用subprocess执行命令并设置超时
-                        proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-                        def kill_proc():
-                            proc.kill()
-
-                        # timer = threading.Timer(float(timeout), kill_proc)
-                        timer = threading.Timer(60, kill_proc)
-                        try:
-                            timer.start()
-                            # stdout, stderr = proc.communicate(timeout=float(timeout))
-                            stdout, stderr = proc.communicate(timeout=60)
-                            timer.cancel()
-
-                            exit_code = proc.returncode
-                            if exit_code != 0:
-                                # print(stdout.decode())
-                                # print(stderr.decode())
-                                self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
-                        except TimeoutExpired:
-                            # proc.kill()  # 发送SIGKILL信号终止进程
-                            # exit_code = -signal.SIGTERM
-                            # self.logger.get_log().warn(f"{py_file} Command timed out after {timeout} seconds")
-                            # # return -signal.SIGTERM
-                            pass
+                        # # 如果需要，可以记录被终止进程的输出
+                        # if stdout:
+                        #     self.logger.get_log().info(stdout.decode())
+                        # if stderr:
+                        #     self.logger.get_log().warn(stderr.decode())
+                        exit_code = -1
                 else:
                     exit_code = os.system(
                         "cp -r PaddleLT.py {}.py && "
