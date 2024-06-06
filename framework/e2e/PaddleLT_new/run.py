@@ -232,7 +232,7 @@ class Run(object):
                 # CINN+动态InputSpec额外增加限制
                 if (
                     os.environ.get("TESTING") == "yaml/dy^dy2stcinn_train_inputspec.yml"
-                    or os.environ.get("TESTING") == "dy^dy2stcinn_eval_inputspec.yml"
+                    or os.environ.get("TESTING") == "yaml/dy^dy2stcinn_eval_inputspec.yml"
                 ):
                     self.logger.get_log().info(f"{py_file} 进入subprocess执行模式, 加入超市限制")
                     cmd = (
