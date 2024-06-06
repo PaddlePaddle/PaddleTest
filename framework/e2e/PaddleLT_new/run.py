@@ -257,18 +257,18 @@ class Run(object):
                                 self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
                         except subprocess.TimeoutExpired:
                             self.logger.get_log().warn(f"{py_file} Command timed out after 60 seconds")
-                            # proc.terminate()  # 发送 SIGTERM 信号到进程
+                            proc.terminate()  # 发送 SIGTERM 信号到进程
 
-                            proc.kill()
-                            stdout, stderr = proc.communicate()  # 读取可能的输出
-                            # 记录超时错误
-                            self.logger.get_log().warn(f"{py_file} Command timed out after 60 seconds")
+                            # proc.kill()
+                            # stdout, stderr = proc.communicate()  # 读取可能的输出
+                            # # 记录超时错误
+                            # self.logger.get_log().warn(f"{py_file} Command timed out after 60 seconds")
 
-                            # 如果需要，可以记录被终止进程的输出
-                            if stdout:
-                                self.logger.get_log().info(stdout.decode())
-                            if stderr:
-                                self.logger.get_log().warn(stderr.decode())
+                            # # 如果需要，可以记录被终止进程的输出
+                            # if stdout:
+                            #     self.logger.get_log().info(stdout.decode())
+                            # if stderr:
+                            #     self.logger.get_log().warn(stderr.decode())
                             exit_code = -1
 
                     else:
