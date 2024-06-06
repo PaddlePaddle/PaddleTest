@@ -240,12 +240,13 @@ class Run(object):
                         cmd = (
                             "cp -r PaddleLT.py {}.py && "
                             "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
-                        ).format(py_file, self.py_cmd, py_file, title, py_file, self.testing, self.report_dir, timeout)
+                        ).format(title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout)
                         # 使用subprocess执行命令并设置超时
                         proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
                         try:
                             stdout, stderr = proc.communicate(timeout=60)
+                            exit_code = proc.returncode
                             # 如果进程正常结束，stdout 和 stderr 将包含输出
                             if stdout:
                                 self.logger.get_log().info(stdout.decode())  # 注意：输出是字节串，需要解码为字符串
@@ -262,7 +263,7 @@ class Run(object):
                         cmd = (
                             "cp -r PaddleLT.py {}.py && "
                             "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
-                        ).format(py_file, self.py_cmd, py_file, title, py_file, self.testing, self.report_dir, timeout)
+                        ).format(title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout)
                         # 使用subprocess执行命令并设置超时
                         proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
