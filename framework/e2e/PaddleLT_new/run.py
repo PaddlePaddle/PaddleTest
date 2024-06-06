@@ -246,18 +246,30 @@ class Run(object):
 
                         try:
                             stdout, stderr = proc.communicate(timeout=60)
-                            exit_code = proc.returncode
+                            # exit_code = proc.returncode
                             self.logger.get_log().warn(f" 11 {py_file} Command failed with return code {exit_code}")
                             # 如果进程正常结束，stdout 和 stderr 将包含输出
                             if stdout:
                                 self.logger.get_log().info(stdout.decode())  # 注意：输出是字节串，需要解码为字符串
                             if stderr:
                                 self.logger.get_log().warn(stderr.decode())  # 注意：错误输出也是字节串，需要解码为字符串
-                            if exit_code != 0:
-                                self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
+                            # if exit_code != 0:
+                            #     self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
                         except subprocess.TimeoutExpired:
                             self.logger.get_log().warn(f"{py_file} Command timed out after 60 seconds")
-                            proc.terminate()  # 发送 SIGTERM 信号到进程
+                            # proc.terminate()  # 发送 SIGTERM 信号到进程
+
+                            proc.kill()
+                            stdout, stderr = proc.communicate()  # 读取可能的输出
+                            # 记录超时错误
+                            self.logger.get_log().warn(f"{py_file} Command timed out after 60 seconds")
+
+                            # 如果需要，可以记录被终止进程的输出
+                            if stdout:
+                                self.logger.get_log().info(stdout.decode())
+                            if stderr:
+                                self.logger.get_log().warn(stderr.decode())
+                            exit_code = -1
 
                     else:
                         self.logger.get_log().info(f"{py_file} 进入subprocess执行模式, 加入超市限制")
