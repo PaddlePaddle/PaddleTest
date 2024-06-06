@@ -243,7 +243,7 @@ class Run(object):
                     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
                     try:
-                        stdout, stderr = proc.communicate(timeout=timeout)
+                        stdout, stderr = proc.communicate(timeout=float(timeout))
                         exit_code = proc.returncode
                         if exit_code != 0:
                             self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
