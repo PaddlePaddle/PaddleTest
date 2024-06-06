@@ -243,15 +243,18 @@ class Run(object):
                     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
                     try:
-                        stdout, stderr = proc.communicate(timeout=float(timeout))
+                        # stdout, stderr = proc.communicate(timeout=float(timeout))
+                        stdout, stderr = proc.communicate(timeout=60)
                         exit_code = proc.returncode
                         if exit_code != 0:
+                            print(stdout.decode())
+                            print(stderr.decode())
                             self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
                     except TimeoutExpired:
                         proc.kill()  # 发送SIGKILL信号终止进程
                         exit_code = -signal.SIGTERM
                         self.logger.get_log().warn(f"{py_file} Command timed out after {timeout} seconds")
-                        return -signal.SIGTERM
+                        # return -signal.SIGTERM
                 else:
                     exit_code = os.system(
                         "cp -r PaddleLT.py {}.py && "
