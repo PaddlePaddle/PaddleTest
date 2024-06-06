@@ -8,6 +8,7 @@
 import os
 import subprocess
 import signal
+import threading
 from subprocess import TimeoutExpired
 import multiprocessing
 from concurrent.futures import ThreadPoolExecutor
@@ -242,19 +243,28 @@ class Run(object):
                     # 使用subprocess执行命令并设置超时
                     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+                    def kill_proc():
+                        proc.kill()
+
+                    # timer = threading.Timer(float(timeout), kill_proc)
+                    timer = threading.Timer(60, kill_proc)
                     try:
+                        timer.start()
                         # stdout, stderr = proc.communicate(timeout=float(timeout))
                         stdout, stderr = proc.communicate(timeout=60)
+                        timer.cancel()
+
                         exit_code = proc.returncode
                         if exit_code != 0:
-                            print(stdout.decode())
-                            print(stderr.decode())
+                            # print(stdout.decode())
+                            # print(stderr.decode())
                             self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
                     except TimeoutExpired:
-                        proc.kill()  # 发送SIGKILL信号终止进程
-                        exit_code = -signal.SIGTERM
-                        self.logger.get_log().warn(f"{py_file} Command timed out after {timeout} seconds")
-                        # return -signal.SIGTERM
+                        # proc.kill()  # 发送SIGKILL信号终止进程
+                        # exit_code = -signal.SIGTERM
+                        # self.logger.get_log().warn(f"{py_file} Command timed out after {timeout} seconds")
+                        # # return -signal.SIGTERM
+                        pass
                 else:
                     exit_code = os.system(
                         "cp -r PaddleLT.py {}.py && "
