@@ -6,6 +6,9 @@
 测试执行器
 """
 import os
+import subprocess
+import signal
+from subprocess import TimeoutExpired
 import multiprocessing
 from concurrent.futures import ThreadPoolExecutor
 import platform
@@ -226,12 +229,35 @@ class Run(object):
                 )
             else:
                 timeout = os.environ.get("PLT_PYTEST_TIMEOUT")
-                exit_code = os.system(
-                    "cp -r PaddleLT.py {}.py && "
-                    "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}".format(
-                        title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout
+                # CINN+动态InputSpec额外增加限制
+                if (
+                    os.environ.get("TESTING") == "yaml/dy^dy2stcinn_train_inputspec.yml"
+                    or os.environ.get("TESTING") == "dy^dy2stcinn_eval_inputspec.yml"
+                ):
+                    cmd = (
+                        "cp -r PaddleLT.py {}.py && "
+                        "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
+                    ).format(py_file, self.py_cmd, py_file, title, py_file, self.testing, self.report_dir, timeout)
+                    # 使用subprocess执行命令并设置超时
+                    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                    try:
+                        stdout, stderr = proc.communicate(timeout=timeout)
+                        exit_code = proc.returncode
+                        if exit_code != 0:
+                            self.logger.get_log().warn(f"{py_file} Command failed with return code {exit_code}")
+                    except TimeoutExpired:
+                        proc.kill()  # 发送SIGKILL信号终止进程
+                        exit_code = -signal.SIGTERM
+                        self.logger.get_log().warn(f"{py_file} Command timed out after {timeout} seconds")
+                        return -signal.SIGTERM
+                else:
+                    exit_code = os.system(
+                        "cp -r PaddleLT.py {}.py && "
+                        "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}".format(
+                            title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout
+                        )
                     )
-                )
         self.logger.get_log().info(f"完成测试子图 {title}, 完成执行pytest命令~~")
         if exit_code != 0:
             return py_file, exit_code
