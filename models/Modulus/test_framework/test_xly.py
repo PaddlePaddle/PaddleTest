@@ -15,7 +15,7 @@ from tools.send_email import send_email
 
 test_data = {}
 # model_list = ["limerock^limerock_transfer_learning^limerock_flow", "darcy^darcy_FNO", "darcy^darcy_PINO", "darcy^darcy_DeepO"]
-model_list = ["limerock^limerock_transfer_learning^limerock_flow"]
+model_list = ["chip_2d^chip_2d_solid_solid_heat_transfer"]
 project_dir = os.getcwd()
 # with open('./model_daily.json', 'r', encoding='utf-8') as f:
 #     # 读取JSON数据
