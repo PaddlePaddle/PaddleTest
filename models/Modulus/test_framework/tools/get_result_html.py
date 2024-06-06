@@ -36,7 +36,10 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
         for sub_key in data[model_name].keys():
             for sub_sub_key in data[model_name][sub_key].keys():
                 if 'atol' not in data[model_name][sub_key][sub_sub_key] or 'rtol' not in data[model_name][sub_key][sub_sub_key]:
-                    html_content += '<td style="background-color:red;">N/A</td>'
+                    if data[model_name][sub_key][sub_sub_key]['status'] == 'Timeout':
+                        html_content += '<td style="background-color:yellow;">Timeout</td>'
+                    else:
+                        html_content += '<td style="background-color:red;">N/A</td>'
                     continue
                 atol = data[model_name][sub_key][sub_sub_key]['atol']
                 rtol = data[model_name][sub_key][sub_sub_key]['rtol']
