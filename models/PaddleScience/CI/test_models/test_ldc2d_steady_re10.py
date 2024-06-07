@@ -116,5 +116,5 @@ def test_ldc2d_steady_re10_infer():
 
 if __name__ == "__main__":
     # 使用 pytest 模块运行测试函数
-    code = pytest.main([--alluredir=./allure", sys.argv[0]])
+    code = pytest.main(["--alluredir=./allure", sys.argv[0]])
     sys.exit(code)
