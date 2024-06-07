@@ -31,5 +31,6 @@ paddle_engine_map = {
     "paddle_infer_mkldnn": LayerInfer,  # cpu mkldnn预测
     "paddle_infer_ort": LayerInfer,  # ort预测
     "dy_eval_perf": LayerEvalBM,  # 动态图评估性能
+    "dy2st_eval_perf": LayerEvalBM,  # 动转静评估性能
     "dy2st_eval_cinn_perf": LayerEvalBM,  # CINN评估性能
 }

@@ -79,6 +79,34 @@ class LayerEvalBM(object):
         time_res = round(time_res * self.statis_times, self.statis_round)
         return time_res
 
+    def dy2st_eval_perf(self):
+        """dygraph eval"""
+        net = self._net_instant()
+        st_net = paddle.jit.to_static(net, full_graph=True)
+
+        def _perf(input_data):
+            logit = st_net(*input_data)
+            return logit
+
+        total_time_list = []
+        # 预热
+        timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
+        for i in range(self.perf_repeat):
+            total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
+            total_time_list.append(total_time)
+
+        save_pickle(data=total_time_list, filename="dy_eval_perf_" + self.layerfile)
+        # 画图
+        perf_by_step(
+            data_list=total_time_list,
+            step_scale=[0.1, 0.5, 1],
+            filename="dy2st_eval_cinn_perf_" + self.layerfile + "_by_step",
+        )
+
+        time_res = eval(self.perf_statis)(data_list=total_time_list)
+        time_res = round(time_res * self.statis_times, self.statis_round)
+        return time_res
+
     def dy2st_eval_cinn_perf(self):
         """dy2st eval"""
         net = self._net_instant()
