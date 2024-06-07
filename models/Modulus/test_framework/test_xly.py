@@ -237,7 +237,7 @@ def test_dy2st_prim_cse(model_name):
         json.dump(test_data, file, ensure_ascii=False, indent=4)
     # 执行dy2st+prim+cse
     dy2st_prim_cse_exit = run_model(model_name, 'dy2st_prim_cse')
-    if dy2st_prim_exit != 0:
+    if dy2st_prim_cse_exit != 0:
         test_data[model_name]["dy2st_prim"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim"]["L4"]["status"] = "Failed"
     assert dy2st_prim_cse_exit == 0
