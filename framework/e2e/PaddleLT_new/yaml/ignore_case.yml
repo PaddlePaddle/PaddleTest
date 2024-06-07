@@ -312,6 +312,7 @@ yaml/dy^dy2stcinn_eval_benchmark.yml:
   - layercase/perf_monitor/manual_subgraph/softmax_fp32_shape_128_12_128_128.py  # 显存溢出
   - layercase/perf_monitor/manual_subgraph/layernorm_fp32_shape_1_1_4096.py # Segmentation fault
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_174.py # Segmentation fault
+  - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_l_30e_voc/SIR_182.py # Segmentation fault
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_30.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_57.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_72.py  # core dumps
@@ -456,6 +457,7 @@ yaml/dy2stcinn_eval_benchmark.yml:
   - layercase/perf_monitor/manual_subgraph/softmax_fp32_shape_128_12_128_128.py  # 显存溢出
   - layercase/perf_monitor/manual_subgraph/layernorm_fp32_shape_1_1_4096.py # Segmentation fault
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_174.py # Segmentation fault
+  - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_l_30e_voc/SIR_182.py # Segmentation fault
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_30.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_57.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_72.py  # core dumps
