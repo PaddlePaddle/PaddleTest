@@ -431,6 +431,7 @@ class Run(object):
         sublayer_dict = {}
         error_list = []
         error_count = 0
+        compare_list = YamlLoader(yml=self.testing).yml.get("compare")
         while not result_queue.empty():
             single_sublayer_dict, single_error_list, single_error_count = result_queue.get()
             sublayer_dict.update(single_sublayer_dict)
@@ -440,7 +441,17 @@ class Run(object):
         self._exit_code_txt(error_count=error_count, error_list=error_list)
 
         baseline_dict, baseline_layer_type = self._db_interact(sublayer_dict=sublayer_dict, error_list=error_list)
+        self._perf_report_gen(
+            compare_list=compare_list,
+            baseline_dict=baseline_dict,
+            sublayer_dict=sublayer_dict,
+            error_list=error_list,
+            baseline_layer_type=baseline_layer_type,
+            latest_layer_type=self.layer_type,
+        )
+
         self._perf_upload()
+        self._pts_callback(error_count)
 
     def _perf_test_run(self):
         """run some test"""

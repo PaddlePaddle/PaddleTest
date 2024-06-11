@@ -254,45 +254,6 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
                         baseline=perf_dict[baseline_engine], latest=perf_dict[latest_engine]
                     )
 
-    # for comparing in compare_list:
-    #     if comparing["baseline"] == "ground_truth":
-    #         for title, perf_dict in data_dict.items():
-    #             if title not in error_list:
-    #                 layer_case = title.split("^", 1)[1]
-    #                 baseline_title = "^".join([baseline_layer_type, layer_case])
-    #                 layer_title = "^".join([latest_layer_type, layer_case])
-
-    #                 if baseline_title in baseline_dict and layer_title in data_dict:
-    #                     if layer_case not in compare_dict:
-    #                         compare_dict[layer_case] = {}
-    #                     for perf_engine, t in perf_dict.items():
-    #                         compare_dict[layer_case][perf_engine + "^" + latest_layer_type + "^latest"] = t
-    #                         compare_dict[layer_case][perf_engine + "^" + baseline_layer_type + "^baseline"] =
-    # json.loads(
-    #                             baseline_dict[baseline_title]["result"]
-    #                         )[perf_engine]
-    #                         compare_dict[layer_case][perf_engine + "^compare"] = perf_compare(
-    #                             baseline=json.loads(baseline_dict[baseline_title]["result"])[perf_engine], latest=t
-    #                         )
-    #     else:
-    #         for title, perf_dict in data_dict.items():
-    #             if title not in error_list:
-    #                 layer_case = title.split("^", 1)[1]
-    #                 # baseline_title = "^".join([latest_layer_type, layer_case])
-    #                 layer_title = "^".join([latest_layer_type, layer_case])
-    #                 # if baseline_title in baseline_dict and layer_title in data_dict:
-    #                 if layer_title in data_dict:
-    #                     if layer_case not in compare_dict:
-    #                         compare_dict[layer_case] = {}
-    #                     for perf_engine, t in perf_dict.items():
-    #                         compare_dict[layer_case][perf_engine + "^" + latest_layer_type + "^latest"] = t
-    #                         compare_dict[layer_case][perf_engine + "^" + baseline_layer_type + "^baseline"] =
-    # json.loads(
-    #                             baseline_dict[baseline_title]["result"]
-    #                         )[perf_engine]
-    #                         compare_dict[layer_case][perf_engine + "^compare"] = perf_compare(
-    #                             baseline=json.loads(baseline_dict[baseline_title]["result"])[perf_engine], latest=t
-    #                         )
     return compare_dict
 
 
