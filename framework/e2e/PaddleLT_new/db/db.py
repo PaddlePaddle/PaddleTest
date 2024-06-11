@@ -215,7 +215,7 @@ class DB(object):
         """通过comment字段、ci字段、机器唯一标识码，查找baseline数据"""
         condition_list = [
             "comment = '{}'".format(comment),
-            # "status = 'done'",
+            "status = 'done'",
             "base = '{}'".format(base),
             "ci = '{}'".format(ci),
             "md5_id = '{}'".format(md5_id),
