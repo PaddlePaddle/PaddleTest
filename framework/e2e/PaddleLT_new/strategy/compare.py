@@ -235,9 +235,7 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
                     if baseline_title in baseline_dict and layer_title in data_dict:  # 判断数据库中的基线是否包含该子图
                         # if layer_case not in compare_dict:
                         #     compare_dict[layer_case] = {}
-                        compare_dict[layer_case][latest_engine + "^" + latest_layer_type + "^latest"] = perf_dict[
-                            latest_engine
-                        ]
+                        compare_dict[layer_case][latest_engine + "^" + latest_layer_type] = perf_dict[latest_engine]
                         compare_dict[layer_case][latest_engine + "^" + baseline_layer_type + "^baseline"] = json.loads(
                             baseline_dict[baseline_title]["result"]
                         )[latest_engine]
@@ -246,9 +244,7 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
                             latest=perf_dict[latest_engine],
                         )
                     else:
-                        compare_dict[layer_case][latest_engine + "^" + latest_layer_type + "^latest"] = perf_dict[
-                            latest_engine
-                        ]
+                        compare_dict[layer_case][latest_engine + "^" + latest_layer_type] = perf_dict[latest_engine]
                         compare_dict[layer_case][latest_engine + "^" + baseline_layer_type + "^baseline"] = "None"
                         compare_dict[layer_case][latest_engine + "^compare"] = "None"
                 else:
