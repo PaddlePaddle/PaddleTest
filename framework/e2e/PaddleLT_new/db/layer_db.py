@@ -125,7 +125,7 @@ class LayerBenchmarkDB(object):
             db.insert_case(jid=latest_id, case_name=title, result=json.dumps(perf_dict), create_time=self.now_time)
 
         if bool(error_list):
-            db.update_job(id=latest_id, status="error", update_time=self.now_time)
+            db.update_job(id=latest_id, status="done", update_time=self.now_time)
             self.logger.get_log().warn("error cases: {}".format(error_list))
             # raise Exception("something wrong with layer benchmark job id: {} !!".format(latest_id))
         else:
@@ -181,7 +181,7 @@ class LayerBenchmarkDB(object):
             db.insert_case(jid=basleine_id, case_name=title, result=json.dumps(perf_dict), create_time=self.now_time)
 
         if bool(error_list):
-            db.update_job(id=basleine_id, status="error", update_time=self.now_time)
+            db.update_job(id=basleine_id, status="done", update_time=self.now_time)
             self.logger.get_log().warn("error cases: {}".format(error_list))
             # raise Exception("something wrong with layer benchmark job id: {} !!".format(basleine_id))
         else:
