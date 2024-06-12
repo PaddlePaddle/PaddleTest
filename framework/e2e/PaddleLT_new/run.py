@@ -24,6 +24,7 @@ from tools.upload_bos import UploadBos
 from tools.statistics import split_list
 from tools.alarm import Alarm
 
+from db.snapshot import Snapshot
 
 class Run(object):
     """
@@ -60,6 +61,14 @@ class Run(object):
         self.logger = Logger("PaddleLTRun")
         self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if os.environ.get("PLT_MD5"):
+            self.md5_id = os.environ.get("PLT_MD5")  # 手动设置
+        else:
+            self.md5_id = Snapshot().get_md5_id()  # 自动获取
+        
+        self.logger.get_log().info(f"self.md5_id is: {self.md5_id}")
+        os.system(f"echo self.md5_id is: {self.md5_id} > md5_id.txt")
 
         if os.environ.get("FRAMEWORK") == "paddle":
             import paddle
