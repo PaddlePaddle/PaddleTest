@@ -219,7 +219,8 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
     :return: 比较字典
     """
     compare_dict = {}
-
+    print("baseline_dict is: ", baseline_dict)
+    print("data_dict is: ", data_dict)
     for title, perf_dict in data_dict.items():  # 遍历所有子图
         if title not in error_list:
             layer_case = title.split("^", 1)[1]
