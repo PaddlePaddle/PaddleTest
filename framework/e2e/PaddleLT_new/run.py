@@ -61,6 +61,11 @@ class Run(object):
         self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        if os.environ.get("FRAMEWORK") == "paddle":
+            import paddle
+
+            self.logger.get_log().info(f"Paddle框架commit: {paddle.__git_commit__}, 版本: {paddle.__version__}")
+
         # 下载ground truth用于跨硬件测试
         plt_gt_download_url = os.environ.get("PLT_GT_DOWNLOAD_URL")
         if not plt_gt_download_url == "None" and os.environ.get("TESTING_MODE") == "precision":

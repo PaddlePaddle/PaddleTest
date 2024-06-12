@@ -225,6 +225,9 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
             layer_case = title.split("^", 1)[1]
             baseline_title = "^".join([baseline_layer_type, layer_case])
             layer_title = "^".join([latest_layer_type, layer_case])
+            print("layer_case is: ", layer_case)
+            print("baseline_title is: ", baseline_title)
+            print("layer_title is: ", layer_title)
             for comparing in compare_list:
                 baseline_engine = comparing["baseline"]
                 latest_engine = comparing["latest"]
@@ -235,6 +238,7 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
                     if baseline_title in baseline_dict and layer_title in data_dict:  # 判断数据库中的基线是否包含该子图
                         # if layer_case not in compare_dict:
                         #     compare_dict[layer_case] = {}
+                        # print("layer_case is: ", layer_case)
                         compare_dict[layer_case][latest_engine + "^" + latest_layer_type] = perf_dict[latest_engine]
                         compare_dict[layer_case][latest_engine + "^" + baseline_layer_type + "^baseline"] = json.loads(
                             baseline_dict[baseline_title]["result"]
