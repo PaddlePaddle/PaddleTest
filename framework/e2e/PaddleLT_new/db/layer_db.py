@@ -31,6 +31,7 @@ class LayerBenchmarkDB(object):
         self.storage = storage
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        print('os.environ.get("PLT_MD5") is: ', os.environ.get("PLT_MD5"))
         # md5唯一标识码
         if os.environ.get("PLT_MD5"):
             self.md5_id = os.environ.get("PLT_MD5")  # 手动设置
