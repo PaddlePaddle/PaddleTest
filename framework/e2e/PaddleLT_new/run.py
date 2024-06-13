@@ -202,7 +202,7 @@ class Run(object):
         else:
             timeout = os.environ.get("PLT_PYTEST_TIMEOUT")
             if self.layer_type == "layerE2Ecase":
-                cmd = os.system(f"{self.py_cmd} -m pytest {py_file} --alluredir={self.report_dir} --timeout={timeout}")
+                cmd = f"{self.py_cmd} -m pytest {py_file} --alluredir={self.report_dir} --timeout={timeout}"
             else:
                 cmd = (
                     "cp -r PaddleLT.py {}.py && "
