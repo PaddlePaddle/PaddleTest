@@ -55,6 +55,7 @@ class LayerEvalBM(object):
     def dy_eval_perf(self):
         """dygraph eval"""
         net = self._net_instant()
+        net.eval()
 
         def _perf(input_data):
             logit = net(*input_data)
@@ -83,6 +84,7 @@ class LayerEvalBM(object):
         """dygraph eval"""
         net = self._net_instant()
         st_net = paddle.jit.to_static(net, full_graph=True)
+        st_net.eval()
 
         def _perf(input_data):
             logit = st_net(*input_data)
@@ -114,6 +116,7 @@ class LayerEvalBM(object):
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+        cinn_net.eval()
 
         # net.eval()
         def _perf(input_data):
