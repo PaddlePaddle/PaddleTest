@@ -396,5 +396,5 @@ if __name__ == "__main__":
     if not os.path.exists("html_result"):
         os.makedirs("html_result") 
     get_html("./test_data.json","./html_result/index.html")
-    send_email('auto_send@baidu.com',['suijiaxin@baidu.com', 'hesensen@baidu.com', 'chenxiaoxu02@baidu.com', 'chenxi67@baidu.com', 'chenyaowen02@baidu.com', 'chenzhuo13@baidu.com', 'gaotiezhu@baidu.com', 'liuhongyu02@baidu.com', 'tianchao04@baidu.com', 'wanghao107@baidu.com', 'xiongkun03@baidu.com', 'xuxiaojian@baidu.com', 'zhangliujie@baidu.com', 'zhangyanbo02@baidu.com', 'huxiaoguang@baidu.com', 'zhengtianyu@baidu.com'],'Modulus 天级别例行测试报告')
+    send_email('auto_send@baidu.com',['suijiaxin@baidu.com', 'hesensen@baidu.com', 'chenxiaoxu02@baidu.com', 'chenxi67@baidu.com', 'chenyaowen02@baidu.com', 'chenzhuo13@baidu.com', 'liuhongyu02@baidu.com', 'tianchao04@baidu.com', 'wanghao107@baidu.com', 'xiongkun03@baidu.com', 'xuxiaojian@baidu.com', 'zhangliujie@baidu.com', 'zhangyanbo02@baidu.com', 'huxiaoguang@baidu.com', 'zhengtianyu@baidu.com'],'Modulus 天级别例行测试报告')
     sys.exit(code)
