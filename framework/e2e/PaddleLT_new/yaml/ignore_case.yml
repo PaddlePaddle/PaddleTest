@@ -314,6 +314,7 @@ yaml/dy^dy2stcinn_eval_benchmark.yml:
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_174.py # Segmentation fault
   - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_l_30e_voc/SIR_182.py # Segmentation fault
   - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_s_30e_voc/SIR_179.py # Segmentation fault
+  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_148 # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_30.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_57.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_72.py  # core dumps
@@ -460,6 +461,7 @@ yaml/dy2stcinn_eval_benchmark.yml:
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_174.py # Segmentation fault
   - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_l_30e_voc/SIR_182.py # Segmentation fault
   - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_s_30e_voc/SIR_179.py # Segmentation fault
+  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_148 # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_30.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_57.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_72.py  # core dumps
@@ -684,6 +686,7 @@ yaml/dy^dy2stcinn_eval-dy2st^dy2stcinn_eval_benchmark.yml:
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_174.py # Segmentation fault
   - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_l_30e_voc/SIR_182.py # Segmentation fault
   - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_s_30e_voc/SIR_179.py # Segmentation fault
+  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_148 # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_30.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_57.py  # core dumps
   - layercase/sublayer1000/Ocr_cases/rec_rec_svtrnet/SIR_72.py  # core dumps
