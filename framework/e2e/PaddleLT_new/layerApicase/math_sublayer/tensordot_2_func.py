@@ -19,6 +19,14 @@ class LayerCase(paddle.nn.Layer):
         return out
 
 
+
+def create_inputspec(): 
+    inputspec = ( 
+        paddle.static.InputSpec(shape=(3, 4, 5), dtype=paddle.float32, stop_gradient=False), 
+        paddle.static.InputSpec(shape=(4, 3, 2), dtype=paddle.float32, stop_gradient=False), 
+    )
+    return inputspec
+
 def create_tensor_inputs():
     """
     paddle tensor
