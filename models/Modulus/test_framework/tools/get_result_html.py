@@ -37,16 +37,18 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
             for sub_sub_key in data[model_name][sub_key].keys():
                 if 'atol' not in data[model_name][sub_key][sub_sub_key] or 'rtol' not in data[model_name][sub_key][sub_sub_key]:
                     if data[model_name][sub_key][sub_sub_key]['status'] == 'Timeout':
-                        html_content += '<td style="background-color:yellow;">Timeout</td>'
+                        html_content += '<td style="background-color:rgb(250,234,200);">Timeout</td>'
+                    elif sub_key == "dy2st":
+                        html_content += '<td style="background-color:rgb(135,141,153)">Skipped</td>'
                     else:
-                        html_content += '<td style="background-color:red;">N/A</td>'
+                        html_content += '<td style="background-color:rgb(254,230,230);">N/A</td>'
                     continue
                 atol = data[model_name][sub_key][sub_sub_key]['atol']
                 rtol = data[model_name][sub_key][sub_sub_key]['rtol']
                 if data[model_name][sub_key][sub_sub_key]['status'] == 'Failed':
-                    html_content += '<td style="background-color:red;">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
+                    html_content += '<td style="background-color:rgb(254,230,230);">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
                 elif data[model_name][sub_key][sub_sub_key]['status'] == 'Success':
-                    html_content += '<td style="background-color:green;">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
+                    html_content += '<td style="background-color:rgb(195, 242, 206);">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
         html_content += '<td>' + model_class[model_name] + '</td>'
         html_content += '</tr>\n'
 

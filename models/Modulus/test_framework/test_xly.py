@@ -23,6 +23,16 @@ project_dir = os.getcwd()
 #     # 遍历 JSON 对象获取所有的键
 #     for key in test_json.keys():
 #         model_list.append(key)
+
+@pytest.mark.parametrize("model_name", model_list)
+@allure.title("pytorch")
+def test_pytorch(model_name):
+    # 切换到项目根目录
+    os.chdir(project_dir)
+    # 执行torch
+    pytorch_exit = run_model(model_name, 'pytorch')
+    assert pytorch_exit == 0
+
 @pytest.mark.parametrize("model_name", model_list)
 @allure.title("动态图")
 def test_dynamic(model_name):
@@ -41,14 +51,13 @@ def test_dynamic(model_name):
     test_data[model_name]["dynamic"]["L4"]["status"] = "Timeout"
     with open('./test_data.json', 'w', encoding='utf-8') as file:
         json.dump(test_data, file, ensure_ascii=False, indent=4)
-    # 执行torch
-    pytorch_exit = run_model(model_name, 'pytorch')
     # 执行动态图
     dynamic_exit = run_model(model_name, 'dynamic')
-    if dynamic_exit != 0 or pytorch_exit != 0:
+    if dynamic_exit != 0:
         test_data[model_name]["dynamic"]["L2"]["status"] = "Failed"
         test_data[model_name]["dynamic"]["L4"]["status"] = "Failed"
-    assert pytorch_exit == 0
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert dynamic_exit == 0
     kpi_loss = {}
     # 解析pytorch的日志文件，提取损失值
@@ -60,6 +69,8 @@ def test_dynamic(model_name):
     if pytorch_kpi[0] == -1 or dynamic_kpi[0] == -1:
         test_data[model_name]["dynamic"]["L2"]["status"] = "Failed"
         test_data[model_name]["dynamic"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert pytorch_kpi[0] != -1
     assert dynamic_kpi[0] != -1
     # 绘制KPI曲线图
@@ -91,7 +102,6 @@ def test_dynamic(model_name):
     np.testing.assert_allclose(dynamic_kpi[0], pytorch_kpi[0], atol=1e-5, rtol=1.3e-6)
     np.testing.assert_allclose(dynamic_kpi_avg, pytorch_kpi_avg, atol=1e-5, rtol=1.3e-6)
 
-
 @pytest.mark.parametrize("model_name", model_list)
 @allure.title("动转静")
 def test_dy2st(model_name):
@@ -114,6 +124,8 @@ def test_dy2st(model_name):
     if dy2st_exit != 0:
         test_data[model_name]["dy2st"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert dy2st_exit == 0
     kpi_loss = {}
     # 解析pytorch的日志文件，提取损失值
@@ -125,6 +137,8 @@ def test_dy2st(model_name):
     if dy2st_kpi[0] == -1 or pytorch_kpi[0] == -1:
         test_data[model_name]["dy2st"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert dy2st_kpi[0] != -1
     assert pytorch_kpi[0] != -1
     kpi_loss['dy2st'] = dy2st_kpi
@@ -178,6 +192,8 @@ def test_dy2st_prim(model_name):
     if dy2st_prim_exit != 0:
         test_data[model_name]["dy2st_prim"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert dy2st_prim_exit == 0
     kpi_loss = {}
     # 解析pytorch的日志文件，提取损失值
@@ -188,6 +204,8 @@ def test_dy2st_prim(model_name):
     if dy2st_prim_kpi[0] == -1 or pytorch_kpi[0] == -1:
         test_data[model_name]["dy2st_prim"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert pytorch_kpi[0] != -1
     assert dy2st_prim_kpi[0] != -1
     # 绘制KPI曲线图
@@ -240,6 +258,8 @@ def test_dy2st_prim_cse(model_name):
     if dy2st_prim_cse_exit != 0:
         test_data[model_name]["dy2st_prim"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert dy2st_prim_cse_exit == 0
     kpi_loss = {}
     # 解析pytorch的日志文件，提取损失值
@@ -250,6 +270,8 @@ def test_dy2st_prim_cse(model_name):
     if dy2st_prim_cse_kpi[0] == -1 or pytorch_kpi[0] == -1:
         test_data[model_name]["dy2st_prim_cse"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim_cse"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert dy2st_prim_cse_kpi[0] != -1
     assert pytorch_kpi[0] != -1
     # 绘制KPI曲线图
@@ -302,6 +324,8 @@ def test_dy2st_prim_cinn(model_name):
     if dy2st_prim_cinn_exit != 0:
         test_data[model_name]["dy2st_prim_cinn"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim_cinn"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert dy2st_prim_cinn_exit == 0
     kpi_loss = {}
     # 解析pytorch的日志文件，提取损失值
@@ -313,6 +337,8 @@ def test_dy2st_prim_cinn(model_name):
     if dy2st_prim_cinn_kpi[0] == -1 or pytorch_kpi[0] == -1:
         test_data[model_name]["dy2st_prim_cinn"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim_cinn"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert pytorch_kpi[0] != -1
     assert dy2st_prim_cinn_kpi[0] != -1
     # 绘制KPI曲线图
@@ -358,6 +384,8 @@ def test_dy2st_prim_cinn_cse(model_name):
     if dy2st_prim_cinn_cse_exit != 0:
         test_data[model_name]["dy2st_prim_cinn_cse"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim_cinn_cse"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert dy2st_prim_cinn_cse_exit == 0
     kpi_loss = {}
     # 解析pytorch的日志文件，提取损失值
@@ -368,6 +396,8 @@ def test_dy2st_prim_cinn_cse(model_name):
     if dy2st_prim_cinn_cse_kpi[0] == -1 or pytorch_kpi[0] == -1:
         test_data[model_name]["dy2st_prim_cinn_cse"]["L2"]["status"] = "Failed"
         test_data[model_name]["dy2st_prim_cinn_cse"]["L4"]["status"] = "Failed"
+    with open('./test_data.json', 'w', encoding='utf-8') as file:
+        json.dump(test_data, file, ensure_ascii=False, indent=4)
     assert pytorch_kpi[0] != -1
     assert dy2st_prim_cinn_cse_kpi[0] != -1
     # 绘制KPI曲线图

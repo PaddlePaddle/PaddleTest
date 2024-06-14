@@ -48,6 +48,16 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
         os.environ ['FLAGS_enable_cse_in_dy2st']= '0'
+        allure.dynamic.description(f"运行命令：debug=1 \
+                                    loss_monitor=1 \
+                                    loss_monitor_pytorch_paddle=1 \
+                                    to_static=False \
+                                    FLAGS_use_cinn=False \
+                                    FLAGS_prim_all=False \
+                                    FLAGS_enable_auto_recompute=1 \
+                                    load_data=True \
+                                    FLAGS_enable_cse_in_dy2st=0 \
+                                    python {model_file} cuda_graphs=false jit=false jit_use_nvfuser=false graph.func_arch=false graph.func_arch_allow_partial_hessian=false {extra_parameters}")
     elif run_mode == 'dy2st':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -73,6 +83,22 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
         os.environ ['FLAGS_enable_cse_in_dy2st']= '0'
+        allure.dynamic.description(f"运行命令：debug=1 \
+                                    loss_monitor=1 \
+                                    loss_monitor_pytorch_paddle=1 \
+                                    to_static=True \
+                                    FLAGS_prim_all=False \
+                                    FLAGS_use_cinn=False \
+                                    FLAGS_enable_pir_in_executor=true \
+                                    FLAGS_enable_pir_api=True \
+                                    FLAGS_cinn_bucket_compile=True \
+                                    FLAGS_group_schedule_tiling_first=1 \
+                                    FLAGS_cinn_new_group_scheduler=1 \
+                                    FLAGS_nvrtc_compile_to_cubin=True \
+                                    FLAGS_enable_auto_recompute=1 \
+                                    load_data=True \
+                                    FLAGS_enable_cse_in_dy2st=0 \
+                                    python {model_file} cuda_graphs=false jit=false jit_use_nvfuser=false graph.func_arch=false graph.func_arch_allow_partial_hessian=false {extra_parameters}")
     elif run_mode == 'dy2st_prim':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -99,6 +125,23 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
         os.environ ['FLAGS_enable_cse_in_dy2st']= '0'
+        allure.dynamic.description(f"运行命令：debug=1 \
+                                    loss_monitor=1 \
+                                    loss_monitor_pytorch_paddle=1 \
+                                    FLAGS_prim_vjp_skip_default_ops=False \
+                                    to_static=True \
+                                    FLAGS_prim_all=True \
+                                    FLAGS_use_cinn=False \
+                                    FLAGS_enable_pir_in_executor=true \
+                                    FLAGS_enable_pir_api=True \
+                                    FLAGS_cinn_bucket_compile=True \
+                                    FLAGS_group_schedule_tiling_first=1 \
+                                    FLAGS_cinn_new_group_scheduler=1 \
+                                    FLAGS_nvrtc_compile_to_cubin=True \
+                                    FLAGS_enable_auto_recompute=1 \
+                                    load_data=True \
+                                    FLAGS_enable_cse_in_dy2st=0 \
+                                    python {model_file} cuda_graphs=false jit=false jit_use_nvfuser=false graph.func_arch=false graph.func_arch_allow_partial_hessian=false {extra_parameters}")
     elif run_mode == 'dy2st_prim_cse':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -125,6 +168,23 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_enable_cse_in_dy2st'] = '1'
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
+        allure.dynamic.description(f"运行命令：debug=1 \
+                                    loss_monitor=1 \
+                                    loss_monitor_pytorch_paddle=1 \
+                                    FLAGS_prim_vjp_skip_default_ops=False \
+                                    to_static=True \
+                                    FLAGS_prim_all=True \
+                                    FLAGS_use_cinn=False \
+                                    FLAGS_enable_pir_in_executor=true \
+                                    FLAGS_enable_pir_api=True \
+                                    FLAGS_cinn_bucket_compile=True \
+                                    FLAGS_group_schedule_tiling_first=1 \
+                                    FLAGS_cinn_new_group_scheduler=1 \
+                                    FLAGS_nvrtc_compile_to_cubin=True \
+                                    FLAGS_enable_auto_recompute=1 \
+                                    load_data=True \
+                                    FLAGS_enable_cse_in_dy2st=1 \
+                                    python {model_file} cuda_graphs=false jit=false jit_use_nvfuser=false graph.func_arch=false graph.func_arch_allow_partial_hessian=false {extra_parameters}")
     elif run_mode == 'dy2st_prim_cinn':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -152,6 +212,23 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
         os.environ ['FLAGS_enable_cse_in_dy2st']= '0'
+        allure.dynamic.description(f"运行命令：debug=1 \
+                                    loss_monitor=1 \
+                                    loss_monitor_pytorch_paddle=1 \
+                                    FLAGS_prim_vjp_skip_default_ops=False \
+                                    to_static=True \
+                                    FLAGS_prim_all=True \
+                                    FLAGS_use_cinn=True \
+                                    FLAGS_enable_pir_in_executor=true \
+                                    FLAGS_enable_pir_api=True \
+                                    FLAGS_cinn_bucket_compile=True \
+                                    FLAGS_group_schedule_tiling_first=1 \
+                                    FLAGS_cinn_new_group_scheduler=1 \
+                                    FLAGS_nvrtc_compile_to_cubin=True \
+                                    FLAGS_enable_auto_recompute=1 \
+                                    load_data=True \
+                                    FLAGS_enable_cse_in_dy2st=0 \
+                                    python {model_file} cuda_graphs=false jit=false jit_use_nvfuser=false graph.func_arch=false graph.func_arch_allow_partial_hessian=false {extra_parameters}")
     elif run_mode == 'dy2st_prim_cinn_cse':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -179,6 +256,23 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         os.environ['FLAGS_enable_cse_in_dy2st'] = '1'
         os.environ['FLAGS_enable_auto_recompute'] = '1'
         os.environ['load_data'] = 'True'
+        allure.dynamic.description(f"运行命令：debug=1 \
+                                    loss_monitor=1 \
+                                    loss_monitor_pytorch_paddle=1 \
+                                    FLAGS_prim_vjp_skip_default_ops=False \
+                                    to_static=True \
+                                    FLAGS_prim_all=True \
+                                    FLAGS_use_cinn=True \
+                                    FLAGS_enable_pir_in_executor=true \
+                                    FLAGS_enable_pir_api=True \
+                                    FLAGS_cinn_bucket_compile=True \
+                                    FLAGS_group_schedule_tiling_first=1 \
+                                    FLAGS_cinn_new_group_scheduler=1 \
+                                    FLAGS_nvrtc_compile_to_cubin=True \
+                                    FLAGS_enable_auto_recompute=1 \
+                                    load_data=True \
+                                    FLAGS_enable_cse_in_dy2st=1 \
+                                    python {model_file} cuda_graphs=false jit=false jit_use_nvfuser=false graph.func_arch=false graph.func_arch_allow_partial_hessian=false {extra_parameters}")
     elif run_mode =='pytorch':
         # 获取当前工作目录
         current_dir = os.getcwd()
@@ -195,6 +289,9 @@ def run_model(model_name, run_mode, extra_parameters='training.max_steps=100'):
         download_datasets()
         os.chdir(current_dir)
         os.environ['save_init_weight_data'] ='True'
+        allure.dynamic.description(f"运行命令：debug=1 \
+                                    save_init_weight_data=True \
+                                    python {model_file} cuda_graphs=false jit=false jit_use_nvfuser=false graph.func_arch=false graph.func_arch_allow_partial_hessian=false {extra_parameters}")
     else:
         raise ValueError("模型运行方式错误：只能选择 动态图、动转静、动转静+prim、动转静+prim+cinn")
     # 创建日志目录
