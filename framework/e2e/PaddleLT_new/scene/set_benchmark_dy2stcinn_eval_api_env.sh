@@ -18,6 +18,7 @@ export PLT_BM_EMAIL="${PLT_BM_EMAIL:-False}"  # True: 发送邮件  False: 不�
 export PLT_BM_REPEAT="${PLT_BM_REPEAT:-1000}"  # 性能测试重复轮次
 export TIMEIT_NUM="${TIMEIT_NUM:-1}"  # timeit number数
 export PLT_BM_STATIS="${PLT_BM_STATIS:-trimmean}"  # 统计策略trimmean, mean, best, best_top_k
+export PLT_BM_ERROR_CHECK="${PLT_BM_ERROR_CHECK:-True}"  # True: 执行性能测试前先执行一次精度测试
 
 #研发指定环境变量
 export FLAGS_pir_apply_shape_optimization_pass=0

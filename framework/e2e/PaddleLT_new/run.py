@@ -184,7 +184,7 @@ class Run(object):
                 f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
 
-    def _single_pytest_run(self, py_file):
+    def _single_pytest_run(self, py_file, testing):
         """run one test"""
         title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
         self.logger.get_log().info(f"开始测试子图 {title}, 准备执行pytest命令~~")
@@ -196,7 +196,7 @@ class Run(object):
                 exit_code = os.system(
                     "cp -r PaddleLT.py {}.py && "
                     "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
-                        title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
+                        title, self.py_cmd, title, title, py_file, testing, self.report_dir
                     )
                 )
         else:
@@ -207,7 +207,7 @@ class Run(object):
                 cmd = (
                     "cp -r PaddleLT.py {}.py && "
                     "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
-                ).format(title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout)
+                ).format(title, self.py_cmd, title, title, py_file, testing, self.report_dir, timeout)
 
             # 使用subprocess执行命令并设置超时
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -279,7 +279,7 @@ class Run(object):
 
         with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
             # 提交任务给线程池
-            futures = [executor.submit(self._single_pytest_run, py_file) for py_file in self.py_list]
+            futures = [executor.submit(self._single_pytest_run, py_file, self.testing) for py_file in self.py_list]
 
             # 等待任务完成，并收集返回值
             for future in futures:
@@ -297,7 +297,7 @@ class Run(object):
         error_list = []
         error_count = 0
         for py_file in self.py_list:
-            _py_file, _exit_code = self._single_pytest_run(py_file=py_file)
+            _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing=self.testing)
             if _exit_code is not None:
                 error_list.append(_py_file)
                 error_count += 1
@@ -382,6 +382,13 @@ class Run(object):
         error_list = []
         compare_list = YamlLoader(yml=self.testing).yml.get("compare")
         for py_file in self.py_list:
+            if os.environ.get("PLT_BM_ERROR_CHECK") == "True":  # 先跑功能看是否能通过
+                _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing="yaml/dy2stcinn_eval.yml")
+                if _exit_code is not None:
+                    error_list.append(_py_file)
+                    error_count += 1
+                    continue
+
             title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
             single_test = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
             perf_dict, exit_code = single_test._perf_case_run()
