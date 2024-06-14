@@ -1,6 +1,7 @@
 import json
 import os
 import datetime
+import math
 def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_class.json"):
     """
     将测试结果以html格式写入文件
@@ -29,9 +30,11 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
                     <h2>精度对齐数据列表</h2>\
                     <p>*精度对齐列表中红色表示未通过，其中N/A表示功能测试未通过，没有精度数据</p>\
                     <p>QA说明：此报告为天级别例行，有问题请联系suijiaxin</p>'
-    html_content += '<table border="1">\n<tr><th></th><th>动态图</th><th></th><th>动转静</th><th></th><th>动转静+组合算子</th><th></th><th>动转静+组合算子+cse</th><th></th><th>动转静+组合算子+编译器</th><th></th><th>动转静+组合算子+编译器+cse</th><th></th><th>模型类别</th></tr>\n'
+    html_content += '<table border="1">\n<tr><th></th><th>动态图</th><th></th><th>动转静</th><th></th><th>动转静+组合算子</th><th></th><th>动转静+组合算子+cse</th><th></th><th>动转静+组合算子+编译器</th><th></th><th>动转静+组合算子+编译器+cse</th><th></th><th>编译器是否有精度优化</th><th>模型类别</th></tr>\n'
     html_content += '<tr><td> </td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td>L2</td><td>L4</td><td></td></tr>\n'
     for model_name in data.keys():
+        # 定义编辑器精度优化flag 
+        accuracy_flag = ""
         html_content += '<tr><td>' + model_name.replace("^", "/") + '</td>'
         for sub_key in data[model_name].keys():
             for sub_sub_key in data[model_name][sub_key].keys():
@@ -40,6 +43,9 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
                         html_content += '<td style="background-color:rgb(250,234,200);">Timeout</td>'
                     elif sub_key == "dy2st":
                         html_content += '<td style="background-color:rgb(135,141,153)">Skipped</td>'
+                    elif sub_key == "dy2st_prim_cse" or sub_key == "dy2st_prim_cinn_cse":
+                        accuracy_flag = "False"
+                        html_content += '<td style="background-color:rgb(254,230,230);">N/A</td>'
                     else:
                         html_content += '<td style="background-color:rgb(254,230,230);">N/A</td>'
                     continue
@@ -49,6 +55,16 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
                     html_content += '<td style="background-color:rgb(254,230,230);">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
                 elif data[model_name][sub_key][sub_sub_key]['status'] == 'Success':
                     html_content += '<td style="background-color:rgb(195, 242, 206);">' + 'atol: ' + str("{:.3e}".format(atol)) + ' \n ' + 'rotl:' + str("{:.3e}".format(rtol)) + '</td>'
+        # 判断编译器是否有精度优化
+        if accuracy_flag == "":
+            accuracy_flag = 'True'
+            for key in data[model_name]['dy2st_prim_cse'].keys():
+                if math.exp(data[model_name]['dy2st_prim_cse'][key]['atol']) < math.exp(data[model_name]['dy2st_prim_cinn_cse'][key]['atol']) and math.exp(data[model_name]['dy2st_prim_cse'][key]['rtol']) < math.exp(data[model_name]['dy2st_prim_cinn_cse'][key]['rtol']):
+                    accuracy_flag = "False"
+        if accuracy_flag == "True":
+            html_content += '<td style="background-color:rgb(195, 242, 206);">True</td>'
+        else:
+            html_content += '<td style="background-color:rgb(254,230,230);">False</td>'    
         html_content += '<td>' + model_class[model_name] + '</td>'
         html_content += '</tr>\n'
 
