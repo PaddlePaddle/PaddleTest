@@ -18,6 +18,7 @@ paddle_engine_map = {
     "dy_dp_train": LayerTrain,
     "dy2st_train": LayerTrain,  # 动转静训练
     "dy2st_train_inputspec": LayerTrain,  # 动转静训练+动态inputspec
+    "dy2st_train_static_inputspec": LayerTrain,  # 动转静训练+静态inputspec
     "dy2st_train_cinn": LayerTrain,  # CINN训练
     "dy2st_train_cinn_inputspec": LayerTrain,  # CINN训练+动态inputspec
     "dy2st_train_cinn_static_inputspec": LayerTrain,  # CINN训练+静态inputspec

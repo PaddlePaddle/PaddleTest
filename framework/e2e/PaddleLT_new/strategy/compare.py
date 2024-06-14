@@ -219,7 +219,6 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
     :return: 比较字典
     """
     compare_dict = {}
-
     for title, perf_dict in data_dict.items():  # 遍历所有子图
         if title not in error_list:
             layer_case = title.split("^", 1)[1]
@@ -235,6 +234,7 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
                     if baseline_title in baseline_dict and layer_title in data_dict:  # 判断数据库中的基线是否包含该子图
                         # if layer_case not in compare_dict:
                         #     compare_dict[layer_case] = {}
+                        # print("layer_case is: ", layer_case)
                         compare_dict[layer_case][latest_engine + "^" + latest_layer_type] = perf_dict[latest_engine]
                         compare_dict[layer_case][latest_engine + "^" + baseline_layer_type + "^baseline"] = json.loads(
                             baseline_dict[baseline_title]["result"]

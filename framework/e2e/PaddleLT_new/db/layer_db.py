@@ -32,7 +32,10 @@ class LayerBenchmarkDB(object):
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # md5唯一标识码
-        self.md5_id = Snapshot().get_md5_id()
+        if os.environ.get("PLT_MD5"):
+            self.md5_id = os.environ.get("PLT_MD5")  # 手动设置
+        else:
+            self.md5_id = Snapshot().get_md5_id()  # 自动获取
 
         # 效率云环境变量
         self.AGILE_PIPELINE_BUILD_ID = int(os.environ.get("AGILE_PIPELINE_BUILD_ID", 0))
@@ -56,6 +59,7 @@ class LayerBenchmarkDB(object):
 
         # 初始化日志
         self.logger = Logger("LayerBenchmarkDB")
+        self.logger.get_log().info(f"md5_id is: {self.md5_id}")
 
     def _frame_info(self):
         """"""
