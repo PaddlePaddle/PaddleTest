@@ -35,7 +35,7 @@ class BuildData(object):
             # dataname = self.layerfile + ".create_numpy_inputs()"
             data = []
             # for i in eval(dataname):
-            for i in getattr(self.layer_module, "create_numpy_inputs"):
+            for i in getattr(self.layer_module, "create_numpy_inputs")():
                 if os.environ.get("FRAMEWORK") == "paddle":
                     if i.dtype == np.int64 or i.dtype == np.int32:
                         data.append(paddle.to_tensor(i, stop_gradient=True))
@@ -56,7 +56,7 @@ class BuildData(object):
         # dataname = self.layerfile + ".create_tensor_inputs()"
         data = []
         # for i in eval(dataname):
-        for i in getattr(self.layer_module, "create_tensor_inputs"):
+        for i in getattr(self.layer_module, "create_tensor_inputs")():
             data.append(i)
 
         return data
@@ -66,7 +66,7 @@ class BuildData(object):
         # dataname = self.layerfile + ".create_numpy_inputs()"
         data = []
         # for i in eval(dataname):
-        for i in getattr(self.layer_module, "create_numpy_inputs"):
+        for i in getattr(self.layer_module, "create_numpy_inputs")():
             data.append(i)
 
         return data
