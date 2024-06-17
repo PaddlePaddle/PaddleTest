@@ -20,7 +20,10 @@ def mean_loss(logit):
         tmp = 0.0
         count = 0
         for l in logit:
-            if isinstance(l, paddle.Tensor):
+            # NOTE(Aurelius84): Some Tensor calculated from paddle.nonzeros
+            # and will return nothing in some cases. It will lead to
+            # error when calculating mean.
+            if isinstance(l, paddle.Tensor) and l.numel() > 0:
                 mean = paddle.mean(l)
                 tmp += mean
                 count += 1

@@ -5,9 +5,16 @@
 layer builder
 """
 
-import paddle
-import diy
-import layercase
+import os
+
+if os.environ.get("FRAMEWORK") == "paddle":
+    import paddle
+    import diy
+    import layerApicase
+    import layercase
+elif os.environ.get("FRAMEWORK") == "torch":
+    import torch
+    import layerTorchcase
 
 
 class BuildLayer(object):

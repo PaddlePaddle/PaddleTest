@@ -1,0 +1,14 @@
+testings:
+  dy_train:
+    model_dtype: "float32"
+
+  dy2st_train_cinn_inputspec:
+    model_dtype: "float32"
+
+compare:
+  -
+    baseline: 'dy_train'
+    latest: 'dy2st_train_cinn_inputspec'
+    precision:
+      delta: 0.00001
+      rtol: 0.000001

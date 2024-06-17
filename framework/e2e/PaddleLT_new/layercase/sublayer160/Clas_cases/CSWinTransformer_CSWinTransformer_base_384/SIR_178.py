@@ -11,14 +11,14 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [12, 288, 192], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_1 = var_0.shape[0] / 2
+        var_1 = var_0.shape[0] // 2
         var_2 = var_0.reshape([var_1, 1, 2, 24, 12, 192])
         var_3 = var_2.transpose([0, 1, 3, 2, 4, 5])
         var_4 = var_3.reshape([var_1, 24, 24, 192])
         return var_4
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[12, 288, 192], dtype=paddle.float32),
     )
@@ -34,7 +34,7 @@ def create_numpy_inputs():
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:

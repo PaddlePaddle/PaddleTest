@@ -73,6 +73,13 @@ function DockerImages () {
             export env_cudnn_version="8.9.1"
             export env_trt_version="8.6.1.6"
             ;;
+        "Cuda123")
+            echo "Selected Centos: Cuda123"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.3-cudnn9.0-trt8.6-gcc12.2"
+            export env_cuda_version="12.3"
+            export env_cudnn_version="9.0.0"
+            export env_trt_version="8.6.1.6"
+            ;;
         *)
             DOCKER_EXIT_CODE=101
             ;;
@@ -122,6 +129,13 @@ function DockerImages () {
             export env_cudnn_version="8.9.1"
             export env_trt_version="8.6.1.6"
             ;;
+        "Cuda123")
+            echo "Selected Ubuntu: Cuda123"
+            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.3-cudnn9.0-trt8.6-gcc12.2"
+            export env_cuda_version="12.3"
+            export env_cudnn_version="9.0.0"
+            export env_trt_version="8.6.1.6"
+            ;;   
         *)
             DOCKER_EXIT_CODE=101
             ;;

@@ -8,60 +8,63 @@ class LayerCase(paddle.nn.Layer):
     def __init__(self):
         super().__init__()
         self.parameter_0 = self.create_parameter(
-           shape=[160],
-           dtype=paddle.float32,
+            shape=[160],
+            dtype=paddle.float32,
         )
         self.parameter_1 = self.create_parameter(
-           shape=[160, 160],
-           dtype=paddle.float32,
+            shape=[160, 160],
+            dtype=paddle.float32,
         )
         self.parameter_2 = self.create_parameter(
-           shape=[160, 160],
-           dtype=paddle.float32,
+            shape=[160, 160],
+            dtype=paddle.float32,
         )
         self.parameter_3 = self.create_parameter(
-           shape=[160],
-           dtype=paddle.float32,
+            shape=[160],
+            dtype=paddle.float32,
         )
         self.parameter_4 = self.create_parameter(
-           shape=[160, 320],
-           dtype=paddle.float32,
+            shape=[160, 320],
+            dtype=paddle.float32,
         )
         self.parameter_5 = self.create_parameter(
-           shape=[320],
-           dtype=paddle.float32,
+            shape=[320],
+            dtype=paddle.float32,
         )
         self.parameter_6 = self.create_parameter(
-           shape=[160],
-           dtype=paddle.float32,
+            shape=[160],
+            dtype=paddle.float32,
         )
         self.parameter_7 = self.create_parameter(
-           shape=[160],
-           dtype=paddle.float32,
+            shape=[160],
+            dtype=paddle.float32,
         )
         self.parameter_8 = self.create_parameter(
-           shape=[160, 160, 2, 2],
-           dtype=paddle.float32,
+            shape=[160, 160, 2, 2],
+            dtype=paddle.float32,
         )
         self.parameter_9 = self.create_parameter(
-           shape=[160],
-           dtype=paddle.float32,
+            shape=[160],
+            dtype=paddle.float32,
         )
         self.parameter_10 = self.create_parameter(
-           shape=[160],
-           dtype=paddle.float32,
+            shape=[160],
+            dtype=paddle.float32,
         )
         self.parameter_11 = self.create_parameter(
-           shape=[160],
-           dtype=paddle.float32,
+            shape=[160],
+            dtype=paddle.float32,
         )
+
     def forward(
         self,
-        var_0,    # (shape: [1, 4096, 160], dtype: paddle.float32, stop_gradient: False)
-        var_1,    # (shape: [], dtype: paddle.int32, stop_gradient: True)
-        var_2,    # (shape: [], dtype: paddle.int32, stop_gradient: True)
+        var_0,  # (shape: [1, 4096, 160], dtype: paddle.float32, stop_gradient: False)
+        var_1,  # (shape: [], dtype: paddle.int32, stop_gradient: True)
+        var_2,  # (shape: [], dtype: paddle.int32, stop_gradient: True)
     ):
-        var_3 = paddle.nn.functional.norm.layer_norm(var_0, normalized_shape=[160], weight=self.parameter_6, bias=self.parameter_11, epsilon=1e-06)
+        var_3 = paddle.nn.functional.norm.layer_norm(
+            var_0, normalized_shape=[160], weight=self.parameter_6, bias=self.parameter_11, epsilon=1e-06
+        )
         var_4 = var_3.shape
         var_5 = var_4.__getitem__(0)
         var_6 = var_4.__getitem__(1)
@@ -70,10 +73,25 @@ class LayerCase(paddle.nn.Layer):
         var_9 = var_8.transpose([0, 2, 1, 3])
         var_10 = var_3.transpose([0, 2, 1])
         var_11 = var_10.reshape([var_5, 160, var_1, var_2])
-        var_12 = paddle.nn.functional.conv._conv_nd(var_11, self.parameter_8, bias=self.parameter_9, stride=[2, 2], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
+        var_12 = paddle.nn.functional.conv._conv_nd(
+            var_11,
+            self.parameter_8,
+            bias=self.parameter_9,
+            stride=[2, 2],
+            padding=[0, 0],
+            padding_algorithm="EXPLICIT",
+            dilation=[1, 1],
+            groups=1,
+            data_format="NCHW",
+            channel_dim=1,
+            op_type="conv2d",
+            use_cudnn=True,
+        )
         var_13 = var_12.reshape([var_5, 160, -1])
         var_14 = var_13.transpose([0, 2, 1])
-        var_15 = paddle.nn.functional.norm.layer_norm(var_14, normalized_shape=[160], weight=self.parameter_0, bias=self.parameter_3, epsilon=1e-05)
+        var_15 = paddle.nn.functional.norm.layer_norm(
+            var_14, normalized_shape=[160], weight=self.parameter_0, bias=self.parameter_3, epsilon=1e-05
+        )
         var_16 = paddle.nn.functional.common.linear(x=var_15, weight=self.parameter_4, bias=self.parameter_5, name=None)
         var_17 = var_16.reshape([var_5, -1, 2, 5, 32])
         var_18 = var_17.transpose([2, 0, 3, 1, 4])
@@ -83,40 +101,45 @@ class LayerCase(paddle.nn.Layer):
         var_22 = var_9.__matmul__(var_21)
         var_23 = var_22.__mul__(0.1767766952966369)
         var_24 = paddle.nn.functional.activation.softmax(var_23, axis=-1)
-        var_25 = paddle.nn.functional.common.dropout(var_24, p=0.0, axis=None, training=True, mode='upscale_in_train', name=None)
+        var_25 = paddle.nn.functional.common.dropout(
+            var_24, p=0.0, axis=None, training=True, mode="upscale_in_train", name=None
+        )
         var_26 = var_25.__matmul__(var_20)
         var_27 = var_26.transpose([0, 2, 1, 3])
         var_28 = var_27.reshape([var_5, var_6, 160])
         var_29 = paddle.nn.functional.common.linear(x=var_28, weight=self.parameter_1, bias=self.parameter_7, name=None)
-        var_30 = paddle.nn.functional.common.dropout(var_29, p=0.0, axis=None, training=True, mode='upscale_in_train', name=None)
+        var_30 = paddle.nn.functional.common.dropout(
+            var_29, p=0.0, axis=None, training=True, mode="upscale_in_train", name=None
+        )
         return var_30
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[1, 4096, 160], dtype=paddle.float32),
-        paddle.randint(low=0, high=10, shape=[1], dtype=paddle.int32),
-        paddle.randint(low=0, high=10, shape=[1], dtype=paddle.int32),
+        paddle.to_tensor(32, dtype=paddle.int32),
+        paddle.to_tensor(128, dtype=paddle.int32),
     )
     return inputs
 
 
 def create_numpy_inputs():
     inputs = (
-        np.random.random(size=[1, 4096, 160]).astype('float32'),
-        np.random.randint(low=0, high=10, size=[1], dtype='int32'),
-        np.random.randint(low=0, high=10, size=[1], dtype='int32'),
+        np.random.random(size=[1, 4096, 160]).astype("float32"),
+        np.array(32, dtype="int32"),
+        np.array(128, dtype="int32"),
     )
     return inputs
 
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
+
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.set_flags({"FLAGS_prim_all": with_prim})
             if with_cinn:
                 build_strategy = paddle.static.BuildStrategy()
                 build_strategy.build_cinn_pass = True
@@ -126,6 +149,7 @@ class TestLayer(unittest.TestCase):
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs
+
     def test_ast_prim_cinn(self):
         st_out = self.train(self.net, to_static=True)
         cinn_out = self.train(self.net, to_static=True, with_prim=True, with_cinn=True)
@@ -133,5 +157,5 @@ class TestLayer(unittest.TestCase):
             np.testing.assert_allclose(st.numpy(), cinn.numpy(), atol=1e-8)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

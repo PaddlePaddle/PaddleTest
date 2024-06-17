@@ -1,0 +1,22 @@
+case:
+  linux:
+    base: ./base/phylstm_base.yaml
+    train:
+      -
+        name: single_phylstm2
+      -
+        name: single_phylstm3
+    eval:
+      -
+        name: single_phylstm2
+      -
+        name: multi_phylstm2
+      -
+        name: single_phylstm3
+      -
+        name: multi_phylstm3
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse

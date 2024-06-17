@@ -1,0 +1,66 @@
+train:
+  -
+    name: single_phylstm2
+    cmd: python examples/phylstm/phylstm2.py
+    params:
+      - TRAIN.epochs=100
+    result:
+      loss:
+        base: 0.00805
+        threshold: 1
+        evaluation: "-"
+  -
+    name: single_phylstm3
+    cmd: python examples/phylstm/phylstm3.py
+    params:
+      - TRAIN.epochs=200
+    result:
+      loss:
+        base: 0.02956
+        threshold: 1
+        evaluation: "-"
+eval:
+  -
+    name: single_phylstm2
+    cmd: python examples/phylstm/phylstm2.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/phylstm/phylstm2_pretrained.pdparams
+    result:
+      loss(sup_valid):
+        base: 0.00799
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi_phylstm2
+    cmd: python -m paddle.distributed.launch examples/phylstm/phylstm2.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/phylstm/phylstm2_pretrained.pdparams
+    result:
+      loss(sup_valid):
+        base: 0.00799
+        threshold: 1
+        evaluation: "-"
+  -
+    name: single_phylstm3
+    cmd: python examples/phylstm/phylstm3.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/phylstm/phylstm3_pretrained.pdparams
+    result:
+      loss(sup_valid):
+        base: 0.03098
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi_phylstm3
+    cmd: python -m paddle.distributed.launch examples/phylstm/phylstm3.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/phylstm/phylstm3_pretrained.pdparams
+    result:
+      loss(sup_valid):
+        base: 0.03098
+        threshold: 1
+        evaluation: "-"

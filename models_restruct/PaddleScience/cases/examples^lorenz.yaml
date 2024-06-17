@@ -6,9 +6,21 @@ case:
         name: train_enn
       -
         name: train_transformer
-    eval: skipped
-    infer: skipped
-    export: skipped
+    eval:
+      -
+        name: train_enn_eval_single
+      -
+        name: train_enn_eval_multi
+      -
+        name: train_transformer_eval_single
+      -
+        name: train_transformer_eval_multi
     predict: skipped
+    export:
+      -
+        name: single
+    infer:
+      -
+        name: single
 
 function: paddlelas_imagenet_parse

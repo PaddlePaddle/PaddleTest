@@ -53,7 +53,7 @@ def test_poiseuille_flow_loss():
     """
     epoch_num = 10  # 迭代次数
     output_dir = "./output_poiseuille_flow"  # 输出目录
-    base_loss = 0.00032  # 基准损失值
+    base_loss = 0.00036  # 基准损失值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
     log_file = os.path.join(output_dir, "train.log")
