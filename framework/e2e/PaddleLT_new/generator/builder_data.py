@@ -26,40 +26,47 @@ class BuildData(object):
 
     def __init__(self, layerfile):
         """init"""
-        self.dataname = layerfile
+        self.layerfile = layerfile
+        self.layer_module = eval(self.layerfile)
 
     def get_single_data(self):
         """get data"""
-        dataname = self.dataname + ".create_numpy_inputs()"
-        data = []
-        for i in eval(dataname):
-            if os.environ.get("FRAMEWORK") == "paddle":
-                if i.dtype == np.int64 or i.dtype == np.int32:
-                    data.append(paddle.to_tensor(i, stop_gradient=True))
-                else:
-                    data.append(paddle.to_tensor(i, stop_gradient=False))
-            elif os.environ.get("FRAMEWORK") == "torch":
-                if i.dtype == np.int64 or i.dtype == np.int32:
-                    data.append(torch.tensor(i, requires_grad=False))
-                else:
-                    data.append(torch.tensor(i, requires_grad=True))
+        if hasattr(self.layer_module, "create_numpy_inputs"):
+            # dataname = self.layerfile + ".create_numpy_inputs()"
+            data = []
+            # for i in eval(dataname):
+            for i in getattr(self.layer_module, "create_numpy_inputs")():
+                if os.environ.get("FRAMEWORK") == "paddle":
+                    if i.dtype == np.int64 or i.dtype == np.int32:
+                        data.append(paddle.to_tensor(i, stop_gradient=True))
+                    else:
+                        data.append(paddle.to_tensor(i, stop_gradient=False))
+                elif os.environ.get("FRAMEWORK") == "torch":
+                    if i.dtype == np.int64 or i.dtype == np.int32:
+                        data.append(torch.tensor(i, requires_grad=False))
+                    else:
+                        data.append(torch.tensor(i, requires_grad=True))
+        else:
+            data = self.get_single_tensor()
 
         return data
 
     def get_single_tensor(self):
         """get data"""
-        dataname = self.dataname + ".create_tensor_inputs()"
+        # dataname = self.layerfile + ".create_tensor_inputs()"
         data = []
-        for i in eval(dataname):
+        # for i in eval(dataname):
+        for i in getattr(self.layer_module, "create_tensor_inputs")():
             data.append(i)
 
         return data
 
     def get_single_numpy(self):
         """get data"""
-        dataname = self.dataname + ".create_numpy_inputs()"
+        # dataname = self.layerfile + ".create_numpy_inputs()"
         data = []
-        for i in eval(dataname):
+        # for i in eval(dataname):
+        for i in getattr(self.layer_module, "create_numpy_inputs")():
             data.append(i)
 
         return data
@@ -93,8 +100,8 @@ class BuildData(object):
         """get single inputspec"""
         spec_list = []
         data = self.get_single_data()
-        if hasattr(eval(self.dataname), "create_inputspec"):  # 如果子图case中包含inputspec, 则直接使用接口获取
-            spec_list = eval(self.dataname + ".create_inputspec()")
+        if hasattr(eval(self.layerfile), "create_inputspec"):  # 如果子图case中包含inputspec, 则直接使用接口获取
+            spec_list = eval(self.layerfile + ".create_inputspec()")
         else:
             for v in data:
                 if isinstance(v, paddle.Tensor):
