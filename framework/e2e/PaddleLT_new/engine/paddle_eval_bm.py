@@ -78,24 +78,33 @@ class LayerEvalBM(object):
         """
         if "FLAGS_prim_all" in os.environ:
             del os.environ["FLAGS_prim_all"]
+            self.logger.get_log().info("_del_cinn_flags del FLAGS_prim_all~~")
         if "FLAGS_prim_enable_dynamic" in os.environ:
             del os.environ["FLAGS_prim_enable_dynamic"]
+            self.logger.get_log().info("_del_cinn_flags del FLAGS_prim_enable_dynamic~~")
 
         if "FLAGS_use_cinn" in os.environ:
             del os.environ["FLAGS_use_cinn"]
+            self.logger.get_log().info("_del_cinn_flags del FLAGS_use_cinn~~")
         if "FLAGS_cinn_bucket_compile" in os.environ:
             del os.environ["FLAGS_cinn_bucket_compile"]
+            self.logger.get_log().info("_del_cinn_flags del FLAGS_cinn_bucket_compile~~")
         if "FLAGS_cinn_new_group_scheduler" in os.environ:
             del os.environ["FLAGS_cinn_new_group_scheduler"]
+            self.logger.get_log().info("_del_cinn_flags del FLAGS_cinn_new_group_scheduler~~")
         if "FLAGS_group_schedule_tiling_first" in os.environ:
             del os.environ["FLAGS_group_schedule_tiling_first"]
+            self.logger.get_log().info("_del_cinn_flags del FLAGS_group_schedule_tiling_first~~")
 
         if "FLAGS_enable_pir_api" in os.environ:
             del os.environ["FLAGS_enable_pir_api"]
+            self.logger.get_log().info("_del_cinn_flags del FLAGS_enable_pir_api~~")
         if "FLAGS_enable_pir_in_executor" in os.environ:
             del os.environ["FLAGS_enable_pir_in_executor"]
+            self.logger.get_log().info("_del_cinn_flags del FLAGS_enable_pir_in_executor~~")
         if "MIN_GRAPH_SIZE" in os.environ:
             del os.environ["MIN_GRAPH_SIZE"]
+            self.logger.get_log().info("_del_cinn_flags del MIN_GRAPH_SIZE~~")
 
         self.logger.get_log().info("_del_cinn_flags 性能测试过程中, 取消cinn相关FLAGS~~")
 
