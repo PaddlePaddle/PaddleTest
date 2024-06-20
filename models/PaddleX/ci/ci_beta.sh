@@ -55,6 +55,7 @@ for modules_info in ${modules_info_list[@]}; do
             check_weights_items=$(func_parser_value "${lines[5]}")
             best_weight_path=$(func_parser_value "${lines[6]}")
             epochs_iters=$(func_parser_value "${lines[7]}")
+            batch_size=$(func_parser_value "${lines[8]}")
             download_dataset_cmd="${PYTHONPATH} ${BASE_PATH}/checker.py --download_dataset --config_path ${check_dataset_yaml} --dataset_url ${dataset_url}"
             run_command ${download_dataset_cmd} ${module_name}
             model_output_path=${MODULE_OUTPUT_PATH}/${module_name}_dataset_check
@@ -73,7 +74,7 @@ for modules_info in ${modules_info_list[@]}; do
                 run_model_list=(${run_model})
                 for mode in ${run_model_list[@]};do
                     # 根据config运行各模型的train和evaluate
-                    run_mode_cmd="${PYTHONPATH} main.py -c ${config_path} -o Global.mode=${mode} -o Global.output=${model_output_path} -o Train.epochs_iters=${epochs_iters} -o Evaluate.weight_path=${evaluate_weight_path}"
+                    run_mode_cmd="${PYTHONPATH} main.py -c ${config_path} -o Global.mode=${mode} -o Global.output=${model_output_path} -o Train.epochs_iters=${epochs_iters} -o Train.batch_size=${batch_size} -o Evaluate.weight_path=${evaluate_weight_path}"
                     run_command ${run_mode_cmd} ${module_name}
                 done
                 check_options_list=(${check_options})
