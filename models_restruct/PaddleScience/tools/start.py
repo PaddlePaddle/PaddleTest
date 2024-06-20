@@ -86,6 +86,11 @@ class PaddleScience_Start(object):
                 logger.info("Install hdf5storage success!")
             except subprocess.CalledProcessError as e:
                 logger.error("Install hdf5storage failed. Error code: {}. Output: {}".format(e.returncode, e.output))
+            try:
+                subprocess.check_call(["python", "-m", "pip", "install", "numpy==1.23.1"])
+                logger.info("Install numpy success!")
+            except subprocess.CalledProcessError as e:
+                logger.error("Install numpy failed. Error code: {}. Output: {}".format(e.returncode, e.output))
 
     def build_prepare(self):
         """
