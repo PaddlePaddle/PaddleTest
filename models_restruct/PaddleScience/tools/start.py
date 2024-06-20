@@ -91,7 +91,11 @@ class PaddleScience_Start(object):
                 logger.info("Install numpy success!")
             except subprocess.CalledProcessError as e:
                 logger.error("Install numpy failed. Error code: {}. Output: {}".format(e.returncode, e.output))
-
+            try:
+                subprocess.check_call(["python", "-m", "pip", "install", "h5py==3.10"])
+                logger.info("Install h5py success!")
+            except subprocess.CalledProcessError as e:
+                logger.error("Install h5py failed. Error code: {}. Output: {}".format(e.returncode, e.output))
     def build_prepare(self):
         """
         build prepare
