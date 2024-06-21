@@ -133,7 +133,7 @@ class LayerEvalBM(object):
         perf_by_step(
             data_list=total_time_list,
             step_scale=[0.1, 0.5, 1],
-            filename="dy2st_eval_cinn_perf_" + self.layerfile + "_by_step",
+            filename="dy_eval_perf_" + self.layerfile + "_by_step",
         )
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
@@ -162,12 +162,12 @@ class LayerEvalBM(object):
             total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
             total_time_list.append(total_time)
 
-        save_pickle(data=total_time_list, filename="dy_eval_perf_" + self.layerfile)
+        save_pickle(data=total_time_list, filename="dy2st_eval_perf_" + self.layerfile)
         # 画图
         perf_by_step(
             data_list=total_time_list,
             step_scale=[0.1, 0.5, 1],
-            filename="dy2st_eval_cinn_perf_" + self.layerfile + "_by_step",
+            filename="dy2st_eval_perf_" + self.layerfile + "_by_step",
         )
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
