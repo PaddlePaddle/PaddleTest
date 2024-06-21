@@ -1,6 +1,6 @@
 module_name:object_detection
 check_dataset_yaml:paddlex/configs/object_detection/PicoDet-S.yaml
-dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/det_coco_examples.Nonstationary_ad.yaml
+dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/det_coco_examples.tar
 run_model:train|evaluate
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdema,pdopt,pdstates,inference_config,pdmodel,pdiparams,pdiparams.info
