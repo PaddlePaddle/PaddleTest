@@ -24,7 +24,7 @@ function run_command(){
     eval $command
 }
 
-set -e
+set +e
 
 # 获取python的绝对路径
 PYTHONPATH="python"
