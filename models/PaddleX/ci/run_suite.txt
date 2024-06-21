@@ -1,6 +1,6 @@
 module_name:object_detection
 check_dataset_yaml:paddlex/configs/object_detection/PicoDet-S.yaml
-dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/det_coco_examples.tar
+dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/det_coco_examples.Nonstationary_ad.yaml
 run_model:train|evaluate
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdema,pdopt,pdstates,inference_config,pdmodel,pdiparams,pdiparams.info
@@ -59,7 +59,6 @@ epochs_iters:2
 batch_size:8
 ================================================================
 config_path:paddlex/configs/ts_anomaly_detection/DLinear_ad.yaml
-config_path:paddlex/configs/ts_anomaly_detection/Nonstationary_ad.yaml
 config_path:paddlex/configs/ts_anomaly_detection/TimesNet_ad.yaml
 config_path:paddlex/configs/ts_anomaly_detection/AutoEncoder_ad.yaml
 config_path:paddlex/configs/ts_anomaly_detection/PatchTST_ad.yaml
