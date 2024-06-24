@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # 最外层测试入口, 通过环境变量设定测试相关的一切信息(除了docker/whl/py以外)
+export python_ver=python3.10
 export CASE_TYPE=layercase
 export CASE_DIR=sublayer1000
 export TESTING=yaml/CI_dy^dy2stcinn_train.yml # 设定测试项目配置yaml
