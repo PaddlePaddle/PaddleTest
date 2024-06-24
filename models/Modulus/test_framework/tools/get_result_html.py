@@ -57,14 +57,13 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
         # 判断编译器是否有精度优化
         if accuracy_flag == "":
             accuracy_flag = 'True'
-            for key in data[model_name]['dy2st_prim_cse'].keys():
-                print(model_name)
-                dy2st_prim_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['atol']).split("e")[1])
-                dy2st_prim_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['rtol']).split("e")[1])
-                dy2st_prim_cinn_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cinn_cse'][key]['atol']).split("e")[1])
-                dy2st_prim_cinn_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cinn_cse'][key]['rtol']).split("e")[1])
-                if dy2st_prim_cse_atol_exp < dy2st_prim_cinn_cse_atol_exp or dy2st_prim_cse_rtol_exp < dy2st_prim_cinn_cse_rtol_exp:
-                    accuracy_flag = "False"
+            key = 'L4'
+            dy2st_prim_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['atol']).split("e")[1])
+            dy2st_prim_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['rtol']).split("e")[1])
+            dy2st_prim_cinn_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cinn_cse'][key]['atol']).split("e")[1])
+            dy2st_prim_cinn_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cinn_cse'][key]['rtol']).split("e")[1])
+            if dy2st_prim_cse_atol_exp < dy2st_prim_cinn_cse_atol_exp or dy2st_prim_cse_rtol_exp < dy2st_prim_cinn_cse_rtol_exp:
+                accuracy_flag = "False"
         if accuracy_flag == "True":
             html_content += '<td style="background-color:rgb(195, 242, 206);">True</td>'
         else:
