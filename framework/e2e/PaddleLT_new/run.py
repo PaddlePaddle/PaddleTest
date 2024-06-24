@@ -253,6 +253,7 @@ class Run(object):
                 self._gt_upload()
             self._exit_code_txt(error_count=error_count, error_list=error_list)
         else:
+            self.logger.get_log().info("对于多线程失败case, 进入double check环节: ")
             self._test_run(py_list=error_list)
 
     def _test_run(self, py_list):
