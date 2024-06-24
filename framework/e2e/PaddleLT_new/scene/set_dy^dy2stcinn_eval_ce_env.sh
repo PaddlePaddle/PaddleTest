@@ -10,7 +10,7 @@ export PLT_DEVICE_ID="${PLT_DEVICE_ID:-6}"
 export CUDA_VISIBLE_DEVICES="${PLT_DEVICE_ID:-6}"
 export FRAMEWORK="${FRAMEWORK:-paddle}"
 export MULTI_WORKER="${MULTI_WORKER:-0}"
-export MULTI_DOUBLE_CHECK="${MULTI_DOUBLE_CHECK:-False}"
+export MULTI_DOUBLE_CHECK="${MULTI_DOUBLE_CHECK:-True}"
 
 export PLT_PYTEST_TIMEOUT="${PLT_PYTEST_TIMEOUT:-600}"  # 超时10分钟则判为失败. 设置为None则不限时
 export PLT_SPEC_USE_MULTI="${PLT_SPEC_USE_MULTI:-False}"  # 开启动态InputSpec搜索遍历
