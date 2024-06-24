@@ -227,59 +227,19 @@ class Run(object):
                 proc.terminate()  # 发送 SIGTERM 信号到进程
                 exit_code = -1
 
-        # if self.layer_type == "layerE2Ecase":
-        #     if os.environ.get("PLT_PYTEST_TIMEOUT") == "None":
-        #         exit_code = os.system(f"{self.py_cmd} -m pytest {py_file} --alluredir={self.report_dir}")
-        #     else:
-        #         timeout = os.environ.get("PLT_PYTEST_TIMEOUT")
-        #         exit_code = os.system(
-        #             f"{self.py_cmd} -m pytest {py_file} --alluredir={self.report_dir} --timeout={timeout}"
-        #         )
-        # else:
-        #     if os.environ.get("PLT_PYTEST_TIMEOUT") == "None":
-        #         exit_code = os.system(
-        #             "cp -r PaddleLT.py {}.py && "
-        #             "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
-        #                 title, self.py_cmd, title, title, py_file, self.testing, self.report_dir
-        #             )
-        #         )
-        #     else:
-        #         timeout = os.environ.get("PLT_PYTEST_TIMEOUT")
-        #         cmd = (
-        #                 "cp -r PaddleLT.py {}.py && "
-        #                 "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
-        #         ).format(title, self.py_cmd, title, title, py_file, self.testing, self.report_dir, timeout)
-        #         # 使用subprocess执行命令并设置超时
-        #         proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        #         try:
-        #             stdout, stderr = proc.communicate(timeout=float(timeout))
-        #             exit_code = proc.returncode
-        #             self.logger.get_log().warning(f"{py_file} Command failed with return code {exit_code}")
-        #             # 如果进程正常结束，stdout 和 stderr 将包含输出
-        #             if stdout:
-        #                 self.logger.get_log().info(stdout.decode())  # 注意：输出是字节串，需要解码为字符串
-        #             if stderr:
-        #                 self.logger.get_log().warning(stderr.decode())  # 注意：错误输出也是字节串，需要解码为字符串
-        #             if exit_code != 0:
-        #                 self.logger.get_log().warning(f"{py_file} Command failed with return code {exit_code}")
-        #         except subprocess.TimeoutExpired:
-        #             self.logger.get_log().warning(f"{py_file} Command timed out after {timeout} seconds")
-        #             proc.terminate()  # 发送 SIGTERM 信号到进程
-        #             exit_code = -1
-
         self.logger.get_log().info(f"完成测试子图 {title}, 完成执行pytest命令~~")
         if exit_code != 0:
             return py_file, exit_code
         return None, None
 
-    def _multithread_test_run(self):
+    def _multithread_test_run(self, py_list):
         """multithread run some test"""
         error_list = []
         error_count = 0
 
         with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
             # 提交任务给线程池
-            futures = [executor.submit(self._single_pytest_run, py_file, self.testing) for py_file in self.py_list]
+            futures = [executor.submit(self._single_pytest_run, py_file, self.testing) for py_file in py_list]
 
             # 等待任务完成，并收集返回值
             for future in futures:
@@ -288,15 +248,19 @@ class Run(object):
                     error_list.append(_py_file)
                     error_count += 1
 
-        if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
-            self._gt_upload()
-        self._exit_code_txt(error_count=error_count, error_list=error_list)
+        if os.environ.get("MULTI_DOUBLE_CHECK") == "False":
+            if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
+                self._gt_upload()
+            self._exit_code_txt(error_count=error_count, error_list=error_list)
+        else:
+            self.logger.get_log().info("对于多线程失败case, 进入double check环节: ")
+            self._test_run(py_list=error_list)
 
-    def _test_run(self):
+    def _test_run(self, py_list):
         """run some test"""
         error_list = []
         error_count = 0
-        for py_file in self.py_list:
+        for py_file in py_list:
             _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing=self.testing)
             if _exit_code is not None:
                 error_list.append(_py_file)
@@ -502,9 +466,9 @@ if __name__ == "__main__":
     tes = Run()
     if os.environ.get("TESTING_MODE") == "precision":
         if os.environ.get("MULTI_WORKER") == "0":
-            tes._test_run()
+            tes._test_run(py_list=tes.py_list)
         else:
-            tes._multithread_test_run()
+            tes._multithread_test_run(py_list=tes.py_list)
     elif os.environ.get("TESTING_MODE") == "performance":
         if os.environ.get("MULTI_WORKER") == "0":
             tes._perf_test_run()
