@@ -89,67 +89,117 @@ class LayerEval(object):
 
     def dy2st_eval(self):
         """dy2st eval"""
+        data = self._net_input()
         net = self._net_instant()
         st_net = paddle.jit.to_static(net, full_graph=True)
         # net.eval()
-        logit = st_net(*self._net_input())
+        logit = st_net(*data)
+        return {"logit": logit}
+
+    def dy2st_eval_inputspec(self):
+        """dy2st eval"""
+        data, input_spec = self._net_input_and_spec()
+        Logger("dy2st_eval_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+        net = self._net_instant()
+        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        # net.eval()
+        logit = st_net(*data)
+        return {"logit": logit}
+
+    def dy2st_eval_static_inputspec(self):
+        """dy2st eval"""
+        data, input_spec = self._net_input_and_static_spec()
+        Logger("dy2st_eval_static_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+        net = self._net_instant()
+        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        # net.eval()
+        logit = st_net(*data)
         return {"logit": logit}
 
     def dy2st_eval_cinn(self):
         """dy2st cinn eval"""
+        data = self._net_input()
         net = self._net_instant()
 
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
         # net.eval()
-        logit = cinn_net(*self._net_input())
+        logit = cinn_net(*data)
         return {"logit": logit}
 
     def dy2st_eval_cinn_inputspec(self):
         """dy2st cinn eval with inputspec"""
+        data, input_spec = self._net_input_and_spec()
+        Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
         net = self._net_instant()
+
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
+        # net.eval()
+        logit = cinn_net(*data)
+        return {"logit": logit}
 
-        if self.use_multispec == "True":
-            # 如果不使用动态InputSpec都会报错, 则直接抛出异常跳过后续测试
-            data, input_spec = self._net_input_and_static_spec()
-            Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
-            cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
-            # net.eval()
-            logit = cinn_net(*data)
+    def dy2st_eval_cinn_static_inputspec(self):
+        """dy2st cinn eval with inputspec"""
+        data, input_spec = self._net_input_and_static_spec()
+        Logger("dy2st_eval_cinn_static_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+        net = self._net_instant()
 
-            # 开始测试动态InputSpec
-            data, spec_gen = self._net_input_and_multi_spec()
-            loops = (16**9) * 2
-            i = 0
-            # for i in range(loops):
-            for inputspec in spec_gen.next():
-                try:
-                    Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {inputspec}")
-                    cinn_net = paddle.jit.to_static(
-                        net, build_strategy=build_strategy, full_graph=True, input_spec=inputspec
-                    )
-                    logit = cinn_net(*data)
-                    if os.environ.get("PLT_SAVE_SPEC") == "True":
-                        case_name = self.layerfile.replace(".py", "").replace("/", "^").replace(".", "^")
-                        save_tensor(data=inputspec, filename=os.path.join("inputspec_save", f"{case_name}.inputspec"))
-                    return {"logit": logit}
-                except Exception:
-                    bug_trace = traceback.format_exc()
-                i += 1
-                if i > loops:
-                    break
-            Logger("dy2st_eval_cinn_inputspec").get_log().warn(f"经过{loops}轮迭代测试, 动态InputSpec测试均失败。")
-            raise Exception(bug_trace)
-        else:
-            data, input_spec = self._net_input_and_spec()
-            Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
-            cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
-            # net.eval()
-            logit = cinn_net(*data)
-            return {"logit": logit}
+        build_strategy = paddle.static.BuildStrategy()
+        build_strategy.build_cinn_pass = True
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
+        # net.eval()
+        logit = cinn_net(*data)
+        return {"logit": logit}
+
+    # def dy2st_eval_cinn_inputspec_legacy_2(self):
+    #     """dy2st cinn eval with inputspec"""
+    #     net = self._net_instant()
+    #     build_strategy = paddle.static.BuildStrategy()
+    #     build_strategy.build_cinn_pass = True
+
+    #     if self.use_multispec == "True":
+    #         # 如果不使用动态InputSpec都会报错, 则直接抛出异常跳过后续测试
+    #         data, input_spec = self._net_input_and_static_spec()
+    #         Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+    #         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy,
+    #                     full_graph=True, input_spec=input_spec)
+    #         # net.eval()
+    #         logit = cinn_net(*data)
+
+    #         # 开始测试动态InputSpec
+    #         data, spec_gen = self._net_input_and_multi_spec()
+    #         loops = (16**9) * 2
+    #         i = 0
+    #         # for i in range(loops):
+    #         for inputspec in spec_gen.next():
+    #             try:
+    #                 Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {inputspec}")
+    #                 cinn_net = paddle.jit.to_static(
+    #                     net, build_strategy=build_strategy, full_graph=True, input_spec=inputspec
+    #                 )
+    #                 logit = cinn_net(*data)
+    #                 if os.environ.get("PLT_SAVE_SPEC") == "True":
+    #                     case_name = self.layerfile.replace(".py", "").replace("/", "^").replace(".", "^")
+    #                     save_tensor(data=inputspec, filename=os.path.join("inputspec_save", f"{case_name}.inputspec"))
+    #                 return {"logit": logit}
+    #             except Exception:
+    #                 bug_trace = traceback.format_exc()
+    #             i += 1
+    #             if i > loops:
+    #                 break
+    #         Logger("dy2st_eval_cinn_inputspec").get_log().warn(f"经过{loops}轮迭代测试, 动态InputSpec测试均失败。")
+    #         raise Exception(bug_trace)
+    #     else:
+    #         data, input_spec = self._net_input_and_spec()
+    #         Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+    #         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy,
+    #                             full_graph=True, input_spec=input_spec)
+    #         # net.eval()
+    #         logit = cinn_net(*data)
+    #         return {"logit": logit}
 
     # def dy2st_eval_cinn_inputspec_legacy(self):
     #     """dy2st eval"""
