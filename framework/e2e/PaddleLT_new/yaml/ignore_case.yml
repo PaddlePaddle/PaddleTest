@@ -680,6 +680,21 @@ yaml/dy2stcinn_eval_benchmark.yml:
 #   - layerApicase/nn_sublayer/relu__func.py
 
 yaml/CI_dy^dy2stcinn_train.yml:
+  # d3bd91f2457df1b327ac01e7caf4f22923bd2a0b 到 717e9f36b211e540b7e117e38f52ea754c722307 有bug
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_109.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_121.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_89.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_70.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_128.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_115.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_37.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_53.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_134.py
+  - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_82.py
+  - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_127.py # core dump
+  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_rcnn_r50_fpn_1x_coco/SIR_106.py
+  - layercase/sublayer1000/Det_cases/gn_cascade_mask_rcnn_r50_fpn_gn_2x_coco/SIR_38.py
+  ####################################
   - layercase/sublayer1000/Clas_cases/CSWinTransformer_CSWinTransformer_base_384/SIR_487.py
   - layercase/sublayer1000/Det_cases/dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco/SIR_55.py
   - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r101_fpn_2x_coco/SIR_53.py
