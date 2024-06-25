@@ -232,6 +232,30 @@ class Run(object):
             return py_file, exit_code
         return None, None
 
+    # def _multithread_test_run(self, py_list):
+    #     """multithread run some test"""
+    #     error_list = []
+    #     error_count = 0
+
+    #     with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
+    #         # 提交任务给线程池
+    #         futures = [executor.submit(self._single_pytest_run, py_file, self.testing) for py_file in py_list]
+
+    #         # 等待任务完成，并收集返回值
+    #         for future in futures:
+    #             _py_file, _exit_code = future.result()
+    #             if _exit_code is not None:
+    #                 error_list.append(_py_file)
+    #                 error_count += 1
+
+    #     if os.environ.get("MULTI_DOUBLE_CHECK") == "False":
+    #         if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
+    #             self._gt_upload()
+    #         self._exit_code_txt(error_count=error_count, error_list=error_list)
+    #     else:
+    #         self.logger.get_log().info("对于多线程失败case, 进入double check环节: ")
+    #         self._test_run(py_list=error_list)
+
     def _multithread_test_run(self, py_list):
         """multithread run some test"""
         error_list = []
