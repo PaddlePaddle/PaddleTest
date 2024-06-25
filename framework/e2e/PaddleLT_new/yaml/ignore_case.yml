@@ -694,7 +694,7 @@ yaml/CI_dy^dy2stcinn_train.yml:
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_127.py # core dump
   - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_rcnn_r50_fpn_1x_coco/SIR_106.py
   - layercase/sublayer1000/Det_cases/gn_cascade_mask_rcnn_r50_fpn_gn_2x_coco/SIR_38.py
-  - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128^SIR_12.py # 超时200秒
+  - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_12.py # 超时200秒
   ####################################
   - layercase/sublayer1000/Clas_cases/CSWinTransformer_CSWinTransformer_base_384/SIR_487.py
   - layercase/sublayer1000/Det_cases/dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco/SIR_55.py
