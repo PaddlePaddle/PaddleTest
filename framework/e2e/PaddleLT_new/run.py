@@ -429,7 +429,7 @@ class Run(object):
                     if os.environ.get("PLT_PERF_CONTENT") == "kernel":
                         exit_code = os.system(
                             f"nsys profile --stats true -w true -t cuda,nvtx,osrt,cudnn,cublas "
-                            f"-o nv_report/{title} {self.py_cmd} "
+                            f"-o nv_report/{title}-{plt_exc} {self.py_cmd} "
                             f"layertest.py --layerfile {py_file} --testing {self.testing} --plt_exc {plt_exc}"
                         )
                     else:
@@ -441,7 +441,7 @@ class Run(object):
                     if os.environ.get("PLT_PERF_CONTENT") == "kernel":
                         cmd = (
                             f"nsys profile --stats true -w true -t cuda,nvtx,osrt,cudnn,cublas "
-                            f"-o nv_report/{title} {self.py_cmd} "
+                            f"-o nv_report/{title}-{plt_exc} {self.py_cmd} "
                             f"layertest.py --layerfile {py_file} --testing {self.testing} --plt_exc {plt_exc}"
                         )
                     else:
@@ -481,9 +481,9 @@ class Run(object):
                     os.system(
                         f"nsys stats --report cuda_gpu_kern_sum --format csv "
                         f"--output . "
-                        f"nv_report/{title}.sqlite"
+                        f"nv_report/{title}-{plt_exc}.sqlite"
                     )
-                    df = pd.read_csv(os.path.join("nv_report", f"{title}_cuda_gpu_kern_sum.csv"))
+                    df = pd.read_csv(os.path.join("nv_report", f"{title}-{plt_exc}_cuda_gpu_kern_sum.csv"))
                     kernel_time = (df["Instances"] * df["Avg (ns)"]).sum()
                     kernel_count = df["Instances"].sum()
 
