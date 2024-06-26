@@ -483,7 +483,7 @@ class Run(object):
                         f"--output . "
                         f"nv_report/{title}.sqlite"
                     )
-                    df = pd.read_csv(f"{title}_cuda_gpu_kern_sum.csv")
+                    df = pd.read_csv(os.path.join("nv_report", f"{title}_cuda_gpu_kern_sum.csv"))
                     kernel_time = (df["Instances"] * df["Avg (ns)"]).sum()
                     kernel_count = df["Instances"].sum()
 
