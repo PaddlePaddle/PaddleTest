@@ -416,7 +416,7 @@ if [[ "${docker_flag}" == "" ]]; then
     }
     trap 'docker_del' SIGTERM
     ## 使用修改之前的set_cuda_back
-    NV_GPU=${set_cuda_back} nvidia-docker run -i   --rm \
+    NV_GPU=${set_cuda_back} nvidia-docker run -i \
         --name=${docker_name} --net=host --cap-add=SYS_ADMIN \
         --shm-size=128G \
         -v $(pwd):/workspace \
