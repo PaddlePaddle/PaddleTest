@@ -45,8 +45,10 @@ elif [ $PLT_PERF_CONTENT == "kernel" ];then
 cd /home/plt_perf && rm -rf PaddleTest.tar.gz && rm -rf PaddleTest
 wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy
 tar -xzf PaddleTest.tar.gz
+cd PaddleTest
 git fetch origin pull/2845/head:pr_2845
 git merge pr_2845
+cd ..
 
 docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "AK=${AK}" -e "SK=${SK}" \
@@ -66,10 +68,10 @@ cd /workspace/PaddleTest/framework/e2e/PaddleLT_new/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/:/usr/local/lib/
 export PATH=$PATH:/opt/nvidia/nsight-systems/2024.4.1/bin
 
-source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
+source /workspace/PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
 source ./${test_scene}
 ${python_ver} -m pip install -r requirement.txt
-${python_ver} -m pip install -r ./PTSTools/LogParseUpload/requirement.txt;
+${python_ver} -m pip install -r /workspace/PTSTools/LogParseUpload/requirement.txt;
 cp -r /workspace/PTSTools/Uploader/apibm_config.yml .
 ${python_ver} -m pip uninstall -y paddlepaddle-gpu
 ${python_ver} -m pip install ${wheel_url}
