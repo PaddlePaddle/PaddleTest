@@ -42,14 +42,6 @@ ${python_ver} run.py
 
 elif [ $PLT_PERF_CONTENT == "kernel" ];then
 
-cd /home/plt_perf && rm -rf PaddleTest.tar.gz && rm -rf PaddleTest
-wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy
-tar -xzf PaddleTest.tar.gz
-cd PaddleTest
-git fetch origin pull/2845/head:pr_2845
-git merge pr_2845
-cd ..
-
 docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "AK=${AK}" -e "SK=${SK}" \
   -e "http_proxy=${http_proxy}" \
