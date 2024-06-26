@@ -117,7 +117,6 @@ class LayerEvalBM(object):
 
         def _perf(input_data):
             logit = net(*input_data)
-            paddle.core._cuda_synchronize(paddle.CUDAPlace(0))
             return logit
 
         total_time_list = []
@@ -126,6 +125,7 @@ class LayerEvalBM(object):
         # timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
         for i in range(self.perf_repeat):
             total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
+            paddle.core._cuda_synchronize(paddle.CUDAPlace(0))
             total_time_list.append(total_time)
 
         save_pickle(data=total_time_list, filename="dy_eval_perf_" + self.layerfile)
