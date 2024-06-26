@@ -407,6 +407,8 @@ class Run(object):
 
     def _perf_unit_test_run(self):
         """run some test"""
+        if not os.path.exists("./nv_report"):
+            os.makedirs(name="./nv_report")
         sublayer_dict = {}
         error_count = 0
         error_list = []
@@ -466,7 +468,7 @@ class Run(object):
                 # single_test = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
                 # perf_dict, exit_code = single_test._perf_case_run()
 
-                loaded_data = load_pickle(filename=os.path.join("perf_unit_result", title + "-" + plt_exc))
+                loaded_data = load_pickle(filename=os.path.join("perf_unit_result", title + "-" + plt_exc + ".pickle"))
 
                 # 报错的子图+engine将不会收录进sublayer_dict
                 if exit_code != 0 or loaded_data[-1] > 0:
