@@ -489,6 +489,9 @@ class Run(object):
 
                     perf_dict[plt_exc + "-" + "kernel_time"] = kernel_time
                     perf_dict[plt_exc + "-" + "kernel_count"] = kernel_count
+                    self.logger.get_log().info("kernel time and count: ")
+                    self.logger.get_log().info(f"kernel time is {kernel_time}")
+                    self.logger.get_log().info(f"kernel count is {kernel_count}")
                 else:
                     perf_dict[plt_exc] = loaded_data[0][plt_exc]
 
