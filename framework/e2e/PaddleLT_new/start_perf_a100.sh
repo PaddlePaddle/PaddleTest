@@ -60,7 +60,7 @@ docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "wheel_url=${wheel_url}" \
   -e "AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID}" \
   PaddleLayerTest_perf_kernel \
-  bash -c "
+  /bin/bash -c "
 ldconfig;
 ps aux | grep python | awk '{print $2}' | xargs kill -9
 
