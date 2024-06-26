@@ -196,7 +196,6 @@ class LayerTest(object):
         if not os.path.exists("./perf_unit_result"):
             os.makedirs(name="./perf_unit_result")
         save_pickle(data=[res_dict, exc], filename=os.path.join("perf_unit_result", self.title + "-" + plt_exc))
-        # return res_dict, exc
 
 
 if __name__ == "__main__":
