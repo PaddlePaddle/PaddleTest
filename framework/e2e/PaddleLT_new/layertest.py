@@ -7,20 +7,12 @@
 """
 import os
 import traceback
-import argparse
 
 # from engine.engine_map import engine_map
 from strategy.compare import base_compare
 from tools.yaml_loader import YamlLoader
 from tools.logger import Logger
 from tools.res_save import save_tensor, load_tensor, save_pickle
-
-parser = argparse.ArgumentParser(description=__doc__)
-# 用于性能测试 单执行器+单子图的 独立python执行模式
-parser.add_argument("--layerfile", type=str, default="layercase/demo/SIR_101.py", help="子图路径")
-parser.add_argument("--testing", type=str, default="yaml/dy_eval.yml", help="执行器配置")
-parser.add_argument("--plt_exc", type=str, default="dy_eval", help="单执行器选择")
-args = parser.parse_args()
 
 
 class LayerTest(object):
@@ -208,6 +200,14 @@ if __name__ == "__main__":
     # 性能调试逻辑
     if os.environ.get("TESTING_MODE") == "performance":
         if os.environ.get("PLT_PERF_MODE") == "unit-python":
+            import argparse
+
+            parser = argparse.ArgumentParser(description=__doc__)
+            # 用于性能测试 单执行器+单子图的 独立python执行模式
+            parser.add_argument("--layerfile", type=str, default="layercase/demo/SIR_101.py", help="子图路径")
+            parser.add_argument("--testing", type=str, default="yaml/dy_eval.yml", help="执行器配置")
+            parser.add_argument("--plt_exc", type=str, default="dy_eval", help="单执行器选择")
+            args = parser.parse_args()
             py_file = args.layerfile
             title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
             single_test = LayerTest(title=title, layerfile=args.layerfile, testing=args.testing)
