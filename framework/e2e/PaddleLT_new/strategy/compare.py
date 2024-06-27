@@ -299,24 +299,54 @@ def perf_compare_kernel_dict(
                     #     compare_dict[layer_case][latest_engine + "^compare"] = "None"
                     pass
                 else:
-                    compare_dict[layer_case][latest_engine + "-" + "kernel_time" + "^" + latest_layer_type] = perf_dict[
-                        latest_engine + "-" + "kernel_time"
-                    ]
-                    compare_dict[layer_case][
-                        latest_engine + "-" + "kernel_count" + "^" + latest_layer_type
-                    ] = perf_dict[latest_engine + "-" + "kernel_count"]
-                    compare_dict[layer_case][
-                        baseline_engine + "-" + "kernel_time" + "^" + baseline_layer_type
-                    ] = perf_dict[baseline_engine + "-" + "kernel_time"]
-                    compare_dict[layer_case][
-                        baseline_engine + "-" + "kernel_count" + "^" + baseline_layer_type
-                    ] = perf_dict[baseline_engine + "-" + "kernel_count"]
-                    compare_dict[layer_case][
-                        latest_engine + "^" + baseline_engine + "^kernel_time_compare"
-                    ] = perf_compare(
-                        baseline=perf_dict[baseline_engine + "-" + "kernel_time"],
-                        latest=perf_dict[latest_engine + "-" + "kernel_time"],
-                    )
+                    if latest_engine + "-" + "kernel_time" in perf_dict:
+                        compare_dict[layer_case][
+                            latest_engine + "-" + "kernel_time" + "^" + latest_layer_type
+                        ] = perf_dict[latest_engine + "-" + "kernel_time"]
+                    else:
+                        compare_dict[layer_case][latest_engine + "-" + "kernel_time" + "^" + latest_layer_type] = "None"
+
+                    if latest_engine + "-" + "kernel_count" in perf_dict:
+                        compare_dict[layer_case][
+                            latest_engine + "-" + "kernel_count" + "^" + latest_layer_type
+                        ] = perf_dict[latest_engine + "-" + "kernel_count"]
+                    else:
+                        compare_dict[layer_case][
+                            latest_engine + "-" + "kernel_count" + "^" + latest_layer_type
+                        ] = "None"
+
+                    if baseline_engine + "-" + "kernel_time" in perf_dict:
+                        compare_dict[layer_case][
+                            baseline_engine + "-" + "kernel_time" + "^" + baseline_layer_type
+                        ] = perf_dict[baseline_engine + "-" + "kernel_time"]
+                    else:
+                        compare_dict[layer_case][
+                            baseline_engine + "-" + "kernel_time" + "^" + baseline_layer_type
+                        ] = "None"
+
+                    if baseline_engine + "-" + "kernel_count" in perf_dict:
+                        compare_dict[layer_case][
+                            baseline_engine + "-" + "kernel_count" + "^" + baseline_layer_type
+                        ] = perf_dict[baseline_engine + "-" + "kernel_count"]
+                    else:
+                        compare_dict[layer_case][
+                            baseline_engine + "-" + "kernel_count" + "^" + baseline_layer_type
+                        ] = "None"
+
+                    if (
+                        latest_engine + "-" + "kernel_time" in perf_dict
+                        and baseline_engine + "-" + "kernel_time" in perf_dict
+                    ):
+                        compare_dict[layer_case][
+                            latest_engine + "^" + baseline_engine + "^kernel_time_compare"
+                        ] = perf_compare(
+                            baseline=perf_dict[baseline_engine + "-" + "kernel_time"],
+                            latest=perf_dict[latest_engine + "-" + "kernel_time"],
+                        )
+                    else:
+                        compare_dict[layer_case][
+                            latest_engine + "^" + baseline_engine + "^kernel_time_compare"
+                        ] = "None"
 
     return compare_dict
 
