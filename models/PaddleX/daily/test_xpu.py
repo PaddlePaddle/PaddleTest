@@ -9,7 +9,7 @@ def run_model(model_name, model_cls, data_dir, env, concurrency=1):
 
 
 
-def test_npu():
+def test_xpu():
     with open('./model_xpu.json', 'r', encoding='utf-8') as f:
     # 读取JSON数据
         test_json = json.load(f)
@@ -48,4 +48,4 @@ def test_npu():
         run_model(model_name, model_cls, data_dir, env)
 
 if __name__ == '__main__':
-    test_npu()
+    test_xpu()
