@@ -15,7 +15,7 @@ from datetime import datetime
 import pandas as pd
 import layertest
 from db.layer_db import LayerBenchmarkDB
-from strategy.compare import perf_compare_dict
+from strategy.compare import perf_compare_dict, perf_compare_kernel_dict
 from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
@@ -521,14 +521,24 @@ class Run(object):
         if baseline_layer_type != "none" and (
             os.environ.get("PLT_BM_MODE") == "latest_as_baseline" or os.environ.get("PLT_BM_MODE") == "latest"
         ):
-            compare_dict = perf_compare_dict(
-                compare_list=compare_list,
-                baseline_dict=baseline_dict,
-                data_dict=sublayer_dict,
-                error_list=error_list,
-                baseline_layer_type=baseline_layer_type,
-                latest_layer_type=self.layer_type,
-            )
+            if os.environ.get("PLT_PERF_CONTENT") == "kernel":
+                compare_dict = perf_compare_kernel_dict(
+                    compare_list=compare_list,
+                    baseline_dict=baseline_dict,
+                    data_dict=sublayer_dict,
+                    error_list=error_list,
+                    baseline_layer_type=baseline_layer_type,
+                    latest_layer_type=self.layer_type,
+                )
+            else:
+                compare_dict = perf_compare_dict(
+                    compare_list=compare_list,
+                    baseline_dict=baseline_dict,
+                    data_dict=sublayer_dict,
+                    error_list=error_list,
+                    baseline_layer_type=baseline_layer_type,
+                    latest_layer_type=self.layer_type,
+                )
             xlsx_save(
                 sublayer_dict=compare_dict,
                 excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",

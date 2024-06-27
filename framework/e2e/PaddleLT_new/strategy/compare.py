@@ -257,6 +257,70 @@ def perf_compare_dict(compare_list, baseline_dict, data_dict, error_list, baseli
     return compare_dict
 
 
+def perf_compare_kernel_dict(
+    compare_list, baseline_dict, data_dict, error_list, baseline_layer_type, latest_layer_type
+):
+    """
+    生成对比dict
+    :param compare_list: yaml配置中的对比项目
+    :param data_dict: 待测字典
+    :param baseline_dict: 基线字典
+    :param error_list: list[报错子图case]
+    :param baseline_layer_type: 基线子图种类，例如layercase、layerApicase
+    :param latest_layer_type: 待测子图种类，例如layercase、layerApicase
+    :return: 比较字典
+    """
+    compare_dict = {}
+    for title, perf_dict in data_dict.items():  # 遍历所有子图
+        if title not in error_list:
+            layer_case = title.split("^", 1)[1]
+            # baseline_title = "^".join([baseline_layer_type, layer_case])
+            # layer_title = "^".join([latest_layer_type, layer_case])
+            for comparing in compare_list:
+                baseline_engine = comparing["baseline"]
+                latest_engine = comparing["latest"]
+                if layer_case not in compare_dict:
+                    compare_dict[layer_case] = {}
+
+                if baseline_engine == "ground_truth":  # 与数据库基线对比的情况
+                    # if baseline_title in baseline_dict and layer_title in data_dict:  # 判断数据库中的基线是否包含该子图
+                    #     compare_dict[layer_case][latest_engine + "^" + latest_layer_type] = perf_dict[latest_engine]
+                    #     compare_dict[layer_case][latest_engine + "^" + baseline_layer_type + "^baseline"]
+                    #         = json.loads(
+                    #         baseline_dict[baseline_title]["result"]
+                    #     )[latest_engine]
+                    #     compare_dict[layer_case][latest_engine + "^compare"] = perf_compare(
+                    #         baseline=json.loads(baseline_dict[baseline_title]["result"])[latest_engine],
+                    #         latest=perf_dict[latest_engine],
+                    #     )
+                    # else:
+                    #     compare_dict[layer_case][latest_engine + "^" + latest_layer_type] = perf_dict[latest_engine]
+                    #     compare_dict[layer_case][latest_engine + "^" + baseline_layer_type + "^baseline"] = "None"
+                    #     compare_dict[layer_case][latest_engine + "^compare"] = "None"
+                    pass
+                else:
+                    compare_dict[layer_case][latest_engine + "-" + "kernel_time" + "^" + latest_layer_type] = perf_dict[
+                        latest_engine + "-" + "kernel_time"
+                    ]
+                    compare_dict[layer_case][
+                        latest_engine + "-" + "kernel_count" + "^" + latest_layer_type
+                    ] = perf_dict[latest_engine + "-" + "kernel_count"]
+                    compare_dict[layer_case][
+                        baseline_engine + "-" + "kernel_time" + "^" + baseline_layer_type
+                    ] = perf_dict[baseline_engine + "-" + "kernel_time"]
+                    compare_dict[layer_case][
+                        baseline_engine + "-" + "kernel_count" + "^" + baseline_layer_type
+                    ] = perf_dict[baseline_engine + "-" + "kernel_count"]
+                    compare_dict[layer_case][
+                        latest_engine + "^" + baseline_engine + "^kernel_time_compare"
+                    ] = perf_compare(
+                        baseline=perf_dict[baseline_engine + "-" + "kernel_time"],
+                        latest=perf_dict[latest_engine + "-" + "kernel_time"],
+                    )
+
+    return compare_dict
+
+
 if __name__ == "__main__":
     from tools.logger import Logger
 
