@@ -2,13 +2,16 @@ testings:
   dy_eval_perf:
     model_dtype: "float32"
 
+  dy2st_eval_perf:
+    model_dtype: "float32"
+
   dy2st_eval_cinn_perf:
     model_dtype: "float32"
 
 compare:
   -
-    baseline: 'ground_truth'
+    baseline: 'dy_eval_perf'
     latest: 'dy2st_eval_cinn_perf'
   -
-    baseline: 'dy_eval_perf'
+    baseline: 'dy2st_eval_perf'
     latest: 'dy2st_eval_cinn_perf'

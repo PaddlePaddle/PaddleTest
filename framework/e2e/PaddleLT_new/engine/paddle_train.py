@@ -249,7 +249,7 @@ class LayerTrain(object):
     def dy2st_train_static_inputspec(self):
         """dy2st cinn train with inputspec"""
         data, input_spec = self._net_input_and_static_spec()
-        Logger("dy2st_train_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
+        Logger("dy2st_train_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
         optimizer = self._net_optimizer()
         loss = self._net_loss()
@@ -333,7 +333,7 @@ class LayerTrain(object):
     def dy2st_train_cinn_static_inputspec(self):
         """dy2st cinn train with inputspec"""
         data, input_spec = self._net_input_and_static_spec()
-        Logger("dy2st_train_cinn_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
+        Logger("dy2st_train_cinn_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
         optimizer = self._net_optimizer()
         loss = self._net_loss()
