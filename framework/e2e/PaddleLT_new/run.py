@@ -468,14 +468,31 @@ class Run(object):
                 # single_test = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
                 # perf_dict, exit_code = single_test._perf_case_run()
 
-                loaded_data = load_pickle(filename=os.path.join("perf_unit_result", title + "-" + plt_exc + ".pickle"))
-
-                # 报错的子图+engine将不会收录进sublayer_dict
-                if exit_code != 0 or loaded_data[-1] > 0:
+                try:  # 兼容core dump不产出loaded_data的情况
+                    loaded_data = load_pickle(
+                        filename=os.path.join("perf_unit_result", title + "-" + plt_exc + ".pickle")
+                    )
+                    # 报错的子图+engine将不会收录进sublayer_dict
+                    if exit_code != 0 or loaded_data[-1] > 0:
+                        if py_file not in error_list:
+                            error_list.append(py_file)
+                            error_count += 1
+                        continue
+                except Exception:  # 兼容core dump不产出loaded_data的情况
                     if py_file not in error_list:
                         error_list.append(py_file)
                         error_count += 1
                     continue
+
+                # loaded_data = load_pickle(
+                #     filename=os.path.join("perf_unit_result", title + "-" + plt_exc + ".pickle")
+                # )
+                # # 报错的子图+engine将不会收录进sublayer_dict
+                # if exit_code != 0 or loaded_data[-1] > 0:
+                #     if py_file not in error_list:
+                #         error_list.append(py_file)
+                #         error_count += 1
+                #     continue
 
                 if os.environ.get("PLT_PERF_CONTENT") == "kernel":
                     os.system(
