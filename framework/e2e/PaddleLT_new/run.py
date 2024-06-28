@@ -262,15 +262,15 @@ class Run(object):
     def _multi_gpu_multithread_test_run(self, py_list):
         """multithread run some test"""
         ######################################################
-        # def _queue_run(py_list, device_place_id, result_queue):
-        def _queue_run(py_list, py_dict, result_queue):
+        def _queue_run(py_list, device_place_id, result_queue):
+        # def _queue_run(py_list, py_dict, result_queue):
             """
             multi run main
             """
             error_list = []
             error_count = 0
 
-            os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+            os.environ["CUDA_VISIBLE_DEVICES"] = str(device_place_id)
             with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
                 # 提交任务给线程池
                 # futures = [
@@ -301,7 +301,7 @@ class Run(object):
         if len(device_list) < 2:
             raise Exception("single gpu cannot use _multi_gpu_multithread_test_run strategy")
 
-        py_dict = {item: i % len(device_list) for i, item in enumerate(py_list)}
+        # py_dict = {item: i % len(device_list) for i, item in enumerate(py_list)}
 
         multiprocess_cases = split_list(lst=self.py_list, n=len(device_list))
         processes = []
@@ -309,8 +309,8 @@ class Run(object):
 
         for i, cases_list in enumerate(multiprocess_cases):
             self.logger.get_log().info(f"multiprocess_cases中i: {i}")
-            # process = multiprocessing.Process(target=_queue_run, args=(cases_list, i, result_queue))
-            process = multiprocessing.Process(target=_queue_run, args=(cases_list, py_dict, result_queue))
+            process = multiprocessing.Process(target=_queue_run, args=(cases_list, i, result_queue))
+            # process = multiprocessing.Process(target=_queue_run, args=(cases_list, py_dict, result_queue))
             process.start()
             # os.sched_setaffinity(process.pid, {self.core_index + i})
             processes.append(process)
