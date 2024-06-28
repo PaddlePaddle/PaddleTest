@@ -37,6 +37,8 @@ class LayerTest(object):
         self.logger = Logger("PaddleLT")
         self.report_dir = os.path.join(os.getcwd(), "report")
 
+        self.logger.get_log().info(f"LayerTest.__init__ 中 device_place_id is: {self.device_place_id}")
+
     def _single_run(self, testing, layerfile, device_place_id=0):
         """
         单次执行器测试

@@ -297,6 +297,7 @@ class Run(object):
         result_queue = multiprocessing.Queue()
 
         for i, cases_list in enumerate(multiprocess_cases):
+            self.logger.get_log().info(f"multiprocess_cases中i: {i}")
             process = multiprocessing.Process(target=_queue_run, args=(cases_list, i, result_queue))
             process.start()
             # os.sched_setaffinity(process.pid, {self.core_index + i})
