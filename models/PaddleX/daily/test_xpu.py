@@ -4,7 +4,7 @@ import json
 
 def run_model(model_name, model_cls, data_dir, env, concurrency=1):
     print(f"start to run {model_name}")
-    os.system(f"python main.py -c paddlex/configs/{model_cls}/{model_name}.yaml -o Global.mode=train -o Global.dataset_dir={data_dir} -o Global.device={env}:4,5,6,7 >test_${model_name}.log 2>&1")
+    os.system(f"python main.py -c paddlex/configs/{model_cls}/{model_name}.yaml -o Global.mode=train -o Global.dataset_dir={data_dir} -o Global.device={env}:4,5,6,7 >test_{model_name}.log 2>&1")
     return 0
 
 
