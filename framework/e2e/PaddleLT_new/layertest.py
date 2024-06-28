@@ -20,10 +20,11 @@ class LayerTest(object):
     单个Layer case 执行
     """
 
-    def __init__(self, title, layerfile, testing):
+    def __init__(self, title, layerfile, testing, device_place_id=0):
         """ """
         self.title = title
 
+        self.device_place_id = int(device_place_id)
         self.layerfile = layerfile.replace(".py", "").replace("/", ".").lstrip(".")
 
         # 解析testing.yml
@@ -36,7 +37,9 @@ class LayerTest(object):
         self.logger = Logger("PaddleLT")
         self.report_dir = os.path.join(os.getcwd(), "report")
 
-    def _single_run(self, testing, layerfile):
+        self.logger.get_log().info(f"LayerTest.__init__ 中 device_place_id is: {self.device_place_id}")
+
+    def _single_run(self, testing, layerfile, device_place_id=0):
         """
         单次执行器测试
         :param testing: 'dy_train', 'dy_eval'...
@@ -46,7 +49,9 @@ class LayerTest(object):
             from engine.paddle_engine_map import paddle_engine_map as engine_map
         elif os.environ.get("FRAMEWORK") == "torch":
             from engine.torch_engine_map import torch_engine_map as engine_map
-        layer_test = engine_map[testing](testing=self.testings.get(testing), layerfile=layerfile)
+        layer_test = engine_map[testing](
+            testing=self.testings.get(testing), layerfile=layerfile, device_place_id=device_place_id
+        )
         res = getattr(layer_test, testing)()
         return res
 
@@ -63,7 +68,7 @@ class LayerTest(object):
         for testing in self.testings_list:
             try:
                 self.logger.get_log().info("测试执行器: {}".format(testing))
-                res = self._single_run(testing=testing, layerfile=self.layerfile)
+                res = self._single_run(testing=testing, layerfile=self.layerfile, device_place_id=self.device_place_id)
                 res_dict[testing] = res
                 if os.environ.get("PLT_SAVE_GT") == "True":  # 开启gt保存
                     gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
