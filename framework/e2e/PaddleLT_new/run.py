@@ -261,27 +261,57 @@ class Run(object):
 
     def _multi_gpu_multithread_test_run(self, py_list):
         """multithread run some test"""
-        error_list = []
-        error_count = 0
+        ######################################################
+        def _queue_run(py_list, device_place_id, result_queue):
+            """
+            multi run main
+            """
+            # os.environ["CUDA_VISIBLE_DEVICES"] = os.environ.get("PLT_DEVICE_ID") + str(device_id)
+            error_list = []
+            error_count = 0
+
+            with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
+                # 提交任务给线程池
+                futures = [
+                    executor.submit(self._single_pytest_run, py_file, self.testing, device_place_id)
+                    for py_file in py_list
+                ]
+
+                # 等待任务完成，并收集返回值
+                for future in futures:
+                    _py_file, _exit_code = future.result()
+                    if _exit_code is not None:
+                        error_list.append(_py_file)
+                        error_count += 1
+
+            # error_dict = self._run_main(all_cases=all_cases, loops=loops, base_times=base_times)
+
+            # result_queue.put(sublayer_dict, error_list, error_count)
+            result_queue.put(error_list, error_count)
+
+        ######################################################
 
         device_list = [int(x) for x in os.environ.get("CUDA_VISIBLE_DEVICES").split(",")]
-        if len(device_list) < 2:
-            raise Exception("single gpu cannot use _multi_gpu_multithread_test_run strategy")
 
-        py_dict = {item: i % len(device_list) for i, item in enumerate(py_list)}
-        with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
-            # 提交任务给线程池
-            futures = [
-                executor.submit(self._single_pytest_run, py_file, self.testing, device_place_id)
-                for py_file, device_place_id in py_dict.items()
-            ]
+        multiprocess_cases = split_list(lst=self.py_list, n=len(device_list))
+        processes = []
+        result_queue = multiprocessing.Queue()
 
-            # 等待任务完成，并收集返回值
-            for future in futures:
-                _py_file, _exit_code = future.result()
-                if _exit_code is not None:
-                    error_list.append(_py_file)
-                    error_count += 1
+        for i, cases_list in enumerate(multiprocess_cases):
+            process = multiprocessing.Process(target=_queue_run, args=(cases_list, i, result_queue))
+            process.start()
+            # os.sched_setaffinity(process.pid, {self.core_index + i})
+            processes.append(process)
+
+        for process in processes:
+            process.join()
+
+        error_list = []
+        error_count = 0
+        while not result_queue.empty():
+            single_error_list, single_error_count = result_queue.get()
+            error_list.extend(single_error_list)
+            error_count += single_error_count
 
         if os.environ.get("MULTI_DOUBLE_CHECK") == "False":
             if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
@@ -290,6 +320,37 @@ class Run(object):
         else:
             self.logger.get_log().info("对于多线程失败case, 进入double check环节: ")
             self._test_run(py_list=error_list)
+        ######################################################
+
+        # error_list = []
+        # error_count = 0
+
+        # device_list = [int(x) for x in os.environ.get("CUDA_VISIBLE_DEVICES").split(",")]
+        # if len(device_list) < 2:
+        #     raise Exception("single gpu cannot use _multi_gpu_multithread_test_run strategy")
+
+        # py_dict = {item: i % len(device_list) for i, item in enumerate(py_list)}
+        # with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
+        #     # 提交任务给线程池
+        #     futures = [
+        #         executor.submit(self._single_pytest_run, py_file, self.testing, device_place_id)
+        #         for py_file, device_place_id in py_dict.items()
+        #     ]
+
+        #     # 等待任务完成，并收集返回值
+        #     for future in futures:
+        #         _py_file, _exit_code = future.result()
+        #         if _exit_code is not None:
+        #             error_list.append(_py_file)
+        #             error_count += 1
+
+        # if os.environ.get("MULTI_DOUBLE_CHECK") == "False":
+        #     if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
+        #         self._gt_upload()
+        #     self._exit_code_txt(error_count=error_count, error_list=error_list)
+        # else:
+        #     self.logger.get_log().info("对于多线程失败case, 进入double check环节: ")
+        #     self._test_run(py_list=error_list)
 
     def _test_run(self, py_list):
         """run some test"""
