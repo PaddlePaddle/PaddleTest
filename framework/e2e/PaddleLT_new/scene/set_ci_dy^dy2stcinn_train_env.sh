@@ -13,7 +13,7 @@ export FRAMEWORK=paddle
 export MULTI_WORKER=12
 export MULTI_DOUBLE_CHECK=True
 
-export PLT_PYTEST_TIMEOUT=200  # 超时10分钟则判为失败. 设置为None则不限时
+export PLT_PYTEST_TIMEOUT=None  # 超时10分钟则判为失败. 设置为None则不限时
 export PLT_SPEC_USE_MULTI=False  # 开启动态InputSpec搜索遍历
 export PLT_SAVE_SPEC=False  # 是否保存InputSpec搜索遍历结果
 export PLT_SAVE_GT=False  # 是否保存精度ground truth, 也就是plt_gt

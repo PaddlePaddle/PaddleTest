@@ -32,6 +32,7 @@ class LayerTrain(object):
         reset(self.seed)
         self.device = os.environ.get("PLT_SET_DEVICE")
         paddle.set_device(f"{self.device}:{device_place_id}")
+        Logger("LayerTrain.__init__").get_log().info(f"device_place_id is: {device_place_id}")
         # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
 
         self.testing = testing

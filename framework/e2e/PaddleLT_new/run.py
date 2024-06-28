@@ -266,7 +266,6 @@ class Run(object):
             """
             multi run main
             """
-            # os.environ["CUDA_VISIBLE_DEVICES"] = os.environ.get("PLT_DEVICE_ID") + str(device_id)
             error_list = []
             error_count = 0
 
