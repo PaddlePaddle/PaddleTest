@@ -10,7 +10,7 @@ export PLT_SET_DEVICE=gpu
 export PLT_DEVICE_ID="${PLT_DEVICE_ID:-0}"
 export CUDA_VISIBLE_DEVICES="${PLT_DEVICE_ID:-0}"
 export FRAMEWORK=paddle
-export MULTI_WORKER=12
+export MULTI_WORKER=24
 export MULTI_DOUBLE_CHECK=True
 
 export PLT_PYTEST_TIMEOUT=200  # 超时10分钟则判为失败. 设置为None则不限时
