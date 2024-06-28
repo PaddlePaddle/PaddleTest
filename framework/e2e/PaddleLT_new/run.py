@@ -270,6 +270,7 @@ class Run(object):
             error_list = []
             error_count = 0
 
+            os.environ.get["CUDA_VISIBLE_DEVICES"] = 1
             with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
                 # 提交任务给线程池
                 # futures = [
@@ -278,7 +279,7 @@ class Run(object):
                 # ]
 
                 futures = [
-                    executor.submit(self._single_pytest_run, py_file, self.testing, 1)
+                    executor.submit(self._single_pytest_run, py_file, self.testing, 0)
                     for py_file in py_list
                 ]
 
