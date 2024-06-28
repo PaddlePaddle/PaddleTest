@@ -270,7 +270,7 @@ class Run(object):
             error_list = []
             error_count = 0
 
-            os.environ["CUDA_VISIBLE_DEVICES"] = 1
+            os.environ["CUDA_VISIBLE_DEVICES"] = "1"
             with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
                 # 提交任务给线程池
                 # futures = [
