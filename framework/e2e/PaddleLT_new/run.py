@@ -293,7 +293,7 @@ class Run(object):
             # error_dict = self._run_main(all_cases=all_cases, loops=loops, base_times=base_times)
 
             # result_queue.put(sublayer_dict, error_list, error_count)
-            result_queue.put(error_list, error_count)
+            result_queue.put((error_list, error_count))
 
         ######################################################
 
