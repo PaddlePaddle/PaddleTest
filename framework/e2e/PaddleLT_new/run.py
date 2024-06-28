@@ -263,7 +263,7 @@ class Run(object):
         """multithread run some test"""
         ######################################################
         def _queue_run(py_list, device_place_id, result_queue):
-        # def _queue_run(py_list, py_dict, result_queue):
+            # def _queue_run(py_list, py_dict, result_queue):
             """
             multi run main
             """
@@ -278,10 +278,7 @@ class Run(object):
                 #     for py_file in py_list
                 # ]
 
-                futures = [
-                    executor.submit(self._single_pytest_run, py_file, self.testing, 0)
-                    for py_file in py_list
-                ]
+                futures = [executor.submit(self._single_pytest_run, py_file, self.testing, 0) for py_file in py_list]
 
                 # 等待任务完成，并收集返回值
                 for future in futures:
@@ -290,14 +287,11 @@ class Run(object):
                         error_list.append(_py_file)
                         error_count += 1
 
-            # error_dict = self._run_main(all_cases=all_cases, loops=loops, base_times=base_times)
-
-            # result_queue.put(sublayer_dict, error_list, error_count)
             result_queue.put((error_list, error_count))
 
         ######################################################
 
-        device_list = [int(x) for x in os.environ.get("CUDA_VISIBLE_DEVICES").split(",")]
+        device_list = [int(x) for x in os.environ.get("PLT_DEVICE_ID").split(",")]
         if len(device_list) < 2:
             raise Exception("single gpu cannot use _multi_gpu_multithread_test_run strategy")
 
@@ -309,10 +303,9 @@ class Run(object):
 
         for i, cases_list in enumerate(multiprocess_cases):
             self.logger.get_log().info(f"multiprocess_cases中i: {i}")
-            process = multiprocessing.Process(target=_queue_run, args=(cases_list, i, result_queue))
+            process = multiprocessing.Process(target=_queue_run, args=(cases_list, device_list[i], result_queue))
             # process = multiprocessing.Process(target=_queue_run, args=(cases_list, py_dict, result_queue))
             process.start()
-            # os.sched_setaffinity(process.pid, {self.core_index + i})
             processes.append(process)
 
         for process in processes:
