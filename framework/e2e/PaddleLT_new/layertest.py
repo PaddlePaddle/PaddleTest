@@ -20,10 +20,11 @@ class LayerTest(object):
     单个Layer case 执行
     """
 
-    def __init__(self, title, layerfile, testing):
+    def __init__(self, title, layerfile, testing, device_place_id=0):
         """ """
         self.title = title
 
+        self.device_place_id = int(device_place_id)
         self.layerfile = layerfile.replace(".py", "").replace("/", ".").lstrip(".")
 
         # 解析testing.yml
@@ -36,7 +37,7 @@ class LayerTest(object):
         self.logger = Logger("PaddleLT")
         self.report_dir = os.path.join(os.getcwd(), "report")
 
-    def _single_run(self, testing, layerfile):
+    def _single_run(self, testing, layerfile, device_place_id=0):
         """
         单次执行器测试
         :param testing: 'dy_train', 'dy_eval'...
@@ -46,7 +47,9 @@ class LayerTest(object):
             from engine.paddle_engine_map import paddle_engine_map as engine_map
         elif os.environ.get("FRAMEWORK") == "torch":
             from engine.torch_engine_map import torch_engine_map as engine_map
-        layer_test = engine_map[testing](testing=self.testings.get(testing), layerfile=layerfile)
+        layer_test = engine_map[testing](
+            testing=self.testings.get(testing), layerfile=layerfile, device_place_id=device_place_id
+        )
         res = getattr(layer_test, testing)()
         return res
 

@@ -185,7 +185,7 @@ class Run(object):
                 f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
 
-    def _single_pytest_run(self, py_file, testing):
+    def _single_pytest_run(self, py_file, testing, device_place_id=0):
         """run one test"""
         title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
         self.logger.get_log().info(f"开始测试子图 {title}, 准备执行pytest命令~~")
@@ -196,8 +196,9 @@ class Run(object):
             else:
                 exit_code = os.system(
                     "cp -r PaddleLT.py {}.py && "
-                    "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={}".format(
-                        title, self.py_cmd, title, title, py_file, testing, self.report_dir
+                    "{} -m pytest {}.py --title={} --layerfile={} --testing={} "
+                    "--device_place_id={} --alluredir={}".format(
+                        title, self.py_cmd, title, title, py_file, testing, device_place_id, self.report_dir
                     )
                 )
         else:
@@ -207,8 +208,9 @@ class Run(object):
             else:
                 cmd = (
                     "cp -r PaddleLT.py {}.py && "
-                    "{} -m pytest {}.py --title={} --layerfile={} --testing={} --alluredir={} --timeout={}"
-                ).format(title, self.py_cmd, title, title, py_file, testing, self.report_dir, timeout)
+                    "{} -m pytest {}.py --title={} --layerfile={} --testing={} "
+                    "--device_place_id={} --alluredir={} --timeout={}"
+                ).format(title, self.py_cmd, title, title, py_file, testing, device_place_id, self.report_dir, timeout)
 
             # 使用subprocess执行命令并设置超时
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -257,29 +259,37 @@ class Run(object):
             self.logger.get_log().info("对于多线程失败case, 进入double check环节: ")
             self._test_run(py_list=error_list)
 
-    # def _multiprocess_multithread_test_run(self, py_list):
-    #     """multithread run some test"""
-    #     error_list = []
-    #     error_count = 0
+    def _multi_gpu_multithread_test_run(self, py_list):
+        """multithread run some test"""
+        error_list = []
+        error_count = 0
 
-    #     with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
-    #         # 提交任务给线程池
-    #         futures = [executor.submit(self._single_pytest_run, py_file, self.testing) for py_file in py_list]
+        device_list = [int(x) for x in os.environ.get("CUDA_VISIBLE_DEVICES").split(",")]
+        if len(device_list) < 2:
+            raise Exception("single gpu cannot use _multi_gpu_multithread_test_run strategy")
 
-    #         # 等待任务完成，并收集返回值
-    #         for future in futures:
-    #             _py_file, _exit_code = future.result()
-    #             if _exit_code is not None:
-    #                 error_list.append(_py_file)
-    #                 error_count += 1
+        py_dict = {item: i % len(device_list) for i, item in enumerate(py_list)}
+        with ThreadPoolExecutor(max_workers=int(os.environ.get("MULTI_WORKER", 13))) as executor:
+            # 提交任务给线程池
+            futures = [
+                executor.submit(self._single_pytest_run, py_file, self.testing, device_place_id)
+                for py_file, device_place_id in py_dict.items()
+            ]
 
-    #     if os.environ.get("MULTI_DOUBLE_CHECK") == "False":
-    #         if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
-    #             self._gt_upload()
-    #         self._exit_code_txt(error_count=error_count, error_list=error_list)
-    #     else:
-    #         self.logger.get_log().info("对于多线程失败case, 进入double check环节: ")
-    #         self._test_run(py_list=error_list)
+            # 等待任务完成，并收集返回值
+            for future in futures:
+                _py_file, _exit_code = future.result()
+                if _exit_code is not None:
+                    error_list.append(_py_file)
+                    error_count += 1
+
+        if os.environ.get("MULTI_DOUBLE_CHECK") == "False":
+            if not os.environ.get("PLT_GT_UPLOAD_URL") == "None":
+                self._gt_upload()
+            self._exit_code_txt(error_count=error_count, error_list=error_list)
+        else:
+            self.logger.get_log().info("对于多线程失败case, 进入double check环节: ")
+            self._test_run(py_list=error_list)
 
     def _test_run(self, py_list):
         """run some test"""
@@ -636,5 +646,7 @@ if __name__ == "__main__":
                 tes._perf_test_run()
             else:
                 tes._multiprocess_perf_test_run()
+    elif os.environ.get("TESTING_MODE") == "precision_multi_gpu":
+        tes._multi_gpu_multithread_test_run(py_list=tes.py_list)
     else:
         raise Exception("unknown testing mode, PaddleLayerTest only support test precision or performance")
