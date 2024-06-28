@@ -12,7 +12,7 @@ import traceback
 from strategy.compare import base_compare
 from tools.yaml_loader import YamlLoader
 from tools.logger import Logger
-from tools.res_save import save_tensor, load_tensor
+from tools.res_save import save_tensor, load_tensor, save_pickle
 
 
 class LayerTest(object):
@@ -165,9 +165,52 @@ class LayerTest(object):
         self.logger.get_log().info("用例 {} 多执行器性能结果: {}".format(self.title, res_dict))
         return res_dict, exc
 
+    def _perf_unit_case_run(self, plt_exc):
+        """
+        用于单个子图性能测试
+        """
+        exc = 0
+        res_dict = {}
+        # compare_res_list = []
+        self.logger.get_log().info("测试case名称: {}".format(self.title))
+        if plt_exc in self.testings_list:
+            try:
+                self.logger.get_log().info("性能测试执行器: {}".format(plt_exc))
+                res = self._single_run(testing=plt_exc, layerfile=self.layerfile)
+                res_dict[plt_exc] = res
+            except Exception:
+                bug_trace = traceback.format_exc()
+                exc += 1
+                res_dict[plt_exc] = bug_trace
+                self.logger.get_log().warn("性能执行器异常结果: {}".format(bug_trace))
+
+        self.logger.get_log().info("用例 {} 单执行器性能结果: {}".format(self.title, res_dict))
+        if not os.path.exists("./perf_unit_result"):
+            os.makedirs(name="./perf_unit_result")
+        save_pickle(data=[res_dict, exc], filename=os.path.join("perf_unit_result", self.title + "-" + plt_exc))
+
 
 if __name__ == "__main__":
-    layerfile = "./layerTorchcase/demo/SIR_101.py"
-    testing = "yaml/dy_eval.yml"
-    single_test = LayerTest(title="lzy_naive", layerfile=layerfile, testing=testing)
-    single_test._case_run()
+    # # 精度调试逻辑
+    # layerfile = "./layerTorchcase/demo/SIR_101.py"
+    # testing = "yaml/dy_eval.yml"
+    # single_test = LayerTest(title="lzy_naive", layerfile=layerfile, testing=testing)
+    # single_test._case_run()
+
+    # 性能调试逻辑
+    if os.environ.get("TESTING_MODE") == "performance":
+        if os.environ.get("PLT_PERF_MODE") == "unit-python":
+            import argparse
+
+            parser = argparse.ArgumentParser(description=__doc__)
+            # 用于性能测试 单执行器+单子图的 独立python执行模式
+            parser.add_argument("--layerfile", type=str, default="layercase/demo/SIR_101.py", help="子图路径")
+            parser.add_argument("--testing", type=str, default="yaml/dy_eval.yml", help="执行器配置")
+            parser.add_argument("--plt_exc", type=str, default="dy_eval", help="单执行器选择")
+            args = parser.parse_args()
+            py_file = args.layerfile
+            title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+            single_test = LayerTest(title=title, layerfile=args.layerfile, testing=args.testing)
+            single_test._perf_unit_case_run(plt_exc=args.plt_exc)
+    else:
+        pass

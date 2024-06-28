@@ -12,14 +12,15 @@ import multiprocessing
 from concurrent.futures import ThreadPoolExecutor
 import platform
 from datetime import datetime
+import pandas as pd
 import layertest
 from db.layer_db import LayerBenchmarkDB
-from strategy.compare import perf_compare_dict
+from strategy.compare import perf_compare_dict, perf_compare_kernel_dict
 from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
 from tools.json_loader import JSONLoader
-from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz
+from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle
 from tools.upload_bos import UploadBos
 from tools.statistics import split_list
 from tools.alarm import Alarm
@@ -404,6 +405,130 @@ class Run(object):
         self._perf_upload()
         self._pts_callback(error_count)
 
+    def _perf_unit_test_run(self):
+        """run some test"""
+        if not os.path.exists("./nv_report"):
+            os.makedirs(name="./nv_report")
+        sublayer_dict = {}
+        error_count = 0
+        error_list = []
+        testings_list = YamlLoader(yml=self.testing).get_junior_name("testings")
+        compare_list = YamlLoader(yml=self.testing).yml.get("compare")
+        for py_file in self.py_list:
+            # if os.environ.get("PLT_BM_ERROR_CHECK") == "True":  # 先跑功能看是否能通过
+            #     _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing="yaml/dy2stcinn_eval.yml")
+            #     if _exit_code is not None:
+            #         error_list.append(_py_file)
+            #         error_count += 1
+            #         continue
+
+            perf_dict = {}
+            for plt_exc in testings_list:
+                title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+                if os.environ.get("PLT_PYTEST_TIMEOUT") == "None":
+                    if os.environ.get("PLT_PERF_CONTENT") == "kernel":
+                        exit_code = os.system(
+                            f"nsys profile --stats true -w true -t cuda,nvtx,osrt,cudnn,cublas "
+                            f"-o nv_report/{title}-{plt_exc} {self.py_cmd} "
+                            f"layertest.py --layerfile {py_file} --testing {self.testing} --plt_exc {plt_exc}"
+                        )
+                    else:
+                        exit_code = os.system(
+                            f"layertest.py --layerfile {py_file} --testing {self.testing} --plt_exc {plt_exc}"
+                        )
+                else:
+                    timeout = os.environ.get("PLT_PYTEST_TIMEOUT")
+                    if os.environ.get("PLT_PERF_CONTENT") == "kernel":
+                        cmd = (
+                            f"nsys profile --stats true -w true -t cuda,nvtx,osrt,cudnn,cublas "
+                            f"-o nv_report/{title}-{plt_exc} {self.py_cmd} "
+                            f"layertest.py --layerfile {py_file} --testing {self.testing} --plt_exc {plt_exc}"
+                        )
+                    else:
+                        cmd = f"layertest.py --layerfile {py_file} --testing {self.testing} --plt_exc {plt_exc}"
+                    # 使用subprocess执行命令并设置超时
+                    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    try:
+                        stdout, stderr = proc.communicate(timeout=float(timeout))
+                        exit_code = proc.returncode
+                        self.logger.get_log().warning(f"{py_file} Command failed with return code {exit_code}")
+                        # 如果进程正常结束，stdout 和 stderr 将包含输出
+                        if stdout:
+                            self.logger.get_log().info(stdout.decode())  # 注意：输出是字节串，需要解码为字符串
+                        if stderr:
+                            self.logger.get_log().warning(stderr.decode())  # 注意：错误输出也是字节串，需要解码为字符串
+                        if exit_code != 0:
+                            self.logger.get_log().warning(f"{py_file} Command failed with return code {exit_code}")
+                    except subprocess.TimeoutExpired:
+                        self.logger.get_log().warning(f"{py_file} Command timed out after {timeout} seconds")
+                        proc.terminate()  # 发送 SIGTERM 信号到进程
+                        exit_code = -1
+
+                # title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
+                # single_test = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
+                # perf_dict, exit_code = single_test._perf_case_run()
+
+                try:  # 兼容core dump不产出loaded_data的情况
+                    loaded_data = load_pickle(
+                        filename=os.path.join("perf_unit_result", title + "-" + plt_exc + ".pickle")
+                    )
+                    # 报错的子图+engine将不会收录进sublayer_dict
+                    if exit_code != 0 or loaded_data[-1] > 0:
+                        if py_file not in error_list:
+                            error_list.append(py_file)
+                            error_count += 1
+                        continue
+                except Exception:  # 兼容core dump不产出loaded_data的情况
+                    if py_file not in error_list:
+                        error_list.append(py_file)
+                        error_count += 1
+                    continue
+
+                # loaded_data = load_pickle(
+                #     filename=os.path.join("perf_unit_result", title + "-" + plt_exc + ".pickle")
+                # )
+                # # 报错的子图+engine将不会收录进sublayer_dict
+                # if exit_code != 0 or loaded_data[-1] > 0:
+                #     if py_file not in error_list:
+                #         error_list.append(py_file)
+                #         error_count += 1
+                #     continue
+
+                if os.environ.get("PLT_PERF_CONTENT") == "kernel":
+                    os.system(
+                        f"nsys stats --report cuda_gpu_kern_sum --format csv "
+                        f"--output . "
+                        f"nv_report/{title}-{plt_exc}.sqlite"
+                    )
+                    df = pd.read_csv(os.path.join("nv_report", f"{title}-{plt_exc}_cuda_gpu_kern_sum.csv"))
+                    kernel_time = (df["Instances"] * df["Avg (ns)"]).sum()
+                    kernel_count = df["Instances"].sum()
+
+                    perf_dict[plt_exc + "-" + "kernel_time"] = kernel_time
+                    perf_dict[plt_exc + "-" + "kernel_count"] = kernel_count
+                    self.logger.get_log().info("kernel time and count: ")
+                    self.logger.get_log().info(f"kernel time is {kernel_time}")
+                    self.logger.get_log().info(f"kernel count is {kernel_count}")
+                else:
+                    perf_dict[plt_exc] = loaded_data[0][plt_exc]
+
+            sublayer_dict[title] = perf_dict
+
+        self._exit_code_txt(error_count=error_count, error_list=error_list)
+
+        baseline_dict, baseline_layer_type = self._db_interact(sublayer_dict=sublayer_dict, error_list=error_list)
+        self._perf_report_gen(
+            compare_list=compare_list,
+            baseline_dict=baseline_dict,
+            sublayer_dict=sublayer_dict,
+            error_list=error_list,
+            baseline_layer_type=baseline_layer_type,
+            latest_layer_type=self.layer_type,
+        )
+
+        self._perf_upload()
+        self._pts_callback(error_count)
+
     def _perf_report_gen(
         self, compare_list, baseline_dict, sublayer_dict, error_list, baseline_layer_type, latest_layer_type
     ):
@@ -413,14 +538,24 @@ class Run(object):
         if baseline_layer_type != "none" and (
             os.environ.get("PLT_BM_MODE") == "latest_as_baseline" or os.environ.get("PLT_BM_MODE") == "latest"
         ):
-            compare_dict = perf_compare_dict(
-                compare_list=compare_list,
-                baseline_dict=baseline_dict,
-                data_dict=sublayer_dict,
-                error_list=error_list,
-                baseline_layer_type=baseline_layer_type,
-                latest_layer_type=self.layer_type,
-            )
+            if os.environ.get("PLT_PERF_CONTENT") == "kernel":
+                compare_dict = perf_compare_kernel_dict(
+                    compare_list=compare_list,
+                    baseline_dict=baseline_dict,
+                    data_dict=sublayer_dict,
+                    error_list=error_list,
+                    baseline_layer_type=baseline_layer_type,
+                    latest_layer_type=self.layer_type,
+                )
+            else:
+                compare_dict = perf_compare_dict(
+                    compare_list=compare_list,
+                    baseline_dict=baseline_dict,
+                    data_dict=sublayer_dict,
+                    error_list=error_list,
+                    baseline_layer_type=baseline_layer_type,
+                    latest_layer_type=self.layer_type,
+                )
             xlsx_save(
                 sublayer_dict=compare_dict,
                 excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
@@ -494,9 +629,12 @@ if __name__ == "__main__":
         else:
             tes._multithread_test_run(py_list=tes.py_list)
     elif os.environ.get("TESTING_MODE") == "performance":
-        if os.environ.get("MULTI_WORKER") == "0":
-            tes._perf_test_run()
+        if os.environ.get("PLT_PERF_MODE") == "unit-python":
+            tes._perf_unit_test_run()
         else:
-            tes._multiprocess_perf_test_run()
+            if os.environ.get("MULTI_WORKER") == "0":
+                tes._perf_test_run()
+            else:
+                tes._multiprocess_perf_test_run()
     else:
         raise Exception("unknown testing mode, PaddleLayerTest only support test precision or performance")
