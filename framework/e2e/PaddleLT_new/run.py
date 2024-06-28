@@ -303,6 +303,8 @@ class Run(object):
 
         for i, cases_list in enumerate(multiprocess_cases):
             self.logger.get_log().info(f"multiprocess_cases中i: {i}")
+            self.logger.get_log().info(f"multiprocess_cases中device_list: {device_list}")
+            self.logger.get_log().info(f"multiprocess_cases中device_list[i]: {device_list[i]}")
             process = multiprocessing.Process(target=_queue_run, args=(cases_list, device_list[i], result_queue))
             # process = multiprocessing.Process(target=_queue_run, args=(cases_list, py_dict, result_queue))
             process.start()
