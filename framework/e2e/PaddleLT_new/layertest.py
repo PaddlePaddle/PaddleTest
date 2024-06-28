@@ -66,7 +66,7 @@ class LayerTest(object):
         for testing in self.testings_list:
             try:
                 self.logger.get_log().info("测试执行器: {}".format(testing))
-                res = self._single_run(testing=testing, layerfile=self.layerfile)
+                res = self._single_run(testing=testing, layerfile=self.layerfile, device_place_id=self.device_place_id)
                 res_dict[testing] = res
                 if os.environ.get("PLT_SAVE_GT") == "True":  # 开启gt保存
                     gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
