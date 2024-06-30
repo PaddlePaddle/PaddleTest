@@ -250,6 +250,7 @@ class CinnTestBase:
             net = self.prepare_static_net(use_cinn)
         else:
             net = self.prepare_net()
+        paddle.seed(2024)
         out = net(*self.inputs)
         return out
     
@@ -282,13 +283,16 @@ class CinnTestBase:
 
 
 
+
+
 if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
-    class PrimitiveOp_319bbc9503f6a2dfe0fca67937c3fca9(InstanceTrait, paddle.nn.Layer):
+    class PrimitiveOp_c584824e8a37b463e1f4ec2cda38787e(InstanceTrait, paddle.nn.Layer):
         
         def __init__(self):
             super().__init__()
 
-        def forward(self, input_0):
+        def forward(self, arg_0):
+            input_0 = arg_0
             return paddle._C_ops.all(input_0, [], False)
 
         def get_input_spec(self):
@@ -301,79 +305,40 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
         static_instance_without_cinn_ = None
 
 
-    class TestPrimitiveOp_6eb43d0852d60ed2d7da5b6f3e711d2f(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_c32961cfcc763f42c2ae658b9bdd891b(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_319bbc9503f6a2dfe0fca67937c3fca9
+            return PrimitiveOp_c584824e8a37b463e1f4ec2cda38787e
         def get_inputs(self):
             return [
                 paddle.to_tensor([True, True], dtype='bool').reshape([2]),
             ]
 
 
-    class TestPrimitiveOp_6eb43d0852d60ed2d7da5b6f3e711d2f(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_c32961cfcc763f42c2ae658b9bdd891b(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_319bbc9503f6a2dfe0fca67937c3fca9
+            return PrimitiveOp_c584824e8a37b463e1f4ec2cda38787e
         def get_inputs(self):
             return [
                 paddle.to_tensor([True, True], dtype='bool').reshape([2]),
             ]
 
 
-    
-    class PrimitiveOp_0cd757056161a891af142dcfa3f9d9c2(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0):
-            return paddle._C_ops.all(input_0, [], False)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[2], dtype='bool'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_648bbfa6426a5d337c3f2e8715a4d79c(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_c32961cfcc763f42c2ae658b9bdd891b(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_0cd757056161a891af142dcfa3f9d9c2
+            return PrimitiveOp_c584824e8a37b463e1f4ec2cda38787e
         def get_inputs(self):
             return [
                 paddle.to_tensor([True, True], dtype='bool').reshape([2]),
             ]
 
 
-    class TestPrimitiveOp_648bbfa6426a5d337c3f2e8715a4d79c(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_c32961cfcc763f42c2ae658b9bdd891b(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_0cd757056161a891af142dcfa3f9d9c2
-        def get_inputs(self):
-            return [
-                paddle.to_tensor([True, True], dtype='bool').reshape([2]),
-            ]
-
-
-    class TestPrimitiveOp_6eb43d0852d60ed2d7da5b6f3e711d2f(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_319bbc9503f6a2dfe0fca67937c3fca9
-        def get_inputs(self):
-            return [
-                paddle.to_tensor([True, True], dtype='bool').reshape([2]),
-            ]
-
-
-    class TestPrimitiveOp_6eb43d0852d60ed2d7da5b6f3e711d2f(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_319bbc9503f6a2dfe0fca67937c3fca9
+            return PrimitiveOp_c584824e8a37b463e1f4ec2cda38787e
         def get_inputs(self):
             return [
                 paddle.to_tensor([True, True], dtype='bool').reshape([2]),

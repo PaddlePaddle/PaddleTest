@@ -250,6 +250,7 @@ class CinnTestBase:
             net = self.prepare_static_net(use_cinn)
         else:
             net = self.prepare_net()
+        paddle.seed(2024)
         out = net(*self.inputs)
         return out
     
@@ -282,13 +283,17 @@ class CinnTestBase:
 
 
 
+
+
 if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
-    class PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef(InstanceTrait, paddle.nn.Layer):
+    class PrimitiveOp_5d9b341d6bf37918762475ac6182a704(InstanceTrait, paddle.nn.Layer):
         
         def __init__(self):
             super().__init__()
 
-        def forward(self, input_0, input_1):
+        def forward(self, arg_0, arg_1):
+            input_0 = arg_0
+            input_1 = arg_1
             return paddle._C_ops.equal(input_0, input_1)
 
         def get_input_spec(self):
@@ -302,10 +307,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
         static_instance_without_cinn_ = None
 
 
-    class TestPrimitiveOp_f700b93744d26168fbf4aea858d99360(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_4d1c1eac1071d60d6c5bc6f9608b0a32(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[86970], dtype='int32'),
@@ -313,10 +318,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_8920a44ef02ee3e80bf75b37fb5ffdfa(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_e766e8034f71ac2edfc75cbdbd675e57(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[242991], dtype='int32'),
@@ -324,10 +329,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_0f6ee66477202fed089d8150efb1062f(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_6ed9d33005ddd29e209a9bef486ac86f(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[220968], dtype='int32'),
@@ -335,10 +340,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_e2106517a1895a122c7cc0b8d277c804(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_056449f0ca1d6852fad8b56cd59153f8(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[153450], dtype='int32'),
@@ -346,10 +351,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_52380ce33348f01227c28de64b2b8397(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_0550dd5c7932699453b446dd24b4e775(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
@@ -357,10 +362,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_770fb7d88ea80304c1fd21030a884f69(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_07e79cda6a3e2beee5d0e81b53bc11bf(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
@@ -368,10 +373,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_9bbdd020f5d205af657a57531239b03b(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_beb82c51265ae16567f82e0f15549bff(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[185691], dtype='int32'),
@@ -379,10 +384,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_78669814f2b9f317a0a99273314e1eb8(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_f6d4752785b1bbe98574462b90378a2e(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
@@ -390,10 +395,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_8550bc8f7d82f49e7bb8866db7d0d5b7(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_2bdb9e0836dffeddec0bb729dd8bbf62(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
@@ -401,10 +406,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_c21f15224d95274563080369532c8c93(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_3812093679b2ee5a084c11b778ad7dde(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
@@ -412,10 +417,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_ebed57eb3dc8a19017eb2e17cade9e86(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_3f9f39bdfd355e57af634470cb9347db(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
@@ -424,12 +429,14 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
 
 
     
-    class PrimitiveOp_200055d32d25bdf604f79b31092ca297(InstanceTrait, paddle.nn.Layer):
+    class PrimitiveOp_104ce7c03966eecbcddc3fdfd931b1a2(InstanceTrait, paddle.nn.Layer):
         
         def __init__(self):
             super().__init__()
 
-        def forward(self, input_0, input_1):
+        def forward(self, arg_0, arg_1):
+            input_0 = arg_0
+            input_1 = arg_1
             return paddle._C_ops.equal(input_0, input_1)
 
         def get_input_spec(self):
@@ -443,10 +450,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
         static_instance_without_cinn_ = None
 
 
-    class TestPrimitiveOp_0e07dec664838553256c656611f34733(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_de0c2c90964d0bd7b5f18464670e9999(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_200055d32d25bdf604f79b31092ca297
+            return PrimitiveOp_104ce7c03966eecbcddc3fdfd931b1a2
         def get_inputs(self):
             return [
                 paddle.to_tensor(1025, dtype='int32').reshape([]),
@@ -454,10 +461,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_949634f170a609f76e22695a9bf81adf(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_3572ad43aab3b4d0be10f66cfcfbacfb(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[113061], dtype='int32'),
@@ -465,10 +472,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_edf101ffe7f497d5a1f1a7b1321cce86(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_356253733d340579260982019be6ea5d(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[205923], dtype='int32'),
@@ -476,10 +483,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_e18c63e0c974a1c7300737a16aa3789f(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_a5704cffa5c017c2021b84937fd82397(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[123783], dtype='int32'),
@@ -487,10 +494,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_66a6c958509d3fdfa66f344160deab9e(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_a5f4459f8a3e363823214119c4781ec5(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[171888], dtype='int32'),
@@ -498,10 +505,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_e7b2647850ff02a169c068fed3ad7916(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_73cd5deffcd9422ac99bfe77f31d639f(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[217413], dtype='int32'),
@@ -509,10 +516,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_3320c26e636450f1e2aaf281c363042b(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_8dd81ba9ce36c3eed49bc15f61c06190(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
@@ -520,10 +527,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_2c28eff5ace2edb61d3d967e5b522fb9(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_c587a07542a44ec0ba2dba5289a85abb(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
@@ -531,10 +538,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_6c543a55afaf6718500ed7ae64ceee44(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_48fb79924ca1adcf1ba1b8c895ea9771(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[185658], dtype='int32'),
@@ -542,30 +549,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_8578a55737e6e3f3506d6d28fe0dfb57(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[86970], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_e2076f2b7a825e2a0c2c79e1dfd959d1(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_4d1c1eac1071d60d6c5bc6f9608b0a32(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_8578a55737e6e3f3506d6d28fe0dfb57
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[86970], dtype='int32'),
@@ -573,30 +560,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_2c140ff71e0ec2fcf784f33f0a79df5d(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[242991], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_4e4e7702538d52307a5b2bdcb494e283(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_e766e8034f71ac2edfc75cbdbd675e57(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_2c140ff71e0ec2fcf784f33f0a79df5d
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[242991], dtype='int32'),
@@ -604,30 +571,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_4a16a2c6a388067ff68481df77bc6e10(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[220968], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_ea275234fe471ff0886b276c96a8f13f(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_6ed9d33005ddd29e209a9bef486ac86f(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_4a16a2c6a388067ff68481df77bc6e10
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[220968], dtype='int32'),
@@ -635,30 +582,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_f52aba9b8c685082c64a0d8867725c18(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[153450], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_a66395c0862dc70def9c60a7dcc4ed66(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_056449f0ca1d6852fad8b56cd59153f8(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_f52aba9b8c685082c64a0d8867725c18
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[153450], dtype='int32'),
@@ -666,30 +593,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_80d62e442aa3a832091c4f43e0fdc0bc(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[2002], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_c36022f110e72707fa36a8696c8cb961(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_0550dd5c7932699453b446dd24b4e775(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_80d62e442aa3a832091c4f43e0fdc0bc
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
@@ -697,10 +604,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_92cda1d553a875afbb35be05b3396024(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_07e79cda6a3e2beee5d0e81b53bc11bf(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_80d62e442aa3a832091c4f43e0fdc0bc
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
@@ -708,30 +615,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_0b0426222fbb89a103036c374189f9cc(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[185691], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_fec38b6efab82ef605979429b451b741(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_beb82c51265ae16567f82e0f15549bff(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_0b0426222fbb89a103036c374189f9cc
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[185691], dtype='int32'),
@@ -739,30 +626,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_d319a5b9a8c32bd9f9e66a463fd6ab62(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[1021], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_321f08f6abdc03160c4ebcc5ea8a9ed3(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_f6d4752785b1bbe98574462b90378a2e(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_d319a5b9a8c32bd9f9e66a463fd6ab62
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
@@ -770,10 +637,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_0148d6db35ec1d75aa26ed300de19097(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_2bdb9e0836dffeddec0bb729dd8bbf62(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_d319a5b9a8c32bd9f9e66a463fd6ab62
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
@@ -781,30 +648,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_246b87c159e12e47441931231e185c04(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[1002], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_25e90f6414a5139fc0d0ecb3c685b7db(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_3812093679b2ee5a084c11b778ad7dde(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_246b87c159e12e47441931231e185c04
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
@@ -812,10 +659,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_d360629a574ec8695c13646989389686(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_3f9f39bdfd355e57af634470cb9347db(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_246b87c159e12e47441931231e185c04
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
@@ -823,10 +670,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_0e07dec664838553256c656611f34733(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_de0c2c90964d0bd7b5f18464670e9999(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_200055d32d25bdf604f79b31092ca297
+            return PrimitiveOp_104ce7c03966eecbcddc3fdfd931b1a2
         def get_inputs(self):
             return [
                 paddle.to_tensor(1025, dtype='int32').reshape([]),
@@ -834,30 +681,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_da29422922034523fac731acb9d5dcdf(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[113061], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_507629f65ececeae29f22ae7bfe95424(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_3572ad43aab3b4d0be10f66cfcfbacfb(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_da29422922034523fac731acb9d5dcdf
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[113061], dtype='int32'),
@@ -865,30 +692,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_bca0d2801a5551f23bf6bf204251297b(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[205923], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_43f0c5a581b06ed11be7c93ebbc516e3(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_356253733d340579260982019be6ea5d(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_bca0d2801a5551f23bf6bf204251297b
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[205923], dtype='int32'),
@@ -896,30 +703,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_8928ef7cf8fbab3df0ce5aa9fd5a772a(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[123783], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_321db28467a076029b211306f9d594ee(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_a5704cffa5c017c2021b84937fd82397(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_8928ef7cf8fbab3df0ce5aa9fd5a772a
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[123783], dtype='int32'),
@@ -927,30 +714,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_80a0862f44f8526bb458b59480c93efc(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[171888], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_8c70395ae683496191d5178c4b67958f(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_a5f4459f8a3e363823214119c4781ec5(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_80a0862f44f8526bb458b59480c93efc
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[171888], dtype='int32'),
@@ -958,30 +725,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_853ed02d4eed6a54118683880dc95bb2(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[217413], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_bb462493123977ddbfcb5fe4e58d8e87(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_73cd5deffcd9422ac99bfe77f31d639f(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_853ed02d4eed6a54118683880dc95bb2
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[217413], dtype='int32'),
@@ -989,30 +736,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_145256b055c4dcde31b101a82d059e60(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[1027], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_7f59c8fe91df789be428a6be818526dc(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_8dd81ba9ce36c3eed49bc15f61c06190(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_145256b055c4dcde31b101a82d059e60
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
@@ -1020,10 +747,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    class TestPrimitiveOp_3dc538bf08399b3092223e350d3d7ce6(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_c587a07542a44ec0ba2dba5289a85abb(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_145256b055c4dcde31b101a82d059e60
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
@@ -1031,250 +758,10 @@ if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
             ]
 
 
-    
-    class PrimitiveOp_252ea10e689ee25917245634a8b92522(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, input_0, input_1):
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[185658], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_cf8fc8c0f2c55e4fc6a843c444a57faf(CinnTestBase, unittest.TestCase):
+    class TestPrimitiveOp_48fb79924ca1adcf1ba1b8c895ea9771(CinnTestBase, unittest.TestCase):
         
         def get_test_class(self):
-            return PrimitiveOp_252ea10e689ee25917245634a8b92522
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[185658], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_f700b93744d26168fbf4aea858d99360(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[86970], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_8920a44ef02ee3e80bf75b37fb5ffdfa(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[242991], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_0f6ee66477202fed089d8150efb1062f(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[220968], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_e2106517a1895a122c7cc0b8d277c804(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[153450], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_52380ce33348f01227c28de64b2b8397(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_770fb7d88ea80304c1fd21030a884f69(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_9bbdd020f5d205af657a57531239b03b(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[185691], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_78669814f2b9f317a0a99273314e1eb8(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_8550bc8f7d82f49e7bb8866db7d0d5b7(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_c21f15224d95274563080369532c8c93(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_ebed57eb3dc8a19017eb2e17cade9e86(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_0e07dec664838553256c656611f34733(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_200055d32d25bdf604f79b31092ca297
-        def get_inputs(self):
-            return [
-                paddle.to_tensor(1025, dtype='int32').reshape([]),
-                paddle.to_tensor(1025, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_949634f170a609f76e22695a9bf81adf(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[113061], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_edf101ffe7f497d5a1f1a7b1321cce86(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[205923], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_e18c63e0c974a1c7300737a16aa3789f(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[123783], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_66a6c958509d3fdfa66f344160deab9e(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[171888], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_e7b2647850ff02a169c068fed3ad7916(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[217413], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_3320c26e636450f1e2aaf281c363042b(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_2c28eff5ace2edb61d3d967e5b522fb9(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_6c543a55afaf6718500ed7ae64ceee44(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_abb2fb9ca728da2cc804166fdf4808ef
+            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
         def get_inputs(self):
             return [
                 paddle.randint(low=0, high=3, shape=[185658], dtype='int32'),
