@@ -680,6 +680,8 @@ yaml/dy2stcinn_eval_benchmark.yml:
 #   - layerApicase/nn_sublayer/relu__func.py
 
 yaml/CI_dy^dy2stcinn_train.yml:
+  - layercase/sublayer1000/Seg_cases/danet_danet_resnet50_os8_cityscapes_1024x512_80k/SIR_31.py
+  - layercase/sublayer1000/Seg_cases/danet_danet_resnet50_os8_voc12aug_512x512_40k/SIR_31.py
   # d3bd91f2457df1b327ac01e7caf4f22923bd2a0b 到 717e9f36b211e540b7e117e38f52ea754c722307 有bug
   - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_109.py
   - layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_121.py
