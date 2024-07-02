@@ -32,7 +32,7 @@ class LayerCase(paddle.nn.Layer):
         var_0,    # (shape: [1, 1174, 384], dtype: paddle.float32, stop_gradient: False)
     ):
         var_1 = paddle.nn.functional.norm.layer_norm(var_0, normalized_shape=[384], weight=self.parameter_3, bias=self.parameter_0, epsilon=1e-05)
-        var_2 = paddle.tensor.attribute.shape(var_1)
+        var_2 = var_1.shape
         var_3 = var_2.__getitem__(1)
         var_4 = var_2.__getitem__(2)
         var_5 = paddle.nn.functional.common.linear(x=var_1, weight=self.parameter_1, bias=None, name=None)
@@ -55,7 +55,7 @@ class LayerCase(paddle.nn.Layer):
         return var_21
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[1, 1174, 384], dtype=paddle.float32),
     )
@@ -71,7 +71,7 @@ def create_numpy_inputs():
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:

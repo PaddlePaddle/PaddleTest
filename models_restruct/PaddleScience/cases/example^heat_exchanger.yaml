@@ -1,0 +1,20 @@
+case:
+  linux:
+    base: ./base/heat_exchanger_base.yaml
+    train:
+      -
+        name: single
+    eval:
+      -
+        name: single
+      -
+        name: multi
+    predict: skipped
+    export:
+      -
+        name: single
+    infer:
+      -
+        name: single
+
+function: paddlelas_imagenet_parse

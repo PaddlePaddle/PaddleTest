@@ -274,6 +274,9 @@ export FLAGS_enable_pir_api=${FLAGS_enable_pir_api:-False}
 export SOT_EXPORT_FLAG=${SOT_EXPORT_FLAG:-False} #240123 针对泽宇项目设为True
 export GLOG_vmodule=${GLOG_vmodule:-}
 
+# 显存复用
+export FLAGS_use_auto_growth_v2=${FLAGS_use_auto_growth_v2:-0}
+
 ######################## 开始执行 ########################
 ####    测试框架下载    #####
 wget -q ${CE_Link} --no-proxy #需要全局定义
@@ -469,6 +472,7 @@ if [[ "${docker_flag}" == "" ]]; then
 	-e api_key=${api_key} \
         -e PTS_ENV_VARS=$PTS_ENV_VARS \
         -e FLAGS_pir_subgraph_saving_dir=${FLAGS_pir_subgraph_saving_dir} \
+	-e FLAGS_use_auto_growth_v2=${FLAGS_use_auto_growth_v2} \
         -w /workspace \
         ${Image_version}  \
         /bin/bash -c '

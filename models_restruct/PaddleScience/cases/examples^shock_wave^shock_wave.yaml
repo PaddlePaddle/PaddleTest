@@ -3,10 +3,28 @@ case:
     base: ./base/shock_wave_base.yaml
     train:
       -
-        name: single
-    eval: skipped
-    infer: skipped
-    export: skipped
+        name: single_Ma2.0
+      -
+        name: single_Ma0.728
+    eval:
+      -
+        name: single_Ma2.0
+      -
+        name: multi_Ma2.0
+      -
+        name: single_Ma0.728
+      -
+        name: multi_Ma0.728
     predict: skipped
+    export:
+      -
+        name: single_Ma2.0
+      -
+        name: single_Ma0.728
+    infer:
+      -
+        name: single_Ma2.0
+      -
+        name: single_Ma0.728
 
 function: paddlelas_imagenet_parse

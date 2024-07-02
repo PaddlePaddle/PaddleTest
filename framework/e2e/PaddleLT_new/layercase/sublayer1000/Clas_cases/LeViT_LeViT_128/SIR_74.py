@@ -64,7 +64,15 @@ class LayerCase(paddle.nn.Layer):
         return var_6, var_9, var_45, var_8
 
 
-def create_paddle_inputs():
+
+def create_inputspec(): 
+    inputspec = ( 
+        paddle.static.InputSpec(shape=(-1, -1, -1), dtype=paddle.float32, stop_gradient=False), 
+        paddle.static.InputSpec(shape=(-1, -1), dtype=paddle.int64, stop_gradient=False), 
+    )
+    return inputspec
+
+def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[22, 16, 768], dtype=paddle.float32),
         paddle.randint(low=0, high=10, shape=[16, 16], dtype=paddle.int64),
@@ -82,7 +90,7 @@ def create_numpy_inputs():
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:

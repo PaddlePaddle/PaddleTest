@@ -85,21 +85,21 @@ class LayerCase(paddle.nn.Layer):
         var_24 = paddle.tensor.manipulation.concat([var_3, var_11], axis=1)
         var_25 = paddle.tensor.manipulation.concat([var_4, var_17], axis=1)
         var_26 = paddle.tensor.manipulation.concat([var_5, var_23], axis=1)
-        var_27 = paddle.tensor.attribute.shape(var_24)
+        var_27 = var_24.shape
         var_28 = var_27.__getitem__(0)
         var_29 = var_27.__getitem__(2)
         var_30 = var_27.__getitem__(3)
         var_31 = paddle.tensor.manipulation.reshape(x=var_24, shape=[var_28, 2, 20, var_29, var_30])
         var_32 = paddle.tensor.linalg.transpose(x=var_31, perm=[0, 2, 1, 3, 4])
         var_33 = paddle.tensor.manipulation.reshape(x=var_32, shape=[var_28, 40, var_29, var_30])
-        var_34 = paddle.tensor.attribute.shape(var_25)
+        var_34 = var_25.shape
         var_35 = var_34.__getitem__(0)
         var_36 = var_34.__getitem__(2)
         var_37 = var_34.__getitem__(3)
         var_38 = paddle.tensor.manipulation.reshape(x=var_25, shape=[var_35, 2, 40, var_36, var_37])
         var_39 = paddle.tensor.linalg.transpose(x=var_38, perm=[0, 2, 1, 3, 4])
         var_40 = paddle.tensor.manipulation.reshape(x=var_39, shape=[var_35, 80, var_36, var_37])
-        var_41 = paddle.tensor.attribute.shape(var_26)
+        var_41 = var_26.shape
         var_42 = var_41.__getitem__(0)
         var_43 = var_41.__getitem__(2)
         var_44 = var_41.__getitem__(3)
@@ -109,7 +109,7 @@ class LayerCase(paddle.nn.Layer):
         return var_33, var_40, var_47
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[1, 20, 128, 256], dtype=paddle.float32),
         paddle.rand(shape=[1, 40, 64, 128], dtype=paddle.float32),
@@ -135,7 +135,7 @@ def create_numpy_inputs():
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:

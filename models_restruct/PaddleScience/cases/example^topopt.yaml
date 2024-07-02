@@ -1,0 +1,28 @@
+case:
+  linux:
+    base: ./base/topopt_base.yaml
+    train:
+      -
+        name: single
+    eval: skipped
+    predict: skipped
+    export:
+      -
+        name: single_Uniform
+      -
+        name: single_Poisson5
+      -
+        name: single_Poisson10
+      -
+        name: single_Poisson30
+    infer:
+      -
+        name: single_Uniform
+      -
+        name: single_Poisson5
+      -
+        name: single_Poisson10
+      -
+        name: single_Poisson30
+
+function: paddlelas_imagenet_parse

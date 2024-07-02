@@ -9,8 +9,8 @@ class LayerCase(paddle.nn.Layer):
         super().__init__()
     def forward(
         self,
-        var_0,    # (shape: [8], dtype: paddle.float32, stop_gradient: False)
-        var_1,    # (shape: [8], dtype: paddle.float32, stop_gradient: True)
+        var_0,    # (shape: [24], dtype: paddle.float32, stop_gradient: False)
+        var_1,    # (shape: [24], dtype: paddle.float32, stop_gradient: True)
     ):
         out = paddle.tensor.manipulation.split(var_0, num_or_sections=4, axis=-1)
         var_2 = out[0]
@@ -48,9 +48,9 @@ class LayerCase(paddle.nn.Layer):
         var_33 = var_27.__sub__(var_25)
         var_34 = var_32.__mul__(var_33)
         var_35 = paddle.tensor.logic.greater_than(var_26, var_24)
-        var_36 = var_34.__mul__(var_35)
+        var_36 = var_34.__mul__(paddle.cast(var_35, paddle.float32))
         var_37 = paddle.tensor.logic.greater_than(var_27, var_25)
-        var_38 = var_36.__mul__(var_37)
+        var_38 = var_36.__mul__(paddle.cast(var_37, paddle.float32))
         var_39 = var_22.__sub__(var_2)
         var_40 = var_23.__sub__(var_3)
         var_41 = var_39.__mul__(var_40)
@@ -99,25 +99,25 @@ class LayerCase(paddle.nn.Layer):
         return var_83
 
 
-def create_paddle_inputs():
+def create_tensor_inputs():
     inputs = (
-        paddle.rand(shape=[8], dtype=paddle.float32),
-        paddle.rand(shape=[8], dtype=paddle.float32),
+        paddle.rand(shape=[24], dtype=paddle.float32),
+        paddle.rand(shape=[24], dtype=paddle.float32),
     )
     return inputs
 
 
 def create_numpy_inputs():
     inputs = (
-        np.random.random(size=[8]).astype('float32'),
-        np.random.random(size=[8]).astype('float32'),
+        np.random.random(size=[24]).astype('float32'),
+        np.random.random(size=[24]).astype('float32'),
     )
     return inputs
 
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:

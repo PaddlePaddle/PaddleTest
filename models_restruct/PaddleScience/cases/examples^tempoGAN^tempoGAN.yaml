@@ -4,9 +4,17 @@ case:
     train:
       -
         name: single
-    eval: skipped
-    infer: skipped
-    export: skipped
+    eval:
+      -
+        name: single
+      -
+        name: multi
     predict: skipped
+    export:
+      -
+        name: single
+    infer:
+      -
+        name: single
 
 function: paddlelas_imagenet_parse

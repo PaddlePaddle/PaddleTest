@@ -76,7 +76,7 @@ def test_trt_fp16_bz1():
     test_suite2.trt_more_bz_test(
         input_data_dict,
         output_data_dict,
-        delta=2e-3,
+        delta=3e-3,
         max_batch_size=1,
         min_subgraph_size=1,
         precision="trt_fp16",

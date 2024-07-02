@@ -9,3 +9,54 @@ train:
         base: 0
         threshold: 0
         evaluation: "="
+eval:
+  -
+    name: single
+    cmd: python examples/aneurysm/aneurysm.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/aneurysm/aneurysm_pretrained.pdparams
+    result:
+      loss(ref_u_v_w_p):
+        base: 0.01488
+        threshold: 1
+        evaluation: "-"
+      MSE.p(ref_u_v_w_p):
+        base: 0.01412
+        threshold: 1
+        evaluation: "-"
+      MSE.u(ref_u_v_w_p):
+        base: 0.00021
+        threshold: 1
+        evaluation: "-"
+      MSE.v(ref_u_v_w_p):
+        base: 0.00024
+        threshold: 1
+        evaluation: "-"
+      MSE.w(ref_u_v_w_p):
+        base: 0.00032
+        threshold: 1
+        evaluation: "-"
+  -
+    name: multi
+    cmd: python -m paddle.distributed.launch examples/aneurysm/aneurysm.py
+    params:
+      - mode=eval
+      - EVAL.pretrained_model_path=https://paddle-org.bj.bcebos.com/paddlescience/models/aneurysm/aneurysm_pretrained.pdparams
+    result:
+      MSE.p(ref_u_v_w_p):
+        base: 0.01412
+        threshold: 1
+        evaluation: "-"
+      MSE.u(ref_u_v_w_p):
+        base: 0.00021
+        threshold: 1
+        evaluation: "-"
+      MSE.v(ref_u_v_w_p):
+        base: 0.00024
+        threshold: 1
+        evaluation: "-"
+      MSE.w(ref_u_v_w_p):
+        base: 0.00032
+        threshold: 1
+        evaluation: "-"

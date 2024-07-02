@@ -1,4 +1,4 @@
-# method:argmax||method:__mul__||method:__add__||method:flatten||method:flatten||api:paddle.tensor.manipulation.gather||method:reshape||method:__gt__||api:paddle.tensor.creation.full_like||api:paddle.tensor.search.where||method:reshape||method:flatten||api:paddle.tensor.manipulation.gather||method:reshape||api:paddle.nn.functional.input.one_hot||api:paddle.tensor.creation.to_tensor||api:paddle.tensor.search.index_select||method:__mul__||method:max||method:__mul__||method:max||method:__add__||method:__truediv__||method:__mul__||method:max||method:unsqueeze||method:__mul__
+# method:argmax||method:__mul__||method:__add__||method:flatten||method:flatten||api:paddle.tensor.manipulation.gather||method:reshape||method:__gt__||api:paddle.tensor.creation.full_like||api:paddle.tensor.search.where||method:reshape||method:flatten||api:paddle.tensor.manipulation.gather||method:reshape||api:paddle.nn.functional.input.one_hot||api:paddle.tensor.search.index_select||method:__mul__||method:max||method:__mul__||method:max||method:__add__||method:__truediv__||method:__mul__||method:max||method:unsqueeze||method:__mul__
 import paddle
 import unittest
 import numpy as np
@@ -7,16 +7,20 @@ import numpy as np
 class LayerCase(paddle.nn.Layer):
     def __init__(self):
         super().__init__()
+
     def forward(
         self,
-        var_0,    # (shape: [1, 1, 2100], dtype: paddle.float32, stop_gradient: True)
-        var_1,    # (shape: [1, 1], dtype: paddle.int32, stop_gradient: True)
-        var_2,    # (shape: [1, 1, 1], dtype: paddle.int32, stop_gradient: True)
-        var_3,    # (shape: [1, 2100], dtype: paddle.float32, stop_gradient: True)
-        var_4,    # (shape: [1, 1, 4], dtype: paddle.float32, stop_gradient: True)
-        var_5,    # (shape: [1, 1, 2100], dtype: paddle.float32, stop_gradient: True)
-        var_6,    # (shape: [1, 1, 2100], dtype: paddle.float32, stop_gradient: True)
+        var_0,  # (shape: [1, 1, 2100], dtype: paddle.float32, stop_gradient: True)
+        var_1,  # (shape: [1, 1], dtype: paddle.int32, stop_gradient: True)
+        var_2,  # (shape: [1, 1, 1], dtype: paddle.int32, stop_gradient: True)
+        var_3,  # (shape: [1, 2100], dtype: paddle.float32, stop_gradient: True)
+        var_4,  # (shape: [1, 1, 4], dtype: paddle.float32, stop_gradient: True)
+        var_5,  # (shape: [1, 1, 2100], dtype: paddle.float32, stop_gradient: True)
+        var_6,  # (shape: [1, 1, 2100], dtype: paddle.float32, stop_gradient: True)
     ):
+        var_1.stop_gradient = True
+        var_2.stop_gradient = True
+        var_4.stop_gradient = True
         var_7 = var_0.argmax(axis=-2)
         var_8 = var_1.__mul__(1)
         var_9 = var_7.__add__(var_8)
@@ -32,7 +36,7 @@ class LayerCase(paddle.nn.Layer):
         var_19 = paddle.tensor.manipulation.gather(var_17, var_18, axis=0)
         var_20 = var_19.reshape([1, 2100, 4])
         var_21 = paddle.nn.functional.input.one_hot(var_16, 21)
-        var_22 = paddle.tensor.creation.to_tensor([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+        var_22 = paddle.arange(20)
         var_23 = paddle.tensor.search.index_select(var_21, var_22, axis=-1)
         var_24 = var_5.__mul__(var_0)
         var_25 = var_24.max(axis=-1, keepdim=True)
@@ -47,10 +51,23 @@ class LayerCase(paddle.nn.Layer):
         return var_16, var_20, var_33
 
 
-def create_paddle_inputs():
+def create_inputspec():
+    inputspec = (
+        paddle.static.InputSpec(shape=(-1, -1, -1), dtype=paddle.float32, stop_gradient=False),
+        paddle.static.InputSpec(shape=(-1, -1), dtype=paddle.int64, stop_gradient=True),
+        paddle.static.InputSpec(shape=(-1, -1, -1), dtype=paddle.int32, stop_gradient=True),
+        paddle.static.InputSpec(shape=(-1, -1), dtype=paddle.float32, stop_gradient=False),
+        paddle.static.InputSpec(shape=(-1, -1, -1), dtype=paddle.float32, stop_gradient=True),
+        paddle.static.InputSpec(shape=(-1, -1, -1), dtype=paddle.float32, stop_gradient=False),
+        paddle.static.InputSpec(shape=(-1, -1, -1), dtype=paddle.float32, stop_gradient=False),
+    )
+    return inputspec
+
+
+def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[1, 1, 2100], dtype=paddle.float32),
-        paddle.randint(low=0, high=10, shape=[1, 1], dtype=paddle.int32),
+        paddle.randint(low=0, high=10, shape=[1, 1], dtype=paddle.int64),
         paddle.randint(low=0, high=10, shape=[1, 1, 1], dtype=paddle.int32),
         paddle.rand(shape=[1, 2100], dtype=paddle.float32),
         paddle.rand(shape=[1, 1, 4], dtype=paddle.float32),
@@ -62,24 +79,25 @@ def create_paddle_inputs():
 
 def create_numpy_inputs():
     inputs = (
-        np.random.random(size=[1, 1, 2100]).astype('float32'),
-        np.random.randint(low=0, high=10, size=[1, 1], dtype='int32'),
-        np.random.randint(low=0, high=10, size=[1, 1, 1], dtype='int32'),
-        np.random.random(size=[1, 2100]).astype('float32'),
-        np.random.random(size=[1, 1, 4]).astype('float32'),
-        np.random.random(size=[1, 1, 2100]).astype('float32'),
-        np.random.random(size=[1, 1, 2100]).astype('float32'),
+        np.random.random(size=[1, 1, 2100]).astype("float32"),
+        np.random.randint(low=0, high=10, size=[1, 1], dtype="int64"),
+        np.random.randint(low=0, high=10, size=[1, 1, 1], dtype="int32"),
+        np.random.random(size=[1, 2100]).astype("float32"),
+        np.random.random(size=[1, 1, 4]).astype("float32"),
+        np.random.random(size=[1, 1, 2100]).astype("float32"),
+        np.random.random(size=[1, 1, 2100]).astype("float32"),
     )
     return inputs
 
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
+
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.set_flags({"FLAGS_prim_all": with_prim})
             if with_cinn:
                 build_strategy = paddle.static.BuildStrategy()
                 build_strategy.build_cinn_pass = True
@@ -89,6 +107,7 @@ class TestLayer(unittest.TestCase):
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs
+
     def test_ast_prim_cinn(self):
         st_out = self.train(self.net, to_static=True)
         cinn_out = self.train(self.net, to_static=True, with_prim=True, with_cinn=True)
@@ -96,5 +115,5 @@ class TestLayer(unittest.TestCase):
             np.testing.assert_allclose(st.numpy(), cinn.numpy(), atol=1e-8)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

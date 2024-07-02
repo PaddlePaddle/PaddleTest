@@ -10,7 +10,7 @@
 /***************************************************************************
   *
   * Copyright (c) 2019 Baidu.com, Inc. All Rights Reserved
-  * @file test_dist_fleet_static_strategy.py
+  * @file ist_fleet_static_strategy.py
   * @author liyang109@baidu.com
   * @date 2020-11-16 14:41
   * @brief

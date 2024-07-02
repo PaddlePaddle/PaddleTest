@@ -24,19 +24,26 @@ class LayerCase(paddle.nn.Layer):
         var_0,    # (shape: [1, 3, 512, 512], dtype: paddle.float32, stop_gradient: True)
     ):
         var_1 = paddle.nn.functional.conv._conv_nd(var_0, self.parameter_0, bias=self.parameter_2, stride=[16, 16], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_2 = paddle.tensor.attribute.shape(var_1)
+        var_2 = var_1.shape
         var_3 = var_2.__getitem__(0)
         var_4 = self.parameter_1.expand((var_3, -1, -1,))
         var_5 = var_1.flatten(2)
         var_6 = var_5.transpose([0, 2, 1])
         var_7 = paddle.tensor.manipulation.concat([var_4, var_6], axis=1)
-        var_8 = paddle.tensor.attribute.shape(var_7)
+        var_8 = var_7.shape
         var_9 = var_8.__getitem__(1)
         var_10 = var_9.__eq__(1025)
         return var_10, var_7, var_2
 
 
-def create_paddle_inputs():
+
+def create_inputspec(): 
+    inputspec = ( 
+        paddle.static.InputSpec(shape=(-1, 3, -1, -1), dtype=paddle.float32, stop_gradient=False), 
+    )
+    return inputspec
+
+def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[1, 3, 512, 512], dtype=paddle.float32),
     )
@@ -52,7 +59,7 @@ def create_numpy_inputs():
 
 class TestLayer(unittest.TestCase):
     def setUp(self):
-        self.inputs = create_paddle_inputs()
+        self.inputs = create_tensor_inputs()
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:

@@ -1,0 +1,22 @@
+case:
+  linux:
+    base: ./base/amgnet_base.yaml
+    train:
+      -
+        name: amgnet_airfoil_single
+      -
+        name: amgnet_cylinder_single
+    eval:
+      -
+        name: amgnet_airfoil_single
+      -
+        name: amgnet_airfoil_multi
+      -
+        name: amgnet_cylinder_single
+      -
+        name: amgnet_cylinder_multi
+    infer: skipped
+    export: skipped
+    predict: skipped
+
+function: paddlelas_imagenet_parse
