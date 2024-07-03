@@ -50,7 +50,7 @@ def test_shape1():
     """
     x = np.nan
     """
-    x = np.array([np.nan, np.inf, np.NINF, -np.inf, -np.nan])
+    x = np.array([np.nan, np.inf, -np.inf, -np.inf, -np.nan])
     res = paddle.shape(paddle.to_tensor(x))
     exp = np.array(x.shape)
     compare(exp, res.numpy())
