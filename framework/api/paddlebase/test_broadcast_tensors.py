@@ -19,7 +19,7 @@ def test_broadcast_tensors_base():
     """
     base 2-D tensor
     """
-    datatype = [np.bool, np.int32, np.int64, np.float32, np.float64]
+    datatype = [np.bool_, np.int32, np.int64, np.float32, np.float64]
     for i in datatype:
         x = randtool("float", -5, 5, [6, 6]).astype(i)
         y = randtool("float", -5, 5, [6, 1]).astype(i)
@@ -36,7 +36,7 @@ def test_broadcast_tensors_base1():
     """
     base 3-D tensor
     """
-    datatype = [np.bool, np.int32, np.int64, np.float32, np.float64]
+    datatype = [np.bool_, np.int32, np.int64, np.float32, np.float64]
     for i in datatype:
         x = randtool("float", -5, 5, [6, 6, 6]).astype(i)
         y = randtool("float", -5, 5, [6, 1, 6]).astype(i)
@@ -53,7 +53,7 @@ def test_broadcast_tensors_base2():
     """
     base 4-D tensor
     """
-    datatype = [np.bool, np.int32, np.int64, np.float32, np.float64]
+    datatype = [np.bool_, np.int32, np.int64, np.float32, np.float64]
     for i in datatype:
         x = randtool("float", -5, 5, [6, 6, 6, 1]).astype(i)
         y = randtool("float", -5, 5, [6, 1, 6, 3]).astype(i)
@@ -70,7 +70,7 @@ def test_broadcast_tensors_base3():
     """
     base 5-D tensor
     """
-    datatype = [np.bool, np.int32, np.int64, np.float32, np.float64]
+    datatype = [np.bool_, np.int32, np.int64, np.float32, np.float64]
     for i in datatype:
         x = randtool("float", -5, 5, [1, 6, 6, 6, 1]).astype(i)
         y = randtool("float", -5, 5, [1, 6, 1, 6, 3]).astype(i)
@@ -87,7 +87,7 @@ def test_broadcast_tensors():
     """
     base 4 tensors to broadcast
     """
-    datatype = [np.bool, np.int32, np.int64, np.float32, np.float64]
+    datatype = [np.bool_, np.int32, np.int64, np.float32, np.float64]
     for i in datatype:
         x = randtool("float", -5, 5, [1, 6, 2, 6, 1]).astype(i)
         y = randtool("float", -5, 5, [1, 6, 1, 1, 3]).astype(i)
@@ -108,8 +108,9 @@ def test_broadcast_tensors():
 def test_broadcast_tensors1():
     """
     base 4 tensors to broadcast
+    
     """
-    datatype = [np.bool, np.int32, np.int64, np.float32, np.float64]
+    datatype = [np.bool_, np.int32, np.int64, np.float32, np.float64]
     for i in datatype:
         x = randtool("float", -5, 5, [1, 6, 2, 6, 1]).astype(i)
         y = randtool("float", -5, 5, [1, 6, 1, 1, 3]).astype(i)
