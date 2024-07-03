@@ -22,7 +22,7 @@ def cal_lu(x):
         lu = l + u - d
         return lu
     else:
-        batchsize = np.product(shape) // (shape[-2] * shape[-1])
+        batchsize = np.prod(shape) // (shape[-2] * shape[-1])
         nx = x.reshape((-1, shape[-2], shape[-1]))
         tlu = []
         for i in range(batchsize):
