@@ -7,6 +7,7 @@ eval 方法
 """
 import os
 import timeit
+import time
 import numpy as np
 import paddle
 from engine.paddle_xtools import reset
@@ -155,8 +156,12 @@ class LayerEvalBM(object):
         timeit.timeit(lambda: _perf(self.data), number=10)
         # timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
         for i in range(self.perf_repeat):
-            total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
+            start_time = time.time()
+            for _ in range(self.timeit_num):
+                _perf(self.data)
             paddle.core._cuda_synchronize(paddle.CUDAPlace(0))
+            end_time = time.time()
+            total_time = end_time - start_time
             total_time_list.append(total_time)
 
         save_pickle(data=total_time_list, filename="dy_eval_perf_" + self.layerfile)
@@ -190,7 +195,12 @@ class LayerEvalBM(object):
         timeit.timeit(lambda: _perf(self.data), number=10)
         # timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
         for i in range(self.perf_repeat):
-            total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
+            start_time = time.time()
+            for _ in range(self.timeit_num):
+                _perf(self.data)
+            paddle.core._cuda_synchronize(paddle.CUDAPlace(0))
+            end_time = time.time()
+            total_time = end_time - start_time
             total_time_list.append(total_time)
 
         save_pickle(data=total_time_list, filename="dy2st_eval_perf_" + self.layerfile)
@@ -228,7 +238,12 @@ class LayerEvalBM(object):
         timeit.timeit(lambda: _perf(self.data), number=10)
         # timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
         for i in range(self.perf_repeat):
-            total_time = timeit.timeit(lambda: _perf(self.data), number=self.timeit_num)
+            start_time = time.time()
+            for _ in range(self.timeit_num):
+                _perf(self.data)
+            paddle.core._cuda_synchronize(paddle.CUDAPlace(0))
+            end_time = time.time()
+            total_time = end_time - start_time
             total_time_list.append(total_time)
 
         save_pickle(data=total_time_list, filename="dy2st_eval_cinn_perf_" + self.layerfile + "_total_time_list")
