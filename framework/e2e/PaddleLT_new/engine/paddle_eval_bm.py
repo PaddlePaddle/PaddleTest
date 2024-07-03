@@ -74,74 +74,46 @@ class LayerEvalBM(object):
 
         self.logger.get_log().info("_set_cinn_flags 性能测试过程中, 成功追加设定prim_cinn_sot_pir相关FLAGS~~")
 
-    def _del_prim_cinn_sot_pir_flags(self):
+    def _set_dy_flags(self):
         """
-        del cinn flags
+        set dy flags
         """
-        if "FLAGS_prim_all" in os.environ:
-            del os.environ["FLAGS_prim_all"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_prim_all~~")
-        if "FLAGS_prim_enable_dynamic" in os.environ:
-            del os.environ["FLAGS_prim_enable_dynamic"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_prim_enable_dynamic~~")
+        os.environ["FLAGS_prim_all"] = "false"
+        os.environ["FLAGS_prim_enable_dynamic"] = "false"
 
-        if "FLAGS_use_cinn" in os.environ:
-            del os.environ["FLAGS_use_cinn"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_use_cinn~~")
-        if "FLAGS_cinn_bucket_compile" in os.environ:
-            del os.environ["FLAGS_cinn_bucket_compile"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_cinn_bucket_compile~~")
-        if "FLAGS_cinn_new_group_scheduler" in os.environ:
-            del os.environ["FLAGS_cinn_new_group_scheduler"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_cinn_new_group_scheduler~~")
-        if "FLAGS_group_schedule_tiling_first" in os.environ:
-            del os.environ["FLAGS_group_schedule_tiling_first"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_group_schedule_tiling_first~~")
+        os.environ["FLAGS_use_cinn"] = "false"
+        os.environ["FLAGS_cinn_bucket_compile"] = "0"
+        os.environ["FLAGS_cinn_new_group_scheduler"] = "0"
+        os.environ["FLAGS_group_schedule_tiling_first"] = "0"
 
-        if "FLAGS_enable_pir_api" in os.environ:
-            del os.environ["FLAGS_enable_pir_api"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_enable_pir_api~~")
-        if "FLAGS_enable_pir_in_executor" in os.environ:
-            del os.environ["FLAGS_enable_pir_in_executor"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_enable_pir_in_executor~~")
-        if "MIN_GRAPH_SIZE" in os.environ:
-            del os.environ["MIN_GRAPH_SIZE"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del MIN_GRAPH_SIZE~~")
-        if "FLAGS_enable_pir_in_executor_trace_run" in os.environ:
-            del os.environ["FLAGS_enable_pir_in_executor_trace_run"]
-            self.logger.get_log().info("_del_prim_cinn_sot_pir_flags del FLAGS_enable_pir_in_executor_trace_run~~")
+        os.environ["FLAGS_enable_pir_api"] = "0"
+        os.environ["FLAGS_enable_pir_in_executor"] = "0"
+        os.environ["MIN_GRAPH_SIZE"] = "0"
+        os.environ["FLAGS_enable_pir_in_executor_trace_run"] = "0"
 
-        self.logger.get_log().info("_del_prim_cinn_sot_pir_flags 性能测试过程中, 取消prim和cinn和sot_pir相关FLAGS~~")
+        self.logger.get_log().info("_set_dy_flags 性能测试过程中, 成功追加设定 dy 相关FLAGS~~")
 
-    def _del_prim_cinn_flags(self):
+    def _set_dy2st_flags(self):
         """
-        del cinn flags
+        set dy2st flags
         """
-        if "FLAGS_prim_all" in os.environ:
-            del os.environ["FLAGS_prim_all"]
-            self.logger.get_log().info("_del_prim_cinn_flags del FLAGS_prim_all~~")
-        if "FLAGS_prim_enable_dynamic" in os.environ:
-            del os.environ["FLAGS_prim_enable_dynamic"]
-            self.logger.get_log().info("_del_prim_cinn_flags del FLAGS_prim_enable_dynamic~~")
+        os.environ["FLAGS_prim_all"] = "false"
+        os.environ["FLAGS_prim_enable_dynamic"] = "false"
 
-        if "FLAGS_use_cinn" in os.environ:
-            del os.environ["FLAGS_use_cinn"]
-            self.logger.get_log().info("_del_prim_cinn_flags del FLAGS_use_cinn~~")
-        if "FLAGS_cinn_bucket_compile" in os.environ:
-            del os.environ["FLAGS_cinn_bucket_compile"]
-            self.logger.get_log().info("_del_prim_cinn_flags del FLAGS_cinn_bucket_compile~~")
-        if "FLAGS_cinn_new_group_scheduler" in os.environ:
-            del os.environ["FLAGS_cinn_new_group_scheduler"]
-            self.logger.get_log().info("_del_prim_cinn_flags del FLAGS_cinn_new_group_scheduler~~")
-        if "FLAGS_group_schedule_tiling_first" in os.environ:
-            del os.environ["FLAGS_group_schedule_tiling_first"]
-            self.logger.get_log().info("_del_prim_cinn_flags del FLAGS_group_schedule_tiling_first~~")
+        os.environ["FLAGS_use_cinn"] = "false"
+        os.environ["FLAGS_cinn_bucket_compile"] = "0"
+        os.environ["FLAGS_cinn_new_group_scheduler"] = "0"
+        os.environ["FLAGS_group_schedule_tiling_first"] = "0"
 
-        self.logger.get_log().info("_del_prim_cinn_flags 性能测试过程中, 取消prim和cinn相关FLAGS~~")
+        os.environ["FLAGS_enable_pir_api"] = "1"
+        os.environ["FLAGS_enable_pir_in_executor"] = "1"
+        os.environ["MIN_GRAPH_SIZE"] = "0"
+        os.environ["FLAGS_enable_pir_in_executor_trace_run"] = "1"
+        self.logger.get_log().info("_set_dy2st_flags 性能测试过程中, 成功追加设定 dy2st 相关FLAGS~~")
 
     def dy_eval_perf(self):
         """dygraph eval"""
-        self._del_prim_cinn_sot_pir_flags()
+        self._set_dy_flags()
 
         net = self._net_instant()
         net.eval()
@@ -170,12 +142,11 @@ class LayerEvalBM(object):
         time_res = eval(self.perf_statis)(data_list=total_time_list)
         time_res = round(time_res * self.statis_times, self.statis_round)
 
-        self._set_cinn_flags()
         return time_res
 
     def dy2st_eval_perf(self):
         """dygraph eval"""
-        self._del_prim_cinn_flags()
+        self._set_dy2st_flags()
 
         net = self._net_instant()
         st_net = paddle.jit.to_static(net, full_graph=True)
@@ -204,7 +175,6 @@ class LayerEvalBM(object):
         time_res = eval(self.perf_statis)(data_list=total_time_list)
         time_res = round(time_res * self.statis_times, self.statis_round)
 
-        self._set_cinn_flags()
         return time_res
 
     def dy2st_eval_cinn_perf(self):
@@ -242,5 +212,4 @@ class LayerEvalBM(object):
         time_res = eval(self.perf_statis)(data_list=total_time_list)
         time_res = round(time_res * self.statis_times, self.statis_round)
 
-        self._set_cinn_flags()
         return time_res
