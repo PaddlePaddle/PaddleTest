@@ -1,1 +1,1 @@
-import layercase.rotate_ppyoloe_r_ppyoloe_r_crn_x_3x_dota.SIR_101
+import layercase.debug.rotate_ppyoloe_r_ppyoloe_r_crn_x_3x_dota.SIR_101
