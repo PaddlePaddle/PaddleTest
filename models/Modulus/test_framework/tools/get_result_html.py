@@ -62,7 +62,9 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
             dy2st_prim_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['rtol']).split("e")[1])
             dy2st_prim_cinn_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cinn_cse'][key]['atol']).split("e")[1])
             dy2st_prim_cinn_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cinn_cse'][key]['rtol']).split("e")[1])
-            if dy2st_prim_cse_atol_exp < dy2st_prim_cinn_cse_atol_exp or dy2st_prim_cse_rtol_exp < dy2st_prim_cinn_cse_rtol_exp:
+            dynamic_atol_exp = int("{:.3e}".format(data[model_name]['dynamic'][key]['atol']).split("e")[1])
+            dynamic_rtol_exp = int("{:.3e}".format(data[model_name]['dynamic'][key]['rtol']).split("e")[1])
+            if (dy2st_prim_cse_atol_exp < dy2st_prim_cinn_cse_atol_exp or dy2st_prim_cse_rtol_exp < dy2st_prim_cinn_cse_rtol_exp) and (dynamic_atol_exp < dy2st_prim_cinn_cse_atol_exp or dynamic_rtol_exp < dy2st_prim_cinn_cse_rtol_exp):
                 accuracy_flag = "False"
         if accuracy_flag == "True":
             html_content += '<td style="background-color:rgb(195, 242, 206);">True</td>'
