@@ -60,7 +60,6 @@ class LayerEvalBM(object):
         """
         set cinn flags
         """
-        os.environ["FLAGS_use_cinn"] = "true"
         os.environ["FLAGS_cinn_bucket_compile"] = "1"
         os.environ["FLAGS_cinn_new_group_scheduler"] = "1"
         os.environ["FLAGS_group_schedule_tiling_first"] = "1"
