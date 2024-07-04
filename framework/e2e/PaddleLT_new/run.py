@@ -638,12 +638,10 @@ class Run(object):
                 # layerE2Ecase中allure报告需要抓取的关键字, 与其他子图不一样
                 if self.layer_type == "layerE2Ecase":
                     if "fullName" in JSONLoader(os.path.join(report_path, json_file)).json_dict():
-                        print("json_file is: ", json_file)
                         case_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["fullName"]
                         layer_name = case_name[: case_name.rfind(".")]
                         allure_case_list.append(layer_name.replace(".", "/") + ".py")
                     elif "labels" in JSONLoader(os.path.join(report_path, json_file)).json_dict():
-                        print("json_file is: ", json_file)
                         layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["labels"][-1]["value"]
                         allure_case_list.append(layer_name.replace(".", "/") + ".py")
 
