@@ -39,7 +39,7 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
         for sub_key in data[model_name].keys():
             for sub_sub_key in data[model_name][sub_key].keys():
                 if 'atol' not in data[model_name][sub_key][sub_sub_key] or 'rtol' not in data[model_name][sub_key][sub_sub_key]:
-                    if sub_key == "dy2st_prim_cse" or sub_key == "dy2st_prim_cinn_cse":
+                    if sub_key == "dy2st_prim_cinn_cse":
                         accuracy_flag = "False"
                     if data[model_name][sub_key][sub_sub_key]['status'] == 'Timeout':
                         html_content += '<td style="background-color:rgb(250,234,200);">Timeout</td>'
@@ -58,14 +58,25 @@ def get_html(json_data,html_data,env_json="../env_json.json",model_class="model_
         if accuracy_flag == "":
             accuracy_flag = 'True'
             key = 'L4'
-            dy2st_prim_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['atol']).split("e")[1])
-            dy2st_prim_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['rtol']).split("e")[1])
             dy2st_prim_cinn_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cinn_cse'][key]['atol']).split("e")[1])
             dy2st_prim_cinn_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cinn_cse'][key]['rtol']).split("e")[1])
-            dynamic_atol_exp = int("{:.3e}".format(data[model_name]['dynamic'][key]['atol']).split("e")[1])
-            dynamic_rtol_exp = int("{:.3e}".format(data[model_name]['dynamic'][key]['rtol']).split("e")[1])
-            if (dy2st_prim_cse_atol_exp < dy2st_prim_cinn_cse_atol_exp or dy2st_prim_cse_rtol_exp < dy2st_prim_cinn_cse_rtol_exp) and (dynamic_atol_exp < dy2st_prim_cinn_cse_atol_exp or dynamic_rtol_exp < dy2st_prim_cinn_cse_rtol_exp):
-                accuracy_flag = "False"
+            if "atol" in data[model_name]['dy2st_prim_cse'][key].keys() and "atol" in data[model_name]['dynamic'][key].keys():
+                dy2st_prim_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['atol']).split("e")[1])
+                dy2st_prim_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['rtol']).split("e")[1])
+                dynamic_atol_exp = int("{:.3e}".format(data[model_name]['dynamic'][key]['atol']).split("e")[1])
+                dynamic_rtol_exp = int("{:.3e}".format(data[model_name]['dynamic'][key]['rtol']).split("e")[1])
+                if (dy2st_prim_cse_atol_exp < dy2st_prim_cinn_cse_atol_exp or dy2st_prim_cse_rtol_exp < dy2st_prim_cinn_cse_rtol_exp) and (dynamic_atol_exp < dy2st_prim_cinn_cse_atol_exp or dynamic_rtol_exp < dy2st_prim_cinn_cse_rtol_exp):
+                    accuracy_flag = "False"
+            elif "atol" in data[model_name]['dy2st_prim_cse'][key].keys():
+                dy2st_prim_cse_atol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['atol']).split("e")[1])
+                dy2st_prim_cse_rtol_exp = int("{:.3e}".format(data[model_name]['dy2st_prim_cse'][key]['rtol']).split("e")[1])
+                if dy2st_prim_cse_atol_exp < dy2st_prim_cinn_cse_atol_exp or dy2st_prim_cse_rtol_exp < dy2st_prim_cinn_cse_rtol_exp:
+                    accuracy_flag = "False"
+            elif "atol" in data[model_name]['dynamic'][key].keys():
+                dynamic_atol_exp = int("{:.3e}".format(data[model_name]['dynamic'][key]['atol']).split("e")[1])
+                dynamic_rtol_exp = int("{:.3e}".format(data[model_name]['dynamic'][key]['rtol']).split("e")[1])
+                if dynamic_atol_exp < dy2st_prim_cinn_cse_atol_exp or dynamic_rtol_exp < dy2st_prim_cinn_cse_rtol_exp:
+                    accuracy_flag = "False"
         if accuracy_flag == "True":
             html_content += '<td style="background-color:rgb(195, 242, 206);">True</td>'
         else:
