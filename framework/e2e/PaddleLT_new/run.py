@@ -185,6 +185,7 @@ class Run(object):
                 alarm.receiver,
                 f"Paddle {self.layer_type}子图性能数据",
                 f"表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file}\n"
+                f"GSB.txt下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/gsb_dict.txt\n"
                 f"plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar\n"
                 f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
