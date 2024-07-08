@@ -8,6 +8,8 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from strategy.compare import base_compare
+
 
 # 多种统计学计算策略
 def trimmean(data_list, ratio=0.2):
@@ -123,48 +125,85 @@ def Q1_Q4_range(data_list):
     return lower_bound, upper_bound
 
 
-def gsb_rule(res):
+def gsb_rule(res, gsb_dict={"G": 0, "S": 0, "B": 0, "error": 0}):
     """
     评分标准
     :param res: compare_res对比
     :return:
     """
-    pass
+    # res = base_compare.perf_compare(baseline, latest)
 
-    # grade = ""
-    # if isinstance(res, str):
-    #     grade = res
-    # else:
-    #     if res <= -1.3:
-    #         grade = "worse"
-    #     elif -1.3 < res <= -1.15:
-    #         grade = "doubt"
-    #     elif -1.15 < res <= 1.15:
-    #         grade = "equal"
-    #     elif res > 1.15:
-    #         grade = "better"
-    # return grade
+    try:
+        res = res.rstrip("%")
+        res = float(res) / 100
+    except Exception:
+        res = "error"
+
+    if res == "error":
+        gsb_dict["error"] += 1
+    else:
+        if res <= -0.05:
+            gsb_dict["B"] += 1
+        elif -0.05 < res <= 0.05:
+            gsb_dict["S"] += 1
+        elif res > 0.05:
+            gsb_dict["G"] += 1
+    return gsb_dict
 
 
-def ci_level_reveal(compare_res):
+def sublayer_perf_gsb_gen(compare_dict, compare_list):
     """
-    等级分类
-    :param compare_res:
+    性能比率gsb生成
+    :param compare_dict:{'layer1':
+    {'dy2st_eval_cinn_perf^layercase': 0.2333,
+    'dy_eval_perf^layercase': 0.114514,
+    'dy2st_eval_cinn_perf^dy_eval_perf^compare': '20%'}}
     :return:
     """
-    pass
-    # grade_dict = {}
-    # grade_dict["worse"] = []
-    # grade_dict["doubt"] = []
-    # grade_dict["equal"] = []
-    # grade_dict["better"] = []
+    gsb_dict = {}
+    for compare in compare_list:
+        gsb_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"] = {"G": 0, "S": 0, "B": 0, "error": 0}
 
-    # for case_name, compare_dict in compare_res.items():
-    #     tmp = {}
-    #     # grade = gsb_rule(res=compare_dict["forward"])
-    #     # tmp[compare_dict["latest_api"]] = compare_dict["forward"]
-    #     grade = gsb_rule(res=compare_dict["best_total"])
-    #     tmp[compare_dict["latest_api"]] = compare_dict["best_total"]
-    #     grade_dict[grade].append(tmp)
+    for layer_name, perf_dict in compare_dict.items():
+        for compare in compare_list:
+            gsb_dict = gsb_rule(
+                res=perf_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"], gsb_dict=gsb_dict
+            )
 
-    # return grade_dict
+    return gsb_dict
+    # for k, v in perf_dict.items():
+    #     if k.split('^')[-1] == "compare":
+
+
+# def gsb_gen(sublayer_dict, compare_list):
+#     """
+#     等级分类
+#     :param sublayer_dict:{'layer1': {'dy_eval': 0.2333, 'dy2st_eval': 0.114514}}
+#     :return:
+#     """
+#     for layer_name, perf_dict in sublayer_dict.items():
+#         for compare in compare_list:
+#             if compare["baseline"] == "ground_truth": # gsb不统计上一次vs最新
+#                 continue
+
+
+# for metric_name, metric_value in perf_dict.items():
+#     if metric_name == "ground_truth":
+#         continue
+
+
+# grade_dict = {}
+# grade_dict["worse"] = []
+# grade_dict["doubt"] = []
+# grade_dict["equal"] = []
+# grade_dict["better"] = []
+
+# for case_name, compare_dict in compare_res.items():
+#     tmp = {}
+#     # grade = gsb_rule(res=compare_dict["forward"])
+#     # tmp[compare_dict["latest_api"]] = compare_dict["forward"]
+#     grade = gsb_rule(res=compare_dict["best_total"])
+#     tmp[compare_dict["latest_api"]] = compare_dict["best_total"]
+#     grade_dict[grade].append(tmp)
+
+# return grade_dict

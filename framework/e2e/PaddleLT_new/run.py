@@ -20,9 +20,9 @@ from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
 from tools.json_loader import JSONLoader
-from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle
+from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle, save_txt
 from tools.upload_bos import UploadBos
-from tools.statistics import split_list
+from tools.statistics import split_list, sublayer_perf_gsb_gen
 from tools.alarm import Alarm
 
 
@@ -168,6 +168,10 @@ class Run(object):
         if os.path.exists(excel_file):
             UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path=excel_file)
             self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, excel_file))
+
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="gsb_dict.txt")
+            self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "gsb_dict.txt"))
+
         os.system("tar -czf plot.tar *.png")
         UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="plot.tar")
         self.logger.get_log().info("plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "plot.tar"))
@@ -613,6 +617,8 @@ class Run(object):
                     baseline_layer_type=baseline_layer_type,
                     latest_layer_type=self.layer_type,
                 )
+                gsb_dict = sublayer_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
+                save_txt(data=str(gsb_dict), filename="gsb_dict")
             xlsx_save(
                 sublayer_dict=compare_dict,
                 excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
