@@ -121,3 +121,50 @@ def Q1_Q4_range(data_list):
     lower_bound = Q1 - k * IQR
     upper_bound = Q3 + k * IQR
     return lower_bound, upper_bound
+
+
+def gsb_rule(res):
+    """
+    评分标准
+    :param res: compare_res对比
+    :return:
+    """
+    pass
+
+    # grade = ""
+    # if isinstance(res, str):
+    #     grade = res
+    # else:
+    #     if res <= -1.3:
+    #         grade = "worse"
+    #     elif -1.3 < res <= -1.15:
+    #         grade = "doubt"
+    #     elif -1.15 < res <= 1.15:
+    #         grade = "equal"
+    #     elif res > 1.15:
+    #         grade = "better"
+    # return grade
+
+
+def ci_level_reveal(compare_res):
+    """
+    等级分类
+    :param compare_res:
+    :return:
+    """
+    pass
+    # grade_dict = {}
+    # grade_dict["worse"] = []
+    # grade_dict["doubt"] = []
+    # grade_dict["equal"] = []
+    # grade_dict["better"] = []
+
+    # for case_name, compare_dict in compare_res.items():
+    #     tmp = {}
+    #     # grade = gsb_rule(res=compare_dict["forward"])
+    #     # tmp[compare_dict["latest_api"]] = compare_dict["forward"]
+    #     grade = gsb_rule(res=compare_dict["best_total"])
+    #     tmp[compare_dict["latest_api"]] = compare_dict["best_total"]
+    #     grade_dict[grade].append(tmp)
+
+    # return grade_dict
