@@ -165,7 +165,7 @@ def sublayer_perf_gsb_gen(compare_dict, compare_list):
         if compare["baseline"] == "ground_truth":
             gsb_dict[compare["latest"] + "^" + "compare"] = {"G": 0, "S": 0, "B": 0, "error": 0}
         else:
-            gsb_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"] = {
+            gsb_dict[compare["latest"] + "^" + compare["baseline"] + "^" + "compare"] = {
                 "G": 0,
                 "S": 0,
                 "B": 0,
@@ -182,10 +182,10 @@ def sublayer_perf_gsb_gen(compare_dict, compare_list):
                 gsb_dict[compare["latest"] + "^" + "compare"] = single_gsb_dict
             else:
                 single_gsb_dict = gsb_rule(
-                    res=perf_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"],
-                    single_gsb_dict=gsb_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"],
+                    res=perf_dict[compare["latest"] + "^" + compare["baseline"] + "^" + "compare"],
+                    single_gsb_dict=gsb_dict[compare["latest"] + "^" + compare["baseline"] + "^" + "compare"],
                 )
-                gsb_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"] = single_gsb_dict
+                gsb_dict[compare["latest"] + "^" + compare["baseline"] + "^" + "compare"] = single_gsb_dict
 
     return gsb_dict
     # for k, v in perf_dict.items():
