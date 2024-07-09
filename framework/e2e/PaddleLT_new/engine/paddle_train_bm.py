@@ -20,7 +20,7 @@ from tools.statistics import trimmean, mean, best, best_top_k, perf_by_step
 from tools.logger import Logger
 
 
-class LayerEvalBM(object):
+class LayerTrainBM(object):
     """
     构建Layer评估的性能通用类
     """
