@@ -11,6 +11,7 @@ from engine.paddle_eval import LayerEval
 from engine.paddle_export import LayerExport
 from engine.paddle_infer import LayerInfer
 from engine.paddle_eval_bm import LayerEvalBM
+from engine.paddle_train_bm import LayerTrainBM
 
 
 paddle_engine_map = {
@@ -37,4 +38,7 @@ paddle_engine_map = {
     "dy_eval_perf": LayerEvalBM,  # 动态图评估性能
     "dy2st_eval_perf": LayerEvalBM,  # 动转静评估性能
     "dy2st_eval_cinn_perf": LayerEvalBM,  # CINN评估性能
+    "dy_train_perf": LayerTrainBM,  # 动态图评估性能
+    "dy2st_train_perf": LayerTrainBM,  # 动转静评估性能
+    "dy2st_train_cinn_perf": LayerTrainBM,  # CINN评估性能
 }
