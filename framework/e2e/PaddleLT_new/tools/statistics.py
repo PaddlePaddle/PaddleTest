@@ -174,9 +174,12 @@ def sublayer_perf_gsb_gen(compare_dict, compare_list):
 
     for layer_name, perf_dict in compare_dict.items():
         for compare in compare_list:
-            gsb_dict = gsb_rule(
-                res=perf_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"], gsb_dict=gsb_dict
-            )
+            if compare["baseline"] == "ground_truth":
+                gsb_dict = gsb_rule(res=perf_dict[compare["latest"] + "^" + "compare"], gsb_dict=gsb_dict)
+            else:
+                gsb_dict = gsb_rule(
+                    res=perf_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"], gsb_dict=gsb_dict
+                )
 
     return gsb_dict
     # for k, v in perf_dict.items():
