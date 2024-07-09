@@ -169,6 +169,7 @@ class Run(object):
             UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path=excel_file)
             self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, excel_file))
 
+        if os.path.exists("gsb_dict.txt"):
             UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="gsb_dict.txt")
             self.logger.get_log().info(
                 "GSB.txt下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "gsb_dict.txt")
@@ -460,7 +461,7 @@ class Run(object):
         compare_list = YamlLoader(yml=self.testing).yml.get("compare")
         for py_file in self.py_list:
             if os.environ.get("PLT_BM_ERROR_CHECK") == "True":  # 先跑功能看是否能通过
-                _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing="yaml/dy2stcinn_eval.yml")
+                _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing="yaml/dy2stcinn_train.yml")
                 if _exit_code is not None:
                     error_list.append(_py_file)
                     error_count += 1
