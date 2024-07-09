@@ -6,6 +6,7 @@
 测试执行器
 """
 import os
+import glob
 import traceback
 
 # from engine.engine_map import engine_map
@@ -38,6 +39,25 @@ class LayerTest(object):
         self.report_dir = os.path.join(os.getcwd(), "report")
 
         self.logger.get_log().info(f"LayerTest.__init__ 中 device_place_id is: {self.device_place_id}")
+
+        self.del_core_dump()
+
+    def del_core_dump(self):
+        """
+        删除core dump文件
+        """
+        # 设置你要搜索的目录，这里使用'.'表示当前目录
+        directory = "."
+
+        # 使用glob查找所有以'core.'开头的文件
+        for filepath in glob.glob(os.path.join(directory, "core.*")):
+            try:
+                # 尝试删除这些文件
+                os.remove(filepath)
+                self.logger.get_log().warn(f"Deleted: {filepath}")
+            except OSError as e:
+                # 如果删除过程中发生错误（比如文件不存在或没有权限），则打印错误信息
+                self.logger.get_log().warn(f"Error deleting {filepath}: {e.strerror}")
 
     def _single_run(self, testing, layerfile, device_place_id=0):
         """
