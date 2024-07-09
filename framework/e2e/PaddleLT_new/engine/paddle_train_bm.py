@@ -49,6 +49,7 @@ class LayerTrainBM(object):
         paddle.set_default_dtype(self.model_dtype)
 
         self.layerfile = layerfile
+        self.step = self.testing.get("step")
         self.data = BuildData(layerfile=self.layerfile).get_single_tensor()
         self.logger = Logger("LayerEvalBM")
 
