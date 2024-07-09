@@ -221,7 +221,7 @@ class DB(object):
             "comment = '{}'".format(comment),
             "status = 'done'",
             "testing = '{}'".format(testing),
-            "plt_perf_content = '{}'".format(self.plt_perf_content),
+            "plt_perf_content = '{}'".format(plt_perf_content),
             "base = '{}'".format(base),
             "ci = '{}'".format(ci),
             "md5_id = '{}'".format(md5_id),
