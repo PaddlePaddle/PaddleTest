@@ -125,7 +125,7 @@ def Q1_Q4_range(data_list):
     return lower_bound, upper_bound
 
 
-def gsb_rule(res, gsb_dict={"G": 0, "S": 0, "B": 0, "error": 0}):
+def gsb_rule(res, single_gsb_dict={"G": 0, "S": 0, "B": 0, "error": 0}):
     """
     评分标准
     :param res: compare_res对比
@@ -140,15 +140,15 @@ def gsb_rule(res, gsb_dict={"G": 0, "S": 0, "B": 0, "error": 0}):
         res = "error"
 
     if res == "error":
-        gsb_dict["error"] += 1
+        single_gsb_dict["error"] += 1
     else:
         if res <= -0.05:
-            gsb_dict["B"] += 1
+            single_gsb_dict["B"] += 1
         elif -0.05 < res <= 0.05:
-            gsb_dict["S"] += 1
+            single_gsb_dict["S"] += 1
         elif res > 0.05:
-            gsb_dict["G"] += 1
-    return gsb_dict
+            single_gsb_dict["G"] += 1
+    return single_gsb_dict
 
 
 def sublayer_perf_gsb_gen(compare_dict, compare_list):
@@ -175,11 +175,17 @@ def sublayer_perf_gsb_gen(compare_dict, compare_list):
     for layer_name, perf_dict in compare_dict.items():
         for compare in compare_list:
             if compare["baseline"] == "ground_truth":
-                gsb_dict = gsb_rule(res=perf_dict[compare["latest"] + "^" + "compare"], gsb_dict=gsb_dict)
-            else:
-                gsb_dict = gsb_rule(
-                    res=perf_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"], gsb_dict=gsb_dict
+                single_gsb_dict = gsb_rule(
+                    res=perf_dict[compare["latest"] + "^" + "compare"],
+                    single_gsb_dict=gsb_dict[compare["latest"] + "^" + "compare"],
                 )
+                gsb_dict[compare["latest"] + "^" + "compare"] = single_gsb_dict
+            else:
+                single_gsb_dict = gsb_rule(
+                    res=perf_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"],
+                    single_gsb_dict=gsb_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"],
+                )
+                gsb_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"] = single_gsb_dict
 
     return gsb_dict
     # for k, v in perf_dict.items():
