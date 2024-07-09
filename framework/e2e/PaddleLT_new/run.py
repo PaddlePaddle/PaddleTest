@@ -22,7 +22,7 @@ from tools.yaml_loader import YamlLoader
 from tools.json_loader import JSONLoader
 from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle, save_txt
 from tools.upload_bos import UploadBos
-from tools.statistics import split_list, sublayer_perf_gsb_gen
+from tools.statistics import split_list, sublayer_perf_gsb_gen, kernel_perf_gsb_gen
 from tools.alarm import Alarm
 
 
@@ -614,6 +614,7 @@ class Run(object):
                     baseline_layer_type=baseline_layer_type,
                     latest_layer_type=self.layer_type,
                 )
+                gsb_dict = kernel_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
             else:
                 compare_dict = perf_compare_dict(
                     compare_list=compare_list,
@@ -624,7 +625,7 @@ class Run(object):
                     latest_layer_type=self.layer_type,
                 )
                 gsb_dict = sublayer_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
-                save_txt(data=gsb_dict, filename="gsb_dict")
+            save_txt(data=gsb_dict, filename="gsb_dict")
             xlsx_save(
                 sublayer_dict=compare_dict,
                 excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
