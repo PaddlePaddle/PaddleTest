@@ -619,7 +619,7 @@ class Run(object):
                     latest_layer_type=self.layer_type,
                 )
                 gsb_dict = sublayer_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
-                save_txt(data=str(gsb_dict), filename="gsb_dict")
+                save_txt(data=gsb_dict, filename="gsb_dict")
             xlsx_save(
                 sublayer_dict=compare_dict,
                 excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",

@@ -162,7 +162,15 @@ def sublayer_perf_gsb_gen(compare_dict, compare_list):
     """
     gsb_dict = {}
     for compare in compare_list:
-        gsb_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"] = {"G": 0, "S": 0, "B": 0, "error": 0}
+        if compare["baseline"] == "ground_truth":
+            gsb_dict[compare["latest"] + "^" + "compare"] = {"G": 0, "S": 0, "B": 0, "error": 0}
+        else:
+            gsb_dict[compare["baseline"] + "^" + compare["latest"] + "^" + "compare"] = {
+                "G": 0,
+                "S": 0,
+                "B": 0,
+                "error": 0,
+            }
 
     for layer_name, perf_dict in compare_dict.items():
         for compare in compare_list:
