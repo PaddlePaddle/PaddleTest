@@ -170,7 +170,9 @@ class Run(object):
             self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, excel_file))
 
             UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="gsb_dict.txt")
-            self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "gsb_dict.txt"))
+            self.logger.get_log().info(
+                "GSB.txt下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "gsb_dict.txt")
+            )
 
         os.system("tar -czf plot.tar *.png")
         UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="plot.tar")
