@@ -54,10 +54,10 @@ class LayerTest(object):
             try:
                 # 尝试删除这些文件
                 os.remove(filepath)
-                self.logger.get_log().warn(f"Deleted: {filepath}")
+                self.logger.get_log().warning(f"Deleted: {filepath}")
             except OSError as e:
                 # 如果删除过程中发生错误（比如文件不存在或没有权限），则打印错误信息
-                self.logger.get_log().warn(f"Error deleting {filepath}: {e.strerror}")
+                self.logger.get_log().warning(f"Error deleting {filepath}: {e.strerror}")
 
     def _single_run(self, testing, layerfile, device_place_id=0):
         """
@@ -100,11 +100,11 @@ class LayerTest(object):
                 exc_func += 1
                 res_dict[testing] = bug_trace
                 fail_testing_list.append(testing)
-                self.logger.get_log().warn("执行器异常结果: {}".format(bug_trace))
+                self.logger.get_log().warning("执行器异常结果: {}".format(bug_trace))
 
         if exc_func > 0:
-            self.logger.get_log().warn("layer测试失败项目汇总: {}".format(fail_testing_list))
-            self.logger.get_log().warn("用例 {} 测试未通过".format(self.title))
+            self.logger.get_log().warning("layer测试失败项目汇总: {}".format(fail_testing_list))
+            self.logger.get_log().warning("用例 {} 测试未通过".format(self.title))
             raise Exception(bug_trace)
 
         for comparing in self.compare_list:
@@ -137,7 +137,7 @@ class LayerTest(object):
                         self.logger.get_log().info("{} 和 {} 豁免对比测试---".format(latest, baseline))
                     else:
                         exc += 1
-                        self.logger.get_log().warn("{} 和 {} 标记为失败的对比测试---".format(latest, baseline))
+                        self.logger.get_log().warning("{} 和 {} 标记为失败的对比测试---".format(latest, baseline))
                         tmp["precision"] = "failed"
                         compare_res_list.append(tmp)
                 else:
@@ -160,11 +160,11 @@ class LayerTest(object):
                         exc += 1
                         tmp["precision"] = "failed"
                         compare_res_list.append(tmp)
-                        self.logger.get_log().warn("{} 和 {} 精度对比失败！！".format(latest, baseline))
+                        self.logger.get_log().warning("{} 和 {} 精度对比失败！！".format(latest, baseline))
 
         self.logger.get_log().info("用例 {} 多执行器输出对比最终结果: {}".format(self.title, compare_res_list))
         if exc + exc_func > 0:
-            self.logger.get_log().warn("layer精度对比异常汇总: {}".format(compare_res_list))
+            self.logger.get_log().warning("layer精度对比异常汇总: {}".format(compare_res_list))
             # raise Exception("用例 {} 测试未通过".format(self.title))
             assert False
 
@@ -185,7 +185,7 @@ class LayerTest(object):
                 bug_trace = traceback.format_exc()
                 exc += 1
                 res_dict[testing] = bug_trace
-                self.logger.get_log().warn("性能执行器异常结果: {}".format(bug_trace))
+                self.logger.get_log().warning("性能执行器异常结果: {}".format(bug_trace))
 
         self.logger.get_log().info("用例 {} 多执行器性能结果: {}".format(self.title, res_dict))
         return res_dict, exc
@@ -207,7 +207,7 @@ class LayerTest(object):
                 bug_trace = traceback.format_exc()
                 exc += 1
                 res_dict[plt_exc] = bug_trace
-                self.logger.get_log().warn("性能执行器异常结果: {}".format(bug_trace))
+                self.logger.get_log().warning("性能执行器异常结果: {}".format(bug_trace))
 
         self.logger.get_log().info("用例 {} 单执行器性能结果: {}".format(self.title, res_dict))
         if not os.path.exists("./perf_unit_result"):
