@@ -174,12 +174,15 @@ class Run(object):
                 "GSB.txt下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "gsb_dict.txt")
             )
 
-        os.system("tar -czf plot.tar *.png")
-        UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="plot.tar")
-        self.logger.get_log().info("plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "plot.tar"))
-        os.system("tar -czf pickle.tar *.pickle")
-        UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="pickle.tar")
-        self.logger.get_log().info("pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "pickle.tar"))
+        if os.environ.get("PLT_BM_PLOT") == "True":
+            os.system("tar -czf plot.tar *.png")
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="plot.tar")
+            self.logger.get_log().info("plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "plot.tar"))
+            os.system("tar -czf pickle.tar *.pickle")
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="pickle.tar")
+            self.logger.get_log().info(
+                "pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "pickle.tar")
+            )
 
         if os.environ.get("PLT_BM_EMAIL") == "True":
             alarm = Alarm(storage="apibm_config.yml")
@@ -188,8 +191,8 @@ class Run(object):
                 f"Paddle {self.layer_type}子图性能数据",
                 f"表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file}\n"
                 f"GSB.txt下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/gsb_dict.txt\n"
-                f"plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar\n"
-                f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
+                # f"plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar\n"
+                # f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
 
     def _single_pytest_run(self, py_file, testing, device_place_id=0):
