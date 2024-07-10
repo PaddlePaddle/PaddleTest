@@ -1,0 +1,17 @@
+testings:
+  dy_train_perf:
+    model_dtype: "float32"
+
+  dy2st_train_perf:
+    model_dtype: "float32"
+
+  dy2st_train_cinn_perf:
+    model_dtype: "float32"
+
+compare:
+  -
+    baseline: 'dy_train_perf'
+    latest: 'dy2st_train_cinn_perf'
+  -
+    baseline: 'dy2st_train_perf'
+    latest: 'dy2st_train_cinn_perf'
