@@ -6,6 +6,7 @@
 测试执行器
 """
 import os
+import shutil
 import subprocess
 from subprocess import TimeoutExpired
 import multiprocessing
@@ -61,6 +62,11 @@ class Run(object):
         self.logger = Logger("PaddleLTRun")
         self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
         self.now_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if os.path.exists("./nv_report"):
+            shutil.rmtree("./nv_report")
+            self.logger.get_log().info("已删除./nv_report路径以及其内容")
+        os.makedirs(name="./nv_report")
 
         if os.environ.get("FRAMEWORK") == "paddle":
             import paddle
