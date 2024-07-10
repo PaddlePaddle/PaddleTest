@@ -29,7 +29,7 @@ def test_meshgrid_base():
         for place in places:
             paddle.disable_static(place)
             res = paddle.meshgrid(paddle.to_tensor(x), paddle.to_tensor(y))
-            expect = list(np.meshgrid(x, y))
+            expect = np.meshgrid(x, y)
             for i, exp in enumerate(expect):
                 expect[i] = exp.transpose(1, 0)
             compare(res, expect)
@@ -49,7 +49,7 @@ def test_meshgrid():
         for place in places:
             paddle.disable_static(place)
             res = paddle.meshgrid(paddle.to_tensor(x), paddle.to_tensor(y), paddle.to_tensor(z))
-            expect = list(np.meshgrid(x, y))
+            expect = np.meshgrid(x, y)
             for i, exp in enumerate(expect):
                 expect[i] = exp.transpose(1, 0, 2)
             compare(res, expect)
