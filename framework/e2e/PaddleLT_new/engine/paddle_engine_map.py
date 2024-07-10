@@ -38,7 +38,9 @@ paddle_engine_map = {
     "dy_eval_perf": LayerEvalBM,  # 动态图评估性能
     "dy2st_eval_perf": LayerEvalBM,  # 动转静评估性能
     "dy2st_eval_cinn_perf": LayerEvalBM,  # CINN评估性能
+    "dy2st_eval_cinn_perf_pre": LayerEvalBM,  # pre测试
     "dy_train_perf": LayerTrainBM,  # 动态图评估性能
     "dy2st_train_perf": LayerTrainBM,  # 动转静评估性能
     "dy2st_train_cinn_perf": LayerTrainBM,  # CINN评估性能
+    "dy2st_train_cinn_perf_pre": LayerTrainBM,  # pre测试
 }

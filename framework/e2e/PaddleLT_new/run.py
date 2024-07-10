@@ -461,7 +461,9 @@ class Run(object):
         compare_list = YamlLoader(yml=self.testing).yml.get("compare")
         for py_file in self.py_list:
             if os.environ.get("PLT_BM_ERROR_CHECK") == "True":  # 先跑功能看是否能通过
-                _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing="yaml/dy2stcinn_train.yml")
+                _py_file, _exit_code = self._single_pytest_run(
+                    py_file=py_file, testing="yaml/pre-dy2stcinn_train_bm.yml"
+                )
                 if _exit_code is not None:
                     error_list.append(_py_file)
                     error_count += 1

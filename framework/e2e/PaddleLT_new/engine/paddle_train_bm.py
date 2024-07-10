@@ -193,7 +193,7 @@ class LayerTrainBM(object):
 
         return time_res
 
-    def _dy2st_train_cinn_perf(self):
+    def _dy2st_train_cinn_perf(self, perf_repeat=10):
         net = self._net_instant()
         optimizer = self._net_optimizer()
         loss = self._net_loss()
@@ -222,7 +222,7 @@ class LayerTrainBM(object):
         # 预热
         timeit.timeit(lambda: _perf(self.data), number=10)
         # timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
-        for i in range(self.perf_repeat):
+        for i in range(perf_repeat):
             start_time = time.time()
             for _ in range(self.timeit_num):
                 _perf(self.data)
@@ -248,5 +248,11 @@ class LayerTrainBM(object):
     def dy2st_train_cinn_perf(self):
         """dy2st train"""
         with paddle.decomposition.decomp.prim_guard():
-            result = self._dy2st_train_cinn_perf()
+            result = self._dy2st_train_cinn_perf(perf_repeat=self.perf_repeat)
+        return result
+
+    def dy2st_train_cinn_perf_pre(self):
+        """dy2st train"""
+        with paddle.decomposition.decomp.prim_guard():
+            result = self._dy2st_train_cinn_perf(perf_repeat=10)
         return result
