@@ -107,6 +107,10 @@ class LayerTest(object):
             self.logger.get_log().warning("用例 {} 测试未通过".format(self.title))
             raise Exception(bug_trace)
 
+        if self.compare_list is None:
+            self.logger.get_log().info("yml没有配置对比项, 跳过对比")
+            return
+
         for comparing in self.compare_list:
             tmp = {}
             latest = comparing.get("latest")
