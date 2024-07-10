@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export DATASET_NAME="lambdalabs/pokemon-blip-captions"
+export DATASET_NAME="lambdalabs/naruto-blip-captions"
 
 python -u -m paddle.distributed.launch --gpus "0,1" train_text_to_image_decoder.py \
     --dataset_name=$DATASET_NAME \

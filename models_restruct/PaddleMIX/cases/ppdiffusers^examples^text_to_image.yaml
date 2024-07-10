@@ -7,7 +7,7 @@ case:
         cmd: python -u train_text_to_image.py
         params:
           - --pretrained_model_name_or_path="CompVis/stable-diffusion-v1-4"
-          - --dataset_name="lambdalabs/pokemon-blip-captions"
+          - --dataset_name="lambdalabs/naruto-blip-captions"
           - --resolution=512 --center_crop --random_flip
           - --train_batch_size=1
           - --gradient_accumulation_steps=4
