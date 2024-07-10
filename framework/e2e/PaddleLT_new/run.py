@@ -575,7 +575,7 @@ class Run(object):
                     kernel_count = df["Instances"].sum()
 
                     perf_dict[plt_exc + "-" + "kernel_time"] = kernel_time
-                    perf_dict[plt_exc + "-" + "kernel_count"] = kernel_count
+                    perf_dict[plt_exc + "-" + "kernel_count"] = int(kernel_count)  # int64无法json化, 所以先转为通用int
                     self.logger.get_log().info("kernel time and count: ")
                     self.logger.get_log().info(f"kernel time is {kernel_time}")
                     self.logger.get_log().info(f"kernel count is {kernel_count}")
