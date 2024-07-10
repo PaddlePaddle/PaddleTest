@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export MODEL_NAME="runwayml/stable-diffusion-v1-5"
-export DATASET_NAME="lambdalabs/pokemon-blip-captions"
+export DATASET_NAME="lambdalabs/naruto-blip-captions"
 export OUTPUT_DIR="sd-pokemon-model-lora"
 
 python train_text_to_image_lora.py \

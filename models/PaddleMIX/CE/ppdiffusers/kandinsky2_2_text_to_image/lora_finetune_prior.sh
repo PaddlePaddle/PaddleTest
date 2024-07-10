@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export DATASET_NAME="lambdalabs/pokemon-blip-captions"
+export DATASET_NAME="lambdalabs/naruto-blip-captions"
 
 python -u train_text_to_image_prior_lora.py \
     --dataset_name=$DATASET_NAME \
