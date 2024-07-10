@@ -493,13 +493,6 @@ class Run(object):
         testings_list = YamlLoader(yml=self.testing).get_junior_name("testings")
         compare_list = YamlLoader(yml=self.testing).yml.get("compare")
         for py_file in self.py_list:
-            # if os.environ.get("PLT_BM_ERROR_CHECK") == "True":  # 先跑功能看是否能通过
-            #     _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing="yaml/dy2stcinn_eval.yml")
-            #     if _exit_code is not None:
-            #         error_list.append(_py_file)
-            #         error_count += 1
-            #         continue
-
             perf_dict = {}
             for plt_exc in testings_list:
                 title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
@@ -542,10 +535,6 @@ class Run(object):
                         proc.terminate()  # 发送 SIGTERM 信号到进程
                         exit_code = -1
 
-                # title = py_file.replace(".py", "").replace("/", "^").replace(".", "^")
-                # single_test = layertest.LayerTest(title=title, layerfile=py_file, testing=self.testing)
-                # perf_dict, exit_code = single_test._perf_case_run()
-
                 try:  # 兼容core dump不产出loaded_data的情况
                     loaded_data = load_pickle(
                         filename=os.path.join("perf_unit_result", title + "-" + plt_exc + ".pickle")
@@ -561,16 +550,6 @@ class Run(object):
                         error_list.append(py_file)
                         error_count += 1
                     continue
-
-                # loaded_data = load_pickle(
-                #     filename=os.path.join("perf_unit_result", title + "-" + plt_exc + ".pickle")
-                # )
-                # # 报错的子图+engine将不会收录进sublayer_dict
-                # if exit_code != 0 or loaded_data[-1] > 0:
-                #     if py_file not in error_list:
-                #         error_list.append(py_file)
-                #         error_count += 1
-                #     continue
 
                 if os.environ.get("PLT_PERF_CONTENT") == "kernel":
                     os.system(
@@ -653,12 +632,25 @@ class Run(object):
             return []
 
         allure_case_list = []
+        # sub_case_list = [] # 用于单个py文件中多个case统计
         for json_file in os.listdir(report_path):
             if json_file.endswith("-result.json"):
                 # layerE2Ecase中allure报告需要抓取的关键字, 与其他子图不一样
                 if self.layer_type == "layerE2Ecase":
-                    layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["labels"][-1]["value"]
-                    allure_case_list.append(layer_name.replace(".", "/") + ".py")
+                    if "fullName" in JSONLoader(os.path.join(report_path, json_file)).json_dict():
+                        case_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["fullName"]
+                        layer_name = case_name[: case_name.rfind(".")]
+                        allure_case_list.append(layer_name.replace(".", "/") + ".py")
+                    elif "labels" in JSONLoader(os.path.join(report_path, json_file)).json_dict():
+                        layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["labels"][-1]["value"]
+                        allure_case_list.append(layer_name.replace(".", "/") + ".py")
+
+                    # # layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["labels"][-1]["value"]
+                    # # allure_case_list.append(layer_name.replace(".", "/") + ".py")
+                    # case_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["fullName"]
+                    # layer_name = case_name[:case_name.rfind('.')]
+                    # allure_case_list.append(layer_name.replace(".", "/") + ".py")
+                    # # sub_case_list.append(case_name)
                 else:
                     layer_name = JSONLoader(os.path.join(report_path, json_file)).json_dict()["name"]
                     allure_case_list.append(layer_name.replace("^", "/") + ".py")

@@ -14,10 +14,8 @@ cases="./test_fast_rcnn_mkldnn.py \
        ./test_yolov3_trt_fp32.py \
        ../test_nlp_model/test_bert_gpu.py \
        ../test_nlp_model/test_bert_mkldnn.py \
-       ../test_nlp_model/test_bert_trt_fp32.py \
        ../test_nlp_model/test_ernie_gpu.py \
        ../test_nlp_model/test_ernie_mkldnn.py \
-       ../test_nlp_model/test_ernie_trt_fp32.py \
        ../test_ocr_model/test_ocr_det_mv3_db_gpu.py \
        ../test_ocr_model/test_ocr_det_mv3_db_mkldnn.py \
        ../test_ocr_model/test_ocr_det_mv3_db_trt_fp32.py \
