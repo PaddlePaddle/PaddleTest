@@ -98,26 +98,55 @@ def IsCinnStageEnableDiff():
         assert GetCurrentCinnStage() is not None
     return enabled
 
-last_cinn_stage_exit_code = None
-def LastCINNStageFailed():
-    global last_cinn_stage_exit_code
-    if last_cinn_stage_exit_code is not None:
-        return last_cinn_stage_exit_code != 0
-    last_stage = GetPrevCinnStage(GetCurrentCinnStage())
+def GetExitCodeAndStdErr(cmd, env):
+    import subprocess
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=env,
+    )
+    return result.returncode, result.stderr
+
+def GetStageExitCodeAndStdErr(stage):
+    return GetExitCodeAndStdErr(
+        [sys.executable, __file__],
+        env=dict(
+            PADDLE_DEBUG_CINN_STAGE_NAME=stage.name,
+            PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
+            PYTHONPATH=os.getenv('PYTHONPATH'),
+            ATHENA_ENABLE_TRY_RUN="False",
+        ),
+    )
+
+def AthenaTryRunEnabled():
+    return os.getenv('ATHENA_ENABLE_TRY_RUN') not in {
+        "0",
+        "False",
+        "false",
+        "OFF"
+    }
+
+def GetNeedSkipAndSkipMessage():
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    if not IsCinnStageEnableDiff():
+        return False, ""
+    last_stage = GetPrevCinnStage(current_stage)
     if last_stage is None:
-        return False
-    env_vars = dict(
-        PADDLE_DEBUG_CINN_STAGE_NAME=last_stage.name,
-        PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
-    )
-    env_vars_str = " ".join(
-        f"{env_var}={value}"
-        for env_var, value in env_vars.items()
-    )
-    last_cinn_stage_exit_code = os.system(
-        f"{env_vars_str} {sys.executable} {__file__} > /dev/null 2>&1"
-    )
-    return last_cinn_stage_exit_code != 0
+        return False, ""
+    exitcode, stderr = GetStageExitCodeAndStdErr(last_stage)
+    if exitcode != 0:
+        return True, f"last stage failed. stderr: {stderr}"
+    return False, ""
+
+def GetCurrentStageTryRunExitCodeAndStdErr():
+    if not AthenaTryRunEnabled():
+        return False, ""
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    return GetStageExitCodeAndStdErr(current_stage)
 
 def SetDefaultEnv(**env_var2value):
     for env_var, value in env_var2value.items():
@@ -236,7 +265,7 @@ class CinnTestBase:
         paddle.seed(2024)
         self.prepare_data()
 
-    def test_train(self):
+    def _test_entry(self):
         dy_outs = self.train(use_cinn=False)
         cinn_outs = self.train(use_cinn=GetEnvVarEnableCinn())
 
@@ -287,7 +316,8 @@ class CinnTestBase:
 
 
 
-last_stage_failed = (IsCinnStageEnableDiff() and LastCINNStageFailed())
+need_skip, skip_message = GetNeedSkipAndSkipMessage()
+try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
 class PrimitiveOp_c995f632c41c78ba5a6ecb11af0406f9(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -309,7 +339,7 @@ class PrimitiveOp_c995f632c41c78ba5a6ecb11af0406f9(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -321,7 +351,17 @@ class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -333,7 +373,17 @@ class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -345,7 +395,17 @@ class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -357,7 +417,17 @@ class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -369,7 +439,17 @@ class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -381,7 +461,17 @@ class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -393,7 +483,17 @@ class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -405,7 +505,17 @@ class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -417,7 +527,17 @@ class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -429,7 +549,17 @@ class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -441,7 +571,17 @@ class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -453,7 +593,17 @@ class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -465,7 +615,17 @@ class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -477,7 +637,17 @@ class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -489,7 +659,17 @@ class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -501,7 +681,17 @@ class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -513,7 +703,17 @@ class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -524,6 +724,16 @@ class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.Te
             paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_4babea563f0cfc94cbd543704a0cd693(InstanceTrait, paddle.nn.Layer):
@@ -547,55 +757,95 @@ class PrimitiveOp_4babea563f0cfc94cbd543704a0cd693(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2ef7b46ffa2e7802e1eebc4577f565a8(CinnTestBase, unittest.TestCase):
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_bf9b2a32570edd7386ea64980310c19a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2ef7b46ffa2e7802e1eebc4577f565a8(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_bf9b2a32570edd7386ea64980310c19a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2ef7b46ffa2e7802e1eebc4577f565a8(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_bf9b2a32570edd7386ea64980310c19a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2ef7b46ffa2e7802e1eebc4577f565a8(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_bf9b2a32570edd7386ea64980310c19a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -607,7 +857,17 @@ class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -619,7 +879,17 @@ class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -631,7 +901,17 @@ class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -643,7 +923,17 @@ class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -655,7 +945,17 @@ class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -667,7 +967,17 @@ class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -679,7 +989,17 @@ class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -690,6 +1010,16 @@ class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.Te
             paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_dbb39dd6deed0358d29234ca99e486af(InstanceTrait, paddle.nn.Layer):
@@ -713,101 +1043,181 @@ class PrimitiveOp_dbb39dd6deed0358d29234ca99e486af(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c37ecaf400ad4bcdbb0320c838f09673(CinnTestBase, unittest.TestCase):
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2d0dff9b3168f993ce71317ae6c3c19f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.39208778738975525], [0.2094176560640335], [0.1283661276102066], [0.27551141381263733], [0.03479340672492981], [0.3570266664028168], [0.11812948435544968], [0.2456916868686676], [0.48227444291114807]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.1547079086303711], [0.3591558635234833], [0.15294159948825836], [0.019754718989133835], [0.2135521024465561], [0.2554653286933899], [0.3142800033092499], [0.4077095687389374], [0.42899003624916077]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.3411575257778168], [0.487751841545105], [0.0991593450307846], [0.005567505490034819], [0.4831579327583313], [0.3312598466873169], [0.3520636558532715], [0.29121044278144836], [0.12009581178426743]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.35281503200531006], [0.18959030508995056], [0.45423388481140137], [0.15740129351615906], [0.15308204293251038], [0.25702497363090515], [0.2365979701280594], [0.4242403507232666], [0.4313344359397888]], dtype='float32').reshape([9, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_555190aab4f35b8fc320ed6848247ec8(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_311bcdf4a45d6d9c103387313f92422f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.49722179770469666], [0.4310191571712494], [0.3834795355796814], [0.30722612142562866], [0.2178652435541153], [0.11710164695978165], [0.23001685738563538], [0.22062554955482483], [0.498458594083786]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39656439423561096], [0.12202204018831253], [0.0054341829381883144], [0.014495838433504105], [0.0013494952581822872], [0.28443190455436707], [0.2855451703071594], [0.20876038074493408], [0.38022154569625854]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.07136072963476181], [0.18888725340366364], [0.21746514737606049], [0.009641475975513458], [0.34512582421302795], [0.023270219564437866], [0.2941991984844208], [0.3037635385990143], [0.4153595566749573]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.25974467396736145], [0.4788047671318054], [0.053342241793870926], [0.0840245708823204], [0.10440663248300552], [0.3625282645225525], [0.09382373839616776], [0.4737075865268707], [0.38082581758499146]], dtype='float32').reshape([9, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6bd5f04137aaa1189b3d7b33e76dae34(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5cfff2e84ed3dffbfcba8ea48d93a036(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.36820653080940247], [0.03848660737276077], [0.08805205672979355], [0.03780742734670639], [0.23160281777381897], [0.18210230767726898], [0.21688763797283173], [0.009429873898625374], [0.23962129652500153]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.08568544685840607], [0.1383717805147171], [0.2306109517812729], [0.03215041384100914], [0.05588645488023758], [0.1058163195848465], [0.12910811603069305], [0.02052994631230831], [0.24312002956867218]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.3918236494064331], [0.17079667747020721], [0.2618381679058075], [0.10360092669725418], [0.2927932143211365], [0.150027334690094], [0.08460388332605362], [0.4861544370651245], [0.19172121584415436]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.13827703893184662], [0.1286333203315735], [0.22485984861850739], [0.15737760066986084], [0.2778044044971466], [0.15569062530994415], [0.15203706920146942], [0.4001633822917938], [0.4737466871738434]], dtype='float32').reshape([9, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_13987dd235c7dd4ccf91ea333aae1aec(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_33822bfca19473e0b769c6f42d2475c0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.39371946454048157], [0.050644610077142715], [0.09682576358318329], [0.37938541173934937], [0.37218934297561646], [0.31943804025650024], [0.009334404021501541], [0.027887742966413498], [0.1417359560728073]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.08652636408805847], [0.38375985622406006], [0.22444428503513336], [0.3983890116214752], [0.28843000531196594], [0.07827463001012802], [0.3716101050376892], [0.20676524937152863], [0.260421484708786]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.18829287588596344], [0.34305354952812195], [0.08177930116653442], [0.3895333707332611], [0.46782585978507996], [0.33204638957977295], [0.23466411232948303], [0.13807879388332367], [0.03301508352160454]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.068621426820755], [0.3688132166862488], [0.14095377922058105], [0.1812393218278885], [0.4349217712879181], [0.4618573486804962], [0.2685330808162689], [0.38841864466667175], [0.36464715003967285]], dtype='float32').reshape([9, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_51e7e195b86c93bf340055a938ec9edf(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_298c131164d40f885a107325d6822e62(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_51e7e195b86c93bf340055a938ec9edf(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_298c131164d40f885a107325d6822e62(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_51e7e195b86c93bf340055a938ec9edf(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_298c131164d40f885a107325d6822e62(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_51e7e195b86c93bf340055a938ec9edf(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_298c131164d40f885a107325d6822e62(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_b15114e4826950e42bafd62b41493dba(InstanceTrait, paddle.nn.Layer):
@@ -831,125 +1241,225 @@ class PrimitiveOp_b15114e4826950e42bafd62b41493dba(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_edfa362723727057f9d5baf7fcda533a(CinnTestBase, unittest.TestCase):
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_fa9bab1b6c39074aa40132f9541dc040(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1027945876121521, 0.3881237208843231, 0.152043879032135, 0.21335071325302124, 0.38008421659469604, 0.12074317038059235], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.08038189262151718, 0.0575774721801281, 0.3921468257904053], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.41314512491226196, 0.10803968459367752, 0.3724486231803894, 0.36033663153648376, 0.18769671022891998, 0.29229438304901123], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.25822827219963074, 0.04662436991930008, 0.12753066420555115, 0.47527799010276794, 0.1672964096069336, 0.08656934648752213], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacd5352e870d3d2b035786152cccb2a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c9857ae79060718bd1ea5b95fdc306aa(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.2527327835559845, 0.1542942374944687, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.4957810342311859, 0.08107513189315796, 0.33436471223831177, 0.4922436773777008, 0.36378422379493713, 0.13394984602928162], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.10805502533912659, 0.01880381442606449, 0.22303974628448486, 0.19843772053718567, 0.027361908927559853, 0.16955791413784027], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.08468656241893768, 0.306545615196228, 0.11176025122404099, 0.0717325508594513, 0.04547895863652229, 0.05067944526672363], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a9764080b3e24ddfa6616ff2927e78d6(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_164acc157d2f7e812d7a098c6359cd5e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1027945876121521, 0.3881237208843231, 0.152043879032135, 0.21335071325302124, 0.38008421659469604, 0.12074317038059235], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2304920107126236, 0.0650036409497261, 0.457919716835022, 0.030212104320526123, 0.35011738538742065, 0.12877273559570312], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.41314512491226196, 0.10803968459367752, 0.3724486231803894, 0.36033663153648376, 0.18769671022891998, 0.29229438304901123], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.029645506292581558, 0.004914592020213604, 0.09595445543527603, 0.39793166518211365, 0.4357508420944214, 0.4137418866157532], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_940105d6e5e0c0aaae3c44f00cca0b05(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2f6799c32cf61557d9543bd8b58b9f52(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.2527327835559845, 0.1542942374944687, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.23068910837173462, 0.1622818112373352, 0.3164260983467102, 0.16976673901081085, 0.15035927295684814, 0.22009573876857758], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.10805502533912659, 0.01880381442606449, 0.22303974628448486, 0.19843772053718567, 0.027361908927559853, 0.16955791413784027], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.3976886570453644, 0.18534445762634277, 0.01889265514910221, 0.45858362317085266, 0.20388272404670715, 0.15198396146297455], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f27ff3b8f310e2af4f7636a3ba7247f2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2ff3d3fa9b2d29ceea6b2f6059afe6fd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.21335071325302124, 0.38008421659469604, 0.3921468257904053], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.24978351593017578, 0.11446373909711838, 0.06451474130153656, 0.04623079672455788, 0.3613818883895874, 0.4987070560455322], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.41314512491226196, 0.10803968459367752, 0.3724486231803894, 0.47527799010276794, 0.18769671022891998, 0.29229438304901123], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.23812781274318695, 0.19943611323833466, 0.06108584254980087, 0.09973878413438797, 0.3285718858242035, 0.48215657472610474], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f31cd8ac229ff2c6d374b493246969dc(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_24a125c946d05e42e81d7f100a635dc5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4957810342311859, 0.1542942374944687, 0.470980703830719, 0.4922436773777008, 0.36378422379493713, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2845926582813263, 0.16627027094364166, 0.25496557354927063, 0.29948753118515015, 0.21094956994056702, 0.2771330177783966], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.10805502533912659, 0.306545615196228, 0.22303974628448486, 0.19843772053718567, 0.04547895863652229, 0.16955791413784027], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.10711614042520523, 0.4060676693916321, 0.3443622589111328, 0.2741973400115967, 0.03332651033997536, 0.2714977264404297], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d2a7a47c32bd2b6f0e20291b3f3db708(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_208eb8aece64515d80cc220a160ff451(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d2a7a47c32bd2b6f0e20291b3f3db708(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_208eb8aece64515d80cc220a160ff451(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d2a7a47c32bd2b6f0e20291b3f3db708(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_208eb8aece64515d80cc220a160ff451(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d2a7a47c32bd2b6f0e20291b3f3db708(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_208eb8aece64515d80cc220a160ff451(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_7da8fae49389fd8247a4e00f8c89a5aa(InstanceTrait, paddle.nn.Layer):
@@ -973,7 +1483,7 @@ class PrimitiveOp_7da8fae49389fd8247a4e00f8c89a5aa(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_79dc8921e550a1c5e521294d2d55d922(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -985,7 +1495,17 @@ class TestPrimitiveOp_79dc8921e550a1c5e521294d2d55d922(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -997,7 +1517,17 @@ class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1009,7 +1539,17 @@ class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1021,7 +1561,17 @@ class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1033,55 +1583,105 @@ class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_aa0eff6667c70c3ca420506348d601a3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_eb8619378577cdfc73dec86bd90e6517(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_aa0eff6667c70c3ca420506348d601a3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_eb8619378577cdfc73dec86bd90e6517(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_aa0eff6667c70c3ca420506348d601a3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_eb8619378577cdfc73dec86bd90e6517(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_aa0eff6667c70c3ca420506348d601a3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_eb8619378577cdfc73dec86bd90e6517(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1093,7 +1693,17 @@ class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1105,7 +1715,17 @@ class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1117,7 +1737,17 @@ class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1129,103 +1759,193 @@ class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8cf3cb0aa1bf00632421a49b4f1a500b(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5de6dc132101dbc76660849b30ebe1b0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.2977246940135956]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.3555246889591217]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.30021312832832336]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.17907217144966125]], dtype='float32').reshape([1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_059fa337c06428aa0fcd0398a0d1e07a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_28c0cf87aad2343772e003a4150a95a5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.45340871810913086]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.43772584199905396]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.29566285014152527]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.4305429756641388]], dtype='float32').reshape([1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7066b8c765ae2ddba3bf17f65de7cd62(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_60f7f26df95bfb74323a8a697a41d923(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.33794644474983215]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.11903903633356094]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.4233570992946625]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.11320116370916367]], dtype='float32').reshape([1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e96314e76c0c2c944c8f476fc2854385(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a8ba0103e4c5c290d07caf31b9067d18(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.12983585894107819]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.0831770971417427]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.07360603660345078]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.11482519656419754]], dtype='float32').reshape([1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5c536977ff50e52181ebebcb3ff273b1(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cfbff5888e82862d6d1d9b7d30aaf82c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.15491808950901031], [0.16919776797294617], [0.1292070597410202], [0.12714418768882751], [0.33482757210731506], [0.2098187357187271]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.3895230293273926], [0.4666270613670349], [0.17671829462051392], [0.3581591248512268], [0.42263373732566833], [0.24344341456890106]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.129848912358284], [0.02661607600748539], [0.27324140071868896], [0.39769837260246277], [0.01840292103588581], [0.15425024926662445]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.36462271213531494], [0.15699154138565063], [0.009385272860527039], [0.49828392267227173], [0.1709592342376709], [0.18620306253433228]], dtype='float32').reshape([6, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_3454176afd0defd4410eb4bc8dbbc8d2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a26c95aa2a7ba017af7e0979f26aeb7e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.4103717803955078], [0.39778658747673035], [0.40150901675224304], [0.42183321714401245], [0.09941722452640533], [0.25498807430267334]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.1010279506444931], [0.2909882366657257], [0.2298392504453659], [0.29276591539382935], [0.1773831695318222], [0.48681026697158813]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.11104662716388702], [0.015465895645320415], [0.3915401101112366], [0.23462030291557312], [0.08867214620113373], [0.3940161466598511]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.07934290170669556], [0.13667255640029907], [0.20768995583057404], [0.40495753288269043], [0.464950293302536], [0.4474965035915375]], dtype='float32').reshape([6, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_90d8fcfe6621ea1813d43fd71e4b50a9(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_662447e1730ecff1d898e38c7bd6e41d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.20998290181159973], [0.4498758018016815], [0.24683597683906555], [0.20288529992103577], [0.21599259972572327], [0.19651634991168976]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.22682112455368042], [0.18442489206790924], [0.1968512237071991], [0.46012169122695923], [0.40794169902801514], [0.4862612187862396]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.03926978260278702], [0.08563093096017838], [0.3721535801887512], [0.18568728864192963], [0.22553320229053497], [0.4946292042732239]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.12608090043067932], [0.20497149229049683], [0.36897599697113037], [0.33328765630722046], [0.14978736639022827], [0.34729060530662537]], dtype='float32').reshape([6, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_551ccc662117a704cf91111c93396095(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8f5e35aa55b1a8de64335aed058412d7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.4901370406150818], [0.2509276866912842], [0.2429288774728775], [0.06132770702242851], [0.08567338436841965], [0.23274247348308563]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.4151418209075928], [0.3606884777545929], [0.13929075002670288], [0.03818127512931824], [0.28175589442253113], [0.3325986862182617]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.1343114972114563], [0.39124366641044617], [0.26737356185913086], [0.42793944478034973], [0.0809512734413147], [0.09805627912282944]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.07382135838270187], [0.4149003326892853], [0.2742626368999481], [0.411622017621994], [0.4005337357521057], [0.1369883418083191]], dtype='float32').reshape([6, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1237,7 +1957,17 @@ class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1249,7 +1979,17 @@ class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1261,7 +2001,17 @@ class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1273,55 +2023,105 @@ class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d2667353754bde5a971c7c5c6ee75e0a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5a016842678002c4483931f45ca3e101(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d2667353754bde5a971c7c5c6ee75e0a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5a016842678002c4483931f45ca3e101(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d2667353754bde5a971c7c5c6ee75e0a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5a016842678002c4483931f45ca3e101(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d2667353754bde5a971c7c5c6ee75e0a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5a016842678002c4483931f45ca3e101(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1333,7 +2133,17 @@ class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1345,103 +2155,193 @@ class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2345143a485b35a707265ac765f14573(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2755c45b3fc607fc725cefe30384d056(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2345143a485b35a707265ac765f14573(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2755c45b3fc607fc725cefe30384d056(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2345143a485b35a707265ac765f14573(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2755c45b3fc607fc725cefe30384d056(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2345143a485b35a707265ac765f14573(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2755c45b3fc607fc725cefe30384d056(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ae03cf1c9f27e7c079f956cbedf43373(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_29c667c496a9cb72262c2f0cf4b8a116(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ae03cf1c9f27e7c079f956cbedf43373(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_29c667c496a9cb72262c2f0cf4b8a116(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ae03cf1c9f27e7c079f956cbedf43373(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_29c667c496a9cb72262c2f0cf4b8a116(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ae03cf1c9f27e7c079f956cbedf43373(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_29c667c496a9cb72262c2f0cf4b8a116(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1453,7 +2353,17 @@ class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1465,7 +2375,17 @@ class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1477,7 +2397,17 @@ class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1489,55 +2419,105 @@ class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6e60c7f68e36dffe2a13ad329c308df9(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_7a29ba37fa5a870e4a78158f2697746d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.3776218891143799], [0.017230553552508354], [0.12865380942821503], [0.0789160430431366], [0.29648688435554504]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.4706946909427643], [0.39319300651550293], [0.19910383224487305], [0.3212777376174927], [0.27562597393989563]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.323615163564682], [0.30178794264793396], [0.1656930297613144], [0.11601903289556503], [0.10725655406713486]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.13989704847335815], [0.4314858913421631], [0.14878864586353302], [0.40420448780059814], [0.3773234188556671]], dtype='float32').reshape([5, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_48a236f43711dd32c221f6c64acded21(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5f83a734deda9791f867260c789998c3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.04191706329584122], [0.1894516497850418], [0.11870089173316956], [0.0004433089052326977], [0.28320610523223877]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.16876435279846191], [0.1280040442943573], [0.3004133403301239], [0.4173230230808258], [0.3782731890678406]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.2432054579257965], [0.38019073009490967], [0.11684619635343552], [0.4634474217891693], [0.16990448534488678]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.3156962990760803], [0.09945223480463028], [0.2634713351726532], [0.11271272599697113], [0.23488155007362366]], dtype='float32').reshape([5, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1505e0021d50db14db121f065a773551(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_567fd740091fab65f01c8eb001427ad5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.3077138066291809], [0.21676185727119446], [0.36836960911750793], [0.01315593346953392], [0.1262916475534439]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.27102693915367126], [0.3185052275657654], [0.3153221905231476], [0.430990993976593], [0.4189223051071167]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.20664435625076294], [0.4538969397544861], [0.20020511746406555], [0.4132084846496582], [0.2432897984981537]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.004550704266875982], [0.4207856059074402], [0.24096810817718506], [0.004030225798487663], [0.03893037885427475]], dtype='float32').reshape([5, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5c4c6be31e2e7640df4338be3b3a25b5(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cf1ae1c3d7dca15fdcd51631f2a19481(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.39167019724845886], [0.046127624809741974], [0.13554736971855164], [0.2480829954147339], [0.17310704290866852]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.4086301028728485], [0.391907662153244], [0.04106692224740982], [0.014858669601380825], [0.4931931793689728]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.17348651587963104], [0.32497742772102356], [0.003286341205239296], [0.16559453308582306], [0.24491815268993378]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.36014536023139954], [0.19286362826824188], [0.07153784483671188], [0.069424569606781], [0.2985104024410248]], dtype='float32').reshape([5, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1549,7 +2529,17 @@ class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1561,7 +2551,17 @@ class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1573,7 +2573,17 @@ class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1585,7 +2595,17 @@ class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1597,7 +2617,17 @@ class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1609,151 +2639,281 @@ class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dd031253a2f53a989acd5f6a6c4cdef6(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1e0356dfb7878a2e28621059dda82bed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dd031253a2f53a989acd5f6a6c4cdef6(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1e0356dfb7878a2e28621059dda82bed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dd031253a2f53a989acd5f6a6c4cdef6(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1e0356dfb7878a2e28621059dda82bed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dd031253a2f53a989acd5f6a6c4cdef6(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1e0356dfb7878a2e28621059dda82bed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e70b18fd08fd66974dbe301f40c3b323(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3a2e6a8f4c55cf51f77e93217e2ebbcf(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e70b18fd08fd66974dbe301f40c3b323(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3a2e6a8f4c55cf51f77e93217e2ebbcf(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e70b18fd08fd66974dbe301f40c3b323(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3a2e6a8f4c55cf51f77e93217e2ebbcf(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e70b18fd08fd66974dbe301f40c3b323(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3a2e6a8f4c55cf51f77e93217e2ebbcf(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a6686765135b072a0365c126e1188ee3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4a815ef8fe8bc26cddfa8162f8757d46(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a6686765135b072a0365c126e1188ee3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4a815ef8fe8bc26cddfa8162f8757d46(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a6686765135b072a0365c126e1188ee3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4a815ef8fe8bc26cddfa8162f8757d46(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a6686765135b072a0365c126e1188ee3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4a815ef8fe8bc26cddfa8162f8757d46(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1765,7 +2925,17 @@ class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1777,103 +2947,193 @@ class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_623e127ff9062a2f5f8592a5eae633d1(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e1f529d1a10911ae60195c09cfc1423b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.4710065722465515], [0.27305787801742554], [0.1443967968225479], [0.18359437584877014]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.11861217021942139], [0.1668710708618164], [0.37650251388549805], [0.3584076464176178]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.15036208927631378], [0.1331283152103424], [0.2937854826450348], [0.4619079828262329]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.33588987588882446], [0.2792902886867523], [0.1107465997338295], [0.3460559844970703]], dtype='float32').reshape([4, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_87d4f1e8f1e8f5e8822fdff511f00da2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_95445d44acd4719cb2897ac81a29a5a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.3558596074581146], [0.24631327390670776], [0.38240188360214233], [0.43209323287010193]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.17836087942123413], [0.34534937143325806], [0.45495909452438354], [0.29443272948265076]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.1913178265094757], [0.294893741607666], [0.036232516169548035], [0.43063637614250183]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.2022257000207901], [0.14955280721187592], [0.286821573972702], [0.023547960445284843]], dtype='float32').reshape([4, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4560330008a1e8c9b2485d5784b1ef39(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5f5c5dd9dd8042bfe19cdec2dde6f9ef(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.1317010074853897], [0.1832035928964615], [0.005624867510050535], [0.382903516292572]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.21841885149478912], [0.4341205954551697], [0.17934243381023407], [0.48898959159851074]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.06513538211584091], [0.3193783462047577], [0.09922898560762405], [0.1432037353515625]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.1513662487268448], [0.28769925236701965], [0.18229663372039795], [0.12690480053424835]], dtype='float32').reshape([4, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_634a22fd2be9ed7ea7f6e6157a08aba3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_52ef18a2bf2defe389a2b464c48c6e04(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.407511442899704], [0.41122034192085266], [0.36212438344955444], [0.47452500462532043]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.2849007844924927], [0.1524905115365982], [0.386353075504303], [0.4171924889087677]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.17245835065841675], [0.15862299501895905], [0.4525022804737091], [0.1308891922235489]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.25924187898635864], [0.346165269613266], [0.1456291526556015], [0.23360179364681244]], dtype='float32').reshape([4, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_936c4584cb51a8986799a6d4249800da(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_abeeeb2a0efaa7beea9d07ad9385dc4e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_936c4584cb51a8986799a6d4249800da(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_abeeeb2a0efaa7beea9d07ad9385dc4e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_936c4584cb51a8986799a6d4249800da(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_abeeeb2a0efaa7beea9d07ad9385dc4e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_936c4584cb51a8986799a6d4249800da(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_abeeeb2a0efaa7beea9d07ad9385dc4e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1885,7 +3145,17 @@ class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1897,7 +3167,17 @@ class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1909,7 +3189,17 @@ class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1921,7 +3211,17 @@ class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1933,7 +3233,17 @@ class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -1945,55 +3255,105 @@ class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5953813d6bf2b7055fc3be5d274ff1e9(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c8d828979cd8b959134ea5c348a54c6c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5953813d6bf2b7055fc3be5d274ff1e9(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c8d828979cd8b959134ea5c348a54c6c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5953813d6bf2b7055fc3be5d274ff1e9(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c8d828979cd8b959134ea5c348a54c6c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5953813d6bf2b7055fc3be5d274ff1e9(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c8d828979cd8b959134ea5c348a54c6c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4babea563f0cfc94cbd543704a0cd693
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2005,7 +3365,17 @@ class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2017,7 +3387,17 @@ class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2029,7 +3409,17 @@ class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2041,7 +3431,17 @@ class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2053,7 +3453,17 @@ class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2065,7 +3475,17 @@ class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2077,7 +3497,17 @@ class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2089,7 +3519,17 @@ class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2101,7 +3541,17 @@ class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2113,7 +3563,17 @@ class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2125,7 +3585,17 @@ class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2137,7 +3607,17 @@ class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2149,7 +3629,17 @@ class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2161,7 +3651,17 @@ class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2173,7 +3673,17 @@ class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2185,7 +3695,17 @@ class TestPrimitiveOp_45590ccb067a993036bdf78e23f474d1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2197,7 +3717,17 @@ class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2209,7 +3739,17 @@ class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2221,7 +3761,17 @@ class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2233,55 +3783,105 @@ class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8ba9c0bc1fe9c11ceee2917c4527ba7d(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_900d1c9fd725a64bdb7cac6eeaedab0f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8ba9c0bc1fe9c11ceee2917c4527ba7d(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_900d1c9fd725a64bdb7cac6eeaedab0f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8ba9c0bc1fe9c11ceee2917c4527ba7d(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_900d1c9fd725a64bdb7cac6eeaedab0f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8ba9c0bc1fe9c11ceee2917c4527ba7d(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_900d1c9fd725a64bdb7cac6eeaedab0f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1755, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2293,7 +3893,17 @@ class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2305,7 +3915,17 @@ class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2317,7 +3937,17 @@ class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2329,7 +3959,17 @@ class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2341,7 +3981,17 @@ class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2353,7 +4003,17 @@ class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2365,7 +4025,17 @@ class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2377,221 +4047,411 @@ class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c37ecaf400ad4bcdbb0320c838f09673(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2d0dff9b3168f993ce71317ae6c3c19f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.39208778738975525], [0.2094176560640335], [0.1283661276102066], [0.27551141381263733], [0.03479340672492981], [0.3570266664028168], [0.11812948435544968], [0.2456916868686676], [0.48227444291114807]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.1547079086303711], [0.3591558635234833], [0.15294159948825836], [0.019754718989133835], [0.2135521024465561], [0.2554653286933899], [0.3142800033092499], [0.4077095687389374], [0.42899003624916077]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.3411575257778168], [0.487751841545105], [0.0991593450307846], [0.005567505490034819], [0.4831579327583313], [0.3312598466873169], [0.3520636558532715], [0.29121044278144836], [0.12009581178426743]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.35281503200531006], [0.18959030508995056], [0.45423388481140137], [0.15740129351615906], [0.15308204293251038], [0.25702497363090515], [0.2365979701280594], [0.4242403507232666], [0.4313344359397888]], dtype='float32').reshape([9, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_555190aab4f35b8fc320ed6848247ec8(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_311bcdf4a45d6d9c103387313f92422f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.49722179770469666], [0.4310191571712494], [0.3834795355796814], [0.30722612142562866], [0.2178652435541153], [0.11710164695978165], [0.23001685738563538], [0.22062554955482483], [0.498458594083786]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39656439423561096], [0.12202204018831253], [0.0054341829381883144], [0.014495838433504105], [0.0013494952581822872], [0.28443190455436707], [0.2855451703071594], [0.20876038074493408], [0.38022154569625854]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.07136072963476181], [0.18888725340366364], [0.21746514737606049], [0.009641475975513458], [0.34512582421302795], [0.023270219564437866], [0.2941991984844208], [0.3037635385990143], [0.4153595566749573]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.25974467396736145], [0.4788047671318054], [0.053342241793870926], [0.0840245708823204], [0.10440663248300552], [0.3625282645225525], [0.09382373839616776], [0.4737075865268707], [0.38082581758499146]], dtype='float32').reshape([9, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6bd5f04137aaa1189b3d7b33e76dae34(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5cfff2e84ed3dffbfcba8ea48d93a036(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.36820653080940247], [0.03848660737276077], [0.08805205672979355], [0.03780742734670639], [0.23160281777381897], [0.18210230767726898], [0.21688763797283173], [0.009429873898625374], [0.23962129652500153]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.08568544685840607], [0.1383717805147171], [0.2306109517812729], [0.03215041384100914], [0.05588645488023758], [0.1058163195848465], [0.12910811603069305], [0.02052994631230831], [0.24312002956867218]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.3918236494064331], [0.17079667747020721], [0.2618381679058075], [0.10360092669725418], [0.2927932143211365], [0.150027334690094], [0.08460388332605362], [0.4861544370651245], [0.19172121584415436]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.13827703893184662], [0.1286333203315735], [0.22485984861850739], [0.15737760066986084], [0.2778044044971466], [0.15569062530994415], [0.15203706920146942], [0.4001633822917938], [0.4737466871738434]], dtype='float32').reshape([9, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_13987dd235c7dd4ccf91ea333aae1aec(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_33822bfca19473e0b769c6f42d2475c0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.39371946454048157], [0.050644610077142715], [0.09682576358318329], [0.37938541173934937], [0.37218934297561646], [0.31943804025650024], [0.009334404021501541], [0.027887742966413498], [0.1417359560728073]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.08652636408805847], [0.38375985622406006], [0.22444428503513336], [0.3983890116214752], [0.28843000531196594], [0.07827463001012802], [0.3716101050376892], [0.20676524937152863], [0.260421484708786]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.18829287588596344], [0.34305354952812195], [0.08177930116653442], [0.3895333707332611], [0.46782585978507996], [0.33204638957977295], [0.23466411232948303], [0.13807879388332367], [0.03301508352160454]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.068621426820755], [0.3688132166862488], [0.14095377922058105], [0.1812393218278885], [0.4349217712879181], [0.4618573486804962], [0.2685330808162689], [0.38841864466667175], [0.36464715003967285]], dtype='float32').reshape([9, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d5d1fc87e695d15078c9c7b6003082b0(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_efe2ee843a574337fc64fb3df556a9a2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d5d1fc87e695d15078c9c7b6003082b0(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_efe2ee843a574337fc64fb3df556a9a2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d5d1fc87e695d15078c9c7b6003082b0(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_efe2ee843a574337fc64fb3df556a9a2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d5d1fc87e695d15078c9c7b6003082b0(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_efe2ee843a574337fc64fb3df556a9a2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5589, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_edfa362723727057f9d5baf7fcda533a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_fa9bab1b6c39074aa40132f9541dc040(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1027945876121521, 0.3881237208843231, 0.152043879032135, 0.21335071325302124, 0.38008421659469604, 0.12074317038059235], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.08038189262151718, 0.0575774721801281, 0.3921468257904053], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.41314512491226196, 0.10803968459367752, 0.3724486231803894, 0.36033663153648376, 0.18769671022891998, 0.29229438304901123], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.25822827219963074, 0.04662436991930008, 0.12753066420555115, 0.47527799010276794, 0.1672964096069336, 0.08656934648752213], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacd5352e870d3d2b035786152cccb2a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c9857ae79060718bd1ea5b95fdc306aa(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.2527327835559845, 0.1542942374944687, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.4957810342311859, 0.08107513189315796, 0.33436471223831177, 0.4922436773777008, 0.36378422379493713, 0.13394984602928162], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.10805502533912659, 0.01880381442606449, 0.22303974628448486, 0.19843772053718567, 0.027361908927559853, 0.16955791413784027], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.08468656241893768, 0.306545615196228, 0.11176025122404099, 0.0717325508594513, 0.04547895863652229, 0.05067944526672363], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a9764080b3e24ddfa6616ff2927e78d6(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_164acc157d2f7e812d7a098c6359cd5e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1027945876121521, 0.3881237208843231, 0.152043879032135, 0.21335071325302124, 0.38008421659469604, 0.12074317038059235], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2304920107126236, 0.0650036409497261, 0.457919716835022, 0.030212104320526123, 0.35011738538742065, 0.12877273559570312], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.41314512491226196, 0.10803968459367752, 0.3724486231803894, 0.36033663153648376, 0.18769671022891998, 0.29229438304901123], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.029645506292581558, 0.004914592020213604, 0.09595445543527603, 0.39793166518211365, 0.4357508420944214, 0.4137418866157532], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_940105d6e5e0c0aaae3c44f00cca0b05(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2f6799c32cf61557d9543bd8b58b9f52(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.2527327835559845, 0.1542942374944687, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.23068910837173462, 0.1622818112373352, 0.3164260983467102, 0.16976673901081085, 0.15035927295684814, 0.22009573876857758], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.10805502533912659, 0.01880381442606449, 0.22303974628448486, 0.19843772053718567, 0.027361908927559853, 0.16955791413784027], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.3976886570453644, 0.18534445762634277, 0.01889265514910221, 0.45858362317085266, 0.20388272404670715, 0.15198396146297455], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f27ff3b8f310e2af4f7636a3ba7247f2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2ff3d3fa9b2d29ceea6b2f6059afe6fd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.21335071325302124, 0.38008421659469604, 0.3921468257904053], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.24978351593017578, 0.11446373909711838, 0.06451474130153656, 0.04623079672455788, 0.3613818883895874, 0.4987070560455322], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.41314512491226196, 0.10803968459367752, 0.3724486231803894, 0.47527799010276794, 0.18769671022891998, 0.29229438304901123], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.23812781274318695, 0.19943611323833466, 0.06108584254980087, 0.09973878413438797, 0.3285718858242035, 0.48215657472610474], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f31cd8ac229ff2c6d374b493246969dc(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_24a125c946d05e42e81d7f100a635dc5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b15114e4826950e42bafd62b41493dba
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4957810342311859, 0.1542942374944687, 0.470980703830719, 0.4922436773777008, 0.36378422379493713, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2845926582813263, 0.16627027094364166, 0.25496557354927063, 0.29948753118515015, 0.21094956994056702, 0.2771330177783966], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.10805502533912659, 0.306545615196228, 0.22303974628448486, 0.19843772053718567, 0.04547895863652229, 0.16955791413784027], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.10711614042520523, 0.4060676693916321, 0.3443622589111328, 0.2741973400115967, 0.03332651033997536, 0.2714977264404297], dtype='float32').reshape([6]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f13fc198cac4668a0001829d063d3a50(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2354bc31bb38181a6e99e27b9ca25805(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f13fc198cac4668a0001829d063d3a50(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2354bc31bb38181a6e99e27b9ca25805(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f13fc198cac4668a0001829d063d3a50(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2354bc31bb38181a6e99e27b9ca25805(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f13fc198cac4668a0001829d063d3a50(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2354bc31bb38181a6e99e27b9ca25805(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_298b3063e6477aaa93ddc21174d33b57(InstanceTrait, paddle.nn.Layer):
@@ -2615,7 +4475,7 @@ class PrimitiveOp_298b3063e6477aaa93ddc21174d33b57(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_5ef20dd23028bc1e154fa6f6a15e14f0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2627,7 +4487,17 @@ class TestPrimitiveOp_5ef20dd23028bc1e154fa6f6a15e14f0(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2639,7 +4509,17 @@ class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2651,7 +4531,17 @@ class TestPrimitiveOp_78e91db0670cae193d8e61f90e54e9f7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2663,7 +4553,17 @@ class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2675,55 +4575,105 @@ class TestPrimitiveOp_73076222e0df50639e7596a6fc86f7a9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d18928ea57b76008ab30485bf141f15e(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f25cfd0dc1d99d868e2ea6350fe5f11b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d18928ea57b76008ab30485bf141f15e(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f25cfd0dc1d99d868e2ea6350fe5f11b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d18928ea57b76008ab30485bf141f15e(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f25cfd0dc1d99d868e2ea6350fe5f11b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d18928ea57b76008ab30485bf141f15e(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f25cfd0dc1d99d868e2ea6350fe5f11b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1512, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2735,7 +4685,17 @@ class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2747,7 +4707,17 @@ class TestPrimitiveOp_ed00b2d0aca2fd7a1a6984cd38dd93a8(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2759,7 +4729,17 @@ class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2771,103 +4751,193 @@ class TestPrimitiveOp_c87c6f0497ecd74dc60320a3e3989617(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8cf3cb0aa1bf00632421a49b4f1a500b(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5de6dc132101dbc76660849b30ebe1b0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.2977246940135956]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.3555246889591217]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.30021312832832336]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.17907217144966125]], dtype='float32').reshape([1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_059fa337c06428aa0fcd0398a0d1e07a(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_28c0cf87aad2343772e003a4150a95a5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.45340871810913086]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.43772584199905396]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.29566285014152527]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.4305429756641388]], dtype='float32').reshape([1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7066b8c765ae2ddba3bf17f65de7cd62(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_60f7f26df95bfb74323a8a697a41d923(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.33794644474983215]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.11903903633356094]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.4233570992946625]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.11320116370916367]], dtype='float32').reshape([1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e96314e76c0c2c944c8f476fc2854385(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a8ba0103e4c5c290d07caf31b9067d18(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.12983585894107819]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.0831770971417427]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.07360603660345078]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.11482519656419754]], dtype='float32').reshape([1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5c536977ff50e52181ebebcb3ff273b1(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cfbff5888e82862d6d1d9b7d30aaf82c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.15491808950901031], [0.16919776797294617], [0.1292070597410202], [0.12714418768882751], [0.33482757210731506], [0.2098187357187271]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.3895230293273926], [0.4666270613670349], [0.17671829462051392], [0.3581591248512268], [0.42263373732566833], [0.24344341456890106]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.129848912358284], [0.02661607600748539], [0.27324140071868896], [0.39769837260246277], [0.01840292103588581], [0.15425024926662445]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.36462271213531494], [0.15699154138565063], [0.009385272860527039], [0.49828392267227173], [0.1709592342376709], [0.18620306253433228]], dtype='float32').reshape([6, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_3454176afd0defd4410eb4bc8dbbc8d2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a26c95aa2a7ba017af7e0979f26aeb7e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.4103717803955078], [0.39778658747673035], [0.40150901675224304], [0.42183321714401245], [0.09941722452640533], [0.25498807430267334]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.1010279506444931], [0.2909882366657257], [0.2298392504453659], [0.29276591539382935], [0.1773831695318222], [0.48681026697158813]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.11104662716388702], [0.015465895645320415], [0.3915401101112366], [0.23462030291557312], [0.08867214620113373], [0.3940161466598511]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.07934290170669556], [0.13667255640029907], [0.20768995583057404], [0.40495753288269043], [0.464950293302536], [0.4474965035915375]], dtype='float32').reshape([6, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_90d8fcfe6621ea1813d43fd71e4b50a9(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_662447e1730ecff1d898e38c7bd6e41d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.20998290181159973], [0.4498758018016815], [0.24683597683906555], [0.20288529992103577], [0.21599259972572327], [0.19651634991168976]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.22682112455368042], [0.18442489206790924], [0.1968512237071991], [0.46012169122695923], [0.40794169902801514], [0.4862612187862396]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.03926978260278702], [0.08563093096017838], [0.3721535801887512], [0.18568728864192963], [0.22553320229053497], [0.4946292042732239]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.12608090043067932], [0.20497149229049683], [0.36897599697113037], [0.33328765630722046], [0.14978736639022827], [0.34729060530662537]], dtype='float32').reshape([6, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_551ccc662117a704cf91111c93396095(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8f5e35aa55b1a8de64335aed058412d7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.4901370406150818], [0.2509276866912842], [0.2429288774728775], [0.06132770702242851], [0.08567338436841965], [0.23274247348308563]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.4151418209075928], [0.3606884777545929], [0.13929075002670288], [0.03818127512931824], [0.28175589442253113], [0.3325986862182617]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.1343114972114563], [0.39124366641044617], [0.26737356185913086], [0.42793944478034973], [0.0809512734413147], [0.09805627912282944]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.07382135838270187], [0.4149003326892853], [0.2742626368999481], [0.411622017621994], [0.4005337357521057], [0.1369883418083191]], dtype='float32').reshape([6, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2879,7 +4949,17 @@ class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2891,7 +4971,17 @@ class TestPrimitiveOp_96bdc15605e030639836217908d584b9(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2903,7 +4993,17 @@ class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2915,55 +5015,105 @@ class TestPrimitiveOp_7380487db5821129bd5686cd6168f44f(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b18cfb9dc8f2931c1f9ec2af08a3eff2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c2edf9181bcdc3029acee20aa14a6ed0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b18cfb9dc8f2931c1f9ec2af08a3eff2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c2edf9181bcdc3029acee20aa14a6ed0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b18cfb9dc8f2931c1f9ec2af08a3eff2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c2edf9181bcdc3029acee20aa14a6ed0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b18cfb9dc8f2931c1f9ec2af08a3eff2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c2edf9181bcdc3029acee20aa14a6ed0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2007, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2975,7 +5125,17 @@ class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -2987,103 +5147,193 @@ class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_61b580e6493f4961c022d53a1c5f0b2e(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c925a479b8b065b74836b669484713ac(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_61b580e6493f4961c022d53a1c5f0b2e(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c925a479b8b065b74836b669484713ac(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_61b580e6493f4961c022d53a1c5f0b2e(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c925a479b8b065b74836b669484713ac(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_61b580e6493f4961c022d53a1c5f0b2e(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c925a479b8b065b74836b669484713ac(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4685, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c1b75d202644ebc6efec7b2fa5615717(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cecaa29694d9e2875bceae137af14d0b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c1b75d202644ebc6efec7b2fa5615717(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cecaa29694d9e2875bceae137af14d0b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c1b75d202644ebc6efec7b2fa5615717(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cecaa29694d9e2875bceae137af14d0b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c1b75d202644ebc6efec7b2fa5615717(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cecaa29694d9e2875bceae137af14d0b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1050, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3095,7 +5345,17 @@ class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3107,7 +5367,17 @@ class TestPrimitiveOp_4556dc993ddd4a2f6294eb744c00b5d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3119,7 +5389,17 @@ class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3131,55 +5411,105 @@ class TestPrimitiveOp_8e4e1cc73ae905136448e537df1b64ed(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6e60c7f68e36dffe2a13ad329c308df9(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_7a29ba37fa5a870e4a78158f2697746d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.3776218891143799], [0.017230553552508354], [0.12865380942821503], [0.0789160430431366], [0.29648688435554504]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.4706946909427643], [0.39319300651550293], [0.19910383224487305], [0.3212777376174927], [0.27562597393989563]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.323615163564682], [0.30178794264793396], [0.1656930297613144], [0.11601903289556503], [0.10725655406713486]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.13989704847335815], [0.4314858913421631], [0.14878864586353302], [0.40420448780059814], [0.3773234188556671]], dtype='float32').reshape([5, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_48a236f43711dd32c221f6c64acded21(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5f83a734deda9791f867260c789998c3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.04191706329584122], [0.1894516497850418], [0.11870089173316956], [0.0004433089052326977], [0.28320610523223877]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.16876435279846191], [0.1280040442943573], [0.3004133403301239], [0.4173230230808258], [0.3782731890678406]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.2432054579257965], [0.38019073009490967], [0.11684619635343552], [0.4634474217891693], [0.16990448534488678]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.3156962990760803], [0.09945223480463028], [0.2634713351726532], [0.11271272599697113], [0.23488155007362366]], dtype='float32').reshape([5, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1505e0021d50db14db121f065a773551(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_567fd740091fab65f01c8eb001427ad5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.3077138066291809], [0.21676185727119446], [0.36836960911750793], [0.01315593346953392], [0.1262916475534439]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.27102693915367126], [0.3185052275657654], [0.3153221905231476], [0.430990993976593], [0.4189223051071167]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.20664435625076294], [0.4538969397544861], [0.20020511746406555], [0.4132084846496582], [0.2432897984981537]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.004550704266875982], [0.4207856059074402], [0.24096810817718506], [0.004030225798487663], [0.03893037885427475]], dtype='float32').reshape([5, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5c4c6be31e2e7640df4338be3b3a25b5(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cf1ae1c3d7dca15fdcd51631f2a19481(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.39167019724845886], [0.046127624809741974], [0.13554736971855164], [0.2480829954147339], [0.17310704290866852]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.4086301028728485], [0.391907662153244], [0.04106692224740982], [0.014858669601380825], [0.4931931793689728]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.17348651587963104], [0.32497742772102356], [0.003286341205239296], [0.16559453308582306], [0.24491815268993378]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.36014536023139954], [0.19286362826824188], [0.07153784483671188], [0.069424569606781], [0.2985104024410248]], dtype='float32').reshape([5, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3191,7 +5521,17 @@ class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3203,7 +5543,17 @@ class TestPrimitiveOp_16c9b5aa2d1049a86ea83c39e582d173(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3215,7 +5565,17 @@ class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3227,7 +5587,17 @@ class TestPrimitiveOp_135bb2deaaeb09d53a1b74581f85f946(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3239,7 +5609,17 @@ class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3251,151 +5631,281 @@ class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8f29ce19c8be6a66e81daa18122a9aa3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ae3316e6de795ba47e5dedef9fe9f875(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8f29ce19c8be6a66e81daa18122a9aa3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ae3316e6de795ba47e5dedef9fe9f875(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8f29ce19c8be6a66e81daa18122a9aa3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ae3316e6de795ba47e5dedef9fe9f875(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8f29ce19c8be6a66e81daa18122a9aa3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ae3316e6de795ba47e5dedef9fe9f875(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2394, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9664bc6a24afc226825121d6e9ad162c(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9ea371947e174bfd1b3eb4692788ad42(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9664bc6a24afc226825121d6e9ad162c(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9ea371947e174bfd1b3eb4692788ad42(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9664bc6a24afc226825121d6e9ad162c(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9ea371947e174bfd1b3eb4692788ad42(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9664bc6a24afc226825121d6e9ad162c(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9ea371947e174bfd1b3eb4692788ad42(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3063, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4e296967aaa31c2189a5ee43babe3455(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0e051a19a2dc27ab7d4b3a34ae56ff27(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4e296967aaa31c2189a5ee43babe3455(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0e051a19a2dc27ab7d4b3a34ae56ff27(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4e296967aaa31c2189a5ee43babe3455(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0e051a19a2dc27ab7d4b3a34ae56ff27(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4e296967aaa31c2189a5ee43babe3455(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0e051a19a2dc27ab7d4b3a34ae56ff27(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3758, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3407,7 +5917,17 @@ class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3419,103 +5939,193 @@ class TestPrimitiveOp_e5a3107e3786d3d3041daed12bfcb22d(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_623e127ff9062a2f5f8592a5eae633d1(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e1f529d1a10911ae60195c09cfc1423b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.4710065722465515], [0.27305787801742554], [0.1443967968225479], [0.18359437584877014]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.11861217021942139], [0.1668710708618164], [0.37650251388549805], [0.3584076464176178]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.15036208927631378], [0.1331283152103424], [0.2937854826450348], [0.4619079828262329]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.33588987588882446], [0.2792902886867523], [0.1107465997338295], [0.3460559844970703]], dtype='float32').reshape([4, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_87d4f1e8f1e8f5e8822fdff511f00da2(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_95445d44acd4719cb2897ac81a29a5a8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.3558596074581146], [0.24631327390670776], [0.38240188360214233], [0.43209323287010193]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.17836087942123413], [0.34534937143325806], [0.45495909452438354], [0.29443272948265076]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.1913178265094757], [0.294893741607666], [0.036232516169548035], [0.43063637614250183]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.2022257000207901], [0.14955280721187592], [0.286821573972702], [0.023547960445284843]], dtype='float32').reshape([4, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4560330008a1e8c9b2485d5784b1ef39(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5f5c5dd9dd8042bfe19cdec2dde6f9ef(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.1317010074853897], [0.1832035928964615], [0.005624867510050535], [0.382903516292572]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.21841885149478912], [0.4341205954551697], [0.17934243381023407], [0.48898959159851074]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.06513538211584091], [0.3193783462047577], [0.09922898560762405], [0.1432037353515625]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.1513662487268448], [0.28769925236701965], [0.18229663372039795], [0.12690480053424835]], dtype='float32').reshape([4, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_634a22fd2be9ed7ea7f6e6157a08aba3(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_52ef18a2bf2defe389a2b464c48c6e04(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.407511442899704], [0.41122034192085266], [0.36212438344955444], [0.47452500462532043]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.2849007844924927], [0.1524905115365982], [0.386353075504303], [0.4171924889087677]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.17245835065841675], [0.15862299501895905], [0.4525022804737091], [0.1308891922235489]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.25924187898635864], [0.346165269613266], [0.1456291526556015], [0.23360179364681244]], dtype='float32').reshape([4, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_61429a9bcde67331774da4fabf7fa325(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_72b4b22b2f75aa50bd9a75d9ea398878(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_61429a9bcde67331774da4fabf7fa325(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_72b4b22b2f75aa50bd9a75d9ea398878(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_61429a9bcde67331774da4fabf7fa325(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_72b4b22b2f75aa50bd9a75d9ea398878(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_61429a9bcde67331774da4fabf7fa325(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_72b4b22b2f75aa50bd9a75d9ea398878(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2008, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3527,7 +6137,17 @@ class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3539,7 +6159,17 @@ class TestPrimitiveOp_72017358536c023689b8ebeb0b3719a7(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3551,7 +6181,17 @@ class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3563,7 +6203,17 @@ class TestPrimitiveOp_7cec3d092d6daee0483bfbca6289a2a1(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3575,7 +6225,17 @@ class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3587,55 +6247,105 @@ class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7de8252518296789b105b7a04f3c3ceb(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e297c76f2edd42d06b43974495c26a74(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7de8252518296789b105b7a04f3c3ceb(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e297c76f2edd42d06b43974495c26a74(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7de8252518296789b105b7a04f3c3ceb(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e297c76f2edd42d06b43974495c26a74(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7de8252518296789b105b7a04f3c3ceb(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e297c76f2edd42d06b43974495c26a74(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dbb39dd6deed0358d29234ca99e486af
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4295, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3647,7 +6357,17 @@ class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -3658,6 +6378,16 @@ class TestPrimitiveOp_e1b2edee8f90f643bd71e6251333740a(CinnTestBase, unittest.Te
             paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
 
 
 

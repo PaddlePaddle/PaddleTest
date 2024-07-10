@@ -98,26 +98,55 @@ def IsCinnStageEnableDiff():
         assert GetCurrentCinnStage() is not None
     return enabled
 
-last_cinn_stage_exit_code = None
-def LastCINNStageFailed():
-    global last_cinn_stage_exit_code
-    if last_cinn_stage_exit_code is not None:
-        return last_cinn_stage_exit_code != 0
-    last_stage = GetPrevCinnStage(GetCurrentCinnStage())
+def GetExitCodeAndStdErr(cmd, env):
+    import subprocess
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=env,
+    )
+    return result.returncode, result.stderr
+
+def GetStageExitCodeAndStdErr(stage):
+    return GetExitCodeAndStdErr(
+        [sys.executable, __file__],
+        env=dict(
+            PADDLE_DEBUG_CINN_STAGE_NAME=stage.name,
+            PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
+            PYTHONPATH=os.getenv('PYTHONPATH'),
+            ATHENA_ENABLE_TRY_RUN="False",
+        ),
+    )
+
+def AthenaTryRunEnabled():
+    return os.getenv('ATHENA_ENABLE_TRY_RUN') not in {
+        "0",
+        "False",
+        "false",
+        "OFF"
+    }
+
+def GetNeedSkipAndSkipMessage():
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    if not IsCinnStageEnableDiff():
+        return False, ""
+    last_stage = GetPrevCinnStage(current_stage)
     if last_stage is None:
-        return False
-    env_vars = dict(
-        PADDLE_DEBUG_CINN_STAGE_NAME=last_stage.name,
-        PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
-    )
-    env_vars_str = " ".join(
-        f"{env_var}={value}"
-        for env_var, value in env_vars.items()
-    )
-    last_cinn_stage_exit_code = os.system(
-        f"{env_vars_str} {sys.executable} {__file__} > /dev/null 2>&1"
-    )
-    return last_cinn_stage_exit_code != 0
+        return False, ""
+    exitcode, stderr = GetStageExitCodeAndStdErr(last_stage)
+    if exitcode != 0:
+        return True, f"last stage failed. stderr: {stderr}"
+    return False, ""
+
+def GetCurrentStageTryRunExitCodeAndStdErr():
+    if not AthenaTryRunEnabled():
+        return False, ""
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    return GetStageExitCodeAndStdErr(current_stage)
 
 def SetDefaultEnv(**env_var2value):
     for env_var, value in env_var2value.items():
@@ -236,7 +265,7 @@ class CinnTestBase:
         paddle.seed(2024)
         self.prepare_data()
 
-    def test_train(self):
+    def _test_entry(self):
         dy_outs = self.train(use_cinn=False)
         cinn_outs = self.train(use_cinn=GetEnvVarEnableCinn())
 
@@ -287,7 +316,8 @@ class CinnTestBase:
 
 
 
-last_stage_failed = (IsCinnStageEnableDiff() and LastCINNStageFailed())
+need_skip, skip_message = GetNeedSkipAndSkipMessage()
+try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
 class PrimitiveOp_b6b38adfa529c8f8d05d54ff6f6fed67(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -308,27 +338,47 @@ class PrimitiveOp_b6b38adfa529c8f8d05d54ff6f6fed67(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e5fb09b206e3388bbf7e54845dd8a24c(CinnTestBase, unittest.TestCase):
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e9794d9450adce988d634f341eec1191(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b6b38adfa529c8f8d05d54ff6f6fed67
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.4026823937892914, 0.4708717167377472], [0.22823500633239746, 0.07231664657592773], [0.4897056519985199, 0.011129551567137241], [0.37206071615219116, 0.07582680135965347], [0.40325236320495605, 0.4095800518989563], [0.458786278963089, 0.13427451252937317]]], dtype='float32').reshape([1, 6, 2]),
+            paddle.to_tensor([[[0.4071896970272064, 0.13613902032375336], [0.06217319518327713, 0.3260059058666229], [0.290440171957016, 0.19214685261249542], [0.2717708647251129, 0.45718052983283997], [0.47337135672569275, 0.2392512559890747], [0.26854974031448364, 0.45605215430259705]]], dtype='float32').reshape([1, 6, 2]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e5fb09b206e3388bbf7e54845dd8a24c(CinnTestBase, unittest.TestCase):
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e9794d9450adce988d634f341eec1191(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b6b38adfa529c8f8d05d54ff6f6fed67
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.4026823937892914, 0.4708717167377472], [0.22823500633239746, 0.07231664657592773], [0.4897056519985199, 0.011129551567137241], [0.37206071615219116, 0.07582680135965347], [0.40325236320495605, 0.4095800518989563], [0.458786278963089, 0.13427451252937317]]], dtype='float32').reshape([1, 6, 2]),
+            paddle.to_tensor([[[0.4071896970272064, 0.13613902032375336], [0.06217319518327713, 0.3260059058666229], [0.290440171957016, 0.19214685261249542], [0.2717708647251129, 0.45718052983283997], [0.47337135672569275, 0.2392512559890747], [0.26854974031448364, 0.45605215430259705]]], dtype='float32').reshape([1, 6, 2]),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code == (128 - 134):
+                # program paniced.
+                raise RuntimeError(f"file {__file__} panicked. stderr: {try_run_stderr}")
+        return self._test_entry()
 
 
 
