@@ -1,5 +1,5 @@
 testings:
-  dy2st_train_cinn:
+  dy2st_train_cinn_perf_pre:
     model_dtype: "float32"
     Loss:
       loss_name: "diy.loss.diy_loss.mean_loss"
@@ -9,11 +9,3 @@ testings:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.00001
     step: 1
-
-compare:
-  -
-    baseline: 'dy2st_train_cinn'
-    latest: 'dy2st_train_cinn'
-    precision:
-      delta: 0.00001
-      rtol: 0.000001

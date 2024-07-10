@@ -107,7 +107,7 @@ class LayerEvalBM(object):
 
         return time_res
 
-    def dy2st_eval_perf(self, perf_repeat=10):
+    def dy2st_eval_perf(self):
         """dygraph eval"""
         net = self._net_instant()
         st_net = paddle.jit.to_static(net, full_graph=True)
@@ -121,7 +121,7 @@ class LayerEvalBM(object):
         # 预热
         timeit.timeit(lambda: _perf(self.data), number=10)
         # timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
-        for i in range(perf_repeat):
+        for i in range(self.perf_repeat):
             start_time = time.time()
             for _ in range(self.timeit_num):
                 _perf(self.data)
@@ -144,7 +144,7 @@ class LayerEvalBM(object):
 
         return time_res
 
-    def _dy2st_eval_cinn_perf(self):
+    def _dy2st_eval_cinn_perf(self, perf_repeat=10):
         net = self._net_instant()
 
         build_strategy = paddle.static.BuildStrategy()
@@ -161,7 +161,7 @@ class LayerEvalBM(object):
         # 预热
         timeit.timeit(lambda: _perf(self.data), number=10)
         # timeit.timeit(lambda: _perf(self.data), number=int(self.perf_repeat * self.timeit_num * 0.2))
-        for i in range(self.perf_repeat):
+        for i in range(perf_repeat):
             start_time = time.time()
             for _ in range(self.timeit_num):
                 _perf(self.data)
