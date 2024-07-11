@@ -47,7 +47,7 @@ echo "*******ppdiffusers/deploy/sdxl ipadapter_sdxl_inference_img2img end*******
     --scheduler "ddim" \
     --backend paddle \
     --device gpu \
-    --task_name inpaint) 2>&1 | tee ${log_dir}/sdxl_inference_inpaint.log
+    --task_name inpaint) 2>&1 | tee ${log_dir}/ipadapter_sdxl_inference_inpaint.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -69,7 +69,7 @@ echo "*******ppdiffusers/deploy/sdxl ipadapter_sdxl_inference_inpaint end*******
     --height 512 \
     --inference_steps 30 \
     --tune True \
-    --use_fp16 False) 2>&1 | tee ${log_dir}/ipadapter_sdxl_inference_tune.log
+    --use_fp16 False) 2>&1 | tee ${log_dir}/ipadapter_ipadapter_sdxl_inference_tune.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -84,7 +84,7 @@ echo "*******ppdiffusers/deploy/sdxl ipadapter_sdxl_inference_tune end**********
     --model_dir static_model/stable-diffusion-xl-base-1.0-ipadapter \
     --scheduler "ddim" \
     --backend paddle_tensorrt \
-    --device gpu --task_name text2img) 2>&1 | tee ${log_dir}/sdxl_inference_tensorrt_text2img.log
+    --device gpu --task_name text2img) 2>&1 | tee ${log_dir}/ipadapter_sdxl_inference_tensorrt_text2img.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -100,7 +100,7 @@ echo "*******ppdiffusers/deploy/sdxl ipadapter_sdxl_inference_tensorrt_text2img 
     --scheduler "ddim" \
     --backend paddle_tensorrt \
     --device gpu \
-    --task_name img2img) 2>&1 | tee ${log_dir}/sdxl_inference_tensorrt_img2img.log
+    --task_name img2img) 2>&1 | tee ${log_dir}/ipadapter_sdxl_inference_tensorrt_img2img.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -116,7 +116,7 @@ echo "*******ppdiffusers/deploy/sdxl ipadapter_sdxl_inference_tensorrt_img2img e
     --scheduler "ddim" \
     --backend paddle_tensorrt \
     --device gpu \
-    --task_name inpaint) 2>&1 | tee ${log_dir}/sdxl_inference_tensorrt_inpaint.log
+    --task_name inpaint) 2>&1 | tee ${log_dir}/ipadapter_sdxl_inference_tensorrt_inpaint.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
