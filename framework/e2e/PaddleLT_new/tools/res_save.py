@@ -80,6 +80,17 @@ def load_tensor(filename):
     return data
 
 
+# dict 保存 为txt
+def save_txt(data, filename):
+    """
+    保存数据为txt
+    """
+    save_name = filename + ".txt"
+    with open(save_name, "w") as f:
+        for key in data.keys():
+            f.write("{}: {}\n".format(key, data[key]))
+
+
 # list 保存/加载 为pickle
 def save_pickle(data, filename):
     """
