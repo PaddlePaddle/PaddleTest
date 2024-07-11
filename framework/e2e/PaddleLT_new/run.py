@@ -187,12 +187,15 @@ class Run(object):
             )
 
         if os.environ.get("PLT_BM_EMAIL") == "True":
+            desc = os.environ.get("TESTING").split("/")[-1].split(".")[0]
             alarm = Alarm(storage="apibm_config.yml")
             alarm.email_send(
                 alarm.receiver,
-                f"Paddle {self.layer_type}子图性能数据",
+                f"Paddle {self.layer_type}子图性能数据{desc}",
                 f"表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file}\n"
+                f"\n"
                 f"GSB.txt下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/gsb_dict.txt\n"
+                f"\n"
                 # f"plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar\n"
                 # f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
