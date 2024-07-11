@@ -33,6 +33,9 @@ paddle_engine_map = {
     "jit_save": LayerExport,  # 动转静导出
     "jit_save_inputspec": LayerExport,  # 动转静+动态inputspec导出
     "jit_save_static_inputspec": LayerExport,  # 动转静+静态inputspec导出
+    "jit_save_cinn": LayerExport,  # 动转静CINN导出
+    "jit_save_cinn_inputspec": LayerExport,  # 动转静CINN+动态inputspec导出
+    "jit_save_cinn_static_inputspec": LayerExport,  # 动转静CINN+静态inputspec导出
     "paddle_infer_gpu": LayerInfer,  # gpu预测
     "paddle_infer_cpu": LayerInfer,  # cpu预测
     "paddle_infer_mkldnn": LayerInfer,  # cpu mkldnn预测
