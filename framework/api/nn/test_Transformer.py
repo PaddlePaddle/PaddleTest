@@ -6,6 +6,7 @@ test Transformer
 
 import pytest
 import paddle
+from paddle.base.framework import in_pir_mode
 from paddle.nn import Transformer
 from util import *
 
@@ -87,12 +88,20 @@ def test2():
     cross_attn_mask = paddle.rand((2, 2, 6, 4))
     transformer = Transformer(128, 2, 4, 4, 512, 0.5, "relu", 0.0, 0.0, False)
     output = transformer(enc_input, dec_input, enc_self_attn_mask, dec_self_attn_mask, cross_attn_mask)  # [2, 6, 128]
-    assert output[0].shape == (6, 128)
-    assert output.shape == (2, 6, 128)
+    if in_pir_mode():
+        assert output[0].shape == [6, 128]
+        assert output.shape == [2, 6, 128]
+    else:
+        assert output[0].shape == (6, 128)
+        assert output.shape == (2, 6, 128)
     transformer = Transformer(128, 2, 4, 4, 512, 1.0, "relu", 0.0, 0.0, False)
     output = transformer(enc_input, dec_input, enc_self_attn_mask, dec_self_attn_mask, cross_attn_mask)  # [2, 6, 128]
-    assert output[0].shape == (6, 128)
-    assert output.shape == (2, 6, 128)
+    if in_pir_mode():
+        assert output[0].shape == [6, 128]
+        assert output.shape == [2, 6, 128]
+    else:
+        assert output[0].shape == (6, 128)
+        assert output.shape == (2, 6, 128)
 
 
 if __name__ == "__main__":
