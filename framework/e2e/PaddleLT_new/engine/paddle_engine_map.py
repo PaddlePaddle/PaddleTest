@@ -31,6 +31,8 @@ paddle_engine_map = {
     "dy2st_eval_cinn_inputspec": LayerEval,  # CINN评估+动态inputspec
     "dy2st_eval_cinn_static_inputspec": LayerEval,  # CINN评估+静态inputspec
     "jit_save": LayerExport,  # 动转静导出
+    "jit_save_inputspec": LayerExport,  # 动转静+动态inputspec导出
+    "jit_save_static_inputspec": LayerExport,  # 动转静+静态inputspec导出
     "paddle_infer_gpu": LayerInfer,  # gpu预测
     "paddle_infer_cpu": LayerInfer,  # cpu预测
     "paddle_infer_mkldnn": LayerInfer,  # cpu mkldnn预测

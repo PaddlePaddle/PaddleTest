@@ -109,7 +109,7 @@ class LayerEval(object):
     def dy2st_eval_static_inputspec(self):
         """dy2st eval"""
         data, input_spec = self._net_input_and_static_spec()
-        Logger("dy2st_eval_static_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+        Logger("dy2st_eval_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
         st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
         # net.eval()
@@ -144,7 +144,7 @@ class LayerEval(object):
     def dy2st_eval_cinn_static_inputspec(self):
         """dy2st cinn eval with inputspec"""
         data, input_spec = self._net_input_and_static_spec()
-        Logger("dy2st_eval_cinn_static_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+        Logger("dy2st_eval_cinn_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
 
         build_strategy = paddle.static.BuildStrategy()

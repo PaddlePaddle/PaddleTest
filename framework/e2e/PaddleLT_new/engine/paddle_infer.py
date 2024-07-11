@@ -35,7 +35,7 @@ class LayerInfer(object):
 
         self.data = BuildData(layerfile=layerfile).get_single_numpy()
 
-        self.path = os.path.join(os.getcwd(), "test_prodct", layerfile.replace(".", "/"))
+        self.path = os.path.join(os.getcwd(), "jit_save_export", layerfile.replace(".", "/"))
 
     def paddle_infer_gpu(self):
         """infer load (layer)"""

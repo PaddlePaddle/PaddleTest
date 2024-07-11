@@ -12,22 +12,22 @@ from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 
+from tools.logger import Logger
+
 
 class LayerExport(object):
     """
     构建Layer导出的通用类
     """
 
-    # def __init__(self, testing, layerfile, device_id):
-    def __init__(self, testing, layerfile):
+    def __init__(self, testing, layerfile, device_place_id):
         """
         初始化
         """
         self.seed = 33
         reset(self.seed)
         self.device = os.environ.get("PLT_SET_DEVICE")
-        paddle.set_device(str(self.device))
-        # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
+        paddle.set_device(f"{self.device}:{device_place_id}")
 
         self.modelpath = layerfile.replace(".py", "").rsplit(".", 1)[0].replace(".", "/")
         self.layername = layerfile.replace(".py", "").rsplit(".", 1)[1].replace(".", "/")
@@ -37,19 +37,69 @@ class LayerExport(object):
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 
-        self.net = BuildLayer(layerfile=layerfile).get_layer()
+        self.path = os.path.join(os.getcwd(), "jit_save_export", self.modelpath)
 
-        self.data = BuildData(layerfile=layerfile).get_single_data()
+    def _net_input(self):
+        """get input"""
+        reset(self.seed)
+        data = BuildData(layerfile=self.layerfile).get_single_data()
+        return data
 
-        self.path = os.path.join(os.getcwd(), "test_prodct", self.modelpath)
+    def _net_instant(self):
+        """get net"""
+        reset(self.seed)
+        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        return net
+
+    def _net_input_and_spec(self):
+        """get input and inputspec"""
+        reset(self.seed)
+        data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_spec()
+        return data, input_spec
+
+    def _net_input_and_static_spec(self):
+        """get input and static inputspec"""
+        reset(self.seed)
+        data, input_spec = BuildData(layerfile=self.layerfile).get_single_input_and_static_spec()
+        return data, input_spec
+
+    def _net_input_and_multi_spec(self):
+        """get input and multi inputspec"""
+        reset(self.seed)
+        data, spec_gen = BuildData(layerfile=self.layerfile).get_single_input_and_multi_spec()
+        return data, spec_gen
 
     def jit_save(self):
         """jit.save(layer)"""
-        reset(self.seed)
-
-        net = paddle.jit.to_static(self.net)
-        net.eval()
-        net(*self.data)
+        st_net = paddle.jit.to_static(self._net_instant())
+        st_net.eval()
+        st_net(*self._net_input())
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
-        paddle.jit.save(net, path=os.path.join(self.path, self.layername))
+        paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save"))
+
+    def jit_save_inputspec(self):
+        """jit.save(layer)"""
+        data, input_spec = self._net_input_and_spec()
+        Logger("jit_save_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+
+        net = self._net_instant()
+        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        st_net.eval()
+        # st_net(*self._net_input())
+
+        # paddle.jit.save(net, path=os.path.join(self.path, self.case))
+        paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save_inputspec"))
+
+    def jit_save_static_inputspec(self):
+        """jit.save(layer)"""
+        data, input_spec = self._net_input_and_static_spec()
+        Logger("jit_save_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
+
+        net = self._net_instant()
+        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        st_net.eval()
+        # st_net(*self._net_input())
+
+        # paddle.jit.save(net, path=os.path.join(self.path, self.case))
+        paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save_static_inputspec"))
