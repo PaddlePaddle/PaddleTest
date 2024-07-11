@@ -98,26 +98,55 @@ def IsCinnStageEnableDiff():
         assert GetCurrentCinnStage() is not None
     return enabled
 
-last_cinn_stage_exit_code = None
-def LastCINNStageFailed():
-    global last_cinn_stage_exit_code
-    if last_cinn_stage_exit_code is not None:
-        return last_cinn_stage_exit_code != 0
-    last_stage = GetPrevCinnStage(GetCurrentCinnStage())
+def GetExitCodeAndStdErr(cmd, env):
+    import subprocess
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=env,
+    )
+    return result.returncode, result.stderr
+
+def GetStageExitCodeAndStdErr(stage):
+    return GetExitCodeAndStdErr(
+        [sys.executable, __file__],
+        env=dict(
+            PADDLE_DEBUG_CINN_STAGE_NAME=stage.name,
+            PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
+            PYTHONPATH=os.getenv('PYTHONPATH'),
+            ATHENA_ENABLE_TRY_RUN="False",
+        ),
+    )
+
+def AthenaTryRunEnabled():
+    return os.getenv('ATHENA_ENABLE_TRY_RUN') not in {
+        "0",
+        "False",
+        "false",
+        "OFF"
+    }
+
+def GetNeedSkipAndSkipMessage():
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    if not IsCinnStageEnableDiff():
+        return False, ""
+    last_stage = GetPrevCinnStage(current_stage)
     if last_stage is None:
-        return False
-    env_vars = dict(
-        PADDLE_DEBUG_CINN_STAGE_NAME=last_stage.name,
-        PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
-    )
-    env_vars_str = " ".join(
-        f"{env_var}={value}"
-        for env_var, value in env_vars.items()
-    )
-    last_cinn_stage_exit_code = os.system(
-        f"{env_vars_str} {sys.executable} {__file__} > /dev/null 2>&1"
-    )
-    return last_cinn_stage_exit_code != 0
+        return False, ""
+    exitcode, stderr = GetStageExitCodeAndStdErr(last_stage)
+    if exitcode != 0:
+        return True, f"last stage failed. stderr: {stderr}"
+    return False, ""
+
+def GetCurrentStageTryRunExitCodeAndStdErr():
+    if not AthenaTryRunEnabled():
+        return False, ""
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    return GetStageExitCodeAndStdErr(current_stage)
 
 def SetDefaultEnv(**env_var2value):
     for env_var, value in env_var2value.items():
@@ -236,7 +265,7 @@ class CinnTestBase:
         paddle.seed(2024)
         self.prepare_data()
 
-    def test_train(self):
+    def _test_entry(self):
         dy_outs = self.train(use_cinn=False)
         cinn_outs = self.train(use_cinn=GetEnvVarEnableCinn())
 
@@ -287,7 +316,8 @@ class CinnTestBase:
 
 
 
-last_stage_failed = (IsCinnStageEnableDiff() and LastCINNStageFailed())
+need_skip, skip_message = GetNeedSkipAndSkipMessage()
+try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
 class PrimitiveOp_e04e49efe4c6e05217d3d37566ab8399(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -308,7 +338,7 @@ class PrimitiveOp_e04e49efe4c6e05217d3d37566ab8399(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8b02fafaf0add0ce4fbd922e8c03415b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -318,6 +348,16 @@ class TestPrimitiveOp_8b02fafaf0add0ce4fbd922e8c03415b(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 64, 128], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_c7a8ae7e9b69f7d8bbef302da817f464(InstanceTrait, paddle.nn.Layer):
@@ -340,7 +380,7 @@ class PrimitiveOp_c7a8ae7e9b69f7d8bbef302da817f464(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8be7eb68fce4ce4580fa986b93a7f35e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -350,6 +390,16 @@ class TestPrimitiveOp_8be7eb68fce4ce4580fa986b93a7f35e(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 64, 128], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_71c5763fe9ce3b59f9d1d459912d88c7(InstanceTrait, paddle.nn.Layer):
@@ -372,7 +422,7 @@ class PrimitiveOp_71c5763fe9ce3b59f9d1d459912d88c7(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_00626a62202c5940f84100de039f77c2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -382,6 +432,16 @@ class TestPrimitiveOp_00626a62202c5940f84100de039f77c2(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 97, 97], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_1a59c9fe608e29ea9182d66395e941d6(InstanceTrait, paddle.nn.Layer):
@@ -404,7 +464,7 @@ class PrimitiveOp_1a59c9fe608e29ea9182d66395e941d6(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_9e64359e925a416c74bd94f8fbb4ffe2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -414,6 +474,16 @@ class TestPrimitiveOp_9e64359e925a416c74bd94f8fbb4ffe2(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 64, 128], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_8432eb9b61c4e343e879f2d8f24636bc(InstanceTrait, paddle.nn.Layer):
@@ -436,7 +506,7 @@ class PrimitiveOp_8432eb9b61c4e343e879f2d8f24636bc(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_f4203787494aeda1f294ace8219cf0dd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -446,6 +516,16 @@ class TestPrimitiveOp_f4203787494aeda1f294ace8219cf0dd(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 64, 128], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_9d43552676c39f6ad32b4a2c5332fadc(InstanceTrait, paddle.nn.Layer):
@@ -468,7 +548,7 @@ class PrimitiveOp_9d43552676c39f6ad32b4a2c5332fadc(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_cb5ff0abccb5b2b146c0d56f32b53deb(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -478,6 +558,16 @@ class TestPrimitiveOp_cb5ff0abccb5b2b146c0d56f32b53deb(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 64, 128], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_44fcbccc1fa85befe9471e89bf9a9555(InstanceTrait, paddle.nn.Layer):
@@ -500,7 +590,7 @@ class PrimitiveOp_44fcbccc1fa85befe9471e89bf9a9555(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_2a2831a84ddf6dce628817d399621d98(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -510,6 +600,16 @@ class TestPrimitiveOp_2a2831a84ddf6dce628817d399621d98(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 64, 128], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_7a3feed3bbe3876bd895c439ff50e906(InstanceTrait, paddle.nn.Layer):
@@ -532,7 +632,7 @@ class PrimitiveOp_7a3feed3bbe3876bd895c439ff50e906(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_a317170c27db091587ffaf2fcc755c1b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -542,6 +642,16 @@ class TestPrimitiveOp_a317170c27db091587ffaf2fcc755c1b(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 97, 97], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_872feb3ccf997d2a2cd4991cbd7cd464(InstanceTrait, paddle.nn.Layer):
@@ -564,7 +674,7 @@ class PrimitiveOp_872feb3ccf997d2a2cd4991cbd7cd464(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_b5c20a025ca7e7c2be1e8256ed0cda94(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -574,6 +684,16 @@ class TestPrimitiveOp_b5c20a025ca7e7c2be1e8256ed0cda94(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 64, 128], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 class PrimitiveOp_082bc23840fb55b0d899b16a4d9c26e4(InstanceTrait, paddle.nn.Layer):
@@ -596,7 +716,7 @@ class PrimitiveOp_082bc23840fb55b0d899b16a4d9c26e4(InstanceTrait, paddle.nn.Laye
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_416470229ef1768738783fee4f54efca(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
@@ -606,6 +726,16 @@ class TestPrimitiveOp_416470229ef1768738783fee4f54efca(CinnTestBase, unittest.Te
             paddle.uniform([1, 512, 1, 64, 128], dtype='float32', min=0, max=0.5),
         ]
 
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
 
 
 
