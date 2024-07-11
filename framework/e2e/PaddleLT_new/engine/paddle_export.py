@@ -29,13 +29,13 @@ class LayerExport(object):
         self.device = os.environ.get("PLT_SET_DEVICE")
         paddle.set_device(f"{self.device}:{device_place_id}")
 
-        self.modelpath = layerfile.replace(".py", "").rsplit(".", 1)[0].replace(".", "/")
-        self.layername = layerfile.replace(".py", "").rsplit(".", 1)[1].replace(".", "/")
-
         self.testing = testing
-
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
+
+        self.layerfile = layerfile
+        self.modelpath = self.layerfile.replace(".py", "").rsplit(".", 1)[0].replace(".", "/")
+        self.layername = self.layerfile.replace(".py", "").rsplit(".", 1)[1].replace(".", "/")
 
         self.path = os.path.join(os.getcwd(), "jit_save_export", self.modelpath)
 
