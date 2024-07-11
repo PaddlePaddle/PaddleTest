@@ -23,7 +23,8 @@ class Test(unittest.TestCase):
         test_transformer_decoder_layer
         """
         paddle.seed(2020)
-        paddle.framework.random._manual_program_seed(2020)
+        with paddle.pir_utils.OldIrGuard():
+            paddle.framework.random._manual_program_seed(2020)
         activation = "relu"
         normalize_before = False
         batch_size, d_model, n_head, dim_feedforward, dropout = generate_basic_params(mode="decoder_layer")[:5]
