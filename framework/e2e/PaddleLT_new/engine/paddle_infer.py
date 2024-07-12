@@ -63,7 +63,7 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
 
     def paddle_infer_cpu(self):
         """infer load (layer)"""
@@ -92,7 +92,7 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
 
     def paddle_infer_mkldnn(self):
         """infer load (layer)"""
@@ -123,7 +123,7 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
 
     def paddle_infer_ort(self):
         """infer load (layer)"""
@@ -153,7 +153,7 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
 
     def paddle_infer_new_exc_pir(self):
         """infer load (layer)"""
@@ -186,4 +186,4 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
