@@ -3,7 +3,7 @@
 rm -rf ./sd-pokemon-model/
 
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
-export dataset_name="lambdalabs/pokemon-blip-captions"
+export dataset_name="lambdalabs/naruto-blip-captions"
 
 python -u train_text_to_image.py \
   --pretrained_model_name_or_path=$MODEL_NAME \

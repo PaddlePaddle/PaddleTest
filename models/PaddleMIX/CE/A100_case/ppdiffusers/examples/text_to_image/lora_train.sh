@@ -2,7 +2,7 @@
 
 export MODEL_NAME="stabilityai/stable-diffusion-xl-base-1.0"
 export VAE_NAME="madebyollin/sdxl-vae-fp16-fix"
-export DATASET_NAME="lambdalabs/pokemon-blip-captions"
+export DATASET_NAME="lambdalabs/naruto-blip-captions"
 
 export HF_ENDPOINT=https://hf-mirror.com
 export FLAGS_conv_workspace_size_limit=4096

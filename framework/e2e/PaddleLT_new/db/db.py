@@ -149,6 +149,8 @@ class DB(object):
         env_info,
         framework,
         agile_pipeline_build_id,
+        testing,
+        plt_perf_content,
         layer_type,
         commit,
         version,
@@ -168,6 +170,8 @@ class DB(object):
             "env_info": env_info,
             "framework": framework,
             "agile_pipeline_build_id": agile_pipeline_build_id,
+            "testing": testing,
+            "plt_perf_content": plt_perf_content,
             "layer_type": layer_type,
             "commit": commit,
             "version": version,
@@ -211,11 +215,13 @@ class DB(object):
         data = {"status": status, "update_time": update_time}
         self.update_by_id(table="layer_job", data=data, id=id)
 
-    def select_baseline_job(self, comment, base, ci, md5_id):
+    def select_baseline_job(self, comment, testing, plt_perf_content, base, ci, md5_id):
         """通过comment字段、ci字段、机器唯一标识码，查找baseline数据"""
         condition_list = [
             "comment = '{}'".format(comment),
             "status = 'done'",
+            "testing = '{}'".format(testing),
+            "plt_perf_content = '{}'".format(plt_perf_content),
             "base = '{}'".format(base),
             "ci = '{}'".format(ci),
             "md5_id = '{}'".format(md5_id),

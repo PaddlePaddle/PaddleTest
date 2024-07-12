@@ -6,6 +6,7 @@
 测试执行器
 """
 import os
+import shutil
 import subprocess
 from subprocess import TimeoutExpired
 import multiprocessing
@@ -20,9 +21,9 @@ from tools.case_select import CaseSelect
 from tools.logger import Logger
 from tools.yaml_loader import YamlLoader
 from tools.json_loader import JSONLoader
-from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle
+from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle, save_txt
 from tools.upload_bos import UploadBos
-from tools.statistics import split_list
+from tools.statistics import split_list, sublayer_perf_gsb_gen, kernel_perf_gsb_gen
 from tools.alarm import Alarm
 
 
@@ -168,21 +169,35 @@ class Run(object):
         if os.path.exists(excel_file):
             UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path=excel_file)
             self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, excel_file))
-        os.system("tar -czf plot.tar *.png")
-        UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="plot.tar")
-        self.logger.get_log().info("plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "plot.tar"))
-        os.system("tar -czf pickle.tar *.pickle")
-        UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="pickle.tar")
-        self.logger.get_log().info("pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "pickle.tar"))
+
+        if os.path.exists("gsb_dict.txt"):
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="gsb_dict.txt")
+            self.logger.get_log().info(
+                "GSB.txt下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "gsb_dict.txt")
+            )
+
+        if os.environ.get("PLT_BM_PLOT") == "True":
+            os.system("tar -czf plot.tar *.png")
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="plot.tar")
+            self.logger.get_log().info("plot下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "plot.tar"))
+            os.system("tar -czf pickle.tar *.pickle")
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path="pickle.tar")
+            self.logger.get_log().info(
+                "pickle下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, "pickle.tar")
+            )
 
         if os.environ.get("PLT_BM_EMAIL") == "True":
+            desc = os.environ.get("TESTING").split("/")[-1].split(".")[0]
             alarm = Alarm(storage="apibm_config.yml")
             alarm.email_send(
                 alarm.receiver,
-                f"Paddle {self.layer_type}子图性能数据",
+                f"Paddle {self.layer_type}子图性能数据{desc}",
                 f"表格下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/{excel_file}\n"
-                f"plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar\n"
-                f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
+                f"\n"
+                f"GSB.txt下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/gsb_dict.txt\n"
+                f"\n"
+                # f"plot下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/plot.tar\n"
+                # f"pickle下载链接: https://paddle-qa.bj.bcebos.com/{bos_path}/pickle.tar",
             )
 
     def _single_pytest_run(self, py_file, testing, device_place_id=0):
@@ -450,7 +465,9 @@ class Run(object):
         compare_list = YamlLoader(yml=self.testing).yml.get("compare")
         for py_file in self.py_list:
             if os.environ.get("PLT_BM_ERROR_CHECK") == "True":  # 先跑功能看是否能通过
-                _py_file, _exit_code = self._single_pytest_run(py_file=py_file, testing="yaml/dy2stcinn_eval.yml")
+                _py_file, _exit_code = self._single_pytest_run(
+                    py_file=py_file, testing="yaml/pre-dy2stcinn_train_bm.yml"
+                )
                 if _exit_code is not None:
                     error_list.append(_py_file)
                     error_count += 1
@@ -485,8 +502,11 @@ class Run(object):
 
     def _perf_unit_test_run(self):
         """run some test"""
-        if not os.path.exists("./nv_report"):
-            os.makedirs(name="./nv_report")
+        if os.path.exists("./nv_report"):
+            shutil.rmtree("./nv_report")
+            self.logger.get_log().info("已删除./nv_report路径以及其内容")
+        os.makedirs(name="./nv_report")
+
         sublayer_dict = {}
         error_count = 0
         error_list = []
@@ -562,7 +582,7 @@ class Run(object):
                     kernel_count = df["Instances"].sum()
 
                     perf_dict[plt_exc + "-" + "kernel_time"] = kernel_time
-                    perf_dict[plt_exc + "-" + "kernel_count"] = kernel_count
+                    perf_dict[plt_exc + "-" + "kernel_count"] = int(kernel_count)  # int64无法json化, 所以先转为通用int
                     self.logger.get_log().info("kernel time and count: ")
                     self.logger.get_log().info(f"kernel time is {kernel_time}")
                     self.logger.get_log().info(f"kernel count is {kernel_count}")
@@ -604,6 +624,7 @@ class Run(object):
                     baseline_layer_type=baseline_layer_type,
                     latest_layer_type=self.layer_type,
                 )
+                gsb_dict = kernel_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
             else:
                 compare_dict = perf_compare_dict(
                     compare_list=compare_list,
@@ -613,6 +634,8 @@ class Run(object):
                     baseline_layer_type=baseline_layer_type,
                     latest_layer_type=self.layer_type,
                 )
+                gsb_dict = sublayer_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
+            save_txt(data=gsb_dict, filename="gsb_dict")
             xlsx_save(
                 sublayer_dict=compare_dict,
                 excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",

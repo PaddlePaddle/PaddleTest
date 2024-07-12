@@ -3,7 +3,7 @@
 # @author Zeref996
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-eval 方法
+train 方法
 """
 import os
 import timeit
@@ -13,12 +13,14 @@ import paddle
 from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
+from generator.builder_optimizer import BuildOptimizer
+from generator.builder_loss import BuildLoss
 from tools.res_save import save_pickle
 from tools.statistics import trimmean, mean, best, best_top_k, perf_by_step
 from tools.logger import Logger
 
 
-class LayerEvalBM(object):
+class LayerTrainBM(object):
     """
     构建Layer评估的性能通用类
     """
@@ -47,6 +49,7 @@ class LayerEvalBM(object):
         paddle.set_default_dtype(self.model_dtype)
 
         self.layerfile = layerfile
+        self.step = self.testing.get("step")
         self.data = BuildData(layerfile=self.layerfile).get_single_tensor()
         self.logger = Logger("LayerEvalBM")
 
@@ -55,6 +58,22 @@ class LayerEvalBM(object):
         reset(self.seed)
         net = BuildLayer(layerfile=self.layerfile).get_layer()
         return net
+
+    def _net_optimizer(self):
+        """get optimizer"""
+        reset(self.seed)
+        optimizer_name = self.testing.get("optimizer").get("optimizer_name")
+        optimizer_param = self.testing.get("optimizer").get("params")
+        optimizer = BuildOptimizer(optimizer_name=optimizer_name, optimizer_param=optimizer_param)
+        return optimizer
+
+    def _net_loss(self):
+        """get net"""
+        reset(self.seed)
+        loss_name = self.testing.get("Loss").get("loss_name")
+        loss_param = self.testing.get("Loss").get("params")
+        loss = BuildLoss(loss_name=loss_name, loss_param=loss_param)
+        return loss
 
     def _set_cinn_flags(self):
         """
@@ -71,14 +90,29 @@ class LayerEvalBM(object):
 
         self.logger.get_log().info("_set_cinn_flags 性能测试过程中, 成功追加设定prim_cinn_sot_pir相关FLAGS~~")
 
-    def dy_eval_perf(self):
-        """dygraph eval"""
+    def dy_train_perf(self):
+        """dygraph train"""
+        # net = self._net_instant()
         net = self._net_instant()
-        net.eval()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
+        net.train()
+
+        # 构建optimizer用于训练
+        if net.parameters():
+            opt = optimizer.get_opt(net=net)
 
         def _perf(input_data):
-            logit = net(*input_data)
-            return logit
+            for epoch in range(self.step):
+                logit = net(*input_data)
+                # 构建loss用于训练
+                dy_loss = loss.get_loss(logit)
+                dy_loss.backward()
+                if net.parameters():
+                    opt.step()
+                    opt.clear_grad()
+            # logit = net(*input_data)
+            return dy_loss
 
         total_time_list = []
         # 预热
@@ -94,12 +128,12 @@ class LayerEvalBM(object):
             total_time_list.append(total_time)
 
         if os.environ.get("PLT_BM_PLOT") == "True":
-            save_pickle(data=total_time_list, filename="dy_eval_perf_" + self.layerfile)
+            save_pickle(data=total_time_list, filename="dy_train_perf_" + self.layerfile)
             # 画图
             perf_by_step(
                 data_list=total_time_list,
                 step_scale=[0.1, 0.5, 1],
-                filename="dy_eval_perf_" + self.layerfile + "_by_step",
+                filename="dy_train_perf_" + self.layerfile + "_by_step",
             )
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
@@ -107,15 +141,30 @@ class LayerEvalBM(object):
 
         return time_res
 
-    def dy2st_eval_perf(self):
-        """dygraph eval"""
+    def dy2st_train_perf(self):
+        """dygraph train"""
         net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
+
+        net.train()
         st_net = paddle.jit.to_static(net, full_graph=True)
-        st_net.eval()
+
+        # 构建optimizer用于训练
+        if st_net.parameters():
+            opt = optimizer.get_opt(net=st_net)
 
         def _perf(input_data):
-            logit = st_net(*input_data)
-            return logit
+            for epoch in range(self.step):
+                logit = st_net(*input_data)
+                # 构建loss用于训练
+                dy_loss = loss.get_loss(logit)
+                dy_loss.backward()
+                if st_net.parameters():
+                    opt.step()
+                    opt.clear_grad()
+            # logit = st_net(*input_data)
+            return dy_loss
 
         total_time_list = []
         # 预热
@@ -131,12 +180,12 @@ class LayerEvalBM(object):
             total_time_list.append(total_time)
 
         if os.environ.get("PLT_BM_PLOT") == "True":
-            save_pickle(data=total_time_list, filename="dy_eval_perf_" + self.layerfile)
+            save_pickle(data=total_time_list, filename="dy_train_perf_" + self.layerfile)
             # 画图
             perf_by_step(
                 data_list=total_time_list,
                 step_scale=[0.1, 0.5, 1],
-                filename="dy_eval_perf_" + self.layerfile + "_by_step",
+                filename="dy_train_perf_" + self.layerfile + "_by_step",
             )
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
@@ -144,17 +193,29 @@ class LayerEvalBM(object):
 
         return time_res
 
-    def _dy2st_eval_cinn_perf(self, perf_repeat=10):
+    def _dy2st_train_cinn_perf(self, perf_repeat=10):
         net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
 
+        net.train()
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
-        cinn_net.eval()
 
-        # net.eval()
+        # 构建optimizer用于训练
+        if cinn_net.parameters():
+            opt = optimizer.get_opt(net=cinn_net)
+
         def _perf(input_data):
-            logit = cinn_net(*input_data)
+            for epoch in range(self.step):
+                logit = cinn_net(*input_data)
+                # 构建loss用于训练
+                dy_loss = loss.get_loss(logit)
+                dy_loss.backward()
+                if cinn_net.parameters():
+                    opt.step()
+                    opt.clear_grad()
             return logit
 
         total_time_list = []
@@ -171,12 +232,12 @@ class LayerEvalBM(object):
             total_time_list.append(total_time)
 
         if os.environ.get("PLT_BM_PLOT") == "True":
-            save_pickle(data=total_time_list, filename="dy_eval_perf_" + self.layerfile)
+            save_pickle(data=total_time_list, filename="dy_train_perf_" + self.layerfile)
             # 画图
             perf_by_step(
                 data_list=total_time_list,
                 step_scale=[0.1, 0.5, 1],
-                filename="dy_eval_perf_" + self.layerfile + "_by_step",
+                filename="dy_train_perf_" + self.layerfile + "_by_step",
             )
 
         time_res = eval(self.perf_statis)(data_list=total_time_list)
@@ -184,14 +245,14 @@ class LayerEvalBM(object):
 
         return time_res
 
-    def dy2st_eval_cinn_perf(self):
-        """dy2st eval"""
+    def dy2st_train_cinn_perf(self):
+        """dy2st train"""
         with paddle.decomposition.decomp.prim_guard():
-            result = self._dy2st_eval_cinn_perf(perf_repeat=self.perf_repeat)
+            result = self._dy2st_train_cinn_perf(perf_repeat=self.perf_repeat)
         return result
 
-    def dy2st_eval_cinn_perf_pre(self):
-        """dy2st eval"""
+    def dy2st_train_cinn_perf_pre(self):
+        """dy2st train"""
         with paddle.decomposition.decomp.prim_guard():
-            result = self._dy2st_eval_cinn_perf(perf_repeat=10)
+            result = self._dy2st_train_cinn_perf(perf_repeat=10)
         return result
