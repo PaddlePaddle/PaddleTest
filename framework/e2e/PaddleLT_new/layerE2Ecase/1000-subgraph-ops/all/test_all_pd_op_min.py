@@ -99,6 +99,11 @@ def IsCinnStageEnableDiff():
     return enabled
 
 def GetExitCodeAndStdErr(cmd, env):
+    env = {
+        k:v
+        for k, v in env.items()
+        if v is not None
+    }
     import subprocess
     result = subprocess.run(
         cmd,
@@ -339,13 +344,13 @@ class PrimitiveOp_b6b38adfa529c8f8d05d54ff6f6fed67(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_efe7f610701b0a04e6e98502404a21e0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ef3d49e0308b06d7ba40399ad4a07c96(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b6b38adfa529c8f8d05d54ff6f6fed67
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.3733748197555542, 0.3169967234134674], [0.48616519570350647, 0.3796095550060272], [0.4304960072040558, 0.20171089470386505], [0.36689379811286926, 0.07088807225227356], [0.36358749866485596, 0.41180381178855896], [0.2821480333805084, 0.22422851622104645]]], dtype='float32').reshape([1, 6, 2]),
+            paddle.to_tensor([[[0.2346169650554657, 0.24948328733444214], [0.2773289084434509, 0.49571195244789124], [0.20115098357200623, 0.48211953043937683], [0.4969460070133209, 0.4321368932723999], [0.07187119126319885, 0.46304598450660706], [0.45128872990608215, 0.42227795720100403]]], dtype='float32').reshape([1, 6, 2]),
         ]
 
 
@@ -360,13 +365,13 @@ class TestPrimitiveOp_efe7f610701b0a04e6e98502404a21e0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_efe7f610701b0a04e6e98502404a21e0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ef3d49e0308b06d7ba40399ad4a07c96(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b6b38adfa529c8f8d05d54ff6f6fed67
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.3733748197555542, 0.3169967234134674], [0.48616519570350647, 0.3796095550060272], [0.4304960072040558, 0.20171089470386505], [0.36689379811286926, 0.07088807225227356], [0.36358749866485596, 0.41180381178855896], [0.2821480333805084, 0.22422851622104645]]], dtype='float32').reshape([1, 6, 2]),
+            paddle.to_tensor([[[0.2346169650554657, 0.24948328733444214], [0.2773289084434509, 0.49571195244789124], [0.20115098357200623, 0.48211953043937683], [0.4969460070133209, 0.4321368932723999], [0.07187119126319885, 0.46304598450660706], [0.45128872990608215, 0.42227795720100403]]], dtype='float32').reshape([1, 6, 2]),
         ]
 
 
