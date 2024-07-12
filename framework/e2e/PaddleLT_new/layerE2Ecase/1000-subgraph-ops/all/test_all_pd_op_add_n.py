@@ -350,20 +350,20 @@ class PrimitiveOp_70dff390cf35e110d71c7dfd9d98d172(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_9618ec3d184e983c2f8e4319d8aaba50(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c91661f91b49f9bc05bf0827e6d35234(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_70dff390cf35e110d71c7dfd9d98d172
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4431421160697937], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.15598748624324799], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.4040181636810303], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.01236765831708908], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.2866763472557068], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.2134021520614624], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.1186891496181488], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.37546035647392273], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3236655592918396], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.10409817099571228], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.01465144008398056], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3333783447742462], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3835933804512024], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.20267482101917267], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.0663292333483696], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.16793742775917053], dtype='float32').reshape([1]),
         ]
 
 
@@ -374,7 +374,7 @@ class TestPrimitiveOp_9618ec3d184e983c2f8e4319d8aaba50(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
         return self._test_entry()
 
 
@@ -406,21 +406,21 @@ class PrimitiveOp_17456f6fd3fbca9bffe3a563036a94b3(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_de3bdde0e448ecc701eb363d6b2e73c6(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9197384cfbdd21aa290a5dbfa19a2397(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_17456f6fd3fbca9bffe3a563036a94b3
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.28434616327285767], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.12836074829101562], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.14380356669425964], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.3972761034965515], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.16920194029808044], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.23396719992160797], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.12249168753623962], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.2890128195285797], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.35508015751838684], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3664098083972931], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.44523531198501587], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.35769784450531006], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.2137250006198883], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.17365959286689758], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.16154514253139496], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.21334043145179749], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.43554338812828064], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.48988425731658936], dtype='float32').reshape([1]),
         ]
 
 
@@ -431,24 +431,24 @@ class TestPrimitiveOp_de3bdde0e448ecc701eb363d6b2e73c6(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_9618ec3d184e983c2f8e4319d8aaba50(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c91661f91b49f9bc05bf0827e6d35234(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_70dff390cf35e110d71c7dfd9d98d172
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4431421160697937], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.15598748624324799], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.4040181636810303], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.01236765831708908], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.2866763472557068], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.2134021520614624], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.1186891496181488], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.37546035647392273], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3236655592918396], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.10409817099571228], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.01465144008398056], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3333783447742462], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3835933804512024], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.20267482101917267], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.0663292333483696], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.16793742775917053], dtype='float32').reshape([1]),
         ]
 
 
@@ -459,25 +459,25 @@ class TestPrimitiveOp_9618ec3d184e983c2f8e4319d8aaba50(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_de3bdde0e448ecc701eb363d6b2e73c6(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9197384cfbdd21aa290a5dbfa19a2397(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_17456f6fd3fbca9bffe3a563036a94b3
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.28434616327285767], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.12836074829101562], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.14380356669425964], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.3972761034965515], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.16920194029808044], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.23396719992160797], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.12249168753623962], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.2890128195285797], dtype='float32').reshape([1]),
-            paddle.to_tensor([0.35508015751838684], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3664098083972931], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.44523531198501587], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.35769784450531006], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.2137250006198883], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.17365959286689758], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.16154514253139496], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.21334043145179749], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.43554338812828064], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.48988425731658936], dtype='float32').reshape([1]),
         ]
 
 
@@ -488,7 +488,7 @@ class TestPrimitiveOp_de3bdde0e448ecc701eb363d6b2e73c6(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"file {__file__} panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
         return self._test_entry()
 
 
