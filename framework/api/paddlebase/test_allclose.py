@@ -4,7 +4,7 @@
 """
 test allclose
 """
-from apibase import APIBase
+from apibase import APIBase, TestWithoutPIR
 import paddle
 import pytest
 import numpy as np
@@ -60,15 +60,14 @@ def test_allclose1():
     """
     paddle.allclose() returns False when the difference equals threshold,it's a bug
     """
-    if paddle.framework.use_pir_api():
-        return
     x = np.array([10.1])
     y = np.array([10])
     a = 0.0
     r = 0.01
     res = np.allclose(x, y, rtol=r, atol=a, equal_nan=False)
     res = np.array(res)
-    obj2.run(res=res, x=x, y=y, rtol=r, atol=a, equal_nan=False)
+    with TestWithoutPIR(obj2):
+        obj2.run(res=res, x=x, y=y, rtol=r, atol=a, equal_nan=False)
 
 
 @pytest.mark.api_base_allclose_parameters
