@@ -287,7 +287,7 @@ def kernel_perf_gsb_gen(compare_dict, compare_list):
                 else:
                     count_res = (
                         perf_dict[compare["latest"] + "-kernel_count^layercase"]
-                        - perf_dict[compare["baseline"] + "-kernel_count^layercase^baseline"]
+                        - perf_dict[compare["baseline"] + "-kernel_count^layercase"]
                     )
 
                 single_gsb_dict = gsb_count_rule(
