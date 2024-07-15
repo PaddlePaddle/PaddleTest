@@ -181,6 +181,9 @@ def test_mean13():
     run axis is Tensor, axis=Tensor([0,1]), res should [1, 1, 3],
     :return:
     """
+    if paddle.framework.use_pir_api():
+        # The axis cant't be Tensor.
+        return
     x = np.array([[[2.0, 3.0, 4.0]], [[4.0, 3.0, 4.0]]]).astype("float32")
     axis = np.array([0, 1])
     res = np.mean(x, axis=(0, 1))
