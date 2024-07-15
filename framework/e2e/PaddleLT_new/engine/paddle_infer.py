@@ -27,8 +27,8 @@ class LayerInfer(object):
         self.seed = 33
         reset(self.seed)
         self.device = os.environ.get("PLT_SET_DEVICE")
+        self.device_id = device_place_id
         paddle.set_device(f"{self.device}:{device_place_id}")
-        # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
 
         self.testing = testing
         self.jit_save_type = self.testing.get("jit_save_type")
