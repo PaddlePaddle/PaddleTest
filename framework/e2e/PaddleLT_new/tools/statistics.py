@@ -281,7 +281,7 @@ def kernel_perf_gsb_gen(compare_dict, compare_list):
                 gsb_dict[compare["latest"] + "^" + compare["baseline"] + "^" + "kernel_time_compare"] = single_gsb_dict
 
                 if isinstance(perf_dict[compare["latest"] + "-kernel_count^layercase"], int) or isinstance(
-                    perf_dict[compare["baseline"] + "-kernel_count^layercase^baseline"], int
+                    perf_dict[compare["baseline"] + "-kernel_count^layercase"], int
                 ):
                     count_res = "error"
                 else:
