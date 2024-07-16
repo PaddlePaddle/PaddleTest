@@ -34,7 +34,7 @@ cinn_stages = [
     Stage(
         name="infer_symbolic",
         env_vars=dict(
-            PADDLE_DEBUG_ENABLE_CINN=True,
+            PADDLE_DEBUG_ENABLE_CINN=False,
             FLAGS_prim_all=True,
             FLAGS_prim_enable_dynamic=True,
             FLAGS_use_cinn=False,
@@ -98,26 +98,60 @@ def IsCinnStageEnableDiff():
         assert GetCurrentCinnStage() is not None
     return enabled
 
-last_cinn_stage_exit_code = None
-def LastCINNStageFailed():
-    global last_cinn_stage_exit_code
-    if last_cinn_stage_exit_code is not None:
-        return last_cinn_stage_exit_code != 0
-    last_stage = GetPrevCinnStage(GetCurrentCinnStage())
+def GetExitCodeAndStdErr(cmd, env):
+    env = {
+        k:v
+        for k, v in env.items()
+        if v is not None
+    }
+    import subprocess
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=env,
+    )
+    return result.returncode, result.stderr
+
+def GetStageExitCodeAndStdErr(stage):
+    return GetExitCodeAndStdErr(
+        [sys.executable, __file__],
+        env=dict(
+            PADDLE_DEBUG_CINN_STAGE_NAME=stage.name,
+            PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
+            PYTHONPATH=os.getenv('PYTHONPATH'),
+            ATHENA_ENABLE_TRY_RUN="False",
+        ),
+    )
+
+def AthenaTryRunEnabled():
+    return os.getenv('ATHENA_ENABLE_TRY_RUN') not in {
+        "0",
+        "False",
+        "false",
+        "OFF"
+    }
+
+def GetNeedSkipAndSkipMessage():
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    if not IsCinnStageEnableDiff():
+        return False, ""
+    last_stage = GetPrevCinnStage(current_stage)
     if last_stage is None:
-        return False
-    env_vars = dict(
-        PADDLE_DEBUG_CINN_STAGE_NAME=last_stage.name,
-        PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
-    )
-    env_vars_str = " ".join(
-        f"{env_var}={value}"
-        for env_var, value in env_vars.items()
-    )
-    last_cinn_stage_exit_code = os.system(
-        f"{env_vars_str} {sys.executable} {__file__} > /dev/null 2>&1"
-    )
-    return last_cinn_stage_exit_code != 0
+        return False, ""
+    exitcode, stderr = GetStageExitCodeAndStdErr(last_stage)
+    if exitcode != 0:
+        return True, f"last stage failed. stderr: {stderr}"
+    return False, ""
+
+def GetCurrentStageTryRunExitCodeAndStdErr():
+    if not AthenaTryRunEnabled():
+        return False, ""
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    return GetStageExitCodeAndStdErr(current_stage)
 
 def SetDefaultEnv(**env_var2value):
     for env_var, value in env_var2value.items():
@@ -125,6 +159,8 @@ def SetDefaultEnv(**env_var2value):
             os.environ[env_var] = str(value)
 
 SetDefaultEnv(
+    PADDLE_DEBUG_CINN_STAGE_NAME="backend",
+    PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF=False,
     PADDLE_DEBUG_ENABLE_CINN=True,
     FLAGS_enable_pir_api=True,
     FLAGS_prim_all=True,
@@ -234,7 +270,7 @@ class CinnTestBase:
         paddle.seed(2024)
         self.prepare_data()
 
-    def test_train(self):
+    def _test_entry(self):
         dy_outs = self.train(use_cinn=False)
         cinn_outs = self.train(use_cinn=GetEnvVarEnableCinn())
 
@@ -285,491 +321,932 @@ class CinnTestBase:
 
 
 
-if not (IsCinnStageEnableDiff() and LastCINNStageFailed()):
-    class PrimitiveOp_5d9b341d6bf37918762475ac6182a704(InstanceTrait, paddle.nn.Layer):
-        
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, arg_0, arg_1):
-            input_0 = arg_0
-            input_1 = arg_1
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[None], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
-
-
-    class TestPrimitiveOp_4d1c1eac1071d60d6c5bc6f9608b0a32(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[86970], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_e766e8034f71ac2edfc75cbdbd675e57(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[242991], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_6ed9d33005ddd29e209a9bef486ac86f(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[220968], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_056449f0ca1d6852fad8b56cd59153f8(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[153450], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_0550dd5c7932699453b446dd24b4e775(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_07e79cda6a3e2beee5d0e81b53bc11bf(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_beb82c51265ae16567f82e0f15549bff(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[185691], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_f6d4752785b1bbe98574462b90378a2e(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_2bdb9e0836dffeddec0bb729dd8bbf62(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_3812093679b2ee5a084c11b778ad7dde(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_3f9f39bdfd355e57af634470cb9347db(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
+need_skip, skip_message = GetNeedSkipAndSkipMessage()
+try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
+class PrimitiveOp_04da482c7547bd96a6f081454d6c94a3(InstanceTrait, paddle.nn.Layer):
     
-    class PrimitiveOp_104ce7c03966eecbcddc3fdfd931b1a2(InstanceTrait, paddle.nn.Layer):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1):
+        input_0 = arg_0
+        input_1 = arg_1
+        return paddle._C_ops.equal(input_0, input_1)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None], dtype='int32'),
+            paddle.static.InputSpec(shape=[], dtype='int32'),
+        ]
         
-        def __init__(self):
-            super().__init__()
-
-        def forward(self, arg_0, arg_1):
-            input_0 = arg_0
-            input_1 = arg_1
-            return paddle._C_ops.equal(input_0, input_1)
-
-        def get_input_spec(self):
-            return [
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-                paddle.static.InputSpec(shape=[], dtype='int32'),
-            ]
-            
-        instance_ = None
-        static_instance_with_cinn_ = None
-        static_instance_without_cinn_ = None
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
 
 
-    class TestPrimitiveOp_de0c2c90964d0bd7b5f18464670e9999(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_104ce7c03966eecbcddc3fdfd931b1a2
-        def get_inputs(self):
-            return [
-                paddle.to_tensor(1025, dtype='int32').reshape([]),
-                paddle.to_tensor(1025, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_3572ad43aab3b4d0be10f66cfcfbacfb(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[113061], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_356253733d340579260982019be6ea5d(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[205923], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_a5704cffa5c017c2021b84937fd82397(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[123783], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_a5f4459f8a3e363823214119c4781ec5(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[171888], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_73cd5deffcd9422ac99bfe77f31d639f(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[217413], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_8dd81ba9ce36c3eed49bc15f61c06190(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_c587a07542a44ec0ba2dba5289a85abb(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_48fb79924ca1adcf1ba1b8c895ea9771(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[185658], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_4d1c1eac1071d60d6c5bc6f9608b0a32(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[86970], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_e766e8034f71ac2edfc75cbdbd675e57(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[242991], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_6ed9d33005ddd29e209a9bef486ac86f(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[220968], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_056449f0ca1d6852fad8b56cd59153f8(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[153450], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_0550dd5c7932699453b446dd24b4e775(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_07e79cda6a3e2beee5d0e81b53bc11bf(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_beb82c51265ae16567f82e0f15549bff(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[185691], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_f6d4752785b1bbe98574462b90378a2e(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_2bdb9e0836dffeddec0bb729dd8bbf62(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_3812093679b2ee5a084c11b778ad7dde(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_3f9f39bdfd355e57af634470cb9347db(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_de0c2c90964d0bd7b5f18464670e9999(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_104ce7c03966eecbcddc3fdfd931b1a2
-        def get_inputs(self):
-            return [
-                paddle.to_tensor(1025, dtype='int32').reshape([]),
-                paddle.to_tensor(1025, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_3572ad43aab3b4d0be10f66cfcfbacfb(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[113061], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_356253733d340579260982019be6ea5d(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[205923], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_a5704cffa5c017c2021b84937fd82397(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[123783], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_a5f4459f8a3e363823214119c4781ec5(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[171888], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_73cd5deffcd9422ac99bfe77f31d639f(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[217413], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_8dd81ba9ce36c3eed49bc15f61c06190(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
-                paddle.to_tensor(0, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_c587a07542a44ec0ba2dba5289a85abb(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
-                paddle.to_tensor(-1, dtype='int32').reshape([]),
-            ]
-
-
-    class TestPrimitiveOp_48fb79924ca1adcf1ba1b8c895ea9771(CinnTestBase, unittest.TestCase):
-        
-        def get_test_class(self):
-            return PrimitiveOp_5d9b341d6bf37918762475ac6182a704
-        def get_inputs(self):
-            return [
-                paddle.randint(low=0, high=3, shape=[185658], dtype='int32'),
-                paddle.to_tensor(1, dtype='int32').reshape([]),
-            ]
-
-
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_34604584e46c6c0cbddbef4faa769055(CinnTestBase, unittest.TestCase):
     
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[86970], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_529b12190ebcf37e84225bde48a51bb8(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[242991], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f22679b5c72f717929f9a0d91b7a896f(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[220968], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f63d35b57920eb7b00f494a0f9025459(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[153450], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ddfbfe6e38f771e26ca8e8123fa4086d(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
+            paddle.to_tensor(0, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0511b85c42bf81b050adcaad159af7d5(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
+            paddle.to_tensor(-1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3f706fcbb4ae72d1b1c31f6ff7edd50e(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[185691], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f7d48bc2d51c1436396208b324947f3e(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
+            paddle.to_tensor(0, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ffb1c16a0f8f5ef7b2c6daca04ef449c(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
+            paddle.to_tensor(-1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_31547b7dc9bdecb1ca26aa92162ccdf7(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
+            paddle.to_tensor(0, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3e0c980d05b57212d3a347b2a221702f(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
+            paddle.to_tensor(-1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+
+class PrimitiveOp_35243965b233551857a6f5ab23553235(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1):
+        input_0 = arg_0
+        input_1 = arg_1
+        return paddle._C_ops.equal(input_0, input_1)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[], dtype='int32'),
+            paddle.static.InputSpec(shape=[], dtype='int32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_55ef1a94dfe01459d2d6bb08c5852d60(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_35243965b233551857a6f5ab23553235
+    def get_inputs(self):
+        return [
+            paddle.to_tensor(1025, dtype='int32').reshape([]),
+            paddle.to_tensor(1025, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2ba8a94048a6a7dcf1164ec1089c8e1d(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[113061], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_61e4a7dcd5ca18de46b692e3f1a49ee9(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[205923], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4077f35f208e58b394b90cc4a75e4212(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[123783], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8ee61c139282781299ce9d91d6a6eea3(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[171888], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f76e2f2c0de8b2d4a800278ae52eeb20(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[217413], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_658356b0b70835fbeeede3188a535c81(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
+            paddle.to_tensor(0, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_59e3326e9d662ef2a7857a3b3577208f(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
+            paddle.to_tensor(-1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9cf49fe8063d22e9f9cfbbc20d91d055(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[185658], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_34604584e46c6c0cbddbef4faa769055(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[86970], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_529b12190ebcf37e84225bde48a51bb8(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[242991], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f22679b5c72f717929f9a0d91b7a896f(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[220968], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f63d35b57920eb7b00f494a0f9025459(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[153450], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ddfbfe6e38f771e26ca8e8123fa4086d(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
+            paddle.to_tensor(0, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0511b85c42bf81b050adcaad159af7d5(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[2002], dtype='int32'),
+            paddle.to_tensor(-1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3f706fcbb4ae72d1b1c31f6ff7edd50e(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[185691], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f7d48bc2d51c1436396208b324947f3e(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
+            paddle.to_tensor(0, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ffb1c16a0f8f5ef7b2c6daca04ef449c(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1021], dtype='int32'),
+            paddle.to_tensor(-1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_31547b7dc9bdecb1ca26aa92162ccdf7(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
+            paddle.to_tensor(0, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3e0c980d05b57212d3a347b2a221702f(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1002], dtype='int32'),
+            paddle.to_tensor(-1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_55ef1a94dfe01459d2d6bb08c5852d60(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_35243965b233551857a6f5ab23553235
+    def get_inputs(self):
+        return [
+            paddle.to_tensor(1025, dtype='int32').reshape([]),
+            paddle.to_tensor(1025, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2ba8a94048a6a7dcf1164ec1089c8e1d(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[113061], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_61e4a7dcd5ca18de46b692e3f1a49ee9(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[205923], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4077f35f208e58b394b90cc4a75e4212(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[123783], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8ee61c139282781299ce9d91d6a6eea3(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[171888], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f76e2f2c0de8b2d4a800278ae52eeb20(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[217413], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_658356b0b70835fbeeede3188a535c81(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
+            paddle.to_tensor(0, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_59e3326e9d662ef2a7857a3b3577208f(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[1027], dtype='int32'),
+            paddle.to_tensor(-1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9cf49fe8063d22e9f9cfbbc20d91d055(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_04da482c7547bd96a6f081454d6c94a3
+    def get_inputs(self):
+        return [
+            paddle.randint(low=0, high=3, shape=[185658], dtype='int32'),
+            paddle.to_tensor(1, dtype='int32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+        return self._test_entry()
+
+
 
 if __name__ == '__main__':
     unittest.main()

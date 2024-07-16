@@ -38,7 +38,7 @@ def cal_cholesky_solve(x, y, upper=False):
     """
     shape = y.shape
     shape1 = x.shape
-    batchsize = np.product(shape) // (shape[-2] * shape[-1])
+    batchsize = np.prod(shape) // (shape[-2] * shape[-1])
     y_t = y.reshape(-1, shape[-2], shape[-1])
     x_t = x.reshape(-1, shape1[-2], shape1[-1])
     tmp = []

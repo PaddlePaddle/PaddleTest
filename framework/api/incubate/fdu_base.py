@@ -15,7 +15,7 @@ def _product(t):
     """
     product
     """
-    return int(np.product(t))
+    return int(np.prod(t))
 
 
 def _get_item(t, idx):

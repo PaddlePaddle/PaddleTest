@@ -167,6 +167,7 @@ def perf_compare(baseline, latest):
     """
     if isinstance(baseline, str) or isinstance(baseline, str):
         res = "error"
+        return res
     else:
         if baseline == 0 or latest == 0:
             res = 0

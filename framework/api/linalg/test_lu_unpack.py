@@ -20,7 +20,7 @@ def cal_lu(x):
         p, l, u = scipy.linalg.lu(x)
         return p, l, u
     else:
-        batchsize = np.product(shape) // (shape[-2] * shape[-1])
+        batchsize = np.prod(shape) // (shape[-2] * shape[-1])
         nx = x.reshape((-1, shape[-2], shape[-1]))
         tp, tl, tu = [], [], []
         for i in range(batchsize):

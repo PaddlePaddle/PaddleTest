@@ -54,6 +54,10 @@ class LayerBenchmarkDB(object):
         self.hostname = socket.gethostname()
         self.system = platform.system()
 
+        # 测试配置
+        self.testing = os.environ.get("TESTING")
+        self.plt_perf_content = os.environ.get("PLT_PERF_CONTENT")
+
         # 子图种类信息
         self.layer_type = os.environ.get("CASE_TYPE")
 
@@ -107,6 +111,8 @@ class LayerBenchmarkDB(object):
             env_info=json.dumps(self.env_info),
             framework=self.framework,
             agile_pipeline_build_id=self.AGILE_PIPELINE_BUILD_ID,
+            testing=self.testing,
+            plt_perf_content=self.plt_perf_content,
             layer_type=self.layer_type,
             commit=self.commit,
             version=self.version,
@@ -141,7 +147,14 @@ class LayerBenchmarkDB(object):
         """
         # 获取baseline用于对比
         db = DB(storage=self.storage)
-        baseline_job = db.select_baseline_job(comment=self.baseline_comment, base=1, ci=self.ci, md5_id=self.md5_id)
+        baseline_job = db.select_baseline_job(
+            comment=self.baseline_comment,
+            testing=self.testing,
+            plt_perf_content=self.plt_perf_content,
+            base=1,
+            ci=self.ci,
+            md5_id=self.md5_id,
+        )
         baseline_id = baseline_job["id"]
         baseline_layer_type = baseline_job["layer_type"]
         baseline_list = db.select(table="layer_case", condition_list=["jid = {}".format(baseline_id)])
@@ -163,6 +176,8 @@ class LayerBenchmarkDB(object):
             env_info=json.dumps(self.env_info),
             framework=self.framework,
             agile_pipeline_build_id=self.AGILE_PIPELINE_BUILD_ID,
+            testing=self.testing,
+            plt_perf_content=self.plt_perf_content,
             layer_type=self.layer_type,
             commit=self.commit,
             version=self.version,

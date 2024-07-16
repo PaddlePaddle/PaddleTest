@@ -46,7 +46,7 @@ def test_isfinite1():
     """
     x = np.nan
     """
-    x = np.array([np.nan, np.inf, np.NINF, -np.inf, -np.nan])
+    x = np.array([np.nan, np.inf, -np.inf, -np.inf, -np.nan])
     res = np.isfinite(x)
     obj.run(res=res, x=x)
 
