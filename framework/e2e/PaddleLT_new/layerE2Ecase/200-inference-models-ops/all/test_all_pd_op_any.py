@@ -8,6 +8,7 @@ import unittest
 import numpy as np
 from dataclasses import dataclass
 import typing as t
+import itertools
 
 @dataclass
 class Stage:
@@ -323,48 +324,7 @@ class CinnTestBase:
 
 need_skip, skip_message = GetNeedSkipAndSkipMessage()
 try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
-class PrimitiveOp_19daae87ffe9b7e0f17926fa9d6a0a6d(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.any(input_0, [-1], False)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 26], dtype='bool'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b211991fb2e4ddd17966bc453796efd3(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19daae87ffe9b7e0f17926fa9d6a0a6d
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]], dtype='bool').reshape([1, 26]),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
-        return self._test_entry()
-
-
+counter = itertools.count()
 class PrimitiveOp_77eb1c8f5e2fd9667cb5e903899b8d6b(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -403,9 +363,57 @@ class TestPrimitiveOp_5fc1f7b4856c3c77393637d3f1708b03(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+                if next(counter) == 0:
+                    panic_stderr = f"stderr: \n{try_run_stderr}"
+                else:
+                    panic_stderr = "panic stderr have been reported by the first test case."
+                raise RuntimeError(f"panicked. {panic_stderr}")
         return self._test_entry()
 
+class PrimitiveOp_19daae87ffe9b7e0f17926fa9d6a0a6d(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.any(input_0, [-1], False)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 26], dtype='bool'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_b211991fb2e4ddd17966bc453796efd3(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_19daae87ffe9b7e0f17926fa9d6a0a6d
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]], dtype='bool').reshape([1, 26]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                if next(counter) == 0:
+                    panic_stderr = f"stderr: \n{try_run_stderr}"
+                else:
+                    panic_stderr = "panic stderr have been reported by the first test case."
+                raise RuntimeError(f"panicked. {panic_stderr}")
+        return self._test_entry()
 
 
 if __name__ == '__main__':

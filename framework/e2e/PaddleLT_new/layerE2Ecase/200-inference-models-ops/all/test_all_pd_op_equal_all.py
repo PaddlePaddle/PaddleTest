@@ -8,6 +8,7 @@ import unittest
 import numpy as np
 from dataclasses import dataclass
 import typing as t
+import itertools
 
 @dataclass
 class Stage:
@@ -323,6 +324,7 @@ class CinnTestBase:
 
 need_skip, skip_message = GetNeedSkipAndSkipMessage()
 try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
+counter = itertools.count()
 class PrimitiveOp_0a64776f67f878d05306c40fa878ab8f(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -346,13 +348,13 @@ class PrimitiveOp_0a64776f67f878d05306c40fa878ab8f(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_446c8d2d354c164bc0dfa2ec3ebce402(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f2dc397f03716003c3f8289bb5631952(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0a64776f67f878d05306c40fa878ab8f
     def get_inputs(self):
         return [
-            paddle.to_tensor([96], dtype='int64').reshape([1]),
+            paddle.to_tensor([25], dtype='int64').reshape([1]),
             paddle.to_tensor([3], dtype='int64').reshape([1]),
         ]
 
@@ -364,9 +366,12 @@ class TestPrimitiveOp_446c8d2d354c164bc0dfa2ec3ebce402(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+                if next(counter) == 0:
+                    panic_stderr = f"stderr: \n{try_run_stderr}"
+                else:
+                    panic_stderr = "panic stderr have been reported by the first test case."
+                raise RuntimeError(f"panicked. {panic_stderr}")
         return self._test_entry()
-
 
 
 if __name__ == '__main__':
