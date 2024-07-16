@@ -20,22 +20,22 @@ class LayerInfer(object):
     构建Layer预测的通用类
     """
 
-    # def __init__(self, testing, layerfile, device_id):
-    def __init__(self, testing, layerfile):
+    def __init__(self, testing, layerfile, device_place_id):
         """
         初始化
         """
         self.seed = 33
         reset(self.seed)
         self.device = os.environ.get("PLT_SET_DEVICE")
-        paddle.set_device(str(self.device))
-        # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
+        self.device_id = device_place_id
+        paddle.set_device(f"{self.device}:{device_place_id}")
 
         self.testing = testing
+        self.jit_save_type = self.testing.get("jit_save_type")
 
         self.data = BuildData(layerfile=layerfile).get_single_numpy()
 
-        self.path = os.path.join(os.getcwd(), "test_prodct", layerfile.replace(".", "/"))
+        self.path = os.path.join(os.getcwd(), "jit_save_export", layerfile.replace(".", "/"), self.jit_save_type)
 
     def paddle_infer_gpu(self):
         """infer load (layer)"""
@@ -63,7 +63,7 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
 
     def paddle_infer_cpu(self):
         """infer load (layer)"""
@@ -92,7 +92,7 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
 
     def paddle_infer_mkldnn(self):
         """infer load (layer)"""
@@ -123,7 +123,7 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
 
     def paddle_infer_ort(self):
         """infer load (layer)"""
@@ -153,4 +153,37 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return infer_res
+        return {"logit": infer_res}
+
+    def paddle_infer_new_exc_pir(self):
+        """infer load (layer)"""
+        reset(self.seed)
+        if not os.path.exists(self.path + ".pdiparams"):
+            return "pass"
+
+        config = paddle_infer.Config(self.path + ".json", self.path + ".pdiparams")
+        # config = paddle_infer.Config(self.path, 'inference')
+
+        config.enable_use_gpu(256, 0)
+        config.switch_ir_optim(False)
+        config.enable_new_executor()
+        config.enable_new_ir()
+
+        predictor = paddle_infer.create_predictor(config)
+        input_names = predictor.get_input_names()
+        for i, name in enumerate(input_names):
+            input_handle = predictor.get_input_handle(name)
+            input_tmp = self.data[i]
+            input_handle.copy_from_cpu(input_tmp)
+
+        predictor.run()
+        output_names = predictor.get_output_names()
+        if len(output_names) > 1:
+            infer_res = []
+            for i, name in enumerate(output_names):
+                output_handle = predictor.get_output_handle(output_names[i])
+                infer_res.append(output_handle.copy_to_cpu())
+        else:
+            output_handle = predictor.get_output_handle(output_names[0])
+            infer_res = output_handle.copy_to_cpu()
+        return {"logit": infer_res}
