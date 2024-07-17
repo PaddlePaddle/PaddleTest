@@ -144,7 +144,7 @@ def GetNeedSkipAndSkipMessage():
         return False, ""
     exitcode, stderr = GetStageExitCodeAndStdErr(last_stage)
     if exitcode != 0:
-        return True, f"last stage failed. stderr: {stderr}"
+        return True, "last stage failed."
     return False, ""
 
 def GetCurrentStageTryRunExitCodeAndStdErr():
@@ -324,7 +324,20 @@ class CinnTestBase:
 
 need_skip, skip_message = GetNeedSkipAndSkipMessage()
 try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
-counter = itertools.count()
+class TestTryRun(unittest.TestCase):
+    def test_panic(self):
+        if not AthenaTryRunEnabled():
+            return
+        if try_run_exit_code == 0:
+            # All unittest cases passed.
+            return
+        if try_run_exit_code > 0:
+            # program failed but not panic.
+            return
+        # program panicked.
+        kOutputLimit = 65536
+        message = try_run_stderr[-kOutputLimit:]
+        raise RuntimeError(f"panicked. last {kOutputLimit} characters of stderr: \n{message}")
 class PrimitiveOp_39771620a7293f4d09d589ef99109c97(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -364,11 +377,7 @@ class TestPrimitiveOp_857888b73bd78995d2a2f5690b409b86(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_18c88491b7db86b66436a83a4f36cdeb(InstanceTrait, paddle.nn.Layer):
@@ -410,11 +419,7 @@ class TestPrimitiveOp_742d2c57a976f5dca84fb95c237a2530(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_9b02cd2a7e52957224659fa6333f5e09(InstanceTrait, paddle.nn.Layer):
@@ -456,11 +461,7 @@ class TestPrimitiveOp_a21da681d6a11a0b34fbc996d216df3a(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_c12f139d8bbdda0ec73115e87d4ae650(InstanceTrait, paddle.nn.Layer):
@@ -502,11 +503,7 @@ class TestPrimitiveOp_3a0007235d991ae4fcd1071ca0496a57(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_3667f452f0826acb09dd6ebb0dc387c6(InstanceTrait, paddle.nn.Layer):
@@ -548,11 +545,7 @@ class TestPrimitiveOp_664927d0e488de03cd5ca4ba1a8b5eb2(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_04a99e7950311f63d6d12c0b9f5c1919(InstanceTrait, paddle.nn.Layer):
@@ -594,11 +587,7 @@ class TestPrimitiveOp_53356eea7bb91f2b7e8103f173096081(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_6bf52d5bef06104e438756b380f01ab7(InstanceTrait, paddle.nn.Layer):
@@ -640,11 +629,7 @@ class TestPrimitiveOp_f0875a6d9876dc3bae7cc3f619212e8b(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_1cfada1902345f59820711b5d1400b87(InstanceTrait, paddle.nn.Layer):
@@ -686,11 +671,7 @@ class TestPrimitiveOp_203d8eefe501db340d7f38493e23f1be(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_f0d5b77e2162567e4e1a70383588754b(InstanceTrait, paddle.nn.Layer):
@@ -732,11 +713,7 @@ class TestPrimitiveOp_d786c8500e9b6ac097f8ed641c6ba014(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_6a2292a1e93f5b3bb35da7bbc9e4a2f7(InstanceTrait, paddle.nn.Layer):
@@ -778,11 +755,7 @@ class TestPrimitiveOp_5f2fa435239f84c44f6e020f305d2ddd(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 

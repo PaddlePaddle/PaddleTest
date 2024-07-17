@@ -144,7 +144,7 @@ def GetNeedSkipAndSkipMessage():
         return False, ""
     exitcode, stderr = GetStageExitCodeAndStdErr(last_stage)
     if exitcode != 0:
-        return True, f"last stage failed. stderr: {stderr}"
+        return True, "last stage failed."
     return False, ""
 
 def GetCurrentStageTryRunExitCodeAndStdErr():
@@ -324,7 +324,20 @@ class CinnTestBase:
 
 need_skip, skip_message = GetNeedSkipAndSkipMessage()
 try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
-counter = itertools.count()
+class TestTryRun(unittest.TestCase):
+    def test_panic(self):
+        if not AthenaTryRunEnabled():
+            return
+        if try_run_exit_code == 0:
+            # All unittest cases passed.
+            return
+        if try_run_exit_code > 0:
+            # program failed but not panic.
+            return
+        # program panicked.
+        kOutputLimit = 65536
+        message = try_run_stderr[-kOutputLimit:]
+        raise RuntimeError(f"panicked. last {kOutputLimit} characters of stderr: \n{message}")
 class PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -346,13 +359,13 @@ class PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_256cf2d6332f9ee18a785ee679ce028d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_3afb49b365f9c525571b0e4aa660f8f8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf
     def get_inputs(self):
         return [
-            paddle.uniform([1, 26, 256], dtype='float16', min=0, max=0.5),
+            paddle.uniform([1, 256, 512], dtype='float16', min=0, max=0.5),
         ]
 
 
@@ -363,11 +376,69 @@ class TestPrimitiveOp_256cf2d6332f9ee18a785ee679ce028d(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_d8f2c09b30db80a877609b163fb08d33(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_bab8b1778594500034bb8e6581fb1823(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_d8f2c09b30db80a877609b163fb08d33
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 256, 512], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c526096ca0cfd1b694896846c405d533(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 256, 256], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_a1e8b2b2672e3779058f3b51e575b145(InstanceTrait, paddle.nn.Layer):
@@ -408,32 +479,8 @@ class TestPrimitiveOp_7c6d81c94904036ead59acb5ad330602(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
-
-class PrimitiveOp_d8f2c09b30db80a877609b163fb08d33(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_741c95211d13b89cd2a69581ea2f5c44(CinnTestBase, unittest.TestCase):
@@ -453,11 +500,7 @@ class TestPrimitiveOp_741c95211d13b89cd2a69581ea2f5c44(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_426c5d7a65aa7d5bd4cc507c1c4b2a11(InstanceTrait, paddle.nn.Layer):
@@ -498,61 +541,7 @@ class TestPrimitiveOp_66299a30a43b75085709345c03ffb93c(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_3afb49b365f9c525571b0e4aa660f8f8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 256, 512], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_827716386a72c62ded51fe07903610cf(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_d8f2c09b30db80a877609b163fb08d33
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 26, 256], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
@@ -573,11 +562,7 @@ class TestPrimitiveOp_b1816dbb0bf9186a475e7d5e80f87009(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
@@ -598,11 +583,91 @@ class TestPrimitiveOp_0827e40dd632fe8f84ff4fb8fd8c618f(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_256cf2d6332f9ee18a785ee679ce028d(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 26, 256], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f3e3264ad0ad2ce0c27967c538c71f16(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 25, 96], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1cf8b569ca7d157b5fb5751de55501ab(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_a1e8b2b2672e3779058f3b51e575b145
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 96], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_827716386a72c62ded51fe07903610cf(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_d8f2c09b30db80a877609b163fb08d33
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 26, 256], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_766d3ccc74df885465d0a7bcad7c38f2(InstanceTrait, paddle.nn.Layer):
@@ -643,11 +708,7 @@ class TestPrimitiveOp_50d201ad874970c7f09c721554a54f5d(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
@@ -668,111 +729,7 @@ class TestPrimitiveOp_59511ce05a1b935af154213d956cc5dc(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f3e3264ad0ad2ce0c27967c538c71f16(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 25, 96], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1cf8b569ca7d157b5fb5751de55501ab(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_a1e8b2b2672e3779058f3b51e575b145
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 96], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c526096ca0cfd1b694896846c405d533(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_dd04634cb0ab6934ba8634b54333d9bf
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 256, 256], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_bab8b1778594500034bb8e6581fb1823(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_d8f2c09b30db80a877609b163fb08d33
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 256, 512], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_5969f8e8be2f0eca6cd9dfc6279af20b(InstanceTrait, paddle.nn.Layer):
@@ -813,11 +770,7 @@ class TestPrimitiveOp_eb2dce800a9479af6057aed38d756ef5(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
@@ -838,191 +791,7 @@ class TestPrimitiveOp_11ccf382b610114037f4d592d3b34df8(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_3c259ac3ef52961bcc994a609ea6da9b(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 26, 256], dtype='float16'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_38e38718e6d1edd549e782809ae97cd1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_3c259ac3ef52961bcc994a609ea6da9b
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 26, 256], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_b3faffd1b4cc2fc4d6043776cdb1fdec(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 256], dtype='float16'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1b7142db78964c05cdcfff4ff82afae2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b3faffd1b4cc2fc4d6043776cdb1fdec
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 256], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_59ff870e7fc7d4b5381cddd2021bde41(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 256, 256], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_8ed2d004336f92cfbfa4fda81e92fe26(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_59ff870e7fc7d4b5381cddd2021bde41
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 256, 256], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_b97064e970ed7348abc683a4dec444ee(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 256], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7039f6be507e4e677206d6532a9f2ee7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b97064e970ed7348abc683a4dec444ee
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 256], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_5c2dda2a6f85b43c5af43176de88bf16(InstanceTrait, paddle.nn.Layer):
@@ -1063,371 +832,7 @@ class TestPrimitiveOp_17ae74c6f576092aa9b241cd3eb167ad(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_d5753185f0490a65eb85b0434afa5227(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 26, 256], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_16a474c0980a906841fd6a6d7fd308f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_d5753185f0490a65eb85b0434afa5227
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 26, 256], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_0d8adbedf7dd6c7320c5756f51faa5e7(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 25, 96], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_11924881423b58c6fe7f1bafebdd42b0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_0d8adbedf7dd6c7320c5756f51faa5e7
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 25, 96], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_f55d39f306c0e9c0d9503162702cc002(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 96], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e0d4999a24f8cac98507ff90f9704d64(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_f55d39f306c0e9c0d9503162702cc002
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 96], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_011406e942421d4927a48f2262240bee(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[1, 144, 180, 320], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_069303bc571438f746a0c258acd9552f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_011406e942421d4927a48f2262240bee
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 144, 180, 320], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_6b9c58255615d8e755438db2d1573d45(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[1, 72, 180, 320], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1138157c4673f5f68a27cc834ea5970a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_6b9c58255615d8e755438db2d1573d45
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 72, 180, 320], dtype='float32', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_2be1bbb2e4dc896d18ea4d3833121c60(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 25, 96], dtype='float16'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b124c374f79a2eb6e26a9d2f69dcbdf6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2be1bbb2e4dc896d18ea4d3833121c60
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 25, 96], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_098300d61704357577d224fb735b2d2e(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 96], dtype='float16'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e967b96ddc423da1e158d30ce82e250c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_098300d61704357577d224fb735b2d2e
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 96], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
-        return self._test_entry()
-
-class PrimitiveOp_7a4675ce06e553fabbbf0f5f6ddc63ed(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        input_0 = arg_0
-        return paddle._C_ops.tanh(input_0)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, 256, 256], dtype='float16'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fa267224ec13788843ad06933352b09d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7a4675ce06e553fabbbf0f5f6ddc63ed
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 256, 256], dtype='float16', min=0, max=0.5),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_38fd06b7d0e259bc9e9d70ae34ed0133(InstanceTrait, paddle.nn.Layer):
@@ -1468,11 +873,499 @@ class TestPrimitiveOp_bbc2f46d8d72b568ebacb5f174856061(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_7a4675ce06e553fabbbf0f5f6ddc63ed(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 256, 256], dtype='float16'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_fa267224ec13788843ad06933352b09d(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_7a4675ce06e553fabbbf0f5f6ddc63ed
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 256, 256], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_b3faffd1b4cc2fc4d6043776cdb1fdec(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 256], dtype='float16'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1b7142db78964c05cdcfff4ff82afae2(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_b3faffd1b4cc2fc4d6043776cdb1fdec
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 256], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_59ff870e7fc7d4b5381cddd2021bde41(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 256, 256], dtype='float32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8ed2d004336f92cfbfa4fda81e92fe26(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_59ff870e7fc7d4b5381cddd2021bde41
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 256, 256], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_b97064e970ed7348abc683a4dec444ee(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 256], dtype='float32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_7039f6be507e4e677206d6532a9f2ee7(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_b97064e970ed7348abc683a4dec444ee
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 256], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_0d8adbedf7dd6c7320c5756f51faa5e7(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 25, 96], dtype='float32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_11924881423b58c6fe7f1bafebdd42b0(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_0d8adbedf7dd6c7320c5756f51faa5e7
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 25, 96], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_f55d39f306c0e9c0d9503162702cc002(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 96], dtype='float32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e0d4999a24f8cac98507ff90f9704d64(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_f55d39f306c0e9c0d9503162702cc002
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 96], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_3c259ac3ef52961bcc994a609ea6da9b(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 26, 256], dtype='float16'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_38e38718e6d1edd549e782809ae97cd1(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_3c259ac3ef52961bcc994a609ea6da9b
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 26, 256], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_2be1bbb2e4dc896d18ea4d3833121c60(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 25, 96], dtype='float16'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_b124c374f79a2eb6e26a9d2f69dcbdf6(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_2be1bbb2e4dc896d18ea4d3833121c60
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 25, 96], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_098300d61704357577d224fb735b2d2e(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 96], dtype='float16'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e967b96ddc423da1e158d30ce82e250c(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_098300d61704357577d224fb735b2d2e
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 96], dtype='float16', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_d5753185f0490a65eb85b0434afa5227(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, 26, 256], dtype='float32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_16a474c0980a906841fd6a6d7fd308f7(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_d5753185f0490a65eb85b0434afa5227
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 26, 256], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_011406e942421d4927a48f2262240bee(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[1, 144, 180, 320], dtype='float32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_069303bc571438f746a0c258acd9552f(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_011406e942421d4927a48f2262240bee
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 144, 180, 320], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_6b9c58255615d8e755438db2d1573d45(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0):
+        input_0 = arg_0
+        return paddle._C_ops.tanh(input_0)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[1, 72, 180, 320], dtype='float32'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1138157c4673f5f68a27cc834ea5970a(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_6b9c58255615d8e755438db2d1573d45
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 72, 180, 320], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_93b74a7cfc6c35fdb896f0884c2df8aa(InstanceTrait, paddle.nn.Layer):
@@ -1513,11 +1406,7 @@ class TestPrimitiveOp_eff213b187d5473e5e209d8b57d73862(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 class PrimitiveOp_00f85f5d7ed4f7f12ba926aa9f4355bc(InstanceTrait, paddle.nn.Layer):
@@ -1558,11 +1447,7 @@ class TestPrimitiveOp_9dc506f20ad4461ee23046d364eba09a(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                if next(counter) == 0:
-                    panic_stderr = f"stderr: \n{try_run_stderr}"
-                else:
-                    panic_stderr = "panic stderr have been reported by the first test case."
-                raise RuntimeError(f"panicked. {panic_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
 
