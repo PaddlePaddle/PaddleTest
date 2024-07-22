@@ -449,22 +449,22 @@ class BlockEntries:
         conv2d_12 = paddle._C_ops.conv2d(pool2d_0, parameter_120, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x16x1x1xf16) <- (-1x16x1x1xf16, 1x16x1x1xf16)
-        add__0 = paddle._C_ops.add(conv2d_12, parameter_121)
+        add__0 = paddle._C_ops.add_(conv2d_12, parameter_121)
 
         # pd_op.relu_: (-1x16x1x1xf16) <- (-1x16x1x1xf16)
-        relu__0 = paddle._C_ops.relu(add__0)
+        relu__0 = paddle._C_ops.relu_(add__0)
 
         # pd_op.conv2d: (-1x64x1x1xf16) <- (-1x16x1x1xf16, 64x16x1x1xf16)
         conv2d_13 = paddle._C_ops.conv2d(relu__0, parameter_122, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x64x1x1xf16) <- (-1x64x1x1xf16, 1x64x1x1xf16)
-        add__1 = paddle._C_ops.add(conv2d_13, parameter_123)
+        add__1 = paddle._C_ops.add_(conv2d_13, parameter_123)
 
         # pd_op.hardsigmoid: (-1x64x1x1xf16) <- (-1x64x1x1xf16)
         hardsigmoid_0 = paddle._C_ops.hardsigmoid(add__1, float('0.166667'), float('0.5'))
 
         # pd_op.multiply_: (-1x64x7x7xf16) <- (-1x64x7x7xf16, -1x64x1x1xf16)
-        multiply__0 = paddle._C_ops.multiply(hardswish_23, hardsigmoid_0)
+        multiply__0 = paddle._C_ops.multiply_(hardswish_23, hardsigmoid_0)
 
         # pd_op.conv2d: (-1x128x7x7xf16) <- (-1x64x7x7xf16, 128x64x1x1xf16)
         conv2d_14 = paddle._C_ops.conv2d(multiply__0, parameter_124, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -491,22 +491,22 @@ class BlockEntries:
         conv2d_15 = paddle._C_ops.conv2d(pool2d_1, parameter_134, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x32x1x1xf16) <- (-1x32x1x1xf16, 1x32x1x1xf16)
-        add__2 = paddle._C_ops.add(conv2d_15, parameter_135)
+        add__2 = paddle._C_ops.add_(conv2d_15, parameter_135)
 
         # pd_op.relu_: (-1x32x1x1xf16) <- (-1x32x1x1xf16)
-        relu__1 = paddle._C_ops.relu(add__2)
+        relu__1 = paddle._C_ops.relu_(add__2)
 
         # pd_op.conv2d: (-1x128x1x1xf16) <- (-1x32x1x1xf16, 128x32x1x1xf16)
         conv2d_16 = paddle._C_ops.conv2d(relu__1, parameter_136, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x1x1xf16) <- (-1x128x1x1xf16, 1x128x1x1xf16)
-        add__3 = paddle._C_ops.add(conv2d_16, parameter_137)
+        add__3 = paddle._C_ops.add_(conv2d_16, parameter_137)
 
         # pd_op.hardsigmoid: (-1x128x1x1xf16) <- (-1x128x1x1xf16)
         hardsigmoid_1 = paddle._C_ops.hardsigmoid(add__3, float('0.166667'), float('0.5'))
 
         # pd_op.multiply_: (-1x128x7x7xf16) <- (-1x128x7x7xf16, -1x128x1x1xf16)
-        multiply__1 = paddle._C_ops.multiply(hardswish_25, hardsigmoid_1)
+        multiply__1 = paddle._C_ops.multiply_(hardswish_25, hardsigmoid_1)
 
         # pd_op.conv2d: (-1x128x7x7xf16) <- (-1x128x7x7xf16, 128x128x1x1xf16)
         conv2d_17 = paddle._C_ops.conv2d(multiply__1, parameter_138, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -530,16 +530,16 @@ class BlockEntries:
         dropout_0, dropout_1 = (lambda x, f: f(x))(paddle._C_ops.dropout(hardswish_27, None, constant_1, True, 'downgrade_in_infer', 0, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.flatten_: (-1x1280xf16, None) <- (-1x1280x1x1xf16)
-        flatten__0, flatten__1 = (lambda x, f: f(x))(paddle._C_ops.flatten(dropout_0, 1, 3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        flatten__0, flatten__1 = (lambda x, f: f(x))(paddle._C_ops.flatten_(dropout_0, 1, 3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf16) <- (-1x1280xf16, 1280x1000xf16)
         matmul_0 = paddle.matmul(flatten__0, parameter_144, transpose_x=False, transpose_y=False)
 
         # pd_op.add_: (-1x1000xf16) <- (-1x1000xf16, 1000xf16)
-        add__4 = paddle._C_ops.add(matmul_0, parameter_145)
+        add__4 = paddle._C_ops.add_(matmul_0, parameter_145)
 
         # pd_op.softmax_: (-1x1000xf16) <- (-1x1000xf16)
-        softmax__0 = paddle._C_ops.softmax(add__4, -1)
+        softmax__0 = paddle._C_ops.softmax_(add__4, -1)
 
         # pd_op.cast: (-1x1000xf32) <- (-1x1000xf16)
         cast_1 = paddle._C_ops.cast(softmax__0, paddle.float32)

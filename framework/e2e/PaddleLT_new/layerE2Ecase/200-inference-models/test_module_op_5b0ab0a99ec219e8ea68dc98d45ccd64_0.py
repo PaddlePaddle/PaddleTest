@@ -1457,10 +1457,10 @@ class BlockEntries:
         arange_1 = paddle.arange(constant_9, cast_2, constant_10, dtype='int64')
 
         # pd_op.unsqueeze_: (1x-1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__0, unsqueeze__1 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_0, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__0, unsqueeze__1 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_0, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__2, unsqueeze__3 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_1, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__2, unsqueeze__3 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_1, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_0 = [slice_0, slice_1]
@@ -1475,10 +1475,10 @@ class BlockEntries:
         expand_1 = paddle._C_ops.expand(unsqueeze__2, combine_1)
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_0, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_0, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_1, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_1, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([-1xi64, -1xi64]) <- (-1xi64, -1xi64)
         combine_2 = [reshape__0, reshape__2]
@@ -1490,7 +1490,7 @@ class BlockEntries:
         cast_3 = paddle._C_ops.cast(stack_0, paddle.float16)
 
         # pd_op.scale_: (-1x2xf16) <- (-1x2xf16, 1xf32)
-        scale__0 = paddle._C_ops.scale(cast_3, constant_14, float('4'), True)
+        scale__0 = paddle._C_ops.scale_(cast_3, constant_14, float('4'), True)
 
         # pd_op.shape: (4xi32) <- (-1x256x-1x-1xf16)
         shape_2 = paddle._C_ops.shape(paddle.cast(add_23, 'float32'))
@@ -1523,10 +1523,10 @@ class BlockEntries:
         arange_3 = paddle.arange(constant_9, cast_5, constant_15, dtype='int64')
 
         # pd_op.unsqueeze_: (1x-1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__4, unsqueeze__5 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_2, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__4, unsqueeze__5 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_2, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__6, unsqueeze__7 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_3, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__6, unsqueeze__7 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_3, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_3 = [slice_2, slice_3]
@@ -1541,10 +1541,10 @@ class BlockEntries:
         expand_3 = paddle._C_ops.expand(unsqueeze__6, combine_4)
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_2, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_2, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__6, reshape__7 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_3, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__6, reshape__7 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_3, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([-1xi64, -1xi64]) <- (-1xi64, -1xi64)
         combine_5 = [reshape__4, reshape__6]
@@ -1556,7 +1556,7 @@ class BlockEntries:
         cast_6 = paddle._C_ops.cast(stack_1, paddle.float16)
 
         # pd_op.scale_: (-1x2xf16) <- (-1x2xf16, 1xf32)
-        scale__1 = paddle._C_ops.scale(cast_6, constant_14, float('8'), True)
+        scale__1 = paddle._C_ops.scale_(cast_6, constant_14, float('8'), True)
 
         # pd_op.shape: (4xi32) <- (-1x256x-1x-1xf16)
         shape_4 = paddle._C_ops.shape(paddle.cast(add_24, 'float32'))
@@ -1589,10 +1589,10 @@ class BlockEntries:
         arange_5 = paddle.arange(constant_9, cast_8, constant_16, dtype='int64')
 
         # pd_op.unsqueeze_: (1x-1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__8, unsqueeze__9 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_4, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__8, unsqueeze__9 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_4, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__10, unsqueeze__11 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_5, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__10, unsqueeze__11 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_5, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_6 = [slice_4, slice_5]
@@ -1607,10 +1607,10 @@ class BlockEntries:
         expand_5 = paddle._C_ops.expand(unsqueeze__10, combine_7)
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__8, reshape__9 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_4, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__8, reshape__9 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_4, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__10, reshape__11 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_5, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__10, reshape__11 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_5, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([-1xi64, -1xi64]) <- (-1xi64, -1xi64)
         combine_8 = [reshape__8, reshape__10]
@@ -1622,7 +1622,7 @@ class BlockEntries:
         cast_9 = paddle._C_ops.cast(stack_2, paddle.float16)
 
         # pd_op.scale_: (-1x2xf16) <- (-1x2xf16, 1xf32)
-        scale__2 = paddle._C_ops.scale(cast_9, constant_14, float('16'), True)
+        scale__2 = paddle._C_ops.scale_(cast_9, constant_14, float('16'), True)
 
         # pd_op.shape: (4xi32) <- (-1x256x-1x-1xf16)
         shape_6 = paddle._C_ops.shape(paddle.cast(add_25, 'float32'))
@@ -1655,10 +1655,10 @@ class BlockEntries:
         arange_7 = paddle.arange(constant_9, cast_11, constant_17, dtype='int64')
 
         # pd_op.unsqueeze_: (1x-1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__12, unsqueeze__13 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_6, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__12, unsqueeze__13 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_6, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__14, unsqueeze__15 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_7, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__14, unsqueeze__15 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_7, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_9 = [slice_6, slice_7]
@@ -1673,10 +1673,10 @@ class BlockEntries:
         expand_7 = paddle._C_ops.expand(unsqueeze__14, combine_10)
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__12, reshape__13 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_6, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__12, reshape__13 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_6, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__14, reshape__15 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_7, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__14, reshape__15 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_7, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([-1xi64, -1xi64]) <- (-1xi64, -1xi64)
         combine_11 = [reshape__12, reshape__14]
@@ -1688,7 +1688,7 @@ class BlockEntries:
         cast_12 = paddle._C_ops.cast(stack_3, paddle.float16)
 
         # pd_op.scale_: (-1x2xf16) <- (-1x2xf16, 1xf32)
-        scale__3 = paddle._C_ops.scale(cast_12, constant_14, float('32'), True)
+        scale__3 = paddle._C_ops.scale_(cast_12, constant_14, float('32'), True)
 
         # pd_op.shape: (4xi32) <- (-1x256x-1x-1xf16)
         shape_8 = paddle._C_ops.shape(paddle.cast(add_26, 'float32'))
@@ -1721,10 +1721,10 @@ class BlockEntries:
         arange_9 = paddle.arange(constant_9, cast_14, constant_18, dtype='int64')
 
         # pd_op.unsqueeze_: (1x-1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__16, unsqueeze__17 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_8, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__16, unsqueeze__17 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_8, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x1xi64, None) <- (-1xi64, 1xi64)
-        unsqueeze__18, unsqueeze__19 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(arange_9, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__18, unsqueeze__19 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(arange_9, constant_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_12 = [slice_8, slice_9]
@@ -1739,10 +1739,10 @@ class BlockEntries:
         expand_9 = paddle._C_ops.expand(unsqueeze__18, combine_13)
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__16, reshape__17 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_8, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__16, reshape__17 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_8, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.reshape_: (-1xi64, 0x-1x-1xi64) <- (-1x-1xi64, 1xi64)
-        reshape__18, reshape__19 = (lambda x, f: f(x))(paddle._C_ops.reshape(expand_9, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__18, reshape__19 = (lambda x, f: f(x))(paddle._C_ops.reshape_(expand_9, constant_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([-1xi64, -1xi64]) <- (-1xi64, -1xi64)
         combine_14 = [reshape__16, reshape__18]
@@ -1754,7 +1754,7 @@ class BlockEntries:
         cast_15 = paddle._C_ops.cast(stack_4, paddle.float16)
 
         # pd_op.scale_: (-1x2xf16) <- (-1x2xf16, 1xf32)
-        scale__4 = paddle._C_ops.scale(cast_15, constant_14, float('64'), True)
+        scale__4 = paddle._C_ops.scale_(cast_15, constant_14, float('64'), True)
 
         # pd_op.sigmoid: (-1x80x-1x-1xf16) <- (-1x80x-1x-1xf16)
         sigmoid_0 = paddle.nn.functional.sigmoid(add_35)
@@ -2147,7 +2147,7 @@ class BlockEntries:
         concat_2 = paddle._C_ops.concat(combine_22, constant_20)
 
         # pd_op.reshape_: (-1x1x4xf16, 0x-1x4xf16) <- (-1x4xf16, 3xi64)
-        reshape__20, reshape__21 = (lambda x, f: f(x))(paddle._C_ops.reshape(concat_2, constant_21), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__20, reshape__21 = (lambda x, f: f(x))(paddle._C_ops.reshape_(concat_2, constant_21), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.divide: (-1x-1x4xf16) <- (-1x-1x4xf16, -1x1x4xf16)
         divide_0 = concat_0 / reshape__20

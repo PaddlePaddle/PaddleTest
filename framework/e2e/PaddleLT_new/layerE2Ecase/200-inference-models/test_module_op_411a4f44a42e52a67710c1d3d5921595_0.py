@@ -227,34 +227,34 @@ class BlockEntries:
         cast_0 = paddle._C_ops.cast(feed_0, paddle.float16)
 
         # pd_op.unsqueeze_: (-1x400x1x100xf16, None) <- (-1x400x100xf16, 1xi64)
-        unsqueeze__0, unsqueeze__1 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(cast_0, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__0, unsqueeze__1 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(cast_0, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (-1x256x1x100xf16) <- (-1x400x1x100xf16, 256x100x1x3xf16)
         conv2d_0 = paddle._C_ops.conv2d(unsqueeze__0, parameter_0, [1, 1], [0, 1], 'EXPLICIT', [1, 1], 4, 'NCHW')
 
         # pd_op.add_: (-1x256x1x100xf16) <- (-1x256x1x100xf16, 1x256x1x1xf16)
-        add__0 = paddle._C_ops.add(conv2d_0, parameter_1)
+        add__0 = paddle._C_ops.add_(conv2d_0, parameter_1)
 
         # pd_op.squeeze_: (-1x256x100xf16, None) <- (-1x256x1x100xf16, 1xi64)
-        squeeze__0, squeeze__1 = (lambda x, f: f(x))(paddle._C_ops.squeeze(add__0, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__0, squeeze__1 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(add__0, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.relu_: (-1x256x100xf16) <- (-1x256x100xf16)
-        relu__0 = paddle._C_ops.relu(squeeze__0)
+        relu__0 = paddle._C_ops.relu_(squeeze__0)
 
         # pd_op.unsqueeze_: (-1x256x1x100xf16, None) <- (-1x256x100xf16, 1xi64)
-        unsqueeze__2, unsqueeze__3 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(relu__0, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__2, unsqueeze__3 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(relu__0, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (-1x256x1x100xf16) <- (-1x256x1x100xf16, 256x64x1x3xf16)
         conv2d_1 = paddle._C_ops.conv2d(unsqueeze__2, parameter_2, [1, 1], [0, 1], 'EXPLICIT', [1, 1], 4, 'NCHW')
 
         # pd_op.add_: (-1x256x1x100xf16) <- (-1x256x1x100xf16, 1x256x1x1xf16)
-        add__1 = paddle._C_ops.add(conv2d_1, parameter_3)
+        add__1 = paddle._C_ops.add_(conv2d_1, parameter_3)
 
         # pd_op.squeeze_: (-1x256x100xf16, None) <- (-1x256x1x100xf16, 1xi64)
-        squeeze__2, squeeze__3 = (lambda x, f: f(x))(paddle._C_ops.squeeze(add__1, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__2, squeeze__3 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(add__1, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.relu_: (-1x256x100xf16) <- (-1x256x100xf16)
-        relu__1 = paddle._C_ops.relu(squeeze__2)
+        relu__1 = paddle._C_ops.relu_(squeeze__2)
 
         # pd_op.unsqueeze: (-1x256x1x100xf16, None) <- (-1x256x100xf16, 1xi64)
         unsqueeze_0, unsqueeze_1 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(relu__1, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
@@ -263,31 +263,31 @@ class BlockEntries:
         conv2d_2 = paddle._C_ops.conv2d(unsqueeze_0, parameter_4, [1, 1], [0, 1], 'EXPLICIT', [1, 1], 4, 'NCHW')
 
         # pd_op.add_: (-1x256x1x100xf16) <- (-1x256x1x100xf16, 1x256x1x1xf16)
-        add__2 = paddle._C_ops.add(conv2d_2, parameter_5)
+        add__2 = paddle._C_ops.add_(conv2d_2, parameter_5)
 
         # pd_op.squeeze_: (-1x256x100xf16, None) <- (-1x256x1x100xf16, 1xi64)
-        squeeze__4, squeeze__5 = (lambda x, f: f(x))(paddle._C_ops.squeeze(add__2, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__4, squeeze__5 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(add__2, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.relu_: (-1x256x100xf16) <- (-1x256x100xf16)
-        relu__2 = paddle._C_ops.relu(squeeze__4)
+        relu__2 = paddle._C_ops.relu_(squeeze__4)
 
         # pd_op.unsqueeze_: (-1x256x1x100xf16, None) <- (-1x256x100xf16, 1xi64)
-        unsqueeze__4, unsqueeze__5 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(relu__2, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__4, unsqueeze__5 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(relu__2, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (-1x1x1x100xf16) <- (-1x256x1x100xf16, 1x256x1x1xf16)
         conv2d_3 = paddle._C_ops.conv2d(unsqueeze__4, parameter_6, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x1x1x100xf16) <- (-1x1x1x100xf16, 1x1x1x1xf16)
-        add__3 = paddle._C_ops.add(conv2d_3, parameter_7)
+        add__3 = paddle._C_ops.add_(conv2d_3, parameter_7)
 
         # pd_op.squeeze_: (-1x1x100xf16, None) <- (-1x1x1x100xf16, 1xi64)
-        squeeze__6, squeeze__7 = (lambda x, f: f(x))(paddle._C_ops.squeeze(add__3, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__6, squeeze__7 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(add__3, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.sigmoid_: (-1x1x100xf16) <- (-1x1x100xf16)
-        sigmoid__0 = paddle._C_ops.sigmoid(squeeze__6)
+        sigmoid__0 = paddle._C_ops.sigmoid_(squeeze__6)
 
         # pd_op.squeeze_: (-1x100xf16, None) <- (-1x1x100xf16, 1xi64)
-        squeeze__8, squeeze__9 = (lambda x, f: f(x))(paddle._C_ops.squeeze(sigmoid__0, constant_1), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__8, squeeze__9 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(sigmoid__0, constant_1), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze: (-1x256x1x100xf16, None) <- (-1x256x100xf16, 1xi64)
         unsqueeze_2, unsqueeze_3 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(relu__1, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
@@ -296,52 +296,52 @@ class BlockEntries:
         conv2d_4 = paddle._C_ops.conv2d(unsqueeze_2, parameter_8, [1, 1], [0, 1], 'EXPLICIT', [1, 1], 4, 'NCHW')
 
         # pd_op.add_: (-1x256x1x100xf16) <- (-1x256x1x100xf16, 1x256x1x1xf16)
-        add__4 = paddle._C_ops.add(conv2d_4, parameter_9)
+        add__4 = paddle._C_ops.add_(conv2d_4, parameter_9)
 
         # pd_op.squeeze_: (-1x256x100xf16, None) <- (-1x256x1x100xf16, 1xi64)
-        squeeze__10, squeeze__11 = (lambda x, f: f(x))(paddle._C_ops.squeeze(add__4, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__10, squeeze__11 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(add__4, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.relu_: (-1x256x100xf16) <- (-1x256x100xf16)
-        relu__3 = paddle._C_ops.relu(squeeze__10)
+        relu__3 = paddle._C_ops.relu_(squeeze__10)
 
         # pd_op.unsqueeze_: (-1x256x1x100xf16, None) <- (-1x256x100xf16, 1xi64)
-        unsqueeze__6, unsqueeze__7 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(relu__3, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__6, unsqueeze__7 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(relu__3, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (-1x1x1x100xf16) <- (-1x256x1x100xf16, 1x256x1x1xf16)
         conv2d_5 = paddle._C_ops.conv2d(unsqueeze__6, parameter_10, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x1x1x100xf16) <- (-1x1x1x100xf16, 1x1x1x1xf16)
-        add__5 = paddle._C_ops.add(conv2d_5, parameter_11)
+        add__5 = paddle._C_ops.add_(conv2d_5, parameter_11)
 
         # pd_op.squeeze_: (-1x1x100xf16, None) <- (-1x1x1x100xf16, 1xi64)
-        squeeze__12, squeeze__13 = (lambda x, f: f(x))(paddle._C_ops.squeeze(add__5, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__12, squeeze__13 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(add__5, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.sigmoid_: (-1x1x100xf16) <- (-1x1x100xf16)
-        sigmoid__1 = paddle._C_ops.sigmoid(squeeze__12)
+        sigmoid__1 = paddle._C_ops.sigmoid_(squeeze__12)
 
         # pd_op.squeeze_: (-1x100xf16, None) <- (-1x1x100xf16, 1xi64)
-        squeeze__14, squeeze__15 = (lambda x, f: f(x))(paddle._C_ops.squeeze(sigmoid__1, constant_1), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__14, squeeze__15 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(sigmoid__1, constant_1), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x256x1x100xf16, None) <- (-1x256x100xf16, 1xi64)
-        unsqueeze__8, unsqueeze__9 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(relu__1, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__8, unsqueeze__9 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(relu__1, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (-1x128x1x100xf16) <- (-1x256x1x100xf16, 128x256x1x3xf16)
         conv2d_6 = paddle._C_ops.conv2d(unsqueeze__8, parameter_12, [1, 1], [0, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x1x100xf16) <- (-1x128x1x100xf16, 1x128x1x1xf16)
-        add__6 = paddle._C_ops.add(conv2d_6, parameter_13)
+        add__6 = paddle._C_ops.add_(conv2d_6, parameter_13)
 
         # pd_op.squeeze_: (-1x128x100xf16, None) <- (-1x128x1x100xf16, 1xi64)
-        squeeze__16, squeeze__17 = (lambda x, f: f(x))(paddle._C_ops.squeeze(add__6, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__16, squeeze__17 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(add__6, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.relu_: (-1x128x100xf16) <- (-1x128x100xf16)
-        relu__4 = paddle._C_ops.relu(squeeze__16)
+        relu__4 = paddle._C_ops.relu_(squeeze__16)
 
         # pd_op.matmul: (-1x128x320000xf16) <- (-1x128x100xf16, 100x320000xf16)
         matmul_0 = paddle.matmul(relu__4, parameter_14, transpose_x=False, transpose_y=False)
 
         # pd_op.reshape_: (-1x128x-1x100x100xf16, 0x-1x128x320000xf16) <- (-1x128x320000xf16, 5xi64)
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape(matmul_0, constant_2), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(matmul_0, constant_2), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv3d: (-1x512x-1x100x100xf16) <- (-1x128x-1x100x100xf16, 512x128x32x1x1xf16)
         conv3d_0 = paddle._C_ops.conv3d(reshape__0, parameter_15, [32, 1, 1], [0, 0, 0], 'EXPLICIT', 1, [1, 1, 1], 'NCDHW')
@@ -353,43 +353,43 @@ class BlockEntries:
         relu_0 = paddle._C_ops.relu(add_0)
 
         # pd_op.squeeze_: (-1x512x100x100xf16, None) <- (-1x512x-1x100x100xf16, 1xi64)
-        squeeze__18, squeeze__19 = (lambda x, f: f(x))(paddle._C_ops.squeeze(relu_0, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__18, squeeze__19 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(relu_0, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (-1x128x100x100xf16) <- (-1x512x100x100xf16, 128x512x1x1xf16)
         conv2d_7 = paddle._C_ops.conv2d(squeeze__18, parameter_17, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x100x100xf16) <- (-1x128x100x100xf16, 1x128x1x1xf16)
-        add__7 = paddle._C_ops.add(conv2d_7, parameter_18)
+        add__7 = paddle._C_ops.add_(conv2d_7, parameter_18)
 
         # pd_op.relu_: (-1x128x100x100xf16) <- (-1x128x100x100xf16)
-        relu__5 = paddle._C_ops.relu(add__7)
+        relu__5 = paddle._C_ops.relu_(add__7)
 
         # pd_op.conv2d: (-1x128x100x100xf16) <- (-1x128x100x100xf16, 128x128x3x3xf16)
         conv2d_8 = paddle._C_ops.conv2d(relu__5, parameter_19, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x100x100xf16) <- (-1x128x100x100xf16, 1x128x1x1xf16)
-        add__8 = paddle._C_ops.add(conv2d_8, parameter_20)
+        add__8 = paddle._C_ops.add_(conv2d_8, parameter_20)
 
         # pd_op.relu_: (-1x128x100x100xf16) <- (-1x128x100x100xf16)
-        relu__6 = paddle._C_ops.relu(add__8)
+        relu__6 = paddle._C_ops.relu_(add__8)
 
         # pd_op.conv2d: (-1x128x100x100xf16) <- (-1x128x100x100xf16, 128x128x3x3xf16)
         conv2d_9 = paddle._C_ops.conv2d(relu__6, parameter_21, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x100x100xf16) <- (-1x128x100x100xf16, 1x128x1x1xf16)
-        add__9 = paddle._C_ops.add(conv2d_9, parameter_22)
+        add__9 = paddle._C_ops.add_(conv2d_9, parameter_22)
 
         # pd_op.relu_: (-1x128x100x100xf16) <- (-1x128x100x100xf16)
-        relu__7 = paddle._C_ops.relu(add__9)
+        relu__7 = paddle._C_ops.relu_(add__9)
 
         # pd_op.conv2d: (-1x2x100x100xf16) <- (-1x128x100x100xf16, 2x128x1x1xf16)
         conv2d_10 = paddle._C_ops.conv2d(relu__7, parameter_23, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x2x100x100xf16) <- (-1x2x100x100xf16, 1x2x1x1xf16)
-        add__10 = paddle._C_ops.add(conv2d_10, parameter_24)
+        add__10 = paddle._C_ops.add_(conv2d_10, parameter_24)
 
         # pd_op.sigmoid_: (-1x2x100x100xf16) <- (-1x2x100x100xf16)
-        sigmoid__2 = paddle._C_ops.sigmoid(add__10)
+        sigmoid__2 = paddle._C_ops.sigmoid_(add__10)
 
         # pd_op.cast: (-1x2x100x100xf32) <- (-1x2x100x100xf16)
         cast_1 = paddle._C_ops.cast(sigmoid__2, paddle.float32)

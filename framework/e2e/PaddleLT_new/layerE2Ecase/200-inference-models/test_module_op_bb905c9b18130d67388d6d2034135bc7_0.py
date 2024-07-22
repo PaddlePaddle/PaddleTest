@@ -230,268 +230,268 @@ class BlockEntries:
         conv2d_0 = paddle._C_ops.conv2d(cast_0, parameter_0, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x64x112x112xf16) <- (-1x64x112x112xf16, 1x64x1x1xf16)
-        add__0 = paddle._C_ops.add(conv2d_0, parameter_1)
+        add__0 = paddle._C_ops.add_(conv2d_0, parameter_1)
 
         # pd_op.relu_: (-1x64x112x112xf16) <- (-1x64x112x112xf16)
-        relu__0 = paddle._C_ops.relu(add__0)
+        relu__0 = paddle._C_ops.relu_(add__0)
 
         # pd_op.conv2d: (-1x192x56x56xf16) <- (-1x64x112x112xf16, 192x64x3x3xf16)
         conv2d_1 = paddle._C_ops.conv2d(relu__0, parameter_2, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x192x56x56xf16) <- (-1x192x56x56xf16, 1x192x1x1xf16)
-        add__1 = paddle._C_ops.add(conv2d_1, parameter_3)
+        add__1 = paddle._C_ops.add_(conv2d_1, parameter_3)
 
         # pd_op.relu_: (-1x192x56x56xf16) <- (-1x192x56x56xf16)
-        relu__1 = paddle._C_ops.relu(add__1)
+        relu__1 = paddle._C_ops.relu_(add__1)
 
         # pd_op.conv2d: (-1x192x56x56xf16) <- (-1x192x56x56xf16, 192x192x3x3xf16)
         conv2d_2 = paddle._C_ops.conv2d(relu__1, parameter_4, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x192x56x56xf16) <- (-1x192x56x56xf16, 1x192x1x1xf16)
-        add__2 = paddle._C_ops.add(conv2d_2, parameter_5)
+        add__2 = paddle._C_ops.add_(conv2d_2, parameter_5)
 
         # pd_op.relu_: (-1x192x56x56xf16) <- (-1x192x56x56xf16)
-        relu__2 = paddle._C_ops.relu(add__2)
+        relu__2 = paddle._C_ops.relu_(add__2)
 
         # pd_op.conv2d: (-1x192x56x56xf16) <- (-1x192x56x56xf16, 192x192x3x3xf16)
         conv2d_3 = paddle._C_ops.conv2d(relu__2, parameter_6, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x192x56x56xf16) <- (-1x192x56x56xf16, 1x192x1x1xf16)
-        add__3 = paddle._C_ops.add(conv2d_3, parameter_7)
+        add__3 = paddle._C_ops.add_(conv2d_3, parameter_7)
 
         # pd_op.relu_: (-1x192x56x56xf16) <- (-1x192x56x56xf16)
-        relu__3 = paddle._C_ops.relu(add__3)
+        relu__3 = paddle._C_ops.relu_(add__3)
 
         # pd_op.conv2d: (-1x192x56x56xf16) <- (-1x192x56x56xf16, 192x192x3x3xf16)
         conv2d_4 = paddle._C_ops.conv2d(relu__3, parameter_8, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x192x56x56xf16) <- (-1x192x56x56xf16, 1x192x1x1xf16)
-        add__4 = paddle._C_ops.add(conv2d_4, parameter_9)
+        add__4 = paddle._C_ops.add_(conv2d_4, parameter_9)
 
         # pd_op.relu_: (-1x192x56x56xf16) <- (-1x192x56x56xf16)
-        relu__4 = paddle._C_ops.relu(add__4)
+        relu__4 = paddle._C_ops.relu_(add__4)
 
         # pd_op.conv2d: (-1x384x28x28xf16) <- (-1x192x56x56xf16, 384x192x3x3xf16)
         conv2d_5 = paddle._C_ops.conv2d(relu__4, parameter_10, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 1x384x1x1xf16)
-        add__5 = paddle._C_ops.add(conv2d_5, parameter_11)
+        add__5 = paddle._C_ops.add_(conv2d_5, parameter_11)
 
         # pd_op.relu_: (-1x384x28x28xf16) <- (-1x384x28x28xf16)
-        relu__5 = paddle._C_ops.relu(add__5)
+        relu__5 = paddle._C_ops.relu_(add__5)
 
         # pd_op.conv2d: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 384x384x3x3xf16)
         conv2d_6 = paddle._C_ops.conv2d(relu__5, parameter_12, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 1x384x1x1xf16)
-        add__6 = paddle._C_ops.add(conv2d_6, parameter_13)
+        add__6 = paddle._C_ops.add_(conv2d_6, parameter_13)
 
         # pd_op.relu_: (-1x384x28x28xf16) <- (-1x384x28x28xf16)
-        relu__6 = paddle._C_ops.relu(add__6)
+        relu__6 = paddle._C_ops.relu_(add__6)
 
         # pd_op.conv2d: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 384x384x3x3xf16)
         conv2d_7 = paddle._C_ops.conv2d(relu__6, parameter_14, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 1x384x1x1xf16)
-        add__7 = paddle._C_ops.add(conv2d_7, parameter_15)
+        add__7 = paddle._C_ops.add_(conv2d_7, parameter_15)
 
         # pd_op.relu_: (-1x384x28x28xf16) <- (-1x384x28x28xf16)
-        relu__7 = paddle._C_ops.relu(add__7)
+        relu__7 = paddle._C_ops.relu_(add__7)
 
         # pd_op.conv2d: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 384x384x3x3xf16)
         conv2d_8 = paddle._C_ops.conv2d(relu__7, parameter_16, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 1x384x1x1xf16)
-        add__8 = paddle._C_ops.add(conv2d_8, parameter_17)
+        add__8 = paddle._C_ops.add_(conv2d_8, parameter_17)
 
         # pd_op.relu_: (-1x384x28x28xf16) <- (-1x384x28x28xf16)
-        relu__8 = paddle._C_ops.relu(add__8)
+        relu__8 = paddle._C_ops.relu_(add__8)
 
         # pd_op.conv2d: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 384x384x3x3xf16)
         conv2d_9 = paddle._C_ops.conv2d(relu__8, parameter_18, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 1x384x1x1xf16)
-        add__9 = paddle._C_ops.add(conv2d_9, parameter_19)
+        add__9 = paddle._C_ops.add_(conv2d_9, parameter_19)
 
         # pd_op.relu_: (-1x384x28x28xf16) <- (-1x384x28x28xf16)
-        relu__9 = paddle._C_ops.relu(add__9)
+        relu__9 = paddle._C_ops.relu_(add__9)
 
         # pd_op.conv2d: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 384x384x3x3xf16)
         conv2d_10 = paddle._C_ops.conv2d(relu__9, parameter_20, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x384x28x28xf16) <- (-1x384x28x28xf16, 1x384x1x1xf16)
-        add__10 = paddle._C_ops.add(conv2d_10, parameter_21)
+        add__10 = paddle._C_ops.add_(conv2d_10, parameter_21)
 
         # pd_op.relu_: (-1x384x28x28xf16) <- (-1x384x28x28xf16)
-        relu__10 = paddle._C_ops.relu(add__10)
+        relu__10 = paddle._C_ops.relu_(add__10)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x384x28x28xf16, 768x384x3x3xf16)
         conv2d_11 = paddle._C_ops.conv2d(relu__10, parameter_22, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__11 = paddle._C_ops.add(conv2d_11, parameter_23)
+        add__11 = paddle._C_ops.add_(conv2d_11, parameter_23)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__11 = paddle._C_ops.relu(add__11)
+        relu__11 = paddle._C_ops.relu_(add__11)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_12 = paddle._C_ops.conv2d(relu__11, parameter_24, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__12 = paddle._C_ops.add(conv2d_12, parameter_25)
+        add__12 = paddle._C_ops.add_(conv2d_12, parameter_25)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__12 = paddle._C_ops.relu(add__12)
+        relu__12 = paddle._C_ops.relu_(add__12)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_13 = paddle._C_ops.conv2d(relu__12, parameter_26, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__13 = paddle._C_ops.add(conv2d_13, parameter_27)
+        add__13 = paddle._C_ops.add_(conv2d_13, parameter_27)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__13 = paddle._C_ops.relu(add__13)
+        relu__13 = paddle._C_ops.relu_(add__13)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_14 = paddle._C_ops.conv2d(relu__13, parameter_28, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__14 = paddle._C_ops.add(conv2d_14, parameter_29)
+        add__14 = paddle._C_ops.add_(conv2d_14, parameter_29)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__14 = paddle._C_ops.relu(add__14)
+        relu__14 = paddle._C_ops.relu_(add__14)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_15 = paddle._C_ops.conv2d(relu__14, parameter_30, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__15 = paddle._C_ops.add(conv2d_15, parameter_31)
+        add__15 = paddle._C_ops.add_(conv2d_15, parameter_31)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__15 = paddle._C_ops.relu(add__15)
+        relu__15 = paddle._C_ops.relu_(add__15)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_16 = paddle._C_ops.conv2d(relu__15, parameter_32, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__16 = paddle._C_ops.add(conv2d_16, parameter_33)
+        add__16 = paddle._C_ops.add_(conv2d_16, parameter_33)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__16 = paddle._C_ops.relu(add__16)
+        relu__16 = paddle._C_ops.relu_(add__16)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_17 = paddle._C_ops.conv2d(relu__16, parameter_34, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__17 = paddle._C_ops.add(conv2d_17, parameter_35)
+        add__17 = paddle._C_ops.add_(conv2d_17, parameter_35)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__17 = paddle._C_ops.relu(add__17)
+        relu__17 = paddle._C_ops.relu_(add__17)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_18 = paddle._C_ops.conv2d(relu__17, parameter_36, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__18 = paddle._C_ops.add(conv2d_18, parameter_37)
+        add__18 = paddle._C_ops.add_(conv2d_18, parameter_37)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__18 = paddle._C_ops.relu(add__18)
+        relu__18 = paddle._C_ops.relu_(add__18)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_19 = paddle._C_ops.conv2d(relu__18, parameter_38, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__19 = paddle._C_ops.add(conv2d_19, parameter_39)
+        add__19 = paddle._C_ops.add_(conv2d_19, parameter_39)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__19 = paddle._C_ops.relu(add__19)
+        relu__19 = paddle._C_ops.relu_(add__19)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_20 = paddle._C_ops.conv2d(relu__19, parameter_40, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__20 = paddle._C_ops.add(conv2d_20, parameter_41)
+        add__20 = paddle._C_ops.add_(conv2d_20, parameter_41)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__20 = paddle._C_ops.relu(add__20)
+        relu__20 = paddle._C_ops.relu_(add__20)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_21 = paddle._C_ops.conv2d(relu__20, parameter_42, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__21 = paddle._C_ops.add(conv2d_21, parameter_43)
+        add__21 = paddle._C_ops.add_(conv2d_21, parameter_43)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__21 = paddle._C_ops.relu(add__21)
+        relu__21 = paddle._C_ops.relu_(add__21)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_22 = paddle._C_ops.conv2d(relu__21, parameter_44, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__22 = paddle._C_ops.add(conv2d_22, parameter_45)
+        add__22 = paddle._C_ops.add_(conv2d_22, parameter_45)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__22 = paddle._C_ops.relu(add__22)
+        relu__22 = paddle._C_ops.relu_(add__22)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_23 = paddle._C_ops.conv2d(relu__22, parameter_46, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__23 = paddle._C_ops.add(conv2d_23, parameter_47)
+        add__23 = paddle._C_ops.add_(conv2d_23, parameter_47)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__23 = paddle._C_ops.relu(add__23)
+        relu__23 = paddle._C_ops.relu_(add__23)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_24 = paddle._C_ops.conv2d(relu__23, parameter_48, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__24 = paddle._C_ops.add(conv2d_24, parameter_49)
+        add__24 = paddle._C_ops.add_(conv2d_24, parameter_49)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__24 = paddle._C_ops.relu(add__24)
+        relu__24 = paddle._C_ops.relu_(add__24)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_25 = paddle._C_ops.conv2d(relu__24, parameter_50, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__25 = paddle._C_ops.add(conv2d_25, parameter_51)
+        add__25 = paddle._C_ops.add_(conv2d_25, parameter_51)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__25 = paddle._C_ops.relu(add__25)
+        relu__25 = paddle._C_ops.relu_(add__25)
 
         # pd_op.conv2d: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 768x768x3x3xf16)
         conv2d_26 = paddle._C_ops.conv2d(relu__25, parameter_52, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x768x14x14xf16) <- (-1x768x14x14xf16, 1x768x1x1xf16)
-        add__26 = paddle._C_ops.add(conv2d_26, parameter_53)
+        add__26 = paddle._C_ops.add_(conv2d_26, parameter_53)
 
         # pd_op.relu_: (-1x768x14x14xf16) <- (-1x768x14x14xf16)
-        relu__26 = paddle._C_ops.relu(add__26)
+        relu__26 = paddle._C_ops.relu_(add__26)
 
         # pd_op.conv2d: (-1x2560x7x7xf16) <- (-1x768x14x14xf16, 2560x768x3x3xf16)
         conv2d_27 = paddle._C_ops.conv2d(relu__26, parameter_54, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x2560x7x7xf16) <- (-1x2560x7x7xf16, 1x2560x1x1xf16)
-        add__27 = paddle._C_ops.add(conv2d_27, parameter_55)
+        add__27 = paddle._C_ops.add_(conv2d_27, parameter_55)
 
         # pd_op.relu_: (-1x2560x7x7xf16) <- (-1x2560x7x7xf16)
-        relu__27 = paddle._C_ops.relu(add__27)
+        relu__27 = paddle._C_ops.relu_(add__27)
 
         # pd_op.pool2d: (-1x2560x1x1xf16) <- (-1x2560x7x7xf16, 2xi64)
         pool2d_0 = paddle._C_ops.pool2d(relu__27, constant_0, [1, 1], [0, 0], False, True, 'NCHW', 'avg', False, True, 'EXPLICIT')
 
         # pd_op.flatten_: (-1x2560xf16, None) <- (-1x2560x1x1xf16)
-        flatten__0, flatten__1 = (lambda x, f: f(x))(paddle._C_ops.flatten(pool2d_0, 1, 3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        flatten__0, flatten__1 = (lambda x, f: f(x))(paddle._C_ops.flatten_(pool2d_0, 1, 3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf16) <- (-1x2560xf16, 2560x1000xf16)
         matmul_0 = paddle.matmul(flatten__0, parameter_56, transpose_x=False, transpose_y=False)
 
         # pd_op.add_: (-1x1000xf16) <- (-1x1000xf16, 1000xf16)
-        add__28 = paddle._C_ops.add(matmul_0, parameter_57)
+        add__28 = paddle._C_ops.add_(matmul_0, parameter_57)
 
         # pd_op.softmax_: (-1x1000xf16) <- (-1x1000xf16)
-        softmax__0 = paddle._C_ops.softmax(add__28, -1)
+        softmax__0 = paddle._C_ops.softmax_(add__28, -1)
 
         # pd_op.cast: (-1x1000xf32) <- (-1x1000xf16)
         cast_1 = paddle._C_ops.cast(softmax__0, paddle.float32)

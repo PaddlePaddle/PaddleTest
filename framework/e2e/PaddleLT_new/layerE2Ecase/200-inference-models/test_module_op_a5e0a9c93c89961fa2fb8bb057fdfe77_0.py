@@ -458,13 +458,13 @@ class BlockEntries:
         conv2d_23 = paddle._C_ops.conv2d(pool2d_2, parameter_115, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x1x1xf16) <- (-1x128x1x1xf16, 1x128x1x1xf16)
-        add__0 = paddle._C_ops.add(conv2d_23, parameter_116)
+        add__0 = paddle._C_ops.add_(conv2d_23, parameter_116)
 
         # pd_op.batch_norm_: (-1x128x1x1xf16, 128xf32, 128xf32, xf32, xf32, None) <- (-1x128x1x1xf16, 128xf32, 128xf32, 128xf32, 128xf32)
         batch_norm__138, batch_norm__139, batch_norm__140, batch_norm__141, batch_norm__142, batch_norm__143 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(add__0, parameter_117, parameter_118, parameter_119, parameter_120, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.relu_: (-1x128x1x1xf16) <- (-1x128x1x1xf16)
-        relu__0 = paddle._C_ops.relu(batch_norm__138)
+        relu__0 = paddle._C_ops.relu_(batch_norm__138)
 
         # pd_op.shape: (4xi32) <- (-1x512x-1x-1xf16)
         shape_0 = paddle._C_ops.shape(paddle.cast(relu_18, 'float32'))
@@ -473,7 +473,7 @@ class BlockEntries:
         slice_0 = paddle._C_ops.slice(shape_0, [0], constant_3, constant_4, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__0 = paddle._C_ops.cast(slice_0, paddle.int32)
+        cast__0 = paddle._C_ops.cast_(slice_0, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x128x-1x-1xf16) <- (-1x128x1x1xf16, 2xi32, None, None)
         bilinear_interp_0 = paddle._C_ops.bilinear_interp(relu__0, cast__0, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
@@ -485,13 +485,13 @@ class BlockEntries:
         conv2d_24 = paddle._C_ops.conv2d(pool2d_3, parameter_121, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x2x2xf16) <- (-1x128x2x2xf16, 1x128x1x1xf16)
-        add__1 = paddle._C_ops.add(conv2d_24, parameter_122)
+        add__1 = paddle._C_ops.add_(conv2d_24, parameter_122)
 
         # pd_op.batch_norm_: (-1x128x2x2xf16, 128xf32, 128xf32, xf32, xf32, None) <- (-1x128x2x2xf16, 128xf32, 128xf32, 128xf32, 128xf32)
         batch_norm__144, batch_norm__145, batch_norm__146, batch_norm__147, batch_norm__148, batch_norm__149 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(add__1, parameter_123, parameter_124, parameter_125, parameter_126, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.relu_: (-1x128x2x2xf16) <- (-1x128x2x2xf16)
-        relu__1 = paddle._C_ops.relu(batch_norm__144)
+        relu__1 = paddle._C_ops.relu_(batch_norm__144)
 
         # pd_op.shape: (4xi32) <- (-1x512x-1x-1xf16)
         shape_1 = paddle._C_ops.shape(paddle.cast(relu_18, 'float32'))
@@ -500,7 +500,7 @@ class BlockEntries:
         slice_1 = paddle._C_ops.slice(shape_1, [0], constant_3, constant_4, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__1 = paddle._C_ops.cast(slice_1, paddle.int32)
+        cast__1 = paddle._C_ops.cast_(slice_1, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x128x-1x-1xf16) <- (-1x128x2x2xf16, 2xi32, None, None)
         bilinear_interp_1 = paddle._C_ops.bilinear_interp(relu__1, cast__1, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
@@ -512,13 +512,13 @@ class BlockEntries:
         conv2d_25 = paddle._C_ops.conv2d(pool2d_4, parameter_127, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x3x3xf16) <- (-1x128x3x3xf16, 1x128x1x1xf16)
-        add__2 = paddle._C_ops.add(conv2d_25, parameter_128)
+        add__2 = paddle._C_ops.add_(conv2d_25, parameter_128)
 
         # pd_op.batch_norm_: (-1x128x3x3xf16, 128xf32, 128xf32, xf32, xf32, None) <- (-1x128x3x3xf16, 128xf32, 128xf32, 128xf32, 128xf32)
         batch_norm__150, batch_norm__151, batch_norm__152, batch_norm__153, batch_norm__154, batch_norm__155 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(add__2, parameter_129, parameter_130, parameter_131, parameter_132, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.relu_: (-1x128x3x3xf16) <- (-1x128x3x3xf16)
-        relu__2 = paddle._C_ops.relu(batch_norm__150)
+        relu__2 = paddle._C_ops.relu_(batch_norm__150)
 
         # pd_op.shape: (4xi32) <- (-1x512x-1x-1xf16)
         shape_2 = paddle._C_ops.shape(paddle.cast(relu_18, 'float32'))
@@ -527,7 +527,7 @@ class BlockEntries:
         slice_2 = paddle._C_ops.slice(shape_2, [0], constant_3, constant_4, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__2 = paddle._C_ops.cast(slice_2, paddle.int32)
+        cast__2 = paddle._C_ops.cast_(slice_2, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x128x-1x-1xf16) <- (-1x128x3x3xf16, 2xi32, None, None)
         bilinear_interp_2 = paddle._C_ops.bilinear_interp(relu__2, cast__2, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
@@ -539,13 +539,13 @@ class BlockEntries:
         conv2d_26 = paddle._C_ops.conv2d(pool2d_5, parameter_133, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x128x6x6xf16) <- (-1x128x6x6xf16, 1x128x1x1xf16)
-        add__3 = paddle._C_ops.add(conv2d_26, parameter_134)
+        add__3 = paddle._C_ops.add_(conv2d_26, parameter_134)
 
         # pd_op.batch_norm_: (-1x128x6x6xf16, 128xf32, 128xf32, xf32, xf32, None) <- (-1x128x6x6xf16, 128xf32, 128xf32, 128xf32, 128xf32)
         batch_norm__156, batch_norm__157, batch_norm__158, batch_norm__159, batch_norm__160, batch_norm__161 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(add__3, parameter_135, parameter_136, parameter_137, parameter_138, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.relu_: (-1x128x6x6xf16) <- (-1x128x6x6xf16)
-        relu__3 = paddle._C_ops.relu(batch_norm__156)
+        relu__3 = paddle._C_ops.relu_(batch_norm__156)
 
         # pd_op.shape: (4xi32) <- (-1x512x-1x-1xf16)
         shape_3 = paddle._C_ops.shape(paddle.cast(relu_18, 'float32'))
@@ -554,7 +554,7 @@ class BlockEntries:
         slice_3 = paddle._C_ops.slice(shape_3, [0], constant_3, constant_4, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__3 = paddle._C_ops.cast(slice_3, paddle.int32)
+        cast__3 = paddle._C_ops.cast_(slice_3, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x128x-1x-1xf16) <- (-1x128x6x6xf16, 2xi32, None, None)
         bilinear_interp_3 = paddle._C_ops.bilinear_interp(relu__3, cast__3, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
@@ -620,7 +620,7 @@ class BlockEntries:
         strided_slice_0 = paddle._C_ops.strided_slice(slice_4, [0], constant_4, constant_7, constant_7)
 
         # pd_op.reshape_: (1x1x1x2xi32, 0x2xi32) <- (2xi32, 4xi64)
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape(strided_slice_0, constant_8), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(strided_slice_0, constant_8), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_5 = paddle._C_ops.slice(slice_4, [0], constant_9, constant_10, [1], [0])
@@ -635,7 +635,7 @@ class BlockEntries:
         linspace_0 = paddle._C_ops.linspace(full_0, full_1, slice_5, paddle.float16, paddle.framework._current_expected_place())
 
         # pd_op.reshape_: (-1x1xf16, 0x-1xf16) <- (-1xf16, 2xi64)
-        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape(linspace_0, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(linspace_0, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_6 = paddle._C_ops.slice(slice_4, [0], constant_10, constant_3, [1], [0])
@@ -653,7 +653,7 @@ class BlockEntries:
         linspace_1 = paddle._C_ops.linspace(full_0, full_1, slice_7, paddle.float16, paddle.framework._current_expected_place())
 
         # pd_op.reshape_: (-1x1xf16, 0x-1xf16) <- (-1xf16, 2xi64)
-        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape(linspace_1, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape_(linspace_1, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_8 = paddle._C_ops.slice(slice_4, [0], constant_9, constant_10, [1], [0])
@@ -668,10 +668,10 @@ class BlockEntries:
         transpose_0 = paddle._C_ops.transpose(tile_1, [1, 0])
 
         # pd_op.unsqueeze_: (-1x-1x1xf16, None) <- (-1x-1xf16, 1xi64)
-        unsqueeze__0, unsqueeze__1 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(transpose_0, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__0, unsqueeze__1 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(transpose_0, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x-1x1xf16, None) <- (-1x-1xf16, 1xi64)
-        unsqueeze__2, unsqueeze__3 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(tile_0, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__2, unsqueeze__3 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(tile_0, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([-1x-1x1xf16, -1x-1x1xf16]) <- (-1x-1x1xf16, -1x-1x1xf16)
         combine_4 = [unsqueeze__0, unsqueeze__2]
@@ -761,7 +761,7 @@ class BlockEntries:
         strided_slice_1 = paddle._C_ops.strided_slice(slice_9, [0], constant_4, constant_7, constant_7)
 
         # pd_op.reshape_: (1x1x1x2xi32, 0x2xi32) <- (2xi32, 4xi64)
-        reshape__6, reshape__7 = (lambda x, f: f(x))(paddle._C_ops.reshape(strided_slice_1, constant_8), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__6, reshape__7 = (lambda x, f: f(x))(paddle._C_ops.reshape_(strided_slice_1, constant_8), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_10 = paddle._C_ops.slice(slice_9, [0], constant_9, constant_10, [1], [0])
@@ -770,7 +770,7 @@ class BlockEntries:
         linspace_2 = paddle._C_ops.linspace(full_0, full_1, slice_10, paddle.float16, paddle.framework._current_expected_place())
 
         # pd_op.reshape_: (-1x1xf16, 0x-1xf16) <- (-1xf16, 2xi64)
-        reshape__8, reshape__9 = (lambda x, f: f(x))(paddle._C_ops.reshape(linspace_2, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__8, reshape__9 = (lambda x, f: f(x))(paddle._C_ops.reshape_(linspace_2, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_11 = paddle._C_ops.slice(slice_9, [0], constant_10, constant_3, [1], [0])
@@ -788,7 +788,7 @@ class BlockEntries:
         linspace_3 = paddle._C_ops.linspace(full_0, full_1, slice_12, paddle.float16, paddle.framework._current_expected_place())
 
         # pd_op.reshape_: (-1x1xf16, 0x-1xf16) <- (-1xf16, 2xi64)
-        reshape__10, reshape__11 = (lambda x, f: f(x))(paddle._C_ops.reshape(linspace_3, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__10, reshape__11 = (lambda x, f: f(x))(paddle._C_ops.reshape_(linspace_3, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_13 = paddle._C_ops.slice(slice_9, [0], constant_9, constant_10, [1], [0])
@@ -803,10 +803,10 @@ class BlockEntries:
         transpose_2 = paddle._C_ops.transpose(tile_3, [1, 0])
 
         # pd_op.unsqueeze_: (-1x-1x1xf16, None) <- (-1x-1xf16, 1xi64)
-        unsqueeze__4, unsqueeze__5 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(transpose_2, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__4, unsqueeze__5 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(transpose_2, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x-1x1xf16, None) <- (-1x-1xf16, 1xi64)
-        unsqueeze__6, unsqueeze__7 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(tile_2, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__6, unsqueeze__7 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(tile_2, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([-1x-1x1xf16, -1x-1x1xf16]) <- (-1x-1x1xf16, -1x-1x1xf16)
         combine_8 = [unsqueeze__4, unsqueeze__6]
@@ -896,7 +896,7 @@ class BlockEntries:
         strided_slice_2 = paddle._C_ops.strided_slice(slice_14, [0], constant_4, constant_7, constant_7)
 
         # pd_op.reshape_: (1x1x1x2xi32, 0x2xi32) <- (2xi32, 4xi64)
-        reshape__12, reshape__13 = (lambda x, f: f(x))(paddle._C_ops.reshape(strided_slice_2, constant_8), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__12, reshape__13 = (lambda x, f: f(x))(paddle._C_ops.reshape_(strided_slice_2, constant_8), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_15 = paddle._C_ops.slice(slice_14, [0], constant_9, constant_10, [1], [0])
@@ -905,7 +905,7 @@ class BlockEntries:
         linspace_4 = paddle._C_ops.linspace(full_0, full_1, slice_15, paddle.float16, paddle.framework._current_expected_place())
 
         # pd_op.reshape_: (-1x1xf16, 0x-1xf16) <- (-1xf16, 2xi64)
-        reshape__14, reshape__15 = (lambda x, f: f(x))(paddle._C_ops.reshape(linspace_4, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__14, reshape__15 = (lambda x, f: f(x))(paddle._C_ops.reshape_(linspace_4, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_16 = paddle._C_ops.slice(slice_14, [0], constant_10, constant_3, [1], [0])
@@ -923,7 +923,7 @@ class BlockEntries:
         linspace_5 = paddle._C_ops.linspace(full_0, full_1, slice_17, paddle.float16, paddle.framework._current_expected_place())
 
         # pd_op.reshape_: (-1x1xf16, 0x-1xf16) <- (-1xf16, 2xi64)
-        reshape__16, reshape__17 = (lambda x, f: f(x))(paddle._C_ops.reshape(linspace_5, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__16, reshape__17 = (lambda x, f: f(x))(paddle._C_ops.reshape_(linspace_5, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (xi32) <- (2xi32, 1xi64, 1xi64)
         slice_18 = paddle._C_ops.slice(slice_14, [0], constant_9, constant_10, [1], [0])
@@ -938,10 +938,10 @@ class BlockEntries:
         transpose_4 = paddle._C_ops.transpose(tile_5, [1, 0])
 
         # pd_op.unsqueeze_: (-1x-1x1xf16, None) <- (-1x-1xf16, 1xi64)
-        unsqueeze__8, unsqueeze__9 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(transpose_4, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__8, unsqueeze__9 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(transpose_4, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.unsqueeze_: (-1x-1x1xf16, None) <- (-1x-1xf16, 1xi64)
-        unsqueeze__10, unsqueeze__11 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze(tile_4, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        unsqueeze__10, unsqueeze__11 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(tile_4, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # builtin.combine: ([-1x-1x1xf16, -1x-1x1xf16]) <- (-1x-1x1xf16, -1x-1x1xf16)
         combine_12 = [unsqueeze__8, unsqueeze__10]
@@ -1007,7 +1007,7 @@ class BlockEntries:
         bilinear_interp_8 = paddle._C_ops.bilinear_interp(relu_21, cast_17, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__4 = paddle._C_ops.cast(slice_19, paddle.int32)
+        cast__4 = paddle._C_ops.cast_(slice_19, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x128x-1x-1xf16) <- (-1x128x-1x-1xf16, 2xi32, None, None)
         bilinear_interp_9 = paddle._C_ops.bilinear_interp(relu_19, cast__4, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
@@ -1040,7 +1040,7 @@ class BlockEntries:
         slice_20 = paddle._C_ops.slice(shape_8, [0], constant_3, constant_4, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__5 = paddle._C_ops.cast(slice_20, paddle.int32)
+        cast__5 = paddle._C_ops.cast_(slice_20, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x19x-1x-1xf16) <- (-1x19x-1x-1xf16, 2xi32, None, None)
         bilinear_interp_10 = paddle._C_ops.bilinear_interp(add_18, cast__5, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
