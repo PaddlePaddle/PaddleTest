@@ -361,14 +361,14 @@ class PrimitiveOp_4e0e1e41ebece0ab9d4c052a641f0081(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_efd19eb6316f509038134327eaca7332(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_df1260efa4e1317118b831e38e389ce8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_4e0e1e41ebece0ab9d4c052a641f0081
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.2679559588432312, 0.3664501905441284]], dtype='float32').reshape([1, 2]),
-            paddle.to_tensor([[0.06803228706121445, 0.18195267021656036]], dtype='float32').reshape([1, 2]),
+            paddle.to_tensor([[0.2987929582595825, 0.2395768165588379]], dtype='float32').reshape([1, 2]),
+            paddle.to_tensor([[0.3214615285396576, 0.18356965482234955]], dtype='float32').reshape([1, 2]),
         ]
 
 
@@ -514,28 +514,6 @@ class TestPrimitiveOp_7561969e2605f119f1d4da8bb45d70f7(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_65298f0d247e997f90774673cb043883(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_4e0e1e41ebece0ab9d4c052a641f0081
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.3220619261264801, 0.1280062347650528]], dtype='float32').reshape([1, 2]),
-            paddle.to_tensor([[0.3894693851470947, 0.38149911165237427]], dtype='float32').reshape([1, 2]),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
-        return self._test_entry()
-
 class PrimitiveOp_e72687eced4c1959d774a1356640a66c(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -559,14 +537,14 @@ class PrimitiveOp_e72687eced4c1959d774a1356640a66c(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a2d95b75f628c696340d7924b1b04a3a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_61f51658896aff75fa152b23fc0d8afc(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e72687eced4c1959d774a1356640a66c
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.2679559588432312, 0.3664501905441284]], dtype='float32').reshape([1, 2]),
-            paddle.to_tensor([[0.06803228706121445, 0.18195267021656036]], dtype='float32').reshape([1, 2]),
+            paddle.to_tensor([[0.2987929582595825, 0.2395768165588379]], dtype='float32').reshape([1, 2]),
+            paddle.to_tensor([[0.3214615285396576, 0.18356965482234955]], dtype='float32').reshape([1, 2]),
         ]
 
 
@@ -699,28 +677,6 @@ class TestPrimitiveOp_732ab2a27026dfacac7de465d9d4bb5c(CinnTestBase, unittest.Te
         return [
             paddle.uniform([1, 256, 256, 2], dtype='float32', min=0, max=0.5),
             paddle.to_tensor([[[[256.0, 256.0]]]], dtype='float32').reshape([1, 1, 1, 2]),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
-        return self._test_entry()
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b7d6a2dafd37befa47bfb9c49a1aef52(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e72687eced4c1959d774a1356640a66c
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.3220619261264801, 0.1280062347650528]], dtype='float32').reshape([1, 2]),
-            paddle.to_tensor([[0.3894693851470947, 0.38149911165237427]], dtype='float32').reshape([1, 2]),
         ]
 
 
