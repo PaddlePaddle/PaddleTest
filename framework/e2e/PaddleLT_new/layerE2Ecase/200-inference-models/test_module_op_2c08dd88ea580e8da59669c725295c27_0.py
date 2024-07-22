@@ -851,10 +851,10 @@ class BlockEntries:
         batch_norm__372, batch_norm__373, batch_norm__374, batch_norm__375, batch_norm__376, batch_norm__377 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_59, parameter_318, parameter_319, parameter_320, parameter_321, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.relu_: (-1x256x1x1xf32) <- (-1x256x1x1xf32)
-        relu__0 = paddle._C_ops.relu(batch_norm__372)
+        relu__0 = paddle._C_ops.relu_(batch_norm__372)
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__0 = paddle._C_ops.cast(slice_0, paddle.int32)
+        cast__0 = paddle._C_ops.cast_(slice_0, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x256x-1x-1xf32) <- (-1x256x1x1xf32, 2xi32, None, None)
         bilinear_interp_0 = paddle._C_ops.bilinear_interp(relu__0, cast__0, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
@@ -899,7 +899,7 @@ class BlockEntries:
         slice_1 = paddle._C_ops.slice(shape_1, [0], constant_7, constant_3, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__1 = paddle._C_ops.cast(slice_1, paddle.int32)
+        cast__1 = paddle._C_ops.cast_(slice_1, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32, 2xi32, None, None)
         bilinear_interp_1 = paddle._C_ops.bilinear_interp(dropout_0, cast__1, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
@@ -965,7 +965,7 @@ class BlockEntries:
         slice_2 = paddle._C_ops.slice(shape_2, [0], constant_2, constant_3, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__2 = paddle._C_ops.cast(slice_2, paddle.int32)
+        cast__2 = paddle._C_ops.cast_(slice_2, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x2x-1x-1xf32) <- (-1x2x-1x-1xf32, 2xi32, None, None)
         bilinear_interp_2 = paddle._C_ops.bilinear_interp(add_29, cast__2, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)

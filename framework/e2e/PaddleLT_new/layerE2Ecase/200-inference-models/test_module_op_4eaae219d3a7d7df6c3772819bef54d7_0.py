@@ -629,7 +629,7 @@ class BlockEntries:
         pool2d_4 = paddle._C_ops.pool2d(relu_34, constant_2, [2, 2], [0, 0], False, True, 'NCHW', 'max', False, False, 'EXPLICIT')
 
         # pd_op.squeeze_: (-1x512x-1xf16, None) <- (-1x512x1x-1xf16, 1xi64)
-        squeeze__0, squeeze__1 = (lambda x, f: f(x))(paddle._C_ops.squeeze(pool2d_4, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        squeeze__0, squeeze__1 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_4, constant_3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.transpose: (-1x-1x512xf16) <- (-1x512x-1xf16)
         transpose_0 = paddle._C_ops.transpose(squeeze__0, [0, 2, 1])

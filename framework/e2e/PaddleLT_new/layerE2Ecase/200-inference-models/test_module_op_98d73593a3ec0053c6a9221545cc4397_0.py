@@ -1304,7 +1304,7 @@ class BlockEntries:
         slice_0 = paddle._C_ops.slice(shape_0, [0], constant_2, constant_3, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__0 = paddle._C_ops.cast(slice_0, paddle.int32)
+        cast__0 = paddle._C_ops.cast_(slice_0, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x256x-1x-1xf16) <- (-1x256x-1x-1xf16, 2xi32, None, None)
         bilinear_interp_0 = paddle._C_ops.bilinear_interp(relu_102, cast__0, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
@@ -1340,7 +1340,7 @@ class BlockEntries:
         slice_1 = paddle._C_ops.slice(shape_1, [0], constant_2, constant_3, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__1 = paddle._C_ops.cast(slice_1, paddle.int32)
+        cast__1 = paddle._C_ops.cast_(slice_1, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x256x-1x-1xf16) <- (-1x256x-1x-1xf16, 2xi32, None, None)
         bilinear_interp_1 = paddle._C_ops.bilinear_interp(add_35, cast__1, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
@@ -1376,7 +1376,7 @@ class BlockEntries:
         slice_2 = paddle._C_ops.slice(shape_2, [0], constant_2, constant_3, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__2 = paddle._C_ops.cast(slice_2, paddle.int32)
+        cast__2 = paddle._C_ops.cast_(slice_2, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x256x-1x-1xf16) <- (-1x256x-1x-1xf16, 2xi32, None, None)
         bilinear_interp_2 = paddle._C_ops.bilinear_interp(add_37, cast__2, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', True, 0)
@@ -1466,7 +1466,7 @@ class BlockEntries:
         bilinear_interp_6 = paddle._C_ops.bilinear_interp(relu_112, None, None, None, 'NCHW', -1, -1, -1, [float('2'), float('2')], 'bilinear', False, 0)
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__3 = paddle._C_ops.cast(slice_3, paddle.int32)
+        cast__3 = paddle._C_ops.cast_(slice_3, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x256x-1x-1xf16) <- (-1x256x-1x-1xf16, 2xi32, None, None)
         bilinear_interp_7 = paddle._C_ops.bilinear_interp(bilinear_interp_6, cast__3, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
@@ -1487,7 +1487,7 @@ class BlockEntries:
         slice_4 = paddle._C_ops.slice(shape_4, [0], constant_2, constant_3, [1], [])
 
         # pd_op.cast_: (2xi32) <- (2xi32)
-        cast__4 = paddle._C_ops.cast(slice_4, paddle.int32)
+        cast__4 = paddle._C_ops.cast_(slice_4, paddle.int32)
 
         # pd_op.bilinear_interp: (-1x19x-1x-1xf16) <- (-1x19x-1x-1xf16, 2xi32, None, None)
         bilinear_interp_8 = paddle._C_ops.bilinear_interp(add_46, cast__4, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)

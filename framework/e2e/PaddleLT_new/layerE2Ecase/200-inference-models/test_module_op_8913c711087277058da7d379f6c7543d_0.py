@@ -1262,7 +1262,7 @@ class BlockEntries:
         pool2d_4 = paddle._C_ops.pool2d(relu6_83, constant_4, [1, 1], [0, 0], False, True, 'NCHW', 'avg', False, True, 'EXPLICIT')
 
         # pd_op.flatten_: (-1x1280xf32, None) <- (-1x1280x1x1xf32)
-        flatten__0, flatten__1 = (lambda x, f: f(x))(paddle._C_ops.flatten(pool2d_4, 1, 3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        flatten__0, flatten__1 = (lambda x, f: f(x))(paddle._C_ops.flatten_(pool2d_4, 1, 3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.dropout: (-1x1280xf32, None) <- (-1x1280xf32, None, 1xf32)
         dropout_2, dropout_3 = (lambda x, f: f(x))(paddle._C_ops.dropout(flatten__0, None, constant_5, True, 'upscale_in_train', 0, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
@@ -1271,10 +1271,10 @@ class BlockEntries:
         matmul_0 = paddle.matmul(dropout_2, parameter_420, transpose_x=False, transpose_y=False)
 
         # pd_op.add_: (-1x1000xf32) <- (-1x1000xf32, 1000xf32)
-        add__0 = paddle._C_ops.add(matmul_0, parameter_421)
+        add__0 = paddle._C_ops.add_(matmul_0, parameter_421)
 
         # pd_op.softmax_: (-1x1000xf32) <- (-1x1000xf32)
-        softmax__0 = paddle._C_ops.softmax(add__0, -1)
+        softmax__0 = paddle._C_ops.softmax_(add__0, -1)
         return softmax__0
 
 

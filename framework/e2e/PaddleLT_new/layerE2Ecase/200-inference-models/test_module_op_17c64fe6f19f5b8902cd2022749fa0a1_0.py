@@ -227,7 +227,7 @@ class BlockEntries:
         cast_0 = paddle._C_ops.cast(feed_0, paddle.float16)
 
         # pd_op.reshape_: (-1x3x224x224xf16, 0x-1x8x3x224x224xf16) <- (-1x8x3x224x224xf16, 4xi64)
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape(cast_0, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(cast_0, constant_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (-1x32x112x112xf16) <- (-1x3x224x224xf16, 32x3x3x3xf16)
         conv2d_0 = paddle._C_ops.conv2d(reshape__0, parameter_0, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -236,7 +236,7 @@ class BlockEntries:
         batch_norm__0, batch_norm__1, batch_norm__2, batch_norm__3, batch_norm__4, batch_norm__5 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_0, parameter_1, parameter_2, parameter_3, parameter_4, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x32x112x112xf16) <- (-1x32x112x112xf16)
-        leaky_relu__0 = paddle._C_ops.leaky_relu(batch_norm__0, float('0.01'))
+        leaky_relu__0 = paddle._C_ops.leaky_relu_(batch_norm__0, float('0.01'))
 
         # pd_op.conv2d: (-1x32x112x112xf16) <- (-1x32x112x112xf16, 32x32x3x3xf16)
         conv2d_1 = paddle._C_ops.conv2d(leaky_relu__0, parameter_5, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -245,7 +245,7 @@ class BlockEntries:
         batch_norm__6, batch_norm__7, batch_norm__8, batch_norm__9, batch_norm__10, batch_norm__11 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_1, parameter_6, parameter_7, parameter_8, parameter_9, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x32x112x112xf16) <- (-1x32x112x112xf16)
-        leaky_relu__1 = paddle._C_ops.leaky_relu(batch_norm__6, float('0.01'))
+        leaky_relu__1 = paddle._C_ops.leaky_relu_(batch_norm__6, float('0.01'))
 
         # pd_op.conv2d: (-1x64x112x112xf16) <- (-1x32x112x112xf16, 64x32x3x3xf16)
         conv2d_2 = paddle._C_ops.conv2d(leaky_relu__1, parameter_10, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -254,7 +254,7 @@ class BlockEntries:
         batch_norm__12, batch_norm__13, batch_norm__14, batch_norm__15, batch_norm__16, batch_norm__17 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_2, parameter_11, parameter_12, parameter_13, parameter_14, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x64x112x112xf16) <- (-1x64x112x112xf16)
-        leaky_relu__2 = paddle._C_ops.leaky_relu(batch_norm__12, float('0.01'))
+        leaky_relu__2 = paddle._C_ops.leaky_relu_(batch_norm__12, float('0.01'))
 
         # pd_op.pool2d: (-1x64x56x56xf16) <- (-1x64x112x112xf16, 2xi64)
         pool2d_0 = paddle._C_ops.pool2d(leaky_relu__2, constant_1, [2, 2], [1, 1], False, True, 'NCHW', 'max', False, False, 'EXPLICIT')
@@ -269,7 +269,7 @@ class BlockEntries:
         batch_norm__18, batch_norm__19, batch_norm__20, batch_norm__21, batch_norm__22, batch_norm__23 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_3, parameter_16, parameter_17, parameter_18, parameter_19, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x64x56x56xf16) <- (-1x64x56x56xf16)
-        leaky_relu__3 = paddle._C_ops.leaky_relu(batch_norm__18, float('0.01'))
+        leaky_relu__3 = paddle._C_ops.leaky_relu_(batch_norm__18, float('0.01'))
 
         # pd_op.conv2d: (-1x64x56x56xf16) <- (-1x64x56x56xf16, 64x64x3x3xf16)
         conv2d_4 = paddle._C_ops.conv2d(leaky_relu__3, parameter_20, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -278,7 +278,7 @@ class BlockEntries:
         batch_norm__24, batch_norm__25, batch_norm__26, batch_norm__27, batch_norm__28, batch_norm__29 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_4, parameter_21, parameter_22, parameter_23, parameter_24, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x64x56x56xf16) <- (-1x64x56x56xf16)
-        leaky_relu__4 = paddle._C_ops.leaky_relu(batch_norm__24, float('0.01'))
+        leaky_relu__4 = paddle._C_ops.leaky_relu_(batch_norm__24, float('0.01'))
 
         # pd_op.conv2d: (-1x256x56x56xf16) <- (-1x64x56x56xf16, 256x64x1x1xf16)
         conv2d_5 = paddle._C_ops.conv2d(leaky_relu__4, parameter_25, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -293,10 +293,10 @@ class BlockEntries:
         batch_norm__36, batch_norm__37, batch_norm__38, batch_norm__39, batch_norm__40, batch_norm__41 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_6, parameter_31, parameter_32, parameter_33, parameter_34, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x256x56x56xf16) <- (-1x256x56x56xf16, -1x256x56x56xf16)
-        add__0 = paddle._C_ops.add(batch_norm__36, batch_norm__30)
+        add__0 = paddle._C_ops.add_(batch_norm__36, batch_norm__30)
 
         # pd_op.leaky_relu_: (-1x256x56x56xf16) <- (-1x256x56x56xf16)
-        leaky_relu__5 = paddle._C_ops.leaky_relu(add__0, float('0.01'))
+        leaky_relu__5 = paddle._C_ops.leaky_relu_(add__0, float('0.01'))
 
         # pd_op.temporal_shift: (-1x256x56x56xf16) <- (-1x256x56x56xf16)
         temporal_shift_1 = paddle._C_ops.temporal_shift(leaky_relu__5, 8, float('0.125'), 'NCHW')
@@ -308,7 +308,7 @@ class BlockEntries:
         batch_norm__42, batch_norm__43, batch_norm__44, batch_norm__45, batch_norm__46, batch_norm__47 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_7, parameter_36, parameter_37, parameter_38, parameter_39, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x64x56x56xf16) <- (-1x64x56x56xf16)
-        leaky_relu__6 = paddle._C_ops.leaky_relu(batch_norm__42, float('0.01'))
+        leaky_relu__6 = paddle._C_ops.leaky_relu_(batch_norm__42, float('0.01'))
 
         # pd_op.conv2d: (-1x64x56x56xf16) <- (-1x64x56x56xf16, 64x64x3x3xf16)
         conv2d_8 = paddle._C_ops.conv2d(leaky_relu__6, parameter_40, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -317,7 +317,7 @@ class BlockEntries:
         batch_norm__48, batch_norm__49, batch_norm__50, batch_norm__51, batch_norm__52, batch_norm__53 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_8, parameter_41, parameter_42, parameter_43, parameter_44, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x64x56x56xf16) <- (-1x64x56x56xf16)
-        leaky_relu__7 = paddle._C_ops.leaky_relu(batch_norm__48, float('0.01'))
+        leaky_relu__7 = paddle._C_ops.leaky_relu_(batch_norm__48, float('0.01'))
 
         # pd_op.conv2d: (-1x256x56x56xf16) <- (-1x64x56x56xf16, 256x64x1x1xf16)
         conv2d_9 = paddle._C_ops.conv2d(leaky_relu__7, parameter_45, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -326,10 +326,10 @@ class BlockEntries:
         batch_norm__54, batch_norm__55, batch_norm__56, batch_norm__57, batch_norm__58, batch_norm__59 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_9, parameter_46, parameter_47, parameter_48, parameter_49, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x256x56x56xf16) <- (-1x256x56x56xf16, -1x256x56x56xf16)
-        add__1 = paddle._C_ops.add(leaky_relu__5, batch_norm__54)
+        add__1 = paddle._C_ops.add_(leaky_relu__5, batch_norm__54)
 
         # pd_op.leaky_relu_: (-1x256x56x56xf16) <- (-1x256x56x56xf16)
-        leaky_relu__8 = paddle._C_ops.leaky_relu(add__1, float('0.01'))
+        leaky_relu__8 = paddle._C_ops.leaky_relu_(add__1, float('0.01'))
 
         # pd_op.temporal_shift: (-1x256x56x56xf16) <- (-1x256x56x56xf16)
         temporal_shift_2 = paddle._C_ops.temporal_shift(leaky_relu__8, 8, float('0.125'), 'NCHW')
@@ -341,7 +341,7 @@ class BlockEntries:
         batch_norm__60, batch_norm__61, batch_norm__62, batch_norm__63, batch_norm__64, batch_norm__65 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_10, parameter_51, parameter_52, parameter_53, parameter_54, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x64x56x56xf16) <- (-1x64x56x56xf16)
-        leaky_relu__9 = paddle._C_ops.leaky_relu(batch_norm__60, float('0.01'))
+        leaky_relu__9 = paddle._C_ops.leaky_relu_(batch_norm__60, float('0.01'))
 
         # pd_op.conv2d: (-1x64x56x56xf16) <- (-1x64x56x56xf16, 64x64x3x3xf16)
         conv2d_11 = paddle._C_ops.conv2d(leaky_relu__9, parameter_55, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -350,7 +350,7 @@ class BlockEntries:
         batch_norm__66, batch_norm__67, batch_norm__68, batch_norm__69, batch_norm__70, batch_norm__71 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_11, parameter_56, parameter_57, parameter_58, parameter_59, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x64x56x56xf16) <- (-1x64x56x56xf16)
-        leaky_relu__10 = paddle._C_ops.leaky_relu(batch_norm__66, float('0.01'))
+        leaky_relu__10 = paddle._C_ops.leaky_relu_(batch_norm__66, float('0.01'))
 
         # pd_op.conv2d: (-1x256x56x56xf16) <- (-1x64x56x56xf16, 256x64x1x1xf16)
         conv2d_12 = paddle._C_ops.conv2d(leaky_relu__10, parameter_60, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -359,10 +359,10 @@ class BlockEntries:
         batch_norm__72, batch_norm__73, batch_norm__74, batch_norm__75, batch_norm__76, batch_norm__77 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_12, parameter_61, parameter_62, parameter_63, parameter_64, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x256x56x56xf16) <- (-1x256x56x56xf16, -1x256x56x56xf16)
-        add__2 = paddle._C_ops.add(leaky_relu__8, batch_norm__72)
+        add__2 = paddle._C_ops.add_(leaky_relu__8, batch_norm__72)
 
         # pd_op.leaky_relu_: (-1x256x56x56xf16) <- (-1x256x56x56xf16)
-        leaky_relu__11 = paddle._C_ops.leaky_relu(add__2, float('0.01'))
+        leaky_relu__11 = paddle._C_ops.leaky_relu_(add__2, float('0.01'))
 
         # pd_op.temporal_shift: (-1x256x56x56xf16) <- (-1x256x56x56xf16)
         temporal_shift_3 = paddle._C_ops.temporal_shift(leaky_relu__11, 8, float('0.125'), 'NCHW')
@@ -374,7 +374,7 @@ class BlockEntries:
         batch_norm__78, batch_norm__79, batch_norm__80, batch_norm__81, batch_norm__82, batch_norm__83 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_13, parameter_66, parameter_67, parameter_68, parameter_69, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x128x56x56xf16) <- (-1x128x56x56xf16)
-        leaky_relu__12 = paddle._C_ops.leaky_relu(batch_norm__78, float('0.01'))
+        leaky_relu__12 = paddle._C_ops.leaky_relu_(batch_norm__78, float('0.01'))
 
         # pd_op.conv2d: (-1x128x28x28xf16) <- (-1x128x56x56xf16, 128x128x3x3xf16)
         conv2d_14 = paddle._C_ops.conv2d(leaky_relu__12, parameter_70, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -383,7 +383,7 @@ class BlockEntries:
         batch_norm__84, batch_norm__85, batch_norm__86, batch_norm__87, batch_norm__88, batch_norm__89 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_14, parameter_71, parameter_72, parameter_73, parameter_74, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x128x28x28xf16) <- (-1x128x28x28xf16)
-        leaky_relu__13 = paddle._C_ops.leaky_relu(batch_norm__84, float('0.01'))
+        leaky_relu__13 = paddle._C_ops.leaky_relu_(batch_norm__84, float('0.01'))
 
         # pd_op.conv2d: (-1x512x28x28xf16) <- (-1x128x28x28xf16, 512x128x1x1xf16)
         conv2d_15 = paddle._C_ops.conv2d(leaky_relu__13, parameter_75, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -401,10 +401,10 @@ class BlockEntries:
         batch_norm__96, batch_norm__97, batch_norm__98, batch_norm__99, batch_norm__100, batch_norm__101 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_16, parameter_81, parameter_82, parameter_83, parameter_84, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x512x28x28xf16) <- (-1x512x28x28xf16, -1x512x28x28xf16)
-        add__3 = paddle._C_ops.add(batch_norm__96, batch_norm__90)
+        add__3 = paddle._C_ops.add_(batch_norm__96, batch_norm__90)
 
         # pd_op.leaky_relu_: (-1x512x28x28xf16) <- (-1x512x28x28xf16)
-        leaky_relu__14 = paddle._C_ops.leaky_relu(add__3, float('0.01'))
+        leaky_relu__14 = paddle._C_ops.leaky_relu_(add__3, float('0.01'))
 
         # pd_op.temporal_shift: (-1x512x28x28xf16) <- (-1x512x28x28xf16)
         temporal_shift_4 = paddle._C_ops.temporal_shift(leaky_relu__14, 8, float('0.125'), 'NCHW')
@@ -416,7 +416,7 @@ class BlockEntries:
         batch_norm__102, batch_norm__103, batch_norm__104, batch_norm__105, batch_norm__106, batch_norm__107 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_17, parameter_86, parameter_87, parameter_88, parameter_89, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x128x28x28xf16) <- (-1x128x28x28xf16)
-        leaky_relu__15 = paddle._C_ops.leaky_relu(batch_norm__102, float('0.01'))
+        leaky_relu__15 = paddle._C_ops.leaky_relu_(batch_norm__102, float('0.01'))
 
         # pd_op.conv2d: (-1x128x28x28xf16) <- (-1x128x28x28xf16, 128x128x3x3xf16)
         conv2d_18 = paddle._C_ops.conv2d(leaky_relu__15, parameter_90, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -425,7 +425,7 @@ class BlockEntries:
         batch_norm__108, batch_norm__109, batch_norm__110, batch_norm__111, batch_norm__112, batch_norm__113 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_18, parameter_91, parameter_92, parameter_93, parameter_94, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x128x28x28xf16) <- (-1x128x28x28xf16)
-        leaky_relu__16 = paddle._C_ops.leaky_relu(batch_norm__108, float('0.01'))
+        leaky_relu__16 = paddle._C_ops.leaky_relu_(batch_norm__108, float('0.01'))
 
         # pd_op.conv2d: (-1x512x28x28xf16) <- (-1x128x28x28xf16, 512x128x1x1xf16)
         conv2d_19 = paddle._C_ops.conv2d(leaky_relu__16, parameter_95, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -434,10 +434,10 @@ class BlockEntries:
         batch_norm__114, batch_norm__115, batch_norm__116, batch_norm__117, batch_norm__118, batch_norm__119 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_19, parameter_96, parameter_97, parameter_98, parameter_99, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x512x28x28xf16) <- (-1x512x28x28xf16, -1x512x28x28xf16)
-        add__4 = paddle._C_ops.add(leaky_relu__14, batch_norm__114)
+        add__4 = paddle._C_ops.add_(leaky_relu__14, batch_norm__114)
 
         # pd_op.leaky_relu_: (-1x512x28x28xf16) <- (-1x512x28x28xf16)
-        leaky_relu__17 = paddle._C_ops.leaky_relu(add__4, float('0.01'))
+        leaky_relu__17 = paddle._C_ops.leaky_relu_(add__4, float('0.01'))
 
         # pd_op.temporal_shift: (-1x512x28x28xf16) <- (-1x512x28x28xf16)
         temporal_shift_5 = paddle._C_ops.temporal_shift(leaky_relu__17, 8, float('0.125'), 'NCHW')
@@ -449,7 +449,7 @@ class BlockEntries:
         batch_norm__120, batch_norm__121, batch_norm__122, batch_norm__123, batch_norm__124, batch_norm__125 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_20, parameter_101, parameter_102, parameter_103, parameter_104, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x128x28x28xf16) <- (-1x128x28x28xf16)
-        leaky_relu__18 = paddle._C_ops.leaky_relu(batch_norm__120, float('0.01'))
+        leaky_relu__18 = paddle._C_ops.leaky_relu_(batch_norm__120, float('0.01'))
 
         # pd_op.conv2d: (-1x128x28x28xf16) <- (-1x128x28x28xf16, 128x128x3x3xf16)
         conv2d_21 = paddle._C_ops.conv2d(leaky_relu__18, parameter_105, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -458,7 +458,7 @@ class BlockEntries:
         batch_norm__126, batch_norm__127, batch_norm__128, batch_norm__129, batch_norm__130, batch_norm__131 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_21, parameter_106, parameter_107, parameter_108, parameter_109, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x128x28x28xf16) <- (-1x128x28x28xf16)
-        leaky_relu__19 = paddle._C_ops.leaky_relu(batch_norm__126, float('0.01'))
+        leaky_relu__19 = paddle._C_ops.leaky_relu_(batch_norm__126, float('0.01'))
 
         # pd_op.conv2d: (-1x512x28x28xf16) <- (-1x128x28x28xf16, 512x128x1x1xf16)
         conv2d_22 = paddle._C_ops.conv2d(leaky_relu__19, parameter_110, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -467,10 +467,10 @@ class BlockEntries:
         batch_norm__132, batch_norm__133, batch_norm__134, batch_norm__135, batch_norm__136, batch_norm__137 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_22, parameter_111, parameter_112, parameter_113, parameter_114, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x512x28x28xf16) <- (-1x512x28x28xf16, -1x512x28x28xf16)
-        add__5 = paddle._C_ops.add(leaky_relu__17, batch_norm__132)
+        add__5 = paddle._C_ops.add_(leaky_relu__17, batch_norm__132)
 
         # pd_op.leaky_relu_: (-1x512x28x28xf16) <- (-1x512x28x28xf16)
-        leaky_relu__20 = paddle._C_ops.leaky_relu(add__5, float('0.01'))
+        leaky_relu__20 = paddle._C_ops.leaky_relu_(add__5, float('0.01'))
 
         # pd_op.temporal_shift: (-1x512x28x28xf16) <- (-1x512x28x28xf16)
         temporal_shift_6 = paddle._C_ops.temporal_shift(leaky_relu__20, 8, float('0.125'), 'NCHW')
@@ -482,7 +482,7 @@ class BlockEntries:
         batch_norm__138, batch_norm__139, batch_norm__140, batch_norm__141, batch_norm__142, batch_norm__143 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_23, parameter_116, parameter_117, parameter_118, parameter_119, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x128x28x28xf16) <- (-1x128x28x28xf16)
-        leaky_relu__21 = paddle._C_ops.leaky_relu(batch_norm__138, float('0.01'))
+        leaky_relu__21 = paddle._C_ops.leaky_relu_(batch_norm__138, float('0.01'))
 
         # pd_op.conv2d: (-1x128x28x28xf16) <- (-1x128x28x28xf16, 128x128x3x3xf16)
         conv2d_24 = paddle._C_ops.conv2d(leaky_relu__21, parameter_120, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -491,7 +491,7 @@ class BlockEntries:
         batch_norm__144, batch_norm__145, batch_norm__146, batch_norm__147, batch_norm__148, batch_norm__149 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_24, parameter_121, parameter_122, parameter_123, parameter_124, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x128x28x28xf16) <- (-1x128x28x28xf16)
-        leaky_relu__22 = paddle._C_ops.leaky_relu(batch_norm__144, float('0.01'))
+        leaky_relu__22 = paddle._C_ops.leaky_relu_(batch_norm__144, float('0.01'))
 
         # pd_op.conv2d: (-1x512x28x28xf16) <- (-1x128x28x28xf16, 512x128x1x1xf16)
         conv2d_25 = paddle._C_ops.conv2d(leaky_relu__22, parameter_125, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -500,10 +500,10 @@ class BlockEntries:
         batch_norm__150, batch_norm__151, batch_norm__152, batch_norm__153, batch_norm__154, batch_norm__155 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_25, parameter_126, parameter_127, parameter_128, parameter_129, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x512x28x28xf16) <- (-1x512x28x28xf16, -1x512x28x28xf16)
-        add__6 = paddle._C_ops.add(leaky_relu__20, batch_norm__150)
+        add__6 = paddle._C_ops.add_(leaky_relu__20, batch_norm__150)
 
         # pd_op.leaky_relu_: (-1x512x28x28xf16) <- (-1x512x28x28xf16)
-        leaky_relu__23 = paddle._C_ops.leaky_relu(add__6, float('0.01'))
+        leaky_relu__23 = paddle._C_ops.leaky_relu_(add__6, float('0.01'))
 
         # pd_op.temporal_shift: (-1x512x28x28xf16) <- (-1x512x28x28xf16)
         temporal_shift_7 = paddle._C_ops.temporal_shift(leaky_relu__23, 8, float('0.125'), 'NCHW')
@@ -515,7 +515,7 @@ class BlockEntries:
         batch_norm__156, batch_norm__157, batch_norm__158, batch_norm__159, batch_norm__160, batch_norm__161 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_26, parameter_131, parameter_132, parameter_133, parameter_134, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x28x28xf16) <- (-1x256x28x28xf16)
-        leaky_relu__24 = paddle._C_ops.leaky_relu(batch_norm__156, float('0.01'))
+        leaky_relu__24 = paddle._C_ops.leaky_relu_(batch_norm__156, float('0.01'))
 
         # pd_op.conv2d: (-1x256x14x14xf16) <- (-1x256x28x28xf16, 256x256x3x3xf16)
         conv2d_27 = paddle._C_ops.conv2d(leaky_relu__24, parameter_135, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -524,7 +524,7 @@ class BlockEntries:
         batch_norm__162, batch_norm__163, batch_norm__164, batch_norm__165, batch_norm__166, batch_norm__167 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_27, parameter_136, parameter_137, parameter_138, parameter_139, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__25 = paddle._C_ops.leaky_relu(batch_norm__162, float('0.01'))
+        leaky_relu__25 = paddle._C_ops.leaky_relu_(batch_norm__162, float('0.01'))
 
         # pd_op.conv2d: (-1x1024x14x14xf16) <- (-1x256x14x14xf16, 1024x256x1x1xf16)
         conv2d_28 = paddle._C_ops.conv2d(leaky_relu__25, parameter_140, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -542,10 +542,10 @@ class BlockEntries:
         batch_norm__174, batch_norm__175, batch_norm__176, batch_norm__177, batch_norm__178, batch_norm__179 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_29, parameter_146, parameter_147, parameter_148, parameter_149, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16, -1x1024x14x14xf16)
-        add__7 = paddle._C_ops.add(batch_norm__174, batch_norm__168)
+        add__7 = paddle._C_ops.add_(batch_norm__174, batch_norm__168)
 
         # pd_op.leaky_relu_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
-        leaky_relu__26 = paddle._C_ops.leaky_relu(add__7, float('0.01'))
+        leaky_relu__26 = paddle._C_ops.leaky_relu_(add__7, float('0.01'))
 
         # pd_op.temporal_shift: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
         temporal_shift_8 = paddle._C_ops.temporal_shift(leaky_relu__26, 8, float('0.125'), 'NCHW')
@@ -557,7 +557,7 @@ class BlockEntries:
         batch_norm__180, batch_norm__181, batch_norm__182, batch_norm__183, batch_norm__184, batch_norm__185 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_30, parameter_151, parameter_152, parameter_153, parameter_154, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__27 = paddle._C_ops.leaky_relu(batch_norm__180, float('0.01'))
+        leaky_relu__27 = paddle._C_ops.leaky_relu_(batch_norm__180, float('0.01'))
 
         # pd_op.conv2d: (-1x256x14x14xf16) <- (-1x256x14x14xf16, 256x256x3x3xf16)
         conv2d_31 = paddle._C_ops.conv2d(leaky_relu__27, parameter_155, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -566,7 +566,7 @@ class BlockEntries:
         batch_norm__186, batch_norm__187, batch_norm__188, batch_norm__189, batch_norm__190, batch_norm__191 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_31, parameter_156, parameter_157, parameter_158, parameter_159, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__28 = paddle._C_ops.leaky_relu(batch_norm__186, float('0.01'))
+        leaky_relu__28 = paddle._C_ops.leaky_relu_(batch_norm__186, float('0.01'))
 
         # pd_op.conv2d: (-1x1024x14x14xf16) <- (-1x256x14x14xf16, 1024x256x1x1xf16)
         conv2d_32 = paddle._C_ops.conv2d(leaky_relu__28, parameter_160, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -575,10 +575,10 @@ class BlockEntries:
         batch_norm__192, batch_norm__193, batch_norm__194, batch_norm__195, batch_norm__196, batch_norm__197 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_32, parameter_161, parameter_162, parameter_163, parameter_164, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16, -1x1024x14x14xf16)
-        add__8 = paddle._C_ops.add(leaky_relu__26, batch_norm__192)
+        add__8 = paddle._C_ops.add_(leaky_relu__26, batch_norm__192)
 
         # pd_op.leaky_relu_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
-        leaky_relu__29 = paddle._C_ops.leaky_relu(add__8, float('0.01'))
+        leaky_relu__29 = paddle._C_ops.leaky_relu_(add__8, float('0.01'))
 
         # pd_op.temporal_shift: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
         temporal_shift_9 = paddle._C_ops.temporal_shift(leaky_relu__29, 8, float('0.125'), 'NCHW')
@@ -590,7 +590,7 @@ class BlockEntries:
         batch_norm__198, batch_norm__199, batch_norm__200, batch_norm__201, batch_norm__202, batch_norm__203 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_33, parameter_166, parameter_167, parameter_168, parameter_169, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__30 = paddle._C_ops.leaky_relu(batch_norm__198, float('0.01'))
+        leaky_relu__30 = paddle._C_ops.leaky_relu_(batch_norm__198, float('0.01'))
 
         # pd_op.conv2d: (-1x256x14x14xf16) <- (-1x256x14x14xf16, 256x256x3x3xf16)
         conv2d_34 = paddle._C_ops.conv2d(leaky_relu__30, parameter_170, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -599,7 +599,7 @@ class BlockEntries:
         batch_norm__204, batch_norm__205, batch_norm__206, batch_norm__207, batch_norm__208, batch_norm__209 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_34, parameter_171, parameter_172, parameter_173, parameter_174, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__31 = paddle._C_ops.leaky_relu(batch_norm__204, float('0.01'))
+        leaky_relu__31 = paddle._C_ops.leaky_relu_(batch_norm__204, float('0.01'))
 
         # pd_op.conv2d: (-1x1024x14x14xf16) <- (-1x256x14x14xf16, 1024x256x1x1xf16)
         conv2d_35 = paddle._C_ops.conv2d(leaky_relu__31, parameter_175, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -608,10 +608,10 @@ class BlockEntries:
         batch_norm__210, batch_norm__211, batch_norm__212, batch_norm__213, batch_norm__214, batch_norm__215 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_35, parameter_176, parameter_177, parameter_178, parameter_179, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16, -1x1024x14x14xf16)
-        add__9 = paddle._C_ops.add(leaky_relu__29, batch_norm__210)
+        add__9 = paddle._C_ops.add_(leaky_relu__29, batch_norm__210)
 
         # pd_op.leaky_relu_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
-        leaky_relu__32 = paddle._C_ops.leaky_relu(add__9, float('0.01'))
+        leaky_relu__32 = paddle._C_ops.leaky_relu_(add__9, float('0.01'))
 
         # pd_op.temporal_shift: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
         temporal_shift_10 = paddle._C_ops.temporal_shift(leaky_relu__32, 8, float('0.125'), 'NCHW')
@@ -623,7 +623,7 @@ class BlockEntries:
         batch_norm__216, batch_norm__217, batch_norm__218, batch_norm__219, batch_norm__220, batch_norm__221 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_36, parameter_181, parameter_182, parameter_183, parameter_184, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__33 = paddle._C_ops.leaky_relu(batch_norm__216, float('0.01'))
+        leaky_relu__33 = paddle._C_ops.leaky_relu_(batch_norm__216, float('0.01'))
 
         # pd_op.conv2d: (-1x256x14x14xf16) <- (-1x256x14x14xf16, 256x256x3x3xf16)
         conv2d_37 = paddle._C_ops.conv2d(leaky_relu__33, parameter_185, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -632,7 +632,7 @@ class BlockEntries:
         batch_norm__222, batch_norm__223, batch_norm__224, batch_norm__225, batch_norm__226, batch_norm__227 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_37, parameter_186, parameter_187, parameter_188, parameter_189, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__34 = paddle._C_ops.leaky_relu(batch_norm__222, float('0.01'))
+        leaky_relu__34 = paddle._C_ops.leaky_relu_(batch_norm__222, float('0.01'))
 
         # pd_op.conv2d: (-1x1024x14x14xf16) <- (-1x256x14x14xf16, 1024x256x1x1xf16)
         conv2d_38 = paddle._C_ops.conv2d(leaky_relu__34, parameter_190, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -641,10 +641,10 @@ class BlockEntries:
         batch_norm__228, batch_norm__229, batch_norm__230, batch_norm__231, batch_norm__232, batch_norm__233 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_38, parameter_191, parameter_192, parameter_193, parameter_194, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16, -1x1024x14x14xf16)
-        add__10 = paddle._C_ops.add(leaky_relu__32, batch_norm__228)
+        add__10 = paddle._C_ops.add_(leaky_relu__32, batch_norm__228)
 
         # pd_op.leaky_relu_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
-        leaky_relu__35 = paddle._C_ops.leaky_relu(add__10, float('0.01'))
+        leaky_relu__35 = paddle._C_ops.leaky_relu_(add__10, float('0.01'))
 
         # pd_op.temporal_shift: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
         temporal_shift_11 = paddle._C_ops.temporal_shift(leaky_relu__35, 8, float('0.125'), 'NCHW')
@@ -656,7 +656,7 @@ class BlockEntries:
         batch_norm__234, batch_norm__235, batch_norm__236, batch_norm__237, batch_norm__238, batch_norm__239 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_39, parameter_196, parameter_197, parameter_198, parameter_199, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__36 = paddle._C_ops.leaky_relu(batch_norm__234, float('0.01'))
+        leaky_relu__36 = paddle._C_ops.leaky_relu_(batch_norm__234, float('0.01'))
 
         # pd_op.conv2d: (-1x256x14x14xf16) <- (-1x256x14x14xf16, 256x256x3x3xf16)
         conv2d_40 = paddle._C_ops.conv2d(leaky_relu__36, parameter_200, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -665,7 +665,7 @@ class BlockEntries:
         batch_norm__240, batch_norm__241, batch_norm__242, batch_norm__243, batch_norm__244, batch_norm__245 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_40, parameter_201, parameter_202, parameter_203, parameter_204, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__37 = paddle._C_ops.leaky_relu(batch_norm__240, float('0.01'))
+        leaky_relu__37 = paddle._C_ops.leaky_relu_(batch_norm__240, float('0.01'))
 
         # pd_op.conv2d: (-1x1024x14x14xf16) <- (-1x256x14x14xf16, 1024x256x1x1xf16)
         conv2d_41 = paddle._C_ops.conv2d(leaky_relu__37, parameter_205, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -674,10 +674,10 @@ class BlockEntries:
         batch_norm__246, batch_norm__247, batch_norm__248, batch_norm__249, batch_norm__250, batch_norm__251 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_41, parameter_206, parameter_207, parameter_208, parameter_209, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16, -1x1024x14x14xf16)
-        add__11 = paddle._C_ops.add(leaky_relu__35, batch_norm__246)
+        add__11 = paddle._C_ops.add_(leaky_relu__35, batch_norm__246)
 
         # pd_op.leaky_relu_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
-        leaky_relu__38 = paddle._C_ops.leaky_relu(add__11, float('0.01'))
+        leaky_relu__38 = paddle._C_ops.leaky_relu_(add__11, float('0.01'))
 
         # pd_op.temporal_shift: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
         temporal_shift_12 = paddle._C_ops.temporal_shift(leaky_relu__38, 8, float('0.125'), 'NCHW')
@@ -689,7 +689,7 @@ class BlockEntries:
         batch_norm__252, batch_norm__253, batch_norm__254, batch_norm__255, batch_norm__256, batch_norm__257 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_42, parameter_211, parameter_212, parameter_213, parameter_214, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__39 = paddle._C_ops.leaky_relu(batch_norm__252, float('0.01'))
+        leaky_relu__39 = paddle._C_ops.leaky_relu_(batch_norm__252, float('0.01'))
 
         # pd_op.conv2d: (-1x256x14x14xf16) <- (-1x256x14x14xf16, 256x256x3x3xf16)
         conv2d_43 = paddle._C_ops.conv2d(leaky_relu__39, parameter_215, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -698,7 +698,7 @@ class BlockEntries:
         batch_norm__258, batch_norm__259, batch_norm__260, batch_norm__261, batch_norm__262, batch_norm__263 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_43, parameter_216, parameter_217, parameter_218, parameter_219, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x256x14x14xf16) <- (-1x256x14x14xf16)
-        leaky_relu__40 = paddle._C_ops.leaky_relu(batch_norm__258, float('0.01'))
+        leaky_relu__40 = paddle._C_ops.leaky_relu_(batch_norm__258, float('0.01'))
 
         # pd_op.conv2d: (-1x1024x14x14xf16) <- (-1x256x14x14xf16, 1024x256x1x1xf16)
         conv2d_44 = paddle._C_ops.conv2d(leaky_relu__40, parameter_220, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -707,10 +707,10 @@ class BlockEntries:
         batch_norm__264, batch_norm__265, batch_norm__266, batch_norm__267, batch_norm__268, batch_norm__269 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_44, parameter_221, parameter_222, parameter_223, parameter_224, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16, -1x1024x14x14xf16)
-        add__12 = paddle._C_ops.add(leaky_relu__38, batch_norm__264)
+        add__12 = paddle._C_ops.add_(leaky_relu__38, batch_norm__264)
 
         # pd_op.leaky_relu_: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
-        leaky_relu__41 = paddle._C_ops.leaky_relu(add__12, float('0.01'))
+        leaky_relu__41 = paddle._C_ops.leaky_relu_(add__12, float('0.01'))
 
         # pd_op.temporal_shift: (-1x1024x14x14xf16) <- (-1x1024x14x14xf16)
         temporal_shift_13 = paddle._C_ops.temporal_shift(leaky_relu__41, 8, float('0.125'), 'NCHW')
@@ -722,7 +722,7 @@ class BlockEntries:
         batch_norm__270, batch_norm__271, batch_norm__272, batch_norm__273, batch_norm__274, batch_norm__275 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_45, parameter_226, parameter_227, parameter_228, parameter_229, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x512x14x14xf16) <- (-1x512x14x14xf16)
-        leaky_relu__42 = paddle._C_ops.leaky_relu(batch_norm__270, float('0.01'))
+        leaky_relu__42 = paddle._C_ops.leaky_relu_(batch_norm__270, float('0.01'))
 
         # pd_op.conv2d: (-1x512x7x7xf16) <- (-1x512x14x14xf16, 512x512x3x3xf16)
         conv2d_46 = paddle._C_ops.conv2d(leaky_relu__42, parameter_230, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -731,7 +731,7 @@ class BlockEntries:
         batch_norm__276, batch_norm__277, batch_norm__278, batch_norm__279, batch_norm__280, batch_norm__281 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_46, parameter_231, parameter_232, parameter_233, parameter_234, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x512x7x7xf16) <- (-1x512x7x7xf16)
-        leaky_relu__43 = paddle._C_ops.leaky_relu(batch_norm__276, float('0.01'))
+        leaky_relu__43 = paddle._C_ops.leaky_relu_(batch_norm__276, float('0.01'))
 
         # pd_op.conv2d: (-1x2048x7x7xf16) <- (-1x512x7x7xf16, 2048x512x1x1xf16)
         conv2d_47 = paddle._C_ops.conv2d(leaky_relu__43, parameter_235, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -749,10 +749,10 @@ class BlockEntries:
         batch_norm__288, batch_norm__289, batch_norm__290, batch_norm__291, batch_norm__292, batch_norm__293 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_48, parameter_241, parameter_242, parameter_243, parameter_244, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x2048x7x7xf16) <- (-1x2048x7x7xf16, -1x2048x7x7xf16)
-        add__13 = paddle._C_ops.add(batch_norm__288, batch_norm__282)
+        add__13 = paddle._C_ops.add_(batch_norm__288, batch_norm__282)
 
         # pd_op.leaky_relu_: (-1x2048x7x7xf16) <- (-1x2048x7x7xf16)
-        leaky_relu__44 = paddle._C_ops.leaky_relu(add__13, float('0.01'))
+        leaky_relu__44 = paddle._C_ops.leaky_relu_(add__13, float('0.01'))
 
         # pd_op.temporal_shift: (-1x2048x7x7xf16) <- (-1x2048x7x7xf16)
         temporal_shift_14 = paddle._C_ops.temporal_shift(leaky_relu__44, 8, float('0.125'), 'NCHW')
@@ -764,7 +764,7 @@ class BlockEntries:
         batch_norm__294, batch_norm__295, batch_norm__296, batch_norm__297, batch_norm__298, batch_norm__299 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_49, parameter_246, parameter_247, parameter_248, parameter_249, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x512x7x7xf16) <- (-1x512x7x7xf16)
-        leaky_relu__45 = paddle._C_ops.leaky_relu(batch_norm__294, float('0.01'))
+        leaky_relu__45 = paddle._C_ops.leaky_relu_(batch_norm__294, float('0.01'))
 
         # pd_op.conv2d: (-1x512x7x7xf16) <- (-1x512x7x7xf16, 512x512x3x3xf16)
         conv2d_50 = paddle._C_ops.conv2d(leaky_relu__45, parameter_250, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -773,7 +773,7 @@ class BlockEntries:
         batch_norm__300, batch_norm__301, batch_norm__302, batch_norm__303, batch_norm__304, batch_norm__305 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_50, parameter_251, parameter_252, parameter_253, parameter_254, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x512x7x7xf16) <- (-1x512x7x7xf16)
-        leaky_relu__46 = paddle._C_ops.leaky_relu(batch_norm__300, float('0.01'))
+        leaky_relu__46 = paddle._C_ops.leaky_relu_(batch_norm__300, float('0.01'))
 
         # pd_op.conv2d: (-1x2048x7x7xf16) <- (-1x512x7x7xf16, 2048x512x1x1xf16)
         conv2d_51 = paddle._C_ops.conv2d(leaky_relu__46, parameter_255, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -782,10 +782,10 @@ class BlockEntries:
         batch_norm__306, batch_norm__307, batch_norm__308, batch_norm__309, batch_norm__310, batch_norm__311 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_51, parameter_256, parameter_257, parameter_258, parameter_259, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x2048x7x7xf16) <- (-1x2048x7x7xf16, -1x2048x7x7xf16)
-        add__14 = paddle._C_ops.add(leaky_relu__44, batch_norm__306)
+        add__14 = paddle._C_ops.add_(leaky_relu__44, batch_norm__306)
 
         # pd_op.leaky_relu_: (-1x2048x7x7xf16) <- (-1x2048x7x7xf16)
-        leaky_relu__47 = paddle._C_ops.leaky_relu(add__14, float('0.01'))
+        leaky_relu__47 = paddle._C_ops.leaky_relu_(add__14, float('0.01'))
 
         # pd_op.temporal_shift: (-1x2048x7x7xf16) <- (-1x2048x7x7xf16)
         temporal_shift_15 = paddle._C_ops.temporal_shift(leaky_relu__47, 8, float('0.125'), 'NCHW')
@@ -797,7 +797,7 @@ class BlockEntries:
         batch_norm__312, batch_norm__313, batch_norm__314, batch_norm__315, batch_norm__316, batch_norm__317 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_52, parameter_261, parameter_262, parameter_263, parameter_264, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x512x7x7xf16) <- (-1x512x7x7xf16)
-        leaky_relu__48 = paddle._C_ops.leaky_relu(batch_norm__312, float('0.01'))
+        leaky_relu__48 = paddle._C_ops.leaky_relu_(batch_norm__312, float('0.01'))
 
         # pd_op.conv2d: (-1x512x7x7xf16) <- (-1x512x7x7xf16, 512x512x3x3xf16)
         conv2d_53 = paddle._C_ops.conv2d(leaky_relu__48, parameter_265, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -806,7 +806,7 @@ class BlockEntries:
         batch_norm__318, batch_norm__319, batch_norm__320, batch_norm__321, batch_norm__322, batch_norm__323 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_53, parameter_266, parameter_267, parameter_268, parameter_269, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.leaky_relu_: (-1x512x7x7xf16) <- (-1x512x7x7xf16)
-        leaky_relu__49 = paddle._C_ops.leaky_relu(batch_norm__318, float('0.01'))
+        leaky_relu__49 = paddle._C_ops.leaky_relu_(batch_norm__318, float('0.01'))
 
         # pd_op.conv2d: (-1x2048x7x7xf16) <- (-1x512x7x7xf16, 2048x512x1x1xf16)
         conv2d_54 = paddle._C_ops.conv2d(leaky_relu__49, parameter_270, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -815,10 +815,10 @@ class BlockEntries:
         batch_norm__324, batch_norm__325, batch_norm__326, batch_norm__327, batch_norm__328, batch_norm__329 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_54, parameter_271, parameter_272, parameter_273, parameter_274, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add_: (-1x2048x7x7xf16) <- (-1x2048x7x7xf16, -1x2048x7x7xf16)
-        add__15 = paddle._C_ops.add(leaky_relu__47, batch_norm__324)
+        add__15 = paddle._C_ops.add_(leaky_relu__47, batch_norm__324)
 
         # pd_op.leaky_relu_: (-1x2048x7x7xf16) <- (-1x2048x7x7xf16)
-        leaky_relu__50 = paddle._C_ops.leaky_relu(add__15, float('0.01'))
+        leaky_relu__50 = paddle._C_ops.leaky_relu_(add__15, float('0.01'))
 
         # pd_op.pool2d: (-1x2048x1x1xf16) <- (-1x2048x7x7xf16, 2xi64)
         pool2d_4 = paddle._C_ops.pool2d(leaky_relu__50, constant_3, [1, 1], [0, 0], False, True, 'NCHW', 'avg', False, True, 'EXPLICIT')
@@ -827,19 +827,19 @@ class BlockEntries:
         dropout_0, dropout_1 = (lambda x, f: f(x))(paddle._C_ops.dropout(pool2d_4, None, constant_4, True, 'upscale_in_train', 0, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.reshape_: (-1x8x2048xf16, 0x-1x2048x1x1xf16) <- (-1x2048x1x1xf16, 3xi64)
-        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape(dropout_0, constant_5), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(dropout_0, constant_5), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.mean: (-1x2048xf16) <- (-1x8x2048xf16)
         mean_0 = paddle._C_ops.mean(reshape__2, [1], False)
 
         # pd_op.reshape_: (-1x2048xf16, 0x-1x2048xf16) <- (-1x2048xf16, 2xi64)
-        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape(mean_0, constant_6), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape_(mean_0, constant_6), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x400xf16) <- (-1x2048xf16, 2048x400xf16)
         matmul_0 = paddle.matmul(reshape__4, parameter_275, transpose_x=False, transpose_y=False)
 
         # pd_op.add_: (-1x400xf16) <- (-1x400xf16, 400xf16)
-        add__16 = paddle._C_ops.add(matmul_0, parameter_276)
+        add__16 = paddle._C_ops.add_(matmul_0, parameter_276)
 
         # pd_op.cast: (-1x400xf32) <- (-1x400xf16)
         cast_1 = paddle._C_ops.cast(add__16, paddle.float32)

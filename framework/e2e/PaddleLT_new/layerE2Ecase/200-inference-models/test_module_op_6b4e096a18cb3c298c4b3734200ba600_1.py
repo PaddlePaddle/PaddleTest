@@ -641,16 +641,16 @@ class BlockEntries:
         conv2d_11 = paddle._C_ops.conv2d(pool2d_0, parameter_123, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x48x1x1xf32) <- (-1x48x1x1xf32, 1x48x1x1xf32)
-        add__0 = paddle._C_ops.add(conv2d_11, parameter_124)
+        add__0 = paddle._C_ops.add_(conv2d_11, parameter_124)
 
         # pd_op.relu_: (-1x48x1x1xf32) <- (-1x48x1x1xf32)
-        relu__0 = paddle._C_ops.relu(add__0)
+        relu__0 = paddle._C_ops.relu_(add__0)
 
         # pd_op.conv2d: (-1x192x1x1xf32) <- (-1x48x1x1xf32, 192x48x1x1xf32)
         conv2d_12 = paddle._C_ops.conv2d(relu__0, parameter_125, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x192x1x1xf32) <- (-1x192x1x1xf32, 1x192x1x1xf32)
-        add__1 = paddle._C_ops.add(conv2d_12, parameter_126)
+        add__1 = paddle._C_ops.add_(conv2d_12, parameter_126)
 
         # pd_op.hardsigmoid: (-1x192x1x1xf32) <- (-1x192x1x1xf32)
         hardsigmoid_0 = paddle._C_ops.hardsigmoid(add__1, float('0.166667'), float('0.5'))
@@ -707,16 +707,16 @@ class BlockEntries:
         conv2d_14 = paddle._C_ops.conv2d(pool2d_1, parameter_139, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x96x1x1xf32) <- (-1x96x1x1xf32, 1x96x1x1xf32)
-        add__2 = paddle._C_ops.add(conv2d_14, parameter_140)
+        add__2 = paddle._C_ops.add_(conv2d_14, parameter_140)
 
         # pd_op.relu_: (-1x96x1x1xf32) <- (-1x96x1x1xf32)
-        relu__1 = paddle._C_ops.relu(add__2)
+        relu__1 = paddle._C_ops.relu_(add__2)
 
         # pd_op.conv2d: (-1x384x1x1xf32) <- (-1x96x1x1xf32, 384x96x1x1xf32)
         conv2d_15 = paddle._C_ops.conv2d(relu__1, parameter_141, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x384x1x1xf32) <- (-1x384x1x1xf32, 1x384x1x1xf32)
-        add__3 = paddle._C_ops.add(conv2d_15, parameter_142)
+        add__3 = paddle._C_ops.add_(conv2d_15, parameter_142)
 
         # pd_op.hardsigmoid: (-1x384x1x1xf32) <- (-1x384x1x1xf32)
         hardsigmoid_1 = paddle._C_ops.hardsigmoid(add__3, float('0.166667'), float('0.5'))
@@ -863,16 +863,16 @@ class BlockEntries:
         conv2d_24 = paddle._C_ops.conv2d(pool2d_2, parameter_182, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x24x1x1xf32) <- (-1x24x1x1xf32, 1x24x1x1xf32)
-        add__4 = paddle._C_ops.add(conv2d_24, parameter_183)
+        add__4 = paddle._C_ops.add_(conv2d_24, parameter_183)
 
         # pd_op.relu_: (-1x24x1x1xf32) <- (-1x24x1x1xf32)
-        relu__2 = paddle._C_ops.relu(add__4)
+        relu__2 = paddle._C_ops.relu_(add__4)
 
         # pd_op.conv2d: (-1x96x1x1xf32) <- (-1x24x1x1xf32, 96x24x1x1xf32)
         conv2d_25 = paddle._C_ops.conv2d(relu__2, parameter_184, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x96x1x1xf32) <- (-1x96x1x1xf32, 1x96x1x1xf32)
-        add__5 = paddle._C_ops.add(conv2d_25, parameter_185)
+        add__5 = paddle._C_ops.add_(conv2d_25, parameter_185)
 
         # pd_op.hardsigmoid: (-1x96x1x1xf32) <- (-1x96x1x1xf32)
         hardsigmoid_2 = paddle._C_ops.hardsigmoid(add__5, float('0.2'), float('0.5'))
@@ -893,16 +893,16 @@ class BlockEntries:
         conv2d_27 = paddle._C_ops.conv2d(pool2d_3, parameter_187, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x24x1x1xf32) <- (-1x24x1x1xf32, 1x24x1x1xf32)
-        add__6 = paddle._C_ops.add(conv2d_27, parameter_188)
+        add__6 = paddle._C_ops.add_(conv2d_27, parameter_188)
 
         # pd_op.relu_: (-1x24x1x1xf32) <- (-1x24x1x1xf32)
-        relu__3 = paddle._C_ops.relu(add__6)
+        relu__3 = paddle._C_ops.relu_(add__6)
 
         # pd_op.conv2d: (-1x96x1x1xf32) <- (-1x24x1x1xf32, 96x24x1x1xf32)
         conv2d_28 = paddle._C_ops.conv2d(relu__3, parameter_189, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x96x1x1xf32) <- (-1x96x1x1xf32, 1x96x1x1xf32)
-        add__7 = paddle._C_ops.add(conv2d_28, parameter_190)
+        add__7 = paddle._C_ops.add_(conv2d_28, parameter_190)
 
         # pd_op.hardsigmoid: (-1x96x1x1xf32) <- (-1x96x1x1xf32)
         hardsigmoid_3 = paddle._C_ops.hardsigmoid(add__7, float('0.2'), float('0.5'))
@@ -923,16 +923,16 @@ class BlockEntries:
         conv2d_30 = paddle._C_ops.conv2d(pool2d_4, parameter_192, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x24x1x1xf32) <- (-1x24x1x1xf32, 1x24x1x1xf32)
-        add__8 = paddle._C_ops.add(conv2d_30, parameter_193)
+        add__8 = paddle._C_ops.add_(conv2d_30, parameter_193)
 
         # pd_op.relu_: (-1x24x1x1xf32) <- (-1x24x1x1xf32)
-        relu__4 = paddle._C_ops.relu(add__8)
+        relu__4 = paddle._C_ops.relu_(add__8)
 
         # pd_op.conv2d: (-1x96x1x1xf32) <- (-1x24x1x1xf32, 96x24x1x1xf32)
         conv2d_31 = paddle._C_ops.conv2d(relu__4, parameter_194, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x96x1x1xf32) <- (-1x96x1x1xf32, 1x96x1x1xf32)
-        add__9 = paddle._C_ops.add(conv2d_31, parameter_195)
+        add__9 = paddle._C_ops.add_(conv2d_31, parameter_195)
 
         # pd_op.hardsigmoid: (-1x96x1x1xf32) <- (-1x96x1x1xf32)
         hardsigmoid_4 = paddle._C_ops.hardsigmoid(add__9, float('0.2'), float('0.5'))
@@ -953,16 +953,16 @@ class BlockEntries:
         conv2d_33 = paddle._C_ops.conv2d(pool2d_5, parameter_197, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x24x1x1xf32) <- (-1x24x1x1xf32, 1x24x1x1xf32)
-        add__10 = paddle._C_ops.add(conv2d_33, parameter_198)
+        add__10 = paddle._C_ops.add_(conv2d_33, parameter_198)
 
         # pd_op.relu_: (-1x24x1x1xf32) <- (-1x24x1x1xf32)
-        relu__5 = paddle._C_ops.relu(add__10)
+        relu__5 = paddle._C_ops.relu_(add__10)
 
         # pd_op.conv2d: (-1x96x1x1xf32) <- (-1x24x1x1xf32, 96x24x1x1xf32)
         conv2d_34 = paddle._C_ops.conv2d(relu__5, parameter_199, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x96x1x1xf32) <- (-1x96x1x1xf32, 1x96x1x1xf32)
-        add__11 = paddle._C_ops.add(conv2d_34, parameter_200)
+        add__11 = paddle._C_ops.add_(conv2d_34, parameter_200)
 
         # pd_op.hardsigmoid: (-1x96x1x1xf32) <- (-1x96x1x1xf32)
         hardsigmoid_5 = paddle._C_ops.hardsigmoid(add__11, float('0.2'), float('0.5'))
@@ -1001,16 +1001,16 @@ class BlockEntries:
         conv2d_36 = paddle._C_ops.conv2d(pool2d_6, parameter_202, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x6x1x1xf32) <- (-1x6x1x1xf32, 1x6x1x1xf32)
-        add__12 = paddle._C_ops.add(conv2d_36, parameter_203)
+        add__12 = paddle._C_ops.add_(conv2d_36, parameter_203)
 
         # pd_op.relu_: (-1x6x1x1xf32) <- (-1x6x1x1xf32)
-        relu__6 = paddle._C_ops.relu(add__12)
+        relu__6 = paddle._C_ops.relu_(add__12)
 
         # pd_op.conv2d: (-1x24x1x1xf32) <- (-1x6x1x1xf32, 24x6x1x1xf32)
         conv2d_37 = paddle._C_ops.conv2d(relu__6, parameter_204, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x24x1x1xf32) <- (-1x24x1x1xf32, 1x24x1x1xf32)
-        add__13 = paddle._C_ops.add(conv2d_37, parameter_205)
+        add__13 = paddle._C_ops.add_(conv2d_37, parameter_205)
 
         # pd_op.hardsigmoid: (-1x24x1x1xf32) <- (-1x24x1x1xf32)
         hardsigmoid_6 = paddle._C_ops.hardsigmoid(add__13, float('0.2'), float('0.5'))
@@ -1031,16 +1031,16 @@ class BlockEntries:
         conv2d_39 = paddle._C_ops.conv2d(pool2d_7, parameter_207, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x6x1x1xf32) <- (-1x6x1x1xf32, 1x6x1x1xf32)
-        add__14 = paddle._C_ops.add(conv2d_39, parameter_208)
+        add__14 = paddle._C_ops.add_(conv2d_39, parameter_208)
 
         # pd_op.relu_: (-1x6x1x1xf32) <- (-1x6x1x1xf32)
-        relu__7 = paddle._C_ops.relu(add__14)
+        relu__7 = paddle._C_ops.relu_(add__14)
 
         # pd_op.conv2d: (-1x24x1x1xf32) <- (-1x6x1x1xf32, 24x6x1x1xf32)
         conv2d_40 = paddle._C_ops.conv2d(relu__7, parameter_209, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x24x1x1xf32) <- (-1x24x1x1xf32, 1x24x1x1xf32)
-        add__15 = paddle._C_ops.add(conv2d_40, parameter_210)
+        add__15 = paddle._C_ops.add_(conv2d_40, parameter_210)
 
         # pd_op.hardsigmoid: (-1x24x1x1xf32) <- (-1x24x1x1xf32)
         hardsigmoid_7 = paddle._C_ops.hardsigmoid(add__15, float('0.2'), float('0.5'))
@@ -1061,16 +1061,16 @@ class BlockEntries:
         conv2d_42 = paddle._C_ops.conv2d(pool2d_8, parameter_212, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x6x1x1xf32) <- (-1x6x1x1xf32, 1x6x1x1xf32)
-        add__16 = paddle._C_ops.add(conv2d_42, parameter_213)
+        add__16 = paddle._C_ops.add_(conv2d_42, parameter_213)
 
         # pd_op.relu_: (-1x6x1x1xf32) <- (-1x6x1x1xf32)
-        relu__8 = paddle._C_ops.relu(add__16)
+        relu__8 = paddle._C_ops.relu_(add__16)
 
         # pd_op.conv2d: (-1x24x1x1xf32) <- (-1x6x1x1xf32, 24x6x1x1xf32)
         conv2d_43 = paddle._C_ops.conv2d(relu__8, parameter_214, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x24x1x1xf32) <- (-1x24x1x1xf32, 1x24x1x1xf32)
-        add__17 = paddle._C_ops.add(conv2d_43, parameter_215)
+        add__17 = paddle._C_ops.add_(conv2d_43, parameter_215)
 
         # pd_op.hardsigmoid: (-1x24x1x1xf32) <- (-1x24x1x1xf32)
         hardsigmoid_8 = paddle._C_ops.hardsigmoid(add__17, float('0.2'), float('0.5'))
@@ -1091,16 +1091,16 @@ class BlockEntries:
         conv2d_45 = paddle._C_ops.conv2d(pool2d_9, parameter_217, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x6x1x1xf32) <- (-1x6x1x1xf32, 1x6x1x1xf32)
-        add__18 = paddle._C_ops.add(conv2d_45, parameter_218)
+        add__18 = paddle._C_ops.add_(conv2d_45, parameter_218)
 
         # pd_op.relu_: (-1x6x1x1xf32) <- (-1x6x1x1xf32)
-        relu__9 = paddle._C_ops.relu(add__18)
+        relu__9 = paddle._C_ops.relu_(add__18)
 
         # pd_op.conv2d: (-1x24x1x1xf32) <- (-1x6x1x1xf32, 24x6x1x1xf32)
         conv2d_46 = paddle._C_ops.conv2d(relu__9, parameter_219, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (-1x24x1x1xf32) <- (-1x24x1x1xf32, 1x24x1x1xf32)
-        add__19 = paddle._C_ops.add(conv2d_46, parameter_220)
+        add__19 = paddle._C_ops.add_(conv2d_46, parameter_220)
 
         # pd_op.hardsigmoid: (-1x24x1x1xf32) <- (-1x24x1x1xf32)
         hardsigmoid_9 = paddle._C_ops.hardsigmoid(add__19, float('0.2'), float('0.5'))

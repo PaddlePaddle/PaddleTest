@@ -230,7 +230,7 @@ class BlockEntries:
         cast_0 = paddle._C_ops.cast(flip_0, paddle.float32)
 
         # pd_op.assign_: (1x1x2x180x320xf32) <- (1x1x2x180x320xf32)
-        assign__0 = paddle._C_ops.assign(cast_0)
+        assign__0 = paddle._C_ops.assign_(cast_0)
         return assign__0
     def pd_op_if_4962_1_0(self, parameter_0):
         return parameter_0
@@ -255,106 +255,106 @@ class BlockEntries:
         conv2d_0 = paddle._C_ops.conv2d(concat_0, parameter_1, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__0 = paddle._C_ops.add(conv2d_0, parameter_2)
+        add__0 = paddle._C_ops.add_(conv2d_0, parameter_2)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__0 = paddle._C_ops.leaky_relu(add__0, float('0.1'))
+        leaky_relu__0 = paddle._C_ops.leaky_relu_(add__0, float('0.1'))
 
         # pd_op.conv2d: (1x16x48x80xf16) <- (1x16x48x80xf16, 16x16x3x3xf16)
         conv2d_1 = paddle._C_ops.conv2d(leaky_relu__0, parameter_3, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__1 = paddle._C_ops.add(conv2d_1, parameter_4)
+        add__1 = paddle._C_ops.add_(conv2d_1, parameter_4)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__1 = paddle._C_ops.leaky_relu(add__1, float('0.1'))
+        leaky_relu__1 = paddle._C_ops.leaky_relu_(add__1, float('0.1'))
 
         # pd_op.conv2d: (1x32x48x80xf16) <- (1x16x48x80xf16, 32x16x3x3xf16)
         conv2d_2 = paddle._C_ops.conv2d(leaky_relu__1, parameter_5, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x48x80xf16) <- (1x32x48x80xf16, 1x32x1x1xf16)
-        add__2 = paddle._C_ops.add(conv2d_2, parameter_6)
+        add__2 = paddle._C_ops.add_(conv2d_2, parameter_6)
 
         # pd_op.leaky_relu_: (1x32x48x80xf16) <- (1x32x48x80xf16)
-        leaky_relu__2 = paddle._C_ops.leaky_relu(add__2, float('0.1'))
+        leaky_relu__2 = paddle._C_ops.leaky_relu_(add__2, float('0.1'))
 
         # pd_op.conv2d: (1x32x48x80xf16) <- (1x32x48x80xf16, 32x32x3x3xf16)
         conv2d_3 = paddle._C_ops.conv2d(leaky_relu__2, parameter_7, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x48x80xf16) <- (1x32x48x80xf16, 1x32x1x1xf16)
-        add__3 = paddle._C_ops.add(conv2d_3, parameter_8)
+        add__3 = paddle._C_ops.add_(conv2d_3, parameter_8)
 
         # pd_op.leaky_relu_: (1x32x48x80xf16) <- (1x32x48x80xf16)
-        leaky_relu__3 = paddle._C_ops.leaky_relu(add__3, float('0.1'))
+        leaky_relu__3 = paddle._C_ops.leaky_relu_(add__3, float('0.1'))
 
         # pd_op.conv2d: (1x32x48x80xf16) <- (1x32x48x80xf16, 32x32x3x3xf16)
         conv2d_4 = paddle._C_ops.conv2d(leaky_relu__3, parameter_9, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x48x80xf16) <- (1x32x48x80xf16, 1x32x1x1xf16)
-        add__4 = paddle._C_ops.add(conv2d_4, parameter_10)
+        add__4 = paddle._C_ops.add_(conv2d_4, parameter_10)
 
         # pd_op.leaky_relu_: (1x32x48x80xf16) <- (1x32x48x80xf16)
-        leaky_relu__4 = paddle._C_ops.leaky_relu(add__4, float('0.1'))
+        leaky_relu__4 = paddle._C_ops.leaky_relu_(add__4, float('0.1'))
 
         # pd_op.conv2d: (1x32x48x80xf16) <- (1x32x48x80xf16, 32x32x3x3xf16)
         conv2d_5 = paddle._C_ops.conv2d(leaky_relu__4, parameter_11, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x48x80xf16) <- (1x32x48x80xf16, 1x32x1x1xf16)
-        add__5 = paddle._C_ops.add(conv2d_5, parameter_12)
+        add__5 = paddle._C_ops.add_(conv2d_5, parameter_12)
 
         # pd_op.leaky_relu_: (1x32x48x80xf16) <- (1x32x48x80xf16)
-        leaky_relu__5 = paddle._C_ops.leaky_relu(add__5, float('0.1'))
+        leaky_relu__5 = paddle._C_ops.leaky_relu_(add__5, float('0.1'))
 
         # pd_op.conv2d: (1x16x48x80xf16) <- (1x32x48x80xf16, 16x32x3x3xf16)
         conv2d_6 = paddle._C_ops.conv2d(leaky_relu__5, parameter_13, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__6 = paddle._C_ops.add(conv2d_6, parameter_14)
+        add__6 = paddle._C_ops.add_(conv2d_6, parameter_14)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__6 = paddle._C_ops.leaky_relu(add__6, float('0.1'))
+        leaky_relu__6 = paddle._C_ops.leaky_relu_(add__6, float('0.1'))
 
         # pd_op.conv2d: (1x16x48x80xf16) <- (1x16x48x80xf16, 16x16x3x3xf16)
         conv2d_7 = paddle._C_ops.conv2d(leaky_relu__6, parameter_15, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__7 = paddle._C_ops.add(conv2d_7, parameter_16)
+        add__7 = paddle._C_ops.add_(conv2d_7, parameter_16)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__7 = paddle._C_ops.leaky_relu(add__7, float('0.1'))
+        leaky_relu__7 = paddle._C_ops.leaky_relu_(add__7, float('0.1'))
 
         # pd_op.conv2d: (1x16x48x80xf16) <- (1x16x48x80xf16, 16x16x3x3xf16)
         conv2d_8 = paddle._C_ops.conv2d(leaky_relu__7, parameter_17, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__8 = paddle._C_ops.add(conv2d_8, parameter_18)
+        add__8 = paddle._C_ops.add_(conv2d_8, parameter_18)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__8 = paddle._C_ops.leaky_relu(add__8, float('0.1'))
+        leaky_relu__8 = paddle._C_ops.leaky_relu_(add__8, float('0.1'))
 
         # pd_op.conv2d: (1x8x48x80xf16) <- (1x16x48x80xf16, 8x16x3x3xf16)
         conv2d_9 = paddle._C_ops.conv2d(leaky_relu__8, parameter_19, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x48x80xf16) <- (1x8x48x80xf16, 1x8x1x1xf16)
-        add__9 = paddle._C_ops.add(conv2d_9, parameter_20)
+        add__9 = paddle._C_ops.add_(conv2d_9, parameter_20)
 
         # pd_op.leaky_relu_: (1x8x48x80xf16) <- (1x8x48x80xf16)
-        leaky_relu__9 = paddle._C_ops.leaky_relu(add__9, float('0.1'))
+        leaky_relu__9 = paddle._C_ops.leaky_relu_(add__9, float('0.1'))
 
         # pd_op.conv2d: (1x8x48x80xf16) <- (1x8x48x80xf16, 8x8x3x3xf16)
         conv2d_10 = paddle._C_ops.conv2d(leaky_relu__9, parameter_21, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x48x80xf16) <- (1x8x48x80xf16, 1x8x1x1xf16)
-        add__10 = paddle._C_ops.add(conv2d_10, parameter_22)
+        add__10 = paddle._C_ops.add_(conv2d_10, parameter_22)
 
         # pd_op.leaky_relu_: (1x8x48x80xf16) <- (1x8x48x80xf16)
-        leaky_relu__10 = paddle._C_ops.leaky_relu(add__10, float('0.1'))
+        leaky_relu__10 = paddle._C_ops.leaky_relu_(add__10, float('0.1'))
 
         # pd_op.conv2d: (1x2x48x80xf16) <- (1x8x48x80xf16, 2x8x3x3xf16)
         conv2d_11 = paddle._C_ops.conv2d(leaky_relu__10, parameter_23, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x2x48x80xf16) <- (1x2x48x80xf16, 1x2x1x1xf16)
-        add__11 = paddle._C_ops.add(conv2d_11, parameter_24)
+        add__11 = paddle._C_ops.add_(conv2d_11, parameter_24)
 
         # pd_op.add: (1x2x48x80xf16) <- (1x2x48x80xf16, 1x2x48x80xf16)
         add_0 = parameter_0 + add__11
@@ -363,7 +363,7 @@ class BlockEntries:
         bilinear_interp_0 = paddle._C_ops.bilinear_interp(add_0, None, None, None, 'NCHW', -1, -1, -1, [float('2'), float('2')], 'bilinear', True, 0)
 
         # pd_op.scale_: (1x2x96x160xf16) <- (1x2x96x160xf16, 1xf32)
-        scale__0 = paddle._C_ops.scale(bilinear_interp_0, constant_1, float('0'), True)
+        scale__0 = paddle._C_ops.scale_(bilinear_interp_0, constant_1, float('0'), True)
 
         # pd_op.transpose: (1x96x160x2xf16) <- (1x2x96x160xf16)
         transpose_0 = paddle._C_ops.transpose(scale__0, [0, 2, 3, 1])
@@ -375,25 +375,25 @@ class BlockEntries:
         slice_0 = paddle._C_ops.slice(add_1, [3], constant_2, constant_3, [1], [3])
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__1 = paddle._C_ops.scale(slice_0, constant_1, float('0'), True)
+        scale__1 = paddle._C_ops.scale_(slice_0, constant_1, float('0'), True)
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__2 = paddle._C_ops.scale(scale__1, constant_4, float('0'), True)
+        scale__2 = paddle._C_ops.scale_(scale__1, constant_4, float('0'), True)
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__3 = paddle._C_ops.scale(scale__2, constant_5, float('-1'), True)
+        scale__3 = paddle._C_ops.scale_(scale__2, constant_5, float('-1'), True)
 
         # pd_op.slice: (1x96x160xf16) <- (1x96x160x2xf16, 1xi64, 1xi64)
         slice_1 = paddle._C_ops.slice(add_1, [3], constant_3, constant_6, [1], [3])
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__4 = paddle._C_ops.scale(slice_1, constant_1, float('0'), True)
+        scale__4 = paddle._C_ops.scale_(slice_1, constant_1, float('0'), True)
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__5 = paddle._C_ops.scale(scale__4, constant_7, float('0'), True)
+        scale__5 = paddle._C_ops.scale_(scale__4, constant_7, float('0'), True)
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__6 = paddle._C_ops.scale(scale__5, constant_5, float('-1'), True)
+        scale__6 = paddle._C_ops.scale_(scale__5, constant_5, float('-1'), True)
 
         # builtin.combine: ([1x96x160xf16, 1x96x160xf16]) <- (1x96x160xf16, 1x96x160xf16)
         combine_1 = [scale__3, scale__6]
@@ -423,115 +423,115 @@ class BlockEntries:
         conv2d_12 = paddle._C_ops.conv2d(concat_1, parameter_25, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__12 = paddle._C_ops.add(conv2d_12, parameter_26)
+        add__12 = paddle._C_ops.add_(conv2d_12, parameter_26)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__11 = paddle._C_ops.leaky_relu(add__12, float('0.1'))
+        leaky_relu__11 = paddle._C_ops.leaky_relu_(add__12, float('0.1'))
 
         # pd_op.conv2d: (1x16x96x160xf16) <- (1x16x96x160xf16, 16x16x3x3xf16)
         conv2d_13 = paddle._C_ops.conv2d(leaky_relu__11, parameter_27, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__13 = paddle._C_ops.add(conv2d_13, parameter_28)
+        add__13 = paddle._C_ops.add_(conv2d_13, parameter_28)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__12 = paddle._C_ops.leaky_relu(add__13, float('0.1'))
+        leaky_relu__12 = paddle._C_ops.leaky_relu_(add__13, float('0.1'))
 
         # pd_op.conv2d: (1x32x96x160xf16) <- (1x16x96x160xf16, 32x16x3x3xf16)
         conv2d_14 = paddle._C_ops.conv2d(leaky_relu__12, parameter_29, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x96x160xf16) <- (1x32x96x160xf16, 1x32x1x1xf16)
-        add__14 = paddle._C_ops.add(conv2d_14, parameter_30)
+        add__14 = paddle._C_ops.add_(conv2d_14, parameter_30)
 
         # pd_op.leaky_relu_: (1x32x96x160xf16) <- (1x32x96x160xf16)
-        leaky_relu__13 = paddle._C_ops.leaky_relu(add__14, float('0.1'))
+        leaky_relu__13 = paddle._C_ops.leaky_relu_(add__14, float('0.1'))
 
         # pd_op.conv2d: (1x32x96x160xf16) <- (1x32x96x160xf16, 32x32x3x3xf16)
         conv2d_15 = paddle._C_ops.conv2d(leaky_relu__13, parameter_31, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x96x160xf16) <- (1x32x96x160xf16, 1x32x1x1xf16)
-        add__15 = paddle._C_ops.add(conv2d_15, parameter_32)
+        add__15 = paddle._C_ops.add_(conv2d_15, parameter_32)
 
         # pd_op.leaky_relu_: (1x32x96x160xf16) <- (1x32x96x160xf16)
-        leaky_relu__14 = paddle._C_ops.leaky_relu(add__15, float('0.1'))
+        leaky_relu__14 = paddle._C_ops.leaky_relu_(add__15, float('0.1'))
 
         # pd_op.conv2d: (1x32x96x160xf16) <- (1x32x96x160xf16, 32x32x3x3xf16)
         conv2d_16 = paddle._C_ops.conv2d(leaky_relu__14, parameter_33, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x96x160xf16) <- (1x32x96x160xf16, 1x32x1x1xf16)
-        add__16 = paddle._C_ops.add(conv2d_16, parameter_34)
+        add__16 = paddle._C_ops.add_(conv2d_16, parameter_34)
 
         # pd_op.leaky_relu_: (1x32x96x160xf16) <- (1x32x96x160xf16)
-        leaky_relu__15 = paddle._C_ops.leaky_relu(add__16, float('0.1'))
+        leaky_relu__15 = paddle._C_ops.leaky_relu_(add__16, float('0.1'))
 
         # pd_op.conv2d: (1x32x96x160xf16) <- (1x32x96x160xf16, 32x32x3x3xf16)
         conv2d_17 = paddle._C_ops.conv2d(leaky_relu__15, parameter_35, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x96x160xf16) <- (1x32x96x160xf16, 1x32x1x1xf16)
-        add__17 = paddle._C_ops.add(conv2d_17, parameter_36)
+        add__17 = paddle._C_ops.add_(conv2d_17, parameter_36)
 
         # pd_op.leaky_relu_: (1x32x96x160xf16) <- (1x32x96x160xf16)
-        leaky_relu__16 = paddle._C_ops.leaky_relu(add__17, float('0.1'))
+        leaky_relu__16 = paddle._C_ops.leaky_relu_(add__17, float('0.1'))
 
         # pd_op.conv2d: (1x16x96x160xf16) <- (1x32x96x160xf16, 16x32x3x3xf16)
         conv2d_18 = paddle._C_ops.conv2d(leaky_relu__16, parameter_37, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__18 = paddle._C_ops.add(conv2d_18, parameter_38)
+        add__18 = paddle._C_ops.add_(conv2d_18, parameter_38)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__17 = paddle._C_ops.leaky_relu(add__18, float('0.1'))
+        leaky_relu__17 = paddle._C_ops.leaky_relu_(add__18, float('0.1'))
 
         # pd_op.conv2d: (1x16x96x160xf16) <- (1x16x96x160xf16, 16x16x3x3xf16)
         conv2d_19 = paddle._C_ops.conv2d(leaky_relu__17, parameter_39, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__19 = paddle._C_ops.add(conv2d_19, parameter_40)
+        add__19 = paddle._C_ops.add_(conv2d_19, parameter_40)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__18 = paddle._C_ops.leaky_relu(add__19, float('0.1'))
+        leaky_relu__18 = paddle._C_ops.leaky_relu_(add__19, float('0.1'))
 
         # pd_op.conv2d: (1x16x96x160xf16) <- (1x16x96x160xf16, 16x16x3x3xf16)
         conv2d_20 = paddle._C_ops.conv2d(leaky_relu__18, parameter_41, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__20 = paddle._C_ops.add(conv2d_20, parameter_42)
+        add__20 = paddle._C_ops.add_(conv2d_20, parameter_42)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__19 = paddle._C_ops.leaky_relu(add__20, float('0.1'))
+        leaky_relu__19 = paddle._C_ops.leaky_relu_(add__20, float('0.1'))
 
         # pd_op.conv2d: (1x8x96x160xf16) <- (1x16x96x160xf16, 8x16x3x3xf16)
         conv2d_21 = paddle._C_ops.conv2d(leaky_relu__19, parameter_43, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x96x160xf16) <- (1x8x96x160xf16, 1x8x1x1xf16)
-        add__21 = paddle._C_ops.add(conv2d_21, parameter_44)
+        add__21 = paddle._C_ops.add_(conv2d_21, parameter_44)
 
         # pd_op.leaky_relu_: (1x8x96x160xf16) <- (1x8x96x160xf16)
-        leaky_relu__20 = paddle._C_ops.leaky_relu(add__21, float('0.1'))
+        leaky_relu__20 = paddle._C_ops.leaky_relu_(add__21, float('0.1'))
 
         # pd_op.conv2d: (1x8x96x160xf16) <- (1x8x96x160xf16, 8x8x3x3xf16)
         conv2d_22 = paddle._C_ops.conv2d(leaky_relu__20, parameter_45, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x96x160xf16) <- (1x8x96x160xf16, 1x8x1x1xf16)
-        add__22 = paddle._C_ops.add(conv2d_22, parameter_46)
+        add__22 = paddle._C_ops.add_(conv2d_22, parameter_46)
 
         # pd_op.leaky_relu_: (1x8x96x160xf16) <- (1x8x96x160xf16)
-        leaky_relu__21 = paddle._C_ops.leaky_relu(add__22, float('0.1'))
+        leaky_relu__21 = paddle._C_ops.leaky_relu_(add__22, float('0.1'))
 
         # pd_op.conv2d: (1x2x96x160xf16) <- (1x8x96x160xf16, 2x8x3x3xf16)
         conv2d_23 = paddle._C_ops.conv2d(leaky_relu__21, parameter_47, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x2x96x160xf16) <- (1x2x96x160xf16, 1x2x1x1xf16)
-        add__23 = paddle._C_ops.add(conv2d_23, parameter_48)
+        add__23 = paddle._C_ops.add_(conv2d_23, parameter_48)
 
         # pd_op.add_: (1x2x96x160xf16) <- (1x2x96x160xf16, 1x2x96x160xf16)
-        add__24 = paddle._C_ops.add(scale__0, add__23)
+        add__24 = paddle._C_ops.add_(scale__0, add__23)
 
         # pd_op.bilinear_interp: (1x2x192x320xf16) <- (1x2x96x160xf16, None, None, None)
         bilinear_interp_1 = paddle._C_ops.bilinear_interp(add__24, None, None, None, 'NCHW', -1, -1, -1, [float('2'), float('2')], 'bilinear', True, 0)
 
         # pd_op.scale_: (1x2x192x320xf16) <- (1x2x192x320xf16, 1xf32)
-        scale__7 = paddle._C_ops.scale(bilinear_interp_1, constant_1, float('0'), True)
+        scale__7 = paddle._C_ops.scale_(bilinear_interp_1, constant_1, float('0'), True)
 
         # pd_op.transpose: (1x192x320x2xf16) <- (1x2x192x320xf16)
         transpose_1 = paddle._C_ops.transpose(scale__7, [0, 2, 3, 1])
@@ -543,25 +543,25 @@ class BlockEntries:
         slice_2 = paddle._C_ops.slice(add_2, [3], constant_2, constant_3, [1], [3])
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__8 = paddle._C_ops.scale(slice_2, constant_1, float('0'), True)
+        scale__8 = paddle._C_ops.scale_(slice_2, constant_1, float('0'), True)
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__9 = paddle._C_ops.scale(scale__8, constant_8, float('0'), True)
+        scale__9 = paddle._C_ops.scale_(scale__8, constant_8, float('0'), True)
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__10 = paddle._C_ops.scale(scale__9, constant_5, float('-1'), True)
+        scale__10 = paddle._C_ops.scale_(scale__9, constant_5, float('-1'), True)
 
         # pd_op.slice: (1x192x320xf16) <- (1x192x320x2xf16, 1xi64, 1xi64)
         slice_3 = paddle._C_ops.slice(add_2, [3], constant_3, constant_6, [1], [3])
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__11 = paddle._C_ops.scale(slice_3, constant_1, float('0'), True)
+        scale__11 = paddle._C_ops.scale_(slice_3, constant_1, float('0'), True)
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__12 = paddle._C_ops.scale(scale__11, constant_9, float('0'), True)
+        scale__12 = paddle._C_ops.scale_(scale__11, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__13 = paddle._C_ops.scale(scale__12, constant_5, float('-1'), True)
+        scale__13 = paddle._C_ops.scale_(scale__12, constant_5, float('-1'), True)
 
         # builtin.combine: ([1x192x320xf16, 1x192x320xf16]) <- (1x192x320xf16, 1x192x320xf16)
         combine_3 = [scale__10, scale__13]
@@ -591,109 +591,109 @@ class BlockEntries:
         conv2d_24 = paddle._C_ops.conv2d(concat_2, parameter_49, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__25 = paddle._C_ops.add(conv2d_24, parameter_50)
+        add__25 = paddle._C_ops.add_(conv2d_24, parameter_50)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__22 = paddle._C_ops.leaky_relu(add__25, float('0.1'))
+        leaky_relu__22 = paddle._C_ops.leaky_relu_(add__25, float('0.1'))
 
         # pd_op.conv2d: (1x16x192x320xf16) <- (1x16x192x320xf16, 16x16x3x3xf16)
         conv2d_25 = paddle._C_ops.conv2d(leaky_relu__22, parameter_51, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__26 = paddle._C_ops.add(conv2d_25, parameter_52)
+        add__26 = paddle._C_ops.add_(conv2d_25, parameter_52)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__23 = paddle._C_ops.leaky_relu(add__26, float('0.1'))
+        leaky_relu__23 = paddle._C_ops.leaky_relu_(add__26, float('0.1'))
 
         # pd_op.conv2d: (1x32x192x320xf16) <- (1x16x192x320xf16, 32x16x3x3xf16)
         conv2d_26 = paddle._C_ops.conv2d(leaky_relu__23, parameter_53, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x192x320xf16) <- (1x32x192x320xf16, 1x32x1x1xf16)
-        add__27 = paddle._C_ops.add(conv2d_26, parameter_54)
+        add__27 = paddle._C_ops.add_(conv2d_26, parameter_54)
 
         # pd_op.leaky_relu_: (1x32x192x320xf16) <- (1x32x192x320xf16)
-        leaky_relu__24 = paddle._C_ops.leaky_relu(add__27, float('0.1'))
+        leaky_relu__24 = paddle._C_ops.leaky_relu_(add__27, float('0.1'))
 
         # pd_op.conv2d: (1x32x192x320xf16) <- (1x32x192x320xf16, 32x32x3x3xf16)
         conv2d_27 = paddle._C_ops.conv2d(leaky_relu__24, parameter_55, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x192x320xf16) <- (1x32x192x320xf16, 1x32x1x1xf16)
-        add__28 = paddle._C_ops.add(conv2d_27, parameter_56)
+        add__28 = paddle._C_ops.add_(conv2d_27, parameter_56)
 
         # pd_op.leaky_relu_: (1x32x192x320xf16) <- (1x32x192x320xf16)
-        leaky_relu__25 = paddle._C_ops.leaky_relu(add__28, float('0.1'))
+        leaky_relu__25 = paddle._C_ops.leaky_relu_(add__28, float('0.1'))
 
         # pd_op.conv2d: (1x32x192x320xf16) <- (1x32x192x320xf16, 32x32x3x3xf16)
         conv2d_28 = paddle._C_ops.conv2d(leaky_relu__25, parameter_57, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x192x320xf16) <- (1x32x192x320xf16, 1x32x1x1xf16)
-        add__29 = paddle._C_ops.add(conv2d_28, parameter_58)
+        add__29 = paddle._C_ops.add_(conv2d_28, parameter_58)
 
         # pd_op.leaky_relu_: (1x32x192x320xf16) <- (1x32x192x320xf16)
-        leaky_relu__26 = paddle._C_ops.leaky_relu(add__29, float('0.1'))
+        leaky_relu__26 = paddle._C_ops.leaky_relu_(add__29, float('0.1'))
 
         # pd_op.conv2d: (1x32x192x320xf16) <- (1x32x192x320xf16, 32x32x3x3xf16)
         conv2d_29 = paddle._C_ops.conv2d(leaky_relu__26, parameter_59, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x192x320xf16) <- (1x32x192x320xf16, 1x32x1x1xf16)
-        add__30 = paddle._C_ops.add(conv2d_29, parameter_60)
+        add__30 = paddle._C_ops.add_(conv2d_29, parameter_60)
 
         # pd_op.leaky_relu_: (1x32x192x320xf16) <- (1x32x192x320xf16)
-        leaky_relu__27 = paddle._C_ops.leaky_relu(add__30, float('0.1'))
+        leaky_relu__27 = paddle._C_ops.leaky_relu_(add__30, float('0.1'))
 
         # pd_op.conv2d: (1x16x192x320xf16) <- (1x32x192x320xf16, 16x32x3x3xf16)
         conv2d_30 = paddle._C_ops.conv2d(leaky_relu__27, parameter_61, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__31 = paddle._C_ops.add(conv2d_30, parameter_62)
+        add__31 = paddle._C_ops.add_(conv2d_30, parameter_62)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__28 = paddle._C_ops.leaky_relu(add__31, float('0.1'))
+        leaky_relu__28 = paddle._C_ops.leaky_relu_(add__31, float('0.1'))
 
         # pd_op.conv2d: (1x16x192x320xf16) <- (1x16x192x320xf16, 16x16x3x3xf16)
         conv2d_31 = paddle._C_ops.conv2d(leaky_relu__28, parameter_63, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__32 = paddle._C_ops.add(conv2d_31, parameter_64)
+        add__32 = paddle._C_ops.add_(conv2d_31, parameter_64)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__29 = paddle._C_ops.leaky_relu(add__32, float('0.1'))
+        leaky_relu__29 = paddle._C_ops.leaky_relu_(add__32, float('0.1'))
 
         # pd_op.conv2d: (1x16x192x320xf16) <- (1x16x192x320xf16, 16x16x3x3xf16)
         conv2d_32 = paddle._C_ops.conv2d(leaky_relu__29, parameter_65, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__33 = paddle._C_ops.add(conv2d_32, parameter_66)
+        add__33 = paddle._C_ops.add_(conv2d_32, parameter_66)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__30 = paddle._C_ops.leaky_relu(add__33, float('0.1'))
+        leaky_relu__30 = paddle._C_ops.leaky_relu_(add__33, float('0.1'))
 
         # pd_op.conv2d: (1x8x192x320xf16) <- (1x16x192x320xf16, 8x16x3x3xf16)
         conv2d_33 = paddle._C_ops.conv2d(leaky_relu__30, parameter_67, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x192x320xf16) <- (1x8x192x320xf16, 1x8x1x1xf16)
-        add__34 = paddle._C_ops.add(conv2d_33, parameter_68)
+        add__34 = paddle._C_ops.add_(conv2d_33, parameter_68)
 
         # pd_op.leaky_relu_: (1x8x192x320xf16) <- (1x8x192x320xf16)
-        leaky_relu__31 = paddle._C_ops.leaky_relu(add__34, float('0.1'))
+        leaky_relu__31 = paddle._C_ops.leaky_relu_(add__34, float('0.1'))
 
         # pd_op.conv2d: (1x8x192x320xf16) <- (1x8x192x320xf16, 8x8x3x3xf16)
         conv2d_34 = paddle._C_ops.conv2d(leaky_relu__31, parameter_69, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x192x320xf16) <- (1x8x192x320xf16, 1x8x1x1xf16)
-        add__35 = paddle._C_ops.add(conv2d_34, parameter_70)
+        add__35 = paddle._C_ops.add_(conv2d_34, parameter_70)
 
         # pd_op.leaky_relu_: (1x8x192x320xf16) <- (1x8x192x320xf16)
-        leaky_relu__32 = paddle._C_ops.leaky_relu(add__35, float('0.1'))
+        leaky_relu__32 = paddle._C_ops.leaky_relu_(add__35, float('0.1'))
 
         # pd_op.conv2d: (1x2x192x320xf16) <- (1x8x192x320xf16, 2x8x3x3xf16)
         conv2d_35 = paddle._C_ops.conv2d(leaky_relu__32, parameter_71, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x2x192x320xf16) <- (1x2x192x320xf16, 1x2x1x1xf16)
-        add__36 = paddle._C_ops.add(conv2d_35, parameter_72)
+        add__36 = paddle._C_ops.add_(conv2d_35, parameter_72)
 
         # pd_op.add_: (1x2x192x320xf16) <- (1x2x192x320xf16, 1x2x192x320xf16)
-        add__37 = paddle._C_ops.add(scale__7, add__36)
+        add__37 = paddle._C_ops.add_(scale__7, add__36)
 
         # pd_op.bilinear_interp: (1x2x180x320xf16) <- (1x2x192x320xf16, None, None, None)
         bilinear_interp_2 = paddle._C_ops.bilinear_interp(add__37, None, None, None, 'NCHW', -1, 180, 320, [], 'bilinear', False, 0)
@@ -702,28 +702,28 @@ class BlockEntries:
         slice_4 = paddle._C_ops.slice(bilinear_interp_2, [1], constant_2, constant_3, [1], [1])
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__14 = paddle._C_ops.scale(slice_4, constant_5, float('0'), True)
+        scale__14 = paddle._C_ops.scale_(slice_4, constant_5, float('0'), True)
 
         # pd_op.set_value_with_tensor_: (1x2x180x320xf16) <- (1x2x180x320xf16, 1x180x320xf16, 1xi64, 1xi64, 1xi64)
-        set_value_with_tensor__0 = paddle._C_ops.set_value_with_tensor(bilinear_interp_2, scale__14, constant_2, constant_3, constant_3, [1], [1], [])
+        set_value_with_tensor__0 = paddle._C_ops.set_value_with_tensor_(bilinear_interp_2, scale__14, constant_2, constant_3, constant_3, [1], [1], [])
 
         # pd_op.slice: (1x180x320xf16) <- (1x2x180x320xf16, 1xi64, 1xi64)
         slice_5 = paddle._C_ops.slice(set_value_with_tensor__0, [1], constant_3, constant_6, [1], [1])
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__15 = paddle._C_ops.scale(slice_5, constant_10, float('0'), True)
+        scale__15 = paddle._C_ops.scale_(slice_5, constant_10, float('0'), True)
 
         # pd_op.set_value_with_tensor_: (1x2x180x320xf16) <- (1x2x180x320xf16, 1x180x320xf16, 1xi64, 1xi64, 1xi64)
-        set_value_with_tensor__1 = paddle._C_ops.set_value_with_tensor(set_value_with_tensor__0, scale__15, constant_3, constant_6, constant_3, [1], [1], [])
+        set_value_with_tensor__1 = paddle._C_ops.set_value_with_tensor_(set_value_with_tensor__0, scale__15, constant_3, constant_6, constant_3, [1], [1], [])
 
         # pd_op.reshape_: (1x1x2x180x320xf16, 0x1x2x180x320xf16) <- (1x2x180x320xf16, 5xi64)
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape(set_value_with_tensor__1, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(set_value_with_tensor__1, constant_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.cast: (1x1x2x180x320xf32) <- (1x1x2x180x320xf16)
         cast_11 = paddle._C_ops.cast(reshape__0, paddle.float32)
 
         # pd_op.assign_: (1x1x2x180x320xf32) <- (1x1x2x180x320xf32)
-        assign__0 = paddle._C_ops.assign(cast_11)
+        assign__0 = paddle._C_ops.assign_(cast_11)
         return assign__0
     def pd_op_if_4969_1_0(self, parameter_0):
         return parameter_0
@@ -745,7 +745,7 @@ class BlockEntries:
         slice_1 = split_with_num_0[0]
 
         # pd_op.subtract_: (1x1x3x180x320xf16) <- (1x1x3x180x320xf16, 1x1x3x180x320xf16)
-        subtract__0 = paddle._C_ops.subtract(slice_1, flip_0)
+        subtract__0 = paddle._C_ops.subtract_(slice_1, flip_0)
 
         # pd_op.cast: (1x1x3x180x320xf32) <- (1x1x3x180x320xf16)
         cast_1 = paddle._C_ops.cast(subtract__0, paddle.float32)
@@ -772,55 +772,55 @@ class BlockEntries:
         conv2d_0 = paddle._C_ops.conv2d(reshape_0, parameter_3, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (2x32x180x320xf16) <- (2x32x180x320xf16, 1x32x1x1xf16)
-        add__0 = paddle._C_ops.add(conv2d_0, parameter_4)
+        add__0 = paddle._C_ops.add_(conv2d_0, parameter_4)
 
         # pd_op.leaky_relu_: (2x32x180x320xf16) <- (2x32x180x320xf16)
-        leaky_relu__0 = paddle._C_ops.leaky_relu(add__0, float('0.1'))
+        leaky_relu__0 = paddle._C_ops.leaky_relu_(add__0, float('0.1'))
 
         # pd_op.conv2d: (2x32x180x320xf16) <- (2x32x180x320xf16, 32x32x3x3xf16)
         conv2d_1 = paddle._C_ops.conv2d(leaky_relu__0, parameter_5, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (2x32x180x320xf16) <- (2x32x180x320xf16, 1x32x1x1xf16)
-        add__1 = paddle._C_ops.add(conv2d_1, parameter_6)
+        add__1 = paddle._C_ops.add_(conv2d_1, parameter_6)
 
         # pd_op.relu_: (2x32x180x320xf16) <- (2x32x180x320xf16)
-        relu__0 = paddle._C_ops.relu(add__1)
+        relu__0 = paddle._C_ops.relu_(add__1)
 
         # pd_op.conv2d: (2x32x180x320xf16) <- (2x32x180x320xf16, 32x32x3x3xf16)
         conv2d_2 = paddle._C_ops.conv2d(relu__0, parameter_7, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (2x32x180x320xf16) <- (2x32x180x320xf16, 1x32x1x1xf16)
-        add__2 = paddle._C_ops.add(conv2d_2, parameter_8)
+        add__2 = paddle._C_ops.add_(conv2d_2, parameter_8)
 
         # pd_op.scale_: (2x32x180x320xf16) <- (2x32x180x320xf16, 1xf32)
-        scale__0 = paddle._C_ops.scale(add__2, constant_3, float('0'), True)
+        scale__0 = paddle._C_ops.scale_(add__2, constant_3, float('0'), True)
 
         # pd_op.add_: (2x32x180x320xf16) <- (2x32x180x320xf16, 2x32x180x320xf16)
-        add__3 = paddle._C_ops.add(leaky_relu__0, scale__0)
+        add__3 = paddle._C_ops.add_(leaky_relu__0, scale__0)
 
         # pd_op.conv2d: (2x32x180x320xf16) <- (2x32x180x320xf16, 32x32x3x3xf16)
         conv2d_3 = paddle._C_ops.conv2d(add__3, parameter_9, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (2x32x180x320xf16) <- (2x32x180x320xf16, 1x32x1x1xf16)
-        add__4 = paddle._C_ops.add(conv2d_3, parameter_10)
+        add__4 = paddle._C_ops.add_(conv2d_3, parameter_10)
 
         # pd_op.relu_: (2x32x180x320xf16) <- (2x32x180x320xf16)
-        relu__1 = paddle._C_ops.relu(add__4)
+        relu__1 = paddle._C_ops.relu_(add__4)
 
         # pd_op.conv2d: (2x32x180x320xf16) <- (2x32x180x320xf16, 32x32x3x3xf16)
         conv2d_4 = paddle._C_ops.conv2d(relu__1, parameter_11, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (2x32x180x320xf16) <- (2x32x180x320xf16, 1x32x1x1xf16)
-        add__5 = paddle._C_ops.add(conv2d_4, parameter_12)
+        add__5 = paddle._C_ops.add_(conv2d_4, parameter_12)
 
         # pd_op.scale_: (2x32x180x320xf16) <- (2x32x180x320xf16, 1xf32)
-        scale__1 = paddle._C_ops.scale(add__5, constant_3, float('0'), True)
+        scale__1 = paddle._C_ops.scale_(add__5, constant_3, float('0'), True)
 
         # pd_op.add_: (2x32x180x320xf16) <- (2x32x180x320xf16, 2x32x180x320xf16)
-        add__6 = paddle._C_ops.add(add__3, scale__1)
+        add__6 = paddle._C_ops.add_(add__3, scale__1)
 
         # pd_op.reshape_: (1x2x32x180x320xf16, 0x2x32x180x320xf16) <- (2x32x180x320xf16, 5xi64)
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape(add__6, constant_4), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(add__6, constant_4), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (1x32x180x320xf16) <- (1x2x32x180x320xf16, 1xi64, 1xi64)
         slice_2 = paddle._C_ops.slice(reshape__0, [1], constant_1, constant_5, [1], [1])
@@ -832,13 +832,13 @@ class BlockEntries:
         slice_4 = paddle._C_ops.slice(cast_0, [1], constant_1, constant_7, [1], [])
 
         # pd_op.reshape_: (1x3x180x320xf16, 0x1x1x3x180x320xf16) <- (1x1x3x180x320xf16, 4xi64)
-        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape(slice_4, constant_2), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(slice_4, constant_2), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.slice: (1x1x3x180x320xf16) <- (1x2x3x180x320xf16, 1xi64, 1xi64)
         slice_5 = paddle._C_ops.slice(cast_0, [1], constant_5, constant_6, [1], [])
 
         # pd_op.reshape_: (1x3x180x320xf16, 0x1x1x3x180x320xf16) <- (1x1x3x180x320xf16, 4xi64)
-        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape(slice_5, constant_2), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape_(slice_5, constant_2), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.bilinear_interp: (1x3x192x320xf16) <- (1x3x180x320xf16, None, None, None)
         bilinear_interp_0 = paddle._C_ops.bilinear_interp(reshape__2, None, None, None, 'NCHW', -1, 192, 320, [], 'bilinear', False, 0)
@@ -847,16 +847,16 @@ class BlockEntries:
         bilinear_interp_1 = paddle._C_ops.bilinear_interp(reshape__4, None, None, None, 'NCHW', -1, 192, 320, [], 'bilinear', False, 0)
 
         # pd_op.subtract_: (1x3x192x320xf16) <- (1x3x192x320xf16, 1x3x1x1xf16)
-        subtract__1 = paddle._C_ops.subtract(bilinear_interp_0, parameter_13)
+        subtract__1 = paddle._C_ops.subtract_(bilinear_interp_0, parameter_13)
 
         # pd_op.divide_: (1x3x192x320xf16) <- (1x3x192x320xf16, 1x3x1x1xf16)
-        divide__0 = paddle._C_ops.divide(subtract__1, parameter_14)
+        divide__0 = paddle._C_ops.divide_(subtract__1, parameter_14)
 
         # pd_op.subtract_: (1x3x192x320xf16) <- (1x3x192x320xf16, 1x3x1x1xf16)
-        subtract__2 = paddle._C_ops.subtract(bilinear_interp_1, parameter_13)
+        subtract__2 = paddle._C_ops.subtract_(bilinear_interp_1, parameter_13)
 
         # pd_op.divide_: (1x3x192x320xf16) <- (1x3x192x320xf16, 1x3x1x1xf16)
-        divide__1 = paddle._C_ops.divide(subtract__2, parameter_14)
+        divide__1 = paddle._C_ops.divide_(subtract__2, parameter_14)
 
         # pd_op.pool2d: (1x3x96x160xf16) <- (1x3x192x320xf16, 2xi64)
         pool2d_0 = paddle._C_ops.pool2d(divide__0, constant_8, [2, 2], [0, 0], False, True, 'NCHW', 'avg', False, False, 'EXPLICIT')
@@ -892,31 +892,31 @@ class BlockEntries:
         cast_4 = paddle._C_ops.cast(stack_0, paddle.float16)
 
         # pd_op.add_: (1x48x80x2xf16) <- (48x80x2xf16, 1x48x80x2xf16)
-        add__7 = paddle._C_ops.add(cast_4, parameter_17)
+        add__7 = paddle._C_ops.add_(cast_4, parameter_17)
 
         # pd_op.slice: (1x48x80xf16) <- (1x48x80x2xf16, 1xi64, 1xi64)
         slice_8 = paddle._C_ops.slice(add__7, [3], constant_1, constant_5, [1], [3])
 
         # pd_op.scale_: (1x48x80xf16) <- (1x48x80xf16, 1xf32)
-        scale__2 = paddle._C_ops.scale(slice_8, constant_9, float('0'), True)
+        scale__2 = paddle._C_ops.scale_(slice_8, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x48x80xf16) <- (1x48x80xf16, 1xf32)
-        scale__3 = paddle._C_ops.scale(scale__2, constant_10, float('0'), True)
+        scale__3 = paddle._C_ops.scale_(scale__2, constant_10, float('0'), True)
 
         # pd_op.scale_: (1x48x80xf16) <- (1x48x80xf16, 1xf32)
-        scale__4 = paddle._C_ops.scale(scale__3, constant_3, float('-1'), True)
+        scale__4 = paddle._C_ops.scale_(scale__3, constant_3, float('-1'), True)
 
         # pd_op.slice: (1x48x80xf16) <- (1x48x80x2xf16, 1xi64, 1xi64)
         slice_9 = paddle._C_ops.slice(add__7, [3], constant_5, constant_6, [1], [3])
 
         # pd_op.scale_: (1x48x80xf16) <- (1x48x80xf16, 1xf32)
-        scale__5 = paddle._C_ops.scale(slice_9, constant_9, float('0'), True)
+        scale__5 = paddle._C_ops.scale_(slice_9, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x48x80xf16) <- (1x48x80xf16, 1xf32)
-        scale__6 = paddle._C_ops.scale(scale__5, constant_11, float('0'), True)
+        scale__6 = paddle._C_ops.scale_(scale__5, constant_11, float('0'), True)
 
         # pd_op.scale_: (1x48x80xf16) <- (1x48x80xf16, 1xf32)
-        scale__7 = paddle._C_ops.scale(scale__6, constant_3, float('-1'), True)
+        scale__7 = paddle._C_ops.scale_(scale__6, constant_3, float('-1'), True)
 
         # builtin.combine: ([1x48x80xf16, 1x48x80xf16]) <- (1x48x80xf16, 1x48x80xf16)
         combine_2 = [scale__4, scale__7]
@@ -946,106 +946,106 @@ class BlockEntries:
         conv2d_5 = paddle._C_ops.conv2d(concat_0, parameter_19, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__8 = paddle._C_ops.add(conv2d_5, parameter_20)
+        add__8 = paddle._C_ops.add_(conv2d_5, parameter_20)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__1 = paddle._C_ops.leaky_relu(add__8, float('0.1'))
+        leaky_relu__1 = paddle._C_ops.leaky_relu_(add__8, float('0.1'))
 
         # pd_op.conv2d: (1x16x48x80xf16) <- (1x16x48x80xf16, 16x16x3x3xf16)
         conv2d_6 = paddle._C_ops.conv2d(leaky_relu__1, parameter_21, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__9 = paddle._C_ops.add(conv2d_6, parameter_22)
+        add__9 = paddle._C_ops.add_(conv2d_6, parameter_22)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__2 = paddle._C_ops.leaky_relu(add__9, float('0.1'))
+        leaky_relu__2 = paddle._C_ops.leaky_relu_(add__9, float('0.1'))
 
         # pd_op.conv2d: (1x32x48x80xf16) <- (1x16x48x80xf16, 32x16x3x3xf16)
         conv2d_7 = paddle._C_ops.conv2d(leaky_relu__2, parameter_23, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x48x80xf16) <- (1x32x48x80xf16, 1x32x1x1xf16)
-        add__10 = paddle._C_ops.add(conv2d_7, parameter_24)
+        add__10 = paddle._C_ops.add_(conv2d_7, parameter_24)
 
         # pd_op.leaky_relu_: (1x32x48x80xf16) <- (1x32x48x80xf16)
-        leaky_relu__3 = paddle._C_ops.leaky_relu(add__10, float('0.1'))
+        leaky_relu__3 = paddle._C_ops.leaky_relu_(add__10, float('0.1'))
 
         # pd_op.conv2d: (1x32x48x80xf16) <- (1x32x48x80xf16, 32x32x3x3xf16)
         conv2d_8 = paddle._C_ops.conv2d(leaky_relu__3, parameter_25, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x48x80xf16) <- (1x32x48x80xf16, 1x32x1x1xf16)
-        add__11 = paddle._C_ops.add(conv2d_8, parameter_26)
+        add__11 = paddle._C_ops.add_(conv2d_8, parameter_26)
 
         # pd_op.leaky_relu_: (1x32x48x80xf16) <- (1x32x48x80xf16)
-        leaky_relu__4 = paddle._C_ops.leaky_relu(add__11, float('0.1'))
+        leaky_relu__4 = paddle._C_ops.leaky_relu_(add__11, float('0.1'))
 
         # pd_op.conv2d: (1x32x48x80xf16) <- (1x32x48x80xf16, 32x32x3x3xf16)
         conv2d_9 = paddle._C_ops.conv2d(leaky_relu__4, parameter_27, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x48x80xf16) <- (1x32x48x80xf16, 1x32x1x1xf16)
-        add__12 = paddle._C_ops.add(conv2d_9, parameter_28)
+        add__12 = paddle._C_ops.add_(conv2d_9, parameter_28)
 
         # pd_op.leaky_relu_: (1x32x48x80xf16) <- (1x32x48x80xf16)
-        leaky_relu__5 = paddle._C_ops.leaky_relu(add__12, float('0.1'))
+        leaky_relu__5 = paddle._C_ops.leaky_relu_(add__12, float('0.1'))
 
         # pd_op.conv2d: (1x32x48x80xf16) <- (1x32x48x80xf16, 32x32x3x3xf16)
         conv2d_10 = paddle._C_ops.conv2d(leaky_relu__5, parameter_29, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x48x80xf16) <- (1x32x48x80xf16, 1x32x1x1xf16)
-        add__13 = paddle._C_ops.add(conv2d_10, parameter_30)
+        add__13 = paddle._C_ops.add_(conv2d_10, parameter_30)
 
         # pd_op.leaky_relu_: (1x32x48x80xf16) <- (1x32x48x80xf16)
-        leaky_relu__6 = paddle._C_ops.leaky_relu(add__13, float('0.1'))
+        leaky_relu__6 = paddle._C_ops.leaky_relu_(add__13, float('0.1'))
 
         # pd_op.conv2d: (1x16x48x80xf16) <- (1x32x48x80xf16, 16x32x3x3xf16)
         conv2d_11 = paddle._C_ops.conv2d(leaky_relu__6, parameter_31, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__14 = paddle._C_ops.add(conv2d_11, parameter_32)
+        add__14 = paddle._C_ops.add_(conv2d_11, parameter_32)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__7 = paddle._C_ops.leaky_relu(add__14, float('0.1'))
+        leaky_relu__7 = paddle._C_ops.leaky_relu_(add__14, float('0.1'))
 
         # pd_op.conv2d: (1x16x48x80xf16) <- (1x16x48x80xf16, 16x16x3x3xf16)
         conv2d_12 = paddle._C_ops.conv2d(leaky_relu__7, parameter_33, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__15 = paddle._C_ops.add(conv2d_12, parameter_34)
+        add__15 = paddle._C_ops.add_(conv2d_12, parameter_34)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__8 = paddle._C_ops.leaky_relu(add__15, float('0.1'))
+        leaky_relu__8 = paddle._C_ops.leaky_relu_(add__15, float('0.1'))
 
         # pd_op.conv2d: (1x16x48x80xf16) <- (1x16x48x80xf16, 16x16x3x3xf16)
         conv2d_13 = paddle._C_ops.conv2d(leaky_relu__8, parameter_35, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x48x80xf16) <- (1x16x48x80xf16, 1x16x1x1xf16)
-        add__16 = paddle._C_ops.add(conv2d_13, parameter_36)
+        add__16 = paddle._C_ops.add_(conv2d_13, parameter_36)
 
         # pd_op.leaky_relu_: (1x16x48x80xf16) <- (1x16x48x80xf16)
-        leaky_relu__9 = paddle._C_ops.leaky_relu(add__16, float('0.1'))
+        leaky_relu__9 = paddle._C_ops.leaky_relu_(add__16, float('0.1'))
 
         # pd_op.conv2d: (1x8x48x80xf16) <- (1x16x48x80xf16, 8x16x3x3xf16)
         conv2d_14 = paddle._C_ops.conv2d(leaky_relu__9, parameter_37, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x48x80xf16) <- (1x8x48x80xf16, 1x8x1x1xf16)
-        add__17 = paddle._C_ops.add(conv2d_14, parameter_38)
+        add__17 = paddle._C_ops.add_(conv2d_14, parameter_38)
 
         # pd_op.leaky_relu_: (1x8x48x80xf16) <- (1x8x48x80xf16)
-        leaky_relu__10 = paddle._C_ops.leaky_relu(add__17, float('0.1'))
+        leaky_relu__10 = paddle._C_ops.leaky_relu_(add__17, float('0.1'))
 
         # pd_op.conv2d: (1x8x48x80xf16) <- (1x8x48x80xf16, 8x8x3x3xf16)
         conv2d_15 = paddle._C_ops.conv2d(leaky_relu__10, parameter_39, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x48x80xf16) <- (1x8x48x80xf16, 1x8x1x1xf16)
-        add__18 = paddle._C_ops.add(conv2d_15, parameter_40)
+        add__18 = paddle._C_ops.add_(conv2d_15, parameter_40)
 
         # pd_op.leaky_relu_: (1x8x48x80xf16) <- (1x8x48x80xf16)
-        leaky_relu__11 = paddle._C_ops.leaky_relu(add__18, float('0.1'))
+        leaky_relu__11 = paddle._C_ops.leaky_relu_(add__18, float('0.1'))
 
         # pd_op.conv2d: (1x2x48x80xf16) <- (1x8x48x80xf16, 2x8x3x3xf16)
         conv2d_16 = paddle._C_ops.conv2d(leaky_relu__11, parameter_41, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x2x48x80xf16) <- (1x2x48x80xf16, 1x2x1x1xf16)
-        add__19 = paddle._C_ops.add(conv2d_16, parameter_42)
+        add__19 = paddle._C_ops.add_(conv2d_16, parameter_42)
 
         # pd_op.add: (1x2x48x80xf16) <- (1x2x48x80xf16, 1x2x48x80xf16)
         add_0 = parameter_18 + add__19
@@ -1054,7 +1054,7 @@ class BlockEntries:
         bilinear_interp_2 = paddle._C_ops.bilinear_interp(add_0, None, None, None, 'NCHW', -1, -1, -1, [float('2'), float('2')], 'bilinear', True, 0)
 
         # pd_op.scale_: (1x2x96x160xf16) <- (1x2x96x160xf16, 1xf32)
-        scale__8 = paddle._C_ops.scale(bilinear_interp_2, constant_9, float('0'), True)
+        scale__8 = paddle._C_ops.scale_(bilinear_interp_2, constant_9, float('0'), True)
 
         # pd_op.transpose: (1x96x160x2xf16) <- (1x2x96x160xf16)
         transpose_0 = paddle._C_ops.transpose(scale__8, [0, 2, 3, 1])
@@ -1087,25 +1087,25 @@ class BlockEntries:
         slice_12 = paddle._C_ops.slice(add_1, [3], constant_1, constant_5, [1], [3])
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__9 = paddle._C_ops.scale(slice_12, constant_9, float('0'), True)
+        scale__9 = paddle._C_ops.scale_(slice_12, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__10 = paddle._C_ops.scale(scale__9, constant_12, float('0'), True)
+        scale__10 = paddle._C_ops.scale_(scale__9, constant_12, float('0'), True)
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__11 = paddle._C_ops.scale(scale__10, constant_3, float('-1'), True)
+        scale__11 = paddle._C_ops.scale_(scale__10, constant_3, float('-1'), True)
 
         # pd_op.slice: (1x96x160xf16) <- (1x96x160x2xf16, 1xi64, 1xi64)
         slice_13 = paddle._C_ops.slice(add_1, [3], constant_5, constant_6, [1], [3])
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__12 = paddle._C_ops.scale(slice_13, constant_9, float('0'), True)
+        scale__12 = paddle._C_ops.scale_(slice_13, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__13 = paddle._C_ops.scale(scale__12, constant_13, float('0'), True)
+        scale__13 = paddle._C_ops.scale_(scale__12, constant_13, float('0'), True)
 
         # pd_op.scale_: (1x96x160xf16) <- (1x96x160xf16, 1xf32)
-        scale__14 = paddle._C_ops.scale(scale__13, constant_3, float('-1'), True)
+        scale__14 = paddle._C_ops.scale_(scale__13, constant_3, float('-1'), True)
 
         # builtin.combine: ([1x96x160xf16, 1x96x160xf16]) <- (1x96x160xf16, 1x96x160xf16)
         combine_6 = [scale__11, scale__14]
@@ -1135,115 +1135,115 @@ class BlockEntries:
         conv2d_17 = paddle._C_ops.conv2d(concat_1, parameter_45, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__20 = paddle._C_ops.add(conv2d_17, parameter_46)
+        add__20 = paddle._C_ops.add_(conv2d_17, parameter_46)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__12 = paddle._C_ops.leaky_relu(add__20, float('0.1'))
+        leaky_relu__12 = paddle._C_ops.leaky_relu_(add__20, float('0.1'))
 
         # pd_op.conv2d: (1x16x96x160xf16) <- (1x16x96x160xf16, 16x16x3x3xf16)
         conv2d_18 = paddle._C_ops.conv2d(leaky_relu__12, parameter_47, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__21 = paddle._C_ops.add(conv2d_18, parameter_48)
+        add__21 = paddle._C_ops.add_(conv2d_18, parameter_48)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__13 = paddle._C_ops.leaky_relu(add__21, float('0.1'))
+        leaky_relu__13 = paddle._C_ops.leaky_relu_(add__21, float('0.1'))
 
         # pd_op.conv2d: (1x32x96x160xf16) <- (1x16x96x160xf16, 32x16x3x3xf16)
         conv2d_19 = paddle._C_ops.conv2d(leaky_relu__13, parameter_49, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x96x160xf16) <- (1x32x96x160xf16, 1x32x1x1xf16)
-        add__22 = paddle._C_ops.add(conv2d_19, parameter_50)
+        add__22 = paddle._C_ops.add_(conv2d_19, parameter_50)
 
         # pd_op.leaky_relu_: (1x32x96x160xf16) <- (1x32x96x160xf16)
-        leaky_relu__14 = paddle._C_ops.leaky_relu(add__22, float('0.1'))
+        leaky_relu__14 = paddle._C_ops.leaky_relu_(add__22, float('0.1'))
 
         # pd_op.conv2d: (1x32x96x160xf16) <- (1x32x96x160xf16, 32x32x3x3xf16)
         conv2d_20 = paddle._C_ops.conv2d(leaky_relu__14, parameter_51, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x96x160xf16) <- (1x32x96x160xf16, 1x32x1x1xf16)
-        add__23 = paddle._C_ops.add(conv2d_20, parameter_52)
+        add__23 = paddle._C_ops.add_(conv2d_20, parameter_52)
 
         # pd_op.leaky_relu_: (1x32x96x160xf16) <- (1x32x96x160xf16)
-        leaky_relu__15 = paddle._C_ops.leaky_relu(add__23, float('0.1'))
+        leaky_relu__15 = paddle._C_ops.leaky_relu_(add__23, float('0.1'))
 
         # pd_op.conv2d: (1x32x96x160xf16) <- (1x32x96x160xf16, 32x32x3x3xf16)
         conv2d_21 = paddle._C_ops.conv2d(leaky_relu__15, parameter_53, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x96x160xf16) <- (1x32x96x160xf16, 1x32x1x1xf16)
-        add__24 = paddle._C_ops.add(conv2d_21, parameter_54)
+        add__24 = paddle._C_ops.add_(conv2d_21, parameter_54)
 
         # pd_op.leaky_relu_: (1x32x96x160xf16) <- (1x32x96x160xf16)
-        leaky_relu__16 = paddle._C_ops.leaky_relu(add__24, float('0.1'))
+        leaky_relu__16 = paddle._C_ops.leaky_relu_(add__24, float('0.1'))
 
         # pd_op.conv2d: (1x32x96x160xf16) <- (1x32x96x160xf16, 32x32x3x3xf16)
         conv2d_22 = paddle._C_ops.conv2d(leaky_relu__16, parameter_55, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x96x160xf16) <- (1x32x96x160xf16, 1x32x1x1xf16)
-        add__25 = paddle._C_ops.add(conv2d_22, parameter_56)
+        add__25 = paddle._C_ops.add_(conv2d_22, parameter_56)
 
         # pd_op.leaky_relu_: (1x32x96x160xf16) <- (1x32x96x160xf16)
-        leaky_relu__17 = paddle._C_ops.leaky_relu(add__25, float('0.1'))
+        leaky_relu__17 = paddle._C_ops.leaky_relu_(add__25, float('0.1'))
 
         # pd_op.conv2d: (1x16x96x160xf16) <- (1x32x96x160xf16, 16x32x3x3xf16)
         conv2d_23 = paddle._C_ops.conv2d(leaky_relu__17, parameter_57, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__26 = paddle._C_ops.add(conv2d_23, parameter_58)
+        add__26 = paddle._C_ops.add_(conv2d_23, parameter_58)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__18 = paddle._C_ops.leaky_relu(add__26, float('0.1'))
+        leaky_relu__18 = paddle._C_ops.leaky_relu_(add__26, float('0.1'))
 
         # pd_op.conv2d: (1x16x96x160xf16) <- (1x16x96x160xf16, 16x16x3x3xf16)
         conv2d_24 = paddle._C_ops.conv2d(leaky_relu__18, parameter_59, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__27 = paddle._C_ops.add(conv2d_24, parameter_60)
+        add__27 = paddle._C_ops.add_(conv2d_24, parameter_60)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__19 = paddle._C_ops.leaky_relu(add__27, float('0.1'))
+        leaky_relu__19 = paddle._C_ops.leaky_relu_(add__27, float('0.1'))
 
         # pd_op.conv2d: (1x16x96x160xf16) <- (1x16x96x160xf16, 16x16x3x3xf16)
         conv2d_25 = paddle._C_ops.conv2d(leaky_relu__19, parameter_61, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x96x160xf16) <- (1x16x96x160xf16, 1x16x1x1xf16)
-        add__28 = paddle._C_ops.add(conv2d_25, parameter_62)
+        add__28 = paddle._C_ops.add_(conv2d_25, parameter_62)
 
         # pd_op.leaky_relu_: (1x16x96x160xf16) <- (1x16x96x160xf16)
-        leaky_relu__20 = paddle._C_ops.leaky_relu(add__28, float('0.1'))
+        leaky_relu__20 = paddle._C_ops.leaky_relu_(add__28, float('0.1'))
 
         # pd_op.conv2d: (1x8x96x160xf16) <- (1x16x96x160xf16, 8x16x3x3xf16)
         conv2d_26 = paddle._C_ops.conv2d(leaky_relu__20, parameter_63, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x96x160xf16) <- (1x8x96x160xf16, 1x8x1x1xf16)
-        add__29 = paddle._C_ops.add(conv2d_26, parameter_64)
+        add__29 = paddle._C_ops.add_(conv2d_26, parameter_64)
 
         # pd_op.leaky_relu_: (1x8x96x160xf16) <- (1x8x96x160xf16)
-        leaky_relu__21 = paddle._C_ops.leaky_relu(add__29, float('0.1'))
+        leaky_relu__21 = paddle._C_ops.leaky_relu_(add__29, float('0.1'))
 
         # pd_op.conv2d: (1x8x96x160xf16) <- (1x8x96x160xf16, 8x8x3x3xf16)
         conv2d_27 = paddle._C_ops.conv2d(leaky_relu__21, parameter_65, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x96x160xf16) <- (1x8x96x160xf16, 1x8x1x1xf16)
-        add__30 = paddle._C_ops.add(conv2d_27, parameter_66)
+        add__30 = paddle._C_ops.add_(conv2d_27, parameter_66)
 
         # pd_op.leaky_relu_: (1x8x96x160xf16) <- (1x8x96x160xf16)
-        leaky_relu__22 = paddle._C_ops.leaky_relu(add__30, float('0.1'))
+        leaky_relu__22 = paddle._C_ops.leaky_relu_(add__30, float('0.1'))
 
         # pd_op.conv2d: (1x2x96x160xf16) <- (1x8x96x160xf16, 2x8x3x3xf16)
         conv2d_28 = paddle._C_ops.conv2d(leaky_relu__22, parameter_67, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x2x96x160xf16) <- (1x2x96x160xf16, 1x2x1x1xf16)
-        add__31 = paddle._C_ops.add(conv2d_28, parameter_68)
+        add__31 = paddle._C_ops.add_(conv2d_28, parameter_68)
 
         # pd_op.add_: (1x2x96x160xf16) <- (1x2x96x160xf16, 1x2x96x160xf16)
-        add__32 = paddle._C_ops.add(scale__8, add__31)
+        add__32 = paddle._C_ops.add_(scale__8, add__31)
 
         # pd_op.bilinear_interp: (1x2x192x320xf16) <- (1x2x96x160xf16, None, None, None)
         bilinear_interp_3 = paddle._C_ops.bilinear_interp(add__32, None, None, None, 'NCHW', -1, -1, -1, [float('2'), float('2')], 'bilinear', True, 0)
 
         # pd_op.scale_: (1x2x192x320xf16) <- (1x2x192x320xf16, 1xf32)
-        scale__15 = paddle._C_ops.scale(bilinear_interp_3, constant_9, float('0'), True)
+        scale__15 = paddle._C_ops.scale_(bilinear_interp_3, constant_9, float('0'), True)
 
         # pd_op.transpose: (1x192x320x2xf16) <- (1x2x192x320xf16)
         transpose_1 = paddle._C_ops.transpose(scale__15, [0, 2, 3, 1])
@@ -1276,25 +1276,25 @@ class BlockEntries:
         slice_16 = paddle._C_ops.slice(add_2, [3], constant_1, constant_5, [1], [3])
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__16 = paddle._C_ops.scale(slice_16, constant_9, float('0'), True)
+        scale__16 = paddle._C_ops.scale_(slice_16, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__17 = paddle._C_ops.scale(scale__16, constant_14, float('0'), True)
+        scale__17 = paddle._C_ops.scale_(scale__16, constant_14, float('0'), True)
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__18 = paddle._C_ops.scale(scale__17, constant_3, float('-1'), True)
+        scale__18 = paddle._C_ops.scale_(scale__17, constant_3, float('-1'), True)
 
         # pd_op.slice: (1x192x320xf16) <- (1x192x320x2xf16, 1xi64, 1xi64)
         slice_17 = paddle._C_ops.slice(add_2, [3], constant_5, constant_6, [1], [3])
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__19 = paddle._C_ops.scale(slice_17, constant_9, float('0'), True)
+        scale__19 = paddle._C_ops.scale_(slice_17, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__20 = paddle._C_ops.scale(scale__19, constant_15, float('0'), True)
+        scale__20 = paddle._C_ops.scale_(scale__19, constant_15, float('0'), True)
 
         # pd_op.scale_: (1x192x320xf16) <- (1x192x320xf16, 1xf32)
-        scale__21 = paddle._C_ops.scale(scale__20, constant_3, float('-1'), True)
+        scale__21 = paddle._C_ops.scale_(scale__20, constant_3, float('-1'), True)
 
         # builtin.combine: ([1x192x320xf16, 1x192x320xf16]) <- (1x192x320xf16, 1x192x320xf16)
         combine_10 = [scale__18, scale__21]
@@ -1324,109 +1324,109 @@ class BlockEntries:
         conv2d_29 = paddle._C_ops.conv2d(concat_2, parameter_71, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__33 = paddle._C_ops.add(conv2d_29, parameter_72)
+        add__33 = paddle._C_ops.add_(conv2d_29, parameter_72)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__23 = paddle._C_ops.leaky_relu(add__33, float('0.1'))
+        leaky_relu__23 = paddle._C_ops.leaky_relu_(add__33, float('0.1'))
 
         # pd_op.conv2d: (1x16x192x320xf16) <- (1x16x192x320xf16, 16x16x3x3xf16)
         conv2d_30 = paddle._C_ops.conv2d(leaky_relu__23, parameter_73, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__34 = paddle._C_ops.add(conv2d_30, parameter_74)
+        add__34 = paddle._C_ops.add_(conv2d_30, parameter_74)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__24 = paddle._C_ops.leaky_relu(add__34, float('0.1'))
+        leaky_relu__24 = paddle._C_ops.leaky_relu_(add__34, float('0.1'))
 
         # pd_op.conv2d: (1x32x192x320xf16) <- (1x16x192x320xf16, 32x16x3x3xf16)
         conv2d_31 = paddle._C_ops.conv2d(leaky_relu__24, parameter_75, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x192x320xf16) <- (1x32x192x320xf16, 1x32x1x1xf16)
-        add__35 = paddle._C_ops.add(conv2d_31, parameter_76)
+        add__35 = paddle._C_ops.add_(conv2d_31, parameter_76)
 
         # pd_op.leaky_relu_: (1x32x192x320xf16) <- (1x32x192x320xf16)
-        leaky_relu__25 = paddle._C_ops.leaky_relu(add__35, float('0.1'))
+        leaky_relu__25 = paddle._C_ops.leaky_relu_(add__35, float('0.1'))
 
         # pd_op.conv2d: (1x32x192x320xf16) <- (1x32x192x320xf16, 32x32x3x3xf16)
         conv2d_32 = paddle._C_ops.conv2d(leaky_relu__25, parameter_77, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x192x320xf16) <- (1x32x192x320xf16, 1x32x1x1xf16)
-        add__36 = paddle._C_ops.add(conv2d_32, parameter_78)
+        add__36 = paddle._C_ops.add_(conv2d_32, parameter_78)
 
         # pd_op.leaky_relu_: (1x32x192x320xf16) <- (1x32x192x320xf16)
-        leaky_relu__26 = paddle._C_ops.leaky_relu(add__36, float('0.1'))
+        leaky_relu__26 = paddle._C_ops.leaky_relu_(add__36, float('0.1'))
 
         # pd_op.conv2d: (1x32x192x320xf16) <- (1x32x192x320xf16, 32x32x3x3xf16)
         conv2d_33 = paddle._C_ops.conv2d(leaky_relu__26, parameter_79, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x192x320xf16) <- (1x32x192x320xf16, 1x32x1x1xf16)
-        add__37 = paddle._C_ops.add(conv2d_33, parameter_80)
+        add__37 = paddle._C_ops.add_(conv2d_33, parameter_80)
 
         # pd_op.leaky_relu_: (1x32x192x320xf16) <- (1x32x192x320xf16)
-        leaky_relu__27 = paddle._C_ops.leaky_relu(add__37, float('0.1'))
+        leaky_relu__27 = paddle._C_ops.leaky_relu_(add__37, float('0.1'))
 
         # pd_op.conv2d: (1x32x192x320xf16) <- (1x32x192x320xf16, 32x32x3x3xf16)
         conv2d_34 = paddle._C_ops.conv2d(leaky_relu__27, parameter_81, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x192x320xf16) <- (1x32x192x320xf16, 1x32x1x1xf16)
-        add__38 = paddle._C_ops.add(conv2d_34, parameter_82)
+        add__38 = paddle._C_ops.add_(conv2d_34, parameter_82)
 
         # pd_op.leaky_relu_: (1x32x192x320xf16) <- (1x32x192x320xf16)
-        leaky_relu__28 = paddle._C_ops.leaky_relu(add__38, float('0.1'))
+        leaky_relu__28 = paddle._C_ops.leaky_relu_(add__38, float('0.1'))
 
         # pd_op.conv2d: (1x16x192x320xf16) <- (1x32x192x320xf16, 16x32x3x3xf16)
         conv2d_35 = paddle._C_ops.conv2d(leaky_relu__28, parameter_83, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__39 = paddle._C_ops.add(conv2d_35, parameter_84)
+        add__39 = paddle._C_ops.add_(conv2d_35, parameter_84)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__29 = paddle._C_ops.leaky_relu(add__39, float('0.1'))
+        leaky_relu__29 = paddle._C_ops.leaky_relu_(add__39, float('0.1'))
 
         # pd_op.conv2d: (1x16x192x320xf16) <- (1x16x192x320xf16, 16x16x3x3xf16)
         conv2d_36 = paddle._C_ops.conv2d(leaky_relu__29, parameter_85, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__40 = paddle._C_ops.add(conv2d_36, parameter_86)
+        add__40 = paddle._C_ops.add_(conv2d_36, parameter_86)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__30 = paddle._C_ops.leaky_relu(add__40, float('0.1'))
+        leaky_relu__30 = paddle._C_ops.leaky_relu_(add__40, float('0.1'))
 
         # pd_op.conv2d: (1x16x192x320xf16) <- (1x16x192x320xf16, 16x16x3x3xf16)
         conv2d_37 = paddle._C_ops.conv2d(leaky_relu__30, parameter_87, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x16x192x320xf16) <- (1x16x192x320xf16, 1x16x1x1xf16)
-        add__41 = paddle._C_ops.add(conv2d_37, parameter_88)
+        add__41 = paddle._C_ops.add_(conv2d_37, parameter_88)
 
         # pd_op.leaky_relu_: (1x16x192x320xf16) <- (1x16x192x320xf16)
-        leaky_relu__31 = paddle._C_ops.leaky_relu(add__41, float('0.1'))
+        leaky_relu__31 = paddle._C_ops.leaky_relu_(add__41, float('0.1'))
 
         # pd_op.conv2d: (1x8x192x320xf16) <- (1x16x192x320xf16, 8x16x3x3xf16)
         conv2d_38 = paddle._C_ops.conv2d(leaky_relu__31, parameter_89, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x192x320xf16) <- (1x8x192x320xf16, 1x8x1x1xf16)
-        add__42 = paddle._C_ops.add(conv2d_38, parameter_90)
+        add__42 = paddle._C_ops.add_(conv2d_38, parameter_90)
 
         # pd_op.leaky_relu_: (1x8x192x320xf16) <- (1x8x192x320xf16)
-        leaky_relu__32 = paddle._C_ops.leaky_relu(add__42, float('0.1'))
+        leaky_relu__32 = paddle._C_ops.leaky_relu_(add__42, float('0.1'))
 
         # pd_op.conv2d: (1x8x192x320xf16) <- (1x8x192x320xf16, 8x8x3x3xf16)
         conv2d_39 = paddle._C_ops.conv2d(leaky_relu__32, parameter_91, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x8x192x320xf16) <- (1x8x192x320xf16, 1x8x1x1xf16)
-        add__43 = paddle._C_ops.add(conv2d_39, parameter_92)
+        add__43 = paddle._C_ops.add_(conv2d_39, parameter_92)
 
         # pd_op.leaky_relu_: (1x8x192x320xf16) <- (1x8x192x320xf16)
-        leaky_relu__33 = paddle._C_ops.leaky_relu(add__43, float('0.1'))
+        leaky_relu__33 = paddle._C_ops.leaky_relu_(add__43, float('0.1'))
 
         # pd_op.conv2d: (1x2x192x320xf16) <- (1x8x192x320xf16, 2x8x3x3xf16)
         conv2d_40 = paddle._C_ops.conv2d(leaky_relu__33, parameter_93, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x2x192x320xf16) <- (1x2x192x320xf16, 1x2x1x1xf16)
-        add__44 = paddle._C_ops.add(conv2d_40, parameter_94)
+        add__44 = paddle._C_ops.add_(conv2d_40, parameter_94)
 
         # pd_op.add_: (1x2x192x320xf16) <- (1x2x192x320xf16, 1x2x192x320xf16)
-        add__45 = paddle._C_ops.add(scale__15, add__44)
+        add__45 = paddle._C_ops.add_(scale__15, add__44)
 
         # pd_op.bilinear_interp: (1x2x180x320xf16) <- (1x2x192x320xf16, None, None, None)
         bilinear_interp_4 = paddle._C_ops.bilinear_interp(add__45, None, None, None, 'NCHW', -1, 180, 320, [], 'bilinear', False, 0)
@@ -1435,22 +1435,22 @@ class BlockEntries:
         slice_18 = paddle._C_ops.slice(bilinear_interp_4, [1], constant_1, constant_5, [1], [1])
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__22 = paddle._C_ops.scale(slice_18, constant_3, float('0'), True)
+        scale__22 = paddle._C_ops.scale_(slice_18, constant_3, float('0'), True)
 
         # pd_op.set_value_with_tensor_: (1x2x180x320xf16) <- (1x2x180x320xf16, 1x180x320xf16, 1xi64, 1xi64, 1xi64)
-        set_value_with_tensor__0 = paddle._C_ops.set_value_with_tensor(bilinear_interp_4, scale__22, constant_1, constant_5, constant_5, [1], [1], [])
+        set_value_with_tensor__0 = paddle._C_ops.set_value_with_tensor_(bilinear_interp_4, scale__22, constant_1, constant_5, constant_5, [1], [1], [])
 
         # pd_op.slice: (1x180x320xf16) <- (1x2x180x320xf16, 1xi64, 1xi64)
         slice_19 = paddle._C_ops.slice(set_value_with_tensor__0, [1], constant_5, constant_6, [1], [1])
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__23 = paddle._C_ops.scale(slice_19, constant_16, float('0'), True)
+        scale__23 = paddle._C_ops.scale_(slice_19, constant_16, float('0'), True)
 
         # pd_op.set_value_with_tensor_: (1x2x180x320xf16) <- (1x2x180x320xf16, 1x180x320xf16, 1xi64, 1xi64, 1xi64)
-        set_value_with_tensor__1 = paddle._C_ops.set_value_with_tensor(set_value_with_tensor__0, scale__23, constant_5, constant_6, constant_5, [1], [1], [])
+        set_value_with_tensor__1 = paddle._C_ops.set_value_with_tensor_(set_value_with_tensor__0, scale__23, constant_5, constant_6, constant_5, [1], [1], [])
 
         # pd_op.reshape_: (1x1x2x180x320xf16, 0x1x2x180x320xf16) <- (1x2x180x320xf16, 5xi64)
-        reshape__6, reshape__7 = (lambda x, f: f(x))(paddle._C_ops.reshape(set_value_with_tensor__1, constant_17), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__6, reshape__7 = (lambda x, f: f(x))(paddle._C_ops.reshape_(set_value_with_tensor__1, constant_17), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.if: (1x1x2x180x320xf32) <- (xb)
         if select_input_0:
@@ -1510,25 +1510,25 @@ class BlockEntries:
         slice_23 = paddle._C_ops.slice(add_3, [3], constant_1, constant_5, [1], [3])
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__24 = paddle._C_ops.scale(slice_23, constant_9, float('0'), True)
+        scale__24 = paddle._C_ops.scale_(slice_23, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__25 = paddle._C_ops.scale(scale__24, constant_14, float('0'), True)
+        scale__25 = paddle._C_ops.scale_(scale__24, constant_14, float('0'), True)
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__26 = paddle._C_ops.scale(scale__25, constant_3, float('-1'), True)
+        scale__26 = paddle._C_ops.scale_(scale__25, constant_3, float('-1'), True)
 
         # pd_op.slice: (1x180x320xf16) <- (1x180x320x2xf16, 1xi64, 1xi64)
         slice_24 = paddle._C_ops.slice(add_3, [3], constant_5, constant_6, [1], [3])
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__27 = paddle._C_ops.scale(slice_24, constant_9, float('0'), True)
+        scale__27 = paddle._C_ops.scale_(slice_24, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__28 = paddle._C_ops.scale(scale__27, constant_18, float('0'), True)
+        scale__28 = paddle._C_ops.scale_(scale__27, constant_18, float('0'), True)
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__29 = paddle._C_ops.scale(scale__28, constant_3, float('-1'), True)
+        scale__29 = paddle._C_ops.scale_(scale__28, constant_3, float('-1'), True)
 
         # builtin.combine: ([1x180x320xf16, 1x180x320xf16]) <- (1x180x320xf16, 1x180x320xf16)
         combine_14 = [scale__26, scale__29]
@@ -1564,34 +1564,34 @@ class BlockEntries:
         conv2d_41 = paddle._C_ops.conv2d(concat_4, parameter_98, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__46 = paddle._C_ops.add(conv2d_41, parameter_99)
+        add__46 = paddle._C_ops.add_(conv2d_41, parameter_99)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__34 = paddle._C_ops.leaky_relu(add__46, float('0.1'))
+        leaky_relu__34 = paddle._C_ops.leaky_relu_(add__46, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_42 = paddle._C_ops.conv2d(leaky_relu__34, parameter_100, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__47 = paddle._C_ops.add(conv2d_42, parameter_101)
+        add__47 = paddle._C_ops.add_(conv2d_42, parameter_101)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__35 = paddle._C_ops.leaky_relu(add__47, float('0.1'))
+        leaky_relu__35 = paddle._C_ops.leaky_relu_(add__47, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_43 = paddle._C_ops.conv2d(leaky_relu__35, parameter_102, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__48 = paddle._C_ops.add(conv2d_43, parameter_103)
+        add__48 = paddle._C_ops.add_(conv2d_43, parameter_103)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__36 = paddle._C_ops.leaky_relu(add__48, float('0.1'))
+        leaky_relu__36 = paddle._C_ops.leaky_relu_(add__48, float('0.1'))
 
         # pd_op.conv2d: (1x216x180x320xf16) <- (1x32x180x320xf16, 216x32x3x3xf16)
         conv2d_44 = paddle._C_ops.conv2d(leaky_relu__36, parameter_104, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x216x180x320xf16) <- (1x216x180x320xf16, 1x216x1x1xf16)
-        add__49 = paddle._C_ops.add(conv2d_44, parameter_105)
+        add__49 = paddle._C_ops.add_(conv2d_44, parameter_105)
 
         # pd_op.split_with_num: ([1x72x180x320xf16, 1x72x180x320xf16, 1x72x180x320xf16]) <- (1x216x180x320xf16, 1xi32)
         split_with_num_1 = paddle._C_ops.split_with_num(add__49, 3, constant_0)
@@ -1609,10 +1609,10 @@ class BlockEntries:
         concat_5 = paddle._C_ops.concat(combine_17, constant_0)
 
         # pd_op.tanh_: (1x144x180x320xf16) <- (1x144x180x320xf16)
-        tanh__0 = paddle._C_ops.tanh(concat_5)
+        tanh__0 = paddle._C_ops.tanh_(concat_5)
 
         # pd_op.scale_: (1x144x180x320xf16) <- (1x144x180x320xf16, 1xf32)
-        scale__30 = paddle._C_ops.scale(tanh__0, constant_19, float('0'), True)
+        scale__30 = paddle._C_ops.scale_(tanh__0, constant_19, float('0'), True)
 
         # pd_op.flip: (1x2x180x320xf16) <- (1x2x180x320xf16)
         flip_1 = paddle._C_ops.flip(cast_17, [1])
@@ -1621,13 +1621,13 @@ class BlockEntries:
         tile_0 = paddle._C_ops.tile(flip_1, constant_20)
 
         # pd_op.add_: (1x144x180x320xf16) <- (1x144x180x320xf16, 1x144x180x320xf16)
-        add__50 = paddle._C_ops.add(scale__30, tile_0)
+        add__50 = paddle._C_ops.add_(scale__30, tile_0)
 
         # builtin.slice: (1x72x180x320xf16) <- ([1x72x180x320xf16, 1x72x180x320xf16, 1x72x180x320xf16])
         slice_27 = split_with_num_1[2]
 
         # pd_op.sigmoid_: (1x72x180x320xf16) <- (1x72x180x320xf16)
-        sigmoid__0 = paddle._C_ops.sigmoid(slice_27)
+        sigmoid__0 = paddle._C_ops.sigmoid_(slice_27)
 
         # pd_op.cast: (1x72x180x320xf32) <- (1x72x180x320xf16)
         cast_22 = paddle._C_ops.cast(sigmoid__0, paddle.float32)
@@ -1642,7 +1642,7 @@ class BlockEntries:
         cast_24 = paddle._C_ops.cast(deformable_conv_0, paddle.float16)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__51 = paddle._C_ops.add(cast_24, parameter_107)
+        add__51 = paddle._C_ops.add_(cast_24, parameter_107)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_18 = [slice_3, parameter_108, add__51]
@@ -1654,73 +1654,73 @@ class BlockEntries:
         conv2d_45 = paddle._C_ops.conv2d(concat_6, parameter_109, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__52 = paddle._C_ops.add(conv2d_45, parameter_110)
+        add__52 = paddle._C_ops.add_(conv2d_45, parameter_110)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__37 = paddle._C_ops.leaky_relu(add__52, float('0.1'))
+        leaky_relu__37 = paddle._C_ops.leaky_relu_(add__52, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_46 = paddle._C_ops.conv2d(leaky_relu__37, parameter_111, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__53 = paddle._C_ops.add(conv2d_46, parameter_112)
+        add__53 = paddle._C_ops.add_(conv2d_46, parameter_112)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__2 = paddle._C_ops.relu(add__53)
+        relu__2 = paddle._C_ops.relu_(add__53)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_47 = paddle._C_ops.conv2d(relu__2, parameter_113, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__54 = paddle._C_ops.add(conv2d_47, parameter_114)
+        add__54 = paddle._C_ops.add_(conv2d_47, parameter_114)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__31 = paddle._C_ops.scale(add__54, constant_3, float('0'), True)
+        scale__31 = paddle._C_ops.scale_(add__54, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__55 = paddle._C_ops.add(leaky_relu__37, scale__31)
+        add__55 = paddle._C_ops.add_(leaky_relu__37, scale__31)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_48 = paddle._C_ops.conv2d(add__55, parameter_115, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__56 = paddle._C_ops.add(conv2d_48, parameter_116)
+        add__56 = paddle._C_ops.add_(conv2d_48, parameter_116)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__3 = paddle._C_ops.relu(add__56)
+        relu__3 = paddle._C_ops.relu_(add__56)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_49 = paddle._C_ops.conv2d(relu__3, parameter_117, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__57 = paddle._C_ops.add(conv2d_49, parameter_118)
+        add__57 = paddle._C_ops.add_(conv2d_49, parameter_118)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__32 = paddle._C_ops.scale(add__57, constant_3, float('0'), True)
+        scale__32 = paddle._C_ops.scale_(add__57, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__58 = paddle._C_ops.add(add__55, scale__32)
+        add__58 = paddle._C_ops.add_(add__55, scale__32)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_50 = paddle._C_ops.conv2d(add__58, parameter_119, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__59 = paddle._C_ops.add(conv2d_50, parameter_120)
+        add__59 = paddle._C_ops.add_(conv2d_50, parameter_120)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__4 = paddle._C_ops.relu(add__59)
+        relu__4 = paddle._C_ops.relu_(add__59)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_51 = paddle._C_ops.conv2d(relu__4, parameter_121, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__60 = paddle._C_ops.add(conv2d_51, parameter_122)
+        add__60 = paddle._C_ops.add_(conv2d_51, parameter_122)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__33 = paddle._C_ops.scale(add__60, constant_3, float('0'), True)
+        scale__33 = paddle._C_ops.scale_(add__60, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__61 = paddle._C_ops.add(add__58, scale__33)
+        add__61 = paddle._C_ops.add_(add__58, scale__33)
 
         # pd_op.slice: (1x2x180x320xf16) <- (1x1x2x180x320xf16, 1xi64, 1xi64)
         slice_28 = paddle._C_ops.slice(reshape__6, [1], constant_1, constant_5, [1], [1])
@@ -1729,31 +1729,31 @@ class BlockEntries:
         transpose_3 = paddle._C_ops.transpose(slice_28, [0, 2, 3, 1])
 
         # pd_op.add_: (1x180x320x2xf16) <- (180x320x2xf16, 1x180x320x2xf16)
-        add__62 = paddle._C_ops.add(cast_18, transpose_3)
+        add__62 = paddle._C_ops.add_(cast_18, transpose_3)
 
         # pd_op.slice: (1x180x320xf16) <- (1x180x320x2xf16, 1xi64, 1xi64)
         slice_29 = paddle._C_ops.slice(add__62, [3], constant_1, constant_5, [1], [3])
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__34 = paddle._C_ops.scale(slice_29, constant_9, float('0'), True)
+        scale__34 = paddle._C_ops.scale_(slice_29, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__35 = paddle._C_ops.scale(scale__34, constant_14, float('0'), True)
+        scale__35 = paddle._C_ops.scale_(scale__34, constant_14, float('0'), True)
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__36 = paddle._C_ops.scale(scale__35, constant_3, float('-1'), True)
+        scale__36 = paddle._C_ops.scale_(scale__35, constant_3, float('-1'), True)
 
         # pd_op.slice: (1x180x320xf16) <- (1x180x320x2xf16, 1xi64, 1xi64)
         slice_30 = paddle._C_ops.slice(add__62, [3], constant_5, constant_6, [1], [3])
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__37 = paddle._C_ops.scale(slice_30, constant_9, float('0'), True)
+        scale__37 = paddle._C_ops.scale_(slice_30, constant_9, float('0'), True)
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__38 = paddle._C_ops.scale(scale__37, constant_18, float('0'), True)
+        scale__38 = paddle._C_ops.scale_(scale__37, constant_18, float('0'), True)
 
         # pd_op.scale_: (1x180x320xf16) <- (1x180x320xf16, 1xf32)
-        scale__39 = paddle._C_ops.scale(scale__38, constant_3, float('-1'), True)
+        scale__39 = paddle._C_ops.scale_(scale__38, constant_3, float('-1'), True)
 
         # builtin.combine: ([1x180x320xf16, 1x180x320xf16]) <- (1x180x320xf16, 1x180x320xf16)
         combine_19 = [scale__36, scale__39]
@@ -1789,34 +1789,34 @@ class BlockEntries:
         conv2d_52 = paddle._C_ops.conv2d(concat_8, parameter_98, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__63 = paddle._C_ops.add(conv2d_52, parameter_99)
+        add__63 = paddle._C_ops.add_(conv2d_52, parameter_99)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__38 = paddle._C_ops.leaky_relu(add__63, float('0.1'))
+        leaky_relu__38 = paddle._C_ops.leaky_relu_(add__63, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_53 = paddle._C_ops.conv2d(leaky_relu__38, parameter_100, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__64 = paddle._C_ops.add(conv2d_53, parameter_101)
+        add__64 = paddle._C_ops.add_(conv2d_53, parameter_101)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__39 = paddle._C_ops.leaky_relu(add__64, float('0.1'))
+        leaky_relu__39 = paddle._C_ops.leaky_relu_(add__64, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_54 = paddle._C_ops.conv2d(leaky_relu__39, parameter_102, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__65 = paddle._C_ops.add(conv2d_54, parameter_103)
+        add__65 = paddle._C_ops.add_(conv2d_54, parameter_103)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__40 = paddle._C_ops.leaky_relu(add__65, float('0.1'))
+        leaky_relu__40 = paddle._C_ops.leaky_relu_(add__65, float('0.1'))
 
         # pd_op.conv2d: (1x216x180x320xf16) <- (1x32x180x320xf16, 216x32x3x3xf16)
         conv2d_55 = paddle._C_ops.conv2d(leaky_relu__40, parameter_104, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x216x180x320xf16) <- (1x216x180x320xf16, 1x216x1x1xf16)
-        add__66 = paddle._C_ops.add(conv2d_55, parameter_105)
+        add__66 = paddle._C_ops.add_(conv2d_55, parameter_105)
 
         # pd_op.split_with_num: ([1x72x180x320xf16, 1x72x180x320xf16, 1x72x180x320xf16]) <- (1x216x180x320xf16, 1xi32)
         split_with_num_2 = paddle._C_ops.split_with_num(add__66, 3, constant_0)
@@ -1834,10 +1834,10 @@ class BlockEntries:
         concat_9 = paddle._C_ops.concat(combine_22, constant_0)
 
         # pd_op.tanh_: (1x144x180x320xf16) <- (1x144x180x320xf16)
-        tanh__1 = paddle._C_ops.tanh(concat_9)
+        tanh__1 = paddle._C_ops.tanh_(concat_9)
 
         # pd_op.scale_: (1x144x180x320xf16) <- (1x144x180x320xf16, 1xf32)
-        scale__40 = paddle._C_ops.scale(tanh__1, constant_19, float('0'), True)
+        scale__40 = paddle._C_ops.scale_(tanh__1, constant_19, float('0'), True)
 
         # pd_op.flip: (1x2x180x320xf16) <- (1x2x180x320xf16)
         flip_2 = paddle._C_ops.flip(slice_28, [1])
@@ -1846,13 +1846,13 @@ class BlockEntries:
         tile_1 = paddle._C_ops.tile(flip_2, constant_20)
 
         # pd_op.add_: (1x144x180x320xf16) <- (1x144x180x320xf16, 1x144x180x320xf16)
-        add__67 = paddle._C_ops.add(scale__40, tile_1)
+        add__67 = paddle._C_ops.add_(scale__40, tile_1)
 
         # builtin.slice: (1x72x180x320xf16) <- ([1x72x180x320xf16, 1x72x180x320xf16, 1x72x180x320xf16])
         slice_33 = split_with_num_2[2]
 
         # pd_op.sigmoid_: (1x72x180x320xf16) <- (1x72x180x320xf16)
-        sigmoid__1 = paddle._C_ops.sigmoid(slice_33)
+        sigmoid__1 = paddle._C_ops.sigmoid_(slice_33)
 
         # pd_op.cast: (1x72x180x320xf32) <- (1x72x180x320xf16)
         cast_28 = paddle._C_ops.cast(sigmoid__1, paddle.float32)
@@ -1867,7 +1867,7 @@ class BlockEntries:
         cast_30 = paddle._C_ops.cast(deformable_conv_1, paddle.float16)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__68 = paddle._C_ops.add(cast_30, parameter_107)
+        add__68 = paddle._C_ops.add_(cast_30, parameter_107)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_23 = [slice_2, add__68, parameter_108]
@@ -1879,73 +1879,73 @@ class BlockEntries:
         conv2d_56 = paddle._C_ops.conv2d(concat_10, parameter_109, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__69 = paddle._C_ops.add(conv2d_56, parameter_110)
+        add__69 = paddle._C_ops.add_(conv2d_56, parameter_110)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__41 = paddle._C_ops.leaky_relu(add__69, float('0.1'))
+        leaky_relu__41 = paddle._C_ops.leaky_relu_(add__69, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_57 = paddle._C_ops.conv2d(leaky_relu__41, parameter_111, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__70 = paddle._C_ops.add(conv2d_57, parameter_112)
+        add__70 = paddle._C_ops.add_(conv2d_57, parameter_112)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__5 = paddle._C_ops.relu(add__70)
+        relu__5 = paddle._C_ops.relu_(add__70)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_58 = paddle._C_ops.conv2d(relu__5, parameter_113, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__71 = paddle._C_ops.add(conv2d_58, parameter_114)
+        add__71 = paddle._C_ops.add_(conv2d_58, parameter_114)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__41 = paddle._C_ops.scale(add__71, constant_3, float('0'), True)
+        scale__41 = paddle._C_ops.scale_(add__71, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__72 = paddle._C_ops.add(leaky_relu__41, scale__41)
+        add__72 = paddle._C_ops.add_(leaky_relu__41, scale__41)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_59 = paddle._C_ops.conv2d(add__72, parameter_115, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__73 = paddle._C_ops.add(conv2d_59, parameter_116)
+        add__73 = paddle._C_ops.add_(conv2d_59, parameter_116)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__6 = paddle._C_ops.relu(add__73)
+        relu__6 = paddle._C_ops.relu_(add__73)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_60 = paddle._C_ops.conv2d(relu__6, parameter_117, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__74 = paddle._C_ops.add(conv2d_60, parameter_118)
+        add__74 = paddle._C_ops.add_(conv2d_60, parameter_118)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__42 = paddle._C_ops.scale(add__74, constant_3, float('0'), True)
+        scale__42 = paddle._C_ops.scale_(add__74, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__75 = paddle._C_ops.add(add__72, scale__42)
+        add__75 = paddle._C_ops.add_(add__72, scale__42)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_61 = paddle._C_ops.conv2d(add__75, parameter_119, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__76 = paddle._C_ops.add(conv2d_61, parameter_120)
+        add__76 = paddle._C_ops.add_(conv2d_61, parameter_120)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__7 = paddle._C_ops.relu(add__76)
+        relu__7 = paddle._C_ops.relu_(add__76)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_62 = paddle._C_ops.conv2d(relu__7, parameter_121, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__77 = paddle._C_ops.add(conv2d_62, parameter_122)
+        add__77 = paddle._C_ops.add_(conv2d_62, parameter_122)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__43 = paddle._C_ops.scale(add__77, constant_3, float('0'), True)
+        scale__43 = paddle._C_ops.scale_(add__77, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__78 = paddle._C_ops.add(add__75, scale__43)
+        add__78 = paddle._C_ops.add_(add__75, scale__43)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_24 = [slice_3, add__61, parameter_108]
@@ -1957,73 +1957,73 @@ class BlockEntries:
         conv2d_63 = paddle._C_ops.conv2d(concat_11, parameter_123, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__79 = paddle._C_ops.add(conv2d_63, parameter_124)
+        add__79 = paddle._C_ops.add_(conv2d_63, parameter_124)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__42 = paddle._C_ops.leaky_relu(add__79, float('0.1'))
+        leaky_relu__42 = paddle._C_ops.leaky_relu_(add__79, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_64 = paddle._C_ops.conv2d(leaky_relu__42, parameter_125, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__80 = paddle._C_ops.add(conv2d_64, parameter_126)
+        add__80 = paddle._C_ops.add_(conv2d_64, parameter_126)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__8 = paddle._C_ops.relu(add__80)
+        relu__8 = paddle._C_ops.relu_(add__80)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_65 = paddle._C_ops.conv2d(relu__8, parameter_127, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__81 = paddle._C_ops.add(conv2d_65, parameter_128)
+        add__81 = paddle._C_ops.add_(conv2d_65, parameter_128)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__44 = paddle._C_ops.scale(add__81, constant_3, float('0'), True)
+        scale__44 = paddle._C_ops.scale_(add__81, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__82 = paddle._C_ops.add(leaky_relu__42, scale__44)
+        add__82 = paddle._C_ops.add_(leaky_relu__42, scale__44)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_66 = paddle._C_ops.conv2d(add__82, parameter_129, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__83 = paddle._C_ops.add(conv2d_66, parameter_130)
+        add__83 = paddle._C_ops.add_(conv2d_66, parameter_130)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__9 = paddle._C_ops.relu(add__83)
+        relu__9 = paddle._C_ops.relu_(add__83)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_67 = paddle._C_ops.conv2d(relu__9, parameter_131, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__84 = paddle._C_ops.add(conv2d_67, parameter_132)
+        add__84 = paddle._C_ops.add_(conv2d_67, parameter_132)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__45 = paddle._C_ops.scale(add__84, constant_3, float('0'), True)
+        scale__45 = paddle._C_ops.scale_(add__84, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__85 = paddle._C_ops.add(add__82, scale__45)
+        add__85 = paddle._C_ops.add_(add__82, scale__45)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_68 = paddle._C_ops.conv2d(add__85, parameter_133, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__86 = paddle._C_ops.add(conv2d_68, parameter_134)
+        add__86 = paddle._C_ops.add_(conv2d_68, parameter_134)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__10 = paddle._C_ops.relu(add__86)
+        relu__10 = paddle._C_ops.relu_(add__86)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_69 = paddle._C_ops.conv2d(relu__10, parameter_135, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__87 = paddle._C_ops.add(conv2d_69, parameter_136)
+        add__87 = paddle._C_ops.add_(conv2d_69, parameter_136)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__46 = paddle._C_ops.scale(add__87, constant_3, float('0'), True)
+        scale__46 = paddle._C_ops.scale_(add__87, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__88 = paddle._C_ops.add(add__85, scale__46)
+        add__88 = paddle._C_ops.add_(add__85, scale__46)
 
         # pd_op.add: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
         add_4 = parameter_108 + add__88
@@ -2053,34 +2053,34 @@ class BlockEntries:
         conv2d_70 = paddle._C_ops.conv2d(concat_13, parameter_137, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__89 = paddle._C_ops.add(conv2d_70, parameter_138)
+        add__89 = paddle._C_ops.add_(conv2d_70, parameter_138)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__43 = paddle._C_ops.leaky_relu(add__89, float('0.1'))
+        leaky_relu__43 = paddle._C_ops.leaky_relu_(add__89, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_71 = paddle._C_ops.conv2d(leaky_relu__43, parameter_139, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__90 = paddle._C_ops.add(conv2d_71, parameter_140)
+        add__90 = paddle._C_ops.add_(conv2d_71, parameter_140)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__44 = paddle._C_ops.leaky_relu(add__90, float('0.1'))
+        leaky_relu__44 = paddle._C_ops.leaky_relu_(add__90, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_72 = paddle._C_ops.conv2d(leaky_relu__44, parameter_141, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__91 = paddle._C_ops.add(conv2d_72, parameter_142)
+        add__91 = paddle._C_ops.add_(conv2d_72, parameter_142)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__45 = paddle._C_ops.leaky_relu(add__91, float('0.1'))
+        leaky_relu__45 = paddle._C_ops.leaky_relu_(add__91, float('0.1'))
 
         # pd_op.conv2d: (1x108x180x320xf16) <- (1x32x180x320xf16, 108x32x3x3xf16)
         conv2d_73 = paddle._C_ops.conv2d(leaky_relu__45, parameter_143, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x108x180x320xf16) <- (1x108x180x320xf16, 1x108x1x1xf16)
-        add__92 = paddle._C_ops.add(conv2d_73, parameter_144)
+        add__92 = paddle._C_ops.add_(conv2d_73, parameter_144)
 
         # pd_op.split_with_num: ([1x36x180x320xf16, 1x36x180x320xf16, 1x36x180x320xf16]) <- (1x108x180x320xf16, 1xi32)
         split_with_num_3 = paddle._C_ops.split_with_num(add__92, 3, constant_0)
@@ -2098,22 +2098,22 @@ class BlockEntries:
         concat_14 = paddle._C_ops.concat(combine_27, constant_0)
 
         # pd_op.tanh_: (1x72x180x320xf16) <- (1x72x180x320xf16)
-        tanh__2 = paddle._C_ops.tanh(concat_14)
+        tanh__2 = paddle._C_ops.tanh_(concat_14)
 
         # pd_op.scale_: (1x72x180x320xf16) <- (1x72x180x320xf16, 1xf32)
-        scale__47 = paddle._C_ops.scale(tanh__2, constant_19, float('0'), True)
+        scale__47 = paddle._C_ops.scale_(tanh__2, constant_19, float('0'), True)
 
         # pd_op.tile: (1x72x180x320xf16) <- (1x2x180x320xf16, 4xi64)
         tile_2 = paddle._C_ops.tile(flip_2, constant_21)
 
         # pd_op.add_: (1x72x180x320xf16) <- (1x72x180x320xf16, 1x72x180x320xf16)
-        add__93 = paddle._C_ops.add(scale__47, tile_2)
+        add__93 = paddle._C_ops.add_(scale__47, tile_2)
 
         # builtin.slice: (1x36x180x320xf16) <- ([1x36x180x320xf16, 1x36x180x320xf16, 1x36x180x320xf16])
         slice_36 = split_with_num_3[2]
 
         # pd_op.sigmoid_: (1x36x180x320xf16) <- (1x36x180x320xf16)
-        sigmoid__2 = paddle._C_ops.sigmoid(slice_36)
+        sigmoid__2 = paddle._C_ops.sigmoid_(slice_36)
 
         # pd_op.cast: (1x36x180x320xf32) <- (1x36x180x320xf16)
         cast_33 = paddle._C_ops.cast(sigmoid__2, paddle.float32)
@@ -2128,7 +2128,7 @@ class BlockEntries:
         cast_35 = paddle._C_ops.cast(deformable_conv_2, paddle.float16)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__94 = paddle._C_ops.add(cast_35, parameter_146)
+        add__94 = paddle._C_ops.add_(cast_35, parameter_146)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_28 = [slice_2, add__78, add__94]
@@ -2140,76 +2140,76 @@ class BlockEntries:
         conv2d_74 = paddle._C_ops.conv2d(concat_15, parameter_123, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__95 = paddle._C_ops.add(conv2d_74, parameter_124)
+        add__95 = paddle._C_ops.add_(conv2d_74, parameter_124)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__46 = paddle._C_ops.leaky_relu(add__95, float('0.1'))
+        leaky_relu__46 = paddle._C_ops.leaky_relu_(add__95, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_75 = paddle._C_ops.conv2d(leaky_relu__46, parameter_125, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__96 = paddle._C_ops.add(conv2d_75, parameter_126)
+        add__96 = paddle._C_ops.add_(conv2d_75, parameter_126)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__11 = paddle._C_ops.relu(add__96)
+        relu__11 = paddle._C_ops.relu_(add__96)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_76 = paddle._C_ops.conv2d(relu__11, parameter_127, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__97 = paddle._C_ops.add(conv2d_76, parameter_128)
+        add__97 = paddle._C_ops.add_(conv2d_76, parameter_128)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__48 = paddle._C_ops.scale(add__97, constant_3, float('0'), True)
+        scale__48 = paddle._C_ops.scale_(add__97, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__98 = paddle._C_ops.add(leaky_relu__46, scale__48)
+        add__98 = paddle._C_ops.add_(leaky_relu__46, scale__48)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_77 = paddle._C_ops.conv2d(add__98, parameter_129, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__99 = paddle._C_ops.add(conv2d_77, parameter_130)
+        add__99 = paddle._C_ops.add_(conv2d_77, parameter_130)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__12 = paddle._C_ops.relu(add__99)
+        relu__12 = paddle._C_ops.relu_(add__99)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_78 = paddle._C_ops.conv2d(relu__12, parameter_131, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__100 = paddle._C_ops.add(conv2d_78, parameter_132)
+        add__100 = paddle._C_ops.add_(conv2d_78, parameter_132)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__49 = paddle._C_ops.scale(add__100, constant_3, float('0'), True)
+        scale__49 = paddle._C_ops.scale_(add__100, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__101 = paddle._C_ops.add(add__98, scale__49)
+        add__101 = paddle._C_ops.add_(add__98, scale__49)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_79 = paddle._C_ops.conv2d(add__101, parameter_133, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__102 = paddle._C_ops.add(conv2d_79, parameter_134)
+        add__102 = paddle._C_ops.add_(conv2d_79, parameter_134)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__13 = paddle._C_ops.relu(add__102)
+        relu__13 = paddle._C_ops.relu_(add__102)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_80 = paddle._C_ops.conv2d(relu__13, parameter_135, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__103 = paddle._C_ops.add(conv2d_80, parameter_136)
+        add__103 = paddle._C_ops.add_(conv2d_80, parameter_136)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__50 = paddle._C_ops.scale(add__103, constant_3, float('0'), True)
+        scale__50 = paddle._C_ops.scale_(add__103, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__104 = paddle._C_ops.add(add__101, scale__50)
+        add__104 = paddle._C_ops.add_(add__101, scale__50)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__105 = paddle._C_ops.add(add__94, add__104)
+        add__105 = paddle._C_ops.add_(add__94, add__104)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_29 = [slice_2, add__78, add__105, parameter_108]
@@ -2221,73 +2221,73 @@ class BlockEntries:
         conv2d_81 = paddle._C_ops.conv2d(concat_16, parameter_147, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__106 = paddle._C_ops.add(conv2d_81, parameter_148)
+        add__106 = paddle._C_ops.add_(conv2d_81, parameter_148)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__47 = paddle._C_ops.leaky_relu(add__106, float('0.1'))
+        leaky_relu__47 = paddle._C_ops.leaky_relu_(add__106, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_82 = paddle._C_ops.conv2d(leaky_relu__47, parameter_149, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__107 = paddle._C_ops.add(conv2d_82, parameter_150)
+        add__107 = paddle._C_ops.add_(conv2d_82, parameter_150)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__14 = paddle._C_ops.relu(add__107)
+        relu__14 = paddle._C_ops.relu_(add__107)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_83 = paddle._C_ops.conv2d(relu__14, parameter_151, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__108 = paddle._C_ops.add(conv2d_83, parameter_152)
+        add__108 = paddle._C_ops.add_(conv2d_83, parameter_152)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__51 = paddle._C_ops.scale(add__108, constant_3, float('0'), True)
+        scale__51 = paddle._C_ops.scale_(add__108, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__109 = paddle._C_ops.add(leaky_relu__47, scale__51)
+        add__109 = paddle._C_ops.add_(leaky_relu__47, scale__51)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_84 = paddle._C_ops.conv2d(add__109, parameter_153, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__110 = paddle._C_ops.add(conv2d_84, parameter_154)
+        add__110 = paddle._C_ops.add_(conv2d_84, parameter_154)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__15 = paddle._C_ops.relu(add__110)
+        relu__15 = paddle._C_ops.relu_(add__110)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_85 = paddle._C_ops.conv2d(relu__15, parameter_155, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__111 = paddle._C_ops.add(conv2d_85, parameter_156)
+        add__111 = paddle._C_ops.add_(conv2d_85, parameter_156)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__52 = paddle._C_ops.scale(add__111, constant_3, float('0'), True)
+        scale__52 = paddle._C_ops.scale_(add__111, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__112 = paddle._C_ops.add(add__109, scale__52)
+        add__112 = paddle._C_ops.add_(add__109, scale__52)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_86 = paddle._C_ops.conv2d(add__112, parameter_157, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__113 = paddle._C_ops.add(conv2d_86, parameter_158)
+        add__113 = paddle._C_ops.add_(conv2d_86, parameter_158)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__16 = paddle._C_ops.relu(add__113)
+        relu__16 = paddle._C_ops.relu_(add__113)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_87 = paddle._C_ops.conv2d(relu__16, parameter_159, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__114 = paddle._C_ops.add(conv2d_87, parameter_160)
+        add__114 = paddle._C_ops.add_(conv2d_87, parameter_160)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__53 = paddle._C_ops.scale(add__114, constant_3, float('0'), True)
+        scale__53 = paddle._C_ops.scale_(add__114, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__115 = paddle._C_ops.add(add__112, scale__53)
+        add__115 = paddle._C_ops.add_(add__112, scale__53)
 
         # pd_op.add: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
         add_5 = parameter_108 + add__115
@@ -2317,34 +2317,34 @@ class BlockEntries:
         conv2d_88 = paddle._C_ops.conv2d(concat_18, parameter_161, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__116 = paddle._C_ops.add(conv2d_88, parameter_162)
+        add__116 = paddle._C_ops.add_(conv2d_88, parameter_162)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__48 = paddle._C_ops.leaky_relu(add__116, float('0.1'))
+        leaky_relu__48 = paddle._C_ops.leaky_relu_(add__116, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_89 = paddle._C_ops.conv2d(leaky_relu__48, parameter_163, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__117 = paddle._C_ops.add(conv2d_89, parameter_164)
+        add__117 = paddle._C_ops.add_(conv2d_89, parameter_164)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__49 = paddle._C_ops.leaky_relu(add__117, float('0.1'))
+        leaky_relu__49 = paddle._C_ops.leaky_relu_(add__117, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_90 = paddle._C_ops.conv2d(leaky_relu__49, parameter_165, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__118 = paddle._C_ops.add(conv2d_90, parameter_166)
+        add__118 = paddle._C_ops.add_(conv2d_90, parameter_166)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__50 = paddle._C_ops.leaky_relu(add__118, float('0.1'))
+        leaky_relu__50 = paddle._C_ops.leaky_relu_(add__118, float('0.1'))
 
         # pd_op.conv2d: (1x108x180x320xf16) <- (1x32x180x320xf16, 108x32x3x3xf16)
         conv2d_91 = paddle._C_ops.conv2d(leaky_relu__50, parameter_167, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x108x180x320xf16) <- (1x108x180x320xf16, 1x108x1x1xf16)
-        add__119 = paddle._C_ops.add(conv2d_91, parameter_168)
+        add__119 = paddle._C_ops.add_(conv2d_91, parameter_168)
 
         # pd_op.split_with_num: ([1x36x180x320xf16, 1x36x180x320xf16, 1x36x180x320xf16]) <- (1x108x180x320xf16, 1xi32)
         split_with_num_4 = paddle._C_ops.split_with_num(add__119, 3, constant_0)
@@ -2362,22 +2362,22 @@ class BlockEntries:
         concat_19 = paddle._C_ops.concat(combine_32, constant_0)
 
         # pd_op.tanh_: (1x72x180x320xf16) <- (1x72x180x320xf16)
-        tanh__3 = paddle._C_ops.tanh(concat_19)
+        tanh__3 = paddle._C_ops.tanh_(concat_19)
 
         # pd_op.scale_: (1x72x180x320xf16) <- (1x72x180x320xf16, 1xf32)
-        scale__54 = paddle._C_ops.scale(tanh__3, constant_19, float('0'), True)
+        scale__54 = paddle._C_ops.scale_(tanh__3, constant_19, float('0'), True)
 
         # pd_op.tile: (1x72x180x320xf16) <- (1x2x180x320xf16, 4xi64)
         tile_3 = paddle._C_ops.tile(flip_1, constant_21)
 
         # pd_op.add_: (1x72x180x320xf16) <- (1x72x180x320xf16, 1x72x180x320xf16)
-        add__120 = paddle._C_ops.add(scale__54, tile_3)
+        add__120 = paddle._C_ops.add_(scale__54, tile_3)
 
         # builtin.slice: (1x36x180x320xf16) <- ([1x36x180x320xf16, 1x36x180x320xf16, 1x36x180x320xf16])
         slice_39 = split_with_num_4[2]
 
         # pd_op.sigmoid_: (1x36x180x320xf16) <- (1x36x180x320xf16)
-        sigmoid__3 = paddle._C_ops.sigmoid(slice_39)
+        sigmoid__3 = paddle._C_ops.sigmoid_(slice_39)
 
         # pd_op.cast: (1x36x180x320xf32) <- (1x36x180x320xf16)
         cast_38 = paddle._C_ops.cast(sigmoid__3, paddle.float32)
@@ -2392,7 +2392,7 @@ class BlockEntries:
         cast_40 = paddle._C_ops.cast(deformable_conv_3, paddle.float16)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__121 = paddle._C_ops.add(cast_40, parameter_170)
+        add__121 = paddle._C_ops.add_(cast_40, parameter_170)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_33 = [slice_3, add__61, add_4, add__121]
@@ -2404,76 +2404,76 @@ class BlockEntries:
         conv2d_92 = paddle._C_ops.conv2d(concat_20, parameter_147, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__122 = paddle._C_ops.add(conv2d_92, parameter_148)
+        add__122 = paddle._C_ops.add_(conv2d_92, parameter_148)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__51 = paddle._C_ops.leaky_relu(add__122, float('0.1'))
+        leaky_relu__51 = paddle._C_ops.leaky_relu_(add__122, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_93 = paddle._C_ops.conv2d(leaky_relu__51, parameter_149, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__123 = paddle._C_ops.add(conv2d_93, parameter_150)
+        add__123 = paddle._C_ops.add_(conv2d_93, parameter_150)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__17 = paddle._C_ops.relu(add__123)
+        relu__17 = paddle._C_ops.relu_(add__123)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_94 = paddle._C_ops.conv2d(relu__17, parameter_151, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__124 = paddle._C_ops.add(conv2d_94, parameter_152)
+        add__124 = paddle._C_ops.add_(conv2d_94, parameter_152)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__55 = paddle._C_ops.scale(add__124, constant_3, float('0'), True)
+        scale__55 = paddle._C_ops.scale_(add__124, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__125 = paddle._C_ops.add(leaky_relu__51, scale__55)
+        add__125 = paddle._C_ops.add_(leaky_relu__51, scale__55)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_95 = paddle._C_ops.conv2d(add__125, parameter_153, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__126 = paddle._C_ops.add(conv2d_95, parameter_154)
+        add__126 = paddle._C_ops.add_(conv2d_95, parameter_154)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__18 = paddle._C_ops.relu(add__126)
+        relu__18 = paddle._C_ops.relu_(add__126)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_96 = paddle._C_ops.conv2d(relu__18, parameter_155, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__127 = paddle._C_ops.add(conv2d_96, parameter_156)
+        add__127 = paddle._C_ops.add_(conv2d_96, parameter_156)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__56 = paddle._C_ops.scale(add__127, constant_3, float('0'), True)
+        scale__56 = paddle._C_ops.scale_(add__127, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__128 = paddle._C_ops.add(add__125, scale__56)
+        add__128 = paddle._C_ops.add_(add__125, scale__56)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_97 = paddle._C_ops.conv2d(add__128, parameter_157, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__129 = paddle._C_ops.add(conv2d_97, parameter_158)
+        add__129 = paddle._C_ops.add_(conv2d_97, parameter_158)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__19 = paddle._C_ops.relu(add__129)
+        relu__19 = paddle._C_ops.relu_(add__129)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_98 = paddle._C_ops.conv2d(relu__19, parameter_159, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__130 = paddle._C_ops.add(conv2d_98, parameter_160)
+        add__130 = paddle._C_ops.add_(conv2d_98, parameter_160)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__57 = paddle._C_ops.scale(add__130, constant_3, float('0'), True)
+        scale__57 = paddle._C_ops.scale_(add__130, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__131 = paddle._C_ops.add(add__128, scale__57)
+        add__131 = paddle._C_ops.add_(add__128, scale__57)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__132 = paddle._C_ops.add(add__121, add__131)
+        add__132 = paddle._C_ops.add_(add__121, add__131)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_34 = [slice_2, add__78, add__105, add_5]
@@ -2485,61 +2485,61 @@ class BlockEntries:
         conv2d_99 = paddle._C_ops.conv2d(concat_21, parameter_171, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__133 = paddle._C_ops.add(conv2d_99, parameter_172)
+        add__133 = paddle._C_ops.add_(conv2d_99, parameter_172)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__52 = paddle._C_ops.leaky_relu(add__133, float('0.1'))
+        leaky_relu__52 = paddle._C_ops.leaky_relu_(add__133, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_100 = paddle._C_ops.conv2d(leaky_relu__52, parameter_173, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__134 = paddle._C_ops.add(conv2d_100, parameter_174)
+        add__134 = paddle._C_ops.add_(conv2d_100, parameter_174)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__20 = paddle._C_ops.relu(add__134)
+        relu__20 = paddle._C_ops.relu_(add__134)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_101 = paddle._C_ops.conv2d(relu__20, parameter_175, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__135 = paddle._C_ops.add(conv2d_101, parameter_176)
+        add__135 = paddle._C_ops.add_(conv2d_101, parameter_176)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__58 = paddle._C_ops.scale(add__135, constant_3, float('0'), True)
+        scale__58 = paddle._C_ops.scale_(add__135, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__136 = paddle._C_ops.add(leaky_relu__52, scale__58)
+        add__136 = paddle._C_ops.add_(leaky_relu__52, scale__58)
 
         # pd_op.conv2d: (1x128x180x320xf16) <- (1x32x180x320xf16, 128x32x3x3xf16)
         conv2d_102 = paddle._C_ops.conv2d(add__136, parameter_177, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x180x320xf16) <- (1x128x180x320xf16, 1x128x1x1xf16)
-        add__137 = paddle._C_ops.add(conv2d_102, parameter_178)
+        add__137 = paddle._C_ops.add_(conv2d_102, parameter_178)
 
         # pd_op.pixel_shuffle: (1x32x360x640xf16) <- (1x128x180x320xf16)
         pixel_shuffle_0 = paddle._C_ops.pixel_shuffle(add__137, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x360x640xf16) <- (1x32x360x640xf16)
-        leaky_relu__53 = paddle._C_ops.leaky_relu(pixel_shuffle_0, float('0.1'))
+        leaky_relu__53 = paddle._C_ops.leaky_relu_(pixel_shuffle_0, float('0.1'))
 
         # pd_op.conv2d: (1x128x360x640xf16) <- (1x32x360x640xf16, 128x32x3x3xf16)
         conv2d_103 = paddle._C_ops.conv2d(leaky_relu__53, parameter_179, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x360x640xf16) <- (1x128x360x640xf16, 1x128x1x1xf16)
-        add__138 = paddle._C_ops.add(conv2d_103, parameter_180)
+        add__138 = paddle._C_ops.add_(conv2d_103, parameter_180)
 
         # pd_op.pixel_shuffle: (1x32x720x1280xf16) <- (1x128x360x640xf16)
         pixel_shuffle_1 = paddle._C_ops.pixel_shuffle(add__138, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x720x1280xf16) <- (1x32x720x1280xf16)
-        leaky_relu__54 = paddle._C_ops.leaky_relu(pixel_shuffle_1, float('0.1'))
+        leaky_relu__54 = paddle._C_ops.leaky_relu_(pixel_shuffle_1, float('0.1'))
 
         # pd_op.conv2d: (1x3x720x1280xf16) <- (1x32x720x1280xf16, 3x32x3x3xf16)
         conv2d_104 = paddle._C_ops.conv2d(leaky_relu__54, parameter_181, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x1x1xf16)
-        add__139 = paddle._C_ops.add(conv2d_104, parameter_182)
+        add__139 = paddle._C_ops.add_(conv2d_104, parameter_182)
 
         # pd_op.slice: (1x3x180x320xf16) <- (1x2x3x180x320xf16, 1xi64, 1xi64)
         slice_40 = paddle._C_ops.slice(cast_0, [1], constant_1, constant_5, [1], [1])
@@ -2548,7 +2548,7 @@ class BlockEntries:
         bilinear_interp_5 = paddle._C_ops.bilinear_interp(slice_40, None, None, None, 'NCHW', -1, -1, -1, [float('4'), float('4')], 'bilinear', False, 0)
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x720x1280xf16)
-        add__140 = paddle._C_ops.add(add__139, bilinear_interp_5)
+        add__140 = paddle._C_ops.add_(add__139, bilinear_interp_5)
 
         # builtin.combine: ([1x3x720x1280xf16, 1x32x720x1280xf16]) <- (1x3x720x1280xf16, 1x32x720x1280xf16)
         combine_35 = [add__140, leaky_relu__54]
@@ -2560,16 +2560,16 @@ class BlockEntries:
         conv2d_105 = paddle._C_ops.conv2d(concat_22, parameter_183, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x360x640xf16) <- (1x32x360x640xf16, 1x32x1x1xf16)
-        add__141 = paddle._C_ops.add(conv2d_105, parameter_184)
+        add__141 = paddle._C_ops.add_(conv2d_105, parameter_184)
 
         # pd_op.leaky_relu_: (1x32x360x640xf16) <- (1x32x360x640xf16)
-        leaky_relu__55 = paddle._C_ops.leaky_relu(add__141, float('0.1'))
+        leaky_relu__55 = paddle._C_ops.leaky_relu_(add__141, float('0.1'))
 
         # pd_op.conv2d: (1x32x360x640xf16) <- (1x32x360x640xf16, 32x32x3x3xf16)
         conv2d_106 = paddle._C_ops.conv2d(leaky_relu__55, parameter_185, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x360x640xf16) <- (1x32x360x640xf16, 1x32x1x1xf16)
-        add__142 = paddle._C_ops.add(conv2d_106, parameter_186)
+        add__142 = paddle._C_ops.add_(conv2d_106, parameter_186)
 
         # builtin.combine: ([1x32x360x640xf16, 1x32x360x640xf16]) <- (1x32x360x640xf16, 1x32x360x640xf16)
         combine_36 = [add__142, leaky_relu__53]
@@ -2581,16 +2581,16 @@ class BlockEntries:
         conv2d_107 = paddle._C_ops.conv2d(concat_23, parameter_187, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__143 = paddle._C_ops.add(conv2d_107, parameter_188)
+        add__143 = paddle._C_ops.add_(conv2d_107, parameter_188)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__56 = paddle._C_ops.leaky_relu(add__143, float('0.1'))
+        leaky_relu__56 = paddle._C_ops.leaky_relu_(add__143, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_108 = paddle._C_ops.conv2d(leaky_relu__56, parameter_189, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__144 = paddle._C_ops.add(conv2d_108, parameter_190)
+        add__144 = paddle._C_ops.add_(conv2d_108, parameter_190)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16)
         combine_37 = [add__144, add__136]
@@ -2602,7 +2602,7 @@ class BlockEntries:
         conv2d_109 = paddle._C_ops.conv2d(concat_24, parameter_191, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__145 = paddle._C_ops.add(conv2d_109, parameter_192)
+        add__145 = paddle._C_ops.add_(conv2d_109, parameter_192)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_38 = [slice_3, add__61, add_4, add__132]
@@ -2614,61 +2614,61 @@ class BlockEntries:
         conv2d_110 = paddle._C_ops.conv2d(concat_25, parameter_171, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__146 = paddle._C_ops.add(conv2d_110, parameter_172)
+        add__146 = paddle._C_ops.add_(conv2d_110, parameter_172)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__57 = paddle._C_ops.leaky_relu(add__146, float('0.1'))
+        leaky_relu__57 = paddle._C_ops.leaky_relu_(add__146, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_111 = paddle._C_ops.conv2d(leaky_relu__57, parameter_173, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__147 = paddle._C_ops.add(conv2d_111, parameter_174)
+        add__147 = paddle._C_ops.add_(conv2d_111, parameter_174)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__21 = paddle._C_ops.relu(add__147)
+        relu__21 = paddle._C_ops.relu_(add__147)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_112 = paddle._C_ops.conv2d(relu__21, parameter_175, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__148 = paddle._C_ops.add(conv2d_112, parameter_176)
+        add__148 = paddle._C_ops.add_(conv2d_112, parameter_176)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__59 = paddle._C_ops.scale(add__148, constant_3, float('0'), True)
+        scale__59 = paddle._C_ops.scale_(add__148, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__149 = paddle._C_ops.add(leaky_relu__57, scale__59)
+        add__149 = paddle._C_ops.add_(leaky_relu__57, scale__59)
 
         # pd_op.conv2d: (1x128x180x320xf16) <- (1x32x180x320xf16, 128x32x3x3xf16)
         conv2d_113 = paddle._C_ops.conv2d(add__149, parameter_177, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x180x320xf16) <- (1x128x180x320xf16, 1x128x1x1xf16)
-        add__150 = paddle._C_ops.add(conv2d_113, parameter_178)
+        add__150 = paddle._C_ops.add_(conv2d_113, parameter_178)
 
         # pd_op.pixel_shuffle: (1x32x360x640xf16) <- (1x128x180x320xf16)
         pixel_shuffle_2 = paddle._C_ops.pixel_shuffle(add__150, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x360x640xf16) <- (1x32x360x640xf16)
-        leaky_relu__58 = paddle._C_ops.leaky_relu(pixel_shuffle_2, float('0.1'))
+        leaky_relu__58 = paddle._C_ops.leaky_relu_(pixel_shuffle_2, float('0.1'))
 
         # pd_op.conv2d: (1x128x360x640xf16) <- (1x32x360x640xf16, 128x32x3x3xf16)
         conv2d_114 = paddle._C_ops.conv2d(leaky_relu__58, parameter_179, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x360x640xf16) <- (1x128x360x640xf16, 1x128x1x1xf16)
-        add__151 = paddle._C_ops.add(conv2d_114, parameter_180)
+        add__151 = paddle._C_ops.add_(conv2d_114, parameter_180)
 
         # pd_op.pixel_shuffle: (1x32x720x1280xf16) <- (1x128x360x640xf16)
         pixel_shuffle_3 = paddle._C_ops.pixel_shuffle(add__151, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x720x1280xf16) <- (1x32x720x1280xf16)
-        leaky_relu__59 = paddle._C_ops.leaky_relu(pixel_shuffle_3, float('0.1'))
+        leaky_relu__59 = paddle._C_ops.leaky_relu_(pixel_shuffle_3, float('0.1'))
 
         # pd_op.conv2d: (1x3x720x1280xf16) <- (1x32x720x1280xf16, 3x32x3x3xf16)
         conv2d_115 = paddle._C_ops.conv2d(leaky_relu__59, parameter_181, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x1x1xf16)
-        add__152 = paddle._C_ops.add(conv2d_115, parameter_182)
+        add__152 = paddle._C_ops.add_(conv2d_115, parameter_182)
 
         # pd_op.slice: (1x3x180x320xf16) <- (1x2x3x180x320xf16, 1xi64, 1xi64)
         slice_41 = paddle._C_ops.slice(cast_0, [1], constant_5, constant_6, [1], [1])
@@ -2677,7 +2677,7 @@ class BlockEntries:
         bilinear_interp_6 = paddle._C_ops.bilinear_interp(slice_41, None, None, None, 'NCHW', -1, -1, -1, [float('4'), float('4')], 'bilinear', False, 0)
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x720x1280xf16)
-        add__153 = paddle._C_ops.add(add__152, bilinear_interp_6)
+        add__153 = paddle._C_ops.add_(add__152, bilinear_interp_6)
 
         # builtin.combine: ([1x3x720x1280xf16, 1x32x720x1280xf16]) <- (1x3x720x1280xf16, 1x32x720x1280xf16)
         combine_39 = [add__153, leaky_relu__59]
@@ -2689,16 +2689,16 @@ class BlockEntries:
         conv2d_116 = paddle._C_ops.conv2d(concat_26, parameter_183, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x360x640xf16) <- (1x32x360x640xf16, 1x32x1x1xf16)
-        add__154 = paddle._C_ops.add(conv2d_116, parameter_184)
+        add__154 = paddle._C_ops.add_(conv2d_116, parameter_184)
 
         # pd_op.leaky_relu_: (1x32x360x640xf16) <- (1x32x360x640xf16)
-        leaky_relu__60 = paddle._C_ops.leaky_relu(add__154, float('0.1'))
+        leaky_relu__60 = paddle._C_ops.leaky_relu_(add__154, float('0.1'))
 
         # pd_op.conv2d: (1x32x360x640xf16) <- (1x32x360x640xf16, 32x32x3x3xf16)
         conv2d_117 = paddle._C_ops.conv2d(leaky_relu__60, parameter_185, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x360x640xf16) <- (1x32x360x640xf16, 1x32x1x1xf16)
-        add__155 = paddle._C_ops.add(conv2d_117, parameter_186)
+        add__155 = paddle._C_ops.add_(conv2d_117, parameter_186)
 
         # builtin.combine: ([1x32x360x640xf16, 1x32x360x640xf16]) <- (1x32x360x640xf16, 1x32x360x640xf16)
         combine_40 = [add__155, leaky_relu__58]
@@ -2710,16 +2710,16 @@ class BlockEntries:
         conv2d_118 = paddle._C_ops.conv2d(concat_27, parameter_187, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__156 = paddle._C_ops.add(conv2d_118, parameter_188)
+        add__156 = paddle._C_ops.add_(conv2d_118, parameter_188)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__61 = paddle._C_ops.leaky_relu(add__156, float('0.1'))
+        leaky_relu__61 = paddle._C_ops.leaky_relu_(add__156, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_119 = paddle._C_ops.conv2d(leaky_relu__61, parameter_189, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__157 = paddle._C_ops.add(conv2d_119, parameter_190)
+        add__157 = paddle._C_ops.add_(conv2d_119, parameter_190)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16)
         combine_41 = [add__157, add__149]
@@ -2731,7 +2731,7 @@ class BlockEntries:
         conv2d_120 = paddle._C_ops.conv2d(concat_28, parameter_191, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__158 = paddle._C_ops.add(conv2d_120, parameter_192)
+        add__158 = paddle._C_ops.add_(conv2d_120, parameter_192)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_42 = [add__158, add__61, add_4, add__132, parameter_108]
@@ -2743,73 +2743,73 @@ class BlockEntries:
         conv2d_121 = paddle._C_ops.conv2d(concat_29, parameter_193, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__159 = paddle._C_ops.add(conv2d_121, parameter_194)
+        add__159 = paddle._C_ops.add_(conv2d_121, parameter_194)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__62 = paddle._C_ops.leaky_relu(add__159, float('0.1'))
+        leaky_relu__62 = paddle._C_ops.leaky_relu_(add__159, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_122 = paddle._C_ops.conv2d(leaky_relu__62, parameter_195, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__160 = paddle._C_ops.add(conv2d_122, parameter_196)
+        add__160 = paddle._C_ops.add_(conv2d_122, parameter_196)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__22 = paddle._C_ops.relu(add__160)
+        relu__22 = paddle._C_ops.relu_(add__160)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_123 = paddle._C_ops.conv2d(relu__22, parameter_197, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__161 = paddle._C_ops.add(conv2d_123, parameter_198)
+        add__161 = paddle._C_ops.add_(conv2d_123, parameter_198)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__60 = paddle._C_ops.scale(add__161, constant_3, float('0'), True)
+        scale__60 = paddle._C_ops.scale_(add__161, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__162 = paddle._C_ops.add(leaky_relu__62, scale__60)
+        add__162 = paddle._C_ops.add_(leaky_relu__62, scale__60)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_124 = paddle._C_ops.conv2d(add__162, parameter_199, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__163 = paddle._C_ops.add(conv2d_124, parameter_200)
+        add__163 = paddle._C_ops.add_(conv2d_124, parameter_200)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__23 = paddle._C_ops.relu(add__163)
+        relu__23 = paddle._C_ops.relu_(add__163)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_125 = paddle._C_ops.conv2d(relu__23, parameter_201, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__164 = paddle._C_ops.add(conv2d_125, parameter_202)
+        add__164 = paddle._C_ops.add_(conv2d_125, parameter_202)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__61 = paddle._C_ops.scale(add__164, constant_3, float('0'), True)
+        scale__61 = paddle._C_ops.scale_(add__164, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__165 = paddle._C_ops.add(add__162, scale__61)
+        add__165 = paddle._C_ops.add_(add__162, scale__61)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_126 = paddle._C_ops.conv2d(add__165, parameter_203, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__166 = paddle._C_ops.add(conv2d_126, parameter_204)
+        add__166 = paddle._C_ops.add_(conv2d_126, parameter_204)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__24 = paddle._C_ops.relu(add__166)
+        relu__24 = paddle._C_ops.relu_(add__166)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_127 = paddle._C_ops.conv2d(relu__24, parameter_205, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__167 = paddle._C_ops.add(conv2d_127, parameter_206)
+        add__167 = paddle._C_ops.add_(conv2d_127, parameter_206)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__62 = paddle._C_ops.scale(add__167, constant_3, float('0'), True)
+        scale__62 = paddle._C_ops.scale_(add__167, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__168 = paddle._C_ops.add(add__165, scale__62)
+        add__168 = paddle._C_ops.add_(add__165, scale__62)
 
         # pd_op.add: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
         add_6 = parameter_108 + add__168
@@ -2824,7 +2824,7 @@ class BlockEntries:
         cast_42 = paddle._C_ops.cast(deformable_conv_4, paddle.float16)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__169 = paddle._C_ops.add(cast_42, parameter_208)
+        add__169 = paddle._C_ops.add_(cast_42, parameter_208)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x2x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x2x180x320xf16)
         combine_43 = [add__169, add__145, slice_28]
@@ -2836,34 +2836,34 @@ class BlockEntries:
         conv2d_128 = paddle._C_ops.conv2d(concat_30, parameter_209, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__170 = paddle._C_ops.add(conv2d_128, parameter_210)
+        add__170 = paddle._C_ops.add_(conv2d_128, parameter_210)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__63 = paddle._C_ops.leaky_relu(add__170, float('0.1'))
+        leaky_relu__63 = paddle._C_ops.leaky_relu_(add__170, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_129 = paddle._C_ops.conv2d(leaky_relu__63, parameter_211, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__171 = paddle._C_ops.add(conv2d_129, parameter_212)
+        add__171 = paddle._C_ops.add_(conv2d_129, parameter_212)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__64 = paddle._C_ops.leaky_relu(add__171, float('0.1'))
+        leaky_relu__64 = paddle._C_ops.leaky_relu_(add__171, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_130 = paddle._C_ops.conv2d(leaky_relu__64, parameter_213, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__172 = paddle._C_ops.add(conv2d_130, parameter_214)
+        add__172 = paddle._C_ops.add_(conv2d_130, parameter_214)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__65 = paddle._C_ops.leaky_relu(add__172, float('0.1'))
+        leaky_relu__65 = paddle._C_ops.leaky_relu_(add__172, float('0.1'))
 
         # pd_op.conv2d: (1x108x180x320xf16) <- (1x32x180x320xf16, 108x32x3x3xf16)
         conv2d_131 = paddle._C_ops.conv2d(leaky_relu__65, parameter_215, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x108x180x320xf16) <- (1x108x180x320xf16, 1x108x1x1xf16)
-        add__173 = paddle._C_ops.add(conv2d_131, parameter_216)
+        add__173 = paddle._C_ops.add_(conv2d_131, parameter_216)
 
         # pd_op.split_with_num: ([1x36x180x320xf16, 1x36x180x320xf16, 1x36x180x320xf16]) <- (1x108x180x320xf16, 1xi32)
         split_with_num_5 = paddle._C_ops.split_with_num(add__173, 3, constant_0)
@@ -2881,25 +2881,25 @@ class BlockEntries:
         concat_31 = paddle._C_ops.concat(combine_44, constant_0)
 
         # pd_op.tanh_: (1x72x180x320xf16) <- (1x72x180x320xf16)
-        tanh__4 = paddle._C_ops.tanh(concat_31)
+        tanh__4 = paddle._C_ops.tanh_(concat_31)
 
         # pd_op.scale_: (1x72x180x320xf16) <- (1x72x180x320xf16, 1xf32)
-        scale__63 = paddle._C_ops.scale(tanh__4, constant_19, float('0'), True)
+        scale__63 = paddle._C_ops.scale_(tanh__4, constant_19, float('0'), True)
 
         # pd_op.add_: (1x72x180x320xf16) <- (1x72x180x320xf16, 1x72x180x320xf16)
-        add__174 = paddle._C_ops.add(scale__63, add__93)
+        add__174 = paddle._C_ops.add_(scale__63, add__93)
 
         # builtin.slice: (1x36x180x320xf16) <- ([1x36x180x320xf16, 1x36x180x320xf16, 1x36x180x320xf16])
         slice_44 = split_with_num_5[2]
 
         # pd_op.sigmoid_: (1x36x180x320xf16) <- (1x36x180x320xf16)
-        sigmoid__4 = paddle._C_ops.sigmoid(slice_44)
+        sigmoid__4 = paddle._C_ops.sigmoid_(slice_44)
 
         # pd_op.add_: (1x36x180x320xf16) <- (1x36x180x320xf16, 1x36x180x320xf16)
-        add__175 = paddle._C_ops.add(sigmoid__4, sigmoid__2)
+        add__175 = paddle._C_ops.add_(sigmoid__4, sigmoid__2)
 
         # pd_op.scale_: (1x36x180x320xf16) <- (1x36x180x320xf16, 1xf32)
-        scale__64 = paddle._C_ops.scale(add__175, constant_22, float('0'), True)
+        scale__64 = paddle._C_ops.scale_(add__175, constant_22, float('0'), True)
 
         # pd_op.cast: (1x36x180x320xf32) <- (1x36x180x320xf16)
         cast_43 = paddle._C_ops.cast(scale__64, paddle.float32)
@@ -2914,7 +2914,7 @@ class BlockEntries:
         cast_45 = paddle._C_ops.cast(deformable_conv_5, paddle.float16)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__176 = paddle._C_ops.add(cast_45, parameter_218)
+        add__176 = paddle._C_ops.add_(cast_45, parameter_218)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_45 = [add__145, add__78, add__105, add_5, add__176]
@@ -2926,76 +2926,76 @@ class BlockEntries:
         conv2d_132 = paddle._C_ops.conv2d(concat_32, parameter_193, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__177 = paddle._C_ops.add(conv2d_132, parameter_194)
+        add__177 = paddle._C_ops.add_(conv2d_132, parameter_194)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__66 = paddle._C_ops.leaky_relu(add__177, float('0.1'))
+        leaky_relu__66 = paddle._C_ops.leaky_relu_(add__177, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_133 = paddle._C_ops.conv2d(leaky_relu__66, parameter_195, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__178 = paddle._C_ops.add(conv2d_133, parameter_196)
+        add__178 = paddle._C_ops.add_(conv2d_133, parameter_196)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__25 = paddle._C_ops.relu(add__178)
+        relu__25 = paddle._C_ops.relu_(add__178)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_134 = paddle._C_ops.conv2d(relu__25, parameter_197, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__179 = paddle._C_ops.add(conv2d_134, parameter_198)
+        add__179 = paddle._C_ops.add_(conv2d_134, parameter_198)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__65 = paddle._C_ops.scale(add__179, constant_3, float('0'), True)
+        scale__65 = paddle._C_ops.scale_(add__179, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__180 = paddle._C_ops.add(leaky_relu__66, scale__65)
+        add__180 = paddle._C_ops.add_(leaky_relu__66, scale__65)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_135 = paddle._C_ops.conv2d(add__180, parameter_199, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__181 = paddle._C_ops.add(conv2d_135, parameter_200)
+        add__181 = paddle._C_ops.add_(conv2d_135, parameter_200)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__26 = paddle._C_ops.relu(add__181)
+        relu__26 = paddle._C_ops.relu_(add__181)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_136 = paddle._C_ops.conv2d(relu__26, parameter_201, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__182 = paddle._C_ops.add(conv2d_136, parameter_202)
+        add__182 = paddle._C_ops.add_(conv2d_136, parameter_202)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__66 = paddle._C_ops.scale(add__182, constant_3, float('0'), True)
+        scale__66 = paddle._C_ops.scale_(add__182, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__183 = paddle._C_ops.add(add__180, scale__66)
+        add__183 = paddle._C_ops.add_(add__180, scale__66)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_137 = paddle._C_ops.conv2d(add__183, parameter_203, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__184 = paddle._C_ops.add(conv2d_137, parameter_204)
+        add__184 = paddle._C_ops.add_(conv2d_137, parameter_204)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__27 = paddle._C_ops.relu(add__184)
+        relu__27 = paddle._C_ops.relu_(add__184)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_138 = paddle._C_ops.conv2d(relu__27, parameter_205, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__185 = paddle._C_ops.add(conv2d_138, parameter_206)
+        add__185 = paddle._C_ops.add_(conv2d_138, parameter_206)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__67 = paddle._C_ops.scale(add__185, constant_3, float('0'), True)
+        scale__67 = paddle._C_ops.scale_(add__185, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__186 = paddle._C_ops.add(add__183, scale__67)
+        add__186 = paddle._C_ops.add_(add__183, scale__67)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__187 = paddle._C_ops.add(add__176, add__186)
+        add__187 = paddle._C_ops.add_(add__176, add__186)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_46 = [add__145, add__78, add__105, add_5, add__187, parameter_108]
@@ -3007,73 +3007,73 @@ class BlockEntries:
         conv2d_139 = paddle._C_ops.conv2d(concat_33, parameter_219, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__188 = paddle._C_ops.add(conv2d_139, parameter_220)
+        add__188 = paddle._C_ops.add_(conv2d_139, parameter_220)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__67 = paddle._C_ops.leaky_relu(add__188, float('0.1'))
+        leaky_relu__67 = paddle._C_ops.leaky_relu_(add__188, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_140 = paddle._C_ops.conv2d(leaky_relu__67, parameter_221, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__189 = paddle._C_ops.add(conv2d_140, parameter_222)
+        add__189 = paddle._C_ops.add_(conv2d_140, parameter_222)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__28 = paddle._C_ops.relu(add__189)
+        relu__28 = paddle._C_ops.relu_(add__189)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_141 = paddle._C_ops.conv2d(relu__28, parameter_223, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__190 = paddle._C_ops.add(conv2d_141, parameter_224)
+        add__190 = paddle._C_ops.add_(conv2d_141, parameter_224)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__68 = paddle._C_ops.scale(add__190, constant_3, float('0'), True)
+        scale__68 = paddle._C_ops.scale_(add__190, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__191 = paddle._C_ops.add(leaky_relu__67, scale__68)
+        add__191 = paddle._C_ops.add_(leaky_relu__67, scale__68)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_142 = paddle._C_ops.conv2d(add__191, parameter_225, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__192 = paddle._C_ops.add(conv2d_142, parameter_226)
+        add__192 = paddle._C_ops.add_(conv2d_142, parameter_226)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__29 = paddle._C_ops.relu(add__192)
+        relu__29 = paddle._C_ops.relu_(add__192)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_143 = paddle._C_ops.conv2d(relu__29, parameter_227, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__193 = paddle._C_ops.add(conv2d_143, parameter_228)
+        add__193 = paddle._C_ops.add_(conv2d_143, parameter_228)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__69 = paddle._C_ops.scale(add__193, constant_3, float('0'), True)
+        scale__69 = paddle._C_ops.scale_(add__193, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__194 = paddle._C_ops.add(add__191, scale__69)
+        add__194 = paddle._C_ops.add_(add__191, scale__69)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_144 = paddle._C_ops.conv2d(add__194, parameter_229, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__195 = paddle._C_ops.add(conv2d_144, parameter_230)
+        add__195 = paddle._C_ops.add_(conv2d_144, parameter_230)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__30 = paddle._C_ops.relu(add__195)
+        relu__30 = paddle._C_ops.relu_(add__195)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_145 = paddle._C_ops.conv2d(relu__30, parameter_231, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__196 = paddle._C_ops.add(conv2d_145, parameter_232)
+        add__196 = paddle._C_ops.add_(conv2d_145, parameter_232)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__70 = paddle._C_ops.scale(add__196, constant_3, float('0'), True)
+        scale__70 = paddle._C_ops.scale_(add__196, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__197 = paddle._C_ops.add(add__194, scale__70)
+        add__197 = paddle._C_ops.add_(add__194, scale__70)
 
         # pd_op.add: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
         add_7 = parameter_108 + add__197
@@ -3088,7 +3088,7 @@ class BlockEntries:
         cast_47 = paddle._C_ops.cast(deformable_conv_6, paddle.float16)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__198 = paddle._C_ops.add(cast_47, parameter_234)
+        add__198 = paddle._C_ops.add_(cast_47, parameter_234)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x2x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x2x180x320xf16)
         combine_47 = [add__198, add__158, cast_17]
@@ -3100,34 +3100,34 @@ class BlockEntries:
         conv2d_146 = paddle._C_ops.conv2d(concat_34, parameter_235, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__199 = paddle._C_ops.add(conv2d_146, parameter_236)
+        add__199 = paddle._C_ops.add_(conv2d_146, parameter_236)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__68 = paddle._C_ops.leaky_relu(add__199, float('0.1'))
+        leaky_relu__68 = paddle._C_ops.leaky_relu_(add__199, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_147 = paddle._C_ops.conv2d(leaky_relu__68, parameter_237, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__200 = paddle._C_ops.add(conv2d_147, parameter_238)
+        add__200 = paddle._C_ops.add_(conv2d_147, parameter_238)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__69 = paddle._C_ops.leaky_relu(add__200, float('0.1'))
+        leaky_relu__69 = paddle._C_ops.leaky_relu_(add__200, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_148 = paddle._C_ops.conv2d(leaky_relu__69, parameter_239, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__201 = paddle._C_ops.add(conv2d_148, parameter_240)
+        add__201 = paddle._C_ops.add_(conv2d_148, parameter_240)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__70 = paddle._C_ops.leaky_relu(add__201, float('0.1'))
+        leaky_relu__70 = paddle._C_ops.leaky_relu_(add__201, float('0.1'))
 
         # pd_op.conv2d: (1x108x180x320xf16) <- (1x32x180x320xf16, 108x32x3x3xf16)
         conv2d_149 = paddle._C_ops.conv2d(leaky_relu__70, parameter_241, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x108x180x320xf16) <- (1x108x180x320xf16, 1x108x1x1xf16)
-        add__202 = paddle._C_ops.add(conv2d_149, parameter_242)
+        add__202 = paddle._C_ops.add_(conv2d_149, parameter_242)
 
         # pd_op.split_with_num: ([1x36x180x320xf16, 1x36x180x320xf16, 1x36x180x320xf16]) <- (1x108x180x320xf16, 1xi32)
         split_with_num_6 = paddle._C_ops.split_with_num(add__202, 3, constant_0)
@@ -3145,25 +3145,25 @@ class BlockEntries:
         concat_35 = paddle._C_ops.concat(combine_48, constant_0)
 
         # pd_op.tanh_: (1x72x180x320xf16) <- (1x72x180x320xf16)
-        tanh__5 = paddle._C_ops.tanh(concat_35)
+        tanh__5 = paddle._C_ops.tanh_(concat_35)
 
         # pd_op.scale_: (1x72x180x320xf16) <- (1x72x180x320xf16, 1xf32)
-        scale__71 = paddle._C_ops.scale(tanh__5, constant_19, float('0'), True)
+        scale__71 = paddle._C_ops.scale_(tanh__5, constant_19, float('0'), True)
 
         # pd_op.add_: (1x72x180x320xf16) <- (1x72x180x320xf16, 1x72x180x320xf16)
-        add__203 = paddle._C_ops.add(scale__71, add__120)
+        add__203 = paddle._C_ops.add_(scale__71, add__120)
 
         # builtin.slice: (1x36x180x320xf16) <- ([1x36x180x320xf16, 1x36x180x320xf16, 1x36x180x320xf16])
         slice_47 = split_with_num_6[2]
 
         # pd_op.sigmoid_: (1x36x180x320xf16) <- (1x36x180x320xf16)
-        sigmoid__5 = paddle._C_ops.sigmoid(slice_47)
+        sigmoid__5 = paddle._C_ops.sigmoid_(slice_47)
 
         # pd_op.add_: (1x36x180x320xf16) <- (1x36x180x320xf16, 1x36x180x320xf16)
-        add__204 = paddle._C_ops.add(sigmoid__5, sigmoid__3)
+        add__204 = paddle._C_ops.add_(sigmoid__5, sigmoid__3)
 
         # pd_op.scale_: (1x36x180x320xf16) <- (1x36x180x320xf16, 1xf32)
-        scale__72 = paddle._C_ops.scale(add__204, constant_22, float('0'), True)
+        scale__72 = paddle._C_ops.scale_(add__204, constant_22, float('0'), True)
 
         # pd_op.cast: (1x36x180x320xf32) <- (1x36x180x320xf16)
         cast_48 = paddle._C_ops.cast(scale__72, paddle.float32)
@@ -3178,7 +3178,7 @@ class BlockEntries:
         cast_50 = paddle._C_ops.cast(deformable_conv_7, paddle.float16)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__205 = paddle._C_ops.add(cast_50, parameter_244)
+        add__205 = paddle._C_ops.add_(cast_50, parameter_244)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_49 = [add__158, add__61, add_4, add__132, add_6, add__205]
@@ -3190,76 +3190,76 @@ class BlockEntries:
         conv2d_150 = paddle._C_ops.conv2d(concat_36, parameter_219, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__206 = paddle._C_ops.add(conv2d_150, parameter_220)
+        add__206 = paddle._C_ops.add_(conv2d_150, parameter_220)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__71 = paddle._C_ops.leaky_relu(add__206, float('0.1'))
+        leaky_relu__71 = paddle._C_ops.leaky_relu_(add__206, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_151 = paddle._C_ops.conv2d(leaky_relu__71, parameter_221, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__207 = paddle._C_ops.add(conv2d_151, parameter_222)
+        add__207 = paddle._C_ops.add_(conv2d_151, parameter_222)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__31 = paddle._C_ops.relu(add__207)
+        relu__31 = paddle._C_ops.relu_(add__207)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_152 = paddle._C_ops.conv2d(relu__31, parameter_223, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__208 = paddle._C_ops.add(conv2d_152, parameter_224)
+        add__208 = paddle._C_ops.add_(conv2d_152, parameter_224)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__73 = paddle._C_ops.scale(add__208, constant_3, float('0'), True)
+        scale__73 = paddle._C_ops.scale_(add__208, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__209 = paddle._C_ops.add(leaky_relu__71, scale__73)
+        add__209 = paddle._C_ops.add_(leaky_relu__71, scale__73)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_153 = paddle._C_ops.conv2d(add__209, parameter_225, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__210 = paddle._C_ops.add(conv2d_153, parameter_226)
+        add__210 = paddle._C_ops.add_(conv2d_153, parameter_226)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__32 = paddle._C_ops.relu(add__210)
+        relu__32 = paddle._C_ops.relu_(add__210)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_154 = paddle._C_ops.conv2d(relu__32, parameter_227, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__211 = paddle._C_ops.add(conv2d_154, parameter_228)
+        add__211 = paddle._C_ops.add_(conv2d_154, parameter_228)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__74 = paddle._C_ops.scale(add__211, constant_3, float('0'), True)
+        scale__74 = paddle._C_ops.scale_(add__211, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__212 = paddle._C_ops.add(add__209, scale__74)
+        add__212 = paddle._C_ops.add_(add__209, scale__74)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_155 = paddle._C_ops.conv2d(add__212, parameter_229, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__213 = paddle._C_ops.add(conv2d_155, parameter_230)
+        add__213 = paddle._C_ops.add_(conv2d_155, parameter_230)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__33 = paddle._C_ops.relu(add__213)
+        relu__33 = paddle._C_ops.relu_(add__213)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_156 = paddle._C_ops.conv2d(relu__33, parameter_231, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__214 = paddle._C_ops.add(conv2d_156, parameter_232)
+        add__214 = paddle._C_ops.add_(conv2d_156, parameter_232)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__75 = paddle._C_ops.scale(add__214, constant_3, float('0'), True)
+        scale__75 = paddle._C_ops.scale_(add__214, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__215 = paddle._C_ops.add(add__212, scale__75)
+        add__215 = paddle._C_ops.add_(add__212, scale__75)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__216 = paddle._C_ops.add(add__205, add__215)
+        add__216 = paddle._C_ops.add_(add__205, add__215)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_50 = [slice_2, add__78, add__105, add_5, add__187, add_7]
@@ -3271,118 +3271,118 @@ class BlockEntries:
         conv2d_157 = paddle._C_ops.conv2d(concat_37, parameter_245, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__217 = paddle._C_ops.add(conv2d_157, parameter_246)
+        add__217 = paddle._C_ops.add_(conv2d_157, parameter_246)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__72 = paddle._C_ops.leaky_relu(add__217, float('0.1'))
+        leaky_relu__72 = paddle._C_ops.leaky_relu_(add__217, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_158 = paddle._C_ops.conv2d(leaky_relu__72, parameter_247, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__218 = paddle._C_ops.add(conv2d_158, parameter_248)
+        add__218 = paddle._C_ops.add_(conv2d_158, parameter_248)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__34 = paddle._C_ops.relu(add__218)
+        relu__34 = paddle._C_ops.relu_(add__218)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_159 = paddle._C_ops.conv2d(relu__34, parameter_249, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__219 = paddle._C_ops.add(conv2d_159, parameter_250)
+        add__219 = paddle._C_ops.add_(conv2d_159, parameter_250)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__76 = paddle._C_ops.scale(add__219, constant_3, float('0'), True)
+        scale__76 = paddle._C_ops.scale_(add__219, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__220 = paddle._C_ops.add(leaky_relu__72, scale__76)
+        add__220 = paddle._C_ops.add_(leaky_relu__72, scale__76)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_160 = paddle._C_ops.conv2d(add__220, parameter_251, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__221 = paddle._C_ops.add(conv2d_160, parameter_252)
+        add__221 = paddle._C_ops.add_(conv2d_160, parameter_252)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__35 = paddle._C_ops.relu(add__221)
+        relu__35 = paddle._C_ops.relu_(add__221)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_161 = paddle._C_ops.conv2d(relu__35, parameter_253, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__222 = paddle._C_ops.add(conv2d_161, parameter_254)
+        add__222 = paddle._C_ops.add_(conv2d_161, parameter_254)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__77 = paddle._C_ops.scale(add__222, constant_3, float('0'), True)
+        scale__77 = paddle._C_ops.scale_(add__222, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__223 = paddle._C_ops.add(add__220, scale__77)
+        add__223 = paddle._C_ops.add_(add__220, scale__77)
 
         # pd_op.conv2d: (1x128x180x320xf16) <- (1x32x180x320xf16, 128x32x3x3xf16)
         conv2d_162 = paddle._C_ops.conv2d(add__223, parameter_255, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x180x320xf16) <- (1x128x180x320xf16, 1x128x1x1xf16)
-        add__224 = paddle._C_ops.add(conv2d_162, parameter_256)
+        add__224 = paddle._C_ops.add_(conv2d_162, parameter_256)
 
         # pd_op.pixel_shuffle: (1x32x360x640xf16) <- (1x128x180x320xf16)
         pixel_shuffle_4 = paddle._C_ops.pixel_shuffle(add__224, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x360x640xf16) <- (1x32x360x640xf16)
-        leaky_relu__73 = paddle._C_ops.leaky_relu(pixel_shuffle_4, float('0.1'))
+        leaky_relu__73 = paddle._C_ops.leaky_relu_(pixel_shuffle_4, float('0.1'))
 
         # pd_op.conv2d: (1x128x360x640xf16) <- (1x32x360x640xf16, 128x32x3x3xf16)
         conv2d_163 = paddle._C_ops.conv2d(leaky_relu__73, parameter_257, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x360x640xf16) <- (1x128x360x640xf16, 1x128x1x1xf16)
-        add__225 = paddle._C_ops.add(conv2d_163, parameter_258)
+        add__225 = paddle._C_ops.add_(conv2d_163, parameter_258)
 
         # pd_op.pixel_shuffle: (1x32x720x1280xf16) <- (1x128x360x640xf16)
         pixel_shuffle_5 = paddle._C_ops.pixel_shuffle(add__225, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x720x1280xf16) <- (1x32x720x1280xf16)
-        leaky_relu__74 = paddle._C_ops.leaky_relu(pixel_shuffle_5, float('0.1'))
+        leaky_relu__74 = paddle._C_ops.leaky_relu_(pixel_shuffle_5, float('0.1'))
 
         # pd_op.conv2d: (1x3x720x1280xf16) <- (1x32x720x1280xf16, 3x32x3x3xf16)
         conv2d_164 = paddle._C_ops.conv2d(leaky_relu__74, parameter_259, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x1x1xf16)
-        add__226 = paddle._C_ops.add(conv2d_164, parameter_260)
+        add__226 = paddle._C_ops.add_(conv2d_164, parameter_260)
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x720x1280xf16)
-        add__227 = paddle._C_ops.add(add__226, bilinear_interp_5)
+        add__227 = paddle._C_ops.add_(add__226, bilinear_interp_5)
 
         # pd_op.conv2d: (1x128x180x320xf16) <- (1x32x180x320xf16, 128x32x3x3xf16)
         conv2d_165 = paddle._C_ops.conv2d(add__78, parameter_177, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x180x320xf16) <- (1x128x180x320xf16, 1x128x1x1xf16)
-        add__228 = paddle._C_ops.add(conv2d_165, parameter_178)
+        add__228 = paddle._C_ops.add_(conv2d_165, parameter_178)
 
         # pd_op.pixel_shuffle: (1x32x360x640xf16) <- (1x128x180x320xf16)
         pixel_shuffle_6 = paddle._C_ops.pixel_shuffle(add__228, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x360x640xf16) <- (1x32x360x640xf16)
-        leaky_relu__75 = paddle._C_ops.leaky_relu(pixel_shuffle_6, float('0.1'))
+        leaky_relu__75 = paddle._C_ops.leaky_relu_(pixel_shuffle_6, float('0.1'))
 
         # pd_op.conv2d: (1x128x360x640xf16) <- (1x32x360x640xf16, 128x32x3x3xf16)
         conv2d_166 = paddle._C_ops.conv2d(leaky_relu__75, parameter_179, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x360x640xf16) <- (1x128x360x640xf16, 1x128x1x1xf16)
-        add__229 = paddle._C_ops.add(conv2d_166, parameter_180)
+        add__229 = paddle._C_ops.add_(conv2d_166, parameter_180)
 
         # pd_op.pixel_shuffle: (1x32x720x1280xf16) <- (1x128x360x640xf16)
         pixel_shuffle_7 = paddle._C_ops.pixel_shuffle(add__229, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x720x1280xf16) <- (1x32x720x1280xf16)
-        leaky_relu__76 = paddle._C_ops.leaky_relu(pixel_shuffle_7, float('0.1'))
+        leaky_relu__76 = paddle._C_ops.leaky_relu_(pixel_shuffle_7, float('0.1'))
 
         # pd_op.conv2d: (1x3x720x1280xf16) <- (1x32x720x1280xf16, 3x32x3x3xf16)
         conv2d_167 = paddle._C_ops.conv2d(leaky_relu__76, parameter_261, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x1x1xf16)
-        add__230 = paddle._C_ops.add(conv2d_167, parameter_262)
+        add__230 = paddle._C_ops.add_(conv2d_167, parameter_262)
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x720x1280xf16)
-        add__231 = paddle._C_ops.add(add__230, add__227)
+        add__231 = paddle._C_ops.add_(add__230, add__227)
 
         # builtin.combine: ([1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16]) <- (1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16, 1x32x180x320xf16)
         combine_51 = [slice_3, add__61, add_4, add__132, add_6, add__216]
@@ -3394,118 +3394,118 @@ class BlockEntries:
         conv2d_168 = paddle._C_ops.conv2d(concat_38, parameter_245, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__232 = paddle._C_ops.add(conv2d_168, parameter_246)
+        add__232 = paddle._C_ops.add_(conv2d_168, parameter_246)
 
         # pd_op.leaky_relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        leaky_relu__77 = paddle._C_ops.leaky_relu(add__232, float('0.1'))
+        leaky_relu__77 = paddle._C_ops.leaky_relu_(add__232, float('0.1'))
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_169 = paddle._C_ops.conv2d(leaky_relu__77, parameter_247, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__233 = paddle._C_ops.add(conv2d_169, parameter_248)
+        add__233 = paddle._C_ops.add_(conv2d_169, parameter_248)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__36 = paddle._C_ops.relu(add__233)
+        relu__36 = paddle._C_ops.relu_(add__233)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_170 = paddle._C_ops.conv2d(relu__36, parameter_249, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__234 = paddle._C_ops.add(conv2d_170, parameter_250)
+        add__234 = paddle._C_ops.add_(conv2d_170, parameter_250)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__78 = paddle._C_ops.scale(add__234, constant_3, float('0'), True)
+        scale__78 = paddle._C_ops.scale_(add__234, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__235 = paddle._C_ops.add(leaky_relu__77, scale__78)
+        add__235 = paddle._C_ops.add_(leaky_relu__77, scale__78)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_171 = paddle._C_ops.conv2d(add__235, parameter_251, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__236 = paddle._C_ops.add(conv2d_171, parameter_252)
+        add__236 = paddle._C_ops.add_(conv2d_171, parameter_252)
 
         # pd_op.relu_: (1x32x180x320xf16) <- (1x32x180x320xf16)
-        relu__37 = paddle._C_ops.relu(add__236)
+        relu__37 = paddle._C_ops.relu_(add__236)
 
         # pd_op.conv2d: (1x32x180x320xf16) <- (1x32x180x320xf16, 32x32x3x3xf16)
         conv2d_172 = paddle._C_ops.conv2d(relu__37, parameter_253, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x1x1xf16)
-        add__237 = paddle._C_ops.add(conv2d_172, parameter_254)
+        add__237 = paddle._C_ops.add_(conv2d_172, parameter_254)
 
         # pd_op.scale_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1xf32)
-        scale__79 = paddle._C_ops.scale(add__237, constant_3, float('0'), True)
+        scale__79 = paddle._C_ops.scale_(add__237, constant_3, float('0'), True)
 
         # pd_op.add_: (1x32x180x320xf16) <- (1x32x180x320xf16, 1x32x180x320xf16)
-        add__238 = paddle._C_ops.add(add__235, scale__79)
+        add__238 = paddle._C_ops.add_(add__235, scale__79)
 
         # pd_op.conv2d: (1x128x180x320xf16) <- (1x32x180x320xf16, 128x32x3x3xf16)
         conv2d_173 = paddle._C_ops.conv2d(add__238, parameter_255, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x180x320xf16) <- (1x128x180x320xf16, 1x128x1x1xf16)
-        add__239 = paddle._C_ops.add(conv2d_173, parameter_256)
+        add__239 = paddle._C_ops.add_(conv2d_173, parameter_256)
 
         # pd_op.pixel_shuffle: (1x32x360x640xf16) <- (1x128x180x320xf16)
         pixel_shuffle_8 = paddle._C_ops.pixel_shuffle(add__239, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x360x640xf16) <- (1x32x360x640xf16)
-        leaky_relu__78 = paddle._C_ops.leaky_relu(pixel_shuffle_8, float('0.1'))
+        leaky_relu__78 = paddle._C_ops.leaky_relu_(pixel_shuffle_8, float('0.1'))
 
         # pd_op.conv2d: (1x128x360x640xf16) <- (1x32x360x640xf16, 128x32x3x3xf16)
         conv2d_174 = paddle._C_ops.conv2d(leaky_relu__78, parameter_257, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x360x640xf16) <- (1x128x360x640xf16, 1x128x1x1xf16)
-        add__240 = paddle._C_ops.add(conv2d_174, parameter_258)
+        add__240 = paddle._C_ops.add_(conv2d_174, parameter_258)
 
         # pd_op.pixel_shuffle: (1x32x720x1280xf16) <- (1x128x360x640xf16)
         pixel_shuffle_9 = paddle._C_ops.pixel_shuffle(add__240, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x720x1280xf16) <- (1x32x720x1280xf16)
-        leaky_relu__79 = paddle._C_ops.leaky_relu(pixel_shuffle_9, float('0.1'))
+        leaky_relu__79 = paddle._C_ops.leaky_relu_(pixel_shuffle_9, float('0.1'))
 
         # pd_op.conv2d: (1x3x720x1280xf16) <- (1x32x720x1280xf16, 3x32x3x3xf16)
         conv2d_175 = paddle._C_ops.conv2d(leaky_relu__79, parameter_259, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x1x1xf16)
-        add__241 = paddle._C_ops.add(conv2d_175, parameter_260)
+        add__241 = paddle._C_ops.add_(conv2d_175, parameter_260)
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x720x1280xf16)
-        add__242 = paddle._C_ops.add(add__241, bilinear_interp_6)
+        add__242 = paddle._C_ops.add_(add__241, bilinear_interp_6)
 
         # pd_op.conv2d: (1x128x180x320xf16) <- (1x32x180x320xf16, 128x32x3x3xf16)
         conv2d_176 = paddle._C_ops.conv2d(add__61, parameter_177, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x180x320xf16) <- (1x128x180x320xf16, 1x128x1x1xf16)
-        add__243 = paddle._C_ops.add(conv2d_176, parameter_178)
+        add__243 = paddle._C_ops.add_(conv2d_176, parameter_178)
 
         # pd_op.pixel_shuffle: (1x32x360x640xf16) <- (1x128x180x320xf16)
         pixel_shuffle_10 = paddle._C_ops.pixel_shuffle(add__243, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x360x640xf16) <- (1x32x360x640xf16)
-        leaky_relu__80 = paddle._C_ops.leaky_relu(pixel_shuffle_10, float('0.1'))
+        leaky_relu__80 = paddle._C_ops.leaky_relu_(pixel_shuffle_10, float('0.1'))
 
         # pd_op.conv2d: (1x128x360x640xf16) <- (1x32x360x640xf16, 128x32x3x3xf16)
         conv2d_177 = paddle._C_ops.conv2d(leaky_relu__80, parameter_179, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x128x360x640xf16) <- (1x128x360x640xf16, 1x128x1x1xf16)
-        add__244 = paddle._C_ops.add(conv2d_177, parameter_180)
+        add__244 = paddle._C_ops.add_(conv2d_177, parameter_180)
 
         # pd_op.pixel_shuffle: (1x32x720x1280xf16) <- (1x128x360x640xf16)
         pixel_shuffle_11 = paddle._C_ops.pixel_shuffle(add__244, 2, 'NCHW')
 
         # pd_op.leaky_relu_: (1x32x720x1280xf16) <- (1x32x720x1280xf16)
-        leaky_relu__81 = paddle._C_ops.leaky_relu(pixel_shuffle_11, float('0.1'))
+        leaky_relu__81 = paddle._C_ops.leaky_relu_(pixel_shuffle_11, float('0.1'))
 
         # pd_op.conv2d: (1x3x720x1280xf16) <- (1x32x720x1280xf16, 3x32x3x3xf16)
         conv2d_178 = paddle._C_ops.conv2d(leaky_relu__81, parameter_261, [1, 1], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x1x1xf16)
-        add__245 = paddle._C_ops.add(conv2d_178, parameter_262)
+        add__245 = paddle._C_ops.add_(conv2d_178, parameter_262)
 
         # pd_op.add_: (1x3x720x1280xf16) <- (1x3x720x1280xf16, 1x3x720x1280xf16)
-        add__246 = paddle._C_ops.add(add__245, add__242)
+        add__246 = paddle._C_ops.add_(add__245, add__242)
 
         # builtin.combine: ([1x3x720x1280xf16, 1x3x720x1280xf16]) <- (1x3x720x1280xf16, 1x3x720x1280xf16)
         combine_52 = [add__140, add__153]
