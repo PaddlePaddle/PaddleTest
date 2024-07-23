@@ -47,6 +47,7 @@ perf_docker_name="PaddleLayerTest_perf_kernel_eval"
 elif [ $TESTING == "yaml/dy^dy2stcinn_train-dy2st^dy2stcinn_train_benchmark.yml" ];then
 perf_docker_name="PaddleLayerTest_perf_kernel_train"
 fi
+echo "perf_docker_name: ${perf_docker_name}"
 
 docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "AK=${AK}" -e "SK=${SK}" \
