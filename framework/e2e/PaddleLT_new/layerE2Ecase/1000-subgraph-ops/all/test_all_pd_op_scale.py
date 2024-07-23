@@ -486,13 +486,13 @@ class PrimitiveOp_1ad7cba87460d86ee01bbd62e47cebca(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_67a238afd2e2697f1167137a11eb070c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4476f508a030a65f563b79a6b43c7564(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1ad7cba87460d86ee01bbd62e47cebca
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.5424542427062988]]], [[[0.4411792457103729]]], [[[0.2570952773094177]]], [[[0.7701631784439087]]], [[[0.8692660927772522]]], [[[0.02568746730685234]]], [[[0.17120203375816345]]], [[[0.5016934275627136]]], [[[0.13365806639194489]]], [[[0.5459965467453003]]], [[[0.873428225517273]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.41266393661499023]]], [[[0.787277102470398]]], [[[0.09235267341136932]]], [[[0.9416996836662292]]], [[[0.2949480414390564]]], [[[0.28548404574394226]]], [[[0.8276010155677795]]], [[[0.5963469743728638]]], [[[0.2971181869506836]]], [[[0.30981895327568054]]], [[[0.8371911644935608]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -654,13 +654,13 @@ class PrimitiveOp_cff539c7b50e4cde83d724798859634e(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7ed193bb8e0eedda6691b1aaf4f6120e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_348db23a490d3330776ee90de024e29b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cff539c7b50e4cde83d724798859634e
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[1.1268471479415894]], [[1.1656999588012695]], [[1.4718120098114014]], [[1.1854958534240723]], [[1.4168580770492554]], [[1.4444173574447632]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[1.1701937913894653]], [[1.0149449110031128]], [[1.213212013244629]], [[1.6079914569854736]], [[1.1799383163452148]], [[1.3320038318634033]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -675,13 +675,13 @@ class TestPrimitiveOp_7ed193bb8e0eedda6691b1aaf4f6120e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a9273714cfcfcf169290968517baa74c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_1b8c4af60107ffe050bc303248e1134c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cff539c7b50e4cde83d724798859634e
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[1.6338253021240234]], [[1.5832443237304688]], [[1.0173780918121338]], [[1.2204434871673584]], [[1.1395745277404785]], [[1.2108428478240967]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[1.5037500858306885]], [[1.3401986360549927]], [[1.0777018070220947]], [[1.5089831352233887]], [[1.0407006740570068]], [[1.4083081483840942]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -1053,13 +1053,13 @@ class PrimitiveOp_394a13fb38ae78b5229e01def640a2ef(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_91bf7abae709f09eb6691ceb2069ce01(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_abacea4ddf55bf019284c22816a02f4f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_394a13fb38ae78b5229e01def640a2ef
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.4491173326969147]], [[0.4733591675758362]], [[0.4858124554157257]], [[0.3472171723842621]], [[0.23939920961856842]], [[0.0426616445183754]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.46257662773132324]], [[0.22868821024894714]], [[0.09311114251613617]], [[0.19589807093143463]], [[0.2936159372329712]], [[0.20391026139259338]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -1074,13 +1074,13 @@ class TestPrimitiveOp_91bf7abae709f09eb6691ceb2069ce01(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_9644d920bbaa1987fcf975560ccd4b56(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0af0fc6567e14159ec3cbcc4e246bbef(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_394a13fb38ae78b5229e01def640a2ef
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.02638155408203602]], [[0.1120413988828659]], [[0.3495563566684723]], [[0.1514725387096405]], [[0.02938399277627468]], [[0.2665025591850281]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.26644501090049744]], [[0.3505541682243347]], [[0.33946865797042847]], [[0.27033060789108276]], [[0.21624350547790527]], [[0.4743625223636627]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -1116,13 +1116,13 @@ class PrimitiveOp_717c0ad4ce4528976dd3db9dc275cc90(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7a8c276b4da01f5c906ba6e362fd6970(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d5fa4e24e05e40da7dcde1cdd3b34a80(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_717c0ad4ce4528976dd3db9dc275cc90
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.23442403972148895]], [[0.029012981802225113]], [[0.0686381459236145]], [[0.006609615869820118]], [[0.3064398169517517]], [[0.2724543511867523]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.3442152738571167]], [[0.12071492522954941]], [[0.36670151352882385]], [[0.3812854290008545]], [[0.07579178363084793]], [[0.4529133439064026]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -1137,13 +1137,13 @@ class TestPrimitiveOp_7a8c276b4da01f5c906ba6e362fd6970(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_800616d713e71d74286175a8fb779e69(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2cd3a054836ffa2ed7e31302395c4ded(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_717c0ad4ce4528976dd3db9dc275cc90
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.06195882707834244]], [[0.007989315316081047]], [[0.11828543245792389]], [[0.28755319118499756]], [[0.1693400740623474]], [[0.17288851737976074]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.145065575838089]], [[0.41218188405036926]], [[0.4891277551651001]], [[0.3759499490261078]], [[0.07741941511631012]], [[0.39330440759658813]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -1389,13 +1389,13 @@ class PrimitiveOp_34eb536b90a981ec27ae21294e6d8618(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d199339cc3bcefe5842945805dc47cc5(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_53366634720bedb4716dfb459357b95d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_34eb536b90a981ec27ae21294e6d8618
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.23786376416683197]]], dtype='float32').reshape([1, 1, 1]),
+            paddle.to_tensor([[[0.24712547659873962]]], dtype='float32').reshape([1, 1, 1]),
         ]
 
 
@@ -1893,13 +1893,13 @@ class PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_044a8c9b2ab1c1b5cd7886409289a2f5(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6fa791670afe2f7590fa9e0e81730417(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(1105.601318359375, dtype='float32').reshape([]),
+            paddle.to_tensor(1090.119873046875, dtype='float32').reshape([]),
         ]
 
 
@@ -1935,13 +1935,13 @@ class PrimitiveOp_2a463dd12e2c5809c04e1554419962df(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_37aa6260f75aa3ea30a67f74ded96ba7(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_76eec4879331aa145ef5c67e69b03250(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(147.2750244140625, dtype='float32').reshape([]),
+            paddle.to_tensor(186.56895446777344, dtype='float32').reshape([]),
         ]
 
 
@@ -1956,13 +1956,13 @@ class TestPrimitiveOp_37aa6260f75aa3ea30a67f74ded96ba7(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2de136c7294af0e86efc08a814ab4a44(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9e6b3a6cf1f10078b666d81bcb5e2f2e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(5.896667957305908, dtype='float32').reshape([]),
+            paddle.to_tensor(4.171368598937988, dtype='float32').reshape([]),
         ]
 
 
@@ -1977,13 +1977,13 @@ class TestPrimitiveOp_2de136c7294af0e86efc08a814ab4a44(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_be815ac35b8fb788d3ba7cac2d85053b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_5e5f7a3edc5cf673b97da8f9ba4430cb(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_34eb536b90a981ec27ae21294e6d8618
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.031024882569909096], [0.008093641139566898], [0.0006668503629043698], [8.230728781200014e-06], [0.00030004570726305246], [0.025871440768241882]]], dtype='float32').reshape([1, 6, 1]),
+            paddle.to_tensor([[[0.0005681845941580832], [8.107848407234997e-05], [0.00014646546333096921], [0.0006095833377912641], [0.01269250363111496], [0.002227757591754198]]], dtype='float32').reshape([1, 6, 1]),
         ]
 
 
@@ -1998,13 +1998,13 @@ class TestPrimitiveOp_be815ac35b8fb788d3ba7cac2d85053b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_aa573c04c7234a9e8e260a5c68ea2410(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2f1cecf6802f7e91d79afa87c7ad6760(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_34eb536b90a981ec27ae21294e6d8618
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.007665802258998156], [0.003259093966335058], [0.011838911101222038], [0.000328052177792415], [0.0019898787140846252], [0.011855190619826317]]], dtype='float32').reshape([1, 6, 1]),
+            paddle.to_tensor([[[0.0023231676314026117], [0.014097107574343681], [0.0009215229656547308], [1.3902589671488386e-05], [0.013960241340100765], [0.0035805420484393835]]], dtype='float32').reshape([1, 6, 1]),
         ]
 
 
@@ -2082,13 +2082,13 @@ class PrimitiveOp_0754ecc0db194b3b22bf17b0285c0d55(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b8b8a0cbbf18934b3902241aa505c458(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7bf8d4cd558d7390cec8a822bf6540eb(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0754ecc0db194b3b22bf17b0285c0d55
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.3981112539768219], [0.14213699102401733], [0.25744423270225525], [0.4038943946361542], [0.057265594601631165], [0.30887165665626526]]], dtype='float32').reshape([1, 6, 1]),
+            paddle.to_tensor([[[0.23993122577667236], [0.21902430057525635], [0.05408056080341339], [0.08582931011915207], [0.20209373533725739], [0.29344651103019714]]], dtype='float32').reshape([1, 6, 1]),
         ]
 
 
@@ -2124,13 +2124,13 @@ class PrimitiveOp_1850200485d37ed88c2a8077c21db1ea(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_3189831697d663325e1f7ce11a31ac86(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7a9d7ddbc390789cbbd0f8c355fd702f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1850200485d37ed88c2a8077c21db1ea
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.03317592293024063], [0.011844743974506855], [0.021453676745295525], [0.033657852560281754], [0.004772130865603685], [0.025739293545484543]]], dtype='float32').reshape([1, 6, 1]),
+            paddle.to_tensor([[[0.019994260743260384], [0.018252016976475716], [0.004506711382418871], [0.007152439560741186], [0.016841137781739235], [0.024453865364193916]]], dtype='float32').reshape([1, 6, 1]),
         ]
 
 
@@ -2145,13 +2145,13 @@ class TestPrimitiveOp_3189831697d663325e1f7ce11a31ac86(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_99bc307fbb73a634562b8849142429fd(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_386bd5f42205d18de859c03a07f17089(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_34eb536b90a981ec27ae21294e6d8618
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.20845061540603638], [0.07442277669906616], [0.13479752838611603], [0.21147868037223816], [0.029984204098582268], [0.16172486543655396]]], dtype='float32').reshape([1, 6, 1]),
+            paddle.to_tensor([[[0.12562774121761322], [0.11468088626861572], [0.028316522017121315], [0.04494013637304306], [0.1058160662651062], [0.1536482721567154]]], dtype='float32').reshape([1, 6, 1]),
         ]
 
 
@@ -2397,13 +2397,13 @@ class PrimitiveOp_7ca943eb4dc2d48fc6c1b41c9a7cfaaa(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_725c4e1461de22d8adfaf8f69fb81bda(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_62ae05968a435e620e694fa7a64b12d3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_7ca943eb4dc2d48fc6c1b41c9a7cfaaa
     def get_inputs(self):
         return [
-            paddle.to_tensor([2.1047089099884033, 1.9849631786346436, 2.2382733821868896, 1.9915084838867188, 2.077735662460327, 2.184988498687744, 1.9679450988769531, 1.9365323781967163, 2.111717939376831, 2.164501667022705, 2.1740524768829346, 1.9865491390228271, 2.190770387649536, 2.2582972049713135, 2.0506789684295654, 2.075472831726074], dtype='float32').reshape([16]),
+            paddle.to_tensor([2.085664987564087, 2.054272174835205, 2.197524309158325, 2.075502872467041, 2.1086959838867188, 2.1254830360412598, 2.0257439613342285, 2.339451551437378, 2.0954179763793945, 1.9835768938064575, 2.0768680572509766, 2.152803897857666, 2.0790984630584717, 2.0758934020996094, 2.0010194778442383, 2.1025073528289795], dtype='float32').reshape([16]),
         ]
 
 
@@ -2439,13 +2439,13 @@ class PrimitiveOp_96c60bcc5171898abb9509e3bff7b47b(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5db6e74f7c59f7c1152ff82ea5bee679(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_cdf375368594e15b75c68896276363e6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_96c60bcc5171898abb9509e3bff7b47b
     def get_inputs(self):
         return [
-            paddle.to_tensor(2.0379791259765625, dtype='float32').reshape([]),
+            paddle.to_tensor(2.741183280944824, dtype='float32').reshape([]),
         ]
 
 
@@ -2670,13 +2670,13 @@ class TestPrimitiveOp_71e107d3cd904bc11d458d47610e9b64(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_89873260046f117791b5c4a5748501b0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_943f75c29478e0663b1b9d246a505bbb(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(38.280765533447266, dtype='float32').reshape([]),
+            paddle.to_tensor(33.62263488769531, dtype='float32').reshape([]),
         ]
 
 
@@ -2943,13 +2943,13 @@ class PrimitiveOp_3a51c7903592364d63851bc40cbcde75(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_698f0451bc901c794f294cd844e09d65(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_571a5465ae4042069d050812b5e61ebf(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -2985,13 +2985,13 @@ class PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b75c2b69d3bfe77c399e5a9ba32b5856(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fdef3e1767faf0356a8438ac5e44cc62(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -3027,13 +3027,13 @@ class PrimitiveOp_e3011b734e7b4f099752269cc799f48e(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d965e75763cd22636724945d1005c7ee(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c1dc2f4199ddd962da9f2b929618edf4(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -3069,13 +3069,13 @@ class PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2e17faf59639cec6ca086eb451fc5795(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_667898a02a3c20f668432da0d879e18e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1790, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1843, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -3090,13 +3090,13 @@ class TestPrimitiveOp_2e17faf59639cec6ca086eb451fc5795(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e6ca9ccff23b997a1564853c918855da(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4be745b15dee40b6e54bb6dc0cabfc34(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([1790, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -3111,13 +3111,13 @@ class TestPrimitiveOp_e6ca9ccff23b997a1564853c918855da(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_43c0f6ee2f4b7b0f7071dbedf4b24066(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_616a9beafb269ed2d9692fe8396c4298(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1790, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1843, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -3174,13 +3174,13 @@ class TestPrimitiveOp_c45890f0ca76cec28d4fd68a2699136b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7a712de822aa9a08437a72e7e742eeb9(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6868e9f20000afd0bedbf46231dc044b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_8c5c48e20e148adf43c49361ab160adf
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.36104175448417664]]], [[[0.8947722911834717]]], [[[0.07632102072238922]]], [[[0.1059940755367279]]], [[[0.17712408304214478]]], [[[0.4899694621562958]]], [[[0.7926150560379028]]], [[[0.3559685945510864]]], [[[0.6099570393562317]]], [[[0.20950312912464142]]], [[[0.9046854972839355]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.14670763909816742]]], [[[0.5661149024963379]]], [[[0.8276474475860596]]], [[[0.7816392183303833]]], [[[0.01712544448673725]]], [[[0.4572899639606476]]], [[[0.15663552284240723]]], [[[0.8234949707984924]]], [[[0.0032547125592827797]]], [[[0.88405841588974]]], [[[0.3822416067123413]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -3237,13 +3237,13 @@ class PrimitiveOp_36b3933768fa8c5d8fc0152e99a8b0c5(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e685d773de987aac0f1d06d9ac4e17dd(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_726e7919a5aaac88da06df6f3a0ea54d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_36b3933768fa8c5d8fc0152e99a8b0c5
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.34356489777565]]], [[[0.326866090297699]]], [[[0.8716182708740234]]], [[[0.7741524577140808]]], [[[0.8832617402076721]]], [[[0.9697280526161194]]], [[[0.31716257333755493]]], [[[0.23448394238948822]]], [[[0.7108698487281799]]], [[[0.37282106280326843]]], [[[0.8541688919067383]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.9093524813652039]]], [[[0.029479775577783585]]], [[[0.6057016849517822]]], [[[0.3420354723930359]]], [[[0.2525221109390259]]], [[[0.8293808698654175]]], [[[0.7880803346633911]]], [[[0.23870401084423065]]], [[[0.03532718867063522]]], [[[0.6772257685661316]]], [[[0.9328996539115906]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -3363,13 +3363,13 @@ class TestPrimitiveOp_f1830849fb0d37d6fce5398520bc1145(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_741bcf83bc25d1cb9f674258280f4ff2(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_77574eb4aa896c4340d7ca911ef88053(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(143.01986694335938, dtype='float32').reshape([]),
+            paddle.to_tensor(137.03318786621094, dtype='float32').reshape([]),
         ]
 
 
@@ -3384,13 +3384,13 @@ class TestPrimitiveOp_741bcf83bc25d1cb9f674258280f4ff2(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_8c90a58fa5d2dbe50479719007b77637(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_07875f3e0c10814e5c7201b76d474668(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(3.199944257736206, dtype='float32').reshape([]),
+            paddle.to_tensor(2.940685987472534, dtype='float32').reshape([]),
         ]
 
 
@@ -3741,13 +3741,13 @@ class TestPrimitiveOp_82a539f6d0184070e3f09eab3f810602(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_17a59d42b07d60debc1fc74e99ef3c3f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_1217387124a275912a585a14263e189e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(92.796630859375, dtype='float32').reshape([]),
+            paddle.to_tensor(145.04238891601562, dtype='float32').reshape([]),
         ]
 
 
@@ -3762,13 +3762,13 @@ class TestPrimitiveOp_17a59d42b07d60debc1fc74e99ef3c3f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1a07d40264576c7b43b37630af98388d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_543c77cfbb823e005ce6615f82ee59f8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(3.537565231323242, dtype='float32').reshape([]),
+            paddle.to_tensor(2.7999253273010254, dtype='float32').reshape([]),
         ]
 
 
@@ -4014,13 +4014,13 @@ class TestPrimitiveOp_e5c3869711921c90d3d060170d70d0ab(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4c809c5a94810fbbd5455e75541d3666(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_05f3d626f44e600a19e84363f771e23c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[-0.028364624828100204], [0.07311856746673584], [0.11045503616333008], [-0.0226440392434597], [0.0005842080572620034], [-0.0005055991350673139], [-0.03523751720786095], [-0.0066676028072834015], [-0.1427663117647171]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.042099811136722565], [-0.008985240943729877], [-0.07179616391658783], [-0.08217840641736984], [-0.04579147323966026], [-0.01613505743443966], [0.03250643610954285], [-0.06761632859706879], [-0.0010444661602377892]], dtype='float32').reshape([9, 1]),
         ]
 
 
@@ -4035,13 +4035,13 @@ class TestPrimitiveOp_4c809c5a94810fbbd5455e75541d3666(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_3b4cd93ad57dbff60ea4e621b61d800e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2a9deeded9b0334241b6bfb45c04bec1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.02520156465470791], [0.014177864417433739], [0.01927180588245392], [0.003695995081216097], [0.024889569729566574], [0.1187274307012558], [0.0058793723583221436], [-0.055993981659412384], [0.05600874125957489]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.12176238745450974], [0.027568111196160316], [-0.003771738614886999], [-0.03208067640662193], [0.016935473307967186], [0.004899502266198397], [-0.018346304073929787], [0.043553732335567474], [0.06336329877376556]], dtype='float32').reshape([9, 1]),
         ]
 
 
@@ -4056,13 +4056,13 @@ class TestPrimitiveOp_3b4cd93ad57dbff60ea4e621b61d800e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_0f8678fa86f2b6f93e46820bd738d18c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_71328eb67de469ef8e779c94b5fafc32(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[-2.1255104541778564], [4.157234191894531], [4.731431484222412], [-7.126642227172852], [-0.9765280485153198], [-1.0042585134506226], [-6.993414878845215], [-0.8809228539466858], [-3.5490005016326904]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[-0.6542461514472961], [-1.325928807258606], [18.035297393798828], [1.5616170167922974], [-3.7038791179656982], [-4.293203353881836], [-2.771824598312378], [-2.552480697631836], [-1.0164837837219238]], dtype='float32').reshape([9, 1]),
         ]
 
 
@@ -4098,13 +4098,13 @@ class PrimitiveOp_8b32e9101c85baa85d90404ba2a46caa(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ec21c0f8bf5b1c6d60a376b69b5fa0f6(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f5196320a5f64922936ed6183dc90e22(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_8b32e9101c85baa85d90404ba2a46caa
     def get_inputs(self):
         return [
-            paddle.to_tensor([[3.1255104541778564], [-3.1572341918945312], [-3.731431484222412], [8.126642227172852], [1.9765280485153198], [2.004258632659912], [7.993414878845215], [1.880922794342041], [4.5490007400512695]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[1.6542460918426514], [2.3259286880493164], [-17.035297393798828], [-0.5616170167922974], [4.703879356384277], [5.293203353881836], [3.771824598312378], [3.552480697631836], [2.016483783721924]], dtype='float32').reshape([9, 1]),
         ]
 
 
@@ -4161,13 +4161,13 @@ class PrimitiveOp_fa323631d27cfc9b03f1d10081396150(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c40f3206f7aac5d44c5cdc9fcd0a50da(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6d5b76c506b2f5b96596aa5fde30edd2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fa323631d27cfc9b03f1d10081396150
     def get_inputs(self):
         return [
-            paddle.to_tensor(11726.607421875, dtype='float32').reshape([]),
+            paddle.to_tensor(11655.833984375, dtype='float32').reshape([]),
         ]
 
 
@@ -4182,13 +4182,13 @@ class TestPrimitiveOp_c40f3206f7aac5d44c5cdc9fcd0a50da(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c15c4a95a303d6ba3ed2d681bf45bcf7(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_3d0bfcb9f22484108c94c8892ec63c37(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(1066.0552978515625, dtype='float32').reshape([]),
+            paddle.to_tensor(1059.621337890625, dtype='float32').reshape([]),
         ]
 
 
@@ -4203,13 +4203,13 @@ class TestPrimitiveOp_c15c4a95a303d6ba3ed2d681bf45bcf7(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_8170b7de04ef68a2f9f548e67b6f48a3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e683d039e0d2da0924d802ec5e9ede8f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1585145741701126], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.16137389838695526], dtype='float32').reshape([1]),
         ]
 
 
@@ -4224,13 +4224,13 @@ class TestPrimitiveOp_8170b7de04ef68a2f9f548e67b6f48a3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_477c44fb80d220dc170080005e586d77(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8ce36f65dfb413aa2630de93ec8b2c45(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cff539c7b50e4cde83d724798859634e
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[1.4196697473526]], [[1.1253246068954468]], [[1.5811030864715576]], [[1.14669930934906]], [[1.4693299531936646]], [[1.432719111442566]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[1.144540548324585]], [[1.1087323427200317]], [[1.4470272064208984]], [[1.3074921369552612]], [[1.1743403673171997]], [[1.3312852382659912]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -4245,13 +4245,13 @@ class TestPrimitiveOp_477c44fb80d220dc170080005e586d77(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4e2376ad4504b7f98b365acdb8f2b20e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8d24a143a053c3eaaa25482114c76e5c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cff539c7b50e4cde83d724798859634e
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[1.3341165781021118]], [[1.0979397296905518]], [[1.335606575012207]], [[1.1619012355804443]], [[1.2406119108200073]], [[1.186174750328064]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[1.2762423753738403]], [[1.560146689414978]], [[1.1820589303970337]], [[1.6330863237380981]], [[1.4411317110061646]], [[1.2321866750717163]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -4371,13 +4371,13 @@ class TestPrimitiveOp_8421855a2e4da6915831e95dd552e0b1(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_803e00e8da0c6838f41d5295896a2dd2(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e54432ef3ed54f009e88acd5ae7bcd4a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([5590, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -4392,13 +4392,13 @@ class TestPrimitiveOp_803e00e8da0c6838f41d5295896a2dd2(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_85fa55a407a21c3ac8fedb92aaf9a31e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ba2fd01a241c638091b24b936bf90488(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([5590, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -4413,13 +4413,13 @@ class TestPrimitiveOp_85fa55a407a21c3ac8fedb92aaf9a31e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2767045f52934200ffdd835f2aa4325f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7f50c6f729a3652cd7f2237f1df8c129(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([5590, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -4434,13 +4434,13 @@ class TestPrimitiveOp_2767045f52934200ffdd835f2aa4325f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_be72bd47b8fca3f4e7211904a52fa1b0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d9a548666e4cbe3020a7646a1086db12(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[5590, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[5583, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -4455,13 +4455,13 @@ class TestPrimitiveOp_be72bd47b8fca3f4e7211904a52fa1b0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_43c5ef483ef3fa290d93c37baf9ae6d1(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_eb19b68b5b7f680184110b5272b6990f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([5590, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -4476,13 +4476,13 @@ class TestPrimitiveOp_43c5ef483ef3fa290d93c37baf9ae6d1(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e78ef8c3da85aac31c08bf45df90b92f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_80d7b28d1b5fa288f5ef8a15c8849ab3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[5590, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[5583, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -4665,13 +4665,13 @@ class TestPrimitiveOp_61303d7678ea81e2b16b0cc027ee36d8(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_89dd639c8e2235bc6f6f3339af40a4c5(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_bb0865d167f9022c7d66cfa464d678f3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(135.08888244628906, dtype='float32').reshape([]),
+            paddle.to_tensor(170.35464477539062, dtype='float32').reshape([]),
         ]
 
 
@@ -4686,13 +4686,13 @@ class TestPrimitiveOp_89dd639c8e2235bc6f6f3339af40a4c5(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a327d9b1896c71d189b1433a75b2b43d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_57cc24af52c5b32838297652baa065fd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(6.461674213409424, dtype='float32').reshape([]),
+            paddle.to_tensor(4.984871864318848, dtype='float32').reshape([]),
         ]
 
 
@@ -4749,13 +4749,13 @@ class TestPrimitiveOp_d619402123aa707e1d7e3cbab17f45a5(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1d8b18d19388d70466607825a9b91dd2(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d313e73f4f0da799c4f6b4ba58fa36fc(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_96c60bcc5171898abb9509e3bff7b47b
     def get_inputs(self):
         return [
-            paddle.to_tensor(5.86119270324707, dtype='float32').reshape([]),
+            paddle.to_tensor(6.1650896072387695, dtype='float32').reshape([]),
         ]
 
 
@@ -4812,13 +4812,13 @@ class PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_58203154a52bd55a118596fcbf1d38f7(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7e9cacea17482091aa821179af7a15fd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.038638655096292496], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.12621042132377625], dtype='float32').reshape([1]),
         ]
 
 
@@ -4833,13 +4833,13 @@ class TestPrimitiveOp_58203154a52bd55a118596fcbf1d38f7(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_57984b5914a72ea2bbf319a497d36a1c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4a62b7972cedf6574a38d9812b62a730(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.030036229640245438], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.182074636220932], dtype='float32').reshape([1]),
         ]
 
 
@@ -4854,13 +4854,13 @@ class TestPrimitiveOp_57984b5914a72ea2bbf319a497d36a1c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e7d3f8cec2cb03bac5fff0ae66f54ab0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_06d928883ef6435976c3f042f9503843(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.21129098534584045], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.7408198714256287], dtype='float32').reshape([1]),
         ]
 
 
@@ -4938,13 +4938,13 @@ class TestPrimitiveOp_31a74226b6b1690b05eda7af919e62e3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5dffd8b48c275b2833b954ab3850615e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_749d05bf6ef58ff2c05d26d4ddbb5856(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(135.16456604003906, dtype='float32').reshape([]),
+            paddle.to_tensor(194.7811737060547, dtype='float32').reshape([]),
         ]
 
 
@@ -4959,13 +4959,13 @@ class TestPrimitiveOp_5dffd8b48c275b2833b954ab3850615e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_680c22837ba38449b5c882d9b52545d2(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_25656abf92cc7f282af5fc53f887ca84(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(94.2795181274414, dtype='float32').reshape([]),
+            paddle.to_tensor(60.60274887084961, dtype='float32').reshape([]),
         ]
 
 
@@ -5001,13 +5001,13 @@ class TestPrimitiveOp_677938510007416acdeaf4f928f3e855(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_8b13922769bafb69f1d1fbb8ebc7809a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0058a2beb07089b1301eac31a7790b4a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.24626313149929047, 0.760871946811676, 0.6686475872993469, 0.919464111328125, 0.7585005164146423, 0.7920091152191162], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.5620812177658081, 0.6867151856422424, 0.6855148077011108, 0.5335599184036255, 0.7576586008071899, 0.3062034845352173], dtype='float32').reshape([6]),
         ]
 
 
@@ -5022,13 +5022,13 @@ class TestPrimitiveOp_8b13922769bafb69f1d1fbb8ebc7809a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fcb37df5308c828942e14c65b41957d1(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2454b31cee7f8965269d63f6172dc09f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.31528782844543457, 0.47412317991256714, 0.35625356435775757, 0.1609477698802948, 0.5521408915519714, 0.7993626594543457], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.4303278923034668, 0.4807954430580139, 0.6096506118774414, 0.3854425549507141, 0.44840431213378906, 0.8539621829986572], dtype='float32').reshape([6]),
         ]
 
 
@@ -5043,13 +5043,13 @@ class TestPrimitiveOp_fcb37df5308c828942e14c65b41957d1(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_769d80a7c69cf69139719742c6022b37(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c9d4ed55259100ea88c733a9170ca62b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.9104808568954468, 0.44420325756073, 0.41188448667526245, 0.586890697479248, 0.3942866325378418, 0.5727201700210571], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.39956134557724, 0.22627024352550507, 0.6888890862464905, 0.5276706218719482, 0.36804234981536865, 0.669101357460022], dtype='float32').reshape([6]),
         ]
 
 
@@ -5064,13 +5064,13 @@ class TestPrimitiveOp_769d80a7c69cf69139719742c6022b37(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fa07813992128990bc666a3103a242e3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_36ee8f3c85b78063ccfd2901bf406f14(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4689977765083313, 0.3186204731464386, 0.1935100257396698, 0.5893430709838867, 0.6224513053894043, 0.666252851486206], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.49171873927116394, 0.26410073041915894, 0.5037387013435364, 0.6381248831748962, 0.0751088410615921, 0.5432639122009277], dtype='float32').reshape([6]),
         ]
 
 
@@ -5106,13 +5106,13 @@ class PrimitiveOp_47067b3cd9df7ff9f50ad8a9e3e7f0ac(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b70d4dd7ccdfe3803f277c2b44766fe0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_776657d42e0380aa977256444abc9178(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_47067b3cd9df7ff9f50ad8a9e3e7f0ac
     def get_inputs(self):
         return [
-            paddle.to_tensor([-0.014530106447637081, 0.030042381957173347, -0.044814519584178925, 0.04457983002066612, 0.06122412905097008, -0.004725469741970301], dtype='float32').reshape([6]),
+            paddle.to_tensor([-0.08293336629867554, 0.039500463753938675, -0.07242836803197861, -0.0063262986950576305, 0.0004034579615108669, -0.0601547546684742], dtype='float32').reshape([6]),
         ]
 
 
@@ -5127,13 +5127,13 @@ class TestPrimitiveOp_b70d4dd7ccdfe3803f277c2b44766fe0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fe22158f9f5dc70e9163b9a90741c9b8(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d059dc53624f6c711c31bd636ae24ad5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_47067b3cd9df7ff9f50ad8a9e3e7f0ac
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.11620298027992249, 0.031115036457777023, 0.02310318686068058, 0.07353190332651138, 0.034398823976516724, 0.016451464965939522], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.00754538644105196, 0.06474153697490692, 0.0028071794658899307, 0.015970760956406593, 0.0727875828742981, 0.05705707147717476], dtype='float32').reshape([6]),
         ]
 
 
@@ -5148,13 +5148,13 @@ class TestPrimitiveOp_fe22158f9f5dc70e9163b9a90741c9b8(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_0dcc761f510f8a38bbbcb61f6a8bae95(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f31ace1a3f7df98304cc1365d0aec4b3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_47067b3cd9df7ff9f50ad8a9e3e7f0ac
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1659451723098755, 0.01078074611723423, 0.033248983323574066, 0.030756626278162003, 0.020945720374584198, 0.0591900609433651], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.05867644026875496, 0.2890215516090393, 0.023738102987408638, 0.01538363192230463, 0.1062421128153801, 0.07423575967550278], dtype='float32').reshape([6]),
         ]
 
 
@@ -5190,13 +5190,13 @@ class PrimitiveOp_172dba8bb0fc3649d7ebec4832c0c5fb(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e3c1adc24695b4cfc96bee42b0fac900(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_bdf906277c3bc5a1a0a8de5bfbc4a6c6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_172dba8bb0fc3649d7ebec4832c0c5fb
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.5114448070526123, 2.608574390411377, -2.1502342224121094, 0.9432817101478577, 0.6861600279808044, 0.8711748123168945], dtype='float32').reshape([6]),
+            paddle.to_tensor([-0.029882878065109253, -1.715312123298645, 0.4616372585296631, -1.0014398097991943, -1.2729142904281616, 0.7110593914985657], dtype='float32').reshape([6]),
         ]
 
 
@@ -5232,13 +5232,13 @@ class PrimitiveOp_6e8fea507afc25f2b240fd87aceebf18(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_568cce4f012882214d7890d076d80f30(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e6cd2b141382375bdbb1df24a04f3647(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_6e8fea507afc25f2b240fd87aceebf18
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.0, 0.0, -0.0, 0.0, 0.0, -0.0], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.0, 0.0, 0.0, -0.0, 0.0, -0.0], dtype='float32').reshape([6]),
         ]
 
 
@@ -5253,13 +5253,13 @@ class TestPrimitiveOp_568cce4f012882214d7890d076d80f30(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_39f796c4a672e9f460e55b485b1326a9(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fa6120458fd484431f5a08e5476dc51c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_47067b3cd9df7ff9f50ad8a9e3e7f0ac
     def get_inputs(self):
         return [
-            paddle.to_tensor([1.1060127019882202, 3.757826805114746, 2.873838186264038, 1.3606146574020386, 1.19081449508667, 1.3075892925262451], dtype='float32').reshape([6]),
+            paddle.to_tensor([1.0003619194030762, 2.1924681663513184, 1.0863698720932007, 1.4064528942108154, 1.656687617301941, 1.2049143314361572], dtype='float32').reshape([6]),
         ]
 
 
@@ -5274,13 +5274,13 @@ class TestPrimitiveOp_39f796c4a672e9f460e55b485b1326a9(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ec5d99d2b480e79b8fbe18e3f8ca7624(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4651ebf376ca0dc65761775aa1d4053d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([1.7104105949401855, 5.910105228424072, 2.916658878326416, 3.4863429069519043, 2.6728601455688477, 1.3502984046936035], dtype='float32').reshape([6]),
+            paddle.to_tensor([1.1285932064056396, 1.8725777864456177, 1.1251230239868164, 2.1556272506713867, 1.9454121589660645, 1.8034416437149048], dtype='float32').reshape([6]),
         ]
 
 
@@ -5316,13 +5316,118 @@ class PrimitiveOp_a1718330960e9bf17ba6650e91fcf5d1(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_82eb7ff074a25f92a104cdfdbdd3f371(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_bbba16e209f6048f976f32a89613e284(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_a1718330960e9bf17ba6650e91fcf5d1
     def get_inputs(self):
         return [
-            paddle.to_tensor(3.007779598236084, dtype='float32').reshape([]),
+            paddle.to_tensor(1.6717958450317383, dtype='float32').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5d817d959884124f753884b587980f75(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_153e4b3ec4edb9e3708c7a867c1a5d0c(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_382f93fd55f4a696d1d02006528a405e(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_89a5b186a211840171888165b0c5f29d(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
+    def get_inputs(self):
+        return [
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1724, 4], dtype='int64'), 'int64'),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c5fb7f0b7e396f251850efb66536ada9(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -5358,13 +5463,13 @@ class PrimitiveOp_e08c11f495c6c2d8853f97a04ec822cb(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_eeccc873ebc870e32d1c884ac02ceee9(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_025dc46c793565a62a1bc73f5bf2ca9b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e08c11f495c6c2d8853f97a04ec822cb
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1790, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1724, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -5505,13 +5610,13 @@ class TestPrimitiveOp_bcd52bedd80ac34454df52d20869162c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5d8513fba2cffcfe7acf8f5256587b86(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4b2d39213e7e9c30e43ba96cd4a623ae(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_394a13fb38ae78b5229e01def640a2ef
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.15446485579013824]], [[0.32756587862968445]], [[0.3810169994831085]], [[0.01443842239677906]], [[0.48069822788238525]], [[0.2653246521949768]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.22004751861095428]], [[0.04282885789871216]], [[0.016098707914352417]], [[0.1740298569202423]], [[0.3826678991317749]], [[0.3837634325027466]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -5526,13 +5631,13 @@ class TestPrimitiveOp_5d8513fba2cffcfe7acf8f5256587b86(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f29d14b36493b89572a00e836458117f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fd4818ac440bb523d379335cf7d76f24(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_394a13fb38ae78b5229e01def640a2ef
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.48421430587768555]], [[0.44111907482147217]], [[0.2546563148498535]], [[0.15832459926605225]], [[0.4479765295982361]], [[0.024577025324106216]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.24193517863750458]], [[0.35259920358657837]], [[0.45025011897087097]], [[0.32819902896881104]], [[0.11765152961015701]], [[0.10464473813772202]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -5547,13 +5652,13 @@ class TestPrimitiveOp_f29d14b36493b89572a00e836458117f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4eaffe55d953da0e3de3890d58088680(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9da1115ba538a9093641365f121807a3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_717c0ad4ce4528976dd3db9dc275cc90
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.19967179000377655]], [[0.38305148482322693]], [[0.13043750822544098]], [[0.050817254930734634]], [[0.2519482374191284]], [[0.16240471601486206]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.023653460666537285]], [[0.005231890827417374]], [[0.45513296127319336]], [[0.49975311756134033]], [[0.4481242299079895]], [[0.19772440195083618]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -5568,13 +5673,13 @@ class TestPrimitiveOp_4eaffe55d953da0e3de3890d58088680(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_307967df4e35484c82b5aa5cde3d9ddf(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c147eb129913f97407dcdaeeff69a634(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_717c0ad4ce4528976dd3db9dc275cc90
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.4722890853881836]], [[0.46297892928123474]], [[0.09087637811899185]], [[0.06543606519699097]], [[0.01585124433040619]], [[0.29577475786209106]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.4689759910106659]], [[0.11694087833166122]], [[0.38196560740470886]], [[0.19081149995326996]], [[0.23261572420597076]], [[0.030995110049843788]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -5610,13 +5715,13 @@ class TestPrimitiveOp_6ad3014a83851df773e6be831eff1c31(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1fef45427e5cf9c7f391da7696de0d68(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9928ae97274b53983f470c879ebd4c72(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.13087128102779388], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.31723156571388245], dtype='float32').reshape([1]),
         ]
 
 
@@ -5652,13 +5757,13 @@ class PrimitiveOp_a3c89bf5f2e4879f3f4b833738580285(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4cb4ee09a67349961dba37855d4ebccf(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_bb74bcf67084f3b417d148764776a04c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_a3c89bf5f2e4879f3f4b833738580285
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.0027740164659917355], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.12938806414604187], dtype='float32').reshape([1]),
         ]
 
 
@@ -5694,13 +5799,13 @@ class PrimitiveOp_b567251ac2041610b611e4127e0bfc4d(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_47306b5565d64d2d23a1a00d2e1a7029(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fc8c8ea4391d427ff6401995ac9898cb(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b567251ac2041610b611e4127e0bfc4d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4701569378376007], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.477792888879776], dtype='float32').reshape([1]),
         ]
 
 
@@ -5967,13 +6072,13 @@ class TestPrimitiveOp_15684f9d2b19b7e939910ca26b278a2d(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_69504f8bb2245ea534acfd0e4aadd3e8(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_799963a6642a25c6c0ceb82e8efb4306(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_7ca943eb4dc2d48fc6c1b41c9a7cfaaa
     def get_inputs(self):
         return [
-            paddle.to_tensor([2.0176262855529785, 2.009506940841675, 2.0656816959381104, 2.1150894165039062, 2.21146297454834, 2.1383681297302246, 1.9470956325531006, 1.9690678119659424, 2.209590435028076, 1.9824647903442383, 2.1645963191986084, 1.99290132522583, 2.053614616394043, 2.1356570720672607, 2.1712050437927246, 1.9503334760665894, 1.9933948516845703, 2.186523675918579, 2.1385579109191895, 2.1756784915924072, 2.1171774864196777, 2.063237190246582, 2.133389949798584, 2.0328798294067383], dtype='float32').reshape([24]),
+            paddle.to_tensor([2.234365940093994, 2.051220655441284, 2.016174554824829, 2.2723546028137207, 2.237623929977417, 2.289452314376831, 2.089562177658081, 2.166801929473877, 2.1801276206970215, 2.1593761444091797, 1.9820835590362549, 1.9766242504119873, 2.1493327617645264, 2.0075392723083496, 1.993208885192871, 2.1142725944519043, 1.9282859563827515, 2.2113802433013916, 2.090029239654541, 2.214477777481079, 1.9372730255126953, 2.3078088760375977, 1.913081407546997, 2.1326944828033447], dtype='float32').reshape([24]),
         ]
 
 
@@ -5988,13 +6093,13 @@ class TestPrimitiveOp_69504f8bb2245ea534acfd0e4aadd3e8(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e71cca151aef173d2f5e83bcf7018f0e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7e604994420a96c8f3757f82963144f2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_96c60bcc5171898abb9509e3bff7b47b
     def get_inputs(self):
         return [
-            paddle.to_tensor(3.778707981109619, dtype='float32').reshape([]),
+            paddle.to_tensor(3.4218554496765137, dtype='float32').reshape([]),
         ]
 
 
@@ -6009,13 +6114,13 @@ class TestPrimitiveOp_e71cca151aef173d2f5e83bcf7018f0e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_af6bd9dd6c16cc5b50e9e7fc4995b5dd(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2e964beccf62db541c6ba10c29aa18f1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1277855932712555], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3008784055709839], dtype='float32').reshape([1]),
         ]
 
 
@@ -6051,13 +6156,13 @@ class PrimitiveOp_e04220878c0158ed048ae9adcf36effe(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d541be0fff7a610a00dbe7b2284f9cd1(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0dbe32e242e074b7806e872e75932b48(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e04220878c0158ed048ae9adcf36effe
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.3938809875695196], dtype='float64').reshape([1]),
+            paddle.to_tensor([0.4103679538513789], dtype='float64').reshape([1]),
         ]
 
 
@@ -6156,13 +6261,13 @@ class TestPrimitiveOp_f137b47b74342254ec2438a190b1a4a3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_315d72feeef21e61809e917b022e7d46(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_1d5fdebcc8cc298149db8b2c79c55dca(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([1532, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -6177,13 +6282,13 @@ class TestPrimitiveOp_315d72feeef21e61809e917b022e7d46(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a1d89b67512a4e296b2e26a3fa553f51(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fcb30daa0e1b26f7d42ea4a1b120beaf(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([1532, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -6198,13 +6303,13 @@ class TestPrimitiveOp_a1d89b67512a4e296b2e26a3fa553f51(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e5563b61fa541f6e0693fcf30ca7655f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_defb9a282e7c9956111040e9f8bbde04(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([1532, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -6219,13 +6324,13 @@ class TestPrimitiveOp_e5563b61fa541f6e0693fcf30ca7655f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4299e5e5b3988e8ca0ecba9b889026d9(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_82e147f511fc85430e17e0a84316df1d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1532, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1492, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -6240,13 +6345,13 @@ class TestPrimitiveOp_4299e5e5b3988e8ca0ecba9b889026d9(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_284c1382732048dfe538c7787564918f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c4d09f0cf5600adffcc33f90646f4efa(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([1532, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -6261,13 +6366,13 @@ class TestPrimitiveOp_284c1382732048dfe538c7787564918f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_de53951163e41ea740a2091b483214ce(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_cd91e94613ddb40ae3fb41fdd0672867(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1532, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1492, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -6324,13 +6429,13 @@ class TestPrimitiveOp_37fb07db5c4b3cbad052c64b46e4dc7e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_cf9b9045583538a7b3b606f264f8dc00(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_47339cef7934c628ad88114ecbf7469a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_34eb536b90a981ec27ae21294e6d8618
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.24369297921657562], [0.2448996752500534]]], dtype='float32').reshape([1, 2, 1]),
+            paddle.to_tensor([[[0.2455739676952362], [0.24429281055927277]]], dtype='float32').reshape([1, 2, 1]),
         ]
 
 
@@ -6408,13 +6513,13 @@ class TestPrimitiveOp_8ce0584ac80594da82465f9a828fe623(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7941a28b4e26fa569402d6ae17a5177b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6e0114f60155c8f1dbbe879bccab15b1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_7ca943eb4dc2d48fc6c1b41c9a7cfaaa
     def get_inputs(self):
         return [
-            paddle.to_tensor([2.227128505706787, 2.0974793434143066, 2.0132222175598145, 2.1894569396972656], dtype='float32').reshape([4]),
+            paddle.to_tensor([2.148212432861328, 1.8930186033248901, 1.9252851009368896, 2.2846548557281494], dtype='float32').reshape([4]),
         ]
 
 
@@ -6429,13 +6534,13 @@ class TestPrimitiveOp_7941a28b4e26fa569402d6ae17a5177b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d00e12be98524c61ade3d52e54d987a5(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_b05310f736cf44349cf7872237b08b6d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_96c60bcc5171898abb9509e3bff7b47b
     def get_inputs(self):
         return [
-            paddle.to_tensor(0.4112092852592468, dtype='float32').reshape([]),
+            paddle.to_tensor(0.6592673063278198, dtype='float32').reshape([]),
         ]
 
 
@@ -6492,13 +6597,13 @@ class TestPrimitiveOp_1960d770594f24ef8842cbdb197ba987(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_61c97d9f9664702a8fbb061082bc7bdb(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_18792bda281929455e68a2c22779ccb2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(152.88465881347656, dtype='float32').reshape([]),
+            paddle.to_tensor(114.01244354248047, dtype='float32').reshape([]),
         ]
 
 
@@ -6513,13 +6618,13 @@ class TestPrimitiveOp_61c97d9f9664702a8fbb061082bc7bdb(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1ceec983dcf18c324dd8ae7b771b0cae(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9333d7e0b539e89370a20b9123ac62dd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(4.782093048095703, dtype='float32').reshape([]),
+            paddle.to_tensor(3.9615707397460938, dtype='float32').reshape([]),
         ]
 
 
@@ -6534,13 +6639,13 @@ class TestPrimitiveOp_1ceec983dcf18c324dd8ae7b771b0cae(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ccffb678b2c67e239e05e7356cc1ab20(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_363a06e24a18fffc5325a9379ae4b163(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(157.826171875, dtype='float32').reshape([]),
+            paddle.to_tensor(159.60186767578125, dtype='float32').reshape([]),
         ]
 
 
@@ -6555,13 +6660,13 @@ class TestPrimitiveOp_ccffb678b2c67e239e05e7356cc1ab20(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_8a91905921657fa72dda88b7f20dca52(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c3396e3f977de298633bf1f1085a69b1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(3.351870536804199, dtype='float32').reshape([]),
+            paddle.to_tensor(4.105981349945068, dtype='float32').reshape([]),
         ]
 
 
@@ -6639,13 +6744,13 @@ class TestPrimitiveOp_edf27cc9c8ef213edc40bd2689fccfe8(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_48892c17b228e057a64d8e007336bf5e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_118a2035fc54e395d7a074abf83b7a00(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(125.39280700683594, dtype='float32').reshape([]),
+            paddle.to_tensor(175.9481658935547, dtype='float32').reshape([]),
         ]
 
 
@@ -6660,13 +6765,13 @@ class TestPrimitiveOp_48892c17b228e057a64d8e007336bf5e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_8f15c9f38abc413330d11dc07c2cba5f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c9d702896fde234cf63cea129c261477(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(7.678503513336182, dtype='float32').reshape([]),
+            paddle.to_tensor(5.762195587158203, dtype='float32').reshape([]),
         ]
 
 
@@ -6681,13 +6786,13 @@ class TestPrimitiveOp_8f15c9f38abc413330d11dc07c2cba5f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_52f6dd71fb2bdf3a4965c14c258a7035(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_da38cae04e36f2c7206c9c8d0ec97226(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[-0.07693696767091751]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.13390283286571503]], dtype='float32').reshape([1, 1]),
         ]
 
 
@@ -6702,13 +6807,13 @@ class TestPrimitiveOp_52f6dd71fb2bdf3a4965c14c258a7035(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_0914095533abe35c9683e825c2b66d7e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_40428ceee101a585cab7025d0a609e5e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.0757695659995079]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[-0.0009522559703327715]], dtype='float32').reshape([1, 1]),
         ]
 
 
@@ -6723,13 +6828,13 @@ class TestPrimitiveOp_0914095533abe35c9683e825c2b66d7e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_cf039b3b9debf1656c92574c1c3d03bf(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_82ae9a6c599c22fccd0544d56d879432(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[-2.0154073238372803]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[-141.616455078125]], dtype='float32').reshape([1, 1]),
         ]
 
 
@@ -6744,13 +6849,13 @@ class TestPrimitiveOp_cf039b3b9debf1656c92574c1c3d03bf(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2ec8dee3140d19d6810d44448e212280(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f21592d84fc0aee48bb0f7be5915054c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_8b32e9101c85baa85d90404ba2a46caa
     def get_inputs(self):
         return [
-            paddle.to_tensor([[3.0154073238372803]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[142.616455078125]], dtype='float32').reshape([1, 1]),
         ]
 
 
@@ -6765,13 +6870,13 @@ class TestPrimitiveOp_2ec8dee3140d19d6810d44448e212280(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f982700093e5f9678bf70dcaea7a2b30(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d9e2bdcef70eacaa6119e89dd40c17be(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.1311141550540924], [-0.020419638603925705], [-0.008005145937204361], [0.02373400144279003], [-0.056487102061510086], [0.060551177710294724]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.01203993335366249], [-0.014768431894481182], [-0.06071321293711662], [-0.016336694359779358], [0.0300133116543293], [0.11517009139060974]], dtype='float32').reshape([6, 1]),
         ]
 
 
@@ -6786,13 +6891,13 @@ class TestPrimitiveOp_f982700093e5f9678bf70dcaea7a2b30(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d82ee832497cab7a41bd16aba3eec2b0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0ca7e665e156ac030d5855f287ce6958(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.11986649036407471], [-0.01700592413544655], [-0.0011857828358188272], [0.0023918775841593742], [-0.016404787078499794], [0.0033397350925952196]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.0852174460887909], [0.044966477900743484], [0.013216112740337849], [0.01536997128278017], [0.017128251492977142], [0.09939897805452347]], dtype='float32').reshape([6, 1]),
         ]
 
 
@@ -6807,13 +6912,13 @@ class TestPrimitiveOp_d82ee832497cab7a41bd16aba3eec2b0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ff4b8223fddbbd15233008508b78c97c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_81d5e0859dc4de5d7fba7a85c7f40932(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.09383493661880493], [0.20073677599430084], [5.750938415527344], [8.922749519348145], [2.4433302879333496], [17.13053321838379]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[-0.8587151765823364], [-1.3284320831298828], [-5.593878269195557], [-2.062896728515625], [0.752269446849823], [0.1586647480726242]], dtype='float32').reshape([6, 1]),
         ]
 
 
@@ -6828,13 +6933,13 @@ class TestPrimitiveOp_ff4b8223fddbbd15233008508b78c97c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_21f61869dc555d04bf44558b551b910a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7fd3b23e31f1ab8544ab20bcb831d4be(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_8b32e9101c85baa85d90404ba2a46caa
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.9061650633811951], [0.7992632389068604], [-4.750938415527344], [-7.9227495193481445], [-1.4433302879333496], [-16.13053321838379]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[1.8587151765823364], [2.328432083129883], [6.593878269195557], [3.062896728515625], [0.247730553150177], [0.8413352370262146]], dtype='float32').reshape([6, 1]),
         ]
 
 
@@ -6849,13 +6954,13 @@ class TestPrimitiveOp_21f61869dc555d04bf44558b551b910a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ab7974c7284e8dcb9b1fa4c3682cb4ea(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6237338966e6bdb8c7c518e148b126dd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_73f67d0facd4c134cbecab2012e8f34b
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.5430904626846313]]], [[[0.1321212202310562]]], [[[0.05979563295841217]]], [[[0.1522083580493927]]], [[[0.8677469491958618]]], [[[0.9952152371406555]]], [[[0.26685720682144165]]], [[[0.23654769361019135]]], [[[0.6884814500808716]]], [[[0.3412136733531952]]], [[[0.43194466829299927]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.22607621550559998]]], [[[0.7577430009841919]]], [[[0.3834150731563568]]], [[[0.23840688169002533]]], [[[0.32386109232902527]]], [[[0.8511556386947632]]], [[[0.6135063767433167]]], [[[0.21878784894943237]]], [[[0.14223983883857727]]], [[[0.37863215804100037]]], [[[0.8423483371734619]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -7374,13 +7479,13 @@ class TestPrimitiveOp_fc7a9878f6451756a6d1ce7f2b5bdadf(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_63772e7f72010214e80551765c70b8ea(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_19099ce0e97e26ed9840e84f59e488f6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_34eb536b90a981ec27ae21294e6d8618
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.24523064494132996]]], dtype='float32').reshape([1, 1, 1]),
+            paddle.to_tensor([[[0.2418222427368164]]], dtype='float32').reshape([1, 1, 1]),
         ]
 
 
@@ -7500,13 +7605,13 @@ class TestPrimitiveOp_367080bf8a6001e2238d7e7c19807a73(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_abee4a3b045671be2601d4b827ad44a3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_81a813e697042cde329eec1f9106e83b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(168.7108154296875, dtype='float32').reshape([]),
+            paddle.to_tensor(130.91665649414062, dtype='float32').reshape([]),
         ]
 
 
@@ -7521,13 +7626,13 @@ class TestPrimitiveOp_abee4a3b045671be2601d4b827ad44a3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2d710a6d45fd09208713ce6112cee1e6(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_818b7d8992eaa02d2f80e716171d4d44(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(3.951643705368042, dtype='float32').reshape([]),
+            paddle.to_tensor(3.0816233158111572, dtype='float32').reshape([]),
         ]
 
 
@@ -7668,13 +7773,13 @@ class TestPrimitiveOp_04dcf3af54a4ace5b5f741a020746166(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d5bc6b3e577dcf4a24fc26228343ca30(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4654f6c91b3ea6e55570eccf92303645(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(171.86166381835938, dtype='float32').reshape([]),
+            paddle.to_tensor(184.15756225585938, dtype='float32').reshape([]),
         ]
 
 
@@ -7689,13 +7794,13 @@ class TestPrimitiveOp_d5bc6b3e577dcf4a24fc26228343ca30(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_929e5dc59d1adeb2093720420c5a6cc7(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9ca08a8a7bd65db4348049b1263e1f0b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(44.07438278198242, dtype='float32').reshape([]),
+            paddle.to_tensor(46.720619201660156, dtype='float32').reshape([]),
         ]
 
 
@@ -7773,13 +7878,13 @@ class TestPrimitiveOp_b016d47581a4d227142ea5a0501d7eea(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_bd8456a8a72f6ea51f66a5e075b7aeef(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2e8e47dbae8f05da6613afda00815abc(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([2029, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -7794,13 +7899,13 @@ class TestPrimitiveOp_bd8456a8a72f6ea51f66a5e075b7aeef(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7dd970f9b63058abc02e327aab604d14(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ea61993a761a8b5bc73fa790e5d2f9e4(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([2029, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -7815,13 +7920,13 @@ class TestPrimitiveOp_7dd970f9b63058abc02e327aab604d14(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5b733b670f0e23499713e8fb33e71855(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7d67549e103e8fee7ea713b0bfd1f560(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([2029, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -7836,13 +7941,13 @@ class TestPrimitiveOp_5b733b670f0e23499713e8fb33e71855(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7965d3d4d980225dd1afb759c42bcac4(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_987ce4bf8e96da15df7c0354a6cc47c6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2029, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2079, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -7857,13 +7962,13 @@ class TestPrimitiveOp_7965d3d4d980225dd1afb759c42bcac4(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a7c982f53d149cc3a9776b22dae1ab86(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_442eb4a6f2f43760cd30a356bdbb118a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([2029, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -7878,13 +7983,13 @@ class TestPrimitiveOp_a7c982f53d149cc3a9776b22dae1ab86(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_39d66dda8dcd21d972f059784114fe0f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7f96f89330860fa1faa5d06ffb7d8552(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2029, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2079, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -7920,13 +8025,13 @@ class TestPrimitiveOp_aa71bafe081ffc39fa57b0fea5164dc6(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7160b616d0a008462debcaa59bd99448(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_220958653f236e39bbc0ac1597251e44(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(94.78678894042969, dtype='float32').reshape([]),
+            paddle.to_tensor(174.8240966796875, dtype='float32').reshape([]),
         ]
 
 
@@ -7941,13 +8046,13 @@ class TestPrimitiveOp_7160b616d0a008462debcaa59bd99448(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_10de27094a0b429efc9c0d16789917ff(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c2312e975aa838b3589941bac84ce559(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(4.332002639770508, dtype='float32').reshape([]),
+            paddle.to_tensor(4.604153633117676, dtype='float32').reshape([]),
         ]
 
 
@@ -7983,13 +8088,13 @@ class TestPrimitiveOp_8d3c19d0720e3afc5362e0202b4cf42c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_8b5fc9aee8ccb00eaf321a37967f635e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c757d64e46621387add27f048fc60b92(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.34155285358428955], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.28478097915649414], dtype='float32').reshape([1]),
         ]
 
 
@@ -8004,13 +8109,13 @@ class TestPrimitiveOp_8b5fc9aee8ccb00eaf321a37967f635e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7dfa12bddc3735a0eb27d961fe41d905(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d7a93599b5a3b3662e12c3c878db0761(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.36377274990081787], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3711332678794861], dtype='float32').reshape([1]),
         ]
 
 
@@ -8025,13 +8130,13 @@ class TestPrimitiveOp_7dfa12bddc3735a0eb27d961fe41d905(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2ce1399a516578514681d70adb23cfb7(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_36fa7277cca1987c656e15468972c6a4(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.11643019318580627], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.10420537739992142], dtype='float32').reshape([1]),
         ]
 
 
@@ -8046,13 +8151,13 @@ class TestPrimitiveOp_2ce1399a516578514681d70adb23cfb7(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_72a52ae3da9ed2cac8b1c56a22599735(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fdb0120882924e1a6c1e49e631f90c62(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.5604607462882996], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.43511417508125305], dtype='float32').reshape([1]),
         ]
 
 
@@ -8067,13 +8172,13 @@ class TestPrimitiveOp_72a52ae3da9ed2cac8b1c56a22599735(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a8fea240ee47c2771337f644c86011c4(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ccae5e596d495bb8d94a32508df47b5a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4633396565914154], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.4197320342063904], dtype='float32').reshape([1]),
         ]
 
 
@@ -8088,13 +8193,13 @@ class TestPrimitiveOp_a8fea240ee47c2771337f644c86011c4(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_03869d7ce430d644fa40d15e73054ea5(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_28aa7e1793bb254287ca162d8bd4a2d0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.5685190558433533], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.43369051814079285], dtype='float32').reshape([1]),
         ]
 
 
@@ -8109,13 +8214,13 @@ class TestPrimitiveOp_03869d7ce430d644fa40d15e73054ea5(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fa53b3768084d0eec32f492f38f833af(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_790de75d40702862ca295b0dda9d67a1(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.012586184777319431], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.30636897683143616], dtype='float32').reshape([1]),
         ]
 
 
@@ -8130,13 +8235,13 @@ class TestPrimitiveOp_fa53b3768084d0eec32f492f38f833af(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_dd242975e1ed757c94058f6355a90930(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_932cde5ba496c82c4d36d82a9c150588(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1699892282485962], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.4790671169757843], dtype='float32').reshape([1]),
         ]
 
 
@@ -8151,13 +8256,13 @@ class TestPrimitiveOp_dd242975e1ed757c94058f6355a90930(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fa7990c3b9f5232b8b2046a6e1dd059a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8a0ba152d1d4c93adabc9a3fc31e9532(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.35221076011657715], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.19238795340061188], dtype='float32').reshape([1]),
         ]
 
 
@@ -8172,13 +8277,13 @@ class TestPrimitiveOp_fa7990c3b9f5232b8b2046a6e1dd059a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_98f0b48966308b6ad125781b1efeaaa0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_af71d37b4d185749fcd53f00676f47fb(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.5728503465652466], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.4346986413002014], dtype='float32').reshape([1]),
         ]
 
 
@@ -8193,13 +8298,13 @@ class TestPrimitiveOp_98f0b48966308b6ad125781b1efeaaa0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_88e3e31e6e6414720379d3a53cbe52c0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e9b807a9d227387d15d76faf6fbb2a67(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4577837288379669], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.07847969979047775], dtype='float32').reshape([1]),
         ]
 
 
@@ -8214,13 +8319,13 @@ class TestPrimitiveOp_88e3e31e6e6414720379d3a53cbe52c0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_0e9715daae40f8865fc093e1ebbf2a60(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_3a676aadc9ed56c9ff60bb2d23648769(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4960741698741913], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.17160958051681519], dtype='float32').reshape([1]),
         ]
 
 
@@ -8235,13 +8340,13 @@ class TestPrimitiveOp_0e9715daae40f8865fc093e1ebbf2a60(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2163e2e9d3649d5e3d9ef3084e75dc56(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_dffbe3408a8e7bf9b2b2d380eead1e61(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.232619509100914], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.12719053030014038], dtype='float32').reshape([1]),
         ]
 
 
@@ -8256,13 +8361,13 @@ class TestPrimitiveOp_2163e2e9d3649d5e3d9ef3084e75dc56(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_074ab200d5edbdee55a15ab094296fd4(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_65cd3bbb998c42b0bab209317d69b950(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.5309926271438599], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.41293221712112427], dtype='float32').reshape([1]),
         ]
 
 
@@ -8277,13 +8382,13 @@ class TestPrimitiveOp_074ab200d5edbdee55a15ab094296fd4(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d6dcb58527a086d7dac26b5f05b26c69(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fbc9c3f90344d639f86fe6df462c108a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.10568716377019882], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.2286999672651291], dtype='float32').reshape([1]),
         ]
 
 
@@ -8298,13 +8403,13 @@ class TestPrimitiveOp_d6dcb58527a086d7dac26b5f05b26c69(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f8af94c324f3187512348cdd92c88c8b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2fe8afecabdd188d8669ce4116037173(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.11220424622297287], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3246830701828003], dtype='float32').reshape([1]),
         ]
 
 
@@ -8319,13 +8424,13 @@ class TestPrimitiveOp_f8af94c324f3187512348cdd92c88c8b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d8335f8eacb13f62e5a975729667fe55(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_3bf2343242f7e4d21f07e50ac150e430(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_5765ab1e78518b3bdd9061dfd256f30d
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.00846647098660469], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.43501174449920654], dtype='float32').reshape([1]),
         ]
 
 
@@ -8340,13 +8445,13 @@ class TestPrimitiveOp_d8335f8eacb13f62e5a975729667fe55(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_46adf9fe09599a54bda733ff6a41b6c0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8ebc26f70472cf57ed1fcf13c335e229(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.09509286284446716], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.6364091634750366], dtype='float32').reshape([1]),
         ]
 
 
@@ -8361,13 +8466,13 @@ class TestPrimitiveOp_46adf9fe09599a54bda733ff6a41b6c0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_27c83cb6ff3a54840a46b10552f4c2ba(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8932ebab8c29743eaac75528b30e92ac(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.031266309320926666], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.11480285227298737], dtype='float32').reshape([1]),
         ]
 
 
@@ -8382,13 +8487,13 @@ class TestPrimitiveOp_27c83cb6ff3a54840a46b10552f4c2ba(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e9bea0ddfcb1a10b625759c1fa96aa8b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_38f3dcbbad7e7dd8d1e1942a202de88c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4988590180873871], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.367251992225647], dtype='float32').reshape([1]),
         ]
 
 
@@ -8403,13 +8508,13 @@ class TestPrimitiveOp_e9bea0ddfcb1a10b625759c1fa96aa8b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d0d6bc06adaa408df7910116c3b0bee6(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_5172f0bba56bf034bf5ffbd85d5861ac(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.16716934740543365], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.02123856358230114], dtype='float32').reshape([1]),
         ]
 
 
@@ -8424,13 +8529,13 @@ class TestPrimitiveOp_d0d6bc06adaa408df7910116c3b0bee6(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5f7095192caa9cbc584c9e1c19003840(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d598404554e2b2b2d2c3c1dc2a6daf50(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.7463762760162354], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.6199690103530884], dtype='float32').reshape([1]),
         ]
 
 
@@ -8634,13 +8739,13 @@ class TestPrimitiveOp_d7d4632a949a64788d05b80fb2e42d75(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_9175c61e5282fdd206b4d5a2e2bfccd7(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f63892429d1716c3e8f38ded74174509(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([4671, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -8655,13 +8760,13 @@ class TestPrimitiveOp_9175c61e5282fdd206b4d5a2e2bfccd7(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c3491612bee89d1bed61b84da4fe3715(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6ab0113da971a9d5c6d9e84e7751cdc2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([4671, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -8676,13 +8781,13 @@ class TestPrimitiveOp_c3491612bee89d1bed61b84da4fe3715(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7ed71aad9547d608a57e1e12d18d7bab(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f5f71078e1221c347f9604b27286c7a3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([4671, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -8697,13 +8802,13 @@ class TestPrimitiveOp_7ed71aad9547d608a57e1e12d18d7bab(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_38dd5e8567db3a7f9c093d2cf2b8ac34(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_986e59feacd8e6fb5946b5cff24e0dd0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[4671, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[4526, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -8718,13 +8823,13 @@ class TestPrimitiveOp_38dd5e8567db3a7f9c093d2cf2b8ac34(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f3d27e5d04b8ad824b2f99b52192c7a3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8268931371f35de154e30d4b2e2a9d5f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([4671, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -8739,13 +8844,13 @@ class TestPrimitiveOp_f3d27e5d04b8ad824b2f99b52192c7a3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c352034d3b2476d5232b9a4a0958986f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0e00284ccd9d619bf70ffbd7590339a5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[4671, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[4526, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -8760,13 +8865,13 @@ class TestPrimitiveOp_c352034d3b2476d5232b9a4a0958986f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_add1815d4f16526576d5e4ea146e1a5c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_040192509516c7312f3550f102a81795(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(100.46148681640625, dtype='float32').reshape([]),
+            paddle.to_tensor(101.78795623779297, dtype='float32').reshape([]),
         ]
 
 
@@ -8781,13 +8886,13 @@ class TestPrimitiveOp_add1815d4f16526576d5e4ea146e1a5c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d44a8d46ab225f6dbb25cac841c7ca82(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_55cf6bd08ccb937c1a673cc4211717a3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(305.2679443359375, dtype='float32').reshape([]),
+            paddle.to_tensor(307.48333740234375, dtype='float32').reshape([]),
         ]
 
 
@@ -8802,13 +8907,13 @@ class TestPrimitiveOp_d44a8d46ab225f6dbb25cac841c7ca82(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_665b602a91a137e4db0822f6d06b86e3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_843025a11966a1eb61d41818ba9f8b03(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([1040, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -8823,13 +8928,13 @@ class TestPrimitiveOp_665b602a91a137e4db0822f6d06b86e3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5347862c115b11705f0c2be8c42bf63f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ed4e6e4cc8bf7f43a69bf1aa4dde9d0e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([1040, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -8844,13 +8949,13 @@ class TestPrimitiveOp_5347862c115b11705f0c2be8c42bf63f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c867efa30e202f9d8dd7f44f4e099288(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_877e0b6fa93da0b3c4dcace7bfe3a951(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([1040, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -8865,13 +8970,13 @@ class TestPrimitiveOp_c867efa30e202f9d8dd7f44f4e099288(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_757af99c2a8b817a71f8eae1ec397760(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_71a9373e8a82263180c5e0bd8b31beea(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1040, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1046, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -8886,13 +8991,13 @@ class TestPrimitiveOp_757af99c2a8b817a71f8eae1ec397760(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_793d835d15d57c9d27ad1a98284203ff(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_72e1be2b6c871443c0cd10e89590819f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([1040, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -8907,13 +9012,13 @@ class TestPrimitiveOp_793d835d15d57c9d27ad1a98284203ff(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_6da12a1da7ffb20a4a935e3e55d6437d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6cf675cde4550baaa7ce82f6b58187e8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1040, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1046, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -9012,13 +9117,13 @@ class TestPrimitiveOp_d5ba0cd0284a031ef5122af791a2d13f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_9f4a13be255b39dbe9dc780e832fd608(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_be9aa93ad6554ef4f86ad653f50d9d28(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(163.11521911621094, dtype='float32').reshape([]),
+            paddle.to_tensor(138.60726928710938, dtype='float32').reshape([]),
         ]
 
 
@@ -9033,13 +9138,13 @@ class TestPrimitiveOp_9f4a13be255b39dbe9dc780e832fd608(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_08fa9c0b78290a6ed63dae04ef6fef53(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_573a048119998f2be1027fb77b644853(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(4.345930099487305, dtype='float32').reshape([]),
+            paddle.to_tensor(4.337692737579346, dtype='float32').reshape([]),
         ]
 
 
@@ -9705,13 +9810,13 @@ class TestPrimitiveOp_e92b99b670c64fd30111d5528f5142e0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_efa460ec227f743f2f0974068716a028(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e80ee5a781d41f2c012d69c616f53082(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[-0.09769831597805023], [-0.0010326141491532326], [0.039797503501176834], [-0.09334252774715424], [0.051836047321558]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.04359088093042374], [0.005178023129701614], [0.0143120801076293], [0.09541353583335876], [-0.08889515697956085]], dtype='float32').reshape([5, 1]),
         ]
 
 
@@ -9726,13 +9831,13 @@ class TestPrimitiveOp_efa460ec227f743f2f0974068716a028(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_42f33491e16fca9aa43378cdfa0659ae(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_59a86401938a15aa7449da6409928296(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[-0.0003804232401307672], [0.017643127590417862], [-0.00221918779425323], [0.014970957301557064], [-0.019182855263352394]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.061871644109487534], [0.02256525307893753], [0.0695381686091423], [0.11277145892381668], [0.03564310818910599]], dtype='float32').reshape([5, 1]),
         ]
 
 
@@ -9747,13 +9852,13 @@ class TestPrimitiveOp_42f33491e16fca9aa43378cdfa0659ae(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b308bdce1eeae1964c713a5cad3a85c1(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2c7eeba67c3c3b5bd29c4896eb383800(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[255.81484985351562], [-1.0585278272628784], [-18.933364868164062], [-7.234907150268555], [-3.702207088470459]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[-0.2954626977443695], [-0.7705311179161072], [-0.7941837906837463], [-0.1539212465286255], [-3.494035005569458]], dtype='float32').reshape([5, 1]),
         ]
 
 
@@ -9768,13 +9873,13 @@ class TestPrimitiveOp_b308bdce1eeae1964c713a5cad3a85c1(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d8071eb1c2e54792c895f9e995033a6a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_b728ef63208cf4f72f013c0972671e39(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_8b32e9101c85baa85d90404ba2a46caa
     def get_inputs(self):
         return [
-            paddle.to_tensor([[-254.81484985351562], [2.058527946472168], [19.933364868164062], [8.234907150268555], [4.702207088470459]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[1.295462727546692], [1.770531177520752], [1.7941837310791016], [1.1539212465286255], [4.494034767150879]], dtype='float32').reshape([5, 1]),
         ]
 
 
@@ -10146,13 +10251,13 @@ class TestPrimitiveOp_7fd65a255fc9c9136331156eb906133a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7665d83bf72b88218407a566588c228a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_56f55d2c23f5ccfa18a67fca4eab5c4f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f14e9969bb29671066790c9a665e9109
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.37724167108535767], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.12749353051185608], dtype='float32').reshape([1]),
         ]
 
 
@@ -10167,13 +10272,13 @@ class TestPrimitiveOp_7665d83bf72b88218407a566588c228a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f4b5ff1d6a0cd5b594e4f15277b7b877(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_606330d00e3c10d7555adc82999e27ca(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_a3c89bf5f2e4879f3f4b833738580285
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.18083539605140686], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.4778403639793396], dtype='float32').reshape([1]),
         ]
 
 
@@ -10188,13 +10293,13 @@ class TestPrimitiveOp_f4b5ff1d6a0cd5b594e4f15277b7b877(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ae76d58defbd9dc06637066c8afbb182(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c6e6a35e32a7781c8c01fadc9d7c98dd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_02269b90130feff70e4f1b4138719cfc
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.12494116276502609], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.44029501080513], dtype='float32').reshape([1]),
         ]
 
 
@@ -10272,13 +10377,13 @@ class TestPrimitiveOp_d7c16a4876d40f3e08aa0a383ef6f925(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_cbc02d4b9bc9a69c7e752ff696e0580c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_cf5f28bcc0feacebdc237332bb3119fd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([2361, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10293,13 +10398,13 @@ class TestPrimitiveOp_cbc02d4b9bc9a69c7e752ff696e0580c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_93e3e433cbd7084aabbc8c6f0463b68a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9fa36f392c4835d66aa44a326b7c7c9d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([2361, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10314,13 +10419,13 @@ class TestPrimitiveOp_93e3e433cbd7084aabbc8c6f0463b68a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_0de49d82c8de0d343483c7f742c9008b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_b50f83f0322e60b6736579c8c5499bf6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([2361, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10335,13 +10440,13 @@ class TestPrimitiveOp_0de49d82c8de0d343483c7f742c9008b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_acb5019a21fb3e171122d03b86f5bc01(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e79fbe5ed84ee36af3d2feb755f7de66(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2361, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2335, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -10356,13 +10461,13 @@ class TestPrimitiveOp_acb5019a21fb3e171122d03b86f5bc01(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d8b34a17c436acf621760c09dc41a98c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fdd3654771c779d38d88781a449662c7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([2361, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10377,13 +10482,13 @@ class TestPrimitiveOp_d8b34a17c436acf621760c09dc41a98c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7c5d1c86d43d053e46bea6a45b5d684e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2058427be211d8acd1b9426dae99f8a0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2361, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2335, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -10398,13 +10503,13 @@ class TestPrimitiveOp_7c5d1c86d43d053e46bea6a45b5d684e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fd078f1038434a293ea380146c5a90d0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8d4f3f215c095868e06fb8765621efd7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([3043, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10419,13 +10524,13 @@ class TestPrimitiveOp_fd078f1038434a293ea380146c5a90d0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b32d3fdc2ab3ac31ca7ba1f51fb96bcc(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f7fea0d47bf4f3bd5deb24ee8a85a902(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([3043, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10440,13 +10545,13 @@ class TestPrimitiveOp_b32d3fdc2ab3ac31ca7ba1f51fb96bcc(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_abdc126307031fab5c37e19656aead23(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4d85970faa655d6ed3829e34b9e5fb2b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([3043, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10461,13 +10566,13 @@ class TestPrimitiveOp_abdc126307031fab5c37e19656aead23(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1f3050c56668d7478d7963e97bea9366(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_88521bee3fe03eda1d91646e32239a22(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[3043, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2986, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -10482,13 +10587,13 @@ class TestPrimitiveOp_1f3050c56668d7478d7963e97bea9366(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_34673a5bfb45d2e6685e969d01f3c218(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8cc87ce09af3dd720ef63480621ab7b6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([3043, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10503,13 +10608,13 @@ class TestPrimitiveOp_34673a5bfb45d2e6685e969d01f3c218(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4b51b1676d03b05aa82f6df1a05b3500(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_b86ef24693cf0435a6acf7ab0aae1225(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[3043, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2986, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -10524,13 +10629,13 @@ class TestPrimitiveOp_4b51b1676d03b05aa82f6df1a05b3500(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d5e7ef797c65332ca792a8a14fca263a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_777933ddd9f45216ad68a112a68bb0e2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([3752, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10545,13 +10650,13 @@ class TestPrimitiveOp_d5e7ef797c65332ca792a8a14fca263a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2ee8dfdbcd8772ce687228b937cfc3ff(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_a5454736e8d0e46b7f0cafbfc09b4bc8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([3752, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10566,13 +10671,13 @@ class TestPrimitiveOp_2ee8dfdbcd8772ce687228b937cfc3ff(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d49223074a0bce90620dd564175536dc(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fa66556dafa39c6abf735f0ff9fcad59(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([3752, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10587,13 +10692,13 @@ class TestPrimitiveOp_d49223074a0bce90620dd564175536dc(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_6fa3ca73c3fbffb920b8c99432edf44f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_589b8542215e07a615e69c35376d3b6d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[3752, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[3783, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -10608,13 +10713,13 @@ class TestPrimitiveOp_6fa3ca73c3fbffb920b8c99432edf44f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_dd8cd7b4d0ebd8f36b4ce18db2ba5fe2(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6de5f6c2cbe0df188638dfd42fe0c2bf(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([3752, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -10629,13 +10734,13 @@ class TestPrimitiveOp_dd8cd7b4d0ebd8f36b4ce18db2ba5fe2(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_64ad73c291ce16f8c2073189068b6982(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9dabce0629260483dac5cc5245474580(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[3752, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[3783, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -10797,13 +10902,13 @@ class PrimitiveOp_d067a61c517867a381a37d19f5447465(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7c9da9d34a5f8bab5239796bfcc4f0ca(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6a19f34f8bd02649be9c7fa73f778ab6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_d067a61c517867a381a37d19f5447465
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.4161657691001892]]], [[[0.291655570268631]]], [[[0.8429783582687378]]], [[[0.49608564376831055]]], [[[0.6166152954101562]]], [[[0.3671640455722809]]], [[[0.9706653952598572]]], [[[0.11804307252168655]]], [[[0.4338018596172333]]], [[[0.5702500939369202]]], [[[0.6808611750602722]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.8548710942268372]]], [[[0.11934872716665268]]], [[[0.09530581533908844]]], [[[0.9877559542655945]]], [[[0.4086410105228424]]], [[[0.2774769067764282]]], [[[0.14035162329673767]]], [[[0.9043948650360107]]], [[[0.453105628490448]]], [[[0.7704435586929321]]], [[[0.5275695323944092]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -11847,13 +11952,13 @@ class TestPrimitiveOp_8b63e051547be496d70fd5e81de99827(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2a5978b3b47d612be5883988d931402a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_a3f3f1b842446076ed769d8059d34e38(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_7ca943eb4dc2d48fc6c1b41c9a7cfaaa
     def get_inputs(self):
         return [
-            paddle.to_tensor([2.0970213413238525, 2.298092842102051, 2.059722900390625, 2.1482441425323486, 2.1182665824890137, 2.0264883041381836, 2.1362781524658203, 1.9194786548614502, 1.9895050525665283, 1.9293397665023804, 2.274038553237915, 2.0912349224090576, 2.036022901535034, 2.262075662612915, 2.162062168121338, 2.0724270343780518, 2.108933210372925, 2.0455029010772705, 2.2837839126586914, 2.1525025367736816], dtype='float32').reshape([20]),
+            paddle.to_tensor([2.1635844707489014, 2.1187310218811035, 2.263307809829712, 1.9452956914901733, 1.9810643196105957, 2.023176431655884, 2.089804172515869, 2.2907657623291016, 2.076936721801758, 2.0780837535858154, 1.9677519798278809, 2.1282782554626465, 1.8974593877792358, 1.9448208808898926, 2.0161185264587402, 2.210709810256958, 2.1631691455841064, 1.9303860664367676, 2.2434499263763428, 2.2454960346221924], dtype='float32').reshape([20]),
         ]
 
 
@@ -11868,13 +11973,13 @@ class TestPrimitiveOp_2a5978b3b47d612be5883988d931402a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_625c504b44387e7e0b33640829aa62ca(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7645251780e2389e9f6d3bec0c5fd34d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_96c60bcc5171898abb9509e3bff7b47b
     def get_inputs(self):
         return [
-            paddle.to_tensor(2.650651216506958, dtype='float32').reshape([]),
+            paddle.to_tensor(3.263112783432007, dtype='float32').reshape([]),
         ]
 
 
@@ -11931,13 +12036,13 @@ class TestPrimitiveOp_363e50b7b1459abba9435febd4830809(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4168c902865b59788214b614337c247f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7953f6a4711d3f12bc2f0407db7de5f7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(370.7100524902344, dtype='float32').reshape([]),
+            paddle.to_tensor(364.6410827636719, dtype='float32').reshape([]),
         ]
 
 
@@ -11973,13 +12078,13 @@ class TestPrimitiveOp_729b4769acad77834147629d14ba3a0a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_35c01ca6b103eda30b529781e414e7ba(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4c299f235b1ba9a03e8b6bfbb63c8247(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.12363174557685852], [-0.023314885795116425], [0.034279726445674896], [0.015957288444042206]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[-0.06615357100963593], [-0.05127071216702461], [-0.07252560555934906], [0.026742246001958847]], dtype='float32').reshape([4, 1]),
         ]
 
 
@@ -11994,13 +12099,13 @@ class TestPrimitiveOp_35c01ca6b103eda30b529781e414e7ba(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fbbbe2d061e21f4091af67cfdf6ee45f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2a95f517571c41b444065ed5ac42349b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.to_tensor([[0.12934863567352295], [-0.08987925201654434], [0.025907261297106743], [0.0054793632589280605]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.009580861777067184], [0.020679686218500137], [-0.0015958440490067005], [0.07555964589118958]], dtype='float32').reshape([4, 1]),
         ]
 
 
@@ -12015,13 +12120,13 @@ class TestPrimitiveOp_fbbbe2d061e21f4091af67cfdf6ee45f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_99e9a427ebdb84811b0a947563984a7f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0799cde911dca5341d3d02e1a3472365(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[-0.044197529554367065], [-0.740597665309906], [0.32317060232162476], [1.9122523069381714]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[-7.904762268066406], [-3.479279041290283], [44.44655227661133], [-0.6460776925086975]], dtype='float32').reshape([4, 1]),
         ]
 
 
@@ -12036,13 +12141,13 @@ class TestPrimitiveOp_99e9a427ebdb84811b0a947563984a7f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c449b8dd3866077755de6ad4df2ee9dd(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_43dc656ba6e6fdcfb70a008e678ef4c0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_8b32e9101c85baa85d90404ba2a46caa
     def get_inputs(self):
         return [
-            paddle.to_tensor([[1.0441975593566895], [1.7405977249145508], [0.6768293976783752], [-0.9122523069381714]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[8.904762268066406], [4.479279041290283], [-43.44655227661133], [1.6460776329040527]], dtype='float32').reshape([4, 1]),
         ]
 
 
@@ -12078,13 +12183,13 @@ class TestPrimitiveOp_c659464047b180ca6519b55ff02167b6(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5a07318f4850bc7e52655a268fb21379(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_97a9064b9d7394b43026f6cbe1aceca9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(31.28129768371582, dtype='float32').reshape([]),
+            paddle.to_tensor(31.994016647338867, dtype='float32').reshape([]),
         ]
 
 
@@ -12141,13 +12246,13 @@ class TestPrimitiveOp_f2208a07644297615a72d2125f160cad(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_655fffa118066ccf465d4eff130d1d67(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_cabed6a75bfbb21578a3cd267480068b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([2058, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -12162,13 +12267,13 @@ class TestPrimitiveOp_655fffa118066ccf465d4eff130d1d67(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_554a2e1253ab3587f925ba51d3c33bab(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_3332b3627450f438a846dd34c764b3c0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([2058, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -12183,13 +12288,13 @@ class TestPrimitiveOp_554a2e1253ab3587f925ba51d3c33bab(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ae2a5ffb2558165aa71e617112992172(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ea28295cba99b802fc4698300ec6c57d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([2058, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -12204,13 +12309,13 @@ class TestPrimitiveOp_ae2a5ffb2558165aa71e617112992172(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7b9f6007194275924d859c7cb0e300e9(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e5718706f7cddd09c915462a4e55874c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2058, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2041, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -12225,13 +12330,13 @@ class TestPrimitiveOp_7b9f6007194275924d859c7cb0e300e9(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_82af9e6563c319d666936b9fc09496b7(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ed313d5678cce2aca48c8fd9055a5f75(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([2058, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -12246,13 +12351,13 @@ class TestPrimitiveOp_82af9e6563c319d666936b9fc09496b7(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7d9ddb21f5a2f691925aface3f99c299(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_44fbe88f45f1c236a08a0196c410a028(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2058, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2041, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -12708,13 +12813,13 @@ class TestPrimitiveOp_8f035dfc451f5936a9ac1e60e06d36dc(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1dbc58318c2e2d4392046b4f70332c2f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_dbb5bf5c8749cd200f4686628c693073(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(208.35101318359375, dtype='float32').reshape([]),
+            paddle.to_tensor(145.79592895507812, dtype='float32').reshape([]),
         ]
 
 
@@ -12729,13 +12834,13 @@ class TestPrimitiveOp_1dbc58318c2e2d4392046b4f70332c2f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_42cea7813524aeadc588660c94a2f3fd(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_90a37e39c721f3c2191bd63b5f65c57b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(3.0325980186462402, dtype='float32').reshape([]),
+            paddle.to_tensor(3.4730279445648193, dtype='float32').reshape([]),
         ]
 
 
@@ -12918,13 +13023,13 @@ class TestPrimitiveOp_7681240d14421f9fcd5d173b5828101b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2f8f7967666a23e58d156003c4ea1839(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_332e8f75c2c72ef636be9d0fdec39555(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(39.122344970703125, dtype='float32').reshape([]),
+            paddle.to_tensor(37.170509338378906, dtype='float32').reshape([]),
         ]
 
 
@@ -12981,13 +13086,13 @@ class TestPrimitiveOp_ac07af892e5ff7bd73b9fa46d94d9f80(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_80520b2bf99b9e9b39184d026934b37c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_314535249c645e65b3c2108349a00e4b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_3a51c7903592364d63851bc40cbcde75
     def get_inputs(self):
         return [
-            paddle.uniform([4175, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -13002,13 +13107,13 @@ class TestPrimitiveOp_80520b2bf99b9e9b39184d026934b37c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1ee3c123297d05e708c9f5d622d76a39(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_78f142c0db1e699a6b68adf685866e7f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([4175, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -13023,13 +13128,13 @@ class TestPrimitiveOp_1ee3c123297d05e708c9f5d622d76a39(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_83f6757ad3518d4c451afc192f6dcfa6(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fc14db44b87247fa09f4249298f2b528(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e3011b734e7b4f099752269cc799f48e
     def get_inputs(self):
         return [
-            paddle.uniform([4175, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -13044,13 +13149,13 @@ class TestPrimitiveOp_83f6757ad3518d4c451afc192f6dcfa6(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7db9ec4885303df3188d813dcd22d4b4(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_156557aa8ab44f5da3fe84d968647945(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0f5235e36a98797a8c6fcb08a24d233d
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[4175, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[4210, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -13065,13 +13170,13 @@ class TestPrimitiveOp_7db9ec4885303df3188d813dcd22d4b4(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_35b9a34001a557d735e79be7ea807942(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_a768bf54a477eb3d494aec74302db4bd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c8784bfb7cf8e876ab40a7019f984b4a
     def get_inputs(self):
         return [
-            paddle.uniform([4175, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -13086,13 +13191,13 @@ class TestPrimitiveOp_35b9a34001a557d735e79be7ea807942(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d234224c524e3539de41a6c9d3aec53c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_3b2231a5690b5b748cf2c3f6b6b1510c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_35c4dea703e22a68031cf2140b340e44
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[4175, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[4210, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -13149,13 +13254,13 @@ class TestPrimitiveOp_8615d2ea224f66a8379002f55b60f6dd(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fac5d59cbc4b2cc9ea00c9a707c4ac17(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8937da7dd55d1fe020bc9d3c98b016d8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(108.0160903930664, dtype='float32').reshape([]),
+            paddle.to_tensor(136.00274658203125, dtype='float32').reshape([]),
         ]
 
 
@@ -13170,13 +13275,13 @@ class TestPrimitiveOp_fac5d59cbc4b2cc9ea00c9a707c4ac17(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f40f37adf29e29335081073fa452e9f4(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_5fa34998226795ebc02d5c191b91d1c2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2a463dd12e2c5809c04e1554419962df
     def get_inputs(self):
         return [
-            paddle.to_tensor(3.99774169921875, dtype='float32').reshape([]),
+            paddle.to_tensor(5.176158905029297, dtype='float32').reshape([]),
         ]
 
 
@@ -13254,13 +13359,13 @@ class TestPrimitiveOp_3a0539b34059e1ae81a40b98a4c168cc(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c1fd4a44bb8d76691384f748f5f63ff3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0424bddc58d6b18ae11888bc6e606558(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9c6b053e1577fe0117b7f6eb49ebe724
     def get_inputs(self):
         return [
-            paddle.to_tensor(38.341026306152344, dtype='float32').reshape([]),
+            paddle.to_tensor(35.052337646484375, dtype='float32').reshape([]),
         ]
 
 
@@ -13380,13 +13485,13 @@ class PrimitiveOp_88bbf2125a5bf62b1d7a7d90d2b42345(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_956f76662cd1f4a80d14f036a85b829b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c72ed9f417c2a0c316845435bc09d34b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_88bbf2125a5bf62b1d7a7d90d2b42345
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.5424542427062988]]], [[[0.4411792457103729]]], [[[0.2570952773094177]]], [[[0.7701631784439087]]], [[[0.8692660927772522]]], [[[0.02568746730685234]]], [[[0.17120203375816345]]], [[[0.5016934275627136]]], [[[0.13365806639194489]]], [[[0.5459965467453003]]], [[[0.873428225517273]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.41266393661499023]]], [[[0.787277102470398]]], [[[0.09235267341136932]]], [[[0.9416996836662292]]], [[[0.2949480414390564]]], [[[0.28548404574394226]]], [[[0.8276010155677795]]], [[[0.5963469743728638]]], [[[0.2971181869506836]]], [[[0.30981895327568054]]], [[[0.8371911644935608]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -13506,13 +13611,13 @@ class PrimitiveOp_9b0b230f7d981bfa856d9aa50677737a(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_bf505748019f728fe00df9cec8479cfe(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_39aa5678b849215938880256c8e31eb9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9b0b230f7d981bfa856d9aa50677737a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.4491173326969147]], [[0.4733591675758362]], [[0.4858124554157257]], [[0.3472171723842621]], [[0.23939920961856842]], [[0.0426616445183754]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.46257662773132324]], [[0.22868821024894714]], [[0.09311114251613617]], [[0.19589807093143463]], [[0.2936159372329712]], [[0.20391026139259338]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -13527,13 +13632,13 @@ class TestPrimitiveOp_bf505748019f728fe00df9cec8479cfe(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e03ac4055f576b43b81b578b28afcb19(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_05c4f5a514f7bf7a23a9095050818f19(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9b0b230f7d981bfa856d9aa50677737a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.02638155408203602]], [[0.1120413988828659]], [[0.3495563566684723]], [[0.1514725387096405]], [[0.02938399277627468]], [[0.2665025591850281]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.26644501090049744]], [[0.3505541682243347]], [[0.33946865797042847]], [[0.27033060789108276]], [[0.21624350547790527]], [[0.4743625223636627]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -13569,13 +13674,13 @@ class PrimitiveOp_ea970663a6ec1ce4569de8b8b7e7e449(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a788e3a1d5255f3d836e4dcc1dd8575e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_338326d9f49cab868f5a54fb4107013b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_ea970663a6ec1ce4569de8b8b7e7e449
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.23442403972148895]], [[0.029012981802225113]], [[0.0686381459236145]], [[0.006609615869820118]], [[0.3064398169517517]], [[0.2724543511867523]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.3442152738571167]], [[0.12071492522954941]], [[0.36670151352882385]], [[0.3812854290008545]], [[0.07579178363084793]], [[0.4529133439064026]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -13590,13 +13695,13 @@ class TestPrimitiveOp_a788e3a1d5255f3d836e4dcc1dd8575e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d2eed2ee8f936f187ea54611024a2db3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d50f7a0bec73eb1ade9883f08d6a0826(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_ea970663a6ec1ce4569de8b8b7e7e449
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.06195882707834244]], [[0.007989315316081047]], [[0.11828543245792389]], [[0.28755319118499756]], [[0.1693400740623474]], [[0.17288851737976074]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.145065575838089]], [[0.41218188405036926]], [[0.4891277551651001]], [[0.3759499490261078]], [[0.07741941511631012]], [[0.39330440759658813]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -13632,13 +13737,13 @@ class PrimitiveOp_b58960a25d6d2b3e4718f34dcfb209de(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_aacd3562dc045ca7bc9abd6d03b7f650(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_237b21c2124587a0969a8024b83943bd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b58960a25d6d2b3e4718f34dcfb209de
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.23786376416683197]]], dtype='float32').reshape([1, 1, 1]),
+            paddle.to_tensor([[[0.24712547659873962]]], dtype='float32').reshape([1, 1, 1]),
         ]
 
 
@@ -14073,13 +14178,13 @@ class PrimitiveOp_484477a4b436439e9c05695c60d64361(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a80ade675fcca8a937083d3210079705(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_878b3636d16213322c224c291894186b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_484477a4b436439e9c05695c60d64361
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.3981112539768219], [0.14213699102401733], [0.25744423270225525], [0.4038943946361542], [0.057265594601631165], [0.30887165665626526]]], dtype='float32').reshape([1, 6, 1]),
+            paddle.to_tensor([[[0.23993122577667236], [0.21902430057525635], [0.05408056080341339], [0.08582931011915207], [0.20209373533725739], [0.29344651103019714]]], dtype='float32').reshape([1, 6, 1]),
         ]
 
 
@@ -14115,13 +14220,13 @@ class PrimitiveOp_d0d97a3bab9a517cf71afa83ab075359(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_72340909b0c1e9f3467f40f65f057ef1(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9322b3de95c9f36f0f670a661c57846e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_d0d97a3bab9a517cf71afa83ab075359
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.03317592293024063], [0.011844743974506855], [0.021453676745295525], [0.033657852560281754], [0.004772130865603685], [0.025739293545484543]]], dtype='float32').reshape([1, 6, 1]),
+            paddle.to_tensor([[[0.019994260743260384], [0.018252016976475716], [0.004506711382418871], [0.007152439560741186], [0.016841137781739235], [0.024453865364193916]]], dtype='float32').reshape([1, 6, 1]),
         ]
 
 
@@ -14136,13 +14241,13 @@ class TestPrimitiveOp_72340909b0c1e9f3467f40f65f057ef1(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fb3d0f53b669e7a1121b20e9ccbefdaf(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_5e971a9cdd487e879160ec135181609e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b58960a25d6d2b3e4718f34dcfb209de
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.20845061540603638], [0.07442277669906616], [0.13479752838611603], [0.21147868037223816], [0.029984204098582268], [0.16172486543655396]]], dtype='float32').reshape([1, 6, 1]),
+            paddle.to_tensor([[[0.12562774121761322], [0.11468088626861572], [0.028316522017121315], [0.04494013637304306], [0.1058160662651062], [0.1536482721567154]]], dtype='float32').reshape([1, 6, 1]),
         ]
 
 
@@ -14409,13 +14514,13 @@ class PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7da085815e4e3df96dce69a54c937f5a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_48edf670836910347b51d1f82cf9d801(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -14451,13 +14556,13 @@ class PrimitiveOp_01aeee0faa023bed8375029deedf746c(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_873b97c260ea6137a4abc2024a74d703(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c44f7bb6dc7513cae1da249583115757(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -14493,13 +14598,13 @@ class PrimitiveOp_680dd56624763f0f67e000f931566d4c(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_72c9930edb7719e5cd1b0778d4924476(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_08746fbb1875338fd4d14ecc389596f0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([1790, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -14535,13 +14640,13 @@ class PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_afcf0562e3bd8f384fc74554a118a4da(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_1f34554932493cc57b050f58e965b0bc(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1790, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1843, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -14577,13 +14682,13 @@ class PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_6553c34abf5a567eb272eeb05dc4e7ed(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_1f8ce54a4d4f3e73db4c9e0987c257e5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([1790, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -14619,13 +14724,13 @@ class PrimitiveOp_cae8640658ea201b89f396dfb2753e47(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a670c8f89ba770efa5d4dfca3dbf36ad(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7a881f911f5b82cbd50ef1f1b5bf4ce4(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1790, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1843, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -14661,13 +14766,13 @@ class TestPrimitiveOp_0d023081c50c3187da33a45c83b072ed(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_db776e63a387ebfac61dddff17c93680(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_489ee36994d19e3620e08b28b87345c9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_e4b676b513d0b51415521c96cf5f9354
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.36104175448417664]]], [[[0.8947722911834717]]], [[[0.07632102072238922]]], [[[0.1059940755367279]]], [[[0.17712408304214478]]], [[[0.4899694621562958]]], [[[0.7926150560379028]]], [[[0.3559685945510864]]], [[[0.6099570393562317]]], [[[0.20950312912464142]]], [[[0.9046854972839355]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.14670763909816742]]], [[[0.5661149024963379]]], [[[0.8276474475860596]]], [[[0.7816392183303833]]], [[[0.01712544448673725]]], [[[0.4572899639606476]]], [[[0.15663552284240723]]], [[[0.8234949707984924]]], [[[0.0032547125592827797]]], [[[0.88405841588974]]], [[[0.3822416067123413]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -14703,13 +14808,13 @@ class PrimitiveOp_2569d57fcfd9a4a11f0c501c01cff3ae(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_dcaf2d815f396b377ee1b2b87086fa24(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_836599e75e1c45443c657beb1ba284c6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2569d57fcfd9a4a11f0c501c01cff3ae
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.34356489777565]]], [[[0.326866090297699]]], [[[0.8716182708740234]]], [[[0.7741524577140808]]], [[[0.8832617402076721]]], [[[0.9697280526161194]]], [[[0.31716257333755493]]], [[[0.23448394238948822]]], [[[0.7108698487281799]]], [[[0.37282106280326843]]], [[[0.8541688919067383]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.9093524813652039]]], [[[0.029479775577783585]]], [[[0.6057016849517822]]], [[[0.3420354723930359]]], [[[0.2525221109390259]]], [[[0.8293808698654175]]], [[[0.7880803346633911]]], [[[0.23870401084423065]]], [[[0.03532718867063522]]], [[[0.6772257685661316]]], [[[0.9328996539115906]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -15312,13 +15417,13 @@ class TestPrimitiveOp_d0c0686964451f3cd1c2270908a46636(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_57e291b042d5a3a76716e2bb1380a801(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f906faf9931a0753d7df1f871e8df533(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([5590, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -15333,13 +15438,13 @@ class TestPrimitiveOp_57e291b042d5a3a76716e2bb1380a801(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7e8eb04b79565eadfe97b184c9b9a955(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e189b9e8be2cd2f7d0b018790d503835(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([5590, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -15354,13 +15459,13 @@ class TestPrimitiveOp_7e8eb04b79565eadfe97b184c9b9a955(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_63a3cf7ac9beedcd6b14565a5dd8824e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4cba67682571901759a4fe56daebae15(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([5590, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -15375,13 +15480,13 @@ class TestPrimitiveOp_63a3cf7ac9beedcd6b14565a5dd8824e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_3b474a44051037a42e3d42a620daae8c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ad55e5ff94ce1ffbf4c8001936eccb7c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[5590, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[5583, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -15396,13 +15501,13 @@ class TestPrimitiveOp_3b474a44051037a42e3d42a620daae8c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7e96c1c59dbb5d79fd45520ca4e3b30d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e9d286f672a30fc129798740e0d853e3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([5590, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -15417,13 +15522,13 @@ class TestPrimitiveOp_7e96c1c59dbb5d79fd45520ca4e3b30d(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_69a23c65036416f40e19695938da7c8b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_26b19e3f561863c1df2ec57defb771f0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[5590, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[5583, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -15648,13 +15753,13 @@ class PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_99fc5dbb3b7b56871345c6f24e46c6dd(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2f520f09801ece1c1941b76cd51f5c71(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.038638655096292496], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.12621042132377625], dtype='float32').reshape([1]),
         ]
 
 
@@ -15669,13 +15774,13 @@ class TestPrimitiveOp_99fc5dbb3b7b56871345c6f24e46c6dd(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1c3efa19d41a437f77811a6e686fc732(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ec53021f270cca3bc2cfa3af19827b88(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.030036229640245438], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.182074636220932], dtype='float32').reshape([1]),
         ]
 
 
@@ -15731,6 +15836,111 @@ class TestPrimitiveOp_f24403ffc2499432f98aadf34a158788(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_b12d62e1dc68bb16559fe9d06eaac904(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_df5eb460c67717a6434ac3486b84f249(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_01aeee0faa023bed8375029deedf746c
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cac3f06352ac7ed787c3476bcc7e0514(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_680dd56624763f0f67e000f931566d4c
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_03c38db25b24755f0ea0515e8eed9065(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
+    def get_inputs(self):
+        return [
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1724, 4], dtype='int64'), 'int64'),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cdf0554880c53d31df9167ba46e455b5(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
 class PrimitiveOp_2059877344c520667f48fb54463bfb7e(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
@@ -15753,13 +15963,13 @@ class PrimitiveOp_2059877344c520667f48fb54463bfb7e(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_aabd8ff3b7245573a3d33a202f1f1376(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_42199746f49ec64692c7cd188f436ed3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_2059877344c520667f48fb54463bfb7e
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1790, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1724, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -15921,13 +16131,13 @@ class TestPrimitiveOp_8902cc70b68eda825c3a4ee62968818e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2091bbda0b43536f9f39ef2e6179b7e0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_c4a5d00a3ce784b5bed447f5367248bb(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9b0b230f7d981bfa856d9aa50677737a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.15446485579013824]], [[0.32756587862968445]], [[0.3810169994831085]], [[0.01443842239677906]], [[0.48069822788238525]], [[0.2653246521949768]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.22004751861095428]], [[0.04282885789871216]], [[0.016098707914352417]], [[0.1740298569202423]], [[0.3826678991317749]], [[0.3837634325027466]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -15942,13 +16152,13 @@ class TestPrimitiveOp_2091bbda0b43536f9f39ef2e6179b7e0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e8982203a62ed0ae8cd1a2f8f7dd0802(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d92e37452926d9d4f66c0ae71de92b44(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_9b0b230f7d981bfa856d9aa50677737a
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.48421430587768555]], [[0.44111907482147217]], [[0.2546563148498535]], [[0.15832459926605225]], [[0.4479765295982361]], [[0.024577025324106216]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.24193517863750458]], [[0.35259920358657837]], [[0.45025011897087097]], [[0.32819902896881104]], [[0.11765152961015701]], [[0.10464473813772202]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -15963,13 +16173,13 @@ class TestPrimitiveOp_e8982203a62ed0ae8cd1a2f8f7dd0802(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_aabaaa69df9c1d28cfb1213d21f1113c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_19aa0eb7f4edb246340f2c055d094591(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_ea970663a6ec1ce4569de8b8b7e7e449
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.19967179000377655]], [[0.38305148482322693]], [[0.13043750822544098]], [[0.050817254930734634]], [[0.2519482374191284]], [[0.16240471601486206]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.023653460666537285]], [[0.005231890827417374]], [[0.45513296127319336]], [[0.49975311756134033]], [[0.4481242299079895]], [[0.19772440195083618]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -15984,13 +16194,13 @@ class TestPrimitiveOp_aabaaa69df9c1d28cfb1213d21f1113c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_18e096a98b2e8ce51221db59cfd1d399(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_450804e58ead5ac8bf6caac447594155(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_ea970663a6ec1ce4569de8b8b7e7e449
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.4722890853881836]], [[0.46297892928123474]], [[0.09087637811899185]], [[0.06543606519699097]], [[0.01585124433040619]], [[0.29577475786209106]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.4689759910106659]], [[0.11694087833166122]], [[0.38196560740470886]], [[0.19081149995326996]], [[0.23261572420597076]], [[0.030995110049843788]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
@@ -16446,13 +16656,13 @@ class PrimitiveOp_8b69bb884a26362a9876e84ccab6b8d5(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ec8c3dad75633108c4635bc18f18241c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e903344127ba8219ab9796046e82deb0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_8b69bb884a26362a9876e84ccab6b8d5
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.1277855932712555], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.3008784055709839], dtype='float32').reshape([1]),
         ]
 
 
@@ -16488,13 +16698,13 @@ class PrimitiveOp_78f1b16f94d6efa3f023e94ffc5e873c(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2e61444a1b63dfe36510136b9b3be3e1(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_94e54188257ed8123858461ac7d523bf(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_78f1b16f94d6efa3f023e94ffc5e873c
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.3938809875695196], dtype='float64').reshape([1]),
+            paddle.to_tensor([0.4103679538513789], dtype='float64').reshape([1]),
         ]
 
 
@@ -16530,13 +16740,13 @@ class TestPrimitiveOp_2463d75cace3b210100311b211a37a65(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_36ac056d34e4815c83a2549ff7cf625f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_000bd1bd910b6a09233b3d7fb892d886(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([1532, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -16551,13 +16761,13 @@ class TestPrimitiveOp_36ac056d34e4815c83a2549ff7cf625f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f7d76b412586d46a7b106a443bcb3d28(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_42ab7481ec85d600da6d8b3a2589e6ca(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([1532, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -16572,13 +16782,13 @@ class TestPrimitiveOp_f7d76b412586d46a7b106a443bcb3d28(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c53a8f77ab934068c3bafbb644b4a10f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_78149e3943b6e741399aa42ede508c4e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([1532, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -16593,13 +16803,13 @@ class TestPrimitiveOp_c53a8f77ab934068c3bafbb644b4a10f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2cff9e8da7d9bc5bf99a98fe467fc40b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_bb1a5319f0658c646ac744d2ee9d4e0e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1532, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1492, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -16614,13 +16824,13 @@ class TestPrimitiveOp_2cff9e8da7d9bc5bf99a98fe467fc40b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_3845751a9498b7060b2cfcc613d2b72e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_163c3f83adc455a0c740b4e3aa33d2b4(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([1532, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -16635,13 +16845,13 @@ class TestPrimitiveOp_3845751a9498b7060b2cfcc613d2b72e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a632e4bbefc08cd211261dad89647235(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_04518f0f4a2d16e110a4fa20f5f8bce3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1532, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1492, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -16656,13 +16866,13 @@ class TestPrimitiveOp_a632e4bbefc08cd211261dad89647235(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f6f424a490e77cb0f81f7c4959b9afbc(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_276064aeb038e0bc61a2c5a98afbc571(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b58960a25d6d2b3e4718f34dcfb209de
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.24369297921657562], [0.2448996752500534]]], dtype='float32').reshape([1, 2, 1]),
+            paddle.to_tensor([[[0.2455739676952362], [0.24429281055927277]]], dtype='float32').reshape([1, 2, 1]),
         ]
 
 
@@ -16761,13 +16971,13 @@ class TestPrimitiveOp_2f58e4a59e479175fe1c125f4bf30b20(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_dc59dfa61c913a89a1f17153531bc1a8(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7997ebc09dca631ddd4089ca9b574c28(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_17c9e16a6a6d1749641bbe3213176077
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.5430904626846313]]], [[[0.1321212202310562]]], [[[0.05979563295841217]]], [[[0.1522083580493927]]], [[[0.8677469491958618]]], [[[0.9952152371406555]]], [[[0.26685720682144165]]], [[[0.23654769361019135]]], [[[0.6884814500808716]]], [[[0.3412136733531952]]], [[[0.43194466829299927]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.22607621550559998]]], [[[0.7577430009841919]]], [[[0.3834150731563568]]], [[[0.23840688169002533]]], [[[0.32386109232902527]]], [[[0.8511556386947632]]], [[[0.6135063767433167]]], [[[0.21878784894943237]]], [[[0.14223983883857727]]], [[[0.37863215804100037]]], [[[0.8423483371734619]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -17286,13 +17496,13 @@ class TestPrimitiveOp_65d85fbb7ab954a62d28807a3ae73b69(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d3d9719a976376f4b6d8741e09fccfbd(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7d474c446b46462a67c14b1b7a26b4d2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b58960a25d6d2b3e4718f34dcfb209de
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.24523064494132996]]], dtype='float32').reshape([1, 1, 1]),
+            paddle.to_tensor([[[0.2418222427368164]]], dtype='float32').reshape([1, 1, 1]),
         ]
 
 
@@ -17496,13 +17706,13 @@ class TestPrimitiveOp_222fed390293510745029c43cb0731c3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b59217f9345b5a3deb55a5edbbed5cb6(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_3c0d507aa73e5b1db51ff434909f8873(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([2029, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -17517,13 +17727,13 @@ class TestPrimitiveOp_b59217f9345b5a3deb55a5edbbed5cb6(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e4a3c1a3803ac3a22335f84524b09ffb(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ead49e51b30a3c518eba2eff2ca9fcf9(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([2029, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -17538,13 +17748,13 @@ class TestPrimitiveOp_e4a3c1a3803ac3a22335f84524b09ffb(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a2f0e40295def6bafca296bf1231b28c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_1095a6d4702908a7fc5fb8fe880dbfda(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([2029, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -17559,13 +17769,13 @@ class TestPrimitiveOp_a2f0e40295def6bafca296bf1231b28c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_dfab9f917bcbb3d67fed47aaf688e6d9(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8e7dc3849a0db9f1040b129acf5f87d4(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2029, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2079, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -17580,13 +17790,13 @@ class TestPrimitiveOp_dfab9f917bcbb3d67fed47aaf688e6d9(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c4f6d9f91486cd930e8b737f5ce00f7d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4a781c84fe737a90ac8869de4616d2a4(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([2029, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -17601,13 +17811,13 @@ class TestPrimitiveOp_c4f6d9f91486cd930e8b737f5ce00f7d(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_31f97ca012fe761269b23a87f1d307e2(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_989c0cbfb74e25467563525ace426a68(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2029, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2079, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -17685,13 +17895,13 @@ class TestPrimitiveOp_9642042b6279fe85125d490259d2035c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1df449d2a785fafed4ef92352d97c6d5(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_003e18f435e0513d12f33bdafdc763ef(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.34155285358428955], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.28478097915649414], dtype='float32').reshape([1]),
         ]
 
 
@@ -17706,13 +17916,13 @@ class TestPrimitiveOp_1df449d2a785fafed4ef92352d97c6d5(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e716111c942a59d4d7a3c0fc1a7c81c7(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_fe7ef8b19a39a1d89afe24c612b3ab91(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.11643019318580627], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.10420537739992142], dtype='float32').reshape([1]),
         ]
 
 
@@ -17727,13 +17937,13 @@ class TestPrimitiveOp_e716111c942a59d4d7a3c0fc1a7c81c7(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_cc619513273aadc98c775e04a91acf6c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ab224960870d4e379af94136a6c0f49f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4633396565914154], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.4197320342063904], dtype='float32').reshape([1]),
         ]
 
 
@@ -17748,13 +17958,13 @@ class TestPrimitiveOp_cc619513273aadc98c775e04a91acf6c(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5c9bc57c94ca44cabc92524d485976e3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_eb25a73a36d0b105d5749ddcf0f70bea(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.012586184777319431], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.30636897683143616], dtype='float32').reshape([1]),
         ]
 
 
@@ -17769,13 +17979,13 @@ class TestPrimitiveOp_5c9bc57c94ca44cabc92524d485976e3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b0e7290f31232648866cca03c2a76b65(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_39711589a94f5c4dd7aafcc35beaaa77(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.35221076011657715], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.19238795340061188], dtype='float32').reshape([1]),
         ]
 
 
@@ -17790,13 +18000,13 @@ class TestPrimitiveOp_b0e7290f31232648866cca03c2a76b65(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f28a71bb82ababa7baa2cbf0d499c332(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2187c558dea895299fbf6cffd67c0148(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.4577837288379669], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.07847969979047775], dtype='float32').reshape([1]),
         ]
 
 
@@ -17811,13 +18021,13 @@ class TestPrimitiveOp_f28a71bb82ababa7baa2cbf0d499c332(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f2855e7c1395e10564608679789941c0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_5258ed04a7b8cce196fb98c40b7c2b48(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.232619509100914], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.12719053030014038], dtype='float32').reshape([1]),
         ]
 
 
@@ -17832,13 +18042,13 @@ class TestPrimitiveOp_f2855e7c1395e10564608679789941c0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a48c36e6ad136106b6ed8ea9ea9a8ef3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4c2673a45e6189dfbd2aa8ab12ad75ed(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.10568716377019882], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.2286999672651291], dtype='float32').reshape([1]),
         ]
 
 
@@ -17853,13 +18063,13 @@ class TestPrimitiveOp_a48c36e6ad136106b6ed8ea9ea9a8ef3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c354499232fd032495338bfa601e702c(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_57f8d473c85cbeb019f3cedefd23e3b8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_fde4fae549dacc712a1d603c69b1c0df
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.00846647098660469], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.43501174449920654], dtype='float32').reshape([1]),
         ]
 
 
@@ -17937,13 +18147,13 @@ class TestPrimitiveOp_6bf0c548732a51403a14387d3f3f37de(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_13819cb0e0b6de2e5cd9c9d5b3516ca5(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2a99708e68af202ac92e41470ca8408e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([4671, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -17958,13 +18168,13 @@ class TestPrimitiveOp_13819cb0e0b6de2e5cd9c9d5b3516ca5(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_79a86ee4e92b734476fef694ca203046(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2b5e7ddf6d05307372f570ced9a842de(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([4671, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -17979,13 +18189,13 @@ class TestPrimitiveOp_79a86ee4e92b734476fef694ca203046(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a422b8006c06a8ead9a0f930944c0196(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_954a6bcd776f669cace58e4df91c5f78(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([4671, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -18000,13 +18210,13 @@ class TestPrimitiveOp_a422b8006c06a8ead9a0f930944c0196(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ef4feca83f178d4d54121f7d6b0643fd(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_13e335f65332ad86eaad28006001e21d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[4671, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[4526, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -18021,13 +18231,13 @@ class TestPrimitiveOp_ef4feca83f178d4d54121f7d6b0643fd(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d4face5a8bdabf38514ef145963dcf85(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_26ba50292d10117340d67f0b09678800(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([4671, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -18042,13 +18252,13 @@ class TestPrimitiveOp_d4face5a8bdabf38514ef145963dcf85(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_37b30c31993c38fcc5ad1123deba80d1(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_48e664d4e0bd107d9eb1753d0fa41174(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[4671, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[4526, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -18063,13 +18273,13 @@ class TestPrimitiveOp_37b30c31993c38fcc5ad1123deba80d1(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4afe269ae4960aea39e8345a2879cc0b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7a922b92838ae0d8f67aac62441057d0(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([1040, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -18084,13 +18294,13 @@ class TestPrimitiveOp_4afe269ae4960aea39e8345a2879cc0b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7175c70ac8d13ed3ad92bdd4408b573d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_056acd90fd9e3311333308f5ee40d6aa(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([1040, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -18105,13 +18315,13 @@ class TestPrimitiveOp_7175c70ac8d13ed3ad92bdd4408b573d(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2ed7eb01185f10e35553d01b7ed754e3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_91a1dc70b7dbde808128224012eadb4f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([1040, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -18126,13 +18336,13 @@ class TestPrimitiveOp_2ed7eb01185f10e35553d01b7ed754e3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e40984635ff22747485808fc319afeb3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_dca3350c7a6de0260f70d6b995075f01(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1040, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1046, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -18147,13 +18357,13 @@ class TestPrimitiveOp_e40984635ff22747485808fc319afeb3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_30b55faad4cd3f8f9d27b3b841654bcf(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7e1e416658a5c9ceb3c14e0e5e93b281(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([1040, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -18168,13 +18378,13 @@ class TestPrimitiveOp_30b55faad4cd3f8f9d27b3b841654bcf(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_96a0310c4b4de33ebc2ed037e3fe2a9a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_67daa7ae1013dfbc6b5628dc36e752a2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[1040, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[1046, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -18945,13 +19155,13 @@ class TestPrimitiveOp_15c5994580061fa249ee0fb539aa677f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_092caf4bd724335799788d34d4e9534b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ea90c59f429890f7109609574783b204(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([2361, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -18966,13 +19176,13 @@ class TestPrimitiveOp_092caf4bd724335799788d34d4e9534b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_63d9d35a6eda964fc1de89e5d90c7f35(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_474d0a995c2712aa91af1281d381e910(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([2361, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -18987,13 +19197,13 @@ class TestPrimitiveOp_63d9d35a6eda964fc1de89e5d90c7f35(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_1e6001539ed55db160df2b6b871834da(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_da9b536a687916248d50bd7546812b26(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([2361, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19008,13 +19218,13 @@ class TestPrimitiveOp_1e6001539ed55db160df2b6b871834da(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_186a523c7105425deb94fbe6d72425ac(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_83ebf613d33172da81f795c215892413(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2361, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2335, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -19029,13 +19239,13 @@ class TestPrimitiveOp_186a523c7105425deb94fbe6d72425ac(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_b89f5ed83ef96c694c064375ee4e4f9f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2eb275fc2e873b7ee025882cf8339279(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([2361, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19050,13 +19260,13 @@ class TestPrimitiveOp_b89f5ed83ef96c694c064375ee4e4f9f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_0733dc6e068374f819cc41d8c2f62efa(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_aaee2dc7d15c54600489d3581f89a2d8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2361, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2335, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -19071,13 +19281,13 @@ class TestPrimitiveOp_0733dc6e068374f819cc41d8c2f62efa(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7a86ba64b45f504d7fb88653d90fd6de(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0d92a253c05767331e6bf46589151698(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([3043, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19092,13 +19302,13 @@ class TestPrimitiveOp_7a86ba64b45f504d7fb88653d90fd6de(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_9e5501fda2a99d64be101958f6a1be19(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_308e2448db999732a6a9e53f2bc1342b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([3043, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19113,13 +19323,13 @@ class TestPrimitiveOp_9e5501fda2a99d64be101958f6a1be19(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_357704bb2c5db55141cc52ee63b94ae9(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_9ee35fb43bad2adb8b262c1bc58185ca(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([3043, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19134,13 +19344,13 @@ class TestPrimitiveOp_357704bb2c5db55141cc52ee63b94ae9(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_0cbcaf4fdf938c73d696337e4823aad3(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6ae35944e211f15a50d4d424917d9791(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[3043, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2986, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -19155,13 +19365,13 @@ class TestPrimitiveOp_0cbcaf4fdf938c73d696337e4823aad3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_5c9baa2968564df4e9be821bdd9fe0df(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_0d8d4601f22dd1ef5746c4e5c1d311d5(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([3043, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19176,13 +19386,13 @@ class TestPrimitiveOp_5c9baa2968564df4e9be821bdd9fe0df(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fee7bb89996b15245d68bc71f87b5c49(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ed2ff539ae9c2fde6cf64ec83d93f993(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[3043, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2986, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -19197,13 +19407,13 @@ class TestPrimitiveOp_fee7bb89996b15245d68bc71f87b5c49(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_146f5efe81384cd1dc83a2525bb431eb(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_ea46efac61b0026323d139896f72af3d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([3752, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19218,13 +19428,13 @@ class TestPrimitiveOp_146f5efe81384cd1dc83a2525bb431eb(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_124825381391fd2df671f850558aff4b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_258b13039996cfbef80868bbad57b7ce(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([3752, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19239,13 +19449,13 @@ class TestPrimitiveOp_124825381391fd2df671f850558aff4b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_17669ca13fa1bf2cbf3411f1718d36e4(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_969ca31fb58d60c207b8a2f19705f1bd(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([3752, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19260,13 +19470,13 @@ class TestPrimitiveOp_17669ca13fa1bf2cbf3411f1718d36e4(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_941009c9128054a3799216e877f04171(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d211b124d709adb3ebe3b30a43b6872f(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[3752, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[3783, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -19281,13 +19491,13 @@ class TestPrimitiveOp_941009c9128054a3799216e877f04171(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f0d1acca27176eb098fa41516f83a30a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_8d7957d0905e19cd5138aeb4ff6c0f14(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([3752, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -19302,13 +19512,13 @@ class TestPrimitiveOp_f0d1acca27176eb098fa41516f83a30a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_3680d1e424b6f997abd33e88d2eaeaa4(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_84d2d16efe9fae4599270d207bb4fd25(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[3752, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[3783, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -19407,13 +19617,13 @@ class PrimitiveOp_c116ef9057f88fe2992fdc2ad8dd0c41(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4724cdae0e199fde6f95c13ccd211f75(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4dee39a94121e9fc8fa96d98606f75b2(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_c116ef9057f88fe2992fdc2ad8dd0c41
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[[0.4161657691001892]]], [[[0.291655570268631]]], [[[0.8429783582687378]]], [[[0.49608564376831055]]], [[[0.6166152954101562]]], [[[0.3671640455722809]]], [[[0.9706653952598572]]], [[[0.11804307252168655]]], [[[0.4338018596172333]]], [[[0.5702500939369202]]], [[[0.6808611750602722]]]], dtype='float32').reshape([11, 1, 1, 1]),
+            paddle.to_tensor([[[[0.8548710942268372]]], [[[0.11934872716665268]]], [[[0.09530581533908844]]], [[[0.9877559542655945]]], [[[0.4086410105228424]]], [[[0.2774769067764282]]], [[[0.14035162329673767]]], [[[0.9043948650360107]]], [[[0.453105628490448]]], [[[0.7704435586929321]]], [[[0.5275695323944092]]]], dtype='float32').reshape([11, 1, 1, 1]),
         ]
 
 
@@ -20940,13 +21150,13 @@ class TestPrimitiveOp_9b9cc7daa2e4f05d5a5c273baa3d8bff(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_3a06bba3e2773310c3055ff0344fe74f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2cbe7e5d1db66f2c24cc9948a84e64a7(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([2058, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -20961,13 +21171,13 @@ class TestPrimitiveOp_3a06bba3e2773310c3055ff0344fe74f(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_3bf25768395d14aa1c029d65cf512139(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d7dace68f3c9b12313d1e89066cbcb2b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([2058, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -20982,13 +21192,13 @@ class TestPrimitiveOp_3bf25768395d14aa1c029d65cf512139(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ebcf63e90f7edfc91e41ed9e742507f9(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_2388a597ff0b922a09fca24beffc8dec(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([2058, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -21003,13 +21213,13 @@ class TestPrimitiveOp_ebcf63e90f7edfc91e41ed9e742507f9(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_980c79dc67bc8ba3a761db027272380e(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_3882b7d7f206a62acb8487327f9f6458(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2058, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2041, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -21024,13 +21234,13 @@ class TestPrimitiveOp_980c79dc67bc8ba3a761db027272380e(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_6f440486585964c05c375f808993c95a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_4925cc58d4e9d586157e1e4f2573efd6(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([2058, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -21045,13 +21255,13 @@ class TestPrimitiveOp_6f440486585964c05c375f808993c95a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_95277f79ca0c0a688c99f9576579e079(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_673768bf860f5845278797f8762cf765(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[2058, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[2041, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -21780,13 +21990,13 @@ class TestPrimitiveOp_7b20d5e82c3d965d08019df326f12a51(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e151e89efe4d6776df0c4a0a88d8f169(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_706504bf27842811b28761f31ceee64e(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_0c4493167b8b1ab5a7a7948a1bce1cea
     def get_inputs(self):
         return [
-            paddle.uniform([4175, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -21801,13 +22011,13 @@ class TestPrimitiveOp_e151e89efe4d6776df0c4a0a88d8f169(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2212c2d61b8f97511862d1f0d2f68c9d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_dd845243ee1f0c801a6a343c6914c71b(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_01aeee0faa023bed8375029deedf746c
     def get_inputs(self):
         return [
-            paddle.uniform([4175, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -21822,13 +22032,13 @@ class TestPrimitiveOp_2212c2d61b8f97511862d1f0d2f68c9d(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_18273090cd02d0dd10d4d26b0d250437(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f8184e82e6321460b0473be52037a2fb(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_680dd56624763f0f67e000f931566d4c
     def get_inputs(self):
         return [
-            paddle.uniform([4175, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -21843,13 +22053,13 @@ class TestPrimitiveOp_18273090cd02d0dd10d4d26b0d250437(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_047b85846bf29941e011ea4dd7748313(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_37d97430553f200b884ce6eff0ee3fc8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_1c63bf4f8560c9e34b73ef829caba277
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[4175, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[4210, 4], dtype='int64'), 'int64'),
         ]
 
 
@@ -21864,13 +22074,13 @@ class TestPrimitiveOp_047b85846bf29941e011ea4dd7748313(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ccd1df6f517e876074851e4f7651d6e0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_48e63e9fb909073d1ea9a8088f170677(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_79d335d7b19abf5d0ec353dc9809f8b8
     def get_inputs(self):
         return [
-            paddle.uniform([4175, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
@@ -21885,13 +22095,13 @@ class TestPrimitiveOp_ccd1df6f517e876074851e4f7651d6e0(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_39a3286ca4c58f7c0fb55db35df65231(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d70b885ce43cba4a3598ed6714c9531c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_cae8640658ea201b89f396dfb2753e47
     def get_inputs(self):
         return [
-            paddle.cast(paddle.randint(low=0, high=3, shape=[4175, 4], dtype='int64'), 'int64'),
+            paddle.cast(paddle.randint(low=0, high=3, shape=[4210, 4], dtype='int64'), 'int64'),
         ]
 
 
