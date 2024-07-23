@@ -42,13 +42,6 @@ ${python_ver} run.py
 
 elif [ $PLT_PERF_CONTENT == "kernel" ];then
 
-# if [ $TESTING == "yaml/dy^dy2stcinn_eval-dy2st^dy2stcinn_eval_benchmark_kernel.yml" ];then
-# perf_docker_name="PaddleLayerTest_perf_kernel_eval"
-# elif [ $TESTING == "yaml/dy^dy2stcinn_train-dy2st^dy2stcinn_train_benchmark.yml" ];then
-# perf_docker_name="PaddleLayerTest_perf_kernel_train"
-# fi
-echo "PLT_PERF_DOCKER_NAME: ${PLT_PERF_DOCKER_NAME}"
-
 docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "AK=${AK}" -e "SK=${SK}" \
   -e "http_proxy=${http_proxy}" \
