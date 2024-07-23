@@ -338,14 +338,12 @@ class TestTryRun(unittest.TestCase):
         kOutputLimit = 65536
         message = try_run_stderr[-kOutputLimit:]
         raise RuntimeError(f"panicked. last {kOutputLimit} characters of stderr: \n{message}")
-class PrimitiveOp_8f0e25b7c5e2ae341a499ff9f3c1f35f(InstanceTrait, paddle.nn.Layer):
+class PrimitiveOp_6d1ebf26e80eba4242aff3d3d4c7b3fb(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
         super().__init__()
 
     def forward(self, arg_0, arg_1, arg_2):
-        arg_1 = paddle._C_ops.full_int_array([1], paddle.int64, paddle.core.CPUPlace())
-        arg_2 = paddle._C_ops.full_int_array([26], paddle.int64, paddle.core.CPUPlace())
         input_0 = arg_0
         input_1 = arg_1
         input_2 = arg_2
@@ -365,10 +363,10 @@ class PrimitiveOp_8f0e25b7c5e2ae341a499ff9f3c1f35f(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_126373fe784cd29d76d629dc040b9e9f(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_535d609fa45a27b2e58215c57878e718(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_8f0e25b7c5e2ae341a499ff9f3c1f35f
+        return PrimitiveOp_6d1ebf26e80eba4242aff3d3d4c7b3fb
     def get_inputs(self):
         return [
             paddle.to_tensor([True], dtype='bool').reshape([1]),

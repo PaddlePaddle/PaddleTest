@@ -338,13 +338,12 @@ class TestTryRun(unittest.TestCase):
         kOutputLimit = 65536
         message = try_run_stderr[-kOutputLimit:]
         raise RuntimeError(f"panicked. last {kOutputLimit} characters of stderr: \n{message}")
-class PrimitiveOp_268dedf78b6ed05d29d319debe649e43(InstanceTrait, paddle.nn.Layer):
+class PrimitiveOp_324868925da044e91297f7e3bf4c216a(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
         super().__init__()
 
     def forward(self, arg_0):
-        arg_0 = paddle._C_ops.full_int_array([0], paddle.int32, paddle.core.CPUPlace())
         input_0 = arg_0
         input_1 = 30
         return paddle._C_ops.one_hot(input_0 % paddle.cast(input_1, input_0.dtype), input_1)
@@ -361,10 +360,10 @@ class PrimitiveOp_268dedf78b6ed05d29d319debe649e43(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_2063b13c40d8f5b5412c7f3f34352d37(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_56aa3fadb6e9f275a76992f312ca76bc(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_268dedf78b6ed05d29d319debe649e43
+        return PrimitiveOp_324868925da044e91297f7e3bf4c216a
     def get_inputs(self):
         return [
             paddle.to_tensor([0], dtype='int32').reshape([1]),
@@ -381,13 +380,12 @@ class TestPrimitiveOp_2063b13c40d8f5b5412c7f3f34352d37(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
-class PrimitiveOp_589a600c4c12c7ec499fa96e4b3cd88b(InstanceTrait, paddle.nn.Layer):
+class PrimitiveOp_54e9c323240c4bcd0677c76c125cd457(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
         super().__init__()
 
     def forward(self, arg_0):
-        arg_0 = paddle._C_ops.full_int_array([0], paddle.int32, paddle.core.CPUPlace())
         input_0 = arg_0
         input_1 = 38
         return paddle._C_ops.one_hot(input_0 % paddle.cast(input_1, input_0.dtype), input_1)
@@ -404,10 +402,10 @@ class PrimitiveOp_589a600c4c12c7ec499fa96e4b3cd88b(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4593537b68e176ebd09a213170072331(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_87d3003417420542e6d2b5c45780858a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_589a600c4c12c7ec499fa96e4b3cd88b
+        return PrimitiveOp_54e9c323240c4bcd0677c76c125cd457
     def get_inputs(self):
         return [
             paddle.to_tensor([0], dtype='int32').reshape([1]),
@@ -424,13 +422,12 @@ class TestPrimitiveOp_4593537b68e176ebd09a213170072331(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
-class PrimitiveOp_cbec093d96cf5f8fdcf175cadc61f296(InstanceTrait, paddle.nn.Layer):
+class PrimitiveOp_cfc791368a1b318ad5d18f868862718b(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
         super().__init__()
 
     def forward(self, arg_0):
-        arg_0 = paddle._C_ops.full_int_array([2], paddle.int64, paddle.core.CPUPlace())
         input_0 = arg_0
         input_1 = 38
         return paddle._C_ops.one_hot(input_0 % paddle.cast(input_1, input_0.dtype), input_1)
@@ -447,10 +444,10 @@ class PrimitiveOp_cbec093d96cf5f8fdcf175cadc61f296(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_d1730f221c7a9ef5b75fa63096616a6b(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_7b2898f473e30d020e33662e294b0515(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_cbec093d96cf5f8fdcf175cadc61f296
+        return PrimitiveOp_cfc791368a1b318ad5d18f868862718b
     def get_inputs(self):
         return [
             paddle.to_tensor([2], dtype='int64').reshape([1]),
@@ -467,33 +464,11 @@ class TestPrimitiveOp_d1730f221c7a9ef5b75fa63096616a6b(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
-class PrimitiveOp_112cb4ad173ff9449ae8cbb148934756(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        arg_0 = paddle._C_ops.full_int_array([0], paddle.int64, paddle.core.CPUPlace())
-        input_0 = arg_0
-        input_1 = 38
-        return paddle._C_ops.one_hot(input_0 % paddle.cast(input_1, input_0.dtype), input_1)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None], dtype='int64'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_4d61761e03019a8bfd3223e54c19f3b0(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_088216b2a1e20f25f7c7d4fdd27b5042(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_112cb4ad173ff9449ae8cbb148934756
+        return PrimitiveOp_cfc791368a1b318ad5d18f868862718b
     def get_inputs(self):
         return [
             paddle.to_tensor([0], dtype='int64').reshape([1]),
@@ -510,33 +485,11 @@ class TestPrimitiveOp_4d61761e03019a8bfd3223e54c19f3b0(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
-class PrimitiveOp_3b16700f50d4f9ef0ba42935214fa9e9(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        arg_0 = paddle._C_ops.full_int_array([37], paddle.int64, paddle.core.CPUPlace())
-        input_0 = arg_0
-        input_1 = 38
-        return paddle._C_ops.one_hot(input_0 % paddle.cast(input_1, input_0.dtype), input_1)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None], dtype='int64'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_c481668e2d2b0f08e367693876eed40a(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_099e4e82fe77639f84752af9bf534b79(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_3b16700f50d4f9ef0ba42935214fa9e9
+        return PrimitiveOp_cfc791368a1b318ad5d18f868862718b
     def get_inputs(self):
         return [
             paddle.to_tensor([37], dtype='int64').reshape([1]),
@@ -553,13 +506,12 @@ class TestPrimitiveOp_c481668e2d2b0f08e367693876eed40a(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
-class PrimitiveOp_18b72b7ae4d94d5ef89a3b326b32260b(InstanceTrait, paddle.nn.Layer):
+class PrimitiveOp_5623b9ed014be8035075885e63a58bb9(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
         super().__init__()
 
     def forward(self, arg_0):
-        arg_0 = paddle._C_ops.full_int_array([0], paddle.int32, paddle.core.CPUPlace())
         input_0 = arg_0
         input_1 = 70
         return paddle._C_ops.one_hot(input_0 % paddle.cast(input_1, input_0.dtype), input_1)
@@ -576,10 +528,10 @@ class PrimitiveOp_18b72b7ae4d94d5ef89a3b326b32260b(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_ba9ab04075dde043c7898b743f29357d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_eb9313a865f04d238a412adac77c643c(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_18b72b7ae4d94d5ef89a3b326b32260b
+        return PrimitiveOp_5623b9ed014be8035075885e63a58bb9
     def get_inputs(self):
         return [
             paddle.to_tensor([0], dtype='int32').reshape([1]),
@@ -596,13 +548,12 @@ class TestPrimitiveOp_ba9ab04075dde043c7898b743f29357d(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
-class PrimitiveOp_a3720a983c9908ae611439ea6ccc0e35(InstanceTrait, paddle.nn.Layer):
+class PrimitiveOp_569f1c09fa8ab2cffe8a452e2dd7226d(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
         super().__init__()
 
     def forward(self, arg_0):
-        arg_0 = paddle._C_ops.full_int_array([0], paddle.int64, paddle.core.CPUPlace())
         input_0 = arg_0
         input_1 = 70
         return paddle._C_ops.one_hot(input_0 % paddle.cast(input_1, input_0.dtype), input_1)
@@ -619,10 +570,10 @@ class PrimitiveOp_a3720a983c9908ae611439ea6ccc0e35(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_142486b0b855dfeff12a7f33fbd447ac(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_a8408dfca272a0559b6210bc7137fca8(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_a3720a983c9908ae611439ea6ccc0e35
+        return PrimitiveOp_569f1c09fa8ab2cffe8a452e2dd7226d
     def get_inputs(self):
         return [
             paddle.to_tensor([0], dtype='int64').reshape([1]),
@@ -639,33 +590,11 @@ class TestPrimitiveOp_142486b0b855dfeff12a7f33fbd447ac(CinnTestBase, unittest.Te
                 raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
-class PrimitiveOp_6cf93dbf1e235c033a4813340d0a51b1(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0):
-        arg_0 = paddle._C_ops.full_int_array([33], paddle.int64, paddle.core.CPUPlace())
-        input_0 = arg_0
-        input_1 = 70
-        return paddle._C_ops.one_hot(input_0 % paddle.cast(input_1, input_0.dtype), input_1)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None], dtype='int64'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_a190845782c0ed73ffbcd6561ce8b702(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_d1f5abe5097f2b1c1e79eb6949664d51(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_6cf93dbf1e235c033a4813340d0a51b1
+        return PrimitiveOp_569f1c09fa8ab2cffe8a452e2dd7226d
     def get_inputs(self):
         return [
             paddle.to_tensor([33], dtype='int64').reshape([1]),
