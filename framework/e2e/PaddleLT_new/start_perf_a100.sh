@@ -42,12 +42,12 @@ ${python_ver} run.py
 
 elif [ $PLT_PERF_CONTENT == "kernel" ];then
 
-if [ $TESTING == "yaml/dy^dy2stcinn_eval-dy2st^dy2stcinn_eval_benchmark_kernel.yml" ];then
-perf_docker_name="PaddleLayerTest_perf_kernel_eval"
-elif [ $TESTING == "yaml/dy^dy2stcinn_train-dy2st^dy2stcinn_train_benchmark.yml" ];then
-perf_docker_name="PaddleLayerTest_perf_kernel_train"
-fi
-echo "perf_docker_name: ${perf_docker_name}"
+# if [ $TESTING == "yaml/dy^dy2stcinn_eval-dy2st^dy2stcinn_eval_benchmark_kernel.yml" ];then
+# perf_docker_name="PaddleLayerTest_perf_kernel_eval"
+# elif [ $TESTING == "yaml/dy^dy2stcinn_train-dy2st^dy2stcinn_train_benchmark.yml" ];then
+# perf_docker_name="PaddleLayerTest_perf_kernel_train"
+# fi
+echo "PLT_PERF_DOCKER_NAME: ${PLT_PERF_DOCKER_NAME}"
 
 docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "AK=${AK}" -e "SK=${SK}" \
@@ -58,7 +58,7 @@ docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "python_ver=${python_ver}" \
   -e "wheel_url=${wheel_url}" \
   -e "AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID}" \
-  ${perf_docker_name} \
+  ${PLT_PERF_DOCKER_NAME} \
   /bin/bash -c "
 ldconfig;
 ps aux | grep python | awk '{print $2}' | xargs kill -9
