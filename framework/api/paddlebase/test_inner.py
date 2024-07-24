@@ -37,8 +37,8 @@ def cal_inner(x, y):
     calculate inner
     """
     shape0, shape1 = x.shape, y.shape
-    batchsize0 = np.product(shape0) // (shape0[-1])
-    batchsize1 = np.product(shape1) // (shape1[-1])
+    batchsize0 = np.prod(shape0) // (shape0[-1])
+    batchsize1 = np.prod(shape1) // (shape1[-1])
     x_t = x.reshape(-1, shape0[-1])
     y_t = y.reshape(-1, shape1[-1])
     tmp = []

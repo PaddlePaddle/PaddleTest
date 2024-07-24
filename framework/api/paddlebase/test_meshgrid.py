@@ -30,9 +30,8 @@ def test_meshgrid_base():
             paddle.disable_static(place)
             res = paddle.meshgrid(paddle.to_tensor(x), paddle.to_tensor(y))
             expect = np.meshgrid(x, y)
-            for i, exp in enumerate(expect):
-                expect[i] = exp.transpose(1, 0)
-            compare(res, expect)
+            expect_list = [exp.transpose(1, 0) for exp in expect]
+            compare(res, expect_list)
             paddle.enable_static()
 
 
@@ -50,7 +49,6 @@ def test_meshgrid():
             paddle.disable_static(place)
             res = paddle.meshgrid(paddle.to_tensor(x), paddle.to_tensor(y), paddle.to_tensor(z))
             expect = np.meshgrid(x, y, z)
-            for i, exp in enumerate(expect):
-                expect[i] = exp.transpose(1, 0, 2)
-            compare(res, expect)
+            expect_list = [exp.transpose(1, 0, 2) for exp in expect]
+            compare(res, expect_list)
             paddle.enable_static()

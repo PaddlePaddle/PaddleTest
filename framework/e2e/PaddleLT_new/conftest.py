@@ -18,6 +18,7 @@ def pytest_addoption(parser):
     parser.addoption("--title", type=str, default="demo_case", help="title name")
     parser.addoption("--layerfile", type=str, default="diy/layer/demo_case/SIR_252.py", help="sublayer.py path")
     parser.addoption("--testing", type=str, default="testing", help="testing yml path")
+    parser.addoption("--device_place_id", type=int, default=0, help="device place id")
 
 
 @pytest.fixture
@@ -36,3 +37,9 @@ def layerfile(request):
 def testing(request):
     """testing"""
     return request.config.getoption("--testing")
+
+
+@pytest.fixture
+def device_place_id(request):
+    """testing"""
+    return request.config.getoption("--device_place_id")

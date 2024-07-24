@@ -24,14 +24,15 @@ class LayerTrain(object):
     """
 
     # def __init__(self, testing, layerfile, device_id):
-    def __init__(self, testing, layerfile):
+    def __init__(self, testing, layerfile, device_place_id):
         """
         初始化
         """
         self.seed = 33
         reset(self.seed)
         self.device = os.environ.get("PLT_SET_DEVICE")
-        paddle.set_device(str(self.device))
+        paddle.device.set_device(f"{self.device}:{device_place_id}")
+        Logger("LayerTrain.__init__").get_log().info(f"device_place_id is: {device_place_id}")
         # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
 
         self.testing = testing
@@ -246,6 +247,33 @@ class LayerTrain(object):
         data_grad = self._get_data_grad(data)
         return {"logit": logit, "data_grad": data_grad}
 
+    def dy2st_train_static_inputspec(self):
+        """dy2st cinn train with inputspec"""
+        data, input_spec = self._net_input_and_static_spec()
+        Logger("dy2st_train_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
+        net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
+
+        net.train()
+        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+
+        # 构建optimizer用于训练
+        if st_net.parameters():
+            opt = optimizer.get_opt(net=st_net)
+
+        for epoch in range(self.step):
+            logit = st_net(*data)
+            # 构建loss用于训练
+            dy_loss = loss.get_loss(logit)
+            dy_loss.backward()
+            if st_net.parameters():
+                opt.step()
+                opt.clear_grad()
+
+        data_grad = self._get_data_grad(data)
+        return {"logit": logit, "data_grad": data_grad}
+
     def dy2st_train_cinn(self):
         """dy2st cinn train"""
         data = self._net_input()
@@ -278,6 +306,35 @@ class LayerTrain(object):
         """dy2st cinn train with inputspec"""
         data, input_spec = self._net_input_and_spec()
         Logger("dy2st_train_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
+        net = self._net_instant()
+        optimizer = self._net_optimizer()
+        loss = self._net_loss()
+
+        net.train()
+        build_strategy = paddle.static.BuildStrategy()
+        build_strategy.build_cinn_pass = True
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
+
+        # 构建optimizer用于训练
+        if cinn_net.parameters():
+            opt = optimizer.get_opt(net=cinn_net)
+
+        for epoch in range(self.step):
+            logit = cinn_net(*data)
+            # 构建loss用于训练
+            dy_loss = loss.get_loss(logit)
+            dy_loss.backward()
+            if cinn_net.parameters():
+                opt.step()
+                opt.clear_grad()
+
+        data_grad = self._get_data_grad(data)
+        return {"logit": logit, "data_grad": data_grad}
+
+    def dy2st_train_cinn_static_inputspec(self):
+        """dy2st cinn train with inputspec"""
+        data, input_spec = self._net_input_and_static_spec()
+        Logger("dy2st_train_cinn_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
         optimizer = self._net_optimizer()
         loss = self._net_loss()

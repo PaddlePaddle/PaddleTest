@@ -46,7 +46,7 @@ def test_isnan1():
     """
     x = np.nan
     """
-    x = np.array([np.nan, np.inf, np.NINF, -np.inf, -np.nan])
+    x = np.array([np.nan, np.inf, -np.inf, -np.inf, -np.nan])
     res = np.isnan(x)
     obj.run(res=res, x=x)
 

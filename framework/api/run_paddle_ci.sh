@@ -1,6 +1,6 @@
 home=$PWD
 python -m pip install pytest
-python -m pip install scipy
+python -m pip install scipy>=1.13
 export FLAGS_use_curand=1
 export FLAGS_set_to_1d=0
 

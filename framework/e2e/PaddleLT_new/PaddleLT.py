@@ -14,7 +14,7 @@ import layertest
 # @allure.story("e2e_Layer")
 # @allure.dynamic.title("{case}")
 # @pytest.mark.parametrize
-def test_module_layer(title, layerfile, testing):
+def test_module_layer(title, layerfile, testing, device_place_id):
     """pytest case"""
     # last_dir = os.path.basename(all_dir)
     # base_dir = all_dir.replace(last_dir, "")
@@ -24,5 +24,7 @@ def test_module_layer(title, layerfile, testing):
     allure.dynamic.feature("case")
 
     allure.dynamic.description("Layer 测试")
-    single_test = layertest.LayerTest(title=title, layerfile=layerfile, testing=testing)
+    single_test = layertest.LayerTest(
+        title=title, layerfile=layerfile, testing=testing, device_place_id=device_place_id
+    )
     single_test._case_run()

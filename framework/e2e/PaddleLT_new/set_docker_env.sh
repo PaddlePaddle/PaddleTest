@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-export wheel_url="${wheel_url:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda112-Trtoff-Py38-Compile/latest/paddlepaddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl}"
-export python_ver="${python_ver:-python3.8}"
+export wheel_url="${wheel_url:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuSome-LinuxCentos-Gcc82-Cuda118-Cudnn86-Trt85-Py310-CINN-Compile/latest/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl}"
+export python_ver="${python_ver:-python3.10}"
 export docker_type="${docker_type:-Ubuntu}"
-export cuda_ver="${cuda_ver:-cuda11.2}"
+export cuda_ver="${cuda_ver:-cuda11.8}"
 
 if [[ "${docker_type}" == "Ubuntu" ]];then
     case ${cuda_ver} in
