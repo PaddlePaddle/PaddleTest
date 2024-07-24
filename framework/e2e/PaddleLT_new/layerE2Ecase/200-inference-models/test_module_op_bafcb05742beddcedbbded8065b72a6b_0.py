@@ -2979,7 +2979,7 @@ class Test_builtin_module_1932_0_0(CinnTestBase, unittest.TestCase):
     def prepare_data(self):
         self.inputs = [
             # constant_20
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([0.125], dtype='float32').reshape([1]),
             # constant_19
             paddle.to_tensor([64], dtype='int32').reshape([1]),
             # constant_18
@@ -2995,7 +2995,7 @@ class Test_builtin_module_1932_0_0(CinnTestBase, unittest.TestCase):
             # constant_13
             paddle.to_tensor([24], dtype='int32').reshape([1]),
             # constant_12
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([0.408248], dtype='float32').reshape([1]),
             # constant_11
             paddle.to_tensor([2], dtype='int64').reshape([1]),
             # constant_10

@@ -1323,13 +1323,13 @@ class Test_builtin_module_1057_0_0(CinnTestBase, unittest.TestCase):
             # constant_5
             paddle.to_tensor([8, -1, 256, 64], dtype='int64').reshape([4]),
             # constant_4
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([0.125], dtype='float32').reshape([1]),
             # constant_3
             paddle.to_tensor([-1, 256, 64], dtype='int64').reshape([3]),
             # constant_2
             paddle.to_tensor([-1, 256, 8, 64], dtype='int64').reshape([4]),
             # constant_1
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([0.1], dtype='float32').reshape([1]),
             # parameter_250
             paddle.uniform([1, 256, 512], dtype='float16', min=0, max=0.5),
             # constant_8

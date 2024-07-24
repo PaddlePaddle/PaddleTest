@@ -999,13 +999,13 @@ class Test_builtin_module_1596_0_0(CinnTestBase, unittest.TestCase):
     def prepare_data(self):
         self.inputs = [
             # constant_7
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0], dtype='float32').reshape([1]),
             # constant_6
             paddle.to_tensor([1], dtype='int64').reshape([1]),
             # parameter_323
             paddle.uniform([1, 19, 1, 1], dtype='float16', min=0, max=0.5),
             # constant_5
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([0.1], dtype='float32').reshape([1]),
             # parameter_317
             paddle.uniform([1, 128, 1, 1], dtype='float16', min=0, max=0.5),
             # parameter_311

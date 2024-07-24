@@ -1882,11 +1882,11 @@ class Test_builtin_module_729_0_0(CinnTestBase, unittest.TestCase):
             # parameter_364
             paddle.uniform([255, 256, 1, 1], dtype='float16', min=0, max=0.5),
             # feed_2
-            paddle.uniform([1, 2], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0, 1.0], dtype='float32').reshape([1, 2]),
             # feed_0
             paddle.uniform([1, 3, 608, 608], dtype='float32', min=0, max=0.5),
             # feed_1
-            paddle.uniform([1, 2], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([608.0, 608.0], dtype='float32').reshape([1, 2]),
         ]
         for input in self.inputs:
             input.stop_gradient = True

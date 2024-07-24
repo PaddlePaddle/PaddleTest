@@ -2252,7 +2252,7 @@ class Test_builtin_module_1719_0_0(CinnTestBase, unittest.TestCase):
             # constant_15
             paddle.to_tensor([16], dtype='int64').reshape([1]),
             # constant_14
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0], dtype='float32').reshape([1]),
             # constant_13
             paddle.to_tensor([-1], dtype='int64').reshape([1]),
             # constant_12
@@ -2270,15 +2270,15 @@ class Test_builtin_module_1719_0_0(CinnTestBase, unittest.TestCase):
             # constant_6
             paddle.to_tensor([2], dtype='int64').reshape([1]),
             # constant_5
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([128.0], dtype='float32').reshape([1]),
             # constant_4
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([64.0], dtype='float32').reshape([1]),
             # constant_3
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([32.0], dtype='float32').reshape([1]),
             # constant_2
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([16.0], dtype='float32').reshape([1]),
             # constant_1
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([8.0], dtype='float32').reshape([1]),
             # parameter_321
             paddle.uniform([1, 1, 1, 1], dtype='float32', min=0, max=0.5),
             # parameter_318
@@ -2934,7 +2934,7 @@ class Test_builtin_module_1719_0_0(CinnTestBase, unittest.TestCase):
             # parameter_325
             paddle.uniform([1], dtype='float32', min=0, max=0.5),
             # feed_1
-            paddle.uniform([1, 2], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0, 1.0], dtype='float32').reshape([1, 2]),
             # feed_0
             paddle.uniform([1, 3, 800, 1344], dtype='float32', min=0, max=0.5),
         ]

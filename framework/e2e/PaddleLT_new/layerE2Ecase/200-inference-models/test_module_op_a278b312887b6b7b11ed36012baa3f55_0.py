@@ -1744,13 +1744,13 @@ class Test_builtin_module_1449_0_0(CinnTestBase, unittest.TestCase):
             # constant_21
             paddle.to_tensor([85], dtype='int64').reshape([1]),
             # constant_20
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([-1.0], dtype='float32').reshape([1]),
             # constant_19
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0], dtype='float32').reshape([1]),
             # constant_18
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([10000000.0], dtype='float32').reshape([1]),
             # constant_17
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1e-07], dtype='float32').reshape([1]),
             # parameter_532
             paddle.uniform([], dtype='float32', min=0, max=0.5),
             # constant_16
@@ -2852,11 +2852,11 @@ class Test_builtin_module_1449_0_0(CinnTestBase, unittest.TestCase):
             # parameter_530
             paddle.uniform([258, 256, 1, 1], dtype='float32', min=0, max=0.5),
             # feed_2
-            paddle.uniform([1, 2], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0, 1.0], dtype='float32').reshape([1, 2]),
             # feed_0
             paddle.uniform([1, 3, 640, 640], dtype='float32', min=0, max=0.5),
             # feed_1
-            paddle.uniform([1, 2], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([640.0, 640.0], dtype='float32').reshape([1, 2]),
         ]
         for input in self.inputs:
             input.stop_gradient = True

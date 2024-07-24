@@ -4482,9 +4482,9 @@ class Test_builtin_module_2437_0_0(CinnTestBase, unittest.TestCase):
             # constant_28
             paddle.to_tensor([2], dtype='int64').reshape([1]),
             # constant_27
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([2.0], dtype='float32').reshape([1]),
             # constant_25
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([0.5], dtype='float32').reshape([1]),
             # constant_24
             paddle.to_tensor([100], dtype='int32').reshape([1]),
             # constant_23
@@ -4520,13 +4520,13 @@ class Test_builtin_module_2437_0_0(CinnTestBase, unittest.TestCase):
             # parameter_47
             paddle.uniform([100], dtype='float64', min=0, max=0.5),
             # constant_20
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0], dtype='float32').reshape([1]),
             # constant_14
             paddle.to_tensor([0], dtype='int32').reshape([1]),
             # parameter_45
             paddle.uniform([10], dtype='float64', min=0, max=0.5),
             # constant_26
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([-1.0], dtype='float32').reshape([1]),
             # parameter_46
             paddle.uniform([10], dtype='float64', min=0, max=0.5),
             # constant_13
