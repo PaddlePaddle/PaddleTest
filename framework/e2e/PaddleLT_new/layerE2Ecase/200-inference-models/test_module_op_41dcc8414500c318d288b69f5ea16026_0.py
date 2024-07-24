@@ -1147,7 +1147,7 @@ class Test_builtin_module_1359_0_0(CinnTestBase, unittest.TestCase):
             # constant_3
             paddle.to_tensor([2], dtype='int32').reshape([1]),
             # constant_2
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0], dtype='float32').reshape([1]),
             # constant_1
             paddle.to_tensor([1], dtype='int64').reshape([1]),
             # constant_0

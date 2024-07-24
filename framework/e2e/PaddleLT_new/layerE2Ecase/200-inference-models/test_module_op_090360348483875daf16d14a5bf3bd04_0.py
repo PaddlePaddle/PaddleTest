@@ -1452,7 +1452,7 @@ class Test_builtin_module_1278_0_0(CinnTestBase, unittest.TestCase):
             # constant_25
             paddle.to_tensor([-1, 1200, 4], dtype='int64').reshape([3]),
             # constant_24
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([32.0], dtype='float32').reshape([1]),
             # parameter_297
             paddle.uniform([1, 3, 20, 20, 2], dtype='float32', min=0, max=0.5),
             # constant_23
@@ -1466,7 +1466,7 @@ class Test_builtin_module_1278_0_0(CinnTestBase, unittest.TestCase):
             # constant_20
             paddle.to_tensor([-1, 4800, 4], dtype='int64').reshape([3]),
             # constant_19
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([16.0], dtype='float32').reshape([1]),
             # parameter_295
             paddle.uniform([1, 3, 40, 40, 2], dtype='float32', min=0, max=0.5),
             # constant_18
@@ -1488,17 +1488,17 @@ class Test_builtin_module_1278_0_0(CinnTestBase, unittest.TestCase):
             # constant_11
             paddle.to_tensor([-1], dtype='int32').reshape([1]),
             # constant_10
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([0.5], dtype='float32').reshape([1]),
             # parameter_292
             paddle.uniform([], dtype='float32', min=0, max=0.5),
             # constant_9
             paddle.to_tensor([4], dtype='int64').reshape([1]),
             # constant_8
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([8.0], dtype='float32').reshape([1]),
             # constant_7
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0], dtype='float32').reshape([1]),
             # constant_6
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([2.0], dtype='float32').reshape([1]),
             # constant_5
             paddle.to_tensor([2], dtype='int64').reshape([1]),
             # parameter_293
@@ -2100,7 +2100,7 @@ class Test_builtin_module_1278_0_0(CinnTestBase, unittest.TestCase):
             # parameter_289
             paddle.uniform([255, 512, 1, 1], dtype='float32', min=0, max=0.5),
             # feed_1
-            paddle.uniform([1, 2], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0, 1.0], dtype='float32').reshape([1, 2]),
             # feed_0
             paddle.uniform([1, 3, 640, 640], dtype='float32', min=0, max=0.5),
         ]

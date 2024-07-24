@@ -867,7 +867,7 @@ class Test_builtin_module_874_0_0(CinnTestBase, unittest.TestCase):
     def prepare_data(self):
         self.inputs = [
             # constant_9
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([1.0], dtype='float32').reshape([1]),
             # constant_8
             paddle.to_tensor([1], dtype='int64').reshape([1]),
             # parameter_245
@@ -877,7 +877,7 @@ class Test_builtin_module_874_0_0(CinnTestBase, unittest.TestCase):
             # parameter_237
             paddle.uniform([1, 19, 1, 1], dtype='float32', min=0, max=0.5),
             # constant_7
-            paddle.uniform([1], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([0.1], dtype='float32').reshape([1]),
             # parameter_231
             paddle.uniform([1, 128, 1, 1], dtype='float32', min=0, max=0.5),
             # parameter_225
