@@ -1,7 +1,7 @@
 module_name:object_detection
 check_dataset_yaml:paddlex/configs/object_detection/PicoDet-S.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/det_coco_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdema,pdopt,pdstates,inference_config,pdmodel,pdiparams,pdiparams.info
 evaluate_weight_path:best_model.pdparams
@@ -15,7 +15,7 @@ config_path:paddlex/configs/object_detection/RT-DETR-L.yaml
 module_name:image_classification
 check_dataset_yaml:paddlex/configs/image_classification/ResNet50.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/cls_flowers_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdopt,pdstates,pdmodel,pdiparams,pdiparams.info
 evaluate_weight_path:best_model.pdparams
@@ -35,7 +35,7 @@ config_path:paddlex/configs/image_classification/SwinTransformer_base_patch4_win
 module_name:ts_forecast
 check_dataset_yaml:paddlex/configs/ts_forecast/DLinear.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/ts_dataset_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:score,pdparams
 evaluate_weight_path:best_accuracy.pdparams.tar
@@ -51,7 +51,7 @@ config_path:paddlex/configs/ts_forecast/TimesNet.yaml
 module_name:ts_anomaly_detection
 check_dataset_yaml:paddlex/configs/ts_anomaly_detection/TimesNet_ad.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/ts_anomaly_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:score,pdparams
 evaluate_weight_path:best_accuracy.pdparams.tar
@@ -67,7 +67,7 @@ config_path:paddlex/configs/ts_anomaly_detection/PatchTST_ad.yaml
 module_name:semantic_segmentation
 check_dataset_yaml:paddlex/configs/semantic_segmentation/OCRNet_HRNet-W48.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/seg_optic_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdstates,inference_config,pdmodel,pdiparams,pdiparams.info
 evaluate_weight_path:best_model/model.pdparams
@@ -82,7 +82,7 @@ config_path:paddlex/configs/semantic_segmentation/Deeplabv3_Plus-R50.yaml
 module_name:text_recognition
 check_dataset_yaml:paddlex/configs/text_recognition/PP-OCRv4_mobile_rec.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/ocr_rec_dataset_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdopt,pdstates,pdmodel,pdiparams,pdiparams.info
 evaluate_weight_path:best_accuracy.pdparams
@@ -94,7 +94,7 @@ config_path:paddlex/configs/text_recognition/PP-OCRv4_mobile_rec.yaml
 module_name:text_detection
 check_dataset_yaml:paddlex/configs/text_detection/PP-OCRv4_mobile_det.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/ocr_det_dataset_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdopt,pdstates,pdmodel,pdiparams,pdiparams.info
 evaluate_weight_path:best_accuracy.pdparams
@@ -106,7 +106,7 @@ config_path:paddlex/configs/text_detection/PP-OCRv4_mobile_det.yaml
 module_name:ts_classification
 check_dataset_yaml:paddlex/configs/ts_classification/TimesNet_cls.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/ts_classify_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:score,pdparams
 evaluate_weight_path:best_accuracy.pdparams.tar
@@ -118,7 +118,7 @@ config_path:paddlex/configs/ts_classification/TimesNet_cls.yaml
 module_name:instance_segmentation
 check_dataset_yaml:paddlex/configs/instance_segmentation/Mask-RT-DETR-H.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/instance_seg_coco_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdema,pdopt,pdstates,inference_config,pdmodel,pdiparams,pdiparams.info
 evaluate_weight_path:best_model.pdparams
@@ -130,7 +130,7 @@ config_path:paddlex/configs/instance_segmentation/Mask-RT-DETR-L.yaml
 module_name:structure_analysis
 check_dataset_yaml:paddlex/configs/structure_analysis/PicoDet_layout_1x.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/det_layout_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdema,pdopt,pdstates,inference_config,pdmodel,pdiparams,pdiparams.info
 evaluate_weight_path:best_model.pdparams
@@ -142,7 +142,7 @@ config_path:paddlex/configs/structure_analysis/PicoDet_layout_1x.yaml
 module_name:table_recognition
 check_dataset_yaml:paddlex/configs/table_recognition/SLANet.yaml
 dataset_url:https://paddle-model-ecology.bj.bcebos.com/paddlex/data/table_rec_dataset_examples.tar
-run_model:train|evaluate
+run_model:train|evaluate|predict
 check_options:check_train_result_json|check_eval_result_json
 check_weights_items:2,pdparams,pdopt,pdstates,pdmodel,pdiparams,pdiparams.info
 evaluate_weight_path:best_accuracy.pdparams
