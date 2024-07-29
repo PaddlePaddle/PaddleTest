@@ -35,6 +35,7 @@ class PaddleScience_Case_Start(object):
         """
         执行准备过程
         """
+        os.system("python -m pip install numpy==1.23.1")
         if "dy2st" in self.case_name:
             # logger.info("dy2st_convergence tag is: {}".format(self.case_name.split("train_")[-1]))
 
