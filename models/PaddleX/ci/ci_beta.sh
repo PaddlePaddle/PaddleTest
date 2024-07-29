@@ -67,6 +67,8 @@ for modules_info in ${modules_info_list[@]}; do
             line_num=`expr $line_num + 1`
             dataset_url=https:$(func_parser_dataset_url "${lines[line_num]}")
             line_num=`expr $line_num + 1`
+            train_list_name=$(func_parser_value "${lines[line_num]}")
+            line_num=`expr $line_num + 1`
             run_model=$(func_parser_value "${lines[line_num]}")
             line_num=`expr $line_num + 1`
             check_options=$(func_parser_value "${lines[line_num]}")
@@ -85,11 +87,21 @@ for modules_info in ${modules_info_list[@]}; do
             run_command ${check_dataset_cmd} ${module_name}
             checker_cmd="${PYTHONPATH} ${BASE_PATH}/checker.py --check --check_dataset_result --output ${model_output_path} --module_name ${module_name}"
             run_command ${checker_cmd} ${module_name}
+            dataset_dir=`cat $check_dataset_yaml | grep  -m 1 dataset_dir | awk  {'print$NF'}| sed 's/"//g'`
+            if [[ ! -z $train_list_name ]]; then
+                train_data_file=${dataset_dir}/${train_list_name}
+                mv $train_data_file $train_data_file.bak
+            fi
 
         elif [[ ! -z $module_info ]]; then
             for config_path in $module_info;do
                 config_path=$(func_parser_value "${config_path}")
                 batch_size=`cat $config_path | grep  -m 1 batch_size | awk  {'print$NF'}`
+                device=`cat $config_path | grep  -m 1 device | awk  {'print$NF'}`
+                IFS=$','
+                device_list=(${device})
+                device_num=${#device_list[@]}
+                IFS=$' '
                 if [[ $MEM_SIZE -lt 16 ]];then
                     if [[ $batch_size -ge 4 ]];then
                         batch_size=`expr $batch_size / 4`
@@ -102,6 +114,14 @@ for modules_info in ${modules_info_list[@]}; do
                     else
                         batch_size=1
                     fi
+                fi
+                data_num=`expr $device_num \* $batch_size`
+                if [[ ! -z $train_data_file ]]; then
+                    if [[ $module_name == ts* ]]; then
+                        data_num=`expr $device_num \* $batch_size \* 30`
+                        data_num=`expr $data_num + 1`
+                    fi
+                    head -n $data_num $train_data_file.bak > $train_data_file
                 fi
                 yaml_name=${config_path##*/}
                 model_name=${yaml_name%.*}
