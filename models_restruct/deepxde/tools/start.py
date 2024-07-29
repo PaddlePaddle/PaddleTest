@@ -197,7 +197,6 @@ def run():
     model.add_seed(filedir, "import deepxde", "dde.config.set_random_seed(1)\n")
     if "antiderivative" in model.qa_yaml_name:
         model.download_datasets()
-    os.system("python -m pip install numpy==1.23.1")
     return 0
 
 
