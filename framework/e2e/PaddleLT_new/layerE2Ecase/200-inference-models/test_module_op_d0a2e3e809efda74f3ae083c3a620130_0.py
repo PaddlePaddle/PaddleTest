@@ -233,7 +233,7 @@ class BlockEntries:
         full_int_array_1 = [1]
 
         # pd_op.slice: (1xi32) <- (4xi32, 1xi64, 1xi64)
-        slice_0 = paddle._C_ops.slice(shape_0, [0], full_int_array_0, full_int_array_1, [1], [0])
+        slice_0 = paddle._C_ops.slice(shape_0, [0], full_int_array_0, full_int_array_1, [1], [])
 
         # pd_op.unfold: (-1x768x196xf32) <- (-1x3x224x224xf32)
         unfold_0 = paddle._C_ops.unfold(feed_0, [16, 16], [16, 16], [0, 0, 0, 0], [1, 1])
@@ -329,7 +329,7 @@ class BlockEntries:
         full_int_array_7 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_1 = paddle._C_ops.slice(shape_1, [0], full_int_array_6, full_int_array_7, [1], [0])
+        slice_1 = paddle._C_ops.slice(shape_1, [0], full_int_array_6, full_int_array_7, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_1 = paddle.matmul(layer_norm_6, parameter_13, transpose_x=False, transpose_y=False)
@@ -467,7 +467,7 @@ class BlockEntries:
         full_int_array_13 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_4 = paddle._C_ops.slice(shape_2, [0], full_int_array_12, full_int_array_13, [1], [0])
+        slice_4 = paddle._C_ops.slice(shape_2, [0], full_int_array_12, full_int_array_13, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_13 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -527,7 +527,7 @@ class BlockEntries:
         full_int_array_20 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_6 = paddle._C_ops.slice(shape_3, [0], full_int_array_19, full_int_array_20, [1], [0])
+        slice_6 = paddle._C_ops.slice(shape_3, [0], full_int_array_19, full_int_array_20, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_9 = paddle.matmul(layer_norm_18, parameter_30, transpose_x=False, transpose_y=False)
@@ -668,7 +668,7 @@ class BlockEntries:
         full_int_array_26 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_9 = paddle._C_ops.slice(shape_4, [0], full_int_array_25, full_int_array_26, [1], [0])
+        slice_9 = paddle._C_ops.slice(shape_4, [0], full_int_array_25, full_int_array_26, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_16 = paddle.matmul(layer_norm_24, parameter_42, transpose_x=False, transpose_y=False)
@@ -806,7 +806,7 @@ class BlockEntries:
         full_int_array_32 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_12 = paddle._C_ops.slice(shape_5, [0], full_int_array_31, full_int_array_32, [1], [0])
+        slice_12 = paddle._C_ops.slice(shape_5, [0], full_int_array_31, full_int_array_32, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_35 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -866,7 +866,7 @@ class BlockEntries:
         full_int_array_39 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_14 = paddle._C_ops.slice(shape_6, [0], full_int_array_38, full_int_array_39, [1], [0])
+        slice_14 = paddle._C_ops.slice(shape_6, [0], full_int_array_38, full_int_array_39, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_24 = paddle.matmul(layer_norm_36, parameter_59, transpose_x=False, transpose_y=False)
@@ -1007,7 +1007,7 @@ class BlockEntries:
         full_int_array_45 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_17 = paddle._C_ops.slice(shape_7, [0], full_int_array_44, full_int_array_45, [1], [0])
+        slice_17 = paddle._C_ops.slice(shape_7, [0], full_int_array_44, full_int_array_45, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_31 = paddle.matmul(layer_norm_42, parameter_71, transpose_x=False, transpose_y=False)
@@ -1145,7 +1145,7 @@ class BlockEntries:
         full_int_array_51 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_20 = paddle._C_ops.slice(shape_8, [0], full_int_array_50, full_int_array_51, [1], [0])
+        slice_20 = paddle._C_ops.slice(shape_8, [0], full_int_array_50, full_int_array_51, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_57 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -1205,7 +1205,7 @@ class BlockEntries:
         full_int_array_58 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_22 = paddle._C_ops.slice(shape_9, [0], full_int_array_57, full_int_array_58, [1], [0])
+        slice_22 = paddle._C_ops.slice(shape_9, [0], full_int_array_57, full_int_array_58, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_39 = paddle.matmul(layer_norm_54, parameter_88, transpose_x=False, transpose_y=False)
@@ -1346,7 +1346,7 @@ class BlockEntries:
         full_int_array_64 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_25 = paddle._C_ops.slice(shape_10, [0], full_int_array_63, full_int_array_64, [1], [0])
+        slice_25 = paddle._C_ops.slice(shape_10, [0], full_int_array_63, full_int_array_64, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_46 = paddle.matmul(layer_norm_60, parameter_100, transpose_x=False, transpose_y=False)
@@ -1484,7 +1484,7 @@ class BlockEntries:
         full_int_array_70 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_28 = paddle._C_ops.slice(shape_11, [0], full_int_array_69, full_int_array_70, [1], [0])
+        slice_28 = paddle._C_ops.slice(shape_11, [0], full_int_array_69, full_int_array_70, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_79 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -1544,7 +1544,7 @@ class BlockEntries:
         full_int_array_77 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_30 = paddle._C_ops.slice(shape_12, [0], full_int_array_76, full_int_array_77, [1], [0])
+        slice_30 = paddle._C_ops.slice(shape_12, [0], full_int_array_76, full_int_array_77, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_54 = paddle.matmul(layer_norm_72, parameter_117, transpose_x=False, transpose_y=False)
@@ -1685,7 +1685,7 @@ class BlockEntries:
         full_int_array_83 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_33 = paddle._C_ops.slice(shape_13, [0], full_int_array_82, full_int_array_83, [1], [0])
+        slice_33 = paddle._C_ops.slice(shape_13, [0], full_int_array_82, full_int_array_83, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_61 = paddle.matmul(layer_norm_78, parameter_129, transpose_x=False, transpose_y=False)
@@ -1823,7 +1823,7 @@ class BlockEntries:
         full_int_array_89 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_36 = paddle._C_ops.slice(shape_14, [0], full_int_array_88, full_int_array_89, [1], [0])
+        slice_36 = paddle._C_ops.slice(shape_14, [0], full_int_array_88, full_int_array_89, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_101 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -1883,7 +1883,7 @@ class BlockEntries:
         full_int_array_96 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_38 = paddle._C_ops.slice(shape_15, [0], full_int_array_95, full_int_array_96, [1], [0])
+        slice_38 = paddle._C_ops.slice(shape_15, [0], full_int_array_95, full_int_array_96, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_69 = paddle.matmul(layer_norm_90, parameter_146, transpose_x=False, transpose_y=False)
@@ -2024,7 +2024,7 @@ class BlockEntries:
         full_int_array_102 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_41 = paddle._C_ops.slice(shape_16, [0], full_int_array_101, full_int_array_102, [1], [0])
+        slice_41 = paddle._C_ops.slice(shape_16, [0], full_int_array_101, full_int_array_102, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_76 = paddle.matmul(layer_norm_96, parameter_158, transpose_x=False, transpose_y=False)
@@ -2162,7 +2162,7 @@ class BlockEntries:
         full_int_array_108 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_44 = paddle._C_ops.slice(shape_17, [0], full_int_array_107, full_int_array_108, [1], [0])
+        slice_44 = paddle._C_ops.slice(shape_17, [0], full_int_array_107, full_int_array_108, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_123 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -2222,7 +2222,7 @@ class BlockEntries:
         full_int_array_115 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_46 = paddle._C_ops.slice(shape_18, [0], full_int_array_114, full_int_array_115, [1], [0])
+        slice_46 = paddle._C_ops.slice(shape_18, [0], full_int_array_114, full_int_array_115, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_84 = paddle.matmul(layer_norm_108, parameter_175, transpose_x=False, transpose_y=False)
@@ -2363,7 +2363,7 @@ class BlockEntries:
         full_int_array_121 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_49 = paddle._C_ops.slice(shape_19, [0], full_int_array_120, full_int_array_121, [1], [0])
+        slice_49 = paddle._C_ops.slice(shape_19, [0], full_int_array_120, full_int_array_121, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_91 = paddle.matmul(layer_norm_114, parameter_187, transpose_x=False, transpose_y=False)
@@ -2501,7 +2501,7 @@ class BlockEntries:
         full_int_array_127 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_52 = paddle._C_ops.slice(shape_20, [0], full_int_array_126, full_int_array_127, [1], [0])
+        slice_52 = paddle._C_ops.slice(shape_20, [0], full_int_array_126, full_int_array_127, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_145 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -2561,7 +2561,7 @@ class BlockEntries:
         full_int_array_134 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_54 = paddle._C_ops.slice(shape_21, [0], full_int_array_133, full_int_array_134, [1], [0])
+        slice_54 = paddle._C_ops.slice(shape_21, [0], full_int_array_133, full_int_array_134, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_99 = paddle.matmul(layer_norm_126, parameter_204, transpose_x=False, transpose_y=False)
@@ -2702,7 +2702,7 @@ class BlockEntries:
         full_int_array_140 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_57 = paddle._C_ops.slice(shape_22, [0], full_int_array_139, full_int_array_140, [1], [0])
+        slice_57 = paddle._C_ops.slice(shape_22, [0], full_int_array_139, full_int_array_140, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_106 = paddle.matmul(layer_norm_132, parameter_216, transpose_x=False, transpose_y=False)
@@ -2840,7 +2840,7 @@ class BlockEntries:
         full_int_array_146 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_60 = paddle._C_ops.slice(shape_23, [0], full_int_array_145, full_int_array_146, [1], [0])
+        slice_60 = paddle._C_ops.slice(shape_23, [0], full_int_array_145, full_int_array_146, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_167 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -2900,7 +2900,7 @@ class BlockEntries:
         full_int_array_153 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_62 = paddle._C_ops.slice(shape_24, [0], full_int_array_152, full_int_array_153, [1], [0])
+        slice_62 = paddle._C_ops.slice(shape_24, [0], full_int_array_152, full_int_array_153, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_114 = paddle.matmul(layer_norm_144, parameter_233, transpose_x=False, transpose_y=False)
@@ -3041,7 +3041,7 @@ class BlockEntries:
         full_int_array_159 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_65 = paddle._C_ops.slice(shape_25, [0], full_int_array_158, full_int_array_159, [1], [0])
+        slice_65 = paddle._C_ops.slice(shape_25, [0], full_int_array_158, full_int_array_159, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_121 = paddle.matmul(layer_norm_150, parameter_245, transpose_x=False, transpose_y=False)
@@ -3179,7 +3179,7 @@ class BlockEntries:
         full_int_array_165 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_68 = paddle._C_ops.slice(shape_26, [0], full_int_array_164, full_int_array_165, [1], [0])
+        slice_68 = paddle._C_ops.slice(shape_26, [0], full_int_array_164, full_int_array_165, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_189 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -3239,7 +3239,7 @@ class BlockEntries:
         full_int_array_172 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_70 = paddle._C_ops.slice(shape_27, [0], full_int_array_171, full_int_array_172, [1], [0])
+        slice_70 = paddle._C_ops.slice(shape_27, [0], full_int_array_171, full_int_array_172, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_129 = paddle.matmul(layer_norm_162, parameter_262, transpose_x=False, transpose_y=False)
@@ -3380,7 +3380,7 @@ class BlockEntries:
         full_int_array_178 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_73 = paddle._C_ops.slice(shape_28, [0], full_int_array_177, full_int_array_178, [1], [0])
+        slice_73 = paddle._C_ops.slice(shape_28, [0], full_int_array_177, full_int_array_178, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_136 = paddle.matmul(layer_norm_168, parameter_274, transpose_x=False, transpose_y=False)
@@ -3518,7 +3518,7 @@ class BlockEntries:
         full_int_array_184 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_76 = paddle._C_ops.slice(shape_29, [0], full_int_array_183, full_int_array_184, [1], [0])
+        slice_76 = paddle._C_ops.slice(shape_29, [0], full_int_array_183, full_int_array_184, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_211 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -3578,7 +3578,7 @@ class BlockEntries:
         full_int_array_191 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_78 = paddle._C_ops.slice(shape_30, [0], full_int_array_190, full_int_array_191, [1], [0])
+        slice_78 = paddle._C_ops.slice(shape_30, [0], full_int_array_190, full_int_array_191, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_144 = paddle.matmul(layer_norm_180, parameter_291, transpose_x=False, transpose_y=False)
@@ -3719,7 +3719,7 @@ class BlockEntries:
         full_int_array_197 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_81 = paddle._C_ops.slice(shape_31, [0], full_int_array_196, full_int_array_197, [1], [0])
+        slice_81 = paddle._C_ops.slice(shape_31, [0], full_int_array_196, full_int_array_197, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_151 = paddle.matmul(layer_norm_186, parameter_303, transpose_x=False, transpose_y=False)
@@ -3857,7 +3857,7 @@ class BlockEntries:
         full_int_array_203 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_84 = paddle._C_ops.slice(shape_32, [0], full_int_array_202, full_int_array_203, [1], [0])
+        slice_84 = paddle._C_ops.slice(shape_32, [0], full_int_array_202, full_int_array_203, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_233 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -3917,7 +3917,7 @@ class BlockEntries:
         full_int_array_210 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_86 = paddle._C_ops.slice(shape_33, [0], full_int_array_209, full_int_array_210, [1], [0])
+        slice_86 = paddle._C_ops.slice(shape_33, [0], full_int_array_209, full_int_array_210, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_159 = paddle.matmul(layer_norm_198, parameter_320, transpose_x=False, transpose_y=False)
@@ -4058,7 +4058,7 @@ class BlockEntries:
         full_int_array_216 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_89 = paddle._C_ops.slice(shape_34, [0], full_int_array_215, full_int_array_216, [1], [0])
+        slice_89 = paddle._C_ops.slice(shape_34, [0], full_int_array_215, full_int_array_216, [1], [])
 
         # pd_op.matmul: (-1x16x48xf32) <- (-1x16x24xf32, 24x48xf32)
         matmul_166 = paddle.matmul(layer_norm_204, parameter_332, transpose_x=False, transpose_y=False)
@@ -4196,7 +4196,7 @@ class BlockEntries:
         full_int_array_222 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_92 = paddle._C_ops.slice(shape_35, [0], full_int_array_221, full_int_array_222, [1], [0])
+        slice_92 = paddle._C_ops.slice(shape_35, [0], full_int_array_221, full_int_array_222, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_255 = paddle._C_ops.full([1], float('196'), paddle.int32, paddle.core.CPUPlace())
@@ -4256,7 +4256,7 @@ class BlockEntries:
         full_int_array_229 = [1]
 
         # pd_op.slice: (1xi32) <- (3xi32, 1xi64, 1xi64)
-        slice_94 = paddle._C_ops.slice(shape_36, [0], full_int_array_228, full_int_array_229, [1], [0])
+        slice_94 = paddle._C_ops.slice(shape_36, [0], full_int_array_228, full_int_array_229, [1], [])
 
         # pd_op.matmul: (-1x197x768xf32) <- (-1x197x384xf32, 384x768xf32)
         matmul_174 = paddle.matmul(layer_norm_216, parameter_349, transpose_x=False, transpose_y=False)

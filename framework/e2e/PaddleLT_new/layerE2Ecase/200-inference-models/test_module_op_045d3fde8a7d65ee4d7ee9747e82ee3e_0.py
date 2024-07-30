@@ -2621,7 +2621,7 @@ class BlockEntries:
         full_int_array_91 = [1]
 
         # pd_op.slice: (1xi32) <- (4xi32, 1xi64, 1xi64)
-        slice_106 = paddle._C_ops.slice(shape_0, [0], full_int_array_90, full_int_array_91, [1], [0])
+        slice_106 = paddle._C_ops.slice(shape_0, [0], full_int_array_90, full_int_array_91, [1], [])
 
         # pd_op.full: (1xi32) <- ()
         full_82 = paddle._C_ops.full([1], float('1536'), paddle.int32, paddle.core.CPUPlace())
