@@ -1148,7 +1148,7 @@ class BlockEntries:
         full_int_array_10 = [1]
 
         # pd_op.slice: (1xi32) <- (4xi32, 1xi64, 1xi64)
-        slice_0 = paddle._C_ops.slice(shape_0, [0], full_int_array_9, full_int_array_10, [1], [0])
+        slice_0 = paddle._C_ops.slice(shape_0, [0], full_int_array_9, full_int_array_10, [1], [])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_11 = [2]
@@ -1157,7 +1157,7 @@ class BlockEntries:
         full_int_array_12 = [3]
 
         # pd_op.slice: (1xi32) <- (4xi32, 1xi64, 1xi64)
-        slice_1 = paddle._C_ops.slice(shape_0, [0], full_int_array_11, full_int_array_12, [1], [0])
+        slice_1 = paddle._C_ops.slice(shape_0, [0], full_int_array_11, full_int_array_12, [1], [])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_13 = [3]
@@ -1166,7 +1166,7 @@ class BlockEntries:
         full_int_array_14 = [4]
 
         # pd_op.slice: (1xi32) <- (4xi32, 1xi64, 1xi64)
-        slice_2 = paddle._C_ops.slice(shape_0, [0], full_int_array_13, full_int_array_14, [1], [0])
+        slice_2 = paddle._C_ops.slice(shape_0, [0], full_int_array_13, full_int_array_14, [1], [])
 
         # pd_op.transpose: (-1x-1x-1x128xf16) <- (-1x128x-1x-1xf16)
         transpose_0 = paddle._C_ops.transpose(relu_73, [0, 2, 3, 1])
@@ -1277,7 +1277,7 @@ class BlockEntries:
         full_int_array_16 = [1]
 
         # pd_op.slice: (1xi32) <- (4xi32, 1xi64, 1xi64)
-        slice_3 = paddle._C_ops.slice(shape_0, [0], full_int_array_15, full_int_array_16, [1], [0])
+        slice_3 = paddle._C_ops.slice(shape_0, [0], full_int_array_15, full_int_array_16, [1], [])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_17 = [3]
@@ -1286,7 +1286,7 @@ class BlockEntries:
         full_int_array_18 = [4]
 
         # pd_op.slice: (1xi32) <- (4xi32, 1xi64, 1xi64)
-        slice_4 = paddle._C_ops.slice(shape_0, [0], full_int_array_17, full_int_array_18, [1], [0])
+        slice_4 = paddle._C_ops.slice(shape_0, [0], full_int_array_17, full_int_array_18, [1], [])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_19 = [2]
@@ -1295,7 +1295,7 @@ class BlockEntries:
         full_int_array_20 = [3]
 
         # pd_op.slice: (1xi32) <- (4xi32, 1xi64, 1xi64)
-        slice_5 = paddle._C_ops.slice(shape_0, [0], full_int_array_19, full_int_array_20, [1], [0])
+        slice_5 = paddle._C_ops.slice(shape_0, [0], full_int_array_19, full_int_array_20, [1], [])
 
         # pd_op.transpose: (-1x-1x-1x128xf16) <- (-1x128x-1x-1xf16)
         transpose_8 = paddle._C_ops.transpose(transpose_5, [0, 2, 3, 1])

@@ -340,7 +340,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -494,7 +494,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -648,7 +648,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -802,7 +802,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -956,7 +956,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -1110,7 +1110,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -1264,7 +1264,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -1418,7 +1418,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -1572,7 +1572,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -1726,7 +1726,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -1880,7 +1880,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -2034,7 +2034,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -2188,7 +2188,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -2342,7 +2342,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -2496,7 +2496,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -2650,7 +2650,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -2804,7 +2804,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -2958,7 +2958,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -3112,7 +3112,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -3266,7 +3266,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -3420,7 +3420,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -3574,7 +3574,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -3728,7 +3728,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -3882,7 +3882,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -4036,7 +4036,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -4190,7 +4190,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -4344,7 +4344,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -4498,7 +4498,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -4652,7 +4652,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -4806,7 +4806,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -4960,7 +4960,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -5114,7 +5114,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -5268,7 +5268,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -5422,7 +5422,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -5576,7 +5576,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -5730,7 +5730,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -5884,7 +5884,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -6038,7 +6038,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -6192,7 +6192,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -6346,7 +6346,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_0][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_0)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -6500,7 +6500,7 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(less_than_0, paddle.int32)
 
         # pd_op.select_input: (-1x40x6x40xf32) <- (xi32, -1x40x6x40xf32, -1x40x6x40xf32)
-        select_input_0 = [if_2, if_1][int(cast_1)]
+        select_input_0 = (if_2 if cast_1 == 0 else if_1)
 
         # pd_op.full: (1xf32) <- ()
         full_7 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())

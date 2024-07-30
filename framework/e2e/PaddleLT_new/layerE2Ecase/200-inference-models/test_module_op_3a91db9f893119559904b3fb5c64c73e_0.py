@@ -2285,7 +2285,7 @@ class BlockEntries:
         full_139 = paddle._C_ops.full([], float('1'), paddle.bool, paddle.framework._current_expected_place())
 
         # pd_op.select_input: (xb) <- (xi32, xb, xb)
-        select_input_0 = [if_0, full_139][int(cast_0)]
+        select_input_0 = (if_0 if cast_0 == 0 else full_139)
 
         # pd_op.logical_not: (xb) <- (xb)
         logical_not_1 = paddle._C_ops.logical_not(select_input_0)
@@ -2309,13 +2309,13 @@ class BlockEntries:
         cast_1 = paddle._C_ops.cast(logical_not_1, paddle.int32)
 
         # pd_op.select_input: (-1xf32) <- (xi32, -1xf32, -1xf32)
-        select_input_1 = [assign_value_0, if_1][int(cast_1)]
+        select_input_1 = (assign_value_0 if cast_1 == 0 else if_1)
 
         # pd_op.select_input: (-1x1xi64) <- (xi32, -1x1xi64, -1x2xi64)
-        select_input_2 = [if_4, if_3][int(cast_1)]
+        select_input_2 = (if_4 if cast_1 == 0 else if_3)
 
         # pd_op.select_input: (-1x1xf32) <- (xi32, -1x1xf32, -1x2xf32)
-        select_input_3 = [if_5, if_2][int(cast_1)]
+        select_input_3 = (if_5 if cast_1 == 0 else if_2)
 
         # pd_op.full: (1xf32) <- ()
         full_140 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
