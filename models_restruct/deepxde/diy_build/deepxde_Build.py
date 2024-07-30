@@ -46,7 +46,7 @@ class deepxde_Build(Model_Build):
         self.test_model_list = []
         self.mount_path = str(os.getenv("mount_path"))
         self.use_data_cfs = str(args.use_data_cfs)
-        os.system("python -m pip install numpy==1.23.1")
+        # os.system("python -m pip install numpy==1.23.1")
 
         if str(self.models_list) != "None":
             for line in self.models_list.split(","):
@@ -69,7 +69,7 @@ class deepxde_Build(Model_Build):
         """
         安装依赖包
         """
-        os.system("python -m pip install numpy==1.23.1")
+        # os.system("python -m pip install numpy==1.23.1")
         return 0
 
     def download_data(self, data_link, destination_folder=".", dir_name=""):
@@ -82,7 +82,7 @@ class deepxde_Build(Model_Build):
         """
         使用父类实现好的能力
         """
-        os.system("python -m pip install numpy==1.23.1")
+        # os.system("python -m pip install numpy==1.23.1")
         super(deepxde_Build, self).build_env()
         ret = 0
         ret = self.build_deepxde()
