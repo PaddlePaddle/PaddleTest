@@ -51,10 +51,13 @@ docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "python_ver=${python_ver}" \
   -e "wheel_url=${wheel_url}" \
   -e "AGILE_PIPELINE_BUILD_ID=${AGILE_PIPELINE_BUILD_ID}" \
-  PaddleLayerTest_perf_kernel \
+  ${PLT_PERF_DOCKER_NAME} \
   /bin/bash -c "
 ldconfig;
 ps aux | grep python | awk '{print $2}' | xargs kill -9
+
+rm -rf PaddleTest
+wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy && tar -xzf PaddleTest.tar.gz
 
 cd /workspace/PaddleTest/framework/e2e/PaddleLT_new/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/:/usr/local/lib/

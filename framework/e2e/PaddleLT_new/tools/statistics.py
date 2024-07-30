@@ -254,11 +254,17 @@ def kernel_perf_gsb_gen(compare_dict, compare_list):
                 )
                 gsb_dict[compare["latest"] + "^" + "kernel_time_compare"] = single_gsb_dict
 
-                count_res = (
-                    perf_dict[compare["latest"] + "-kernel_count^layercase"]
-                    - perf_dict[compare["baseline"] + "-kernel_count^layercase^baseline"]
-                )
-                single_gsb_dict = gsb_ratio_rule(
+                if isinstance(perf_dict[compare["latest"] + "-kernel_count^layercase"], str) or isinstance(
+                    perf_dict[compare["baseline"] + "-kernel_count^layercase^baseline"], str
+                ):
+                    count_res = "error"
+                else:
+                    count_res = (
+                        perf_dict[compare["latest"] + "-kernel_count^layercase"]
+                        - perf_dict[compare["baseline"] + "-kernel_count^layercase^baseline"]
+                    )
+
+                single_gsb_dict = gsb_count_rule(
                     res=count_res,
                     single_gsb_dict=gsb_dict[
                         compare["latest"] + "^" + compare["baseline"] + "^" + "kernel_count_compare"
@@ -274,11 +280,17 @@ def kernel_perf_gsb_gen(compare_dict, compare_list):
                 )
                 gsb_dict[compare["latest"] + "^" + compare["baseline"] + "^" + "kernel_time_compare"] = single_gsb_dict
 
-                count_res = (
-                    perf_dict[compare["latest"] + "-kernel_count^layercase"]
-                    - perf_dict[compare["baseline"] + "-kernel_count^layercase"]
-                )
-                single_gsb_dict = gsb_ratio_rule(
+                if isinstance(perf_dict[compare["latest"] + "-kernel_count^layercase"], str) or isinstance(
+                    perf_dict[compare["baseline"] + "-kernel_count^layercase"], str
+                ):
+                    count_res = "error"
+                else:
+                    count_res = (
+                        perf_dict[compare["latest"] + "-kernel_count^layercase"]
+                        - perf_dict[compare["baseline"] + "-kernel_count^layercase"]
+                    )
+
+                single_gsb_dict = gsb_count_rule(
                     res=count_res,
                     single_gsb_dict=gsb_dict[
                         compare["latest"] + "^" + compare["baseline"] + "^" + "kernel_count_compare"

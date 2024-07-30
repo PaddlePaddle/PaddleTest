@@ -8,6 +8,7 @@ import unittest
 import numpy as np
 from dataclasses import dataclass
 import typing as t
+import itertools
 
 @dataclass
 class Stage:
@@ -143,7 +144,7 @@ def GetNeedSkipAndSkipMessage():
         return False, ""
     exitcode, stderr = GetStageExitCodeAndStdErr(last_stage)
     if exitcode != 0:
-        return True, f"last stage failed. stderr: {stderr}"
+        return True, "last stage failed."
     return False, ""
 
 def GetCurrentStageTryRunExitCodeAndStdErr():
@@ -323,7 +324,21 @@ class CinnTestBase:
 
 need_skip, skip_message = GetNeedSkipAndSkipMessage()
 try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
-class PrimitiveOp_2feb485bfd9f9c07cd8b0f30df76653e(InstanceTrait, paddle.nn.Layer):
+class TestTryRun(unittest.TestCase):
+    def test_panic(self):
+        if not AthenaTryRunEnabled():
+            return
+        if try_run_exit_code == 0:
+            # All unittest cases passed.
+            return
+        if try_run_exit_code > 0:
+            # program failed but not panic.
+            return
+        # program panicked.
+        kOutputLimit = 65536
+        message = try_run_stderr[-kOutputLimit:]
+        raise RuntimeError(f"panicked. last {kOutputLimit} characters of stderr: \n{message}")
+class PrimitiveOp_6b8198b29ecade32686844eda124cb46(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
         super().__init__()
@@ -334,21 +349,21 @@ class PrimitiveOp_2feb485bfd9f9c07cd8b0f30df76653e(InstanceTrait, paddle.nn.Laye
         input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7]
         input_3 = None
         input_4 = arg_4
-        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 512, 256, 1, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
+        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), False, 128, 128, 2, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
 
     def get_input_spec(self):
         return [
-            paddle.static.InputSpec(shape=[26, None, 512], dtype='float32'),
-            paddle.static.InputSpec(shape=[2, None, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[2, None, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
             paddle.static.InputSpec(shape=[], dtype='uint8'),
         ]
         
@@ -359,24 +374,24 @@ class PrimitiveOp_2feb485bfd9f9c07cd8b0f30df76653e(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_8b9377a68164bede2072b35604e3aae1(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_dee42a58fcaa0df2d022bc35f3a1884a(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_2feb485bfd9f9c07cd8b0f30df76653e
+        return PrimitiveOp_6b8198b29ecade32686844eda124cb46
     def get_inputs(self):
         return [
-            paddle.uniform([26, 1, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2, 1, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2, 1, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor(2, dtype='uint8').reshape([]),
+            paddle.uniform([40, 6, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 6, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 6, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
         ]
 
 
@@ -387,64 +402,28 @@ class TestPrimitiveOp_8b9377a68164bede2072b35604e3aae1(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
-
-
-class PrimitiveOp_e36353f78fb272c5de1710ce7ef1b087(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_4):
-        input_0 = arg_0
-        input_1 = [arg_1_0, arg_1_1]
-        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7]
-        input_3 = None
-        input_4 = arg_4
-        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 256, 256, 1, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[26, None, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[2, None, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[2, None, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[], dtype='uint8'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_0b2f49571c9b8c19451549d714287536(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_13f626a3c81ef76706086f0b37a9124d(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_e36353f78fb272c5de1710ce7ef1b087
+        return PrimitiveOp_6b8198b29ecade32686844eda124cb46
     def get_inputs(self):
         return [
-            paddle.uniform([26, 1, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2, 1, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2, 1, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor(2, dtype='uint8').reshape([]),
+            paddle.uniform([40, 1, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
         ]
 
 
@@ -455,177 +434,8 @@ class TestPrimitiveOp_0b2f49571c9b8c19451549d714287536(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
-
-
-class PrimitiveOp_0be9406f923967cc3f8ba5a42ed5dabb(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15, arg_4):
-        input_0 = arg_0
-        input_1 = [arg_1_0, arg_1_1]
-        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15]
-        input_3 = None
-        input_4 = arg_4
-        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 480, 96, 2, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[25, None, 480], dtype='float32'),
-            paddle.static.InputSpec(shape=[4, None, 96], dtype='float32'),
-            paddle.static.InputSpec(shape=[4, None, 96], dtype='float32'),
-            paddle.static.InputSpec(shape=[384, 480], dtype='float32'),
-            paddle.static.InputSpec(shape=[384, 96], dtype='float32'),
-            paddle.static.InputSpec(shape=[384, 480], dtype='float32'),
-            paddle.static.InputSpec(shape=[384, 96], dtype='float32'),
-            paddle.static.InputSpec(shape=[384, 192], dtype='float32'),
-            paddle.static.InputSpec(shape=[384, 96], dtype='float32'),
-            paddle.static.InputSpec(shape=[384, 192], dtype='float32'),
-            paddle.static.InputSpec(shape=[384, 96], dtype='float32'),
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            paddle.static.InputSpec(shape=[], dtype='uint8'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_e2283b5ca7d4284abdd8222cc0615cc4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_0be9406f923967cc3f8ba5a42ed5dabb
-    def get_inputs(self):
-        return [
-            paddle.uniform([25, 1, 480], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4, 1, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4, 1, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 480], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 480], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 192], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 192], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor(2, dtype='uint8').reshape([]),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
-        return self._test_entry()
-
-
-class PrimitiveOp_f17dfad96e52530a12837eaca3a7f2d4(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15, arg_4):
-        input_0 = arg_0
-        input_1 = [arg_1_0, arg_1_1]
-        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15]
-        input_3 = None
-        input_4 = arg_4
-        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 512, 256, 2, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, None, 512], dtype='float32'),
-            paddle.static.InputSpec(shape=[4, None, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[4, None, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[1024], dtype='float32'),
-            paddle.static.InputSpec(shape=[], dtype='uint8'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_89770cc53d7cab8f6583f83ce9a6169e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_f17dfad96e52530a12837eaca3a7f2d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([25, 1, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4, 1, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4, 1, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor(1, dtype='uint8').reshape([]),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
-        return self._test_entry()
-
 
 class PrimitiveOp_b950ec76ffcfa5b6d0104ac9c1c1bad1(InstanceTrait, paddle.nn.Layer):
     
@@ -663,7 +473,7 @@ class PrimitiveOp_b950ec76ffcfa5b6d0104ac9c1c1bad1(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_045a7c469d20301ce381c2d3a8cb9d9d(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_f4be1d8a425e0c661a6b959e21df6365(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_b950ec76ffcfa5b6d0104ac9c1c1bad1
@@ -680,7 +490,7 @@ class TestPrimitiveOp_045a7c469d20301ce381c2d3a8cb9d9d(CinnTestBase, unittest.Te
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor(2, dtype='uint8').reshape([]),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
         ]
 
 
@@ -691,9 +501,8 @@ class TestPrimitiveOp_045a7c469d20301ce381c2d3a8cb9d9d(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
-
 
 class PrimitiveOp_a93ec554fe6577e67536c1712f927c33(InstanceTrait, paddle.nn.Layer):
     
@@ -731,7 +540,7 @@ class PrimitiveOp_a93ec554fe6577e67536c1712f927c33(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_51cf28536d276abb2e8e5f9456dd7c06(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_e0f9b252d68e56bb37ef448caa1f9e11(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_a93ec554fe6577e67536c1712f927c33
@@ -748,7 +557,7 @@ class TestPrimitiveOp_51cf28536d276abb2e8e5f9456dd7c06(CinnTestBase, unittest.Te
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor(2, dtype='uint8').reshape([]),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
         ]
 
 
@@ -759,93 +568,8 @@ class TestPrimitiveOp_51cf28536d276abb2e8e5f9456dd7c06(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
-
-
-class PrimitiveOp_103c411e1e1114dd3d547667b5c2fc32(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15, arg_4):
-        input_0 = arg_0
-        input_1 = [arg_1_0, arg_1_1]
-        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15]
-        input_3 = None
-        input_4 = arg_4
-        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 480, 96, 2, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[], dtype='uint8'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-
-@unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_7ebd5c3817edd4cfe25aeffe097c8151(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_103c411e1e1114dd3d547667b5c2fc32
-    def get_inputs(self):
-        return [
-            paddle.uniform([25, 1, 480], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4, 1, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4, 1, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 480], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 480], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 192], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 192], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.uniform([384], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor(2, dtype='uint8').reshape([]),
-        ]
-
-
-    def test_entry(self):
-        if AthenaTryRunEnabled():
-            if try_run_exit_code == 0:
-                # All unittest cases passed.
-                return
-            if try_run_exit_code < 0:
-                # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
-        return self._test_entry()
-
 
 class PrimitiveOp_f0ba6092c9be8d8d2ea398e395f85e6c(InstanceTrait, paddle.nn.Layer):
     
@@ -891,7 +615,7 @@ class PrimitiveOp_f0ba6092c9be8d8d2ea398e395f85e6c(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_f48fb280d8f305d732b9e36460c4e857(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_734c908e92a88b19ed46757c12194373(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_f0ba6092c9be8d8d2ea398e395f85e6c
@@ -916,7 +640,7 @@ class TestPrimitiveOp_f48fb280d8f305d732b9e36460c4e857(CinnTestBase, unittest.Te
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
             paddle.uniform([1024], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor(1, dtype='uint8').reshape([]),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
         ]
 
 
@@ -927,9 +651,490 @@ class TestPrimitiveOp_f48fb280d8f305d732b9e36460c4e857(CinnTestBase, unittest.Te
                 return
             if try_run_exit_code < 0:
                 # program panicked.
-                raise RuntimeError(f"panicked. stderr: \n{try_run_stderr}")
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
         return self._test_entry()
 
+class PrimitiveOp_103c411e1e1114dd3d547667b5c2fc32(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15, arg_4):
+        input_0 = arg_0
+        input_1 = [arg_1_0, arg_1_1]
+        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15]
+        input_3 = None
+        input_4 = arg_4
+        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 480, 96, 2, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[], dtype='uint8'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cbfac81c229750be245e6a9d1941c843(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_103c411e1e1114dd3d547667b5c2fc32
+    def get_inputs(self):
+        return [
+            paddle.uniform([25, 1, 480], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4, 1, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4, 1, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 480], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 480], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 192], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 192], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_1e94daeae8d3ff039e84e3a07663a507(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_4):
+        input_0 = arg_0
+        input_1 = [arg_1_0, arg_1_1]
+        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7]
+        input_3 = None
+        input_4 = arg_4
+        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), False, 128, 128, 2, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[40, None, 128], dtype='float32'),
+            paddle.static.InputSpec(shape=[2, None, 128], dtype='float32'),
+            paddle.static.InputSpec(shape=[2, None, 128], dtype='float32'),
+            paddle.static.InputSpec(shape=[512, 128], dtype='float32'),
+            paddle.static.InputSpec(shape=[512, 128], dtype='float32'),
+            paddle.static.InputSpec(shape=[512, 128], dtype='float32'),
+            paddle.static.InputSpec(shape=[512, 128], dtype='float32'),
+            paddle.static.InputSpec(shape=[512], dtype='float32'),
+            paddle.static.InputSpec(shape=[512], dtype='float32'),
+            paddle.static.InputSpec(shape=[512], dtype='float32'),
+            paddle.static.InputSpec(shape=[512], dtype='float32'),
+            paddle.static.InputSpec(shape=[], dtype='uint8'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_b74bd5396d991916225ce8a46e0b5723(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_1e94daeae8d3ff039e84e3a07663a507
+    def get_inputs(self):
+        return [
+            paddle.uniform([40, 6, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 6, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 6, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a29cefe1c66c1eb8786631dfad88eb9e(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_1e94daeae8d3ff039e84e3a07663a507
+    def get_inputs(self):
+        return [
+            paddle.uniform([40, 1, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([512], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_2feb485bfd9f9c07cd8b0f30df76653e(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_4):
+        input_0 = arg_0
+        input_1 = [arg_1_0, arg_1_1]
+        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7]
+        input_3 = None
+        input_4 = arg_4
+        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 512, 256, 1, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[26, None, 512], dtype='float32'),
+            paddle.static.InputSpec(shape=[2, None, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[2, None, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[], dtype='uint8'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4fe5d36b02e74938695d2ef49052cfa5(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_2feb485bfd9f9c07cd8b0f30df76653e
+    def get_inputs(self):
+        return [
+            paddle.uniform([26, 1, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_e36353f78fb272c5de1710ce7ef1b087(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_4):
+        input_0 = arg_0
+        input_1 = [arg_1_0, arg_1_1]
+        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7]
+        input_3 = None
+        input_4 = arg_4
+        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 256, 256, 1, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[26, None, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[2, None, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[2, None, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[], dtype='uint8'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_d5a160619488d2590e270b42186c6f51(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_e36353f78fb272c5de1710ce7ef1b087
+    def get_inputs(self):
+        return [
+            paddle.uniform([26, 1, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_f17dfad96e52530a12837eaca3a7f2d4(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15, arg_4):
+        input_0 = arg_0
+        input_1 = [arg_1_0, arg_1_1]
+        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15]
+        input_3 = None
+        input_4 = arg_4
+        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 512, 256, 2, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, None, 512], dtype='float32'),
+            paddle.static.InputSpec(shape=[4, None, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[4, None, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 512], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024, 256], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[1024], dtype='float32'),
+            paddle.static.InputSpec(shape=[], dtype='uint8'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0d30c4af967618d39a3d364c25f39818(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_f17dfad96e52530a12837eaca3a7f2d4
+    def get_inputs(self):
+        return [
+            paddle.uniform([25, 1, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4, 1, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4, 1, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024, 256], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1024], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_0be9406f923967cc3f8ba5a42ed5dabb(InstanceTrait, paddle.nn.Layer):
+    
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1_0, arg_1_1, arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15, arg_4):
+        input_0 = arg_0
+        input_1 = [arg_1_0, arg_1_1]
+        input_2 = [arg_2_0, arg_2_1, arg_2_2, arg_2_3, arg_2_4, arg_2_5, arg_2_6, arg_2_7, arg_2_8, arg_2_9, arg_2_10, arg_2_11, arg_2_12, arg_2_13, arg_2_14, arg_2_15]
+        input_3 = None
+        input_4 = arg_4
+        return (lambda x, f: f(x))(paddle._C_ops.rnn(input_0, input_1, input_2, None, input_4, float('0'), True, 480, 96, 2, 'LSTM', 0, True), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None)) + (None,)
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[25, None, 480], dtype='float32'),
+            paddle.static.InputSpec(shape=[4, None, 96], dtype='float32'),
+            paddle.static.InputSpec(shape=[4, None, 96], dtype='float32'),
+            paddle.static.InputSpec(shape=[384, 480], dtype='float32'),
+            paddle.static.InputSpec(shape=[384, 96], dtype='float32'),
+            paddle.static.InputSpec(shape=[384, 480], dtype='float32'),
+            paddle.static.InputSpec(shape=[384, 96], dtype='float32'),
+            paddle.static.InputSpec(shape=[384, 192], dtype='float32'),
+            paddle.static.InputSpec(shape=[384, 96], dtype='float32'),
+            paddle.static.InputSpec(shape=[384, 192], dtype='float32'),
+            paddle.static.InputSpec(shape=[384, 96], dtype='float32'),
+            paddle.static.InputSpec(shape=[384], dtype='float32'),
+            paddle.static.InputSpec(shape=[384], dtype='float32'),
+            paddle.static.InputSpec(shape=[384], dtype='float32'),
+            paddle.static.InputSpec(shape=[384], dtype='float32'),
+            paddle.static.InputSpec(shape=[384], dtype='float32'),
+            paddle.static.InputSpec(shape=[384], dtype='float32'),
+            paddle.static.InputSpec(shape=[384], dtype='float32'),
+            paddle.static.InputSpec(shape=[384], dtype='float32'),
+            paddle.static.InputSpec(shape=[], dtype='uint8'),
+        ]
+        
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8147f6bec14d89a47661956a47046a78(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_0be9406f923967cc3f8ba5a42ed5dabb
+    def get_inputs(self):
+        return [
+            paddle.uniform([25, 1, 480], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4, 1, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4, 1, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 480], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 480], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 192], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 192], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384, 96], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.uniform([384], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor(0, dtype='uint8').reshape([]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 
 if __name__ == '__main__':
