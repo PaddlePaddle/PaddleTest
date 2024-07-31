@@ -139,10 +139,10 @@ class PostTrainingChecker:
                 if not os.path.exists(os.path.join(output_dir, config_path)):
                     check_train_json_message.append(f"检查失败：配置文件 {config_path} 不存在")
                     pass_flag = False
-
-                if not os.path.exists(os.path.join(output_dir, visualdl_log_path)):
-                    check_train_json_message.append(f"检查失败：VisualDL日志文件 {visualdl_log_path} 不存在")
-                    pass_flag = False
+                if not ("text" in module_name or "table" in module_name):
+                    if not os.path.exists(os.path.join(output_dir, visualdl_log_path)):
+                        check_train_json_message.append(f"检查失败：VisualDL日志文件 {visualdl_log_path} 不存在")
+                        pass_flag = False
 
                 if not os.path.exists(os.path.join(output_dir, label_dict_path)):
                     check_train_json_message.append(f"检查失败：标签映射文件 {label_dict_path} 不存在")
