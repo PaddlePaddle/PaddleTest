@@ -1331,7 +1331,7 @@ class BlockEntries:
         squeeze__0, squeeze__1 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(dropout_0, full_int_array_59), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf32) <- (-1x1280xf32, 1280x1000xf32)
-        matmul_0 = paddle.matmul(squeeze__0, parameter_309, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(squeeze__0, parameter_309, False, False)
 
         # pd_op.add_: (-1x1000xf32) <- (-1x1000xf32, 1000xf32)
         add__41 = paddle._C_ops.add_(matmul_0, parameter_310)
