@@ -338,14 +338,12 @@ class TestTryRun(unittest.TestCase):
         kOutputLimit = 65536
         message = try_run_stderr[-kOutputLimit:]
         raise RuntimeError(f"panicked. last {kOutputLimit} characters of stderr: \n{message}")
-class PrimitiveOp_87179938669bb5f40484332a7e8d055b(InstanceTrait, paddle.nn.Layer):
+class PrimitiveOp_0a64776f67f878d05306c40fa878ab8f(InstanceTrait, paddle.nn.Layer):
     
     def __init__(self):
         super().__init__()
 
     def forward(self, arg_0, arg_1):
-        arg_0 = paddle._C_ops.full_int_array([10], paddle.int64, paddle.core.CPUPlace())
-        arg_1 = paddle._C_ops.full_int_array([3], paddle.int64, paddle.core.CPUPlace())
         input_0 = arg_0
         input_1 = arg_1
         return paddle._C_ops.equal_all(input_0, input_1)
@@ -363,13 +361,35 @@ class PrimitiveOp_87179938669bb5f40484332a7e8d055b(InstanceTrait, paddle.nn.Laye
 
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_fb0052a3ecf40242a0d3720efb1bb046(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_6c99ab1f57c3e5b15b5dd7c721c55da3(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
-        return PrimitiveOp_87179938669bb5f40484332a7e8d055b
+        return PrimitiveOp_0a64776f67f878d05306c40fa878ab8f
     def get_inputs(self):
         return [
-            paddle.to_tensor([10], dtype='int64').reshape([1]),
+            paddle.to_tensor([0], dtype='int64').reshape([1]),
+            paddle.to_tensor([3], dtype='int64').reshape([1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a04269305c8df08cf211f1844f1a8ad8(CinnTestBase, unittest.TestCase):
+    
+    def get_test_class(self):
+        return PrimitiveOp_0a64776f67f878d05306c40fa878ab8f
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([44], dtype='int64').reshape([1]),
             paddle.to_tensor([3], dtype='int64').reshape([1]),
         ]
 
