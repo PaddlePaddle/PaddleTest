@@ -275,7 +275,7 @@ class BlockEntries:
         squeeze__0, squeeze__1 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_1, full_int_array_2), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x16xf32) <- (-1x256xf32, 256x16xf32)
-        matmul_0 = paddle.matmul(squeeze__0, parameter_20, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(squeeze__0, parameter_20, False, False)
 
         # pd_op.add_: (-1x16xf32) <- (-1x16xf32, 16xf32)
         add__0 = paddle._C_ops.add_(matmul_0, parameter_21)
@@ -284,7 +284,7 @@ class BlockEntries:
         relu__3 = paddle._C_ops.relu_(add__0)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x16xf32, 16x256xf32)
-        matmul_1 = paddle.matmul(relu__3, parameter_22, transpose_x=False, transpose_y=False)
+        matmul_1 = paddle._C_ops.matmul(relu__3, parameter_22, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__1 = paddle._C_ops.add_(matmul_1, parameter_23)
@@ -350,7 +350,7 @@ class BlockEntries:
         squeeze__2, squeeze__3 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_2, full_int_array_5), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x16xf32) <- (-1x256xf32, 256x16xf32)
-        matmul_2 = paddle.matmul(squeeze__2, parameter_44, transpose_x=False, transpose_y=False)
+        matmul_2 = paddle._C_ops.matmul(squeeze__2, parameter_44, False, False)
 
         # pd_op.add_: (-1x16xf32) <- (-1x16xf32, 16xf32)
         add__3 = paddle._C_ops.add_(matmul_2, parameter_45)
@@ -359,7 +359,7 @@ class BlockEntries:
         relu__7 = paddle._C_ops.relu_(add__3)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x16xf32, 16x256xf32)
-        matmul_3 = paddle.matmul(relu__7, parameter_46, transpose_x=False, transpose_y=False)
+        matmul_3 = paddle._C_ops.matmul(relu__7, parameter_46, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__4 = paddle._C_ops.add_(matmul_3, parameter_47)
@@ -419,7 +419,7 @@ class BlockEntries:
         squeeze__4, squeeze__5 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_3, full_int_array_8), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x16xf32) <- (-1x256xf32, 256x16xf32)
-        matmul_4 = paddle.matmul(squeeze__4, parameter_63, transpose_x=False, transpose_y=False)
+        matmul_4 = paddle._C_ops.matmul(squeeze__4, parameter_63, False, False)
 
         # pd_op.add_: (-1x16xf32) <- (-1x16xf32, 16xf32)
         add__6 = paddle._C_ops.add_(matmul_4, parameter_64)
@@ -428,7 +428,7 @@ class BlockEntries:
         relu__11 = paddle._C_ops.relu_(add__6)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x16xf32, 16x256xf32)
-        matmul_5 = paddle.matmul(relu__11, parameter_65, transpose_x=False, transpose_y=False)
+        matmul_5 = paddle._C_ops.matmul(relu__11, parameter_65, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__7 = paddle._C_ops.add_(matmul_5, parameter_66)
@@ -488,7 +488,7 @@ class BlockEntries:
         squeeze__6, squeeze__7 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_4, full_int_array_11), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x32xf32) <- (-1x512xf32, 512x32xf32)
-        matmul_6 = paddle.matmul(squeeze__6, parameter_82, transpose_x=False, transpose_y=False)
+        matmul_6 = paddle._C_ops.matmul(squeeze__6, parameter_82, False, False)
 
         # pd_op.add_: (-1x32xf32) <- (-1x32xf32, 32xf32)
         add__9 = paddle._C_ops.add_(matmul_6, parameter_83)
@@ -497,7 +497,7 @@ class BlockEntries:
         relu__15 = paddle._C_ops.relu_(add__9)
 
         # pd_op.matmul: (-1x512xf32) <- (-1x32xf32, 32x512xf32)
-        matmul_7 = paddle.matmul(relu__15, parameter_84, transpose_x=False, transpose_y=False)
+        matmul_7 = paddle._C_ops.matmul(relu__15, parameter_84, False, False)
 
         # pd_op.add_: (-1x512xf32) <- (-1x512xf32, 512xf32)
         add__10 = paddle._C_ops.add_(matmul_7, parameter_85)
@@ -563,7 +563,7 @@ class BlockEntries:
         squeeze__8, squeeze__9 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_5, full_int_array_14), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x32xf32) <- (-1x512xf32, 512x32xf32)
-        matmul_8 = paddle.matmul(squeeze__8, parameter_106, transpose_x=False, transpose_y=False)
+        matmul_8 = paddle._C_ops.matmul(squeeze__8, parameter_106, False, False)
 
         # pd_op.add_: (-1x32xf32) <- (-1x32xf32, 32xf32)
         add__12 = paddle._C_ops.add_(matmul_8, parameter_107)
@@ -572,7 +572,7 @@ class BlockEntries:
         relu__19 = paddle._C_ops.relu_(add__12)
 
         # pd_op.matmul: (-1x512xf32) <- (-1x32xf32, 32x512xf32)
-        matmul_9 = paddle.matmul(relu__19, parameter_108, transpose_x=False, transpose_y=False)
+        matmul_9 = paddle._C_ops.matmul(relu__19, parameter_108, False, False)
 
         # pd_op.add_: (-1x512xf32) <- (-1x512xf32, 512xf32)
         add__13 = paddle._C_ops.add_(matmul_9, parameter_109)
@@ -632,7 +632,7 @@ class BlockEntries:
         squeeze__10, squeeze__11 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_6, full_int_array_17), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x32xf32) <- (-1x512xf32, 512x32xf32)
-        matmul_10 = paddle.matmul(squeeze__10, parameter_125, transpose_x=False, transpose_y=False)
+        matmul_10 = paddle._C_ops.matmul(squeeze__10, parameter_125, False, False)
 
         # pd_op.add_: (-1x32xf32) <- (-1x32xf32, 32xf32)
         add__15 = paddle._C_ops.add_(matmul_10, parameter_126)
@@ -641,7 +641,7 @@ class BlockEntries:
         relu__23 = paddle._C_ops.relu_(add__15)
 
         # pd_op.matmul: (-1x512xf32) <- (-1x32xf32, 32x512xf32)
-        matmul_11 = paddle.matmul(relu__23, parameter_127, transpose_x=False, transpose_y=False)
+        matmul_11 = paddle._C_ops.matmul(relu__23, parameter_127, False, False)
 
         # pd_op.add_: (-1x512xf32) <- (-1x512xf32, 512xf32)
         add__16 = paddle._C_ops.add_(matmul_11, parameter_128)
@@ -701,7 +701,7 @@ class BlockEntries:
         squeeze__12, squeeze__13 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_7, full_int_array_20), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x32xf32) <- (-1x512xf32, 512x32xf32)
-        matmul_12 = paddle.matmul(squeeze__12, parameter_144, transpose_x=False, transpose_y=False)
+        matmul_12 = paddle._C_ops.matmul(squeeze__12, parameter_144, False, False)
 
         # pd_op.add_: (-1x32xf32) <- (-1x32xf32, 32xf32)
         add__18 = paddle._C_ops.add_(matmul_12, parameter_145)
@@ -710,7 +710,7 @@ class BlockEntries:
         relu__27 = paddle._C_ops.relu_(add__18)
 
         # pd_op.matmul: (-1x512xf32) <- (-1x32xf32, 32x512xf32)
-        matmul_13 = paddle.matmul(relu__27, parameter_146, transpose_x=False, transpose_y=False)
+        matmul_13 = paddle._C_ops.matmul(relu__27, parameter_146, False, False)
 
         # pd_op.add_: (-1x512xf32) <- (-1x512xf32, 512xf32)
         add__19 = paddle._C_ops.add_(matmul_13, parameter_147)
@@ -770,7 +770,7 @@ class BlockEntries:
         squeeze__14, squeeze__15 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_8, full_int_array_23), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_14 = paddle.matmul(squeeze__14, parameter_163, transpose_x=False, transpose_y=False)
+        matmul_14 = paddle._C_ops.matmul(squeeze__14, parameter_163, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__21 = paddle._C_ops.add_(matmul_14, parameter_164)
@@ -779,7 +779,7 @@ class BlockEntries:
         relu__31 = paddle._C_ops.relu_(add__21)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_15 = paddle.matmul(relu__31, parameter_165, transpose_x=False, transpose_y=False)
+        matmul_15 = paddle._C_ops.matmul(relu__31, parameter_165, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__22 = paddle._C_ops.add_(matmul_15, parameter_166)
@@ -845,7 +845,7 @@ class BlockEntries:
         squeeze__16, squeeze__17 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_9, full_int_array_26), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_16 = paddle.matmul(squeeze__16, parameter_187, transpose_x=False, transpose_y=False)
+        matmul_16 = paddle._C_ops.matmul(squeeze__16, parameter_187, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__24 = paddle._C_ops.add_(matmul_16, parameter_188)
@@ -854,7 +854,7 @@ class BlockEntries:
         relu__35 = paddle._C_ops.relu_(add__24)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_17 = paddle.matmul(relu__35, parameter_189, transpose_x=False, transpose_y=False)
+        matmul_17 = paddle._C_ops.matmul(relu__35, parameter_189, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__25 = paddle._C_ops.add_(matmul_17, parameter_190)
@@ -914,7 +914,7 @@ class BlockEntries:
         squeeze__18, squeeze__19 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_10, full_int_array_29), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_18 = paddle.matmul(squeeze__18, parameter_206, transpose_x=False, transpose_y=False)
+        matmul_18 = paddle._C_ops.matmul(squeeze__18, parameter_206, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__27 = paddle._C_ops.add_(matmul_18, parameter_207)
@@ -923,7 +923,7 @@ class BlockEntries:
         relu__39 = paddle._C_ops.relu_(add__27)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_19 = paddle.matmul(relu__39, parameter_208, transpose_x=False, transpose_y=False)
+        matmul_19 = paddle._C_ops.matmul(relu__39, parameter_208, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__28 = paddle._C_ops.add_(matmul_19, parameter_209)
@@ -983,7 +983,7 @@ class BlockEntries:
         squeeze__20, squeeze__21 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_11, full_int_array_32), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_20 = paddle.matmul(squeeze__20, parameter_225, transpose_x=False, transpose_y=False)
+        matmul_20 = paddle._C_ops.matmul(squeeze__20, parameter_225, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__30 = paddle._C_ops.add_(matmul_20, parameter_226)
@@ -992,7 +992,7 @@ class BlockEntries:
         relu__43 = paddle._C_ops.relu_(add__30)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_21 = paddle.matmul(relu__43, parameter_227, transpose_x=False, transpose_y=False)
+        matmul_21 = paddle._C_ops.matmul(relu__43, parameter_227, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__31 = paddle._C_ops.add_(matmul_21, parameter_228)
@@ -1052,7 +1052,7 @@ class BlockEntries:
         squeeze__22, squeeze__23 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_12, full_int_array_35), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_22 = paddle.matmul(squeeze__22, parameter_244, transpose_x=False, transpose_y=False)
+        matmul_22 = paddle._C_ops.matmul(squeeze__22, parameter_244, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__33 = paddle._C_ops.add_(matmul_22, parameter_245)
@@ -1061,7 +1061,7 @@ class BlockEntries:
         relu__47 = paddle._C_ops.relu_(add__33)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_23 = paddle.matmul(relu__47, parameter_246, transpose_x=False, transpose_y=False)
+        matmul_23 = paddle._C_ops.matmul(relu__47, parameter_246, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__34 = paddle._C_ops.add_(matmul_23, parameter_247)
@@ -1121,7 +1121,7 @@ class BlockEntries:
         squeeze__24, squeeze__25 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_13, full_int_array_38), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_24 = paddle.matmul(squeeze__24, parameter_263, transpose_x=False, transpose_y=False)
+        matmul_24 = paddle._C_ops.matmul(squeeze__24, parameter_263, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__36 = paddle._C_ops.add_(matmul_24, parameter_264)
@@ -1130,7 +1130,7 @@ class BlockEntries:
         relu__51 = paddle._C_ops.relu_(add__36)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_25 = paddle.matmul(relu__51, parameter_265, transpose_x=False, transpose_y=False)
+        matmul_25 = paddle._C_ops.matmul(relu__51, parameter_265, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__37 = paddle._C_ops.add_(matmul_25, parameter_266)
@@ -1190,7 +1190,7 @@ class BlockEntries:
         squeeze__26, squeeze__27 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_14, full_int_array_41), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_26 = paddle.matmul(squeeze__26, parameter_282, transpose_x=False, transpose_y=False)
+        matmul_26 = paddle._C_ops.matmul(squeeze__26, parameter_282, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__39 = paddle._C_ops.add_(matmul_26, parameter_283)
@@ -1199,7 +1199,7 @@ class BlockEntries:
         relu__55 = paddle._C_ops.relu_(add__39)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_27 = paddle.matmul(relu__55, parameter_284, transpose_x=False, transpose_y=False)
+        matmul_27 = paddle._C_ops.matmul(relu__55, parameter_284, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__40 = paddle._C_ops.add_(matmul_27, parameter_285)
@@ -1259,7 +1259,7 @@ class BlockEntries:
         squeeze__28, squeeze__29 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_15, full_int_array_44), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_28 = paddle.matmul(squeeze__28, parameter_301, transpose_x=False, transpose_y=False)
+        matmul_28 = paddle._C_ops.matmul(squeeze__28, parameter_301, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__42 = paddle._C_ops.add_(matmul_28, parameter_302)
@@ -1268,7 +1268,7 @@ class BlockEntries:
         relu__59 = paddle._C_ops.relu_(add__42)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_29 = paddle.matmul(relu__59, parameter_303, transpose_x=False, transpose_y=False)
+        matmul_29 = paddle._C_ops.matmul(relu__59, parameter_303, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__43 = paddle._C_ops.add_(matmul_29, parameter_304)
@@ -1328,7 +1328,7 @@ class BlockEntries:
         squeeze__30, squeeze__31 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_16, full_int_array_47), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_30 = paddle.matmul(squeeze__30, parameter_320, transpose_x=False, transpose_y=False)
+        matmul_30 = paddle._C_ops.matmul(squeeze__30, parameter_320, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__45 = paddle._C_ops.add_(matmul_30, parameter_321)
@@ -1337,7 +1337,7 @@ class BlockEntries:
         relu__63 = paddle._C_ops.relu_(add__45)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_31 = paddle.matmul(relu__63, parameter_322, transpose_x=False, transpose_y=False)
+        matmul_31 = paddle._C_ops.matmul(relu__63, parameter_322, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__46 = paddle._C_ops.add_(matmul_31, parameter_323)
@@ -1397,7 +1397,7 @@ class BlockEntries:
         squeeze__32, squeeze__33 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_17, full_int_array_50), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_32 = paddle.matmul(squeeze__32, parameter_339, transpose_x=False, transpose_y=False)
+        matmul_32 = paddle._C_ops.matmul(squeeze__32, parameter_339, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__48 = paddle._C_ops.add_(matmul_32, parameter_340)
@@ -1406,7 +1406,7 @@ class BlockEntries:
         relu__67 = paddle._C_ops.relu_(add__48)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_33 = paddle.matmul(relu__67, parameter_341, transpose_x=False, transpose_y=False)
+        matmul_33 = paddle._C_ops.matmul(relu__67, parameter_341, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__49 = paddle._C_ops.add_(matmul_33, parameter_342)
@@ -1466,7 +1466,7 @@ class BlockEntries:
         squeeze__34, squeeze__35 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_18, full_int_array_53), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_34 = paddle.matmul(squeeze__34, parameter_358, transpose_x=False, transpose_y=False)
+        matmul_34 = paddle._C_ops.matmul(squeeze__34, parameter_358, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__51 = paddle._C_ops.add_(matmul_34, parameter_359)
@@ -1475,7 +1475,7 @@ class BlockEntries:
         relu__71 = paddle._C_ops.relu_(add__51)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_35 = paddle.matmul(relu__71, parameter_360, transpose_x=False, transpose_y=False)
+        matmul_35 = paddle._C_ops.matmul(relu__71, parameter_360, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__52 = paddle._C_ops.add_(matmul_35, parameter_361)
@@ -1535,7 +1535,7 @@ class BlockEntries:
         squeeze__36, squeeze__37 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_19, full_int_array_56), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_36 = paddle.matmul(squeeze__36, parameter_377, transpose_x=False, transpose_y=False)
+        matmul_36 = paddle._C_ops.matmul(squeeze__36, parameter_377, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__54 = paddle._C_ops.add_(matmul_36, parameter_378)
@@ -1544,7 +1544,7 @@ class BlockEntries:
         relu__75 = paddle._C_ops.relu_(add__54)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_37 = paddle.matmul(relu__75, parameter_379, transpose_x=False, transpose_y=False)
+        matmul_37 = paddle._C_ops.matmul(relu__75, parameter_379, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__55 = paddle._C_ops.add_(matmul_37, parameter_380)
@@ -1604,7 +1604,7 @@ class BlockEntries:
         squeeze__38, squeeze__39 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_20, full_int_array_59), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_38 = paddle.matmul(squeeze__38, parameter_396, transpose_x=False, transpose_y=False)
+        matmul_38 = paddle._C_ops.matmul(squeeze__38, parameter_396, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__57 = paddle._C_ops.add_(matmul_38, parameter_397)
@@ -1613,7 +1613,7 @@ class BlockEntries:
         relu__79 = paddle._C_ops.relu_(add__57)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_39 = paddle.matmul(relu__79, parameter_398, transpose_x=False, transpose_y=False)
+        matmul_39 = paddle._C_ops.matmul(relu__79, parameter_398, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__58 = paddle._C_ops.add_(matmul_39, parameter_399)
@@ -1673,7 +1673,7 @@ class BlockEntries:
         squeeze__40, squeeze__41 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_21, full_int_array_62), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_40 = paddle.matmul(squeeze__40, parameter_415, transpose_x=False, transpose_y=False)
+        matmul_40 = paddle._C_ops.matmul(squeeze__40, parameter_415, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__60 = paddle._C_ops.add_(matmul_40, parameter_416)
@@ -1682,7 +1682,7 @@ class BlockEntries:
         relu__83 = paddle._C_ops.relu_(add__60)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_41 = paddle.matmul(relu__83, parameter_417, transpose_x=False, transpose_y=False)
+        matmul_41 = paddle._C_ops.matmul(relu__83, parameter_417, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__61 = paddle._C_ops.add_(matmul_41, parameter_418)
@@ -1742,7 +1742,7 @@ class BlockEntries:
         squeeze__42, squeeze__43 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_22, full_int_array_65), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_42 = paddle.matmul(squeeze__42, parameter_434, transpose_x=False, transpose_y=False)
+        matmul_42 = paddle._C_ops.matmul(squeeze__42, parameter_434, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__63 = paddle._C_ops.add_(matmul_42, parameter_435)
@@ -1751,7 +1751,7 @@ class BlockEntries:
         relu__87 = paddle._C_ops.relu_(add__63)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_43 = paddle.matmul(relu__87, parameter_436, transpose_x=False, transpose_y=False)
+        matmul_43 = paddle._C_ops.matmul(relu__87, parameter_436, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__64 = paddle._C_ops.add_(matmul_43, parameter_437)
@@ -1811,7 +1811,7 @@ class BlockEntries:
         squeeze__44, squeeze__45 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_23, full_int_array_68), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_44 = paddle.matmul(squeeze__44, parameter_453, transpose_x=False, transpose_y=False)
+        matmul_44 = paddle._C_ops.matmul(squeeze__44, parameter_453, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__66 = paddle._C_ops.add_(matmul_44, parameter_454)
@@ -1820,7 +1820,7 @@ class BlockEntries:
         relu__91 = paddle._C_ops.relu_(add__66)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_45 = paddle.matmul(relu__91, parameter_455, transpose_x=False, transpose_y=False)
+        matmul_45 = paddle._C_ops.matmul(relu__91, parameter_455, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__67 = paddle._C_ops.add_(matmul_45, parameter_456)
@@ -1880,7 +1880,7 @@ class BlockEntries:
         squeeze__46, squeeze__47 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_24, full_int_array_71), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_46 = paddle.matmul(squeeze__46, parameter_472, transpose_x=False, transpose_y=False)
+        matmul_46 = paddle._C_ops.matmul(squeeze__46, parameter_472, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__69 = paddle._C_ops.add_(matmul_46, parameter_473)
@@ -1889,7 +1889,7 @@ class BlockEntries:
         relu__95 = paddle._C_ops.relu_(add__69)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_47 = paddle.matmul(relu__95, parameter_474, transpose_x=False, transpose_y=False)
+        matmul_47 = paddle._C_ops.matmul(relu__95, parameter_474, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__70 = paddle._C_ops.add_(matmul_47, parameter_475)
@@ -1949,7 +1949,7 @@ class BlockEntries:
         squeeze__48, squeeze__49 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_25, full_int_array_74), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_48 = paddle.matmul(squeeze__48, parameter_491, transpose_x=False, transpose_y=False)
+        matmul_48 = paddle._C_ops.matmul(squeeze__48, parameter_491, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__72 = paddle._C_ops.add_(matmul_48, parameter_492)
@@ -1958,7 +1958,7 @@ class BlockEntries:
         relu__99 = paddle._C_ops.relu_(add__72)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_49 = paddle.matmul(relu__99, parameter_493, transpose_x=False, transpose_y=False)
+        matmul_49 = paddle._C_ops.matmul(relu__99, parameter_493, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__73 = paddle._C_ops.add_(matmul_49, parameter_494)
@@ -2018,7 +2018,7 @@ class BlockEntries:
         squeeze__50, squeeze__51 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_26, full_int_array_77), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_50 = paddle.matmul(squeeze__50, parameter_510, transpose_x=False, transpose_y=False)
+        matmul_50 = paddle._C_ops.matmul(squeeze__50, parameter_510, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__75 = paddle._C_ops.add_(matmul_50, parameter_511)
@@ -2027,7 +2027,7 @@ class BlockEntries:
         relu__103 = paddle._C_ops.relu_(add__75)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_51 = paddle.matmul(relu__103, parameter_512, transpose_x=False, transpose_y=False)
+        matmul_51 = paddle._C_ops.matmul(relu__103, parameter_512, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__76 = paddle._C_ops.add_(matmul_51, parameter_513)
@@ -2087,7 +2087,7 @@ class BlockEntries:
         squeeze__52, squeeze__53 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_27, full_int_array_80), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_52 = paddle.matmul(squeeze__52, parameter_529, transpose_x=False, transpose_y=False)
+        matmul_52 = paddle._C_ops.matmul(squeeze__52, parameter_529, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__78 = paddle._C_ops.add_(matmul_52, parameter_530)
@@ -2096,7 +2096,7 @@ class BlockEntries:
         relu__107 = paddle._C_ops.relu_(add__78)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_53 = paddle.matmul(relu__107, parameter_531, transpose_x=False, transpose_y=False)
+        matmul_53 = paddle._C_ops.matmul(relu__107, parameter_531, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__79 = paddle._C_ops.add_(matmul_53, parameter_532)
@@ -2156,7 +2156,7 @@ class BlockEntries:
         squeeze__54, squeeze__55 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_28, full_int_array_83), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_54 = paddle.matmul(squeeze__54, parameter_548, transpose_x=False, transpose_y=False)
+        matmul_54 = paddle._C_ops.matmul(squeeze__54, parameter_548, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__81 = paddle._C_ops.add_(matmul_54, parameter_549)
@@ -2165,7 +2165,7 @@ class BlockEntries:
         relu__111 = paddle._C_ops.relu_(add__81)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_55 = paddle.matmul(relu__111, parameter_550, transpose_x=False, transpose_y=False)
+        matmul_55 = paddle._C_ops.matmul(relu__111, parameter_550, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__82 = paddle._C_ops.add_(matmul_55, parameter_551)
@@ -2225,7 +2225,7 @@ class BlockEntries:
         squeeze__56, squeeze__57 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_29, full_int_array_86), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_56 = paddle.matmul(squeeze__56, parameter_567, transpose_x=False, transpose_y=False)
+        matmul_56 = paddle._C_ops.matmul(squeeze__56, parameter_567, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__84 = paddle._C_ops.add_(matmul_56, parameter_568)
@@ -2234,7 +2234,7 @@ class BlockEntries:
         relu__115 = paddle._C_ops.relu_(add__84)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_57 = paddle.matmul(relu__115, parameter_569, transpose_x=False, transpose_y=False)
+        matmul_57 = paddle._C_ops.matmul(relu__115, parameter_569, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__85 = paddle._C_ops.add_(matmul_57, parameter_570)
@@ -2294,7 +2294,7 @@ class BlockEntries:
         squeeze__58, squeeze__59 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_30, full_int_array_89), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x64xf32) <- (-1x1024xf32, 1024x64xf32)
-        matmul_58 = paddle.matmul(squeeze__58, parameter_586, transpose_x=False, transpose_y=False)
+        matmul_58 = paddle._C_ops.matmul(squeeze__58, parameter_586, False, False)
 
         # pd_op.add_: (-1x64xf32) <- (-1x64xf32, 64xf32)
         add__87 = paddle._C_ops.add_(matmul_58, parameter_587)
@@ -2303,7 +2303,7 @@ class BlockEntries:
         relu__119 = paddle._C_ops.relu_(add__87)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x64xf32, 64x1024xf32)
-        matmul_59 = paddle.matmul(relu__119, parameter_588, transpose_x=False, transpose_y=False)
+        matmul_59 = paddle._C_ops.matmul(relu__119, parameter_588, False, False)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__88 = paddle._C_ops.add_(matmul_59, parameter_589)
@@ -2363,7 +2363,7 @@ class BlockEntries:
         squeeze__60, squeeze__61 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_31, full_int_array_92), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x128xf32) <- (-1x2048xf32, 2048x128xf32)
-        matmul_60 = paddle.matmul(squeeze__60, parameter_605, transpose_x=False, transpose_y=False)
+        matmul_60 = paddle._C_ops.matmul(squeeze__60, parameter_605, False, False)
 
         # pd_op.add_: (-1x128xf32) <- (-1x128xf32, 128xf32)
         add__90 = paddle._C_ops.add_(matmul_60, parameter_606)
@@ -2372,7 +2372,7 @@ class BlockEntries:
         relu__123 = paddle._C_ops.relu_(add__90)
 
         # pd_op.matmul: (-1x2048xf32) <- (-1x128xf32, 128x2048xf32)
-        matmul_61 = paddle.matmul(relu__123, parameter_607, transpose_x=False, transpose_y=False)
+        matmul_61 = paddle._C_ops.matmul(relu__123, parameter_607, False, False)
 
         # pd_op.add_: (-1x2048xf32) <- (-1x2048xf32, 2048xf32)
         add__91 = paddle._C_ops.add_(matmul_61, parameter_608)
@@ -2438,7 +2438,7 @@ class BlockEntries:
         squeeze__62, squeeze__63 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_32, full_int_array_95), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x128xf32) <- (-1x2048xf32, 2048x128xf32)
-        matmul_62 = paddle.matmul(squeeze__62, parameter_629, transpose_x=False, transpose_y=False)
+        matmul_62 = paddle._C_ops.matmul(squeeze__62, parameter_629, False, False)
 
         # pd_op.add_: (-1x128xf32) <- (-1x128xf32, 128xf32)
         add__93 = paddle._C_ops.add_(matmul_62, parameter_630)
@@ -2447,7 +2447,7 @@ class BlockEntries:
         relu__127 = paddle._C_ops.relu_(add__93)
 
         # pd_op.matmul: (-1x2048xf32) <- (-1x128xf32, 128x2048xf32)
-        matmul_63 = paddle.matmul(relu__127, parameter_631, transpose_x=False, transpose_y=False)
+        matmul_63 = paddle._C_ops.matmul(relu__127, parameter_631, False, False)
 
         # pd_op.add_: (-1x2048xf32) <- (-1x2048xf32, 2048xf32)
         add__94 = paddle._C_ops.add_(matmul_63, parameter_632)
@@ -2507,7 +2507,7 @@ class BlockEntries:
         squeeze__64, squeeze__65 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(pool2d_33, full_int_array_98), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x128xf32) <- (-1x2048xf32, 2048x128xf32)
-        matmul_64 = paddle.matmul(squeeze__64, parameter_648, transpose_x=False, transpose_y=False)
+        matmul_64 = paddle._C_ops.matmul(squeeze__64, parameter_648, False, False)
 
         # pd_op.add_: (-1x128xf32) <- (-1x128xf32, 128xf32)
         add__96 = paddle._C_ops.add_(matmul_64, parameter_649)
@@ -2516,7 +2516,7 @@ class BlockEntries:
         relu__131 = paddle._C_ops.relu_(add__96)
 
         # pd_op.matmul: (-1x2048xf32) <- (-1x128xf32, 128x2048xf32)
-        matmul_65 = paddle.matmul(relu__131, parameter_650, transpose_x=False, transpose_y=False)
+        matmul_65 = paddle._C_ops.matmul(relu__131, parameter_650, False, False)
 
         # pd_op.add_: (-1x2048xf32) <- (-1x2048xf32, 2048xf32)
         add__97 = paddle._C_ops.add_(matmul_65, parameter_651)
@@ -2552,7 +2552,7 @@ class BlockEntries:
         reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(pool2d_34, full_int_array_101), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf32) <- (-1x2048xf32, 2048x1000xf32)
-        matmul_66 = paddle.matmul(reshape__0, parameter_652, transpose_x=False, transpose_y=False)
+        matmul_66 = paddle._C_ops.matmul(reshape__0, parameter_652, False, False)
 
         # pd_op.add_: (-1x1000xf32) <- (-1x1000xf32, 1000xf32)
         add__99 = paddle._C_ops.add_(matmul_66, parameter_653)

@@ -449,7 +449,7 @@ class BlockEntries:
         reshape_0, reshape_1 = (lambda x, f: f(x))(paddle._C_ops.reshape(parameter_68, full_int_array_8), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.add: (-1x3x-1x-1xf32) <- (-1x3x-1x-1xf32, 1x3x1x1xf32)
-        add_0 = conv2d_transpose_7 + reshape_0
+        add_0 = paddle._C_ops.add(conv2d_transpose_7, reshape_0)
 
         # pd_op.tanh: (-1x3x-1x-1xf32) <- (-1x3x-1x-1xf32)
         tanh_0 = paddle._C_ops.tanh(add_0)

@@ -860,7 +860,7 @@ class BlockEntries:
         reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(mean_0, full_int_array_7), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x400xf32) <- (-1x2048xf32, 2048x400xf32)
-        matmul_0 = paddle.matmul(reshape__2, parameter_275, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(reshape__2, parameter_275, False, False)
 
         # pd_op.add_: (-1x400xf32) <- (-1x400xf32, 400xf32)
         add__16 = paddle._C_ops.add_(matmul_0, parameter_276)

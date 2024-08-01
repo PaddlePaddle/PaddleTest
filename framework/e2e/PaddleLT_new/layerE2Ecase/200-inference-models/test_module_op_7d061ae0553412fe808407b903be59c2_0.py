@@ -272,7 +272,7 @@ class BlockEntries:
         batch_norm__30, batch_norm__31, batch_norm__32, batch_norm__33, batch_norm__34, batch_norm__35 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_5, parameter_26, parameter_27, parameter_28, parameter_29, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32, -1x256x-1x-1xf32)
-        add_0 = batch_norm__24 + batch_norm__30
+        add_0 = paddle._C_ops.add(batch_norm__24, batch_norm__30)
 
         # pd_op.relu: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32)
         relu_4 = paddle._C_ops.relu(add_0)
@@ -302,7 +302,7 @@ class BlockEntries:
         batch_norm__48, batch_norm__49, batch_norm__50, batch_norm__51, batch_norm__52, batch_norm__53 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_8, parameter_41, parameter_42, parameter_43, parameter_44, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32, -1x256x-1x-1xf32)
-        add_1 = batch_norm__48 + relu_4
+        add_1 = paddle._C_ops.add(batch_norm__48, relu_4)
 
         # pd_op.relu: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32)
         relu_7 = paddle._C_ops.relu(add_1)
@@ -332,7 +332,7 @@ class BlockEntries:
         batch_norm__66, batch_norm__67, batch_norm__68, batch_norm__69, batch_norm__70, batch_norm__71 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_11, parameter_56, parameter_57, parameter_58, parameter_59, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32, -1x256x-1x-1xf32)
-        add_2 = batch_norm__66 + relu_7
+        add_2 = paddle._C_ops.add(batch_norm__66, relu_7)
 
         # pd_op.relu: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32)
         relu_10 = paddle._C_ops.relu(add_2)
@@ -362,7 +362,7 @@ class BlockEntries:
         batch_norm__84, batch_norm__85, batch_norm__86, batch_norm__87, batch_norm__88, batch_norm__89 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_14, parameter_71, parameter_72, parameter_73, parameter_74, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32, -1x256x-1x-1xf32)
-        add_3 = batch_norm__84 + relu_10
+        add_3 = paddle._C_ops.add(batch_norm__84, relu_10)
 
         # pd_op.relu: (-1x256x-1x-1xf32) <- (-1x256x-1x-1xf32)
         relu_13 = paddle._C_ops.relu(add_3)
@@ -401,7 +401,7 @@ class BlockEntries:
         batch_norm__108, batch_norm__109, batch_norm__110, batch_norm__111, batch_norm__112, batch_norm__113 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_18, parameter_91, parameter_92, parameter_93, parameter_94, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_4 = batch_norm__108 + relu_14
+        add_4 = paddle._C_ops.add(batch_norm__108, relu_14)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_17 = paddle._C_ops.relu(add_4)
@@ -422,7 +422,7 @@ class BlockEntries:
         batch_norm__120, batch_norm__121, batch_norm__122, batch_norm__123, batch_norm__124, batch_norm__125 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_20, parameter_101, parameter_102, parameter_103, parameter_104, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_5 = batch_norm__120 + relu_17
+        add_5 = paddle._C_ops.add(batch_norm__120, relu_17)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_19 = paddle._C_ops.relu(add_5)
@@ -443,7 +443,7 @@ class BlockEntries:
         batch_norm__132, batch_norm__133, batch_norm__134, batch_norm__135, batch_norm__136, batch_norm__137 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_22, parameter_111, parameter_112, parameter_113, parameter_114, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_6 = batch_norm__132 + relu_19
+        add_6 = paddle._C_ops.add(batch_norm__132, relu_19)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_21 = paddle._C_ops.relu(add_6)
@@ -464,7 +464,7 @@ class BlockEntries:
         batch_norm__144, batch_norm__145, batch_norm__146, batch_norm__147, batch_norm__148, batch_norm__149 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_24, parameter_121, parameter_122, parameter_123, parameter_124, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_7 = batch_norm__144 + relu_21
+        add_7 = paddle._C_ops.add(batch_norm__144, relu_21)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_23 = paddle._C_ops.relu(add_7)
@@ -485,7 +485,7 @@ class BlockEntries:
         batch_norm__156, batch_norm__157, batch_norm__158, batch_norm__159, batch_norm__160, batch_norm__161 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_26, parameter_131, parameter_132, parameter_133, parameter_134, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_8 = batch_norm__156 + relu_15
+        add_8 = paddle._C_ops.add(batch_norm__156, relu_15)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_25 = paddle._C_ops.relu(add_8)
@@ -506,7 +506,7 @@ class BlockEntries:
         batch_norm__168, batch_norm__169, batch_norm__170, batch_norm__171, batch_norm__172, batch_norm__173 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_28, parameter_141, parameter_142, parameter_143, parameter_144, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_9 = batch_norm__168 + relu_25
+        add_9 = paddle._C_ops.add(batch_norm__168, relu_25)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_27 = paddle._C_ops.relu(add_9)
@@ -527,7 +527,7 @@ class BlockEntries:
         batch_norm__180, batch_norm__181, batch_norm__182, batch_norm__183, batch_norm__184, batch_norm__185 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_30, parameter_151, parameter_152, parameter_153, parameter_154, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_10 = batch_norm__180 + relu_27
+        add_10 = paddle._C_ops.add(batch_norm__180, relu_27)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_29 = paddle._C_ops.relu(add_10)
@@ -548,7 +548,7 @@ class BlockEntries:
         batch_norm__192, batch_norm__193, batch_norm__194, batch_norm__195, batch_norm__196, batch_norm__197 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_32, parameter_161, parameter_162, parameter_163, parameter_164, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_11 = batch_norm__192 + relu_29
+        add_11 = paddle._C_ops.add(batch_norm__192, relu_29)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_31 = paddle._C_ops.relu(add_11)
@@ -578,7 +578,7 @@ class BlockEntries:
         bilinear_interp_0 = paddle._C_ops.bilinear_interp(batch_norm__198, cast__0, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_12 = relu_23 + bilinear_interp_0
+        add_12 = paddle._C_ops.add(relu_23, bilinear_interp_0)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_32 = paddle._C_ops.relu(add_12)
@@ -590,7 +590,7 @@ class BlockEntries:
         batch_norm__204, batch_norm__205, batch_norm__206, batch_norm__207, batch_norm__208, batch_norm__209 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_34, parameter_171, parameter_172, parameter_173, parameter_174, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_13 = relu_31 + batch_norm__204
+        add_13 = paddle._C_ops.add(relu_31, batch_norm__204)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_33 = paddle._C_ops.relu(add_13)
@@ -620,7 +620,7 @@ class BlockEntries:
         batch_norm__222, batch_norm__223, batch_norm__224, batch_norm__225, batch_norm__226, batch_norm__227 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_37, parameter_186, parameter_187, parameter_188, parameter_189, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_14 = batch_norm__222 + relu_32
+        add_14 = paddle._C_ops.add(batch_norm__222, relu_32)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_36 = paddle._C_ops.relu(add_14)
@@ -641,7 +641,7 @@ class BlockEntries:
         batch_norm__234, batch_norm__235, batch_norm__236, batch_norm__237, batch_norm__238, batch_norm__239 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_39, parameter_196, parameter_197, parameter_198, parameter_199, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_15 = batch_norm__234 + relu_36
+        add_15 = paddle._C_ops.add(batch_norm__234, relu_36)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_38 = paddle._C_ops.relu(add_15)
@@ -662,7 +662,7 @@ class BlockEntries:
         batch_norm__246, batch_norm__247, batch_norm__248, batch_norm__249, batch_norm__250, batch_norm__251 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_41, parameter_206, parameter_207, parameter_208, parameter_209, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_16 = batch_norm__246 + relu_38
+        add_16 = paddle._C_ops.add(batch_norm__246, relu_38)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_40 = paddle._C_ops.relu(add_16)
@@ -683,7 +683,7 @@ class BlockEntries:
         batch_norm__258, batch_norm__259, batch_norm__260, batch_norm__261, batch_norm__262, batch_norm__263 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_43, parameter_216, parameter_217, parameter_218, parameter_219, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_17 = batch_norm__258 + relu_40
+        add_17 = paddle._C_ops.add(batch_norm__258, relu_40)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_42 = paddle._C_ops.relu(add_17)
@@ -704,7 +704,7 @@ class BlockEntries:
         batch_norm__270, batch_norm__271, batch_norm__272, batch_norm__273, batch_norm__274, batch_norm__275 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_45, parameter_226, parameter_227, parameter_228, parameter_229, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_18 = batch_norm__270 + relu_33
+        add_18 = paddle._C_ops.add(batch_norm__270, relu_33)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_44 = paddle._C_ops.relu(add_18)
@@ -725,7 +725,7 @@ class BlockEntries:
         batch_norm__282, batch_norm__283, batch_norm__284, batch_norm__285, batch_norm__286, batch_norm__287 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_47, parameter_236, parameter_237, parameter_238, parameter_239, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_19 = batch_norm__282 + relu_44
+        add_19 = paddle._C_ops.add(batch_norm__282, relu_44)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_46 = paddle._C_ops.relu(add_19)
@@ -746,7 +746,7 @@ class BlockEntries:
         batch_norm__294, batch_norm__295, batch_norm__296, batch_norm__297, batch_norm__298, batch_norm__299 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_49, parameter_246, parameter_247, parameter_248, parameter_249, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_20 = batch_norm__294 + relu_46
+        add_20 = paddle._C_ops.add(batch_norm__294, relu_46)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_48 = paddle._C_ops.relu(add_20)
@@ -767,7 +767,7 @@ class BlockEntries:
         batch_norm__306, batch_norm__307, batch_norm__308, batch_norm__309, batch_norm__310, batch_norm__311 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_51, parameter_256, parameter_257, parameter_258, parameter_259, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_21 = batch_norm__306 + relu_48
+        add_21 = paddle._C_ops.add(batch_norm__306, relu_48)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_50 = paddle._C_ops.relu(add_21)
@@ -788,7 +788,7 @@ class BlockEntries:
         batch_norm__318, batch_norm__319, batch_norm__320, batch_norm__321, batch_norm__322, batch_norm__323 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_53, parameter_266, parameter_267, parameter_268, parameter_269, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_22 = batch_norm__318 + relu_34
+        add_22 = paddle._C_ops.add(batch_norm__318, relu_34)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_52 = paddle._C_ops.relu(add_22)
@@ -809,7 +809,7 @@ class BlockEntries:
         batch_norm__330, batch_norm__331, batch_norm__332, batch_norm__333, batch_norm__334, batch_norm__335 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_55, parameter_276, parameter_277, parameter_278, parameter_279, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_23 = batch_norm__330 + relu_52
+        add_23 = paddle._C_ops.add(batch_norm__330, relu_52)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_54 = paddle._C_ops.relu(add_23)
@@ -830,7 +830,7 @@ class BlockEntries:
         batch_norm__342, batch_norm__343, batch_norm__344, batch_norm__345, batch_norm__346, batch_norm__347 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_57, parameter_286, parameter_287, parameter_288, parameter_289, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_24 = batch_norm__342 + relu_54
+        add_24 = paddle._C_ops.add(batch_norm__342, relu_54)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_56 = paddle._C_ops.relu(add_24)
@@ -851,7 +851,7 @@ class BlockEntries:
         batch_norm__354, batch_norm__355, batch_norm__356, batch_norm__357, batch_norm__358, batch_norm__359 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_59, parameter_296, parameter_297, parameter_298, parameter_299, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_25 = batch_norm__354 + relu_56
+        add_25 = paddle._C_ops.add(batch_norm__354, relu_56)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_58 = paddle._C_ops.relu(add_25)
@@ -881,7 +881,7 @@ class BlockEntries:
         bilinear_interp_1 = paddle._C_ops.bilinear_interp(batch_norm__360, cast_0, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_26 = relu_42 + bilinear_interp_1
+        add_26 = paddle._C_ops.add(relu_42, bilinear_interp_1)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x72x-1x-1xf32, 18x72x1x1xf32)
         conv2d_61 = paddle._C_ops.conv2d(relu_58, parameter_305, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -896,7 +896,7 @@ class BlockEntries:
         bilinear_interp_2 = paddle._C_ops.bilinear_interp(batch_norm__366, cast__1, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_27 = add_26 + bilinear_interp_2
+        add_27 = paddle._C_ops.add(add_26, bilinear_interp_2)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_59 = paddle._C_ops.relu(add_27)
@@ -920,7 +920,7 @@ class BlockEntries:
         batch_norm__372, batch_norm__373, batch_norm__374, batch_norm__375, batch_norm__376, batch_norm__377 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_62, parameter_311, parameter_312, parameter_313, parameter_314, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_28 = relu_50 + batch_norm__372
+        add_28 = paddle._C_ops.add(relu_50, batch_norm__372)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x72x-1x-1xf32, 36x72x1x1xf32)
         conv2d_63 = paddle._C_ops.conv2d(relu_58, parameter_315, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -935,7 +935,7 @@ class BlockEntries:
         bilinear_interp_3 = paddle._C_ops.bilinear_interp(batch_norm__378, cast__2, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_29 = add_28 + bilinear_interp_3
+        add_29 = paddle._C_ops.add(add_28, bilinear_interp_3)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_60 = paddle._C_ops.relu(add_29)
@@ -956,7 +956,7 @@ class BlockEntries:
         batch_norm__390, batch_norm__391, batch_norm__392, batch_norm__393, batch_norm__394, batch_norm__395 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_65, parameter_326, parameter_327, parameter_328, parameter_329, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_30 = relu_58 + batch_norm__390
+        add_30 = paddle._C_ops.add(relu_58, batch_norm__390)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x36x-1x-1xf32, 72x36x3x3xf32)
         conv2d_66 = paddle._C_ops.conv2d(relu_50, parameter_330, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -965,7 +965,7 @@ class BlockEntries:
         batch_norm__396, batch_norm__397, batch_norm__398, batch_norm__399, batch_norm__400, batch_norm__401 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_66, parameter_331, parameter_332, parameter_333, parameter_334, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_31 = add_30 + batch_norm__396
+        add_31 = paddle._C_ops.add(add_30, batch_norm__396)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_62 = paddle._C_ops.relu(add_31)
@@ -986,7 +986,7 @@ class BlockEntries:
         batch_norm__408, batch_norm__409, batch_norm__410, batch_norm__411, batch_norm__412, batch_norm__413 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_68, parameter_341, parameter_342, parameter_343, parameter_344, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_32 = batch_norm__408 + relu_59
+        add_32 = paddle._C_ops.add(batch_norm__408, relu_59)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_64 = paddle._C_ops.relu(add_32)
@@ -1007,7 +1007,7 @@ class BlockEntries:
         batch_norm__420, batch_norm__421, batch_norm__422, batch_norm__423, batch_norm__424, batch_norm__425 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_70, parameter_351, parameter_352, parameter_353, parameter_354, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_33 = batch_norm__420 + relu_64
+        add_33 = paddle._C_ops.add(batch_norm__420, relu_64)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_66 = paddle._C_ops.relu(add_33)
@@ -1028,7 +1028,7 @@ class BlockEntries:
         batch_norm__432, batch_norm__433, batch_norm__434, batch_norm__435, batch_norm__436, batch_norm__437 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_72, parameter_361, parameter_362, parameter_363, parameter_364, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_34 = batch_norm__432 + relu_66
+        add_34 = paddle._C_ops.add(batch_norm__432, relu_66)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_68 = paddle._C_ops.relu(add_34)
@@ -1049,7 +1049,7 @@ class BlockEntries:
         batch_norm__444, batch_norm__445, batch_norm__446, batch_norm__447, batch_norm__448, batch_norm__449 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_74, parameter_371, parameter_372, parameter_373, parameter_374, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_35 = batch_norm__444 + relu_68
+        add_35 = paddle._C_ops.add(batch_norm__444, relu_68)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_70 = paddle._C_ops.relu(add_35)
@@ -1070,7 +1070,7 @@ class BlockEntries:
         batch_norm__456, batch_norm__457, batch_norm__458, batch_norm__459, batch_norm__460, batch_norm__461 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_76, parameter_381, parameter_382, parameter_383, parameter_384, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_36 = batch_norm__456 + relu_60
+        add_36 = paddle._C_ops.add(batch_norm__456, relu_60)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_72 = paddle._C_ops.relu(add_36)
@@ -1091,7 +1091,7 @@ class BlockEntries:
         batch_norm__468, batch_norm__469, batch_norm__470, batch_norm__471, batch_norm__472, batch_norm__473 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_78, parameter_391, parameter_392, parameter_393, parameter_394, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_37 = batch_norm__468 + relu_72
+        add_37 = paddle._C_ops.add(batch_norm__468, relu_72)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_74 = paddle._C_ops.relu(add_37)
@@ -1112,7 +1112,7 @@ class BlockEntries:
         batch_norm__480, batch_norm__481, batch_norm__482, batch_norm__483, batch_norm__484, batch_norm__485 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_80, parameter_401, parameter_402, parameter_403, parameter_404, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_38 = batch_norm__480 + relu_74
+        add_38 = paddle._C_ops.add(batch_norm__480, relu_74)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_76 = paddle._C_ops.relu(add_38)
@@ -1133,7 +1133,7 @@ class BlockEntries:
         batch_norm__492, batch_norm__493, batch_norm__494, batch_norm__495, batch_norm__496, batch_norm__497 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_82, parameter_411, parameter_412, parameter_413, parameter_414, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_39 = batch_norm__492 + relu_76
+        add_39 = paddle._C_ops.add(batch_norm__492, relu_76)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_78 = paddle._C_ops.relu(add_39)
@@ -1154,7 +1154,7 @@ class BlockEntries:
         batch_norm__504, batch_norm__505, batch_norm__506, batch_norm__507, batch_norm__508, batch_norm__509 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_84, parameter_421, parameter_422, parameter_423, parameter_424, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_40 = batch_norm__504 + relu_62
+        add_40 = paddle._C_ops.add(batch_norm__504, relu_62)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_80 = paddle._C_ops.relu(add_40)
@@ -1175,7 +1175,7 @@ class BlockEntries:
         batch_norm__516, batch_norm__517, batch_norm__518, batch_norm__519, batch_norm__520, batch_norm__521 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_86, parameter_431, parameter_432, parameter_433, parameter_434, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_41 = batch_norm__516 + relu_80
+        add_41 = paddle._C_ops.add(batch_norm__516, relu_80)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_82 = paddle._C_ops.relu(add_41)
@@ -1196,7 +1196,7 @@ class BlockEntries:
         batch_norm__528, batch_norm__529, batch_norm__530, batch_norm__531, batch_norm__532, batch_norm__533 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_88, parameter_441, parameter_442, parameter_443, parameter_444, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_42 = batch_norm__528 + relu_82
+        add_42 = paddle._C_ops.add(batch_norm__528, relu_82)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_84 = paddle._C_ops.relu(add_42)
@@ -1217,7 +1217,7 @@ class BlockEntries:
         batch_norm__540, batch_norm__541, batch_norm__542, batch_norm__543, batch_norm__544, batch_norm__545 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_90, parameter_451, parameter_452, parameter_453, parameter_454, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_43 = batch_norm__540 + relu_84
+        add_43 = paddle._C_ops.add(batch_norm__540, relu_84)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_86 = paddle._C_ops.relu(add_43)
@@ -1247,7 +1247,7 @@ class BlockEntries:
         bilinear_interp_4 = paddle._C_ops.bilinear_interp(batch_norm__546, cast_1, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_44 = relu_70 + bilinear_interp_4
+        add_44 = paddle._C_ops.add(relu_70, bilinear_interp_4)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x72x-1x-1xf32, 18x72x1x1xf32)
         conv2d_92 = paddle._C_ops.conv2d(relu_86, parameter_460, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -1262,7 +1262,7 @@ class BlockEntries:
         bilinear_interp_5 = paddle._C_ops.bilinear_interp(batch_norm__552, cast__3, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_45 = add_44 + bilinear_interp_5
+        add_45 = paddle._C_ops.add(add_44, bilinear_interp_5)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_87 = paddle._C_ops.relu(add_45)
@@ -1286,7 +1286,7 @@ class BlockEntries:
         batch_norm__558, batch_norm__559, batch_norm__560, batch_norm__561, batch_norm__562, batch_norm__563 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_93, parameter_466, parameter_467, parameter_468, parameter_469, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_46 = relu_78 + batch_norm__558
+        add_46 = paddle._C_ops.add(relu_78, batch_norm__558)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x72x-1x-1xf32, 36x72x1x1xf32)
         conv2d_94 = paddle._C_ops.conv2d(relu_86, parameter_470, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -1301,7 +1301,7 @@ class BlockEntries:
         bilinear_interp_6 = paddle._C_ops.bilinear_interp(batch_norm__564, cast__4, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_47 = add_46 + bilinear_interp_6
+        add_47 = paddle._C_ops.add(add_46, bilinear_interp_6)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_88 = paddle._C_ops.relu(add_47)
@@ -1322,7 +1322,7 @@ class BlockEntries:
         batch_norm__576, batch_norm__577, batch_norm__578, batch_norm__579, batch_norm__580, batch_norm__581 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_96, parameter_481, parameter_482, parameter_483, parameter_484, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_48 = relu_86 + batch_norm__576
+        add_48 = paddle._C_ops.add(relu_86, batch_norm__576)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x36x-1x-1xf32, 72x36x3x3xf32)
         conv2d_97 = paddle._C_ops.conv2d(relu_78, parameter_485, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -1331,7 +1331,7 @@ class BlockEntries:
         batch_norm__582, batch_norm__583, batch_norm__584, batch_norm__585, batch_norm__586, batch_norm__587 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_97, parameter_486, parameter_487, parameter_488, parameter_489, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_49 = add_48 + batch_norm__582
+        add_49 = paddle._C_ops.add(add_48, batch_norm__582)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_90 = paddle._C_ops.relu(add_49)
@@ -1352,7 +1352,7 @@ class BlockEntries:
         batch_norm__594, batch_norm__595, batch_norm__596, batch_norm__597, batch_norm__598, batch_norm__599 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_99, parameter_496, parameter_497, parameter_498, parameter_499, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_50 = batch_norm__594 + relu_87
+        add_50 = paddle._C_ops.add(batch_norm__594, relu_87)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_92 = paddle._C_ops.relu(add_50)
@@ -1373,7 +1373,7 @@ class BlockEntries:
         batch_norm__606, batch_norm__607, batch_norm__608, batch_norm__609, batch_norm__610, batch_norm__611 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_101, parameter_506, parameter_507, parameter_508, parameter_509, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_51 = batch_norm__606 + relu_92
+        add_51 = paddle._C_ops.add(batch_norm__606, relu_92)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_94 = paddle._C_ops.relu(add_51)
@@ -1394,7 +1394,7 @@ class BlockEntries:
         batch_norm__618, batch_norm__619, batch_norm__620, batch_norm__621, batch_norm__622, batch_norm__623 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_103, parameter_516, parameter_517, parameter_518, parameter_519, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_52 = batch_norm__618 + relu_94
+        add_52 = paddle._C_ops.add(batch_norm__618, relu_94)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_96 = paddle._C_ops.relu(add_52)
@@ -1415,7 +1415,7 @@ class BlockEntries:
         batch_norm__630, batch_norm__631, batch_norm__632, batch_norm__633, batch_norm__634, batch_norm__635 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_105, parameter_526, parameter_527, parameter_528, parameter_529, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_53 = batch_norm__630 + relu_96
+        add_53 = paddle._C_ops.add(batch_norm__630, relu_96)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_98 = paddle._C_ops.relu(add_53)
@@ -1436,7 +1436,7 @@ class BlockEntries:
         batch_norm__642, batch_norm__643, batch_norm__644, batch_norm__645, batch_norm__646, batch_norm__647 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_107, parameter_536, parameter_537, parameter_538, parameter_539, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_54 = batch_norm__642 + relu_88
+        add_54 = paddle._C_ops.add(batch_norm__642, relu_88)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_100 = paddle._C_ops.relu(add_54)
@@ -1457,7 +1457,7 @@ class BlockEntries:
         batch_norm__654, batch_norm__655, batch_norm__656, batch_norm__657, batch_norm__658, batch_norm__659 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_109, parameter_546, parameter_547, parameter_548, parameter_549, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_55 = batch_norm__654 + relu_100
+        add_55 = paddle._C_ops.add(batch_norm__654, relu_100)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_102 = paddle._C_ops.relu(add_55)
@@ -1478,7 +1478,7 @@ class BlockEntries:
         batch_norm__666, batch_norm__667, batch_norm__668, batch_norm__669, batch_norm__670, batch_norm__671 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_111, parameter_556, parameter_557, parameter_558, parameter_559, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_56 = batch_norm__666 + relu_102
+        add_56 = paddle._C_ops.add(batch_norm__666, relu_102)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_104 = paddle._C_ops.relu(add_56)
@@ -1499,7 +1499,7 @@ class BlockEntries:
         batch_norm__678, batch_norm__679, batch_norm__680, batch_norm__681, batch_norm__682, batch_norm__683 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_113, parameter_566, parameter_567, parameter_568, parameter_569, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_57 = batch_norm__678 + relu_104
+        add_57 = paddle._C_ops.add(batch_norm__678, relu_104)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_106 = paddle._C_ops.relu(add_57)
@@ -1520,7 +1520,7 @@ class BlockEntries:
         batch_norm__690, batch_norm__691, batch_norm__692, batch_norm__693, batch_norm__694, batch_norm__695 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_115, parameter_576, parameter_577, parameter_578, parameter_579, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_58 = batch_norm__690 + relu_90
+        add_58 = paddle._C_ops.add(batch_norm__690, relu_90)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_108 = paddle._C_ops.relu(add_58)
@@ -1541,7 +1541,7 @@ class BlockEntries:
         batch_norm__702, batch_norm__703, batch_norm__704, batch_norm__705, batch_norm__706, batch_norm__707 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_117, parameter_586, parameter_587, parameter_588, parameter_589, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_59 = batch_norm__702 + relu_108
+        add_59 = paddle._C_ops.add(batch_norm__702, relu_108)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_110 = paddle._C_ops.relu(add_59)
@@ -1562,7 +1562,7 @@ class BlockEntries:
         batch_norm__714, batch_norm__715, batch_norm__716, batch_norm__717, batch_norm__718, batch_norm__719 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_119, parameter_596, parameter_597, parameter_598, parameter_599, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_60 = batch_norm__714 + relu_110
+        add_60 = paddle._C_ops.add(batch_norm__714, relu_110)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_112 = paddle._C_ops.relu(add_60)
@@ -1583,7 +1583,7 @@ class BlockEntries:
         batch_norm__726, batch_norm__727, batch_norm__728, batch_norm__729, batch_norm__730, batch_norm__731 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_121, parameter_606, parameter_607, parameter_608, parameter_609, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_61 = batch_norm__726 + relu_112
+        add_61 = paddle._C_ops.add(batch_norm__726, relu_112)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_114 = paddle._C_ops.relu(add_61)
@@ -1613,7 +1613,7 @@ class BlockEntries:
         bilinear_interp_7 = paddle._C_ops.bilinear_interp(batch_norm__732, cast_2, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_62 = relu_98 + bilinear_interp_7
+        add_62 = paddle._C_ops.add(relu_98, bilinear_interp_7)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x72x-1x-1xf32, 18x72x1x1xf32)
         conv2d_123 = paddle._C_ops.conv2d(relu_114, parameter_615, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -1628,7 +1628,7 @@ class BlockEntries:
         bilinear_interp_8 = paddle._C_ops.bilinear_interp(batch_norm__738, cast__5, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_63 = add_62 + bilinear_interp_8
+        add_63 = paddle._C_ops.add(add_62, bilinear_interp_8)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_115 = paddle._C_ops.relu(add_63)
@@ -1652,7 +1652,7 @@ class BlockEntries:
         batch_norm__744, batch_norm__745, batch_norm__746, batch_norm__747, batch_norm__748, batch_norm__749 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_124, parameter_621, parameter_622, parameter_623, parameter_624, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_64 = relu_106 + batch_norm__744
+        add_64 = paddle._C_ops.add(relu_106, batch_norm__744)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x72x-1x-1xf32, 36x72x1x1xf32)
         conv2d_125 = paddle._C_ops.conv2d(relu_114, parameter_625, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -1667,7 +1667,7 @@ class BlockEntries:
         bilinear_interp_9 = paddle._C_ops.bilinear_interp(batch_norm__750, cast__6, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_65 = add_64 + bilinear_interp_9
+        add_65 = paddle._C_ops.add(add_64, bilinear_interp_9)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_116 = paddle._C_ops.relu(add_65)
@@ -1688,7 +1688,7 @@ class BlockEntries:
         batch_norm__762, batch_norm__763, batch_norm__764, batch_norm__765, batch_norm__766, batch_norm__767 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_127, parameter_636, parameter_637, parameter_638, parameter_639, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_66 = relu_114 + batch_norm__762
+        add_66 = paddle._C_ops.add(relu_114, batch_norm__762)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x36x-1x-1xf32, 72x36x3x3xf32)
         conv2d_128 = paddle._C_ops.conv2d(relu_106, parameter_640, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -1697,7 +1697,7 @@ class BlockEntries:
         batch_norm__768, batch_norm__769, batch_norm__770, batch_norm__771, batch_norm__772, batch_norm__773 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_128, parameter_641, parameter_642, parameter_643, parameter_644, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_67 = add_66 + batch_norm__768
+        add_67 = paddle._C_ops.add(add_66, batch_norm__768)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_118 = paddle._C_ops.relu(add_67)
@@ -1718,7 +1718,7 @@ class BlockEntries:
         batch_norm__780, batch_norm__781, batch_norm__782, batch_norm__783, batch_norm__784, batch_norm__785 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_130, parameter_651, parameter_652, parameter_653, parameter_654, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_68 = batch_norm__780 + relu_115
+        add_68 = paddle._C_ops.add(batch_norm__780, relu_115)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_120 = paddle._C_ops.relu(add_68)
@@ -1739,7 +1739,7 @@ class BlockEntries:
         batch_norm__792, batch_norm__793, batch_norm__794, batch_norm__795, batch_norm__796, batch_norm__797 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_132, parameter_661, parameter_662, parameter_663, parameter_664, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_69 = batch_norm__792 + relu_120
+        add_69 = paddle._C_ops.add(batch_norm__792, relu_120)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_122 = paddle._C_ops.relu(add_69)
@@ -1760,7 +1760,7 @@ class BlockEntries:
         batch_norm__804, batch_norm__805, batch_norm__806, batch_norm__807, batch_norm__808, batch_norm__809 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_134, parameter_671, parameter_672, parameter_673, parameter_674, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_70 = batch_norm__804 + relu_122
+        add_70 = paddle._C_ops.add(batch_norm__804, relu_122)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_124 = paddle._C_ops.relu(add_70)
@@ -1781,7 +1781,7 @@ class BlockEntries:
         batch_norm__816, batch_norm__817, batch_norm__818, batch_norm__819, batch_norm__820, batch_norm__821 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_136, parameter_681, parameter_682, parameter_683, parameter_684, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_71 = batch_norm__816 + relu_124
+        add_71 = paddle._C_ops.add(batch_norm__816, relu_124)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_126 = paddle._C_ops.relu(add_71)
@@ -1802,7 +1802,7 @@ class BlockEntries:
         batch_norm__828, batch_norm__829, batch_norm__830, batch_norm__831, batch_norm__832, batch_norm__833 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_138, parameter_691, parameter_692, parameter_693, parameter_694, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_72 = batch_norm__828 + relu_116
+        add_72 = paddle._C_ops.add(batch_norm__828, relu_116)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_128 = paddle._C_ops.relu(add_72)
@@ -1823,7 +1823,7 @@ class BlockEntries:
         batch_norm__840, batch_norm__841, batch_norm__842, batch_norm__843, batch_norm__844, batch_norm__845 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_140, parameter_701, parameter_702, parameter_703, parameter_704, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_73 = batch_norm__840 + relu_128
+        add_73 = paddle._C_ops.add(batch_norm__840, relu_128)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_130 = paddle._C_ops.relu(add_73)
@@ -1844,7 +1844,7 @@ class BlockEntries:
         batch_norm__852, batch_norm__853, batch_norm__854, batch_norm__855, batch_norm__856, batch_norm__857 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_142, parameter_711, parameter_712, parameter_713, parameter_714, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_74 = batch_norm__852 + relu_130
+        add_74 = paddle._C_ops.add(batch_norm__852, relu_130)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_132 = paddle._C_ops.relu(add_74)
@@ -1865,7 +1865,7 @@ class BlockEntries:
         batch_norm__864, batch_norm__865, batch_norm__866, batch_norm__867, batch_norm__868, batch_norm__869 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_144, parameter_721, parameter_722, parameter_723, parameter_724, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_75 = batch_norm__864 + relu_132
+        add_75 = paddle._C_ops.add(batch_norm__864, relu_132)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_134 = paddle._C_ops.relu(add_75)
@@ -1886,7 +1886,7 @@ class BlockEntries:
         batch_norm__876, batch_norm__877, batch_norm__878, batch_norm__879, batch_norm__880, batch_norm__881 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_146, parameter_731, parameter_732, parameter_733, parameter_734, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_76 = batch_norm__876 + relu_118
+        add_76 = paddle._C_ops.add(batch_norm__876, relu_118)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_136 = paddle._C_ops.relu(add_76)
@@ -1907,7 +1907,7 @@ class BlockEntries:
         batch_norm__888, batch_norm__889, batch_norm__890, batch_norm__891, batch_norm__892, batch_norm__893 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_148, parameter_741, parameter_742, parameter_743, parameter_744, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_77 = batch_norm__888 + relu_136
+        add_77 = paddle._C_ops.add(batch_norm__888, relu_136)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_138 = paddle._C_ops.relu(add_77)
@@ -1928,7 +1928,7 @@ class BlockEntries:
         batch_norm__900, batch_norm__901, batch_norm__902, batch_norm__903, batch_norm__904, batch_norm__905 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_150, parameter_751, parameter_752, parameter_753, parameter_754, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_78 = batch_norm__900 + relu_138
+        add_78 = paddle._C_ops.add(batch_norm__900, relu_138)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_140 = paddle._C_ops.relu(add_78)
@@ -1949,7 +1949,7 @@ class BlockEntries:
         batch_norm__912, batch_norm__913, batch_norm__914, batch_norm__915, batch_norm__916, batch_norm__917 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_152, parameter_761, parameter_762, parameter_763, parameter_764, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_79 = batch_norm__912 + relu_140
+        add_79 = paddle._C_ops.add(batch_norm__912, relu_140)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_142 = paddle._C_ops.relu(add_79)
@@ -1979,7 +1979,7 @@ class BlockEntries:
         bilinear_interp_10 = paddle._C_ops.bilinear_interp(batch_norm__918, cast_3, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_80 = relu_126 + bilinear_interp_10
+        add_80 = paddle._C_ops.add(relu_126, bilinear_interp_10)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x72x-1x-1xf32, 18x72x1x1xf32)
         conv2d_154 = paddle._C_ops.conv2d(relu_142, parameter_770, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -1994,7 +1994,7 @@ class BlockEntries:
         bilinear_interp_11 = paddle._C_ops.bilinear_interp(batch_norm__924, cast__7, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_81 = add_80 + bilinear_interp_11
+        add_81 = paddle._C_ops.add(add_80, bilinear_interp_11)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_143 = paddle._C_ops.relu(add_81)
@@ -2018,7 +2018,7 @@ class BlockEntries:
         batch_norm__930, batch_norm__931, batch_norm__932, batch_norm__933, batch_norm__934, batch_norm__935 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_155, parameter_776, parameter_777, parameter_778, parameter_779, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_82 = relu_134 + batch_norm__930
+        add_82 = paddle._C_ops.add(relu_134, batch_norm__930)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x72x-1x-1xf32, 36x72x1x1xf32)
         conv2d_156 = paddle._C_ops.conv2d(relu_142, parameter_780, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -2033,7 +2033,7 @@ class BlockEntries:
         bilinear_interp_12 = paddle._C_ops.bilinear_interp(batch_norm__936, cast__8, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_83 = add_82 + bilinear_interp_12
+        add_83 = paddle._C_ops.add(add_82, bilinear_interp_12)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_144 = paddle._C_ops.relu(add_83)
@@ -2054,7 +2054,7 @@ class BlockEntries:
         batch_norm__948, batch_norm__949, batch_norm__950, batch_norm__951, batch_norm__952, batch_norm__953 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_158, parameter_791, parameter_792, parameter_793, parameter_794, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_84 = relu_142 + batch_norm__948
+        add_84 = paddle._C_ops.add(relu_142, batch_norm__948)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x36x-1x-1xf32, 72x36x3x3xf32)
         conv2d_159 = paddle._C_ops.conv2d(relu_134, parameter_795, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -2063,7 +2063,7 @@ class BlockEntries:
         batch_norm__954, batch_norm__955, batch_norm__956, batch_norm__957, batch_norm__958, batch_norm__959 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_159, parameter_796, parameter_797, parameter_798, parameter_799, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_85 = add_84 + batch_norm__954
+        add_85 = paddle._C_ops.add(add_84, batch_norm__954)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_146 = paddle._C_ops.relu(add_85)
@@ -2093,7 +2093,7 @@ class BlockEntries:
         batch_norm__972, batch_norm__973, batch_norm__974, batch_norm__975, batch_norm__976, batch_norm__977 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_162, parameter_811, parameter_812, parameter_813, parameter_814, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_86 = batch_norm__972 + relu_143
+        add_86 = paddle._C_ops.add(batch_norm__972, relu_143)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_149 = paddle._C_ops.relu(add_86)
@@ -2114,7 +2114,7 @@ class BlockEntries:
         batch_norm__984, batch_norm__985, batch_norm__986, batch_norm__987, batch_norm__988, batch_norm__989 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_164, parameter_821, parameter_822, parameter_823, parameter_824, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_87 = batch_norm__984 + relu_149
+        add_87 = paddle._C_ops.add(batch_norm__984, relu_149)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_151 = paddle._C_ops.relu(add_87)
@@ -2135,7 +2135,7 @@ class BlockEntries:
         batch_norm__996, batch_norm__997, batch_norm__998, batch_norm__999, batch_norm__1000, batch_norm__1001 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_166, parameter_831, parameter_832, parameter_833, parameter_834, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_88 = batch_norm__996 + relu_151
+        add_88 = paddle._C_ops.add(batch_norm__996, relu_151)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_153 = paddle._C_ops.relu(add_88)
@@ -2156,7 +2156,7 @@ class BlockEntries:
         batch_norm__1008, batch_norm__1009, batch_norm__1010, batch_norm__1011, batch_norm__1012, batch_norm__1013 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_168, parameter_841, parameter_842, parameter_843, parameter_844, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_89 = batch_norm__1008 + relu_153
+        add_89 = paddle._C_ops.add(batch_norm__1008, relu_153)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_155 = paddle._C_ops.relu(add_89)
@@ -2177,7 +2177,7 @@ class BlockEntries:
         batch_norm__1020, batch_norm__1021, batch_norm__1022, batch_norm__1023, batch_norm__1024, batch_norm__1025 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_170, parameter_851, parameter_852, parameter_853, parameter_854, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_90 = batch_norm__1020 + relu_144
+        add_90 = paddle._C_ops.add(batch_norm__1020, relu_144)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_157 = paddle._C_ops.relu(add_90)
@@ -2198,7 +2198,7 @@ class BlockEntries:
         batch_norm__1032, batch_norm__1033, batch_norm__1034, batch_norm__1035, batch_norm__1036, batch_norm__1037 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_172, parameter_861, parameter_862, parameter_863, parameter_864, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_91 = batch_norm__1032 + relu_157
+        add_91 = paddle._C_ops.add(batch_norm__1032, relu_157)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_159 = paddle._C_ops.relu(add_91)
@@ -2219,7 +2219,7 @@ class BlockEntries:
         batch_norm__1044, batch_norm__1045, batch_norm__1046, batch_norm__1047, batch_norm__1048, batch_norm__1049 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_174, parameter_871, parameter_872, parameter_873, parameter_874, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_92 = batch_norm__1044 + relu_159
+        add_92 = paddle._C_ops.add(batch_norm__1044, relu_159)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_161 = paddle._C_ops.relu(add_92)
@@ -2240,7 +2240,7 @@ class BlockEntries:
         batch_norm__1056, batch_norm__1057, batch_norm__1058, batch_norm__1059, batch_norm__1060, batch_norm__1061 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_176, parameter_881, parameter_882, parameter_883, parameter_884, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_93 = batch_norm__1056 + relu_161
+        add_93 = paddle._C_ops.add(batch_norm__1056, relu_161)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_163 = paddle._C_ops.relu(add_93)
@@ -2261,7 +2261,7 @@ class BlockEntries:
         batch_norm__1068, batch_norm__1069, batch_norm__1070, batch_norm__1071, batch_norm__1072, batch_norm__1073 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_178, parameter_891, parameter_892, parameter_893, parameter_894, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_94 = batch_norm__1068 + relu_146
+        add_94 = paddle._C_ops.add(batch_norm__1068, relu_146)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_165 = paddle._C_ops.relu(add_94)
@@ -2282,7 +2282,7 @@ class BlockEntries:
         batch_norm__1080, batch_norm__1081, batch_norm__1082, batch_norm__1083, batch_norm__1084, batch_norm__1085 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_180, parameter_901, parameter_902, parameter_903, parameter_904, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_95 = batch_norm__1080 + relu_165
+        add_95 = paddle._C_ops.add(batch_norm__1080, relu_165)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_167 = paddle._C_ops.relu(add_95)
@@ -2303,7 +2303,7 @@ class BlockEntries:
         batch_norm__1092, batch_norm__1093, batch_norm__1094, batch_norm__1095, batch_norm__1096, batch_norm__1097 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_182, parameter_911, parameter_912, parameter_913, parameter_914, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_96 = batch_norm__1092 + relu_167
+        add_96 = paddle._C_ops.add(batch_norm__1092, relu_167)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_169 = paddle._C_ops.relu(add_96)
@@ -2324,7 +2324,7 @@ class BlockEntries:
         batch_norm__1104, batch_norm__1105, batch_norm__1106, batch_norm__1107, batch_norm__1108, batch_norm__1109 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_184, parameter_921, parameter_922, parameter_923, parameter_924, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_97 = batch_norm__1104 + relu_169
+        add_97 = paddle._C_ops.add(batch_norm__1104, relu_169)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_171 = paddle._C_ops.relu(add_97)
@@ -2345,7 +2345,7 @@ class BlockEntries:
         batch_norm__1116, batch_norm__1117, batch_norm__1118, batch_norm__1119, batch_norm__1120, batch_norm__1121 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_186, parameter_931, parameter_932, parameter_933, parameter_934, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_98 = batch_norm__1116 + relu_147
+        add_98 = paddle._C_ops.add(batch_norm__1116, relu_147)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_173 = paddle._C_ops.relu(add_98)
@@ -2366,7 +2366,7 @@ class BlockEntries:
         batch_norm__1128, batch_norm__1129, batch_norm__1130, batch_norm__1131, batch_norm__1132, batch_norm__1133 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_188, parameter_941, parameter_942, parameter_943, parameter_944, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_99 = batch_norm__1128 + relu_173
+        add_99 = paddle._C_ops.add(batch_norm__1128, relu_173)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_175 = paddle._C_ops.relu(add_99)
@@ -2387,7 +2387,7 @@ class BlockEntries:
         batch_norm__1140, batch_norm__1141, batch_norm__1142, batch_norm__1143, batch_norm__1144, batch_norm__1145 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_190, parameter_951, parameter_952, parameter_953, parameter_954, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_100 = batch_norm__1140 + relu_175
+        add_100 = paddle._C_ops.add(batch_norm__1140, relu_175)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_177 = paddle._C_ops.relu(add_100)
@@ -2408,7 +2408,7 @@ class BlockEntries:
         batch_norm__1152, batch_norm__1153, batch_norm__1154, batch_norm__1155, batch_norm__1156, batch_norm__1157 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_192, parameter_961, parameter_962, parameter_963, parameter_964, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_101 = batch_norm__1152 + relu_177
+        add_101 = paddle._C_ops.add(batch_norm__1152, relu_177)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_179 = paddle._C_ops.relu(add_101)
@@ -2438,7 +2438,7 @@ class BlockEntries:
         bilinear_interp_13 = paddle._C_ops.bilinear_interp(batch_norm__1158, cast_4, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_102 = relu_155 + bilinear_interp_13
+        add_102 = paddle._C_ops.add(relu_155, bilinear_interp_13)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x72x-1x-1xf32, 18x72x1x1xf32)
         conv2d_194 = paddle._C_ops.conv2d(relu_171, parameter_970, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -2453,7 +2453,7 @@ class BlockEntries:
         bilinear_interp_14 = paddle._C_ops.bilinear_interp(batch_norm__1164, cast_5, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_103 = add_102 + bilinear_interp_14
+        add_103 = paddle._C_ops.add(add_102, bilinear_interp_14)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x144x-1x-1xf32, 18x144x1x1xf32)
         conv2d_195 = paddle._C_ops.conv2d(relu_179, parameter_975, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -2468,7 +2468,7 @@ class BlockEntries:
         bilinear_interp_15 = paddle._C_ops.bilinear_interp(batch_norm__1170, cast__9, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_104 = add_103 + bilinear_interp_15
+        add_104 = paddle._C_ops.add(add_103, bilinear_interp_15)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_180 = paddle._C_ops.relu(add_104)
@@ -2492,7 +2492,7 @@ class BlockEntries:
         batch_norm__1176, batch_norm__1177, batch_norm__1178, batch_norm__1179, batch_norm__1180, batch_norm__1181 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_196, parameter_981, parameter_982, parameter_983, parameter_984, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_105 = relu_163 + batch_norm__1176
+        add_105 = paddle._C_ops.add(relu_163, batch_norm__1176)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x72x-1x-1xf32, 36x72x1x1xf32)
         conv2d_197 = paddle._C_ops.conv2d(relu_171, parameter_985, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -2507,7 +2507,7 @@ class BlockEntries:
         bilinear_interp_16 = paddle._C_ops.bilinear_interp(batch_norm__1182, cast_6, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_106 = add_105 + bilinear_interp_16
+        add_106 = paddle._C_ops.add(add_105, bilinear_interp_16)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x144x-1x-1xf32, 36x144x1x1xf32)
         conv2d_198 = paddle._C_ops.conv2d(relu_179, parameter_990, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -2522,7 +2522,7 @@ class BlockEntries:
         bilinear_interp_17 = paddle._C_ops.bilinear_interp(batch_norm__1188, cast__10, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_107 = add_106 + bilinear_interp_17
+        add_107 = paddle._C_ops.add(add_106, bilinear_interp_17)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_181 = paddle._C_ops.relu(add_107)
@@ -2555,7 +2555,7 @@ class BlockEntries:
         batch_norm__1200, batch_norm__1201, batch_norm__1202, batch_norm__1203, batch_norm__1204, batch_norm__1205 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_200, parameter_1001, parameter_1002, parameter_1003, parameter_1004, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_108 = relu_171 + batch_norm__1200
+        add_108 = paddle._C_ops.add(relu_171, batch_norm__1200)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x36x-1x-1xf32, 72x36x3x3xf32)
         conv2d_201 = paddle._C_ops.conv2d(relu_163, parameter_1005, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -2564,7 +2564,7 @@ class BlockEntries:
         batch_norm__1206, batch_norm__1207, batch_norm__1208, batch_norm__1209, batch_norm__1210, batch_norm__1211 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_201, parameter_1006, parameter_1007, parameter_1008, parameter_1009, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_109 = add_108 + batch_norm__1206
+        add_109 = paddle._C_ops.add(add_108, batch_norm__1206)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x144x-1x-1xf32, 72x144x1x1xf32)
         conv2d_202 = paddle._C_ops.conv2d(relu_179, parameter_1010, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -2579,7 +2579,7 @@ class BlockEntries:
         bilinear_interp_18 = paddle._C_ops.bilinear_interp(batch_norm__1212, cast__11, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_110 = add_109 + bilinear_interp_18
+        add_110 = paddle._C_ops.add(add_109, bilinear_interp_18)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_183 = paddle._C_ops.relu(add_110)
@@ -2609,7 +2609,7 @@ class BlockEntries:
         batch_norm__1230, batch_norm__1231, batch_norm__1232, batch_norm__1233, batch_norm__1234, batch_norm__1235 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_205, parameter_1026, parameter_1027, parameter_1028, parameter_1029, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_111 = relu_179 + batch_norm__1230
+        add_111 = paddle._C_ops.add(relu_179, batch_norm__1230)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, 36x36x3x3xf32)
         conv2d_206 = paddle._C_ops.conv2d(relu_163, parameter_1030, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -2627,7 +2627,7 @@ class BlockEntries:
         batch_norm__1242, batch_norm__1243, batch_norm__1244, batch_norm__1245, batch_norm__1246, batch_norm__1247 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_207, parameter_1036, parameter_1037, parameter_1038, parameter_1039, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_112 = add_111 + batch_norm__1242
+        add_112 = paddle._C_ops.add(add_111, batch_norm__1242)
 
         # pd_op.conv2d: (-1x144x-1x-1xf32) <- (-1x72x-1x-1xf32, 144x72x3x3xf32)
         conv2d_208 = paddle._C_ops.conv2d(relu_171, parameter_1040, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -2636,7 +2636,7 @@ class BlockEntries:
         batch_norm__1248, batch_norm__1249, batch_norm__1250, batch_norm__1251, batch_norm__1252, batch_norm__1253 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_208, parameter_1041, parameter_1042, parameter_1043, parameter_1044, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_113 = add_112 + batch_norm__1248
+        add_113 = paddle._C_ops.add(add_112, batch_norm__1248)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_187 = paddle._C_ops.relu(add_113)
@@ -2657,7 +2657,7 @@ class BlockEntries:
         batch_norm__1260, batch_norm__1261, batch_norm__1262, batch_norm__1263, batch_norm__1264, batch_norm__1265 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_210, parameter_1051, parameter_1052, parameter_1053, parameter_1054, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_114 = batch_norm__1260 + relu_180
+        add_114 = paddle._C_ops.add(batch_norm__1260, relu_180)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_189 = paddle._C_ops.relu(add_114)
@@ -2678,7 +2678,7 @@ class BlockEntries:
         batch_norm__1272, batch_norm__1273, batch_norm__1274, batch_norm__1275, batch_norm__1276, batch_norm__1277 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_212, parameter_1061, parameter_1062, parameter_1063, parameter_1064, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_115 = batch_norm__1272 + relu_189
+        add_115 = paddle._C_ops.add(batch_norm__1272, relu_189)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_191 = paddle._C_ops.relu(add_115)
@@ -2699,7 +2699,7 @@ class BlockEntries:
         batch_norm__1284, batch_norm__1285, batch_norm__1286, batch_norm__1287, batch_norm__1288, batch_norm__1289 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_214, parameter_1071, parameter_1072, parameter_1073, parameter_1074, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_116 = batch_norm__1284 + relu_191
+        add_116 = paddle._C_ops.add(batch_norm__1284, relu_191)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_193 = paddle._C_ops.relu(add_116)
@@ -2720,7 +2720,7 @@ class BlockEntries:
         batch_norm__1296, batch_norm__1297, batch_norm__1298, batch_norm__1299, batch_norm__1300, batch_norm__1301 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_216, parameter_1081, parameter_1082, parameter_1083, parameter_1084, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_117 = batch_norm__1296 + relu_193
+        add_117 = paddle._C_ops.add(batch_norm__1296, relu_193)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_195 = paddle._C_ops.relu(add_117)
@@ -2741,7 +2741,7 @@ class BlockEntries:
         batch_norm__1308, batch_norm__1309, batch_norm__1310, batch_norm__1311, batch_norm__1312, batch_norm__1313 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_218, parameter_1091, parameter_1092, parameter_1093, parameter_1094, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_118 = batch_norm__1308 + relu_181
+        add_118 = paddle._C_ops.add(batch_norm__1308, relu_181)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_197 = paddle._C_ops.relu(add_118)
@@ -2762,7 +2762,7 @@ class BlockEntries:
         batch_norm__1320, batch_norm__1321, batch_norm__1322, batch_norm__1323, batch_norm__1324, batch_norm__1325 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_220, parameter_1101, parameter_1102, parameter_1103, parameter_1104, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_119 = batch_norm__1320 + relu_197
+        add_119 = paddle._C_ops.add(batch_norm__1320, relu_197)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_199 = paddle._C_ops.relu(add_119)
@@ -2783,7 +2783,7 @@ class BlockEntries:
         batch_norm__1332, batch_norm__1333, batch_norm__1334, batch_norm__1335, batch_norm__1336, batch_norm__1337 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_222, parameter_1111, parameter_1112, parameter_1113, parameter_1114, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_120 = batch_norm__1332 + relu_199
+        add_120 = paddle._C_ops.add(batch_norm__1332, relu_199)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_201 = paddle._C_ops.relu(add_120)
@@ -2804,7 +2804,7 @@ class BlockEntries:
         batch_norm__1344, batch_norm__1345, batch_norm__1346, batch_norm__1347, batch_norm__1348, batch_norm__1349 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_224, parameter_1121, parameter_1122, parameter_1123, parameter_1124, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_121 = batch_norm__1344 + relu_201
+        add_121 = paddle._C_ops.add(batch_norm__1344, relu_201)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_203 = paddle._C_ops.relu(add_121)
@@ -2825,7 +2825,7 @@ class BlockEntries:
         batch_norm__1356, batch_norm__1357, batch_norm__1358, batch_norm__1359, batch_norm__1360, batch_norm__1361 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_226, parameter_1131, parameter_1132, parameter_1133, parameter_1134, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_122 = batch_norm__1356 + relu_183
+        add_122 = paddle._C_ops.add(batch_norm__1356, relu_183)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_205 = paddle._C_ops.relu(add_122)
@@ -2846,7 +2846,7 @@ class BlockEntries:
         batch_norm__1368, batch_norm__1369, batch_norm__1370, batch_norm__1371, batch_norm__1372, batch_norm__1373 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_228, parameter_1141, parameter_1142, parameter_1143, parameter_1144, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_123 = batch_norm__1368 + relu_205
+        add_123 = paddle._C_ops.add(batch_norm__1368, relu_205)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_207 = paddle._C_ops.relu(add_123)
@@ -2867,7 +2867,7 @@ class BlockEntries:
         batch_norm__1380, batch_norm__1381, batch_norm__1382, batch_norm__1383, batch_norm__1384, batch_norm__1385 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_230, parameter_1151, parameter_1152, parameter_1153, parameter_1154, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_124 = batch_norm__1380 + relu_207
+        add_124 = paddle._C_ops.add(batch_norm__1380, relu_207)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_209 = paddle._C_ops.relu(add_124)
@@ -2888,7 +2888,7 @@ class BlockEntries:
         batch_norm__1392, batch_norm__1393, batch_norm__1394, batch_norm__1395, batch_norm__1396, batch_norm__1397 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_232, parameter_1161, parameter_1162, parameter_1163, parameter_1164, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_125 = batch_norm__1392 + relu_209
+        add_125 = paddle._C_ops.add(batch_norm__1392, relu_209)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_211 = paddle._C_ops.relu(add_125)
@@ -2909,7 +2909,7 @@ class BlockEntries:
         batch_norm__1404, batch_norm__1405, batch_norm__1406, batch_norm__1407, batch_norm__1408, batch_norm__1409 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_234, parameter_1171, parameter_1172, parameter_1173, parameter_1174, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_126 = batch_norm__1404 + relu_187
+        add_126 = paddle._C_ops.add(batch_norm__1404, relu_187)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_213 = paddle._C_ops.relu(add_126)
@@ -2930,7 +2930,7 @@ class BlockEntries:
         batch_norm__1416, batch_norm__1417, batch_norm__1418, batch_norm__1419, batch_norm__1420, batch_norm__1421 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_236, parameter_1181, parameter_1182, parameter_1183, parameter_1184, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_127 = batch_norm__1416 + relu_213
+        add_127 = paddle._C_ops.add(batch_norm__1416, relu_213)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_215 = paddle._C_ops.relu(add_127)
@@ -2951,7 +2951,7 @@ class BlockEntries:
         batch_norm__1428, batch_norm__1429, batch_norm__1430, batch_norm__1431, batch_norm__1432, batch_norm__1433 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_238, parameter_1191, parameter_1192, parameter_1193, parameter_1194, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_128 = batch_norm__1428 + relu_215
+        add_128 = paddle._C_ops.add(batch_norm__1428, relu_215)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_217 = paddle._C_ops.relu(add_128)
@@ -2972,7 +2972,7 @@ class BlockEntries:
         batch_norm__1440, batch_norm__1441, batch_norm__1442, batch_norm__1443, batch_norm__1444, batch_norm__1445 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_240, parameter_1201, parameter_1202, parameter_1203, parameter_1204, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_129 = batch_norm__1440 + relu_217
+        add_129 = paddle._C_ops.add(batch_norm__1440, relu_217)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_219 = paddle._C_ops.relu(add_129)
@@ -3002,7 +3002,7 @@ class BlockEntries:
         bilinear_interp_19 = paddle._C_ops.bilinear_interp(batch_norm__1446, cast_7, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_130 = relu_195 + bilinear_interp_19
+        add_130 = paddle._C_ops.add(relu_195, bilinear_interp_19)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x72x-1x-1xf32, 18x72x1x1xf32)
         conv2d_242 = paddle._C_ops.conv2d(relu_211, parameter_1210, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3017,7 +3017,7 @@ class BlockEntries:
         bilinear_interp_20 = paddle._C_ops.bilinear_interp(batch_norm__1452, cast_8, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_131 = add_130 + bilinear_interp_20
+        add_131 = paddle._C_ops.add(add_130, bilinear_interp_20)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x144x-1x-1xf32, 18x144x1x1xf32)
         conv2d_243 = paddle._C_ops.conv2d(relu_219, parameter_1215, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3032,7 +3032,7 @@ class BlockEntries:
         bilinear_interp_21 = paddle._C_ops.bilinear_interp(batch_norm__1458, cast__12, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_132 = add_131 + bilinear_interp_21
+        add_132 = paddle._C_ops.add(add_131, bilinear_interp_21)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_220 = paddle._C_ops.relu(add_132)
@@ -3056,7 +3056,7 @@ class BlockEntries:
         batch_norm__1464, batch_norm__1465, batch_norm__1466, batch_norm__1467, batch_norm__1468, batch_norm__1469 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_244, parameter_1221, parameter_1222, parameter_1223, parameter_1224, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_133 = relu_203 + batch_norm__1464
+        add_133 = paddle._C_ops.add(relu_203, batch_norm__1464)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x72x-1x-1xf32, 36x72x1x1xf32)
         conv2d_245 = paddle._C_ops.conv2d(relu_211, parameter_1225, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3071,7 +3071,7 @@ class BlockEntries:
         bilinear_interp_22 = paddle._C_ops.bilinear_interp(batch_norm__1470, cast_9, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_134 = add_133 + bilinear_interp_22
+        add_134 = paddle._C_ops.add(add_133, bilinear_interp_22)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x144x-1x-1xf32, 36x144x1x1xf32)
         conv2d_246 = paddle._C_ops.conv2d(relu_219, parameter_1230, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3086,7 +3086,7 @@ class BlockEntries:
         bilinear_interp_23 = paddle._C_ops.bilinear_interp(batch_norm__1476, cast__13, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_135 = add_134 + bilinear_interp_23
+        add_135 = paddle._C_ops.add(add_134, bilinear_interp_23)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_221 = paddle._C_ops.relu(add_135)
@@ -3119,7 +3119,7 @@ class BlockEntries:
         batch_norm__1488, batch_norm__1489, batch_norm__1490, batch_norm__1491, batch_norm__1492, batch_norm__1493 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_248, parameter_1241, parameter_1242, parameter_1243, parameter_1244, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_136 = relu_211 + batch_norm__1488
+        add_136 = paddle._C_ops.add(relu_211, batch_norm__1488)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x36x-1x-1xf32, 72x36x3x3xf32)
         conv2d_249 = paddle._C_ops.conv2d(relu_203, parameter_1245, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -3128,7 +3128,7 @@ class BlockEntries:
         batch_norm__1494, batch_norm__1495, batch_norm__1496, batch_norm__1497, batch_norm__1498, batch_norm__1499 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_249, parameter_1246, parameter_1247, parameter_1248, parameter_1249, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_137 = add_136 + batch_norm__1494
+        add_137 = paddle._C_ops.add(add_136, batch_norm__1494)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x144x-1x-1xf32, 72x144x1x1xf32)
         conv2d_250 = paddle._C_ops.conv2d(relu_219, parameter_1250, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3143,7 +3143,7 @@ class BlockEntries:
         bilinear_interp_24 = paddle._C_ops.bilinear_interp(batch_norm__1500, cast__14, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_138 = add_137 + bilinear_interp_24
+        add_138 = paddle._C_ops.add(add_137, bilinear_interp_24)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_223 = paddle._C_ops.relu(add_138)
@@ -3173,7 +3173,7 @@ class BlockEntries:
         batch_norm__1518, batch_norm__1519, batch_norm__1520, batch_norm__1521, batch_norm__1522, batch_norm__1523 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_253, parameter_1266, parameter_1267, parameter_1268, parameter_1269, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_139 = relu_219 + batch_norm__1518
+        add_139 = paddle._C_ops.add(relu_219, batch_norm__1518)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, 36x36x3x3xf32)
         conv2d_254 = paddle._C_ops.conv2d(relu_203, parameter_1270, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -3191,7 +3191,7 @@ class BlockEntries:
         batch_norm__1530, batch_norm__1531, batch_norm__1532, batch_norm__1533, batch_norm__1534, batch_norm__1535 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_255, parameter_1276, parameter_1277, parameter_1278, parameter_1279, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_140 = add_139 + batch_norm__1530
+        add_140 = paddle._C_ops.add(add_139, batch_norm__1530)
 
         # pd_op.conv2d: (-1x144x-1x-1xf32) <- (-1x72x-1x-1xf32, 144x72x3x3xf32)
         conv2d_256 = paddle._C_ops.conv2d(relu_211, parameter_1280, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -3200,7 +3200,7 @@ class BlockEntries:
         batch_norm__1536, batch_norm__1537, batch_norm__1538, batch_norm__1539, batch_norm__1540, batch_norm__1541 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_256, parameter_1281, parameter_1282, parameter_1283, parameter_1284, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_141 = add_140 + batch_norm__1536
+        add_141 = paddle._C_ops.add(add_140, batch_norm__1536)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_227 = paddle._C_ops.relu(add_141)
@@ -3221,7 +3221,7 @@ class BlockEntries:
         batch_norm__1548, batch_norm__1549, batch_norm__1550, batch_norm__1551, batch_norm__1552, batch_norm__1553 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_258, parameter_1291, parameter_1292, parameter_1293, parameter_1294, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_142 = batch_norm__1548 + relu_220
+        add_142 = paddle._C_ops.add(batch_norm__1548, relu_220)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_229 = paddle._C_ops.relu(add_142)
@@ -3242,7 +3242,7 @@ class BlockEntries:
         batch_norm__1560, batch_norm__1561, batch_norm__1562, batch_norm__1563, batch_norm__1564, batch_norm__1565 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_260, parameter_1301, parameter_1302, parameter_1303, parameter_1304, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_143 = batch_norm__1560 + relu_229
+        add_143 = paddle._C_ops.add(batch_norm__1560, relu_229)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_231 = paddle._C_ops.relu(add_143)
@@ -3263,7 +3263,7 @@ class BlockEntries:
         batch_norm__1572, batch_norm__1573, batch_norm__1574, batch_norm__1575, batch_norm__1576, batch_norm__1577 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_262, parameter_1311, parameter_1312, parameter_1313, parameter_1314, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_144 = batch_norm__1572 + relu_231
+        add_144 = paddle._C_ops.add(batch_norm__1572, relu_231)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_233 = paddle._C_ops.relu(add_144)
@@ -3284,7 +3284,7 @@ class BlockEntries:
         batch_norm__1584, batch_norm__1585, batch_norm__1586, batch_norm__1587, batch_norm__1588, batch_norm__1589 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_264, parameter_1321, parameter_1322, parameter_1323, parameter_1324, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_145 = batch_norm__1584 + relu_233
+        add_145 = paddle._C_ops.add(batch_norm__1584, relu_233)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_235 = paddle._C_ops.relu(add_145)
@@ -3305,7 +3305,7 @@ class BlockEntries:
         batch_norm__1596, batch_norm__1597, batch_norm__1598, batch_norm__1599, batch_norm__1600, batch_norm__1601 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_266, parameter_1331, parameter_1332, parameter_1333, parameter_1334, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_146 = batch_norm__1596 + relu_221
+        add_146 = paddle._C_ops.add(batch_norm__1596, relu_221)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_237 = paddle._C_ops.relu(add_146)
@@ -3326,7 +3326,7 @@ class BlockEntries:
         batch_norm__1608, batch_norm__1609, batch_norm__1610, batch_norm__1611, batch_norm__1612, batch_norm__1613 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_268, parameter_1341, parameter_1342, parameter_1343, parameter_1344, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_147 = batch_norm__1608 + relu_237
+        add_147 = paddle._C_ops.add(batch_norm__1608, relu_237)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_239 = paddle._C_ops.relu(add_147)
@@ -3347,7 +3347,7 @@ class BlockEntries:
         batch_norm__1620, batch_norm__1621, batch_norm__1622, batch_norm__1623, batch_norm__1624, batch_norm__1625 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_270, parameter_1351, parameter_1352, parameter_1353, parameter_1354, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_148 = batch_norm__1620 + relu_239
+        add_148 = paddle._C_ops.add(batch_norm__1620, relu_239)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_241 = paddle._C_ops.relu(add_148)
@@ -3368,7 +3368,7 @@ class BlockEntries:
         batch_norm__1632, batch_norm__1633, batch_norm__1634, batch_norm__1635, batch_norm__1636, batch_norm__1637 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_272, parameter_1361, parameter_1362, parameter_1363, parameter_1364, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_149 = batch_norm__1632 + relu_241
+        add_149 = paddle._C_ops.add(batch_norm__1632, relu_241)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_243 = paddle._C_ops.relu(add_149)
@@ -3389,7 +3389,7 @@ class BlockEntries:
         batch_norm__1644, batch_norm__1645, batch_norm__1646, batch_norm__1647, batch_norm__1648, batch_norm__1649 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_274, parameter_1371, parameter_1372, parameter_1373, parameter_1374, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_150 = batch_norm__1644 + relu_223
+        add_150 = paddle._C_ops.add(batch_norm__1644, relu_223)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_245 = paddle._C_ops.relu(add_150)
@@ -3410,7 +3410,7 @@ class BlockEntries:
         batch_norm__1656, batch_norm__1657, batch_norm__1658, batch_norm__1659, batch_norm__1660, batch_norm__1661 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_276, parameter_1381, parameter_1382, parameter_1383, parameter_1384, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_151 = batch_norm__1656 + relu_245
+        add_151 = paddle._C_ops.add(batch_norm__1656, relu_245)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_247 = paddle._C_ops.relu(add_151)
@@ -3431,7 +3431,7 @@ class BlockEntries:
         batch_norm__1668, batch_norm__1669, batch_norm__1670, batch_norm__1671, batch_norm__1672, batch_norm__1673 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_278, parameter_1391, parameter_1392, parameter_1393, parameter_1394, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_152 = batch_norm__1668 + relu_247
+        add_152 = paddle._C_ops.add(batch_norm__1668, relu_247)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_249 = paddle._C_ops.relu(add_152)
@@ -3452,7 +3452,7 @@ class BlockEntries:
         batch_norm__1680, batch_norm__1681, batch_norm__1682, batch_norm__1683, batch_norm__1684, batch_norm__1685 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_280, parameter_1401, parameter_1402, parameter_1403, parameter_1404, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_153 = batch_norm__1680 + relu_249
+        add_153 = paddle._C_ops.add(batch_norm__1680, relu_249)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_251 = paddle._C_ops.relu(add_153)
@@ -3473,7 +3473,7 @@ class BlockEntries:
         batch_norm__1692, batch_norm__1693, batch_norm__1694, batch_norm__1695, batch_norm__1696, batch_norm__1697 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_282, parameter_1411, parameter_1412, parameter_1413, parameter_1414, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_154 = batch_norm__1692 + relu_227
+        add_154 = paddle._C_ops.add(batch_norm__1692, relu_227)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_253 = paddle._C_ops.relu(add_154)
@@ -3494,7 +3494,7 @@ class BlockEntries:
         batch_norm__1704, batch_norm__1705, batch_norm__1706, batch_norm__1707, batch_norm__1708, batch_norm__1709 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_284, parameter_1421, parameter_1422, parameter_1423, parameter_1424, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_155 = batch_norm__1704 + relu_253
+        add_155 = paddle._C_ops.add(batch_norm__1704, relu_253)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_255 = paddle._C_ops.relu(add_155)
@@ -3515,7 +3515,7 @@ class BlockEntries:
         batch_norm__1716, batch_norm__1717, batch_norm__1718, batch_norm__1719, batch_norm__1720, batch_norm__1721 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_286, parameter_1431, parameter_1432, parameter_1433, parameter_1434, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_156 = batch_norm__1716 + relu_255
+        add_156 = paddle._C_ops.add(batch_norm__1716, relu_255)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_257 = paddle._C_ops.relu(add_156)
@@ -3536,7 +3536,7 @@ class BlockEntries:
         batch_norm__1728, batch_norm__1729, batch_norm__1730, batch_norm__1731, batch_norm__1732, batch_norm__1733 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_288, parameter_1441, parameter_1442, parameter_1443, parameter_1444, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_157 = batch_norm__1728 + relu_257
+        add_157 = paddle._C_ops.add(batch_norm__1728, relu_257)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_259 = paddle._C_ops.relu(add_157)
@@ -3566,7 +3566,7 @@ class BlockEntries:
         bilinear_interp_25 = paddle._C_ops.bilinear_interp(batch_norm__1734, cast_10, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_158 = relu_235 + bilinear_interp_25
+        add_158 = paddle._C_ops.add(relu_235, bilinear_interp_25)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x72x-1x-1xf32, 18x72x1x1xf32)
         conv2d_290 = paddle._C_ops.conv2d(relu_251, parameter_1450, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3581,7 +3581,7 @@ class BlockEntries:
         bilinear_interp_26 = paddle._C_ops.bilinear_interp(batch_norm__1740, cast_11, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_159 = add_158 + bilinear_interp_26
+        add_159 = paddle._C_ops.add(add_158, bilinear_interp_26)
 
         # pd_op.conv2d: (-1x18x-1x-1xf32) <- (-1x144x-1x-1xf32, 18x144x1x1xf32)
         conv2d_291 = paddle._C_ops.conv2d(relu_259, parameter_1455, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3596,7 +3596,7 @@ class BlockEntries:
         bilinear_interp_27 = paddle._C_ops.bilinear_interp(batch_norm__1746, cast__15, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32, -1x18x-1x-1xf32)
-        add_160 = add_159 + bilinear_interp_27
+        add_160 = paddle._C_ops.add(add_159, bilinear_interp_27)
 
         # pd_op.relu: (-1x18x-1x-1xf32) <- (-1x18x-1x-1xf32)
         relu_260 = paddle._C_ops.relu(add_160)
@@ -3620,7 +3620,7 @@ class BlockEntries:
         batch_norm__1752, batch_norm__1753, batch_norm__1754, batch_norm__1755, batch_norm__1756, batch_norm__1757 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_292, parameter_1461, parameter_1462, parameter_1463, parameter_1464, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_161 = relu_243 + batch_norm__1752
+        add_161 = paddle._C_ops.add(relu_243, batch_norm__1752)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x72x-1x-1xf32, 36x72x1x1xf32)
         conv2d_293 = paddle._C_ops.conv2d(relu_251, parameter_1465, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3635,7 +3635,7 @@ class BlockEntries:
         bilinear_interp_28 = paddle._C_ops.bilinear_interp(batch_norm__1758, cast_12, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_162 = add_161 + bilinear_interp_28
+        add_162 = paddle._C_ops.add(add_161, bilinear_interp_28)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x144x-1x-1xf32, 36x144x1x1xf32)
         conv2d_294 = paddle._C_ops.conv2d(relu_259, parameter_1470, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3650,7 +3650,7 @@ class BlockEntries:
         bilinear_interp_29 = paddle._C_ops.bilinear_interp(batch_norm__1764, cast__16, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, -1x36x-1x-1xf32)
-        add_163 = add_162 + bilinear_interp_29
+        add_163 = paddle._C_ops.add(add_162, bilinear_interp_29)
 
         # pd_op.relu: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32)
         relu_261 = paddle._C_ops.relu(add_163)
@@ -3683,7 +3683,7 @@ class BlockEntries:
         batch_norm__1776, batch_norm__1777, batch_norm__1778, batch_norm__1779, batch_norm__1780, batch_norm__1781 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_296, parameter_1481, parameter_1482, parameter_1483, parameter_1484, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_164 = relu_251 + batch_norm__1776
+        add_164 = paddle._C_ops.add(relu_251, batch_norm__1776)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x36x-1x-1xf32, 72x36x3x3xf32)
         conv2d_297 = paddle._C_ops.conv2d(relu_243, parameter_1485, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -3692,7 +3692,7 @@ class BlockEntries:
         batch_norm__1782, batch_norm__1783, batch_norm__1784, batch_norm__1785, batch_norm__1786, batch_norm__1787 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_297, parameter_1486, parameter_1487, parameter_1488, parameter_1489, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_165 = add_164 + batch_norm__1782
+        add_165 = paddle._C_ops.add(add_164, batch_norm__1782)
 
         # pd_op.conv2d: (-1x72x-1x-1xf32) <- (-1x144x-1x-1xf32, 72x144x1x1xf32)
         conv2d_298 = paddle._C_ops.conv2d(relu_259, parameter_1490, [1, 1], [0, 0], 'SAME', [1, 1], 1, 'NCHW')
@@ -3707,7 +3707,7 @@ class BlockEntries:
         bilinear_interp_30 = paddle._C_ops.bilinear_interp(batch_norm__1788, cast__17, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32, -1x72x-1x-1xf32)
-        add_166 = add_165 + bilinear_interp_30
+        add_166 = paddle._C_ops.add(add_165, bilinear_interp_30)
 
         # pd_op.relu: (-1x72x-1x-1xf32) <- (-1x72x-1x-1xf32)
         relu_263 = paddle._C_ops.relu(add_166)
@@ -3737,7 +3737,7 @@ class BlockEntries:
         batch_norm__1806, batch_norm__1807, batch_norm__1808, batch_norm__1809, batch_norm__1810, batch_norm__1811 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_301, parameter_1506, parameter_1507, parameter_1508, parameter_1509, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_167 = relu_259 + batch_norm__1806
+        add_167 = paddle._C_ops.add(relu_259, batch_norm__1806)
 
         # pd_op.conv2d: (-1x36x-1x-1xf32) <- (-1x36x-1x-1xf32, 36x36x3x3xf32)
         conv2d_302 = paddle._C_ops.conv2d(relu_243, parameter_1510, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -3755,7 +3755,7 @@ class BlockEntries:
         batch_norm__1818, batch_norm__1819, batch_norm__1820, batch_norm__1821, batch_norm__1822, batch_norm__1823 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_303, parameter_1516, parameter_1517, parameter_1518, parameter_1519, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_168 = add_167 + batch_norm__1818
+        add_168 = paddle._C_ops.add(add_167, batch_norm__1818)
 
         # pd_op.conv2d: (-1x144x-1x-1xf32) <- (-1x72x-1x-1xf32, 144x72x3x3xf32)
         conv2d_304 = paddle._C_ops.conv2d(relu_251, parameter_1520, [2, 2], [1, 1], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -3764,7 +3764,7 @@ class BlockEntries:
         batch_norm__1824, batch_norm__1825, batch_norm__1826, batch_norm__1827, batch_norm__1828, batch_norm__1829 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(conv2d_304, parameter_1521, parameter_1522, parameter_1523, parameter_1524, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
 
         # pd_op.add: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32, -1x144x-1x-1xf32)
-        add_169 = add_168 + batch_norm__1824
+        add_169 = paddle._C_ops.add(add_168, batch_norm__1824)
 
         # pd_op.relu: (-1x144x-1x-1xf32) <- (-1x144x-1x-1xf32)
         relu_267 = paddle._C_ops.relu(add_169)
