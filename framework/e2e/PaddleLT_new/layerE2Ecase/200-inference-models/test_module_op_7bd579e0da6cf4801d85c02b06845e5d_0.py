@@ -1372,7 +1372,7 @@ class BlockEntries:
         full_3 = paddle._C_ops.full([], float('1'), paddle.bool, paddle.framework._current_expected_place())
 
         # pd_op.select_input: (xb) <- (xi32, xb, xb)
-        select_input_0 = [full_2, full_3][int(cast_3)]
+        select_input_0 = (full_2 if cast_3 == 0 else full_3)
 
         # pd_op.full_int_array: (4xi64) <- ()
         full_int_array_1 = [-1, 3, 180, 320]
@@ -2605,7 +2605,7 @@ class BlockEntries:
         cast_17 = paddle._C_ops.cast(select_input_0, paddle.int32)
 
         # pd_op.select_input: (1x1x2x180x320xf32) <- (xi32, 1x1x2x180x320xf32, 1x1x2x180x320xf32)
-        select_input_1 = [if_1, if_0][int(cast_17)]
+        select_input_1 = (if_1 if cast_17 == 0 else if_0)
 
         # pd_op.full: (1x32x180x320xf16) <- ()
         full_49 = paddle._C_ops.full([1, 32, 180, 320], float('0'), paddle.float16, paddle.framework._current_expected_place())

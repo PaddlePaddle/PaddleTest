@@ -281,7 +281,7 @@ class BlockEntries:
         combine_0 = [slice_0, full_0, full_1, full_2, full_3]
 
         # pd_op.reshape_: (-1x2x9x112x112xf32, 0x-1x18x112x112xf32) <- (-1x18x112x112xf32, [1xi32, 1xi32, 1xi32, 1xi32, 1xi32])
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(add__0, combine_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(add__0, [x.reshape([1]) for x in combine_0]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_3 = [2]
@@ -311,10 +311,10 @@ class BlockEntries:
         combine_1 = [slice_0, full_4, full_5, full_6, full_7, full_8]
 
         # pd_op.reshape_: (-1x2x16x9x112x112xf32, 0x-1x288x12544xf32) <- (-1x288x12544xf32, [1xi32, 1xi32, 1xi32, 1xi32, 1xi32, 1xi32])
-        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_0, combine_1), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_0, [x.reshape([1]) for x in combine_1]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x2x16x9x112x112xf32) <- (-1x2x1x9x112x112xf32, -1x2x16x9x112x112xf32)
-        multiply_0 = unsqueeze__0 * reshape__2
+        multiply_0 = paddle._C_ops.multiply(unsqueeze__0, reshape__2)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_4 = [3]
@@ -335,7 +335,7 @@ class BlockEntries:
         combine_2 = [slice_0, full_9, full_10, full_11]
 
         # pd_op.reshape_: (-1x32x112x112xf32, 0x-1x2x16x112x112xf32) <- (-1x2x16x112x112xf32, [1xi32, 1xi32, 1xi32, 1xi32])
-        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape_(sum_0, combine_2), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape_(sum_0, [x.reshape([1]) for x in combine_2]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.batch_norm_: (-1x32x112x112xf32, 32xf32, 32xf32, xf32, xf32, None) <- (-1x32x112x112xf32, 32xf32, 32xf32, 32xf32, 32xf32)
         batch_norm__12, batch_norm__13, batch_norm__14, batch_norm__15, batch_norm__16, batch_norm__17 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(reshape__4, parameter_12, parameter_13, parameter_14, parameter_15, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
@@ -410,7 +410,7 @@ class BlockEntries:
         reshape__8, reshape__9 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_1, full_int_array_9), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x4x16x49x56x56xf32) <- (-1x4x1x49x56x56xf32, -1x4x16x49x56x56xf32)
-        multiply_1 = unsqueeze__2 * reshape__8
+        multiply_1 = paddle._C_ops.multiply(unsqueeze__2, reshape__8)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_10 = [3]
@@ -500,7 +500,7 @@ class BlockEntries:
         reshape__14, reshape__15 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_2, full_int_array_15), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x4x16x49x56x56xf32) <- (-1x4x1x49x56x56xf32, -1x4x16x49x56x56xf32)
-        multiply_2 = unsqueeze__4 * reshape__14
+        multiply_2 = paddle._C_ops.multiply(unsqueeze__4, reshape__14)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_16 = [3]
@@ -584,7 +584,7 @@ class BlockEntries:
         reshape__20, reshape__21 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_3, full_int_array_21), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x4x16x49x56x56xf32) <- (-1x4x1x49x56x56xf32, -1x4x16x49x56x56xf32)
-        multiply_3 = unsqueeze__6 * reshape__20
+        multiply_3 = paddle._C_ops.multiply(unsqueeze__6, reshape__20)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_22 = [3]
@@ -674,7 +674,7 @@ class BlockEntries:
         reshape__26, reshape__27 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_4, full_int_array_28), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x8x16x49x28x28xf32) <- (-1x8x1x49x28x28xf32, -1x8x16x49x28x28xf32)
-        multiply_4 = unsqueeze__8 * reshape__26
+        multiply_4 = paddle._C_ops.multiply(unsqueeze__8, reshape__26)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_29 = [3]
@@ -764,7 +764,7 @@ class BlockEntries:
         reshape__32, reshape__33 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_5, full_int_array_34), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x8x16x49x28x28xf32) <- (-1x8x1x49x28x28xf32, -1x8x16x49x28x28xf32)
-        multiply_5 = unsqueeze__10 * reshape__32
+        multiply_5 = paddle._C_ops.multiply(unsqueeze__10, reshape__32)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_35 = [3]
@@ -848,7 +848,7 @@ class BlockEntries:
         reshape__38, reshape__39 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_6, full_int_array_40), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x8x16x49x28x28xf32) <- (-1x8x1x49x28x28xf32, -1x8x16x49x28x28xf32)
-        multiply_6 = unsqueeze__12 * reshape__38
+        multiply_6 = paddle._C_ops.multiply(unsqueeze__12, reshape__38)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_41 = [3]
@@ -932,7 +932,7 @@ class BlockEntries:
         reshape__44, reshape__45 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_7, full_int_array_46), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x8x16x49x28x28xf32) <- (-1x8x1x49x28x28xf32, -1x8x16x49x28x28xf32)
-        multiply_7 = unsqueeze__14 * reshape__44
+        multiply_7 = paddle._C_ops.multiply(unsqueeze__14, reshape__44)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_47 = [3]
@@ -1022,7 +1022,7 @@ class BlockEntries:
         reshape__50, reshape__51 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_8, full_int_array_53), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_8 = unsqueeze__16 * reshape__50
+        multiply_8 = paddle._C_ops.multiply(unsqueeze__16, reshape__50)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_54 = [3]
@@ -1112,7 +1112,7 @@ class BlockEntries:
         reshape__56, reshape__57 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_9, full_int_array_59), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_9 = unsqueeze__18 * reshape__56
+        multiply_9 = paddle._C_ops.multiply(unsqueeze__18, reshape__56)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_60 = [3]
@@ -1196,7 +1196,7 @@ class BlockEntries:
         reshape__62, reshape__63 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_10, full_int_array_65), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_10 = unsqueeze__20 * reshape__62
+        multiply_10 = paddle._C_ops.multiply(unsqueeze__20, reshape__62)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_66 = [3]
@@ -1280,7 +1280,7 @@ class BlockEntries:
         reshape__68, reshape__69 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_11, full_int_array_71), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_11 = unsqueeze__22 * reshape__68
+        multiply_11 = paddle._C_ops.multiply(unsqueeze__22, reshape__68)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_72 = [3]
@@ -1364,7 +1364,7 @@ class BlockEntries:
         reshape__74, reshape__75 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_12, full_int_array_77), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_12 = unsqueeze__24 * reshape__74
+        multiply_12 = paddle._C_ops.multiply(unsqueeze__24, reshape__74)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_78 = [3]
@@ -1448,7 +1448,7 @@ class BlockEntries:
         reshape__80, reshape__81 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_13, full_int_array_83), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_13 = unsqueeze__26 * reshape__80
+        multiply_13 = paddle._C_ops.multiply(unsqueeze__26, reshape__80)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_84 = [3]
@@ -1532,7 +1532,7 @@ class BlockEntries:
         reshape__86, reshape__87 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_14, full_int_array_89), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_14 = unsqueeze__28 * reshape__86
+        multiply_14 = paddle._C_ops.multiply(unsqueeze__28, reshape__86)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_90 = [3]
@@ -1616,7 +1616,7 @@ class BlockEntries:
         reshape__92, reshape__93 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_15, full_int_array_95), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_15 = unsqueeze__30 * reshape__92
+        multiply_15 = paddle._C_ops.multiply(unsqueeze__30, reshape__92)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_96 = [3]
@@ -1700,7 +1700,7 @@ class BlockEntries:
         reshape__98, reshape__99 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_16, full_int_array_101), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_16 = unsqueeze__32 * reshape__98
+        multiply_16 = paddle._C_ops.multiply(unsqueeze__32, reshape__98)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_102 = [3]
@@ -1784,7 +1784,7 @@ class BlockEntries:
         reshape__104, reshape__105 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_17, full_int_array_107), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_17 = unsqueeze__34 * reshape__104
+        multiply_17 = paddle._C_ops.multiply(unsqueeze__34, reshape__104)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_108 = [3]
@@ -1868,7 +1868,7 @@ class BlockEntries:
         reshape__110, reshape__111 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_18, full_int_array_113), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_18 = unsqueeze__36 * reshape__110
+        multiply_18 = paddle._C_ops.multiply(unsqueeze__36, reshape__110)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_114 = [3]
@@ -1952,7 +1952,7 @@ class BlockEntries:
         reshape__116, reshape__117 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_19, full_int_array_119), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_19 = unsqueeze__38 * reshape__116
+        multiply_19 = paddle._C_ops.multiply(unsqueeze__38, reshape__116)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_120 = [3]
@@ -2036,7 +2036,7 @@ class BlockEntries:
         reshape__122, reshape__123 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_20, full_int_array_125), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_20 = unsqueeze__40 * reshape__122
+        multiply_20 = paddle._C_ops.multiply(unsqueeze__40, reshape__122)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_126 = [3]
@@ -2120,7 +2120,7 @@ class BlockEntries:
         reshape__128, reshape__129 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_21, full_int_array_131), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_21 = unsqueeze__42 * reshape__128
+        multiply_21 = paddle._C_ops.multiply(unsqueeze__42, reshape__128)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_132 = [3]
@@ -2204,7 +2204,7 @@ class BlockEntries:
         reshape__134, reshape__135 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_22, full_int_array_137), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_22 = unsqueeze__44 * reshape__134
+        multiply_22 = paddle._C_ops.multiply(unsqueeze__44, reshape__134)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_138 = [3]
@@ -2288,7 +2288,7 @@ class BlockEntries:
         reshape__140, reshape__141 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_23, full_int_array_143), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_23 = unsqueeze__46 * reshape__140
+        multiply_23 = paddle._C_ops.multiply(unsqueeze__46, reshape__140)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_144 = [3]
@@ -2372,7 +2372,7 @@ class BlockEntries:
         reshape__146, reshape__147 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_24, full_int_array_149), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_24 = unsqueeze__48 * reshape__146
+        multiply_24 = paddle._C_ops.multiply(unsqueeze__48, reshape__146)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_150 = [3]
@@ -2456,7 +2456,7 @@ class BlockEntries:
         reshape__152, reshape__153 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_25, full_int_array_155), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_25 = unsqueeze__50 * reshape__152
+        multiply_25 = paddle._C_ops.multiply(unsqueeze__50, reshape__152)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_156 = [3]
@@ -2540,7 +2540,7 @@ class BlockEntries:
         reshape__158, reshape__159 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_26, full_int_array_161), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_26 = unsqueeze__52 * reshape__158
+        multiply_26 = paddle._C_ops.multiply(unsqueeze__52, reshape__158)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_162 = [3]
@@ -2624,7 +2624,7 @@ class BlockEntries:
         reshape__164, reshape__165 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_27, full_int_array_167), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_27 = unsqueeze__54 * reshape__164
+        multiply_27 = paddle._C_ops.multiply(unsqueeze__54, reshape__164)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_168 = [3]
@@ -2708,7 +2708,7 @@ class BlockEntries:
         reshape__170, reshape__171 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_28, full_int_array_173), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_28 = unsqueeze__56 * reshape__170
+        multiply_28 = paddle._C_ops.multiply(unsqueeze__56, reshape__170)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_174 = [3]
@@ -2792,7 +2792,7 @@ class BlockEntries:
         reshape__176, reshape__177 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_29, full_int_array_179), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_29 = unsqueeze__58 * reshape__176
+        multiply_29 = paddle._C_ops.multiply(unsqueeze__58, reshape__176)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_180 = [3]
@@ -2876,7 +2876,7 @@ class BlockEntries:
         reshape__182, reshape__183 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_30, full_int_array_185), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x16x16x49x14x14xf32) <- (-1x16x1x49x14x14xf32, -1x16x16x49x14x14xf32)
-        multiply_30 = unsqueeze__60 * reshape__182
+        multiply_30 = paddle._C_ops.multiply(unsqueeze__60, reshape__182)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_186 = [3]
@@ -2966,7 +2966,7 @@ class BlockEntries:
         reshape__188, reshape__189 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_31, full_int_array_192), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x32x16x49x7x7xf32) <- (-1x32x1x49x7x7xf32, -1x32x16x49x7x7xf32)
-        multiply_31 = unsqueeze__62 * reshape__188
+        multiply_31 = paddle._C_ops.multiply(unsqueeze__62, reshape__188)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_193 = [3]
@@ -3056,7 +3056,7 @@ class BlockEntries:
         reshape__194, reshape__195 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_32, full_int_array_198), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x32x16x49x7x7xf32) <- (-1x32x1x49x7x7xf32, -1x32x16x49x7x7xf32)
-        multiply_32 = unsqueeze__64 * reshape__194
+        multiply_32 = paddle._C_ops.multiply(unsqueeze__64, reshape__194)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_199 = [3]
@@ -3140,7 +3140,7 @@ class BlockEntries:
         reshape__200, reshape__201 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_33, full_int_array_204), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x32x16x49x7x7xf32) <- (-1x32x1x49x7x7xf32, -1x32x16x49x7x7xf32)
-        multiply_33 = unsqueeze__66 * reshape__200
+        multiply_33 = paddle._C_ops.multiply(unsqueeze__66, reshape__200)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_205 = [3]
@@ -3182,7 +3182,7 @@ class BlockEntries:
         flatten__0, flatten__1 = (lambda x, f: f(x))(paddle._C_ops.flatten_(pool2d_4, 1, 3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf32) <- (-1x2048xf32, 2048x1000xf32)
-        matmul_0 = paddle.matmul(flatten__0, parameter_734, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(flatten__0, parameter_734, False, False)
 
         # pd_op.add_: (-1x1000xf32) <- (-1x1000xf32, 1000xf32)
         add__67 = paddle._C_ops.add_(matmul_0, parameter_735)

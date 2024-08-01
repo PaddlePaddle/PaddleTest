@@ -383,10 +383,10 @@ class BlockEntries:
         combine_0 = [slice_0, full_0]
 
         # pd_op.reshape_: (-1x-1xf32, 0x-1x256x1x2xf32) <- (-1x256x1x2xf32, [1xi32, 1xi32])
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(relu__5, combine_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(relu__5, [x.reshape([1]) for x in combine_0]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x512xf32) <- (-1x-1xf32, 512x512xf32)
-        matmul_0 = paddle.matmul(reshape__0, parameter_36, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(reshape__0, parameter_36, False, False)
 
         # pd_op.add_: (-1x512xf32) <- (-1x512xf32, 512xf32)
         add__6 = paddle._C_ops.add_(matmul_0, parameter_37)
@@ -404,7 +404,7 @@ class BlockEntries:
         scale__0 = paddle._C_ops.scale_(relu__6, full_1, float('0'), True)
 
         # pd_op.matmul: (-1x40xf32) <- (-1x512xf32, 512x40xf32)
-        matmul_1 = paddle.matmul(scale__0, parameter_42, transpose_x=False, transpose_y=False)
+        matmul_1 = paddle._C_ops.matmul(scale__0, parameter_42, False, False)
 
         # pd_op.add_: (-1x40xf32) <- (-1x40xf32, 40xf32)
         add__7 = paddle._C_ops.add_(matmul_1, parameter_43)
@@ -452,10 +452,10 @@ class BlockEntries:
         concat_0 = paddle._C_ops.concat(combine_2, full_4)
 
         # pd_op.matmul: (-1x23x2xf32) <- (23x23xf32, -1x23x2xf32)
-        matmul_2 = paddle.matmul(parameter_45, concat_0, transpose_x=False, transpose_y=False)
+        matmul_2 = paddle._C_ops.matmul(parameter_45, concat_0, False, False)
 
         # pd_op.matmul: (-1x3200x2xf32) <- (3200x23xf32, -1x23x2xf32)
-        matmul_3 = paddle.matmul(parameter_46, matmul_2, transpose_x=False, transpose_y=False)
+        matmul_3 = paddle._C_ops.matmul(parameter_46, matmul_2, False, False)
 
         # pd_op.full_int_array: (4xi64) <- ()
         full_int_array_16 = [-1, 32, 100, 2]
@@ -536,7 +536,7 @@ class BlockEntries:
         layer_norm_0, layer_norm_1, layer_norm_2 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__10, parameter_60, parameter_61, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x200x192xf32) <- (-1x200x64xf32, 64x192xf32)
-        matmul_4 = paddle.matmul(layer_norm_0, parameter_62, transpose_x=False, transpose_y=False)
+        matmul_4 = paddle._C_ops.matmul(layer_norm_0, parameter_62, False, False)
 
         # pd_op.add_: (-1x200x192xf32) <- (-1x200x192xf32, 192xf32)
         add__11 = paddle._C_ops.add_(matmul_4, parameter_63)
@@ -587,16 +587,16 @@ class BlockEntries:
         transpose_2 = paddle._C_ops.transpose(slice_3, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x2x-1x-1xf32) <- (-1x2x-1x32xf32, -1x2x32x-1xf32)
-        matmul_5 = paddle.matmul(scale_0, transpose_2, transpose_x=False, transpose_y=False)
+        matmul_5 = paddle._C_ops.matmul(scale_0, transpose_2, False, False)
 
         # pd_op.add: (-1x2x200x200xf32) <- (-1x2x-1x-1xf32, 1x1x200x200xf32)
-        add_0 = matmul_5 + parameter_64
+        add_0 = paddle._C_ops.add(matmul_5, parameter_64)
 
         # pd_op.softmax_: (-1x2x200x200xf32) <- (-1x2x200x200xf32)
         softmax__0 = paddle._C_ops.softmax_(add_0, -1)
 
         # pd_op.matmul: (-1x2x200x32xf32) <- (-1x2x200x200xf32, -1x2x-1x32xf32)
-        matmul_6 = paddle.matmul(softmax__0, slice_4, transpose_x=False, transpose_y=False)
+        matmul_6 = paddle._C_ops.matmul(softmax__0, slice_4, False, False)
 
         # pd_op.transpose: (-1x200x2x32xf32) <- (-1x2x200x32xf32)
         transpose_3 = paddle._C_ops.transpose(matmul_6, [0, 2, 1, 3])
@@ -608,10 +608,10 @@ class BlockEntries:
         reshape__8, reshape__9 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_3, full_int_array_26), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x64xf32) <- (-1x-1x64xf32, 64x64xf32)
-        matmul_7 = paddle.matmul(reshape__8, parameter_65, transpose_x=False, transpose_y=False)
+        matmul_7 = paddle._C_ops.matmul(reshape__8, parameter_65, False, False)
 
         # pd_op.add: (-1x-1x64xf32) <- (-1x-1x64xf32, 64xf32)
-        add_1 = matmul_7 + parameter_66
+        add_1 = paddle._C_ops.add(matmul_7, parameter_66)
 
         # pd_op.add_: (-1x200x64xf32) <- (-1x200x64xf32, -1x-1x64xf32)
         add__12 = paddle._C_ops.add_(add__10, add_1)
@@ -620,7 +620,7 @@ class BlockEntries:
         layer_norm_3, layer_norm_4, layer_norm_5 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__12, parameter_67, parameter_68, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x200x256xf32) <- (-1x200x64xf32, 64x256xf32)
-        matmul_8 = paddle.matmul(layer_norm_3, parameter_69, transpose_x=False, transpose_y=False)
+        matmul_8 = paddle._C_ops.matmul(layer_norm_3, parameter_69, False, False)
 
         # pd_op.add_: (-1x200x256xf32) <- (-1x200x256xf32, 256xf32)
         add__13 = paddle._C_ops.add_(matmul_8, parameter_70)
@@ -629,7 +629,7 @@ class BlockEntries:
         gelu_2 = paddle._C_ops.gelu(add__13, False)
 
         # pd_op.matmul: (-1x200x64xf32) <- (-1x200x256xf32, 256x64xf32)
-        matmul_9 = paddle.matmul(gelu_2, parameter_71, transpose_x=False, transpose_y=False)
+        matmul_9 = paddle._C_ops.matmul(gelu_2, parameter_71, False, False)
 
         # pd_op.add_: (-1x200x64xf32) <- (-1x200x64xf32, 64xf32)
         add__14 = paddle._C_ops.add_(matmul_9, parameter_72)
@@ -641,7 +641,7 @@ class BlockEntries:
         layer_norm_6, layer_norm_7, layer_norm_8 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__15, parameter_73, parameter_74, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x200x192xf32) <- (-1x200x64xf32, 64x192xf32)
-        matmul_10 = paddle.matmul(layer_norm_6, parameter_75, transpose_x=False, transpose_y=False)
+        matmul_10 = paddle._C_ops.matmul(layer_norm_6, parameter_75, False, False)
 
         # pd_op.add_: (-1x200x192xf32) <- (-1x200x192xf32, 192xf32)
         add__16 = paddle._C_ops.add_(matmul_10, parameter_76)
@@ -692,16 +692,16 @@ class BlockEntries:
         transpose_5 = paddle._C_ops.transpose(slice_6, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x2x-1x-1xf32) <- (-1x2x-1x32xf32, -1x2x32x-1xf32)
-        matmul_11 = paddle.matmul(scale_1, transpose_5, transpose_x=False, transpose_y=False)
+        matmul_11 = paddle._C_ops.matmul(scale_1, transpose_5, False, False)
 
         # pd_op.add: (-1x2x200x200xf32) <- (-1x2x-1x-1xf32, 1x1x200x200xf32)
-        add_2 = matmul_11 + parameter_77
+        add_2 = paddle._C_ops.add(matmul_11, parameter_77)
 
         # pd_op.softmax_: (-1x2x200x200xf32) <- (-1x2x200x200xf32)
         softmax__1 = paddle._C_ops.softmax_(add_2, -1)
 
         # pd_op.matmul: (-1x2x200x32xf32) <- (-1x2x200x200xf32, -1x2x-1x32xf32)
-        matmul_12 = paddle.matmul(softmax__1, slice_7, transpose_x=False, transpose_y=False)
+        matmul_12 = paddle._C_ops.matmul(softmax__1, slice_7, False, False)
 
         # pd_op.transpose: (-1x200x2x32xf32) <- (-1x2x200x32xf32)
         transpose_6 = paddle._C_ops.transpose(matmul_12, [0, 2, 1, 3])
@@ -713,10 +713,10 @@ class BlockEntries:
         reshape__12, reshape__13 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_6, full_int_array_34), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x64xf32) <- (-1x-1x64xf32, 64x64xf32)
-        matmul_13 = paddle.matmul(reshape__12, parameter_78, transpose_x=False, transpose_y=False)
+        matmul_13 = paddle._C_ops.matmul(reshape__12, parameter_78, False, False)
 
         # pd_op.add: (-1x-1x64xf32) <- (-1x-1x64xf32, 64xf32)
-        add_3 = matmul_13 + parameter_79
+        add_3 = paddle._C_ops.add(matmul_13, parameter_79)
 
         # pd_op.add_: (-1x200x64xf32) <- (-1x200x64xf32, -1x-1x64xf32)
         add__17 = paddle._C_ops.add_(add__15, add_3)
@@ -725,7 +725,7 @@ class BlockEntries:
         layer_norm_9, layer_norm_10, layer_norm_11 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__17, parameter_80, parameter_81, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x200x256xf32) <- (-1x200x64xf32, 64x256xf32)
-        matmul_14 = paddle.matmul(layer_norm_9, parameter_82, transpose_x=False, transpose_y=False)
+        matmul_14 = paddle._C_ops.matmul(layer_norm_9, parameter_82, False, False)
 
         # pd_op.add_: (-1x200x256xf32) <- (-1x200x256xf32, 256xf32)
         add__18 = paddle._C_ops.add_(matmul_14, parameter_83)
@@ -734,7 +734,7 @@ class BlockEntries:
         gelu_3 = paddle._C_ops.gelu(add__18, False)
 
         # pd_op.matmul: (-1x200x64xf32) <- (-1x200x256xf32, 256x64xf32)
-        matmul_15 = paddle.matmul(gelu_3, parameter_84, transpose_x=False, transpose_y=False)
+        matmul_15 = paddle._C_ops.matmul(gelu_3, parameter_84, False, False)
 
         # pd_op.add_: (-1x200x64xf32) <- (-1x200x64xf32, 64xf32)
         add__19 = paddle._C_ops.add_(matmul_15, parameter_85)
@@ -746,7 +746,7 @@ class BlockEntries:
         layer_norm_12, layer_norm_13, layer_norm_14 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__20, parameter_86, parameter_87, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x200x192xf32) <- (-1x200x64xf32, 64x192xf32)
-        matmul_16 = paddle.matmul(layer_norm_12, parameter_88, transpose_x=False, transpose_y=False)
+        matmul_16 = paddle._C_ops.matmul(layer_norm_12, parameter_88, False, False)
 
         # pd_op.add_: (-1x200x192xf32) <- (-1x200x192xf32, 192xf32)
         add__21 = paddle._C_ops.add_(matmul_16, parameter_89)
@@ -797,16 +797,16 @@ class BlockEntries:
         transpose_8 = paddle._C_ops.transpose(slice_9, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x2x-1x-1xf32) <- (-1x2x-1x32xf32, -1x2x32x-1xf32)
-        matmul_17 = paddle.matmul(scale_2, transpose_8, transpose_x=False, transpose_y=False)
+        matmul_17 = paddle._C_ops.matmul(scale_2, transpose_8, False, False)
 
         # pd_op.add: (-1x2x200x200xf32) <- (-1x2x-1x-1xf32, 1x1x200x200xf32)
-        add_4 = matmul_17 + parameter_90
+        add_4 = paddle._C_ops.add(matmul_17, parameter_90)
 
         # pd_op.softmax_: (-1x2x200x200xf32) <- (-1x2x200x200xf32)
         softmax__2 = paddle._C_ops.softmax_(add_4, -1)
 
         # pd_op.matmul: (-1x2x200x32xf32) <- (-1x2x200x200xf32, -1x2x-1x32xf32)
-        matmul_18 = paddle.matmul(softmax__2, slice_10, transpose_x=False, transpose_y=False)
+        matmul_18 = paddle._C_ops.matmul(softmax__2, slice_10, False, False)
 
         # pd_op.transpose: (-1x200x2x32xf32) <- (-1x2x200x32xf32)
         transpose_9 = paddle._C_ops.transpose(matmul_18, [0, 2, 1, 3])
@@ -818,10 +818,10 @@ class BlockEntries:
         reshape__16, reshape__17 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_9, full_int_array_42), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x64xf32) <- (-1x-1x64xf32, 64x64xf32)
-        matmul_19 = paddle.matmul(reshape__16, parameter_91, transpose_x=False, transpose_y=False)
+        matmul_19 = paddle._C_ops.matmul(reshape__16, parameter_91, False, False)
 
         # pd_op.add: (-1x-1x64xf32) <- (-1x-1x64xf32, 64xf32)
-        add_5 = matmul_19 + parameter_92
+        add_5 = paddle._C_ops.add(matmul_19, parameter_92)
 
         # pd_op.add_: (-1x200x64xf32) <- (-1x200x64xf32, -1x-1x64xf32)
         add__22 = paddle._C_ops.add_(add__20, add_5)
@@ -830,7 +830,7 @@ class BlockEntries:
         layer_norm_15, layer_norm_16, layer_norm_17 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__22, parameter_93, parameter_94, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x200x256xf32) <- (-1x200x64xf32, 64x256xf32)
-        matmul_20 = paddle.matmul(layer_norm_15, parameter_95, transpose_x=False, transpose_y=False)
+        matmul_20 = paddle._C_ops.matmul(layer_norm_15, parameter_95, False, False)
 
         # pd_op.add_: (-1x200x256xf32) <- (-1x200x256xf32, 256xf32)
         add__23 = paddle._C_ops.add_(matmul_20, parameter_96)
@@ -839,7 +839,7 @@ class BlockEntries:
         gelu_4 = paddle._C_ops.gelu(add__23, False)
 
         # pd_op.matmul: (-1x200x64xf32) <- (-1x200x256xf32, 256x64xf32)
-        matmul_21 = paddle.matmul(gelu_4, parameter_97, transpose_x=False, transpose_y=False)
+        matmul_21 = paddle._C_ops.matmul(gelu_4, parameter_97, False, False)
 
         # pd_op.add_: (-1x200x64xf32) <- (-1x200x64xf32, 64xf32)
         add__24 = paddle._C_ops.add_(matmul_21, parameter_98)
@@ -881,7 +881,7 @@ class BlockEntries:
         layer_norm_21, layer_norm_22, layer_norm_23 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(layer_norm_18, parameter_103, parameter_104, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x384xf32) <- (-1x100x128xf32, 128x384xf32)
-        matmul_22 = paddle.matmul(layer_norm_21, parameter_105, transpose_x=False, transpose_y=False)
+        matmul_22 = paddle._C_ops.matmul(layer_norm_21, parameter_105, False, False)
 
         # pd_op.add_: (-1x100x384xf32) <- (-1x100x384xf32, 384xf32)
         add__27 = paddle._C_ops.add_(matmul_22, parameter_106)
@@ -932,16 +932,16 @@ class BlockEntries:
         transpose_13 = paddle._C_ops.transpose(slice_12, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x4x-1x-1xf32) <- (-1x4x-1x32xf32, -1x4x32x-1xf32)
-        matmul_23 = paddle.matmul(scale_3, transpose_13, transpose_x=False, transpose_y=False)
+        matmul_23 = paddle._C_ops.matmul(scale_3, transpose_13, False, False)
 
         # pd_op.add: (-1x4x100x100xf32) <- (-1x4x-1x-1xf32, 1x1x100x100xf32)
-        add_6 = matmul_23 + parameter_107
+        add_6 = paddle._C_ops.add(matmul_23, parameter_107)
 
         # pd_op.softmax_: (-1x4x100x100xf32) <- (-1x4x100x100xf32)
         softmax__3 = paddle._C_ops.softmax_(add_6, -1)
 
         # pd_op.matmul: (-1x4x100x32xf32) <- (-1x4x100x100xf32, -1x4x-1x32xf32)
-        matmul_24 = paddle.matmul(softmax__3, slice_13, transpose_x=False, transpose_y=False)
+        matmul_24 = paddle._C_ops.matmul(softmax__3, slice_13, False, False)
 
         # pd_op.transpose: (-1x100x4x32xf32) <- (-1x4x100x32xf32)
         transpose_14 = paddle._C_ops.transpose(matmul_24, [0, 2, 1, 3])
@@ -953,10 +953,10 @@ class BlockEntries:
         reshape__22, reshape__23 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_14, full_int_array_52), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x128xf32) <- (-1x-1x128xf32, 128x128xf32)
-        matmul_25 = paddle.matmul(reshape__22, parameter_108, transpose_x=False, transpose_y=False)
+        matmul_25 = paddle._C_ops.matmul(reshape__22, parameter_108, False, False)
 
         # pd_op.add: (-1x-1x128xf32) <- (-1x-1x128xf32, 128xf32)
-        add_7 = matmul_25 + parameter_109
+        add_7 = paddle._C_ops.add(matmul_25, parameter_109)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, -1x-1x128xf32)
         add__28 = paddle._C_ops.add_(layer_norm_18, add_7)
@@ -965,7 +965,7 @@ class BlockEntries:
         layer_norm_24, layer_norm_25, layer_norm_26 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__28, parameter_110, parameter_111, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x512xf32) <- (-1x100x128xf32, 128x512xf32)
-        matmul_26 = paddle.matmul(layer_norm_24, parameter_112, transpose_x=False, transpose_y=False)
+        matmul_26 = paddle._C_ops.matmul(layer_norm_24, parameter_112, False, False)
 
         # pd_op.add_: (-1x100x512xf32) <- (-1x100x512xf32, 512xf32)
         add__29 = paddle._C_ops.add_(matmul_26, parameter_113)
@@ -974,7 +974,7 @@ class BlockEntries:
         gelu_5 = paddle._C_ops.gelu(add__29, False)
 
         # pd_op.matmul: (-1x100x128xf32) <- (-1x100x512xf32, 512x128xf32)
-        matmul_27 = paddle.matmul(gelu_5, parameter_114, transpose_x=False, transpose_y=False)
+        matmul_27 = paddle._C_ops.matmul(gelu_5, parameter_114, False, False)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, 128xf32)
         add__30 = paddle._C_ops.add_(matmul_27, parameter_115)
@@ -986,7 +986,7 @@ class BlockEntries:
         layer_norm_27, layer_norm_28, layer_norm_29 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__31, parameter_116, parameter_117, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x384xf32) <- (-1x100x128xf32, 128x384xf32)
-        matmul_28 = paddle.matmul(layer_norm_27, parameter_118, transpose_x=False, transpose_y=False)
+        matmul_28 = paddle._C_ops.matmul(layer_norm_27, parameter_118, False, False)
 
         # pd_op.add_: (-1x100x384xf32) <- (-1x100x384xf32, 384xf32)
         add__32 = paddle._C_ops.add_(matmul_28, parameter_119)
@@ -1037,16 +1037,16 @@ class BlockEntries:
         transpose_16 = paddle._C_ops.transpose(slice_15, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x4x-1x-1xf32) <- (-1x4x-1x32xf32, -1x4x32x-1xf32)
-        matmul_29 = paddle.matmul(scale_4, transpose_16, transpose_x=False, transpose_y=False)
+        matmul_29 = paddle._C_ops.matmul(scale_4, transpose_16, False, False)
 
         # pd_op.add: (-1x4x100x100xf32) <- (-1x4x-1x-1xf32, 1x1x100x100xf32)
-        add_8 = matmul_29 + parameter_120
+        add_8 = paddle._C_ops.add(matmul_29, parameter_120)
 
         # pd_op.softmax_: (-1x4x100x100xf32) <- (-1x4x100x100xf32)
         softmax__4 = paddle._C_ops.softmax_(add_8, -1)
 
         # pd_op.matmul: (-1x4x100x32xf32) <- (-1x4x100x100xf32, -1x4x-1x32xf32)
-        matmul_30 = paddle.matmul(softmax__4, slice_16, transpose_x=False, transpose_y=False)
+        matmul_30 = paddle._C_ops.matmul(softmax__4, slice_16, False, False)
 
         # pd_op.transpose: (-1x100x4x32xf32) <- (-1x4x100x32xf32)
         transpose_17 = paddle._C_ops.transpose(matmul_30, [0, 2, 1, 3])
@@ -1058,10 +1058,10 @@ class BlockEntries:
         reshape__26, reshape__27 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_17, full_int_array_60), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x128xf32) <- (-1x-1x128xf32, 128x128xf32)
-        matmul_31 = paddle.matmul(reshape__26, parameter_121, transpose_x=False, transpose_y=False)
+        matmul_31 = paddle._C_ops.matmul(reshape__26, parameter_121, False, False)
 
         # pd_op.add: (-1x-1x128xf32) <- (-1x-1x128xf32, 128xf32)
-        add_9 = matmul_31 + parameter_122
+        add_9 = paddle._C_ops.add(matmul_31, parameter_122)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, -1x-1x128xf32)
         add__33 = paddle._C_ops.add_(add__31, add_9)
@@ -1070,7 +1070,7 @@ class BlockEntries:
         layer_norm_30, layer_norm_31, layer_norm_32 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__33, parameter_123, parameter_124, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x512xf32) <- (-1x100x128xf32, 128x512xf32)
-        matmul_32 = paddle.matmul(layer_norm_30, parameter_125, transpose_x=False, transpose_y=False)
+        matmul_32 = paddle._C_ops.matmul(layer_norm_30, parameter_125, False, False)
 
         # pd_op.add_: (-1x100x512xf32) <- (-1x100x512xf32, 512xf32)
         add__34 = paddle._C_ops.add_(matmul_32, parameter_126)
@@ -1079,7 +1079,7 @@ class BlockEntries:
         gelu_6 = paddle._C_ops.gelu(add__34, False)
 
         # pd_op.matmul: (-1x100x128xf32) <- (-1x100x512xf32, 512x128xf32)
-        matmul_33 = paddle.matmul(gelu_6, parameter_127, transpose_x=False, transpose_y=False)
+        matmul_33 = paddle._C_ops.matmul(gelu_6, parameter_127, False, False)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, 128xf32)
         add__35 = paddle._C_ops.add_(matmul_33, parameter_128)
@@ -1091,7 +1091,7 @@ class BlockEntries:
         layer_norm_33, layer_norm_34, layer_norm_35 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__36, parameter_129, parameter_130, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x384xf32) <- (-1x100x128xf32, 128x384xf32)
-        matmul_34 = paddle.matmul(layer_norm_33, parameter_131, transpose_x=False, transpose_y=False)
+        matmul_34 = paddle._C_ops.matmul(layer_norm_33, parameter_131, False, False)
 
         # pd_op.add_: (-1x100x384xf32) <- (-1x100x384xf32, 384xf32)
         add__37 = paddle._C_ops.add_(matmul_34, parameter_132)
@@ -1142,16 +1142,16 @@ class BlockEntries:
         transpose_19 = paddle._C_ops.transpose(slice_18, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x4x-1x-1xf32) <- (-1x4x-1x32xf32, -1x4x32x-1xf32)
-        matmul_35 = paddle.matmul(scale_5, transpose_19, transpose_x=False, transpose_y=False)
+        matmul_35 = paddle._C_ops.matmul(scale_5, transpose_19, False, False)
 
         # pd_op.add: (-1x4x100x100xf32) <- (-1x4x-1x-1xf32, 1x1x100x100xf32)
-        add_10 = matmul_35 + parameter_133
+        add_10 = paddle._C_ops.add(matmul_35, parameter_133)
 
         # pd_op.softmax_: (-1x4x100x100xf32) <- (-1x4x100x100xf32)
         softmax__5 = paddle._C_ops.softmax_(add_10, -1)
 
         # pd_op.matmul: (-1x4x100x32xf32) <- (-1x4x100x100xf32, -1x4x-1x32xf32)
-        matmul_36 = paddle.matmul(softmax__5, slice_19, transpose_x=False, transpose_y=False)
+        matmul_36 = paddle._C_ops.matmul(softmax__5, slice_19, False, False)
 
         # pd_op.transpose: (-1x100x4x32xf32) <- (-1x4x100x32xf32)
         transpose_20 = paddle._C_ops.transpose(matmul_36, [0, 2, 1, 3])
@@ -1163,10 +1163,10 @@ class BlockEntries:
         reshape__30, reshape__31 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_20, full_int_array_68), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x128xf32) <- (-1x-1x128xf32, 128x128xf32)
-        matmul_37 = paddle.matmul(reshape__30, parameter_134, transpose_x=False, transpose_y=False)
+        matmul_37 = paddle._C_ops.matmul(reshape__30, parameter_134, False, False)
 
         # pd_op.add: (-1x-1x128xf32) <- (-1x-1x128xf32, 128xf32)
-        add_11 = matmul_37 + parameter_135
+        add_11 = paddle._C_ops.add(matmul_37, parameter_135)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, -1x-1x128xf32)
         add__38 = paddle._C_ops.add_(add__36, add_11)
@@ -1175,7 +1175,7 @@ class BlockEntries:
         layer_norm_36, layer_norm_37, layer_norm_38 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__38, parameter_136, parameter_137, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x512xf32) <- (-1x100x128xf32, 128x512xf32)
-        matmul_38 = paddle.matmul(layer_norm_36, parameter_138, transpose_x=False, transpose_y=False)
+        matmul_38 = paddle._C_ops.matmul(layer_norm_36, parameter_138, False, False)
 
         # pd_op.add_: (-1x100x512xf32) <- (-1x100x512xf32, 512xf32)
         add__39 = paddle._C_ops.add_(matmul_38, parameter_139)
@@ -1184,7 +1184,7 @@ class BlockEntries:
         gelu_7 = paddle._C_ops.gelu(add__39, False)
 
         # pd_op.matmul: (-1x100x128xf32) <- (-1x100x512xf32, 512x128xf32)
-        matmul_39 = paddle.matmul(gelu_7, parameter_140, transpose_x=False, transpose_y=False)
+        matmul_39 = paddle._C_ops.matmul(gelu_7, parameter_140, False, False)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, 128xf32)
         add__40 = paddle._C_ops.add_(matmul_39, parameter_141)
@@ -1196,7 +1196,7 @@ class BlockEntries:
         layer_norm_39, layer_norm_40, layer_norm_41 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__41, parameter_142, parameter_143, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x384xf32) <- (-1x100x128xf32, 128x384xf32)
-        matmul_40 = paddle.matmul(layer_norm_39, parameter_144, transpose_x=False, transpose_y=False)
+        matmul_40 = paddle._C_ops.matmul(layer_norm_39, parameter_144, False, False)
 
         # pd_op.add_: (-1x100x384xf32) <- (-1x100x384xf32, 384xf32)
         add__42 = paddle._C_ops.add_(matmul_40, parameter_145)
@@ -1247,13 +1247,13 @@ class BlockEntries:
         transpose_22 = paddle._C_ops.transpose(slice_21, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x4x-1x-1xf32) <- (-1x4x-1x32xf32, -1x4x32x-1xf32)
-        matmul_41 = paddle.matmul(scale_6, transpose_22, transpose_x=False, transpose_y=False)
+        matmul_41 = paddle._C_ops.matmul(scale_6, transpose_22, False, False)
 
         # pd_op.softmax: (-1x4x-1x-1xf32) <- (-1x4x-1x-1xf32)
         softmax_0 = paddle._C_ops.softmax(matmul_41, -1)
 
         # pd_op.matmul: (-1x4x-1x32xf32) <- (-1x4x-1x-1xf32, -1x4x-1x32xf32)
-        matmul_42 = paddle.matmul(softmax_0, slice_22, transpose_x=False, transpose_y=False)
+        matmul_42 = paddle._C_ops.matmul(softmax_0, slice_22, False, False)
 
         # pd_op.transpose: (-1x-1x4x32xf32) <- (-1x4x-1x32xf32)
         transpose_23 = paddle._C_ops.transpose(matmul_42, [0, 2, 1, 3])
@@ -1265,10 +1265,10 @@ class BlockEntries:
         reshape__34, reshape__35 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_23, full_int_array_76), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x128xf32) <- (-1x-1x128xf32, 128x128xf32)
-        matmul_43 = paddle.matmul(reshape__34, parameter_146, transpose_x=False, transpose_y=False)
+        matmul_43 = paddle._C_ops.matmul(reshape__34, parameter_146, False, False)
 
         # pd_op.add: (-1x-1x128xf32) <- (-1x-1x128xf32, 128xf32)
-        add_12 = matmul_43 + parameter_147
+        add_12 = paddle._C_ops.add(matmul_43, parameter_147)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, -1x-1x128xf32)
         add__43 = paddle._C_ops.add_(add__41, add_12)
@@ -1277,7 +1277,7 @@ class BlockEntries:
         layer_norm_42, layer_norm_43, layer_norm_44 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__43, parameter_148, parameter_149, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x512xf32) <- (-1x100x128xf32, 128x512xf32)
-        matmul_44 = paddle.matmul(layer_norm_42, parameter_150, transpose_x=False, transpose_y=False)
+        matmul_44 = paddle._C_ops.matmul(layer_norm_42, parameter_150, False, False)
 
         # pd_op.add_: (-1x100x512xf32) <- (-1x100x512xf32, 512xf32)
         add__44 = paddle._C_ops.add_(matmul_44, parameter_151)
@@ -1286,7 +1286,7 @@ class BlockEntries:
         gelu_8 = paddle._C_ops.gelu(add__44, False)
 
         # pd_op.matmul: (-1x100x128xf32) <- (-1x100x512xf32, 512x128xf32)
-        matmul_45 = paddle.matmul(gelu_8, parameter_152, transpose_x=False, transpose_y=False)
+        matmul_45 = paddle._C_ops.matmul(gelu_8, parameter_152, False, False)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, 128xf32)
         add__45 = paddle._C_ops.add_(matmul_45, parameter_153)
@@ -1298,7 +1298,7 @@ class BlockEntries:
         layer_norm_45, layer_norm_46, layer_norm_47 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__46, parameter_154, parameter_155, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x384xf32) <- (-1x100x128xf32, 128x384xf32)
-        matmul_46 = paddle.matmul(layer_norm_45, parameter_156, transpose_x=False, transpose_y=False)
+        matmul_46 = paddle._C_ops.matmul(layer_norm_45, parameter_156, False, False)
 
         # pd_op.add_: (-1x100x384xf32) <- (-1x100x384xf32, 384xf32)
         add__47 = paddle._C_ops.add_(matmul_46, parameter_157)
@@ -1349,13 +1349,13 @@ class BlockEntries:
         transpose_25 = paddle._C_ops.transpose(slice_24, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x4x-1x-1xf32) <- (-1x4x-1x32xf32, -1x4x32x-1xf32)
-        matmul_47 = paddle.matmul(scale_7, transpose_25, transpose_x=False, transpose_y=False)
+        matmul_47 = paddle._C_ops.matmul(scale_7, transpose_25, False, False)
 
         # pd_op.softmax: (-1x4x-1x-1xf32) <- (-1x4x-1x-1xf32)
         softmax_1 = paddle._C_ops.softmax(matmul_47, -1)
 
         # pd_op.matmul: (-1x4x-1x32xf32) <- (-1x4x-1x-1xf32, -1x4x-1x32xf32)
-        matmul_48 = paddle.matmul(softmax_1, slice_25, transpose_x=False, transpose_y=False)
+        matmul_48 = paddle._C_ops.matmul(softmax_1, slice_25, False, False)
 
         # pd_op.transpose: (-1x-1x4x32xf32) <- (-1x4x-1x32xf32)
         transpose_26 = paddle._C_ops.transpose(matmul_48, [0, 2, 1, 3])
@@ -1367,10 +1367,10 @@ class BlockEntries:
         reshape__38, reshape__39 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_26, full_int_array_84), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x128xf32) <- (-1x-1x128xf32, 128x128xf32)
-        matmul_49 = paddle.matmul(reshape__38, parameter_158, transpose_x=False, transpose_y=False)
+        matmul_49 = paddle._C_ops.matmul(reshape__38, parameter_158, False, False)
 
         # pd_op.add: (-1x-1x128xf32) <- (-1x-1x128xf32, 128xf32)
-        add_13 = matmul_49 + parameter_159
+        add_13 = paddle._C_ops.add(matmul_49, parameter_159)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, -1x-1x128xf32)
         add__48 = paddle._C_ops.add_(add__46, add_13)
@@ -1379,7 +1379,7 @@ class BlockEntries:
         layer_norm_48, layer_norm_49, layer_norm_50 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__48, parameter_160, parameter_161, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x512xf32) <- (-1x100x128xf32, 128x512xf32)
-        matmul_50 = paddle.matmul(layer_norm_48, parameter_162, transpose_x=False, transpose_y=False)
+        matmul_50 = paddle._C_ops.matmul(layer_norm_48, parameter_162, False, False)
 
         # pd_op.add_: (-1x100x512xf32) <- (-1x100x512xf32, 512xf32)
         add__49 = paddle._C_ops.add_(matmul_50, parameter_163)
@@ -1388,7 +1388,7 @@ class BlockEntries:
         gelu_9 = paddle._C_ops.gelu(add__49, False)
 
         # pd_op.matmul: (-1x100x128xf32) <- (-1x100x512xf32, 512x128xf32)
-        matmul_51 = paddle.matmul(gelu_9, parameter_164, transpose_x=False, transpose_y=False)
+        matmul_51 = paddle._C_ops.matmul(gelu_9, parameter_164, False, False)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, 128xf32)
         add__50 = paddle._C_ops.add_(matmul_51, parameter_165)
@@ -1400,7 +1400,7 @@ class BlockEntries:
         layer_norm_51, layer_norm_52, layer_norm_53 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__51, parameter_166, parameter_167, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x384xf32) <- (-1x100x128xf32, 128x384xf32)
-        matmul_52 = paddle.matmul(layer_norm_51, parameter_168, transpose_x=False, transpose_y=False)
+        matmul_52 = paddle._C_ops.matmul(layer_norm_51, parameter_168, False, False)
 
         # pd_op.add_: (-1x100x384xf32) <- (-1x100x384xf32, 384xf32)
         add__52 = paddle._C_ops.add_(matmul_52, parameter_169)
@@ -1451,13 +1451,13 @@ class BlockEntries:
         transpose_28 = paddle._C_ops.transpose(slice_27, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x4x-1x-1xf32) <- (-1x4x-1x32xf32, -1x4x32x-1xf32)
-        matmul_53 = paddle.matmul(scale_8, transpose_28, transpose_x=False, transpose_y=False)
+        matmul_53 = paddle._C_ops.matmul(scale_8, transpose_28, False, False)
 
         # pd_op.softmax: (-1x4x-1x-1xf32) <- (-1x4x-1x-1xf32)
         softmax_2 = paddle._C_ops.softmax(matmul_53, -1)
 
         # pd_op.matmul: (-1x4x-1x32xf32) <- (-1x4x-1x-1xf32, -1x4x-1x32xf32)
-        matmul_54 = paddle.matmul(softmax_2, slice_28, transpose_x=False, transpose_y=False)
+        matmul_54 = paddle._C_ops.matmul(softmax_2, slice_28, False, False)
 
         # pd_op.transpose: (-1x-1x4x32xf32) <- (-1x4x-1x32xf32)
         transpose_29 = paddle._C_ops.transpose(matmul_54, [0, 2, 1, 3])
@@ -1469,10 +1469,10 @@ class BlockEntries:
         reshape__42, reshape__43 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_29, full_int_array_92), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x128xf32) <- (-1x-1x128xf32, 128x128xf32)
-        matmul_55 = paddle.matmul(reshape__42, parameter_170, transpose_x=False, transpose_y=False)
+        matmul_55 = paddle._C_ops.matmul(reshape__42, parameter_170, False, False)
 
         # pd_op.add: (-1x-1x128xf32) <- (-1x-1x128xf32, 128xf32)
-        add_14 = matmul_55 + parameter_171
+        add_14 = paddle._C_ops.add(matmul_55, parameter_171)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, -1x-1x128xf32)
         add__53 = paddle._C_ops.add_(add__51, add_14)
@@ -1481,7 +1481,7 @@ class BlockEntries:
         layer_norm_54, layer_norm_55, layer_norm_56 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__53, parameter_172, parameter_173, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x100x512xf32) <- (-1x100x128xf32, 128x512xf32)
-        matmul_56 = paddle.matmul(layer_norm_54, parameter_174, transpose_x=False, transpose_y=False)
+        matmul_56 = paddle._C_ops.matmul(layer_norm_54, parameter_174, False, False)
 
         # pd_op.add_: (-1x100x512xf32) <- (-1x100x512xf32, 512xf32)
         add__54 = paddle._C_ops.add_(matmul_56, parameter_175)
@@ -1490,7 +1490,7 @@ class BlockEntries:
         gelu_10 = paddle._C_ops.gelu(add__54, False)
 
         # pd_op.matmul: (-1x100x128xf32) <- (-1x100x512xf32, 512x128xf32)
-        matmul_57 = paddle.matmul(gelu_10, parameter_176, transpose_x=False, transpose_y=False)
+        matmul_57 = paddle._C_ops.matmul(gelu_10, parameter_176, False, False)
 
         # pd_op.add_: (-1x100x128xf32) <- (-1x100x128xf32, 128xf32)
         add__55 = paddle._C_ops.add_(matmul_57, parameter_177)
@@ -1532,7 +1532,7 @@ class BlockEntries:
         layer_norm_60, layer_norm_61, layer_norm_62 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(layer_norm_57, parameter_182, parameter_183, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x50x768xf32) <- (-1x50x256xf32, 256x768xf32)
-        matmul_58 = paddle.matmul(layer_norm_60, parameter_184, transpose_x=False, transpose_y=False)
+        matmul_58 = paddle._C_ops.matmul(layer_norm_60, parameter_184, False, False)
 
         # pd_op.add_: (-1x50x768xf32) <- (-1x50x768xf32, 768xf32)
         add__58 = paddle._C_ops.add_(matmul_58, parameter_185)
@@ -1583,13 +1583,13 @@ class BlockEntries:
         transpose_33 = paddle._C_ops.transpose(slice_30, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x8x-1x-1xf32) <- (-1x8x-1x32xf32, -1x8x32x-1xf32)
-        matmul_59 = paddle.matmul(scale_9, transpose_33, transpose_x=False, transpose_y=False)
+        matmul_59 = paddle._C_ops.matmul(scale_9, transpose_33, False, False)
 
         # pd_op.softmax: (-1x8x-1x-1xf32) <- (-1x8x-1x-1xf32)
         softmax_3 = paddle._C_ops.softmax(matmul_59, -1)
 
         # pd_op.matmul: (-1x8x-1x32xf32) <- (-1x8x-1x-1xf32, -1x8x-1x32xf32)
-        matmul_60 = paddle.matmul(softmax_3, slice_31, transpose_x=False, transpose_y=False)
+        matmul_60 = paddle._C_ops.matmul(softmax_3, slice_31, False, False)
 
         # pd_op.transpose: (-1x-1x8x32xf32) <- (-1x8x-1x32xf32)
         transpose_34 = paddle._C_ops.transpose(matmul_60, [0, 2, 1, 3])
@@ -1601,10 +1601,10 @@ class BlockEntries:
         reshape__48, reshape__49 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_34, full_int_array_102), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x256xf32) <- (-1x-1x256xf32, 256x256xf32)
-        matmul_61 = paddle.matmul(reshape__48, parameter_186, transpose_x=False, transpose_y=False)
+        matmul_61 = paddle._C_ops.matmul(reshape__48, parameter_186, False, False)
 
         # pd_op.add: (-1x-1x256xf32) <- (-1x-1x256xf32, 256xf32)
-        add_15 = matmul_61 + parameter_187
+        add_15 = paddle._C_ops.add(matmul_61, parameter_187)
 
         # pd_op.add_: (-1x50x256xf32) <- (-1x50x256xf32, -1x-1x256xf32)
         add__59 = paddle._C_ops.add_(layer_norm_57, add_15)
@@ -1613,7 +1613,7 @@ class BlockEntries:
         layer_norm_63, layer_norm_64, layer_norm_65 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__59, parameter_188, parameter_189, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x50x1024xf32) <- (-1x50x256xf32, 256x1024xf32)
-        matmul_62 = paddle.matmul(layer_norm_63, parameter_190, transpose_x=False, transpose_y=False)
+        matmul_62 = paddle._C_ops.matmul(layer_norm_63, parameter_190, False, False)
 
         # pd_op.add_: (-1x50x1024xf32) <- (-1x50x1024xf32, 1024xf32)
         add__60 = paddle._C_ops.add_(matmul_62, parameter_191)
@@ -1622,7 +1622,7 @@ class BlockEntries:
         gelu_11 = paddle._C_ops.gelu(add__60, False)
 
         # pd_op.matmul: (-1x50x256xf32) <- (-1x50x1024xf32, 1024x256xf32)
-        matmul_63 = paddle.matmul(gelu_11, parameter_192, transpose_x=False, transpose_y=False)
+        matmul_63 = paddle._C_ops.matmul(gelu_11, parameter_192, False, False)
 
         # pd_op.add_: (-1x50x256xf32) <- (-1x50x256xf32, 256xf32)
         add__61 = paddle._C_ops.add_(matmul_63, parameter_193)
@@ -1634,7 +1634,7 @@ class BlockEntries:
         layer_norm_66, layer_norm_67, layer_norm_68 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__62, parameter_194, parameter_195, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x50x768xf32) <- (-1x50x256xf32, 256x768xf32)
-        matmul_64 = paddle.matmul(layer_norm_66, parameter_196, transpose_x=False, transpose_y=False)
+        matmul_64 = paddle._C_ops.matmul(layer_norm_66, parameter_196, False, False)
 
         # pd_op.add_: (-1x50x768xf32) <- (-1x50x768xf32, 768xf32)
         add__63 = paddle._C_ops.add_(matmul_64, parameter_197)
@@ -1685,13 +1685,13 @@ class BlockEntries:
         transpose_36 = paddle._C_ops.transpose(slice_33, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x8x-1x-1xf32) <- (-1x8x-1x32xf32, -1x8x32x-1xf32)
-        matmul_65 = paddle.matmul(scale_10, transpose_36, transpose_x=False, transpose_y=False)
+        matmul_65 = paddle._C_ops.matmul(scale_10, transpose_36, False, False)
 
         # pd_op.softmax: (-1x8x-1x-1xf32) <- (-1x8x-1x-1xf32)
         softmax_4 = paddle._C_ops.softmax(matmul_65, -1)
 
         # pd_op.matmul: (-1x8x-1x32xf32) <- (-1x8x-1x-1xf32, -1x8x-1x32xf32)
-        matmul_66 = paddle.matmul(softmax_4, slice_34, transpose_x=False, transpose_y=False)
+        matmul_66 = paddle._C_ops.matmul(softmax_4, slice_34, False, False)
 
         # pd_op.transpose: (-1x-1x8x32xf32) <- (-1x8x-1x32xf32)
         transpose_37 = paddle._C_ops.transpose(matmul_66, [0, 2, 1, 3])
@@ -1703,10 +1703,10 @@ class BlockEntries:
         reshape__52, reshape__53 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_37, full_int_array_110), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x256xf32) <- (-1x-1x256xf32, 256x256xf32)
-        matmul_67 = paddle.matmul(reshape__52, parameter_198, transpose_x=False, transpose_y=False)
+        matmul_67 = paddle._C_ops.matmul(reshape__52, parameter_198, False, False)
 
         # pd_op.add: (-1x-1x256xf32) <- (-1x-1x256xf32, 256xf32)
-        add_16 = matmul_67 + parameter_199
+        add_16 = paddle._C_ops.add(matmul_67, parameter_199)
 
         # pd_op.add_: (-1x50x256xf32) <- (-1x50x256xf32, -1x-1x256xf32)
         add__64 = paddle._C_ops.add_(add__62, add_16)
@@ -1715,7 +1715,7 @@ class BlockEntries:
         layer_norm_69, layer_norm_70, layer_norm_71 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__64, parameter_200, parameter_201, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x50x1024xf32) <- (-1x50x256xf32, 256x1024xf32)
-        matmul_68 = paddle.matmul(layer_norm_69, parameter_202, transpose_x=False, transpose_y=False)
+        matmul_68 = paddle._C_ops.matmul(layer_norm_69, parameter_202, False, False)
 
         # pd_op.add_: (-1x50x1024xf32) <- (-1x50x1024xf32, 1024xf32)
         add__65 = paddle._C_ops.add_(matmul_68, parameter_203)
@@ -1724,7 +1724,7 @@ class BlockEntries:
         gelu_12 = paddle._C_ops.gelu(add__65, False)
 
         # pd_op.matmul: (-1x50x256xf32) <- (-1x50x1024xf32, 1024x256xf32)
-        matmul_69 = paddle.matmul(gelu_12, parameter_204, transpose_x=False, transpose_y=False)
+        matmul_69 = paddle._C_ops.matmul(gelu_12, parameter_204, False, False)
 
         # pd_op.add_: (-1x50x256xf32) <- (-1x50x256xf32, 256xf32)
         add__66 = paddle._C_ops.add_(matmul_69, parameter_205)
@@ -1736,7 +1736,7 @@ class BlockEntries:
         layer_norm_72, layer_norm_73, layer_norm_74 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__67, parameter_206, parameter_207, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x50x768xf32) <- (-1x50x256xf32, 256x768xf32)
-        matmul_70 = paddle.matmul(layer_norm_72, parameter_208, transpose_x=False, transpose_y=False)
+        matmul_70 = paddle._C_ops.matmul(layer_norm_72, parameter_208, False, False)
 
         # pd_op.add_: (-1x50x768xf32) <- (-1x50x768xf32, 768xf32)
         add__68 = paddle._C_ops.add_(matmul_70, parameter_209)
@@ -1787,13 +1787,13 @@ class BlockEntries:
         transpose_39 = paddle._C_ops.transpose(slice_36, [0, 1, 3, 2])
 
         # pd_op.matmul: (-1x8x-1x-1xf32) <- (-1x8x-1x32xf32, -1x8x32x-1xf32)
-        matmul_71 = paddle.matmul(scale_11, transpose_39, transpose_x=False, transpose_y=False)
+        matmul_71 = paddle._C_ops.matmul(scale_11, transpose_39, False, False)
 
         # pd_op.softmax: (-1x8x-1x-1xf32) <- (-1x8x-1x-1xf32)
         softmax_5 = paddle._C_ops.softmax(matmul_71, -1)
 
         # pd_op.matmul: (-1x8x-1x32xf32) <- (-1x8x-1x-1xf32, -1x8x-1x32xf32)
-        matmul_72 = paddle.matmul(softmax_5, slice_37, transpose_x=False, transpose_y=False)
+        matmul_72 = paddle._C_ops.matmul(softmax_5, slice_37, False, False)
 
         # pd_op.transpose: (-1x-1x8x32xf32) <- (-1x8x-1x32xf32)
         transpose_40 = paddle._C_ops.transpose(matmul_72, [0, 2, 1, 3])
@@ -1805,10 +1805,10 @@ class BlockEntries:
         reshape__56, reshape__57 = (lambda x, f: f(x))(paddle._C_ops.reshape_(transpose_40, full_int_array_118), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x-1x256xf32) <- (-1x-1x256xf32, 256x256xf32)
-        matmul_73 = paddle.matmul(reshape__56, parameter_210, transpose_x=False, transpose_y=False)
+        matmul_73 = paddle._C_ops.matmul(reshape__56, parameter_210, False, False)
 
         # pd_op.add: (-1x-1x256xf32) <- (-1x-1x256xf32, 256xf32)
-        add_17 = matmul_73 + parameter_211
+        add_17 = paddle._C_ops.add(matmul_73, parameter_211)
 
         # pd_op.add_: (-1x50x256xf32) <- (-1x50x256xf32, -1x-1x256xf32)
         add__69 = paddle._C_ops.add_(add__67, add_17)
@@ -1817,7 +1817,7 @@ class BlockEntries:
         layer_norm_75, layer_norm_76, layer_norm_77 = (lambda x, f: f(x))(paddle._C_ops.layer_norm(add__69, parameter_212, parameter_213, float('1e-06'), 2), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None))
 
         # pd_op.matmul: (-1x50x1024xf32) <- (-1x50x256xf32, 256x1024xf32)
-        matmul_74 = paddle.matmul(layer_norm_75, parameter_214, transpose_x=False, transpose_y=False)
+        matmul_74 = paddle._C_ops.matmul(layer_norm_75, parameter_214, False, False)
 
         # pd_op.add_: (-1x50x1024xf32) <- (-1x50x1024xf32, 1024xf32)
         add__70 = paddle._C_ops.add_(matmul_74, parameter_215)
@@ -1826,7 +1826,7 @@ class BlockEntries:
         gelu_13 = paddle._C_ops.gelu(add__70, False)
 
         # pd_op.matmul: (-1x50x256xf32) <- (-1x50x1024xf32, 1024x256xf32)
-        matmul_75 = paddle.matmul(gelu_13, parameter_216, transpose_x=False, transpose_y=False)
+        matmul_75 = paddle._C_ops.matmul(gelu_13, parameter_216, False, False)
 
         # pd_op.add_: (-1x50x256xf32) <- (-1x50x256xf32, 256xf32)
         add__71 = paddle._C_ops.add_(matmul_75, parameter_217)
@@ -1874,7 +1874,7 @@ class BlockEntries:
         transpose_42 = paddle._C_ops.transpose(squeeze__0, [0, 2, 1])
 
         # pd_op.matmul: (-1x25x37xf32) <- (-1x25x192xf32, 192x37xf32)
-        matmul_76 = paddle.matmul(transpose_42, parameter_221, transpose_x=False, transpose_y=False)
+        matmul_76 = paddle._C_ops.matmul(transpose_42, parameter_221, False, False)
 
         # pd_op.add_: (-1x25x37xf32) <- (-1x25x37xf32, 37xf32)
         add__73 = paddle._C_ops.add_(matmul_76, parameter_222)

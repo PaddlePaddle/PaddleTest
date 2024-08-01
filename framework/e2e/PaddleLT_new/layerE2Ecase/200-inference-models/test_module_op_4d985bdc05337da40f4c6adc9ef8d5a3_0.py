@@ -1112,7 +1112,7 @@ class BlockEntries:
         sigmoid__0 = paddle._C_ops.sigmoid_(add__21)
 
         # pd_op.multiply: (-1x384x20x20xf32) <- (-1x384x20x20xf32, -1x384x1x1xf32)
-        multiply_0 = swish_60 * sigmoid__0
+        multiply_0 = paddle._C_ops.multiply(swish_60, sigmoid__0)
 
         # pd_op.conv2d: (-1x384x20x20xf32) <- (-1x384x20x20xf32, 384x384x1x1xf32)
         conv2d_66 = paddle._C_ops.conv2d(multiply_0, parameter_282, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -1229,7 +1229,7 @@ class BlockEntries:
         sigmoid__3 = paddle._C_ops.sigmoid_(add__26)
 
         # pd_op.multiply: (-1x192x40x40xf32) <- (-1x192x40x40xf32, -1x192x1x1xf32)
-        multiply_1 = swish_54 * sigmoid__3
+        multiply_1 = paddle._C_ops.multiply(swish_54, sigmoid__3)
 
         # pd_op.conv2d: (-1x192x40x40xf32) <- (-1x192x40x40xf32, 192x192x1x1xf32)
         conv2d_73 = paddle._C_ops.conv2d(multiply_1, parameter_301, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -1346,7 +1346,7 @@ class BlockEntries:
         sigmoid__6 = paddle._C_ops.sigmoid_(add__31)
 
         # pd_op.multiply: (-1x96x80x80xf32) <- (-1x96x80x80xf32, -1x96x1x1xf32)
-        multiply_2 = swish_48 * sigmoid__6
+        multiply_2 = paddle._C_ops.multiply(swish_48, sigmoid__6)
 
         # pd_op.conv2d: (-1x96x80x80xf32) <- (-1x96x80x80xf32, 96x96x1x1xf32)
         conv2d_80 = paddle._C_ops.conv2d(multiply_2, parameter_319, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')

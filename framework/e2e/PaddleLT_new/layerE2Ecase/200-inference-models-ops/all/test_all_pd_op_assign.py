@@ -462,13 +462,13 @@ class TestPrimitiveOp_f2804e537a170ea0a53a61522dbc1321(CinnTestBase, unittest.Te
         return self._test_entry()
 
 @unittest.skipIf(need_skip, skip_message)
-class TestPrimitiveOp_9186a1ea60b5aba93b29d76f5ea8ae80(CinnTestBase, unittest.TestCase):
+class TestPrimitiveOp_dd72ac2058c189924fbd827fbaacde24(CinnTestBase, unittest.TestCase):
     
     def get_test_class(self):
         return PrimitiveOp_44c4c8b31145542dca6451a1b4ccddcf
     def get_inputs(self):
         return [
-            paddle.to_tensor([0.10873199254274368], dtype='float32').reshape([1]),
+            paddle.to_tensor([0.06716042757034302], dtype='float32').reshape([1]),
         ]
 
 

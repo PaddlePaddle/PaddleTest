@@ -773,7 +773,7 @@ class BlockEntries:
         flatten__0, flatten__1 = (lambda x, f: f(x))(paddle._C_ops.flatten_(relu__38, 1, 3), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf32) <- (-1x2048xf32, 2048x1000xf32)
-        matmul_0 = paddle.matmul(flatten__0, parameter_216, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(flatten__0, parameter_216, False, False)
 
         # pd_op.add_: (-1x1000xf32) <- (-1x1000xf32, 1000xf32)
         add__6 = paddle._C_ops.add_(matmul_0, parameter_217)

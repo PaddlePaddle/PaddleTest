@@ -3,6 +3,8 @@
 set -e
 set -x
 
+SUITE_NAME=$1
+
 MEM_SIZE=16
 
 function func_parser_value(){
@@ -41,15 +43,28 @@ PYTHONPATH="python"
 BASE_PATH=$(cd "$(dirname $0)"; pwd)
 MODULE_OUTPUT_PATH=${BASE_PATH}/outputs
 # 安装paddlex，完成环境准备
-install_deps_cmd="pip install -e . && paddlex --install -y"
-eval ${install_deps_cmd}
+
+
 
 declare -A weight_dict
 declare -A model_dict
 
+if [[ -z $SUITE_NAME ]]; then
+    modules_info_file=${BASE_PATH}/PaddleX_simplify_models.txt
+    install_deps_cmd="pip install -e . && paddlex --install -y"
+elif [[ $SUITE_NAME == "PaddleX" ]]; then
+    modules_info_file=${BASE_PATH}/PaddleX_models.txt
+    install_deps_cmd="pip install -e . && paddlex --install -y"
+else
+    install_deps_cmd="pip install -e . && paddlex --install -y $SUITE_NAME"
+    modules_info_file=${BASE_PATH}/${SUITE_NAME}_models.txt
+fi
+eval ${install_deps_cmd}
+
 IFS='*'
-modules_info_file=${BASE_PATH}/run_suite.txt
 modules_info_list=($(cat ${modules_info_file}))
+
+unset http_proxy https_proxy
 
 for modules_info in ${modules_info_list[@]}; do
     IFS='='

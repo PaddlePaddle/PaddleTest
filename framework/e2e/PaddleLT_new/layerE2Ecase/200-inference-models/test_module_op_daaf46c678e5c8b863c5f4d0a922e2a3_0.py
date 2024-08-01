@@ -1001,7 +1001,7 @@ class BlockEntries:
         add__25 = paddle._C_ops.add_(conv2d_74, reshape_4)
 
         # pd_op.divide: (-1x2xf32) <- (-1x2xf32, -1x2xf32)
-        divide_0 = feed_1 / feed_2
+        divide_0 = paddle._C_ops.divide(feed_1, feed_2)
 
         # pd_op.cast: (-1x2xi32) <- (-1x2xf32)
         cast_0 = paddle._C_ops.cast(divide_0, paddle.int32)

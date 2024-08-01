@@ -2633,10 +2633,10 @@ class BlockEntries:
         combine_41 = [slice_106, full_82]
 
         # pd_op.reshape_: (-1x1536xf16, 0x-1x1536x1x1xf16) <- (-1x1536x1x1xf16, [1xi32, 1xi32])
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(pool2d_16, combine_41), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(pool2d_16, [x.reshape([1]) for x in combine_41]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf16) <- (-1x1536xf16, 1536x1000xf16)
-        matmul_0 = paddle.matmul(reshape__0, parameter_419, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(reshape__0, parameter_419, False, False)
 
         # pd_op.add_: (-1x1000xf16) <- (-1x1000xf16, 1000xf16)
         add__46 = paddle._C_ops.add_(matmul_0, parameter_420)
