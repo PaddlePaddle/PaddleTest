@@ -254,7 +254,7 @@ class BlockEntries:
         combine_0 = [slice_0, full_0, full_1]
 
         # pd_op.expand: (-1x1x768xf32) <- (1x1x768xf32, [1xi32, 1xi32, 1xi32])
-        expand_0 = paddle._C_ops.expand(parameter_1, combine_0)
+        expand_0 = paddle._C_ops.expand(parameter_1, [x.reshape([]) for x in combine_0])
 
         # builtin.combine: ([-1x1x768xf32, -1x196x768xf32]) <- (-1x1x768xf32, -1x196x768xf32)
         combine_1 = [expand_0, transpose_0]
