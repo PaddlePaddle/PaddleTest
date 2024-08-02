@@ -761,7 +761,7 @@ class BlockEntries:
         combine_2 = [slice_6]
 
         # pd_op.tile: (-1x-1xf16) <- (-1x1xf16, [xi32])
-        tile_0 = paddle._C_ops.tile(reshape__2, combine_2)
+        tile_0 = paddle._C_ops.tile(reshape__2, [x.reshape([]) for x in combine_2])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_31 = [1]
@@ -800,7 +800,7 @@ class BlockEntries:
         combine_3 = [slice_8]
 
         # pd_op.tile: (-1x-1xf16) <- (-1x1xf16, [xi32])
-        tile_1 = paddle._C_ops.tile(reshape__4, combine_3)
+        tile_1 = paddle._C_ops.tile(reshape__4, [x.reshape([]) for x in combine_3])
 
         # pd_op.transpose: (-1x-1xf16) <- (-1x-1xf16)
         transpose_0 = paddle._C_ops.transpose(tile_1, [1, 0])
@@ -974,7 +974,7 @@ class BlockEntries:
         combine_6 = [slice_11]
 
         # pd_op.tile: (-1x-1xf16) <- (-1x1xf16, [xi32])
-        tile_2 = paddle._C_ops.tile(reshape__8, combine_6)
+        tile_2 = paddle._C_ops.tile(reshape__8, [x.reshape([]) for x in combine_6])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_50 = [1]
@@ -1013,7 +1013,7 @@ class BlockEntries:
         combine_7 = [slice_13]
 
         # pd_op.tile: (-1x-1xf16) <- (-1x1xf16, [xi32])
-        tile_3 = paddle._C_ops.tile(reshape__10, combine_7)
+        tile_3 = paddle._C_ops.tile(reshape__10, [x.reshape([]) for x in combine_7])
 
         # pd_op.transpose: (-1x-1xf16) <- (-1x-1xf16)
         transpose_2 = paddle._C_ops.transpose(tile_3, [1, 0])
@@ -1187,7 +1187,7 @@ class BlockEntries:
         combine_10 = [slice_16]
 
         # pd_op.tile: (-1x-1xf16) <- (-1x1xf16, [xi32])
-        tile_4 = paddle._C_ops.tile(reshape__14, combine_10)
+        tile_4 = paddle._C_ops.tile(reshape__14, [x.reshape([]) for x in combine_10])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_69 = [1]
@@ -1226,7 +1226,7 @@ class BlockEntries:
         combine_11 = [slice_18]
 
         # pd_op.tile: (-1x-1xf16) <- (-1x1xf16, [xi32])
-        tile_5 = paddle._C_ops.tile(reshape__16, combine_11)
+        tile_5 = paddle._C_ops.tile(reshape__16, [x.reshape([]) for x in combine_11])
 
         # pd_op.transpose: (-1x-1xf16) <- (-1x-1xf16)
         transpose_4 = paddle._C_ops.transpose(tile_5, [1, 0])

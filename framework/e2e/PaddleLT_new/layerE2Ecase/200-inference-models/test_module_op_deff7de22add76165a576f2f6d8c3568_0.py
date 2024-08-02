@@ -284,7 +284,7 @@ class BlockEntries:
         combine_0 = [slice_0, full_0, full_1, full_2, full_3]
 
         # pd_op.reshape_: (-1x2x9x112x112xf16, 0x-1x18x112x112xf16) <- (-1x18x112x112xf16, [1xi32, 1xi32, 1xi32, 1xi32, 1xi32])
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(add__0, [x.reshape([1]) for x in combine_0]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(add__0, [x.reshape([]) for x in combine_0]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_3 = [2]
@@ -314,7 +314,7 @@ class BlockEntries:
         combine_1 = [slice_0, full_4, full_5, full_6, full_7, full_8]
 
         # pd_op.reshape_: (-1x2x16x9x112x112xf16, 0x-1x288x12544xf16) <- (-1x288x12544xf16, [1xi32, 1xi32, 1xi32, 1xi32, 1xi32, 1xi32])
-        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_0, [x.reshape([1]) for x in combine_1]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(unfold_0, [x.reshape([]) for x in combine_1]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x2x16x9x112x112xf16) <- (-1x2x1x9x112x112xf16, -1x2x16x9x112x112xf16)
         multiply_0 = paddle._C_ops.multiply(unsqueeze__0, reshape__2)
@@ -344,7 +344,7 @@ class BlockEntries:
         combine_2 = [slice_0, full_9, full_10, full_11]
 
         # pd_op.reshape_: (-1x32x112x112xf16, 0x-1x2x16x112x112xf16) <- (-1x2x16x112x112xf16, [1xi32, 1xi32, 1xi32, 1xi32])
-        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape_(cast_2, [x.reshape([1]) for x in combine_2]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__4, reshape__5 = (lambda x, f: f(x))(paddle._C_ops.reshape_(cast_2, [x.reshape([]) for x in combine_2]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.batch_norm_: (-1x32x112x112xf16, 32xf32, 32xf32, xf32, xf32, None) <- (-1x32x112x112xf16, 32xf32, 32xf32, 32xf32, 32xf32)
         batch_norm__12, batch_norm__13, batch_norm__14, batch_norm__15, batch_norm__16, batch_norm__17 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(reshape__4, parameter_12, parameter_13, parameter_14, parameter_15, True, float('0.9'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))

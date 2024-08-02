@@ -755,7 +755,7 @@ class BlockEntries:
         combine_0 = [slice_0]
 
         # pd_op.slice: (-1x1x512xf16) <- (256x1x512xf16, 1xi64, [xi32])
-        slice_1 = paddle._C_ops.slice(parameter_250, [0], full_int_array_2, combine_0, [-1], [])
+        slice_1 = paddle._C_ops.slice(parameter_250, [0], full_int_array_2, [x.reshape([]) for x in combine_0], [-1], [])
 
         # pd_op.add: (256x-1x512xf16) <- (256x-1x512xf16, -1x1x512xf16)
         add_0 = paddle._C_ops.add(transpose_1, slice_1)
@@ -1391,7 +1391,7 @@ class BlockEntries:
         combine_2 = [slice_12]
 
         # pd_op.slice: (-1x1x512xf16) <- (26x1x512xf16, 1xi64, [xi32])
-        slice_13 = paddle._C_ops.slice(parameter_335, [0], full_int_array_40, combine_2, [-1], [])
+        slice_13 = paddle._C_ops.slice(parameter_335, [0], full_int_array_40, [x.reshape([]) for x in combine_2], [-1], [])
 
         # pd_op.add: (26x-1x512xf16) <- (26x-1x512xf16, -1x1x512xf16)
         add_1 = paddle._C_ops.add(transpose_13, slice_13)
@@ -1538,7 +1538,7 @@ class BlockEntries:
         combine_3 = [slice_14]
 
         # pd_op.slice: (-1x1x512xf16) <- (26x1x512xf16, 1xi64, [xi32])
-        slice_15 = paddle._C_ops.slice(parameter_341, [0], full_int_array_43, combine_3, [-1], [])
+        slice_15 = paddle._C_ops.slice(parameter_341, [0], full_int_array_43, [x.reshape([]) for x in combine_3], [-1], [])
 
         # pd_op.add: (26x-1x512xf16) <- (26x-1x512xf16, -1x1x512xf16)
         add_2 = paddle._C_ops.add(transpose_16, slice_15)
@@ -1595,7 +1595,7 @@ class BlockEntries:
         combine_4 = [slice_16, full_37]
 
         # pd_op.tile: (-1x26xi64) <- (1x26xi64, [xi32, 1xi32])
-        tile_0 = paddle._C_ops.tile(unsqueeze__2, combine_4)
+        tile_0 = paddle._C_ops.tile(unsqueeze__2, [x.reshape([]) for x in combine_4])
 
         # pd_op.full: (xi32) <- ()
         full_38 = paddle._C_ops.full([], float('26'), paddle.int32, paddle.core.CPUPlace())
@@ -1682,7 +1682,7 @@ class BlockEntries:
         combine_7 = [slice_17]
 
         # pd_op.slice: (-1x1x512xf16) <- (26x1x512xf16, 1xi64, [xi32])
-        slice_18 = paddle._C_ops.slice(parameter_342, [0], full_int_array_52, combine_7, [-1], [])
+        slice_18 = paddle._C_ops.slice(parameter_342, [0], full_int_array_52, [x.reshape([]) for x in combine_7], [-1], [])
 
         # pd_op.add: (26x-1x512xf16) <- (26x-1x512xf16, -1x1x512xf16)
         add_4 = paddle._C_ops.add(transpose_18, slice_18)
@@ -2396,7 +2396,7 @@ class BlockEntries:
         combine_9 = [slice_27]
 
         # pd_op.slice: (-1x1x512xf16) <- (26x1x512xf16, 1xi64, [xi32])
-        slice_28 = paddle._C_ops.slice(parameter_341, [0], full_int_array_83, combine_9, [-1], [])
+        slice_28 = paddle._C_ops.slice(parameter_341, [0], full_int_array_83, [x.reshape([]) for x in combine_9], [-1], [])
 
         # pd_op.add: (26x-1x512xf16) <- (26x-1x512xf16, -1x1x512xf16)
         add_5 = paddle._C_ops.add(transpose_36, slice_28)
@@ -2453,7 +2453,7 @@ class BlockEntries:
         combine_10 = [slice_29, full_84]
 
         # pd_op.tile: (-1x26xi64) <- (1x26xi64, [xi32, 1xi32])
-        tile_1 = paddle._C_ops.tile(unsqueeze__10, combine_10)
+        tile_1 = paddle._C_ops.tile(unsqueeze__10, [x.reshape([]) for x in combine_10])
 
         # pd_op.full: (xi32) <- ()
         full_85 = paddle._C_ops.full([], float('26'), paddle.int32, paddle.core.CPUPlace())
@@ -2540,7 +2540,7 @@ class BlockEntries:
         combine_13 = [slice_30]
 
         # pd_op.slice: (-1x1x512xf16) <- (26x1x512xf16, 1xi64, [xi32])
-        slice_31 = paddle._C_ops.slice(parameter_342, [0], full_int_array_92, combine_13, [-1], [])
+        slice_31 = paddle._C_ops.slice(parameter_342, [0], full_int_array_92, [x.reshape([]) for x in combine_13], [-1], [])
 
         # pd_op.add: (26x-1x512xf16) <- (26x-1x512xf16, -1x1x512xf16)
         add_7 = paddle._C_ops.add(transpose_38, slice_31)
@@ -3254,7 +3254,7 @@ class BlockEntries:
         combine_15 = [slice_40]
 
         # pd_op.slice: (-1x1x512xf16) <- (26x1x512xf16, 1xi64, [xi32])
-        slice_41 = paddle._C_ops.slice(parameter_341, [0], full_int_array_123, combine_15, [-1], [])
+        slice_41 = paddle._C_ops.slice(parameter_341, [0], full_int_array_123, [x.reshape([]) for x in combine_15], [-1], [])
 
         # pd_op.add: (26x-1x512xf16) <- (26x-1x512xf16, -1x1x512xf16)
         add_8 = paddle._C_ops.add(transpose_56, slice_41)
@@ -3311,7 +3311,7 @@ class BlockEntries:
         combine_16 = [slice_42, full_131]
 
         # pd_op.tile: (-1x26xi64) <- (1x26xi64, [xi32, 1xi32])
-        tile_2 = paddle._C_ops.tile(unsqueeze__18, combine_16)
+        tile_2 = paddle._C_ops.tile(unsqueeze__18, [x.reshape([]) for x in combine_16])
 
         # pd_op.full: (xi32) <- ()
         full_132 = paddle._C_ops.full([], float('26'), paddle.int32, paddle.core.CPUPlace())
@@ -3398,7 +3398,7 @@ class BlockEntries:
         combine_19 = [slice_43]
 
         # pd_op.slice: (-1x1x512xf16) <- (26x1x512xf16, 1xi64, [xi32])
-        slice_44 = paddle._C_ops.slice(parameter_342, [0], full_int_array_132, combine_19, [-1], [])
+        slice_44 = paddle._C_ops.slice(parameter_342, [0], full_int_array_132, [x.reshape([]) for x in combine_19], [-1], [])
 
         # pd_op.add: (26x-1x512xf16) <- (26x-1x512xf16, -1x1x512xf16)
         add_10 = paddle._C_ops.add(transpose_58, slice_44)

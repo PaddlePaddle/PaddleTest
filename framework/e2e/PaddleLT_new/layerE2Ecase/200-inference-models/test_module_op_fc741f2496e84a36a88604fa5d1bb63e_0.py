@@ -1895,13 +1895,13 @@ class BlockEntries:
         combine_0 = [slice_0, slice_1]
 
         # pd_op.expand: (-1x-1xi64) <- (1x-1xi64, [1xi32, 1xi32])
-        expand_0 = paddle._C_ops.expand(unsqueeze__0, combine_0)
+        expand_0 = paddle._C_ops.expand(unsqueeze__0, [x.reshape([]) for x in combine_0])
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_1 = [slice_0, slice_1]
 
         # pd_op.expand: (-1x-1xi64) <- (-1x1xi64, [1xi32, 1xi32])
-        expand_1 = paddle._C_ops.expand(unsqueeze__2, combine_1)
+        expand_1 = paddle._C_ops.expand(unsqueeze__2, [x.reshape([]) for x in combine_1])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_70 = [-1]
@@ -2006,13 +2006,13 @@ class BlockEntries:
         combine_3 = [slice_2, slice_3]
 
         # pd_op.expand: (-1x-1xi64) <- (1x-1xi64, [1xi32, 1xi32])
-        expand_2 = paddle._C_ops.expand(unsqueeze__4, combine_3)
+        expand_2 = paddle._C_ops.expand(unsqueeze__4, [x.reshape([]) for x in combine_3])
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_4 = [slice_2, slice_3]
 
         # pd_op.expand: (-1x-1xi64) <- (-1x1xi64, [1xi32, 1xi32])
-        expand_3 = paddle._C_ops.expand(unsqueeze__6, combine_4)
+        expand_3 = paddle._C_ops.expand(unsqueeze__6, [x.reshape([]) for x in combine_4])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_78 = [-1]
@@ -2117,13 +2117,13 @@ class BlockEntries:
         combine_6 = [slice_4, slice_5]
 
         # pd_op.expand: (-1x-1xi64) <- (1x-1xi64, [1xi32, 1xi32])
-        expand_4 = paddle._C_ops.expand(unsqueeze__8, combine_6)
+        expand_4 = paddle._C_ops.expand(unsqueeze__8, [x.reshape([]) for x in combine_6])
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_7 = [slice_4, slice_5]
 
         # pd_op.expand: (-1x-1xi64) <- (-1x1xi64, [1xi32, 1xi32])
-        expand_5 = paddle._C_ops.expand(unsqueeze__10, combine_7)
+        expand_5 = paddle._C_ops.expand(unsqueeze__10, [x.reshape([]) for x in combine_7])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_86 = [-1]
@@ -2228,13 +2228,13 @@ class BlockEntries:
         combine_9 = [slice_6, slice_7]
 
         # pd_op.expand: (-1x-1xi64) <- (1x-1xi64, [1xi32, 1xi32])
-        expand_6 = paddle._C_ops.expand(unsqueeze__12, combine_9)
+        expand_6 = paddle._C_ops.expand(unsqueeze__12, [x.reshape([]) for x in combine_9])
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_10 = [slice_6, slice_7]
 
         # pd_op.expand: (-1x-1xi64) <- (-1x1xi64, [1xi32, 1xi32])
-        expand_7 = paddle._C_ops.expand(unsqueeze__14, combine_10)
+        expand_7 = paddle._C_ops.expand(unsqueeze__14, [x.reshape([]) for x in combine_10])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_94 = [-1]
@@ -2339,13 +2339,13 @@ class BlockEntries:
         combine_12 = [slice_8, slice_9]
 
         # pd_op.expand: (-1x-1xi64) <- (1x-1xi64, [1xi32, 1xi32])
-        expand_8 = paddle._C_ops.expand(unsqueeze__16, combine_12)
+        expand_8 = paddle._C_ops.expand(unsqueeze__16, [x.reshape([]) for x in combine_12])
 
         # builtin.combine: ([1xi32, 1xi32]) <- (1xi32, 1xi32)
         combine_13 = [slice_8, slice_9]
 
         # pd_op.expand: (-1x-1xi64) <- (-1x1xi64, [1xi32, 1xi32])
-        expand_9 = paddle._C_ops.expand(unsqueeze__18, combine_13)
+        expand_9 = paddle._C_ops.expand(unsqueeze__18, [x.reshape([]) for x in combine_13])
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_102 = [-1]

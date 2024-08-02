@@ -236,7 +236,7 @@ class BlockEntries:
         combine_1 = [scale_0]
 
         # pd_op.slice: (xi64) <- (-1xi64, [xi64], [xi64])
-        slice_0 = paddle._C_ops.slice(arange_0, [0], combine_0, combine_1, [-1], [0])
+        slice_0 = paddle._C_ops.slice(arange_0, [0], [x.reshape([]) for x in combine_0], [x.reshape([]) for x in combine_1], [-1], [0])
 
         # pd_op.full: (1xi32) <- ()
         full_2 = paddle._C_ops.full([1], float('30'), paddle.int32, paddle.core.CPUPlace())
@@ -425,7 +425,7 @@ class BlockEntries:
         full_int_array_2 = [1]
 
         # pd_op.set_value_with_tensor: (-1x501x30xf16) <- (-1x501x30xf16, -1x30xf16, [xi64], [xi64], 1xi64)
-        set_value_with_tensor_0 = paddle._C_ops.set_value_with_tensor(full_with_tensor_2, cast_3, combine_3, combine_4, full_int_array_2, [1], [1], [])
+        set_value_with_tensor_0 = paddle._C_ops.set_value_with_tensor(full_with_tensor_2, cast_3, [x.reshape([]) for x in combine_3], [x.reshape([]) for x in combine_4], full_int_array_2, [1], [1], [])
 
         # pd_op.full: (1xf32) <- ()
         full_8 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -449,7 +449,7 @@ class BlockEntries:
         full_int_array_3 = [1]
 
         # pd_op.set_value_with_tensor: (-1x501x4xf16) <- (-1x501x4xf16, -1x4xf16, [xi64], [xi64], 1xi64)
-        set_value_with_tensor_1 = paddle._C_ops.set_value_with_tensor(full_with_tensor_3, cast_5, combine_5, combine_6, full_int_array_3, [1], [1], [])
+        set_value_with_tensor_1 = paddle._C_ops.set_value_with_tensor(full_with_tensor_3, cast_5, [x.reshape([]) for x in combine_5], [x.reshape([]) for x in combine_6], full_int_array_3, [1], [1], [])
 
         # pd_op.full: (1xf32) <- ()
         full_9 = paddle._C_ops.full([1], float('1'), paddle.float32, paddle.core.CPUPlace())
@@ -1429,7 +1429,7 @@ class BlockEntries:
         combine_12 = [slice_4, full_12, full_13]
 
         # pd_op.reshape_: (-1x96x-1xf16, 0x-1x96x-1x-1xf16) <- (-1x96x-1x-1xf16, [xi32, 1xi32, 1xi32])
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(hardswish_72, [x.reshape([1]) for x in combine_12]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(hardswish_72, [x.reshape([]) for x in combine_12]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.transpose: (-1x-1x96xf16) <- (-1x96x-1xf16)
         transpose_0 = paddle._C_ops.transpose(reshape__0, [0, 2, 1])
