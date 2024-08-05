@@ -467,7 +467,7 @@ class BlockEntries:
         relu__4 = paddle._C_ops.relu_(squeeze__16)
 
         # pd_op.matmul: (-1x128x320000xf32) <- (-1x128x100xf32, 100x320000xf32)
-        matmul_0 = paddle.matmul(relu__4, parameter_14, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(relu__4, parameter_14, False, False)
 
         # pd_op.full_int_array: (5xi64) <- ()
         full_int_array_30 = [0, 0, -1, 100, 100]
@@ -485,7 +485,7 @@ class BlockEntries:
         reshape_14, reshape_15 = (lambda x, f: f(x))(paddle._C_ops.reshape(parameter_16, full_int_array_31), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.add: (-1x512x-1x100x100xf32) <- (-1x512x-1x100x100xf32, 1x512x1x1x1xf32)
-        add_0 = conv3d_0 + reshape_14
+        add_0 = paddle._C_ops.add(conv3d_0, reshape_14)
 
         # pd_op.relu: (-1x512x-1x100x100xf32) <- (-1x512x-1x100x100xf32)
         relu_0 = paddle._C_ops.relu(add_0)

@@ -1301,7 +1301,7 @@ class BlockEntries:
         dropout_0, dropout_1 = (lambda x, f: f(x))(paddle._C_ops.dropout(reshape__0, None, full_15, True, 'downgrade_in_infer', 0, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf32) <- (-1x2048xf32, 2048x1000xf32)
-        matmul_0 = paddle.matmul(dropout_0, parameter_470, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(dropout_0, parameter_470, False, False)
 
         # pd_op.add_: (-1x1000xf32) <- (-1x1000xf32, 1000xf32)
         add__0 = paddle._C_ops.add_(matmul_0, parameter_471)

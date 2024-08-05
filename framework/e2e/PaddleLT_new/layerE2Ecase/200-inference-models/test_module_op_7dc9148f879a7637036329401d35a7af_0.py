@@ -530,7 +530,7 @@ class BlockEntries:
         combine_0 = [full_1, full_2, slice_1, slice_2]
 
         # pd_op.reshape_: (1x512x-1x-1xf16, 0x1x8x64x256xf16) <- (1x8x64x256xf16, [1xi32, 1xi32, xi32, xi32])
-        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(divide__0, combine_0), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__2, reshape__3 = (lambda x, f: f(x))(paddle._C_ops.reshape_(divide__0, [x.reshape([]) for x in combine_0]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (1x512x-1x-1xf16) <- (1x512x-1x-1xf16, 512x512x1x1xf16)
         conv2d_21 = paddle._C_ops.conv2d(reshape__2, parameter_107, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -809,7 +809,7 @@ class BlockEntries:
         combine_1 = [full_6, full_7, slice_6, slice_7]
 
         # pd_op.reshape_: (1x512x-1x-1xf16, 0x1x8x64x256xf16) <- (1x8x64x256xf16, [1xi32, 1xi32, xi32, xi32])
-        reshape__18, reshape__19 = (lambda x, f: f(x))(paddle._C_ops.reshape_(divide__1, combine_1), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__18, reshape__19 = (lambda x, f: f(x))(paddle._C_ops.reshape_(divide__1, [x.reshape([]) for x in combine_1]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.conv2d: (1x512x-1x-1xf16) <- (1x512x-1x-1xf16, 512x512x1x1xf16)
         conv2d_33 = paddle._C_ops.conv2d(reshape__18, parameter_153, [1, 1], [0, 0], 'EXPLICIT', [1, 1], 1, 'NCHW')
@@ -1037,7 +1037,7 @@ class BlockEntries:
         bilinear_interp_3 = paddle._C_ops.bilinear_interp(conv2d_43, cast_5, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (1x128x16x16xf16) <- (1x128x-1x-1xf16, 1x128x16x16xf16)
-        add_0 = bilinear_interp_3 + conv2d_42
+        add_0 = paddle._C_ops.add(bilinear_interp_3, conv2d_42)
 
         # pd_op.batch_norm_: (1x128x16x16xf16, 128xf32, 128xf32, xf32, xf32, None) <- (1x128x16x16xf16, 128xf32, 128xf32, 128xf32, 128xf32)
         batch_norm__216, batch_norm__217, batch_norm__218, batch_norm__219, batch_norm__220, batch_norm__221 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(add_0, parameter_194, parameter_195, parameter_196, parameter_197, True, float('0.1'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
@@ -1070,7 +1070,7 @@ class BlockEntries:
         bilinear_interp_4 = paddle._C_ops.bilinear_interp(conv2d_45, cast_6, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (1x128x16x16xf16) <- (1x128x-1x-1xf16, 1x128x16x16xf16)
-        add_1 = bilinear_interp_4 + conv2d_44
+        add_1 = paddle._C_ops.add(bilinear_interp_4, conv2d_44)
 
         # pd_op.batch_norm_: (1x128x16x16xf16, 128xf32, 128xf32, xf32, xf32, None) <- (1x128x16x16xf16, 128xf32, 128xf32, 128xf32, 128xf32)
         batch_norm__228, batch_norm__229, batch_norm__230, batch_norm__231, batch_norm__232, batch_norm__233 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(add_1, parameter_204, parameter_205, parameter_206, parameter_207, True, float('0.1'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
@@ -1103,7 +1103,7 @@ class BlockEntries:
         bilinear_interp_5 = paddle._C_ops.bilinear_interp(conv2d_47, cast_7, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (1x128x16x16xf16) <- (1x128x-1x-1xf16, 1x128x16x16xf16)
-        add_2 = bilinear_interp_5 + conv2d_46
+        add_2 = paddle._C_ops.add(bilinear_interp_5, conv2d_46)
 
         # pd_op.batch_norm_: (1x128x16x16xf16, 128xf32, 128xf32, xf32, xf32, None) <- (1x128x16x16xf16, 128xf32, 128xf32, 128xf32, 128xf32)
         batch_norm__240, batch_norm__241, batch_norm__242, batch_norm__243, batch_norm__244, batch_norm__245 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(add_2, parameter_214, parameter_215, parameter_216, parameter_217, True, float('0.1'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))
@@ -1136,7 +1136,7 @@ class BlockEntries:
         bilinear_interp_6 = paddle._C_ops.bilinear_interp(conv2d_49, cast__3, None, None, 'NCHW', -1, -1, -1, [], 'bilinear', False, 0)
 
         # pd_op.add: (1x128x16x16xf16) <- (1x128x-1x-1xf16, 1x128x16x16xf16)
-        add_3 = bilinear_interp_6 + conv2d_48
+        add_3 = paddle._C_ops.add(bilinear_interp_6, conv2d_48)
 
         # pd_op.batch_norm_: (1x128x16x16xf16, 128xf32, 128xf32, xf32, xf32, None) <- (1x128x16x16xf16, 128xf32, 128xf32, 128xf32, 128xf32)
         batch_norm__252, batch_norm__253, batch_norm__254, batch_norm__255, batch_norm__256, batch_norm__257 = (lambda x, f: f(x))(paddle._C_ops.batch_norm(add_3, parameter_224, parameter_225, parameter_226, parameter_227, True, float('0.1'), float('1e-05'), 'NCHW', True, False), lambda out: out if isinstance(out, (list, tuple)) else (out, None,None,None,None,None))

@@ -296,7 +296,7 @@ class BlockEntries:
         squeeze__2, squeeze__3 = (lambda x, f: f(x))(paddle._C_ops.squeeze_(squeeze__0, full_int_array_5), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x256xf32) <- (-1x512xf32, 512x256xf32)
-        matmul_0 = paddle.matmul(squeeze__2, parameter_20, transpose_x=False, transpose_y=False)
+        matmul_0 = paddle._C_ops.matmul(squeeze__2, parameter_20, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__0 = paddle._C_ops.add_(matmul_0, parameter_21)
@@ -305,7 +305,7 @@ class BlockEntries:
         relu__4 = paddle._C_ops.relu_(add__0)
 
         # pd_op.matmul: (-1x40xf32) <- (-1x256xf32, 256x40xf32)
-        matmul_1 = paddle.matmul(relu__4, parameter_22, transpose_x=False, transpose_y=False)
+        matmul_1 = paddle._C_ops.matmul(relu__4, parameter_22, False, False)
 
         # pd_op.add_: (-1x40xf32) <- (-1x40xf32, 40xf32)
         add__1 = paddle._C_ops.add_(matmul_1, parameter_23)
@@ -464,7 +464,7 @@ class BlockEntries:
         reshape_2, reshape_3 = (lambda x, f: f(x))(paddle._C_ops.reshape(concat_0, full_int_array_9), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.subtract: (20x20x2xf64) <- (1x20x2xf64, 20x1x2xf64)
-        subtract_0 = reshape_0 - reshape_2
+        subtract_0 = paddle._C_ops.subtract(reshape_0, reshape_2)
 
         # pd_op.p_norm: (20x20xf64) <- (20x20x2xf64)
         p_norm_0 = paddle._C_ops.p_norm(subtract_0, float('2'), 2, float('1e-12'), False, False)
@@ -476,7 +476,7 @@ class BlockEntries:
         full_17 = paddle._C_ops.full([], float('2'), paddle.float64, paddle.framework._current_expected_place())
 
         # pd_op.elementwise_pow: (20x20xf64) <- (20x20xf64, xf64)
-        elementwise_pow_0 = paddle.pow(add__2, full_17)
+        elementwise_pow_0 = paddle._C_ops.elementwise_pow(add__2, full_17)
 
         # pd_op.log_: (20x20xf64) <- (20x20xf64)
         log__0 = paddle._C_ops.log_(add__2)
@@ -614,10 +614,10 @@ class BlockEntries:
         combine_10 = [slice_2, full_29]
 
         # pd_op.reshape: (-1x40xf32, 0x-1x20x2xf32) <- (-1x20x2xf32, [xi32, 1xi32])
-        reshape_4, reshape_5 = (lambda x, f: f(x))(paddle._C_ops.reshape(reshape__0, combine_10), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape_4, reshape_5 = (lambda x, f: f(x))(paddle._C_ops.reshape(reshape__0, [x.reshape([]) for x in combine_10]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x6xf32) <- (-1x40xf32, 40x6xf32)
-        matmul_2 = paddle.matmul(reshape_4, parameter_24, transpose_x=False, transpose_y=False)
+        matmul_2 = paddle._C_ops.matmul(reshape_4, parameter_24, False, False)
 
         # pd_op.add_: (-1x6xf32) <- (-1x6xf32, 6xf32)
         add__3 = paddle._C_ops.add_(matmul_2, parameter_25)
@@ -638,10 +638,10 @@ class BlockEntries:
         concat_6 = paddle._C_ops.concat(combine_11, full_30)
 
         # pd_op.matmul: (-1x23x2xf32) <- (23x23xf32, -1x23x2xf32)
-        matmul_3 = paddle.matmul(cast_2, concat_6, transpose_x=False, transpose_y=False)
+        matmul_3 = paddle._C_ops.matmul(cast_2, concat_6, False, False)
 
         # pd_op.matmul: (-1x3200x2xf32) <- (3200x23xf32, -1x23x2xf32)
-        matmul_4 = paddle.matmul(cast_3, matmul_3, transpose_x=False, transpose_y=False)
+        matmul_4 = paddle._C_ops.matmul(cast_3, matmul_3, False, False)
 
         # pd_op.full_int_array: (4xi64) <- ()
         full_int_array_16 = [-1, 32, 100, 2]
@@ -1214,7 +1214,7 @@ class BlockEntries:
         combine_12 = [slice_3, full_31, full_32, full_33]
 
         # pd_op.reshape_: (-1x512x1x26xf32, 0x-1x512x1x26xf32) <- (-1x512x1x26xf32, [xi32, 1xi32, 1xi32, 1xi32])
-        reshape__8, reshape__9 = (lambda x, f: f(x))(paddle._C_ops.reshape_(relu__33, combine_12), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__8, reshape__9 = (lambda x, f: f(x))(paddle._C_ops.reshape_(relu__33, [x.reshape([]) for x in combine_12]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_23 = [2]
@@ -1226,7 +1226,7 @@ class BlockEntries:
         transpose_2 = paddle._C_ops.transpose(squeeze_0, [0, 2, 1])
 
         # pd_op.matmul: (-1x26x512xf32) <- (-1x26x512xf32, 512x512xf32)
-        matmul_5 = paddle.matmul(transpose_2, parameter_286, transpose_x=False, transpose_y=False)
+        matmul_5 = paddle._C_ops.matmul(transpose_2, parameter_286, False, False)
 
         # pd_op.transpose: (-1x512x26xf32) <- (-1x26x512xf32)
         transpose_3 = paddle._C_ops.transpose(matmul_5, [0, 2, 1])
@@ -1244,7 +1244,7 @@ class BlockEntries:
         unsqueeze__2, unsqueeze__3 = (lambda x, f: f(x))(paddle._C_ops.unsqueeze_(relu__53, full_int_array_24), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.multiply: (-1x512x1x26xf32) <- (-1x512x1x26xf32, -1x512x1x26xf32)
-        multiply_0 = relu__52 * unsqueeze__2
+        multiply_0 = paddle._C_ops.multiply(relu__52, unsqueeze__2)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_25 = [2]
@@ -1256,7 +1256,7 @@ class BlockEntries:
         transpose_4 = paddle._C_ops.transpose(squeeze_2, [0, 2, 1])
 
         # pd_op.matmul: (-1x26x512xf32) <- (-1x26x512xf32, 512x512xf32)
-        matmul_6 = paddle.matmul(transpose_4, parameter_291, transpose_x=False, transpose_y=False)
+        matmul_6 = paddle._C_ops.matmul(transpose_4, parameter_291, False, False)
 
         # pd_op.transpose: (-1x512x26xf32) <- (-1x26x512xf32)
         transpose_5 = paddle._C_ops.transpose(matmul_6, [0, 2, 1])
@@ -1304,7 +1304,7 @@ class BlockEntries:
         combine_13 = [slice_4, full_34, full_35, full_36]
 
         # pd_op.reshape_: (-1x512x1x26xf32, 0x-1x512x1x26xf32) <- (-1x512x1x26xf32, [xi32, 1xi32, 1xi32, 1xi32])
-        reshape__10, reshape__11 = (lambda x, f: f(x))(paddle._C_ops.reshape_(multiply_0, combine_13), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__10, reshape__11 = (lambda x, f: f(x))(paddle._C_ops.reshape_(multiply_0, [x.reshape([]) for x in combine_13]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_29 = [2]
@@ -1337,13 +1337,13 @@ class BlockEntries:
         combine_14 = [slice_5, full_37, full_38]
 
         # pd_op.reshape_: (-1x512x26xf32, 0x-1x512x1x26xf32) <- (-1x512x1x26xf32, [xi32, 1xi32, 1xi32])
-        reshape__12, reshape__13 = (lambda x, f: f(x))(paddle._C_ops.reshape_(add__23, combine_14), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__12, reshape__13 = (lambda x, f: f(x))(paddle._C_ops.reshape_(add__23, [x.reshape([]) for x in combine_14]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.transpose: (-1x26x512xf32) <- (-1x512x26xf32)
         transpose_7 = paddle._C_ops.transpose(reshape__12, [0, 2, 1])
 
         # pd_op.matmul: (-1x26x512xf32) <- (-1x26x512xf32, 512x512xf32)
-        matmul_7 = paddle.matmul(transpose_7, parameter_296, transpose_x=False, transpose_y=False)
+        matmul_7 = paddle._C_ops.matmul(transpose_7, parameter_296, False, False)
 
         # pd_op.shape: (3xi32) <- (-1x26x512xf32)
         shape_4 = paddle._C_ops.shape(matmul_7)
@@ -1364,10 +1364,10 @@ class BlockEntries:
         combine_15 = [slice_6, full_39]
 
         # pd_op.reshape_: (-1x13312xf32, 0x-1x26x512xf32) <- (-1x26x512xf32, [xi32, 1xi32])
-        reshape__14, reshape__15 = (lambda x, f: f(x))(paddle._C_ops.reshape_(matmul_7, combine_15), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__14, reshape__15 = (lambda x, f: f(x))(paddle._C_ops.reshape_(matmul_7, [x.reshape([]) for x in combine_15]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x38xf32) <- (-1x13312xf32, 13312x38xf32)
-        matmul_8 = paddle.matmul(reshape__14, parameter_297, transpose_x=False, transpose_y=False)
+        matmul_8 = paddle._C_ops.matmul(reshape__14, parameter_297, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__24 = paddle._C_ops.add_(matmul_8, parameter_298)
@@ -1433,10 +1433,10 @@ class BlockEntries:
         one_hot_0 = paddle._C_ops.one_hot(full_with_tensor_2 % paddle.cast(full_45, full_with_tensor_2.dtype), full_45)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_9 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_9 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_10 = paddle.matmul(full_with_tensor_0, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_10 = paddle._C_ops.matmul(full_with_tensor_0, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__25 = paddle._C_ops.add_(matmul_10, parameter_301)
@@ -1454,7 +1454,7 @@ class BlockEntries:
         tanh__0 = paddle._C_ops.tanh_(add__26)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_11 = paddle.matmul(tanh__0, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_11 = paddle._C_ops.matmul(tanh__0, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__0 = paddle._C_ops.softmax_(matmul_11, 1)
@@ -1463,7 +1463,7 @@ class BlockEntries:
         transpose_8 = paddle._C_ops.transpose(softmax__0, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_12 = paddle.matmul(transpose_8, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_12 = paddle._C_ops.matmul(transpose_8, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_37 = [1]
@@ -1481,13 +1481,13 @@ class BlockEntries:
         concat_7 = paddle._C_ops.concat(combine_19, full_46)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_13 = paddle.matmul(concat_7, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_13 = paddle._C_ops.matmul(concat_7, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__27 = paddle._C_ops.add_(matmul_13, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_14 = paddle.matmul(full_with_tensor_0, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_14 = paddle._C_ops.matmul(full_with_tensor_0, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__28 = paddle._C_ops.add_(add__27, matmul_14)
@@ -1541,7 +1541,7 @@ class BlockEntries:
         multiply__5 = paddle._C_ops.multiply_(sigmoid__2, tanh_0)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_15 = paddle.matmul(multiply__5, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_15 = paddle._C_ops.matmul(multiply__5, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__31 = paddle._C_ops.add_(matmul_15, parameter_308)
@@ -1565,10 +1565,10 @@ class BlockEntries:
         one_hot_1 = paddle._C_ops.one_hot(argmax_0 % paddle.cast(full_49, argmax_0.dtype), full_49)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_16 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_16 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_17 = paddle.matmul(multiply__5, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_17 = paddle._C_ops.matmul(multiply__5, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__32 = paddle._C_ops.add_(matmul_17, parameter_301)
@@ -1586,7 +1586,7 @@ class BlockEntries:
         tanh__2 = paddle._C_ops.tanh_(add__33)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_18 = paddle.matmul(tanh__2, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_18 = paddle._C_ops.matmul(tanh__2, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__1 = paddle._C_ops.softmax_(matmul_18, 1)
@@ -1595,7 +1595,7 @@ class BlockEntries:
         transpose_9 = paddle._C_ops.transpose(softmax__1, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_19 = paddle.matmul(transpose_9, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_19 = paddle._C_ops.matmul(transpose_9, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_40 = [1]
@@ -1613,13 +1613,13 @@ class BlockEntries:
         concat_8 = paddle._C_ops.concat(combine_20, full_50)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_20 = paddle.matmul(concat_8, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_20 = paddle._C_ops.matmul(concat_8, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__34 = paddle._C_ops.add_(matmul_20, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_21 = paddle.matmul(multiply__5, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_21 = paddle._C_ops.matmul(multiply__5, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__35 = paddle._C_ops.add_(add__34, matmul_21)
@@ -1673,7 +1673,7 @@ class BlockEntries:
         multiply__8 = paddle._C_ops.multiply_(sigmoid__5, tanh_1)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_22 = paddle.matmul(multiply__8, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_22 = paddle._C_ops.matmul(multiply__8, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__38 = paddle._C_ops.add_(matmul_22, parameter_308)
@@ -1706,10 +1706,10 @@ class BlockEntries:
         one_hot_2 = paddle._C_ops.one_hot(argmax_1 % paddle.cast(full_54, argmax_1.dtype), full_54)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_23 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_23 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_24 = paddle.matmul(multiply__8, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_24 = paddle._C_ops.matmul(multiply__8, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__39 = paddle._C_ops.add_(matmul_24, parameter_301)
@@ -1727,7 +1727,7 @@ class BlockEntries:
         tanh__4 = paddle._C_ops.tanh_(add__40)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_25 = paddle.matmul(tanh__4, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_25 = paddle._C_ops.matmul(tanh__4, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__2 = paddle._C_ops.softmax_(matmul_25, 1)
@@ -1736,7 +1736,7 @@ class BlockEntries:
         transpose_10 = paddle._C_ops.transpose(softmax__2, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_26 = paddle.matmul(transpose_10, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_26 = paddle._C_ops.matmul(transpose_10, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_43 = [1]
@@ -1754,13 +1754,13 @@ class BlockEntries:
         concat_10 = paddle._C_ops.concat(combine_22, full_55)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_27 = paddle.matmul(concat_10, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_27 = paddle._C_ops.matmul(concat_10, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__41 = paddle._C_ops.add_(matmul_27, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_28 = paddle.matmul(multiply__8, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_28 = paddle._C_ops.matmul(multiply__8, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__42 = paddle._C_ops.add_(add__41, matmul_28)
@@ -1814,7 +1814,7 @@ class BlockEntries:
         multiply__11 = paddle._C_ops.multiply_(sigmoid__8, tanh_2)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_29 = paddle.matmul(multiply__11, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_29 = paddle._C_ops.matmul(multiply__11, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__45 = paddle._C_ops.add_(matmul_29, parameter_308)
@@ -1847,10 +1847,10 @@ class BlockEntries:
         one_hot_3 = paddle._C_ops.one_hot(argmax_2 % paddle.cast(full_59, argmax_2.dtype), full_59)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_30 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_30 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_31 = paddle.matmul(multiply__11, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_31 = paddle._C_ops.matmul(multiply__11, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__46 = paddle._C_ops.add_(matmul_31, parameter_301)
@@ -1868,7 +1868,7 @@ class BlockEntries:
         tanh__6 = paddle._C_ops.tanh_(add__47)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_32 = paddle.matmul(tanh__6, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_32 = paddle._C_ops.matmul(tanh__6, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__3 = paddle._C_ops.softmax_(matmul_32, 1)
@@ -1877,7 +1877,7 @@ class BlockEntries:
         transpose_11 = paddle._C_ops.transpose(softmax__3, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_33 = paddle.matmul(transpose_11, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_33 = paddle._C_ops.matmul(transpose_11, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_46 = [1]
@@ -1895,13 +1895,13 @@ class BlockEntries:
         concat_12 = paddle._C_ops.concat(combine_24, full_60)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_34 = paddle.matmul(concat_12, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_34 = paddle._C_ops.matmul(concat_12, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__48 = paddle._C_ops.add_(matmul_34, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_35 = paddle.matmul(multiply__11, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_35 = paddle._C_ops.matmul(multiply__11, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__49 = paddle._C_ops.add_(add__48, matmul_35)
@@ -1955,7 +1955,7 @@ class BlockEntries:
         multiply__14 = paddle._C_ops.multiply_(sigmoid__11, tanh_3)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_36 = paddle.matmul(multiply__14, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_36 = paddle._C_ops.matmul(multiply__14, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__52 = paddle._C_ops.add_(matmul_36, parameter_308)
@@ -1988,10 +1988,10 @@ class BlockEntries:
         one_hot_4 = paddle._C_ops.one_hot(argmax_3 % paddle.cast(full_64, argmax_3.dtype), full_64)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_37 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_37 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_38 = paddle.matmul(multiply__14, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_38 = paddle._C_ops.matmul(multiply__14, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__53 = paddle._C_ops.add_(matmul_38, parameter_301)
@@ -2009,7 +2009,7 @@ class BlockEntries:
         tanh__8 = paddle._C_ops.tanh_(add__54)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_39 = paddle.matmul(tanh__8, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_39 = paddle._C_ops.matmul(tanh__8, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__4 = paddle._C_ops.softmax_(matmul_39, 1)
@@ -2018,7 +2018,7 @@ class BlockEntries:
         transpose_12 = paddle._C_ops.transpose(softmax__4, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_40 = paddle.matmul(transpose_12, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_40 = paddle._C_ops.matmul(transpose_12, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_49 = [1]
@@ -2036,13 +2036,13 @@ class BlockEntries:
         concat_14 = paddle._C_ops.concat(combine_26, full_65)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_41 = paddle.matmul(concat_14, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_41 = paddle._C_ops.matmul(concat_14, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__55 = paddle._C_ops.add_(matmul_41, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_42 = paddle.matmul(multiply__14, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_42 = paddle._C_ops.matmul(multiply__14, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__56 = paddle._C_ops.add_(add__55, matmul_42)
@@ -2096,7 +2096,7 @@ class BlockEntries:
         multiply__17 = paddle._C_ops.multiply_(sigmoid__14, tanh_4)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_43 = paddle.matmul(multiply__17, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_43 = paddle._C_ops.matmul(multiply__17, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__59 = paddle._C_ops.add_(matmul_43, parameter_308)
@@ -2129,10 +2129,10 @@ class BlockEntries:
         one_hot_5 = paddle._C_ops.one_hot(argmax_4 % paddle.cast(full_69, argmax_4.dtype), full_69)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_44 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_44 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_45 = paddle.matmul(multiply__17, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_45 = paddle._C_ops.matmul(multiply__17, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__60 = paddle._C_ops.add_(matmul_45, parameter_301)
@@ -2150,7 +2150,7 @@ class BlockEntries:
         tanh__10 = paddle._C_ops.tanh_(add__61)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_46 = paddle.matmul(tanh__10, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_46 = paddle._C_ops.matmul(tanh__10, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__5 = paddle._C_ops.softmax_(matmul_46, 1)
@@ -2159,7 +2159,7 @@ class BlockEntries:
         transpose_13 = paddle._C_ops.transpose(softmax__5, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_47 = paddle.matmul(transpose_13, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_47 = paddle._C_ops.matmul(transpose_13, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_52 = [1]
@@ -2177,13 +2177,13 @@ class BlockEntries:
         concat_16 = paddle._C_ops.concat(combine_28, full_70)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_48 = paddle.matmul(concat_16, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_48 = paddle._C_ops.matmul(concat_16, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__62 = paddle._C_ops.add_(matmul_48, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_49 = paddle.matmul(multiply__17, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_49 = paddle._C_ops.matmul(multiply__17, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__63 = paddle._C_ops.add_(add__62, matmul_49)
@@ -2237,7 +2237,7 @@ class BlockEntries:
         multiply__20 = paddle._C_ops.multiply_(sigmoid__17, tanh_5)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_50 = paddle.matmul(multiply__20, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_50 = paddle._C_ops.matmul(multiply__20, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__66 = paddle._C_ops.add_(matmul_50, parameter_308)
@@ -2270,10 +2270,10 @@ class BlockEntries:
         one_hot_6 = paddle._C_ops.one_hot(argmax_5 % paddle.cast(full_74, argmax_5.dtype), full_74)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_51 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_51 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_52 = paddle.matmul(multiply__20, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_52 = paddle._C_ops.matmul(multiply__20, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__67 = paddle._C_ops.add_(matmul_52, parameter_301)
@@ -2291,7 +2291,7 @@ class BlockEntries:
         tanh__12 = paddle._C_ops.tanh_(add__68)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_53 = paddle.matmul(tanh__12, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_53 = paddle._C_ops.matmul(tanh__12, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__6 = paddle._C_ops.softmax_(matmul_53, 1)
@@ -2300,7 +2300,7 @@ class BlockEntries:
         transpose_14 = paddle._C_ops.transpose(softmax__6, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_54 = paddle.matmul(transpose_14, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_54 = paddle._C_ops.matmul(transpose_14, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_55 = [1]
@@ -2318,13 +2318,13 @@ class BlockEntries:
         concat_18 = paddle._C_ops.concat(combine_30, full_75)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_55 = paddle.matmul(concat_18, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_55 = paddle._C_ops.matmul(concat_18, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__69 = paddle._C_ops.add_(matmul_55, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_56 = paddle.matmul(multiply__20, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_56 = paddle._C_ops.matmul(multiply__20, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__70 = paddle._C_ops.add_(add__69, matmul_56)
@@ -2378,7 +2378,7 @@ class BlockEntries:
         multiply__23 = paddle._C_ops.multiply_(sigmoid__20, tanh_6)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_57 = paddle.matmul(multiply__23, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_57 = paddle._C_ops.matmul(multiply__23, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__73 = paddle._C_ops.add_(matmul_57, parameter_308)
@@ -2411,10 +2411,10 @@ class BlockEntries:
         one_hot_7 = paddle._C_ops.one_hot(argmax_6 % paddle.cast(full_79, argmax_6.dtype), full_79)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_58 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_58 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_59 = paddle.matmul(multiply__23, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_59 = paddle._C_ops.matmul(multiply__23, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__74 = paddle._C_ops.add_(matmul_59, parameter_301)
@@ -2432,7 +2432,7 @@ class BlockEntries:
         tanh__14 = paddle._C_ops.tanh_(add__75)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_60 = paddle.matmul(tanh__14, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_60 = paddle._C_ops.matmul(tanh__14, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__7 = paddle._C_ops.softmax_(matmul_60, 1)
@@ -2441,7 +2441,7 @@ class BlockEntries:
         transpose_15 = paddle._C_ops.transpose(softmax__7, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_61 = paddle.matmul(transpose_15, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_61 = paddle._C_ops.matmul(transpose_15, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_58 = [1]
@@ -2459,13 +2459,13 @@ class BlockEntries:
         concat_20 = paddle._C_ops.concat(combine_32, full_80)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_62 = paddle.matmul(concat_20, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_62 = paddle._C_ops.matmul(concat_20, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__76 = paddle._C_ops.add_(matmul_62, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_63 = paddle.matmul(multiply__23, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_63 = paddle._C_ops.matmul(multiply__23, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__77 = paddle._C_ops.add_(add__76, matmul_63)
@@ -2519,7 +2519,7 @@ class BlockEntries:
         multiply__26 = paddle._C_ops.multiply_(sigmoid__23, tanh_7)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_64 = paddle.matmul(multiply__26, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_64 = paddle._C_ops.matmul(multiply__26, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__80 = paddle._C_ops.add_(matmul_64, parameter_308)
@@ -2552,10 +2552,10 @@ class BlockEntries:
         one_hot_8 = paddle._C_ops.one_hot(argmax_7 % paddle.cast(full_84, argmax_7.dtype), full_84)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_65 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_65 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_66 = paddle.matmul(multiply__26, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_66 = paddle._C_ops.matmul(multiply__26, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__81 = paddle._C_ops.add_(matmul_66, parameter_301)
@@ -2573,7 +2573,7 @@ class BlockEntries:
         tanh__16 = paddle._C_ops.tanh_(add__82)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_67 = paddle.matmul(tanh__16, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_67 = paddle._C_ops.matmul(tanh__16, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__8 = paddle._C_ops.softmax_(matmul_67, 1)
@@ -2582,7 +2582,7 @@ class BlockEntries:
         transpose_16 = paddle._C_ops.transpose(softmax__8, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_68 = paddle.matmul(transpose_16, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_68 = paddle._C_ops.matmul(transpose_16, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_61 = [1]
@@ -2600,13 +2600,13 @@ class BlockEntries:
         concat_22 = paddle._C_ops.concat(combine_34, full_85)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_69 = paddle.matmul(concat_22, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_69 = paddle._C_ops.matmul(concat_22, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__83 = paddle._C_ops.add_(matmul_69, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_70 = paddle.matmul(multiply__26, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_70 = paddle._C_ops.matmul(multiply__26, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__84 = paddle._C_ops.add_(add__83, matmul_70)
@@ -2660,7 +2660,7 @@ class BlockEntries:
         multiply__29 = paddle._C_ops.multiply_(sigmoid__26, tanh_8)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_71 = paddle.matmul(multiply__29, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_71 = paddle._C_ops.matmul(multiply__29, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__87 = paddle._C_ops.add_(matmul_71, parameter_308)
@@ -2693,10 +2693,10 @@ class BlockEntries:
         one_hot_9 = paddle._C_ops.one_hot(argmax_8 % paddle.cast(full_89, argmax_8.dtype), full_89)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_72 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_72 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_73 = paddle.matmul(multiply__29, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_73 = paddle._C_ops.matmul(multiply__29, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__88 = paddle._C_ops.add_(matmul_73, parameter_301)
@@ -2714,7 +2714,7 @@ class BlockEntries:
         tanh__18 = paddle._C_ops.tanh_(add__89)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_74 = paddle.matmul(tanh__18, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_74 = paddle._C_ops.matmul(tanh__18, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__9 = paddle._C_ops.softmax_(matmul_74, 1)
@@ -2723,7 +2723,7 @@ class BlockEntries:
         transpose_17 = paddle._C_ops.transpose(softmax__9, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_75 = paddle.matmul(transpose_17, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_75 = paddle._C_ops.matmul(transpose_17, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_64 = [1]
@@ -2741,13 +2741,13 @@ class BlockEntries:
         concat_24 = paddle._C_ops.concat(combine_36, full_90)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_76 = paddle.matmul(concat_24, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_76 = paddle._C_ops.matmul(concat_24, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__90 = paddle._C_ops.add_(matmul_76, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_77 = paddle.matmul(multiply__29, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_77 = paddle._C_ops.matmul(multiply__29, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__91 = paddle._C_ops.add_(add__90, matmul_77)
@@ -2801,7 +2801,7 @@ class BlockEntries:
         multiply__32 = paddle._C_ops.multiply_(sigmoid__29, tanh_9)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_78 = paddle.matmul(multiply__32, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_78 = paddle._C_ops.matmul(multiply__32, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__94 = paddle._C_ops.add_(matmul_78, parameter_308)
@@ -2834,10 +2834,10 @@ class BlockEntries:
         one_hot_10 = paddle._C_ops.one_hot(argmax_9 % paddle.cast(full_94, argmax_9.dtype), full_94)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_79 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_79 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_80 = paddle.matmul(multiply__32, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_80 = paddle._C_ops.matmul(multiply__32, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__95 = paddle._C_ops.add_(matmul_80, parameter_301)
@@ -2855,7 +2855,7 @@ class BlockEntries:
         tanh__20 = paddle._C_ops.tanh_(add__96)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_81 = paddle.matmul(tanh__20, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_81 = paddle._C_ops.matmul(tanh__20, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__10 = paddle._C_ops.softmax_(matmul_81, 1)
@@ -2864,7 +2864,7 @@ class BlockEntries:
         transpose_18 = paddle._C_ops.transpose(softmax__10, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_82 = paddle.matmul(transpose_18, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_82 = paddle._C_ops.matmul(transpose_18, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_67 = [1]
@@ -2882,13 +2882,13 @@ class BlockEntries:
         concat_26 = paddle._C_ops.concat(combine_38, full_95)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_83 = paddle.matmul(concat_26, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_83 = paddle._C_ops.matmul(concat_26, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__97 = paddle._C_ops.add_(matmul_83, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_84 = paddle.matmul(multiply__32, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_84 = paddle._C_ops.matmul(multiply__32, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__98 = paddle._C_ops.add_(add__97, matmul_84)
@@ -2942,7 +2942,7 @@ class BlockEntries:
         multiply__35 = paddle._C_ops.multiply_(sigmoid__32, tanh_10)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_85 = paddle.matmul(multiply__35, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_85 = paddle._C_ops.matmul(multiply__35, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__101 = paddle._C_ops.add_(matmul_85, parameter_308)
@@ -2975,10 +2975,10 @@ class BlockEntries:
         one_hot_11 = paddle._C_ops.one_hot(argmax_10 % paddle.cast(full_99, argmax_10.dtype), full_99)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_86 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_86 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_87 = paddle.matmul(multiply__35, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_87 = paddle._C_ops.matmul(multiply__35, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__102 = paddle._C_ops.add_(matmul_87, parameter_301)
@@ -2996,7 +2996,7 @@ class BlockEntries:
         tanh__22 = paddle._C_ops.tanh_(add__103)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_88 = paddle.matmul(tanh__22, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_88 = paddle._C_ops.matmul(tanh__22, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__11 = paddle._C_ops.softmax_(matmul_88, 1)
@@ -3005,7 +3005,7 @@ class BlockEntries:
         transpose_19 = paddle._C_ops.transpose(softmax__11, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_89 = paddle.matmul(transpose_19, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_89 = paddle._C_ops.matmul(transpose_19, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_70 = [1]
@@ -3023,13 +3023,13 @@ class BlockEntries:
         concat_28 = paddle._C_ops.concat(combine_40, full_100)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_90 = paddle.matmul(concat_28, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_90 = paddle._C_ops.matmul(concat_28, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__104 = paddle._C_ops.add_(matmul_90, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_91 = paddle.matmul(multiply__35, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_91 = paddle._C_ops.matmul(multiply__35, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__105 = paddle._C_ops.add_(add__104, matmul_91)
@@ -3083,7 +3083,7 @@ class BlockEntries:
         multiply__38 = paddle._C_ops.multiply_(sigmoid__35, tanh_11)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_92 = paddle.matmul(multiply__38, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_92 = paddle._C_ops.matmul(multiply__38, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__108 = paddle._C_ops.add_(matmul_92, parameter_308)
@@ -3116,10 +3116,10 @@ class BlockEntries:
         one_hot_12 = paddle._C_ops.one_hot(argmax_11 % paddle.cast(full_104, argmax_11.dtype), full_104)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_93 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_93 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_94 = paddle.matmul(multiply__38, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_94 = paddle._C_ops.matmul(multiply__38, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__109 = paddle._C_ops.add_(matmul_94, parameter_301)
@@ -3137,7 +3137,7 @@ class BlockEntries:
         tanh__24 = paddle._C_ops.tanh_(add__110)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_95 = paddle.matmul(tanh__24, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_95 = paddle._C_ops.matmul(tanh__24, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__12 = paddle._C_ops.softmax_(matmul_95, 1)
@@ -3146,7 +3146,7 @@ class BlockEntries:
         transpose_20 = paddle._C_ops.transpose(softmax__12, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_96 = paddle.matmul(transpose_20, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_96 = paddle._C_ops.matmul(transpose_20, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_73 = [1]
@@ -3164,13 +3164,13 @@ class BlockEntries:
         concat_30 = paddle._C_ops.concat(combine_42, full_105)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_97 = paddle.matmul(concat_30, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_97 = paddle._C_ops.matmul(concat_30, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__111 = paddle._C_ops.add_(matmul_97, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_98 = paddle.matmul(multiply__38, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_98 = paddle._C_ops.matmul(multiply__38, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__112 = paddle._C_ops.add_(add__111, matmul_98)
@@ -3224,7 +3224,7 @@ class BlockEntries:
         multiply__41 = paddle._C_ops.multiply_(sigmoid__38, tanh_12)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_99 = paddle.matmul(multiply__41, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_99 = paddle._C_ops.matmul(multiply__41, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__115 = paddle._C_ops.add_(matmul_99, parameter_308)
@@ -3257,10 +3257,10 @@ class BlockEntries:
         one_hot_13 = paddle._C_ops.one_hot(argmax_12 % paddle.cast(full_109, argmax_12.dtype), full_109)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_100 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_100 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_101 = paddle.matmul(multiply__41, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_101 = paddle._C_ops.matmul(multiply__41, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__116 = paddle._C_ops.add_(matmul_101, parameter_301)
@@ -3278,7 +3278,7 @@ class BlockEntries:
         tanh__26 = paddle._C_ops.tanh_(add__117)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_102 = paddle.matmul(tanh__26, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_102 = paddle._C_ops.matmul(tanh__26, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__13 = paddle._C_ops.softmax_(matmul_102, 1)
@@ -3287,7 +3287,7 @@ class BlockEntries:
         transpose_21 = paddle._C_ops.transpose(softmax__13, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_103 = paddle.matmul(transpose_21, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_103 = paddle._C_ops.matmul(transpose_21, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_76 = [1]
@@ -3305,13 +3305,13 @@ class BlockEntries:
         concat_32 = paddle._C_ops.concat(combine_44, full_110)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_104 = paddle.matmul(concat_32, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_104 = paddle._C_ops.matmul(concat_32, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__118 = paddle._C_ops.add_(matmul_104, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_105 = paddle.matmul(multiply__41, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_105 = paddle._C_ops.matmul(multiply__41, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__119 = paddle._C_ops.add_(add__118, matmul_105)
@@ -3365,7 +3365,7 @@ class BlockEntries:
         multiply__44 = paddle._C_ops.multiply_(sigmoid__41, tanh_13)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_106 = paddle.matmul(multiply__44, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_106 = paddle._C_ops.matmul(multiply__44, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__122 = paddle._C_ops.add_(matmul_106, parameter_308)
@@ -3398,10 +3398,10 @@ class BlockEntries:
         one_hot_14 = paddle._C_ops.one_hot(argmax_13 % paddle.cast(full_114, argmax_13.dtype), full_114)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_107 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_107 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_108 = paddle.matmul(multiply__44, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_108 = paddle._C_ops.matmul(multiply__44, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__123 = paddle._C_ops.add_(matmul_108, parameter_301)
@@ -3419,7 +3419,7 @@ class BlockEntries:
         tanh__28 = paddle._C_ops.tanh_(add__124)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_109 = paddle.matmul(tanh__28, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_109 = paddle._C_ops.matmul(tanh__28, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__14 = paddle._C_ops.softmax_(matmul_109, 1)
@@ -3428,7 +3428,7 @@ class BlockEntries:
         transpose_22 = paddle._C_ops.transpose(softmax__14, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_110 = paddle.matmul(transpose_22, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_110 = paddle._C_ops.matmul(transpose_22, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_79 = [1]
@@ -3446,13 +3446,13 @@ class BlockEntries:
         concat_34 = paddle._C_ops.concat(combine_46, full_115)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_111 = paddle.matmul(concat_34, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_111 = paddle._C_ops.matmul(concat_34, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__125 = paddle._C_ops.add_(matmul_111, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_112 = paddle.matmul(multiply__44, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_112 = paddle._C_ops.matmul(multiply__44, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__126 = paddle._C_ops.add_(add__125, matmul_112)
@@ -3506,7 +3506,7 @@ class BlockEntries:
         multiply__47 = paddle._C_ops.multiply_(sigmoid__44, tanh_14)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_113 = paddle.matmul(multiply__47, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_113 = paddle._C_ops.matmul(multiply__47, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__129 = paddle._C_ops.add_(matmul_113, parameter_308)
@@ -3539,10 +3539,10 @@ class BlockEntries:
         one_hot_15 = paddle._C_ops.one_hot(argmax_14 % paddle.cast(full_119, argmax_14.dtype), full_119)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_114 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_114 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_115 = paddle.matmul(multiply__47, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_115 = paddle._C_ops.matmul(multiply__47, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__130 = paddle._C_ops.add_(matmul_115, parameter_301)
@@ -3560,7 +3560,7 @@ class BlockEntries:
         tanh__30 = paddle._C_ops.tanh_(add__131)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_116 = paddle.matmul(tanh__30, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_116 = paddle._C_ops.matmul(tanh__30, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__15 = paddle._C_ops.softmax_(matmul_116, 1)
@@ -3569,7 +3569,7 @@ class BlockEntries:
         transpose_23 = paddle._C_ops.transpose(softmax__15, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_117 = paddle.matmul(transpose_23, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_117 = paddle._C_ops.matmul(transpose_23, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_82 = [1]
@@ -3587,13 +3587,13 @@ class BlockEntries:
         concat_36 = paddle._C_ops.concat(combine_48, full_120)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_118 = paddle.matmul(concat_36, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_118 = paddle._C_ops.matmul(concat_36, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__132 = paddle._C_ops.add_(matmul_118, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_119 = paddle.matmul(multiply__47, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_119 = paddle._C_ops.matmul(multiply__47, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__133 = paddle._C_ops.add_(add__132, matmul_119)
@@ -3647,7 +3647,7 @@ class BlockEntries:
         multiply__50 = paddle._C_ops.multiply_(sigmoid__47, tanh_15)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_120 = paddle.matmul(multiply__50, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_120 = paddle._C_ops.matmul(multiply__50, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__136 = paddle._C_ops.add_(matmul_120, parameter_308)
@@ -3680,10 +3680,10 @@ class BlockEntries:
         one_hot_16 = paddle._C_ops.one_hot(argmax_15 % paddle.cast(full_124, argmax_15.dtype), full_124)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_121 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_121 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_122 = paddle.matmul(multiply__50, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_122 = paddle._C_ops.matmul(multiply__50, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__137 = paddle._C_ops.add_(matmul_122, parameter_301)
@@ -3701,7 +3701,7 @@ class BlockEntries:
         tanh__32 = paddle._C_ops.tanh_(add__138)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_123 = paddle.matmul(tanh__32, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_123 = paddle._C_ops.matmul(tanh__32, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__16 = paddle._C_ops.softmax_(matmul_123, 1)
@@ -3710,7 +3710,7 @@ class BlockEntries:
         transpose_24 = paddle._C_ops.transpose(softmax__16, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_124 = paddle.matmul(transpose_24, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_124 = paddle._C_ops.matmul(transpose_24, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_85 = [1]
@@ -3728,13 +3728,13 @@ class BlockEntries:
         concat_38 = paddle._C_ops.concat(combine_50, full_125)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_125 = paddle.matmul(concat_38, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_125 = paddle._C_ops.matmul(concat_38, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__139 = paddle._C_ops.add_(matmul_125, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_126 = paddle.matmul(multiply__50, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_126 = paddle._C_ops.matmul(multiply__50, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__140 = paddle._C_ops.add_(add__139, matmul_126)
@@ -3788,7 +3788,7 @@ class BlockEntries:
         multiply__53 = paddle._C_ops.multiply_(sigmoid__50, tanh_16)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_127 = paddle.matmul(multiply__53, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_127 = paddle._C_ops.matmul(multiply__53, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__143 = paddle._C_ops.add_(matmul_127, parameter_308)
@@ -3821,10 +3821,10 @@ class BlockEntries:
         one_hot_17 = paddle._C_ops.one_hot(argmax_16 % paddle.cast(full_129, argmax_16.dtype), full_129)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_128 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_128 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_129 = paddle.matmul(multiply__53, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_129 = paddle._C_ops.matmul(multiply__53, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__144 = paddle._C_ops.add_(matmul_129, parameter_301)
@@ -3842,7 +3842,7 @@ class BlockEntries:
         tanh__34 = paddle._C_ops.tanh_(add__145)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_130 = paddle.matmul(tanh__34, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_130 = paddle._C_ops.matmul(tanh__34, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__17 = paddle._C_ops.softmax_(matmul_130, 1)
@@ -3851,7 +3851,7 @@ class BlockEntries:
         transpose_25 = paddle._C_ops.transpose(softmax__17, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_131 = paddle.matmul(transpose_25, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_131 = paddle._C_ops.matmul(transpose_25, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_88 = [1]
@@ -3869,13 +3869,13 @@ class BlockEntries:
         concat_40 = paddle._C_ops.concat(combine_52, full_130)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_132 = paddle.matmul(concat_40, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_132 = paddle._C_ops.matmul(concat_40, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__146 = paddle._C_ops.add_(matmul_132, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_133 = paddle.matmul(multiply__53, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_133 = paddle._C_ops.matmul(multiply__53, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__147 = paddle._C_ops.add_(add__146, matmul_133)
@@ -3929,7 +3929,7 @@ class BlockEntries:
         multiply__56 = paddle._C_ops.multiply_(sigmoid__53, tanh_17)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_134 = paddle.matmul(multiply__56, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_134 = paddle._C_ops.matmul(multiply__56, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__150 = paddle._C_ops.add_(matmul_134, parameter_308)
@@ -3962,10 +3962,10 @@ class BlockEntries:
         one_hot_18 = paddle._C_ops.one_hot(argmax_17 % paddle.cast(full_134, argmax_17.dtype), full_134)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_135 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_135 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_136 = paddle.matmul(multiply__56, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_136 = paddle._C_ops.matmul(multiply__56, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__151 = paddle._C_ops.add_(matmul_136, parameter_301)
@@ -3983,7 +3983,7 @@ class BlockEntries:
         tanh__36 = paddle._C_ops.tanh_(add__152)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_137 = paddle.matmul(tanh__36, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_137 = paddle._C_ops.matmul(tanh__36, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__18 = paddle._C_ops.softmax_(matmul_137, 1)
@@ -3992,7 +3992,7 @@ class BlockEntries:
         transpose_26 = paddle._C_ops.transpose(softmax__18, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_138 = paddle.matmul(transpose_26, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_138 = paddle._C_ops.matmul(transpose_26, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_91 = [1]
@@ -4010,13 +4010,13 @@ class BlockEntries:
         concat_42 = paddle._C_ops.concat(combine_54, full_135)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_139 = paddle.matmul(concat_42, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_139 = paddle._C_ops.matmul(concat_42, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__153 = paddle._C_ops.add_(matmul_139, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_140 = paddle.matmul(multiply__56, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_140 = paddle._C_ops.matmul(multiply__56, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__154 = paddle._C_ops.add_(add__153, matmul_140)
@@ -4070,7 +4070,7 @@ class BlockEntries:
         multiply__59 = paddle._C_ops.multiply_(sigmoid__56, tanh_18)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_141 = paddle.matmul(multiply__59, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_141 = paddle._C_ops.matmul(multiply__59, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__157 = paddle._C_ops.add_(matmul_141, parameter_308)
@@ -4103,10 +4103,10 @@ class BlockEntries:
         one_hot_19 = paddle._C_ops.one_hot(argmax_18 % paddle.cast(full_139, argmax_18.dtype), full_139)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_142 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_142 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_143 = paddle.matmul(multiply__59, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_143 = paddle._C_ops.matmul(multiply__59, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__158 = paddle._C_ops.add_(matmul_143, parameter_301)
@@ -4124,7 +4124,7 @@ class BlockEntries:
         tanh__38 = paddle._C_ops.tanh_(add__159)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_144 = paddle.matmul(tanh__38, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_144 = paddle._C_ops.matmul(tanh__38, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__19 = paddle._C_ops.softmax_(matmul_144, 1)
@@ -4133,7 +4133,7 @@ class BlockEntries:
         transpose_27 = paddle._C_ops.transpose(softmax__19, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_145 = paddle.matmul(transpose_27, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_145 = paddle._C_ops.matmul(transpose_27, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_94 = [1]
@@ -4151,13 +4151,13 @@ class BlockEntries:
         concat_44 = paddle._C_ops.concat(combine_56, full_140)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_146 = paddle.matmul(concat_44, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_146 = paddle._C_ops.matmul(concat_44, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__160 = paddle._C_ops.add_(matmul_146, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_147 = paddle.matmul(multiply__59, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_147 = paddle._C_ops.matmul(multiply__59, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__161 = paddle._C_ops.add_(add__160, matmul_147)
@@ -4211,7 +4211,7 @@ class BlockEntries:
         multiply__62 = paddle._C_ops.multiply_(sigmoid__59, tanh_19)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_148 = paddle.matmul(multiply__62, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_148 = paddle._C_ops.matmul(multiply__62, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__164 = paddle._C_ops.add_(matmul_148, parameter_308)
@@ -4244,10 +4244,10 @@ class BlockEntries:
         one_hot_20 = paddle._C_ops.one_hot(argmax_19 % paddle.cast(full_144, argmax_19.dtype), full_144)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_149 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_149 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_150 = paddle.matmul(multiply__62, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_150 = paddle._C_ops.matmul(multiply__62, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__165 = paddle._C_ops.add_(matmul_150, parameter_301)
@@ -4265,7 +4265,7 @@ class BlockEntries:
         tanh__40 = paddle._C_ops.tanh_(add__166)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_151 = paddle.matmul(tanh__40, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_151 = paddle._C_ops.matmul(tanh__40, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__20 = paddle._C_ops.softmax_(matmul_151, 1)
@@ -4274,7 +4274,7 @@ class BlockEntries:
         transpose_28 = paddle._C_ops.transpose(softmax__20, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_152 = paddle.matmul(transpose_28, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_152 = paddle._C_ops.matmul(transpose_28, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_97 = [1]
@@ -4292,13 +4292,13 @@ class BlockEntries:
         concat_46 = paddle._C_ops.concat(combine_58, full_145)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_153 = paddle.matmul(concat_46, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_153 = paddle._C_ops.matmul(concat_46, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__167 = paddle._C_ops.add_(matmul_153, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_154 = paddle.matmul(multiply__62, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_154 = paddle._C_ops.matmul(multiply__62, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__168 = paddle._C_ops.add_(add__167, matmul_154)
@@ -4352,7 +4352,7 @@ class BlockEntries:
         multiply__65 = paddle._C_ops.multiply_(sigmoid__62, tanh_20)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_155 = paddle.matmul(multiply__65, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_155 = paddle._C_ops.matmul(multiply__65, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__171 = paddle._C_ops.add_(matmul_155, parameter_308)
@@ -4385,10 +4385,10 @@ class BlockEntries:
         one_hot_21 = paddle._C_ops.one_hot(argmax_20 % paddle.cast(full_149, argmax_20.dtype), full_149)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_156 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_156 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_157 = paddle.matmul(multiply__65, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_157 = paddle._C_ops.matmul(multiply__65, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__172 = paddle._C_ops.add_(matmul_157, parameter_301)
@@ -4406,7 +4406,7 @@ class BlockEntries:
         tanh__42 = paddle._C_ops.tanh_(add__173)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_158 = paddle.matmul(tanh__42, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_158 = paddle._C_ops.matmul(tanh__42, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__21 = paddle._C_ops.softmax_(matmul_158, 1)
@@ -4415,7 +4415,7 @@ class BlockEntries:
         transpose_29 = paddle._C_ops.transpose(softmax__21, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_159 = paddle.matmul(transpose_29, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_159 = paddle._C_ops.matmul(transpose_29, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_100 = [1]
@@ -4433,13 +4433,13 @@ class BlockEntries:
         concat_48 = paddle._C_ops.concat(combine_60, full_150)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_160 = paddle.matmul(concat_48, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_160 = paddle._C_ops.matmul(concat_48, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__174 = paddle._C_ops.add_(matmul_160, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_161 = paddle.matmul(multiply__65, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_161 = paddle._C_ops.matmul(multiply__65, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__175 = paddle._C_ops.add_(add__174, matmul_161)
@@ -4493,7 +4493,7 @@ class BlockEntries:
         multiply__68 = paddle._C_ops.multiply_(sigmoid__65, tanh_21)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_162 = paddle.matmul(multiply__68, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_162 = paddle._C_ops.matmul(multiply__68, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__178 = paddle._C_ops.add_(matmul_162, parameter_308)
@@ -4526,10 +4526,10 @@ class BlockEntries:
         one_hot_22 = paddle._C_ops.one_hot(argmax_21 % paddle.cast(full_154, argmax_21.dtype), full_154)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_163 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_163 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_164 = paddle.matmul(multiply__68, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_164 = paddle._C_ops.matmul(multiply__68, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__179 = paddle._C_ops.add_(matmul_164, parameter_301)
@@ -4547,7 +4547,7 @@ class BlockEntries:
         tanh__44 = paddle._C_ops.tanh_(add__180)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_165 = paddle.matmul(tanh__44, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_165 = paddle._C_ops.matmul(tanh__44, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__22 = paddle._C_ops.softmax_(matmul_165, 1)
@@ -4556,7 +4556,7 @@ class BlockEntries:
         transpose_30 = paddle._C_ops.transpose(softmax__22, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_166 = paddle.matmul(transpose_30, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_166 = paddle._C_ops.matmul(transpose_30, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_103 = [1]
@@ -4574,13 +4574,13 @@ class BlockEntries:
         concat_50 = paddle._C_ops.concat(combine_62, full_155)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_167 = paddle.matmul(concat_50, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_167 = paddle._C_ops.matmul(concat_50, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__181 = paddle._C_ops.add_(matmul_167, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_168 = paddle.matmul(multiply__68, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_168 = paddle._C_ops.matmul(multiply__68, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__182 = paddle._C_ops.add_(add__181, matmul_168)
@@ -4634,7 +4634,7 @@ class BlockEntries:
         multiply__71 = paddle._C_ops.multiply_(sigmoid__68, tanh_22)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_169 = paddle.matmul(multiply__71, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_169 = paddle._C_ops.matmul(multiply__71, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__185 = paddle._C_ops.add_(matmul_169, parameter_308)
@@ -4667,10 +4667,10 @@ class BlockEntries:
         one_hot_23 = paddle._C_ops.one_hot(argmax_22 % paddle.cast(full_159, argmax_22.dtype), full_159)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_170 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_170 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_171 = paddle.matmul(multiply__71, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_171 = paddle._C_ops.matmul(multiply__71, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__186 = paddle._C_ops.add_(matmul_171, parameter_301)
@@ -4688,7 +4688,7 @@ class BlockEntries:
         tanh__46 = paddle._C_ops.tanh_(add__187)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_172 = paddle.matmul(tanh__46, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_172 = paddle._C_ops.matmul(tanh__46, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__23 = paddle._C_ops.softmax_(matmul_172, 1)
@@ -4697,7 +4697,7 @@ class BlockEntries:
         transpose_31 = paddle._C_ops.transpose(softmax__23, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_173 = paddle.matmul(transpose_31, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_173 = paddle._C_ops.matmul(transpose_31, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_106 = [1]
@@ -4715,13 +4715,13 @@ class BlockEntries:
         concat_52 = paddle._C_ops.concat(combine_64, full_160)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_174 = paddle.matmul(concat_52, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_174 = paddle._C_ops.matmul(concat_52, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__188 = paddle._C_ops.add_(matmul_174, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_175 = paddle.matmul(multiply__71, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_175 = paddle._C_ops.matmul(multiply__71, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__189 = paddle._C_ops.add_(add__188, matmul_175)
@@ -4775,7 +4775,7 @@ class BlockEntries:
         multiply__74 = paddle._C_ops.multiply_(sigmoid__71, tanh_23)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_176 = paddle.matmul(multiply__74, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_176 = paddle._C_ops.matmul(multiply__74, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__192 = paddle._C_ops.add_(matmul_176, parameter_308)
@@ -4808,10 +4808,10 @@ class BlockEntries:
         one_hot_24 = paddle._C_ops.one_hot(argmax_23 % paddle.cast(full_164, argmax_23.dtype), full_164)
 
         # pd_op.matmul: (-1x26x256xf32) <- (-1x26x512xf32, 512x256xf32)
-        matmul_177 = paddle.matmul(transpose_6, parameter_299, transpose_x=False, transpose_y=False)
+        matmul_177 = paddle._C_ops.matmul(transpose_6, parameter_299, False, False)
 
         # pd_op.matmul: (-1x256xf32) <- (-1x256xf32, 256x256xf32)
-        matmul_178 = paddle.matmul(multiply__74, parameter_300, transpose_x=False, transpose_y=False)
+        matmul_178 = paddle._C_ops.matmul(multiply__74, parameter_300, False, False)
 
         # pd_op.add_: (-1x256xf32) <- (-1x256xf32, 256xf32)
         add__193 = paddle._C_ops.add_(matmul_178, parameter_301)
@@ -4829,7 +4829,7 @@ class BlockEntries:
         tanh__48 = paddle._C_ops.tanh_(add__194)
 
         # pd_op.matmul: (-1x26x1xf32) <- (-1x26x256xf32, 256x1xf32)
-        matmul_179 = paddle.matmul(tanh__48, parameter_302, transpose_x=False, transpose_y=False)
+        matmul_179 = paddle._C_ops.matmul(tanh__48, parameter_302, False, False)
 
         # pd_op.softmax_: (-1x26x1xf32) <- (-1x26x1xf32)
         softmax__24 = paddle._C_ops.softmax_(matmul_179, 1)
@@ -4838,7 +4838,7 @@ class BlockEntries:
         transpose_32 = paddle._C_ops.transpose(softmax__24, [0, 2, 1])
 
         # pd_op.matmul: (-1x1x512xf32) <- (-1x1x26xf32, -1x26x512xf32)
-        matmul_180 = paddle.matmul(transpose_32, transpose_6, transpose_x=False, transpose_y=False)
+        matmul_180 = paddle._C_ops.matmul(transpose_32, transpose_6, False, False)
 
         # pd_op.full_int_array: (1xi64) <- ()
         full_int_array_109 = [1]
@@ -4856,13 +4856,13 @@ class BlockEntries:
         concat_54 = paddle._C_ops.concat(combine_66, full_165)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x550xf32, 1024x550xf32)
-        matmul_181 = paddle.matmul(concat_54, parameter_303, transpose_x=False, transpose_y=True)
+        matmul_181 = paddle._C_ops.matmul(concat_54, parameter_303, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, 1024xf32)
         add__195 = paddle._C_ops.add_(matmul_181, parameter_304)
 
         # pd_op.matmul: (-1x1024xf32) <- (-1x256xf32, 1024x256xf32)
-        matmul_182 = paddle.matmul(multiply__74, parameter_305, transpose_x=False, transpose_y=True)
+        matmul_182 = paddle._C_ops.matmul(multiply__74, parameter_305, False, True)
 
         # pd_op.add_: (-1x1024xf32) <- (-1x1024xf32, -1x1024xf32)
         add__196 = paddle._C_ops.add_(add__195, matmul_182)
@@ -4916,7 +4916,7 @@ class BlockEntries:
         multiply__77 = paddle._C_ops.multiply_(sigmoid__74, tanh__50)
 
         # pd_op.matmul: (-1x38xf32) <- (-1x256xf32, 256x38xf32)
-        matmul_183 = paddle.matmul(multiply__77, parameter_307, transpose_x=False, transpose_y=False)
+        matmul_183 = paddle._C_ops.matmul(multiply__77, parameter_307, False, False)
 
         # pd_op.add_: (-1x38xf32) <- (-1x38xf32, 38xf32)
         add__199 = paddle._C_ops.add_(matmul_183, parameter_308)

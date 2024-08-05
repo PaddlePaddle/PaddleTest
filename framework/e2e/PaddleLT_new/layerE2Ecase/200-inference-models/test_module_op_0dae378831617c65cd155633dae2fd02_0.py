@@ -500,7 +500,7 @@ class BlockEntries:
         cast_16 = paddle._C_ops.cast(conv2d_transpose_7, paddle.float16)
 
         # pd_op.add: (-1x3x-1x-1xf16) <- (-1x3x-1x-1xf16, 1x3x1x1xf16)
-        add_0 = cast_16 + reshape_0
+        add_0 = paddle._C_ops.add(cast_16, reshape_0)
 
         # pd_op.tanh: (-1x3x-1x-1xf16) <- (-1x3x-1x-1xf16)
         tanh_0 = paddle._C_ops.tanh(add_0)
