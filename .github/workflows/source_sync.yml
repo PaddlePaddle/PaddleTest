@@ -1,11 +1,13 @@
 name: source code sync to bos
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: Source code synchronization
 on: [push]
 jobs:
-  test_bos:
+  upload_bos:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 20
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-activate-base: true
@@ -17,8 +19,9 @@ jobs:
         run: |
           ls -l
           pwd
-          tar -zcf PaddleTest.tar.gz ../PaddleTest
+          cd ../
+          tar -zcf PaddleTest.tar.gz ./PaddleTest
           python -m pip install bce-python-sdk==0.8.74
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "Branch Name: $BRANCH_NAME"
-          python tools/bos_upload.py PaddleTest.tar.gz xly-devops/PaddleTest
+          python ./PaddleTest/tools/bos_upload.py PaddleTest.tar.gz xly-devops/PaddleTest
