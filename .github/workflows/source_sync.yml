@@ -1,10 +1,26 @@
 name: source code sync to bos
 run-name: Source code synchronization
-on: [push]
+on: 
+  workflow_dispatch:
 jobs:
   upload_bos:
     runs-on: ubuntu-latest
     steps:
+      - name: Git Version
+        run: git --version
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
+      - name: Download and install Git 2.34
+        run: |
+          wget https://github.com/git/git/archive/refs/tags/v2.34.0.zip
+          unzip v2.34.0.zip
+          cd git-2.34.0
+          make prefix=/usr/local all
+          sudo make prefix=/usr/local install
+      - name: Check Git version
+        run: git --version
       - uses: actions/checkout@v4
         with:
           fetch-depth: 20
