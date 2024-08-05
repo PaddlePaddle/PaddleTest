@@ -56,7 +56,7 @@ elif [[ $SUITE_NAME == "PaddleX" ]]; then
     modules_info_file=${BASE_PATH}/PaddleX_models.txt
     install_deps_cmd="pip install -e . && paddlex --install -y"
 else
-    install_deps_cmd="pip install -e . && paddlex --install -y $SUITE_NAME"
+    install_deps_cmd="pip install -e . && echo n |paddlex --install $SUITE_NAME"
     modules_info_file=${BASE_PATH}/${SUITE_NAME}_models.txt
 fi
 eval ${install_deps_cmd}
