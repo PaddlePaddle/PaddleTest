@@ -20,7 +20,7 @@ jobs:
           ls -l
           pwd
           cd ../
-          tar -zcf PaddleTest.tar.gz ./PaddleTest
+          tar -zcf PaddleTest_workflow.tar.gz ./PaddleTest
           python -m pip install bce-python-sdk==0.8.74
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "Branch Name: $BRANCH_NAME"
