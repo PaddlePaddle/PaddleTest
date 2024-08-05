@@ -1,0 +1,24 @@
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
+jobs:
+  test_bos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+      - name: upload-source-code
+        env:
+          AK: ${{ secrets.BOS_AK }}
+          SK: ${{ secrets.BOS_SK }}
+        run: |
+          ls -l
+          pwd
+          tar -zcf PaddleTest.tar.gz ../PaddleTest
+          python -m pip install bce-python-sdk==0.8.74
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          echo "Branch Name: $BRANCH_NAME"
+          python tools/bos_upload.py PaddleTest.tar.gz xly-devops/PaddleTest
