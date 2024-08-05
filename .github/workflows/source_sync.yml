@@ -1,4 +1,4 @@
-name: learn-github-actions
+name: source code sync to bos
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
 jobs:
