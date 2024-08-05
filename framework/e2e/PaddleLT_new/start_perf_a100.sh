@@ -44,7 +44,6 @@ ${python_ver} run.py
 
 elif [ $PLT_PERF_CONTENT == "kernel" ];then
 export docker_name=${DOCKER_NAME:-PaddleLayerTest_perf_${AGILE_PIPELINE_BUILD_NUMBER}}
-docker container ls -a --filter "name=${docker_name}" --format "{{.ID}}" | xargs -r docker rm -f
 
 docker exec -e "PLT_DEVICE_ID=${PLT_DEVICE_ID}" \
   -e "AK=${AK}" -e "SK=${SK}" \
