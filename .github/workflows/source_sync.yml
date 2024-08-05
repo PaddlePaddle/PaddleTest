@@ -24,4 +24,4 @@ jobs:
           python -m pip install bce-python-sdk==0.8.74
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           echo "Branch Name: $BRANCH_NAME"
-          python ./PaddleTest/tools/bos_upload.py PaddleTest.tar.gz xly-devops/PaddleTest
+          python ./PaddleTest/tools/bos_upload.py PaddleTest_workflow.tar.gz xly-devops/PaddleTest
