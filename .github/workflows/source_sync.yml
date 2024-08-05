@@ -1,5 +1,5 @@
 name: source code sync to bos
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: Source code synchronization
 on: [push]
 jobs:
   test_bos:
