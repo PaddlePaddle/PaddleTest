@@ -1,6 +1,6 @@
 name: source code sync to bos
 run-name: Source code synchronization
-on: 
+on:
   workflow_dispatch:
 jobs:
   upload_bos:
