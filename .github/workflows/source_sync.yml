@@ -16,9 +16,7 @@ jobs:
           entrypoint: /bin/sh
           args: |
             -c "
-            git clone https://github.com/PaddlePaddle/PaddleTest.git --depth=10 .
-            ls -l
-            pwd
-            tar -czf PaddleTest_workflow.tar.gz *
-            python3 ./tools/bos_upload.py PaddleTest_workflow.tar.gz xly-devops/PaddleTest
+            git clone https://github.com/PaddlePaddle/PaddleTest.git --depth=10
+            tar -zcf PaddleTest_workflow.tar.gz PaddleTest
+            python3 ./PaddleTest/tools/bos_upload.py PaddleTest_workflow.tar.gz xly-devops/PaddleTest
             "
