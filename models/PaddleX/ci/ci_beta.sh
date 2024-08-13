@@ -39,7 +39,7 @@ function run_command(){
         printf "\e[32m|%-20s| %-20s | %-50s | %-20s\n\e[0m" "[${time_stamp}]" ${module_name} "Retrying $n times with comand: ${command}"
         eval $command
         last_status=${PIPESTATUS[0]}
-        if [[ $n -gt 3 && $last_status != 0 ]]; then
+        if [[ $n -eq 3 && $last_status != 0 ]]; then
             echo "Retry 3 times failed with comand: ${command}"
             exit 1
         fi
@@ -62,10 +62,10 @@ declare -A model_dict
 
 if [[ -z $SUITE_NAME ]]; then
     modules_info_file=${BASE_PATH}/PaddleX_simplify_models.txt
-    install_deps_cmd="pip install -e . && paddlex --install --use_local_repos"
+    install_deps_cmd="pip install -e . && paddlex --install"
 elif [[ $SUITE_NAME == "PaddleX" ]]; then
     modules_info_file=${BASE_PATH}/PaddleX_models.txt
-    install_deps_cmd="pip install -e . && paddlex --install --use_local_repos"
+    install_deps_cmd="pip install -e . && paddlex --install"
 else
     install_deps_cmd="pip install -e . && paddlex --install --use_local_repos $SUITE_NAME"
     modules_info_file=${BASE_PATH}/${SUITE_NAME}_models.txt
