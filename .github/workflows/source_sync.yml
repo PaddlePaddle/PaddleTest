@@ -4,40 +4,19 @@ on:
   workflow_dispatch:
 jobs:
   upload_bos:
+    if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-latest
     steps:
-      - name: Git Version
-        run: git --version
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
-      - name: Download and install Git 2.34
-        run: |
-          wget https://github.com/git/git/archive/refs/tags/v2.34.0.zip
-          unzip v2.34.0.zip
-          cd git-2.34.0
-          make prefix=/usr/local all
-          sudo make prefix=/usr/local install
-      - name: Check Git version
-        run: git --version
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 20
-      - uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-activate-base: true
-          activate-environment: ""
-      - name: upload-source-code
+      - name: code-clone-upload
         env:
           AK: ${{ secrets.BOS_AK }}
           SK: ${{ secrets.BOS_SK }}
-        run: |
-          ls -l
-          pwd
-          cd ../
-          tar -zcf PaddleTest_workflow.tar.gz ./PaddleTest
-          python -m pip install bce-python-sdk==0.8.74
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          echo "Branch Name: $BRANCH_NAME"
-          python ./PaddleTest/tools/bos_upload.py PaddleTest_workflow.tar.gz xly-devops/PaddleTest
+        uses: docker://xieyunshen2020/paddleqa:code-clone-git2.34
+        with:
+          entrypoint: /bin/sh
+          args: |
+            -c "
+            git clone https://github.com/PaddlePaddle/PaddleTest.git --depth=10
+            tar -zcf PaddleTest_workflow.tar.gz PaddleTest
+            python3 ./PaddleTest/tools/bos_upload.py PaddleTest_workflow.tar.gz xly-devops/PaddleTest
+            "
