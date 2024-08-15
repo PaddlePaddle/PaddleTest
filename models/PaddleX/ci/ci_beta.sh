@@ -24,15 +24,27 @@ function func_parser_dataset_url(){
 }
 
 function run_command(){
+    set +e
     command=$1
     module_name=$2
     time_stamp=$(date +"%Y-%m-%d %H:%M:%S")
     printf "\e[32m|%-20s| %-20s | %-50s | %-20s\n\e[0m" "[${time_stamp}]" ${module_name} "Run ${command}"
     eval $command
     last_status=${PIPESTATUS[0]}
-    if [[ $last_status != 0 ]];then
-        exit 1
-    fi
+    n=1
+    # Try 3 times to run command if it fails
+    while [[ $last_status != 0 ]]; do
+        sleep 10
+        n=`expr $n + 1`
+        printf "\e[32m|%-20s| %-20s | %-50s | %-20s\n\e[0m" "[${time_stamp}]" ${module_name} "Retrying $n times with comand: ${command}"
+        eval $command
+        last_status=${PIPESTATUS[0]}
+        if [[ $n -eq 3 && $last_status != 0 ]]; then
+            echo "Retry 3 times failed with comand: ${command}"
+            exit 1
+        fi
+    done
+    set -e
 }
 
 
@@ -43,18 +55,17 @@ PYTHONPATH="python"
 BASE_PATH=$(cd "$(dirname $0)"; pwd)
 MODULE_OUTPUT_PATH=${BASE_PATH}/outputs
 # 安装paddlex，完成环境准备
-
-
+pip config set global.index-url https://mirrors.bfsu.edu.cn/pypi/web/simple
 
 declare -A weight_dict
 declare -A model_dict
 
 if [[ -z $SUITE_NAME ]]; then
     modules_info_file=${BASE_PATH}/PaddleX_simplify_models.txt
-    install_deps_cmd="pip install -e . && paddlex --install -y"
+    install_deps_cmd="pip install -e . && paddlex --install"
 elif [[ $SUITE_NAME == "PaddleX" ]]; then
     modules_info_file=${BASE_PATH}/PaddleX_models.txt
-    install_deps_cmd="pip install -e . && paddlex --install -y"
+    install_deps_cmd="pip install -e . && paddlex --install"
 else
     install_deps_cmd="pip install -e . && paddlex --install --use_local_repos $SUITE_NAME"
     modules_info_file=${BASE_PATH}/${SUITE_NAME}_models.txt
