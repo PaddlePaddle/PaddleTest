@@ -76,4 +76,4 @@ jobs:
           file_name=$REPO_NAME.tar
           tar -cf $REPO_NAME.tar ${{ matrix.path }}
           python -m pip install bce-python-sdk==0.8.74
-          python tools/bos_upload.py ${file_name} paddle-qa/CodeSync
+          python tools/bos_upload.py ${file_name} paddle-model-ecology/paddlex/PaddleX3.0/repos
