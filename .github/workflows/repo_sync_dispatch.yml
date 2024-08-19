@@ -2,8 +2,7 @@ name: Paddle kits repos sync via repository_dispatch
 run-name: Paddle kits repos sync Runs on ${{ github.event_name }}
 on:
   repository_dispatch:
-    types:
-      - sync-event
+    types: [sync-event]
 
 jobs:
   paddleqa-checkout:
