@@ -38,3 +38,4 @@ jobs:
           tar -cf $REPO_NAME.tar ${{ github.event.client_payload.path }}
           python -m pip install bce-python-sdk==0.8.74
           python tools/bos_upload.py ${file_name} paddle-qa/CodeSync/${{ github.event.client_payload.ref }}/
+          echo "Bos link: https://paddle-qa.bj.bcebos.com/CodeSync/${{ github.event.client_payload.ref }}/$file_name"
