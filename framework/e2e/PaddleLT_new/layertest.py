@@ -71,12 +71,11 @@ class LayerTest(object):
             from engine.torch_engine_map import torch_engine_map as engine_map
 
         engine = testing
-        self.logger.get_log().info(f"CI _single_run debug engine is: {engine}")
         if "layertest_engine_cover" in self.test_config.yml:  # 执行器覆盖配置
             if testing in self.test_config.yml.get("layertest_engine_cover"):
                 if layerfile in self.test_config.yml.get("layertest_engine_cover")[testing]:
-                    self.logger.get_log().info(f"CI _single_run debug layerfile is: {layerfile}")
                     engine = self.test_config.yml.get("layertest_engine_cover")[testing][layerfile]
+                    self.logger.get_log().info(f"testing engine has been covered. Real engine is: {engine}")
 
         layer_test = engine_map[engine](
             testing=self.testings.get(testing), layerfile=layerfile, device_place_id=device_place_id
