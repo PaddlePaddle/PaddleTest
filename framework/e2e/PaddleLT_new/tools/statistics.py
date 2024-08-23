@@ -212,6 +212,12 @@ def sublayer_perf_gsb_gen(compare_dict, compare_list):
                 )
                 gsb_dict[compare["latest"] + "^" + compare["baseline"] + "^" + "compare"] = single_gsb_dict
 
+    for key, value in gsb_dict.items():
+        all_num = value["G"] + value["S"] + value["B"]
+        gsb_dict[key]["G_ratio"] = round(value["G"] / all_num, 2)
+        gsb_dict[key]["S_ratio"] = round(value["S"] / all_num, 2)
+        gsb_dict[key]["B_ratio"] = round(value["B"] / all_num, 2)
+
     return gsb_dict
 
 
@@ -297,6 +303,13 @@ def kernel_perf_gsb_gen(compare_dict, compare_list):
                     ],
                 )
                 gsb_dict[compare["latest"] + "^" + compare["baseline"] + "^" + "kernel_count_compare"] = single_gsb_dict
+
+    for key, value in gsb_dict.items():
+        all_num = value["G"] + value["S"] + value["B"]
+        gsb_dict[key]["G_ratio"] = round(value["G"] / all_num, 2)
+        gsb_dict[key]["S_ratio"] = round(value["S"] / all_num, 2)
+        gsb_dict[key]["B_ratio"] = round(value["B"] / all_num, 2)
+
     return gsb_dict
 
 
