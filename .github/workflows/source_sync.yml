@@ -2,21 +2,39 @@ name: source code sync to bos
 run-name: Source code synchronization
 on:
   workflow_dispatch:
+  push:
 jobs:
   upload_bos:
     if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-latest
     steps:
-      - name: code-clone-upload
+      - name: PaddleTest Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools
+      - name: Code Checkout
+        id: checkout
+        uses: XieYunshen/PaddleQACheckout@v1.0.0
+        with:
+          repository: "PaddlePaddle/PaddleTest"
+          ref: "develop"
+          submodules: "false"
+          fetch_depth: 20
+          path: "PaddleTest"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Upload Code
         env:
           AK: ${{ secrets.BOS_AK }}
           SK: ${{ secrets.BOS_SK }}
-        uses: docker://xieyunshen2020/paddleqa:code-clone-git2.34
-        with:
-          entrypoint: /bin/sh
-          args: |
-            -c "
-            git clone https://github.com/PaddlePaddle/PaddleTest.git --depth=10
-            tar -zcf PaddleTest_workflow.tar.gz PaddleTest
-            python3 ./PaddleTest/tools/bos_upload.py PaddleTest_workflow.tar.gz xly-devops/PaddleTest
-            "
+        run: |
+          tree -L 3
+          path=PaddleTest
+          REPO_NAME=PaddleTest
+          file_name=$REPO_NAME.tar.gz
+          tar -zcf ${file_name} ${path}
+          python -m pip install bce-python-sdk==0.8.74
+          python tools/bos_upload.py ${file_name} xly-devops/PaddleTest
+          echo "Bos link: https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz"
