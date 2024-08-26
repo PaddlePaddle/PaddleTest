@@ -1,0 +1,22 @@
+name: source code sync to bos
+run-name: Source code synchronization
+on:
+  workflow_dispatch:
+jobs:
+  upload_bos:
+    if: ${{ !github.event.repository.fork }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: code-clone-upload
+        env:
+          AK: ${{ secrets.BOS_AK }}
+          SK: ${{ secrets.BOS_SK }}
+        uses: docker://xieyunshen2020/paddleqa:code-clone-git2.34
+        with:
+          entrypoint: /bin/sh
+          args: |
+            -c "
+            git clone https://github.com/PaddlePaddle/PaddleTest.git --depth=10
+            tar -zcf PaddleTest_workflow.tar.gz PaddleTest
+            python3 ./PaddleTest/tools/bos_upload.py PaddleTest_workflow.tar.gz xly-devops/PaddleTest
+            "

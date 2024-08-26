@@ -1406,7 +1406,7 @@ class BlockEntries:
         combine_0 = [slice_1, full_16]
 
         # pd_op.expand: (-1x26xi64) <- (1x26xi64, [1xi32, 1xi32])
-        expand_0 = paddle._C_ops.expand(unsqueeze__12, combine_0)
+        expand_0 = paddle._C_ops.expand(unsqueeze__12, [x.reshape([]) for x in combine_0])
 
         # pd_op.embedding: (-1x26x512xf16) <- (-1x26xi64, 26x512xf16)
         embedding_0 = paddle._C_ops.embedding(expand_0, parameter_301, -1, False)

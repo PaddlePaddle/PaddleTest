@@ -69,10 +69,18 @@ class LayerTest(object):
             from engine.paddle_engine_map import paddle_engine_map as engine_map
         elif os.environ.get("FRAMEWORK") == "torch":
             from engine.torch_engine_map import torch_engine_map as engine_map
-        layer_test = engine_map[testing](
+
+        engine = testing
+        if "layertest_engine_cover" in self.test_config.yml:  # 执行器覆盖配置
+            if testing in self.test_config.yml.get("layertest_engine_cover"):
+                if layerfile in self.test_config.yml.get("layertest_engine_cover")[testing]:
+                    engine = self.test_config.yml.get("layertest_engine_cover")[testing][layerfile]
+                    self.logger.get_log().info(f"testing engine has been covered. Real engine is: {engine}")
+
+        layer_test = engine_map[engine](
             testing=self.testings.get(testing), layerfile=layerfile, device_place_id=device_place_id
         )
-        res = getattr(layer_test, testing)()
+        res = getattr(layer_test, engine)()
         return res
 
     def _case_run(self):

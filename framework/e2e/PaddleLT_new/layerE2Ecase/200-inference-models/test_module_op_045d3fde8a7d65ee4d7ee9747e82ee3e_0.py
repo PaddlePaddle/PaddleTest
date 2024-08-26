@@ -2630,7 +2630,7 @@ class BlockEntries:
         combine_41 = [slice_106, full_82]
 
         # pd_op.reshape_: (-1x1536xf32, 0x-1x1536x1x1xf32) <- (-1x1536x1x1xf32, [1xi32, 1xi32])
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(pool2d_16, [x.reshape([1]) for x in combine_41]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(pool2d_16, [x.reshape([]) for x in combine_41]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.matmul: (-1x1000xf32) <- (-1x1536xf32, 1536x1000xf32)
         matmul_0 = paddle._C_ops.matmul(reshape__0, parameter_419, False, False)

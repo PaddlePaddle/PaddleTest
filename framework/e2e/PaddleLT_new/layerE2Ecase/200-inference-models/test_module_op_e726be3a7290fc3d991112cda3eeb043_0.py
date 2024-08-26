@@ -1394,7 +1394,7 @@ class BlockEntries:
         combine_5 = [slice_0, full_6]
 
         # pd_op.reshape_: (-1x-1xf16, 0x-1x400xf16) <- (-1x400xf16, [1xi32, 1xi32])
-        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(mean_0, [x.reshape([1]) for x in combine_5]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
+        reshape__0, reshape__1 = (lambda x, f: f(x))(paddle._C_ops.reshape_(mean_0, [x.reshape([]) for x in combine_5]), lambda out: out if isinstance(out, (list, tuple)) else (out, None))
 
         # pd_op.cast: (-1x-1xf32) <- (-1x-1xf16)
         cast_2 = paddle._C_ops.cast(reshape__0, paddle.float32)
