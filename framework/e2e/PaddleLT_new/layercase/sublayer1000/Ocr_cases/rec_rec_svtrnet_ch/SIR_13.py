@@ -36,6 +36,7 @@ class LayerCase(paddle.nn.Layer):
         var_0,    # (shape: [10, 640, 64], dtype: paddle.float32, stop_gradient: False)
         var_1,    # (shape: [1, 1, 640, 640], dtype: paddle.float32, stop_gradient: True)
     ):
+        paddle.seed(33)
         var_2 = paddle.nn.functional.norm.layer_norm(var_0, normalized_shape=[64], weight=self.parameter_3, bias=self.parameter_4, epsilon=1e-06)
         var_3 = paddle.nn.functional.common.linear(x=var_2, weight=self.parameter_5, bias=self.parameter_0, name=None)
         var_4 = var_3.reshape((0, -1, 3, 2, 32,))
@@ -94,7 +95,7 @@ class TestLayer(unittest.TestCase):
                 net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
             else:
                 net = paddle.jit.to_static(net, full_graph=True)
-        paddle.seed(123)
+        paddle.seed(33)
         outs = net(*self.inputs)
         return outs
     def test_ast_prim_cinn(self):
