@@ -62,6 +62,7 @@ class LayerCase(paddle.nn.Layer):
         var_1,  # (shape: [], dtype: paddle.int32, stop_gradient: True)
         var_2,  # (shape: [], dtype: paddle.int32, stop_gradient: True)
     ):
+        paddle.seed(33)
         var_3 = paddle.nn.functional.norm.layer_norm(
             var_0, normalized_shape=[128], weight=self.parameter_9, bias=self.parameter_3, epsilon=1e-06
         )
@@ -150,7 +151,7 @@ class TestLayer(unittest.TestCase):
                 net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
             else:
                 net = paddle.jit.to_static(net, full_graph=True)
-        paddle.seed(123)
+        paddle.seed(33)
         outs = net(*self.inputs)
         return outs
 
