@@ -11,6 +11,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [1, 128, 64, 128], dtype: paddle.float32, stop_gradient: False)
     ):
+        paddle.seed(123)
         var_1 = paddle.nn.functional.common.dropout2d(var_0, p=0.1, training=True, data_format='NCHW', name=None)
         return var_1
 

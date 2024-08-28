@@ -19,6 +19,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [43, 704, 7, 7], dtype: paddle.float32, stop_gradient: False)
     ):
+        paddle.seed(123)
         var_1 = paddle.nn.functional.pooling.avg_pool2d(var_0, kernel_size=[7, 7])
         var_2 = var_1.flatten(1)
         var_3 = paddle.nn.functional.common.dropout(var_2, p=0.05, training=True)

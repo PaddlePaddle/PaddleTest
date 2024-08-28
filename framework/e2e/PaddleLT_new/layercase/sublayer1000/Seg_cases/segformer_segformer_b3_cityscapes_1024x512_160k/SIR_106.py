@@ -43,6 +43,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [1, 512, 512], dtype: paddle.float32, stop_gradient: False)
     ):
+        paddle.seed(123)
         var_1 = paddle.nn.functional.norm.layer_norm(var_0, normalized_shape=[512], weight=self.parameter_3, bias=self.parameter_5, epsilon=1e-06)
         var_2 = var_1.shape
         var_3 = var_2.__getitem__(0)

@@ -27,6 +27,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [11, 192, 28, 28], dtype: paddle.float32, stop_gradient: False)
     ):
+        paddle.seed(123)
         var_1 = paddle.nn.functional.conv._conv_nd(var_0, self.parameter_0, bias=self.parameter_3, stride=[2, 2], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         var_2 = var_1.flatten(2)
         var_3 = var_2.transpose([0, 2, 1])

@@ -36,6 +36,7 @@ class LayerCase(paddle.nn.Layer):
         var_0,    # (shape: [10, 200, 64], dtype: paddle.float32, stop_gradient: False)
         var_1,    # (shape: [1, 1, 200, 200], dtype: paddle.float32, stop_gradient: True)
     ):
+        paddle.seed(123)
         var_2 = paddle.nn.functional.norm.layer_norm(var_0, normalized_shape=[64], weight=self.parameter_0, bias=self.parameter_2, epsilon=1e-06)
         var_3 = paddle.nn.functional.common.linear(x=var_2, weight=self.parameter_1, bias=self.parameter_5, name=None)
         var_4 = var_3.reshape((0, -1, 3, 2, 32,))
