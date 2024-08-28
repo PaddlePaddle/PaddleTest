@@ -1,3 +1,4 @@
+# method:cast||method:__add__||method:cast||method:__sub__||method:cast||method:__sub__||api:paddle.nn.functional.loss.cross_entropy||method:__mul__||api:paddle.nn.functional.loss.cross_entropy||method:__mul__||method:__add__||method:__rmul__||method:__mul__||method:sum||method:__truediv__
 import paddle
 import unittest
 import numpy as np
@@ -78,7 +79,7 @@ class TestLayer(unittest.TestCase):
         return outs
 
     def test_ast_prim_cinn(self):
-        st_out = self.train(self.net, to_static=True, with_prim=True)
+        st_out = self.train(self.net, to_static=True)
         cinn_out = self.train(self.net, to_static=True, with_prim=True, with_cinn=True)
         for st, cinn in zip(paddle.utils.flatten(st_out), paddle.utils.flatten(cinn_out)):
             np.testing.assert_allclose(st.numpy(), cinn.numpy(), atol=1e-8)
