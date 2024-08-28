@@ -20,7 +20,7 @@ class LayerInfer(object):
     构建Layer预测的通用类
     """
 
-    def __init__(self, testing, layerfile, device_place_id):
+    def __init__(self, testing, layerfile, device_place_id, upstream_net):
         """
         初始化
         """

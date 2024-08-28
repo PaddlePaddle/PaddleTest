@@ -59,7 +59,7 @@ class LayerTest(object):
                 # 如果删除过程中发生错误（比如文件不存在或没有权限），则打印错误信息
                 self.logger.get_log().warning(f"Error deleting {filepath}: {e.strerror}")
 
-    def _single_run(self, testing, layerfile, device_place_id=0):
+    def _single_run(self, testing, layerfile, device_place_id=0, upstream_net=None):
         """
         单次执行器测试
         :param testing: 'dy_train', 'dy_eval'...
@@ -78,7 +78,10 @@ class LayerTest(object):
                     self.logger.get_log().info(f"testing engine has been covered. Real engine is: {engine}")
 
         layer_test = engine_map[engine](
-            testing=self.testings.get(testing), layerfile=layerfile, device_place_id=device_place_id
+            testing=self.testings.get(testing),
+            layerfile=layerfile,
+            device_place_id=device_place_id,
+            upstream_net=upstream_net,
         )
         res = getattr(layer_test, engine)()
         return res
@@ -90,14 +93,18 @@ class LayerTest(object):
         exc_func = 0
         exc = 0
         res_dict = {}
+        net = None
         compare_res_list = []
         self.logger.get_log().info("测试case名称: {}".format(self.title))
         fail_testing_list = []
         for testing in self.testings_list:
             try:
                 self.logger.get_log().info("测试执行器: {}".format(testing))
-                res = self._single_run(testing=testing, layerfile=self.layerfile, device_place_id=self.device_place_id)
-                res_dict[testing] = res
+                res = self._single_run(
+                    testing=testing, layerfile=self.layerfile, device_place_id=self.device_place_id, upstream_net=net
+                )
+                res_dict[testing] = res["res"]
+                net = res["net"]
                 if os.environ.get("PLT_SAVE_GT") == "True":  # 开启gt保存
                     gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
                     if not os.path.exists(gt_path):
