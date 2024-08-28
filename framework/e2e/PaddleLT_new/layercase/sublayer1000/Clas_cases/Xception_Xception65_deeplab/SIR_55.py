@@ -19,7 +19,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [10, 2048, 10, 10], dtype: paddle.float32, stop_gradient: False)
     ):
-        paddle.seed(123)
+        paddle.seed(33)
         var_1 = paddle.nn.functional.common.dropout(var_0, p=0.5, axis=None, training=True, mode='downscale_in_infer', name=None)
         var_2 = paddle.nn.functional.pooling.adaptive_avg_pool2d(var_1, output_size=1, data_format='NCHW', name=None)
         var_3 = paddle.tensor.manipulation.squeeze(var_2, axis=[2, 3])
@@ -61,7 +61,7 @@ class TestLayer(unittest.TestCase):
                 net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
             else:
                 net = paddle.jit.to_static(net, full_graph=True)
-        paddle.seed(123)
+        paddle.seed(33)
         outs = net(*self.inputs)
         return outs
     def test_ast_prim_cinn(self):
