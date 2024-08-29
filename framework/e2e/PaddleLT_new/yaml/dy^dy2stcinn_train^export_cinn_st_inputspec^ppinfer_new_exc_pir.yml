@@ -31,7 +31,7 @@ testings:
 
 compare:
   -
-    baseline: 'dy_eval'
+    baseline: 'dy_train'
     latest: 'paddle_infer_new_exc_pir'
     precision:
       delta: 0.00001
