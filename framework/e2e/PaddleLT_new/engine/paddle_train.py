@@ -140,6 +140,7 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy_train").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
         if self.return_net_instance == "True":
             return {"res": {"logit": logit, "data_grad": data_grad}, "net": net}
@@ -174,6 +175,7 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy_dp_train").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
         # return {"logit": logit, "data_grad": data_grad}
         if self.return_net_instance == "True":
@@ -229,6 +231,7 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
         # return {"logit": logit, "data_grad": data_grad}
         if self.return_net_instance == "True":
@@ -260,6 +263,7 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_inputspec").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
         # return {"logit": logit, "data_grad": data_grad}
         if self.return_net_instance == "True":
@@ -291,6 +295,7 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_static_inputspec").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
         # return {"logit": logit, "data_grad": data_grad}
         if self.return_net_instance == "True":
@@ -323,6 +328,7 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_cinn").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
         # return {"logit": logit, "data_grad": data_grad}
         if self.return_net_instance == "True":
@@ -356,6 +362,7 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_cinn_inputspec").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
         # return {"logit": logit, "data_grad": data_grad}
         if self.return_net_instance == "True":
@@ -389,6 +396,7 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_cinn_static_inputspec").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
         # return {"logit": logit, "data_grad": data_grad}
         if self.return_net_instance == "True":
