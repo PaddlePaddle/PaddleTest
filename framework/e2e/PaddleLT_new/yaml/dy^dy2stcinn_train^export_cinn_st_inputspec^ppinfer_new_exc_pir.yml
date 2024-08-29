@@ -36,3 +36,9 @@ compare:
     precision:
       delta: 0.00001
       rtol: 0.000001
+  -
+    baseline: 'dy2st_train_cinn'
+    latest: 'paddle_infer_new_exc_pir'
+    precision:
+      delta: 0.00001
+      rtol: 0.000001
