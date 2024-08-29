@@ -100,7 +100,7 @@ class LayerTest(object):
         for testing in self.testings_list:
             try:
                 self.logger.get_log().info("测试执行器: {}".format(testing))
-                if self.testings.get("use_upstream_net_instance", "False") == "False":
+                if self.testings.get(testing).get("use_upstream_net_instance", "False") == "False":
                     net = None
                 res = self._single_run(
                     testing=testing, layerfile=self.layerfile, device_place_id=self.device_place_id, upstream_net=net
