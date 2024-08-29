@@ -82,6 +82,7 @@ class LayerExport(object):
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save"))
+        return {"res": None}
 
     def jit_save_inputspec(self):
         """jit.save(layer)"""
@@ -95,6 +96,7 @@ class LayerExport(object):
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save_inputspec"))
+        return {"res": None}
 
     def jit_save_static_inputspec(self):
         """jit.save(layer)"""
@@ -108,6 +110,7 @@ class LayerExport(object):
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save_static_inputspec"))
+        return {"res": None}
 
     def jit_save_cinn(self):
         """jit.save(layer)"""
@@ -122,6 +125,7 @@ class LayerExport(object):
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(cinn_net, path=os.path.join(self.path, self.layername, "jit_save_cinn"))
+        return {"res": None}
 
     def jit_save_cinn_inputspec(self):
         """jit.save(layer)"""
@@ -137,6 +141,7 @@ class LayerExport(object):
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(cinn_net, path=os.path.join(self.path, self.layername, "jit_save_cinn_inputspec"))
+        return {"res": None}
 
     def jit_save_cinn_static_inputspec(self):
         """jit.save(layer)"""
@@ -152,3 +157,4 @@ class LayerExport(object):
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(cinn_net, path=os.path.join(self.path, self.layername, "jit_save_cinn_static_inputspec"))
+        return {"res": None}

@@ -106,7 +106,7 @@ class LayerTest(object):
                     testing=testing, layerfile=self.layerfile, device_place_id=self.device_place_id, upstream_net=net
                 )
                 res_dict[testing] = res["res"]
-                net = res["net"]
+                net = res.get("net", None)
                 if os.environ.get("PLT_SAVE_GT") == "True":  # 开启gt保存
                     gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
                     if not os.path.exists(gt_path):
