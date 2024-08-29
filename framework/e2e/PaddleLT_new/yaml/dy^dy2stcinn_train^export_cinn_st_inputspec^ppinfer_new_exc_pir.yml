@@ -31,14 +31,14 @@ testings:
 
 compare:
   -
-    baseline: 'dy_train'
-    latest: 'paddle_infer_new_exc_pir'
+    baseline: 'paddle_infer_new_exc_pir'
+    latest: 'dy_train'
     precision:
       delta: 0.00001
       rtol: 0.000001
   -
-    baseline: 'dy2st_train_cinn'
-    latest: 'paddle_infer_new_exc_pir'
+    baseline: 'paddle_infer_new_exc_pir'
+    latest: 'dy2st_train_cinn'
     precision:
       delta: 0.00001
       rtol: 0.000001
