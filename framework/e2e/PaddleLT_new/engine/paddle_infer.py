@@ -41,7 +41,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
         config.enable_use_gpu(1000, int(self.device_id))
@@ -69,7 +69,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
 
@@ -98,7 +98,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
 
@@ -129,7 +129,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
 
@@ -159,7 +159,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".json", self.path + ".pdiparams")
         # config = paddle_infer.Config(self.path, 'inference')
