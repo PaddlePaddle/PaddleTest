@@ -41,6 +41,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
+            Logger("paddle_infer_gpu").get_log().info(f"该子图export未产出pdiparams, 所以跳过infer测试")
             return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
@@ -69,6 +70,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
+            Logger("paddle_infer_cpu").get_log().info(f"该子图export未产出pdiparams, 所以跳过infer测试")
             return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
@@ -98,6 +100,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
+            Logger("paddle_infer_mkldnn").get_log().info(f"该子图export未产出pdiparams, 所以跳过infer测试")
             return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
@@ -129,6 +132,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
+            Logger("paddle_infer_ort").get_log().info(f"该子图export未产出pdiparams, 所以跳过infer测试")
             return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
@@ -159,6 +163,7 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
+            Logger("paddle_infer_new_exc_pir").get_log().info(f"该子图export未产出pdiparams, 所以跳过infer测试")
             return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".json", self.path + ".pdiparams")
