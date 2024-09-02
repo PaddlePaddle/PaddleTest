@@ -163,7 +163,7 @@ class LayerTest(object):
                         compare_res_list.append(tmp)
                 else:
                     precision = comparing.get("precision")
-                    if comparing.get("compare_method") == "infer_compare":
+                    if comparing.get("compare_method", "base_compare") == "infer_compare":
                         compare_methon = infer_compare
                     else:
                         compare_methon = base_compare
