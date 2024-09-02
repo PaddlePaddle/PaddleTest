@@ -148,6 +148,43 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
     return exc_dict
 
 
+def infer_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1e-10, exc_dict={}):
+    """
+    比较函数
+    :param result: 待测值
+    :param expect: 基线值
+    :param delta: 误差值
+    :param rtol: 相对误差
+    :return:
+    """
+    # 去除反向结果的数据
+    forward_handled_result = {"logit": []}
+    forward_handled_expect = {"logit": []}
+
+    # 去除非tensor数值的影响
+    if isinstance(expect["logit"], (tuple, list)):
+        for item in expect["logit"]:
+            if not isinstance(item, (int, bool, float)):
+                forward_handled_expect["logit"].append(item)
+
+    if isinstance(result["logit"], (tuple, list)):
+        for item in result["logit"]:
+            if not isinstance(item, (int, bool, float)):
+                forward_handled_result["logit"].append(item)
+
+    exc_dict = base_compare(
+        result=result,
+        expect=expect,
+        res_name=res_name,
+        exp_name=exp_name,
+        logger=logger,
+        delta=1e-10,
+        rtol=1e-10,
+        exc_dict=exc_dict,
+    )
+    return exc_dict
+
+
 def perf_compare_legacy(baseline, latest):
     """
     比较函数

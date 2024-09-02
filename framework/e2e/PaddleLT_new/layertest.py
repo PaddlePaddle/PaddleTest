@@ -10,7 +10,7 @@ import glob
 import traceback
 
 # from engine.engine_map import engine_map
-from strategy.compare import base_compare
+from strategy.compare import base_compare, infer_compare
 from tools.yaml_loader import YamlLoader
 from tools.logger import Logger
 from tools.res_save import save_tensor, load_tensor, save_pickle
@@ -163,7 +163,11 @@ class LayerTest(object):
                         compare_res_list.append(tmp)
                 else:
                     precision = comparing.get("precision")
-                    compare_res = base_compare(
+                    if comparing.get("compare_method") == "infer_compare":
+                        compare_methon = infer_compare
+                    else:
+                        compare_methon = base_compare
+                    compare_res = compare_methon(
                         result=result,
                         expect=expect,
                         res_name=latest,
