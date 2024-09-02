@@ -173,13 +173,13 @@ def infer_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=
                 forward_handled_result["logit"].append(item)
 
     exc_dict = base_compare(
-        result=result,
-        expect=expect,
+        result=forward_handled_result,
+        expect=forward_handled_expect,
         res_name=res_name,
         exp_name=exp_name,
         logger=logger,
-        delta=1e-10,
-        rtol=1e-10,
+        delta=delta,
+        rtol=rtol,
         exc_dict=exc_dict,
     )
     return exc_dict
