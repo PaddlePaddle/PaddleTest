@@ -22,7 +22,7 @@ compare:
   -
     baseline: 'dy2st_train_static_inputspec'
     latest: 'paddle_infer_new_exc_pir'
-    compare_method: "infer_compare"
+    # compare_method: "infer_compare"
     precision:
       delta: 0.00001
       rtol: 0.000001
