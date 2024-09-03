@@ -20,7 +20,7 @@ testings:
 
 compare:
   -
-    baseline: 'dy2st_train_static_inputspec'
+    baseline: 'dy_train'
     latest: 'paddle_infer_new_exc_pir'
     # compare_method: "infer_compare"
     precision:
