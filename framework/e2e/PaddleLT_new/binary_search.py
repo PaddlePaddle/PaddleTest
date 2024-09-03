@@ -63,6 +63,7 @@ class BinarySearch(object):
         self.py_cmd = os.environ.get("python_ver")
         self.testing_mode = os.environ.get("TESTING_MODE")
         self.device_place_id = 0
+        self.timeout = 300
 
     def _status_print(self, exit_code, status_str):
         """
@@ -106,7 +107,8 @@ class BinarySearch(object):
         exit_code = os.system(
             f"cp -r PaddleLT.py {self.title}.py && "
             f"{self.py_cmd} -m pytest {self.title}.py --title={self.title} "
-            f"--layerfile={self.layerfile} --testing={self.testing} --device_place_id={self.device_place_id}"
+            f"--layerfile={self.layerfile} --testing={self.testing} "
+            f"--device_place_id={self.device_place_id} --timeout={self.timeout}"
         )
 
         if exit_code > 0:
