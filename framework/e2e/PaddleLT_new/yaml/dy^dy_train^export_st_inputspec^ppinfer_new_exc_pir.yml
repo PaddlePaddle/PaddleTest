@@ -8,7 +8,7 @@ testings:
       params:
         opt_api: "paddle.optimizer.SGD"
         learning_rate: 0.00001
-    step: 5
+    step: 20
     return_net_instance: "True"  # 测试engine会返回模型实例
 
   dy_eval:
