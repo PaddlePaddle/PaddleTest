@@ -13,7 +13,7 @@ class LayerCase(paddle.nn.Layer):
         var_1,    # (shape: [1, 128, 64, 128], dtype: paddle.float32, stop_gradient: False)
     ):
         paddle.seed(33)
-        var_2 = paddle.nn.functional.common.dropout2d(var_0, p=0.1, training=True, data_format='NCHW', name=None)
+        var_2 = paddle.nn.functional.common.dropout2d(var_0, p=0.1, training=self.training, data_format='NCHW', name=None)
         var_3 = var_1.__add__(var_2)
         return var_3
 
