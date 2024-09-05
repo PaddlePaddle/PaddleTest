@@ -15,7 +15,7 @@ class LayerCase(paddle.nn.Layer):
         """
         forward
         """
-        out = paddle.nn.functional.dropout2d(x,  p=paddle.to_tensor([0.5], dtype='float32', stop_gradient=False), training=True, )
+        out = paddle.nn.functional.dropout2d(x,  p=paddle.to_tensor([0.5], dtype='float32', stop_gradient=False), training=self.training, )
         return out
 
 

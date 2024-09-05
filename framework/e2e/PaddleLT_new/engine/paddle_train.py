@@ -24,7 +24,7 @@ class LayerTrain(object):
     """
 
     # def __init__(self, testing, layerfile, device_id):
-    def __init__(self, testing, layerfile, device_place_id):
+    def __init__(self, testing, layerfile, device_place_id, upstream_net):
         """
         初始化
         """
@@ -36,6 +36,8 @@ class LayerTrain(object):
         # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
 
         self.testing = testing
+        self.upstream_net = upstream_net
+        self.return_net_instance = self.testing.get("return_net_instance", "False")
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 
@@ -51,7 +53,10 @@ class LayerTrain(object):
     def _net_instant(self):
         """get net"""
         reset(self.seed)
-        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        if self.upstream_net:
+            net = self.upstream_net
+        else:
+            net = BuildLayer(layerfile=self.layerfile).get_layer()
         return net
 
     def _net_optimizer(self):
@@ -135,8 +140,12 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy_train").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": net}
+        else:
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": None}
 
     def dy_dp_train(self):
         """dygraph data parallel train"""
@@ -166,8 +175,13 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy_dp_train").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        # return {"logit": logit, "data_grad": data_grad}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": net}
+        else:
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": None}
 
     # def dy_train_dl(self):
     #     """dygraph train with dataloader"""
@@ -217,8 +231,13 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        # return {"logit": logit, "data_grad": data_grad}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": st_net}
+        else:
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": None}
 
     def dy2st_train_inputspec(self):
         """dy2st cinn train with inputspec"""
@@ -244,8 +263,13 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_inputspec").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        # return {"logit": logit, "data_grad": data_grad}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": st_net}
+        else:
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": None}
 
     def dy2st_train_static_inputspec(self):
         """dy2st cinn train with inputspec"""
@@ -271,8 +295,13 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_static_inputspec").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        # return {"logit": logit, "data_grad": data_grad}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": st_net}
+        else:
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": None}
 
     def dy2st_train_cinn(self):
         """dy2st cinn train"""
@@ -284,23 +313,28 @@ class LayerTrain(object):
         net.train()
         build_strategy = paddle.static.BuildStrategy()
         build_strategy.build_cinn_pass = True
-        st_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
 
         # 构建optimizer用于训练
-        if st_net.parameters():
-            opt = optimizer.get_opt(net=st_net)
+        if cinn_net.parameters():
+            opt = optimizer.get_opt(net=cinn_net)
 
         for epoch in range(self.step):
-            logit = st_net(*data)
+            logit = cinn_net(*data)
             # 构建loss用于训练
             dy_loss = loss.get_loss(logit)
             dy_loss.backward()
-            if st_net.parameters():
+            if cinn_net.parameters():
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_cinn").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        # return {"logit": logit, "data_grad": data_grad}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": cinn_net}
+        else:
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": None}
 
     def dy2st_train_cinn_inputspec(self):
         """dy2st cinn train with inputspec"""
@@ -328,8 +362,13 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_cinn_inputspec").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        # return {"logit": logit, "data_grad": data_grad}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": cinn_net}
+        else:
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": None}
 
     def dy2st_train_cinn_static_inputspec(self):
         """dy2st cinn train with inputspec"""
@@ -357,5 +396,10 @@ class LayerTrain(object):
                 opt.step()
                 opt.clear_grad()
 
+        Logger("dy2st_train_cinn_static_inputspec").get_log().info(f"已完成 {epoch} 轮训练")
         data_grad = self._get_data_grad(data)
-        return {"logit": logit, "data_grad": data_grad}
+        # return {"logit": logit, "data_grad": data_grad}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": cinn_net}
+        else:
+            return {"res": {"logit": logit, "data_grad": data_grad}, "net": None}

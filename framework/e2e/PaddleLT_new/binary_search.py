@@ -62,6 +62,8 @@ class BinarySearch(object):
         self.test_obj = test_obj
         self.py_cmd = os.environ.get("python_ver")
         self.testing_mode = os.environ.get("TESTING_MODE")
+        self.device_place_id = 0
+        self.timeout = 300
 
     def _status_print(self, exit_code, status_str):
         """
@@ -82,8 +84,8 @@ class BinarySearch(object):
 
         whl_link = (
             "https://paddle-qa.bj.bcebos.com/paddle-pipe"
-            "line/Develop-GpuAll-LinuxCentos-Gcc82-Cuda112-Trtoff-Py38-Compile/{}/paddle"
-            "paddle_gpu-0.0.0-cp38-cp38-linux_x86_64.whl".format(commit_id)
+            "line/Develop-GpuSome-LinuxCentos-Gcc82-Cuda118-Cudnn86-Trt85-Py310-CINN-Compile/{}/paddle"
+            "paddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl".format(commit_id)
         )
         exit_code = os.system(f"{self.py_cmd} -m pip install {whl_link}")
         self._status_print(exit_code=exit_code, status_str="install paddlepaddle-gpu")
@@ -105,7 +107,8 @@ class BinarySearch(object):
         exit_code = os.system(
             f"cp -r PaddleLT.py {self.title}.py && "
             f"{self.py_cmd} -m pytest {self.title}.py --title={self.title} "
-            f"--layerfile={self.layerfile} --testing={self.testing}"
+            f"--layerfile={self.layerfile} --testing={self.testing} "
+            f"--device_place_id={self.device_place_id} --timeout={self.timeout}"
         )
 
         if exit_code > 0:
@@ -168,8 +171,8 @@ if __name__ == "__main__":
     if not os.path.exists("paddle"):
         os.system("git clone -b develop http://github.com/paddlepaddle/paddle.git")
     os.chdir(os.path.join(cur_path, "paddle"))
-    start_commit = "f651ac5cf387c56488b52fcc6456a63e9eb73086"  # 成功commit
-    end_commit = "9d5f31687cce16a976256723a70df4550085d685"  # 失败commit
+    start_commit = "4ac66e4319740d65eb3b2a9e80b4a9f989083099"  # 成功commit
+    end_commit = "81dc24b20d9a016dd4e92e76d2849cc9e3d0f8c8"  # 失败commit
     commits = get_commits(start=start_commit, end=end_commit)
     save_pickle(data=commits, filename="candidate_commits.pickle")
     print("the candidate commits is {}".format(commits))
@@ -178,8 +181,8 @@ if __name__ == "__main__":
     final_commit = BinarySearch(
         commit_list=commits,
         title="PrecisionBS",
-        layerfile="./layercase/sublayer1000/Clas_cases/CSWinTransformer_CSWinTransformer_base_384/SIR_5.py",
-        testing="yaml/dy^dy2stcinn_eval.yml",
+        layerfile="./layercase/sublayer1000/Det_cases/ppyolo_ppyolo_r50vd_dcn_1x_coco/SIR_58.py",
+        testing="yaml/dy^dy2stcinn_train_inputspec.yml",
         perf_decay=None,  # ["dy2st_eval_cinn_perf", 0.042814, -0.3]
         test_obj=LayerTest,
     )._commit_locate(commits)

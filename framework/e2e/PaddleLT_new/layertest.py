@@ -10,7 +10,7 @@ import glob
 import traceback
 
 # from engine.engine_map import engine_map
-from strategy.compare import base_compare
+from strategy.compare import base_compare, infer_compare
 from tools.yaml_loader import YamlLoader
 from tools.logger import Logger
 from tools.res_save import save_tensor, load_tensor, save_pickle
@@ -59,7 +59,7 @@ class LayerTest(object):
                 # 如果删除过程中发生错误（比如文件不存在或没有权限），则打印错误信息
                 self.logger.get_log().warning(f"Error deleting {filepath}: {e.strerror}")
 
-    def _single_run(self, testing, layerfile, device_place_id=0):
+    def _single_run(self, testing, layerfile, device_place_id=0, upstream_net=None):
         """
         单次执行器测试
         :param testing: 'dy_train', 'dy_eval'...
@@ -78,7 +78,10 @@ class LayerTest(object):
                     self.logger.get_log().info(f"testing engine has been covered. Real engine is: {engine}")
 
         layer_test = engine_map[engine](
-            testing=self.testings.get(testing), layerfile=layerfile, device_place_id=device_place_id
+            testing=self.testings.get(testing),
+            layerfile=layerfile,
+            device_place_id=device_place_id,
+            upstream_net=upstream_net,
         )
         res = getattr(layer_test, engine)()
         return res
@@ -90,14 +93,20 @@ class LayerTest(object):
         exc_func = 0
         exc = 0
         res_dict = {}
+        net = None
         compare_res_list = []
         self.logger.get_log().info("测试case名称: {}".format(self.title))
         fail_testing_list = []
         for testing in self.testings_list:
             try:
                 self.logger.get_log().info("测试执行器: {}".format(testing))
-                res = self._single_run(testing=testing, layerfile=self.layerfile, device_place_id=self.device_place_id)
-                res_dict[testing] = res
+                if self.testings.get(testing).get("use_upstream_net_instance", "False") == "False":
+                    net = None
+                res = self._single_run(
+                    testing=testing, layerfile=self.layerfile, device_place_id=self.device_place_id, upstream_net=net
+                )
+                res_dict[testing] = res["res"]
+                net = res.get("net", None)
                 if os.environ.get("PLT_SAVE_GT") == "True":  # 开启gt保存
                     gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
                     if not os.path.exists(gt_path):
@@ -154,7 +163,11 @@ class LayerTest(object):
                         compare_res_list.append(tmp)
                 else:
                     precision = comparing.get("precision")
-                    compare_res = base_compare(
+                    if comparing.get("compare_method", "base_compare") == "infer_compare":
+                        compare_methon = infer_compare
+                    else:
+                        compare_methon = base_compare
+                    compare_res = compare_methon(
                         result=result,
                         expect=expect,
                         res_name=latest,

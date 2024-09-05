@@ -14,13 +14,15 @@ from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 
+from tools.logger import Logger
+
 
 class LayerInfer(object):
     """
     构建Layer预测的通用类
     """
 
-    def __init__(self, testing, layerfile, device_place_id):
+    def __init__(self, testing, layerfile, device_place_id, upstream_net):
         """
         初始化
         """
@@ -41,7 +43,8 @@ class LayerInfer(object):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            Logger("paddle_infer_gpu").get_log().info("该子图export未产出pdiparams, 所以跳过infer测试")
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
         config.enable_use_gpu(1000, int(self.device_id))
@@ -63,13 +66,14 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return {"logit": infer_res}
+        return {"res": {"logit": infer_res}}
 
     def paddle_infer_cpu(self):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            Logger("paddle_infer_cpu").get_log().info("该子图export未产出pdiparams, 所以跳过infer测试")
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
 
@@ -92,13 +96,14 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return {"logit": infer_res}
+        return {"res": {"logit": infer_res}}
 
     def paddle_infer_mkldnn(self):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            Logger("paddle_infer_mkldnn").get_log().info("该子图export未产出pdiparams, 所以跳过infer测试")
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
 
@@ -123,13 +128,14 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return {"logit": infer_res}
+        return {"res": {"logit": infer_res}}
 
     def paddle_infer_ort(self):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            Logger("paddle_infer_ort").get_log().info("该子图export未产出pdiparams, 所以跳过infer测试")
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".pdmodel", self.path + ".pdiparams")
 
@@ -153,13 +159,14 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return {"logit": infer_res}
+        return {"res": {"logit": infer_res}}
 
     def paddle_infer_new_exc_pir(self):
         """infer load (layer)"""
         reset(self.seed)
         if not os.path.exists(self.path + ".pdiparams"):
-            return "pass"
+            Logger("paddle_infer_new_exc_pir").get_log().info("该子图export未产出pdiparams, 所以跳过infer测试")
+            return {"res": {"logit": None}}
 
         config = paddle_infer.Config(self.path + ".json", self.path + ".pdiparams")
         # config = paddle_infer.Config(self.path, 'inference')
@@ -186,4 +193,4 @@ class LayerInfer(object):
         else:
             output_handle = predictor.get_output_handle(output_names[0])
             infer_res = output_handle.copy_to_cpu()
-        return {"logit": infer_res}
+        return {"res": {"logit": infer_res}}

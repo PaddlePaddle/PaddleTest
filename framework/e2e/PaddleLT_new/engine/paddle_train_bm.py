@@ -26,7 +26,7 @@ class LayerTrainBM(object):
     """
 
     # def __init__(self, testing, layerfile, device_id):
-    def __init__(self, testing, layerfile, device_place_id):
+    def __init__(self, testing, layerfile, device_place_id, upstream_net):
         """
         初始化
         """
@@ -45,6 +45,8 @@ class LayerTrainBM(object):
         self.statis_round = 6
 
         self.testing = testing
+        self.upstream_net = upstream_net
+        # self.return_net_instance = self.testing.get("return_net_instance", "False")
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 
@@ -56,7 +58,10 @@ class LayerTrainBM(object):
     def _net_instant(self):
         """get net and data"""
         reset(self.seed)
-        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        if self.upstream_net:
+            net = self.upstream_net
+        else:
+            net = BuildLayer(layerfile=self.layerfile).get_layer()
         return net
 
     def _net_optimizer(self):
