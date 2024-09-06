@@ -11,9 +11,9 @@ import traceback
 
 # from engine.engine_map import engine_map
 from strategy.compare import base_compare, infer_compare
-from tools.yaml_loader import YamlLoader
-from tools.logger import Logger
-from tools.res_save import save_tensor, load_tensor, save_pickle
+from pltools.yaml_loader import YamlLoader
+from pltools.logger import Logger
+from pltools.res_save import save_tensor, load_tensor, save_pickle
 
 
 class LayerTest(object):

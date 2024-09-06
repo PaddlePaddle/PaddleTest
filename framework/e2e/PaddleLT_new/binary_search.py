@@ -13,8 +13,8 @@ import subprocess
 import numpy as np
 from layertest import LayerTest
 from strategy.compare import perf_compare
-from tools.logger import Logger
-from tools.res_save import save_pickle
+from pltools.logger import Logger
+from pltools.res_save import save_pickle
 
 
 def get_commits(start, end):

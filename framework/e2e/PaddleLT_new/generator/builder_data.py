@@ -18,7 +18,7 @@ elif os.environ.get("FRAMEWORK") == "torch":
     import torch
     import layerTorchcase
 
-import tools.np_tool as tool
+import pltools.np_tool as tool
 
 
 class BuildData(object):
