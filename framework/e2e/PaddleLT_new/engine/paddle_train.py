@@ -15,7 +15,7 @@ from generator.builder_data import BuildData
 from generator.builder_optimizer import BuildOptimizer
 from generator.builder_loss import BuildLoss
 
-from tools.logger import Logger
+from pltools.logger import Logger
 
 
 class LayerTrain(object):

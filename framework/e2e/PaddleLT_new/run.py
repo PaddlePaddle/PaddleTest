@@ -17,14 +17,14 @@ import pandas as pd
 import layertest
 from db.layer_db import LayerBenchmarkDB
 from strategy.compare import perf_compare_dict, perf_compare_kernel_dict
-from tools.case_select import CaseSelect
-from tools.logger import Logger
-from tools.yaml_loader import YamlLoader
-from tools.json_loader import JSONLoader
-from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle, save_txt
-from tools.upload_bos import UploadBos
-from tools.statistics import split_list, sublayer_perf_gsb_gen, kernel_perf_gsb_gen
-from tools.alarm import Alarm
+from pltools.case_select import CaseSelect
+from pltools.logger import Logger
+from pltools.yaml_loader import YamlLoader
+from pltools.json_loader import JSONLoader
+from pltools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle, save_txt
+from pltools.upload_bos import UploadBos
+from pltools.statistics import split_list, sublayer_perf_gsb_gen, kernel_perf_gsb_gen
+from pltools.alarm import Alarm
 
 
 class Run(object):

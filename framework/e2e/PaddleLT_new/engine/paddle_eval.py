@@ -13,9 +13,9 @@ from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 
-from tools.logger import Logger
+from pltools.logger import Logger
 
-from tools.res_save import save_tensor
+from pltools.res_save import save_tensor
 
 
 class LayerEval(object):
