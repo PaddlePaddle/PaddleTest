@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 """
-upload script
+ttt upload script
 """
 import os
 import sys
