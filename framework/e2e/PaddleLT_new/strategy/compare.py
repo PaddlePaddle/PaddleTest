@@ -13,7 +13,7 @@ import json
 import traceback
 import numpy as np
 
-from tools.logger import Logger
+from pltools.logger import Logger
 
 framework = ""
 if os.environ.get("FRAMEWORK") == "paddle":

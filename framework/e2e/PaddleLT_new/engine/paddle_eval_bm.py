@@ -13,9 +13,9 @@ import paddle
 from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
-from tools.res_save import save_pickle
-from tools.statistics import trimmean, mean, best, best_top_k, perf_by_step
-from tools.logger import Logger
+from pltools.res_save import save_pickle
+from pltools.statistics import trimmean, mean, best, best_top_k, perf_by_step
+from pltools.logger import Logger
 
 
 class LayerEvalBM(object):
