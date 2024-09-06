@@ -73,7 +73,7 @@ class Run(object):
                     "wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleOCR/PaddleOCR.tar.gz --no-proxy "
                     "&& tar -xzf PaddleOCR.tar.gz && rm -rf PaddleOCR.tar.gz "
                     "&& cd PaddleOCR && git rev-parse HEAD && git branch "
-                    f"&& {self.py_cmd} setup.py install && {self.py_cmd} -m pip install -r requirements.txt"
+                    f"&& {self.py_cmd} -m pip install -r requirements.txt && {self.py_cmd} setup.py install"
                 )
 
         # 下载ground truth用于跨硬件测试
