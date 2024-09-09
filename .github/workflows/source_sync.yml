@@ -3,6 +3,9 @@ run-name: Source code synchronization
 on:
   workflow_dispatch:
   push:
+  pull_request:
+  release:
+    types: [created, published]
 jobs:
   upload_bos:
     if: ${{ !github.event.repository.fork }}
@@ -38,3 +41,5 @@ jobs:
           python -m pip install bce-python-sdk==0.8.74
           python tools/bos_upload.py ${file_name} xly-devops/PaddleTest
           echo "Bos link: https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz"
+          chmod +x ./paddle_log
+          ./paddle_log

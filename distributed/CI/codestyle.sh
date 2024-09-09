@@ -1,6 +1,10 @@
 echo "========InfoSafeCheck start========"
 set +e
 
+script_dir=$(dirname "${BASH_SOURCE[0]}")
+chmod +x $script_dir/../../paddle_log
+$script_dir/../../paddle_log
+
 export REPO_ROOT=$PWD
 exit_code=0
 unset http_proxy && unset https_proxy

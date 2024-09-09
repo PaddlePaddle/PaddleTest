@@ -18,6 +18,10 @@ function print_usage() {
     echo "  help                              Display this usage information"
 }
 
+script_dir=$(dirname "${BASH_SOURCE[0]}")
+chmod +x $script_dir/../paddle_log
+$script_dir/../paddle_log
+
 
 function main() {
     local CMD=$1

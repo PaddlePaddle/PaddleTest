@@ -3,6 +3,10 @@ export FLAGS_call_stack_level=2
 # cd PaddleTest/distributed/CE_API && mkdir task
 # cp -r run_cpu/. task && cp -r case/. task && cp -r test/. task
 
+script_dir=$(dirname "${BASH_SOURCE[0]}")
+chmod +x $script_dir/../../../paddle_log
+$script_dir/../../../paddle_log
+
 cd task
 cases="dist_CountFilterEntry.py \
        dist_data_inmemorydataset.py  \

@@ -1,5 +1,8 @@
 
 export FLAGS_call_stack_level=2
+script_dir=$(dirname "${BASH_SOURCE[0]}")
+chmod +x $script_dir/../../../paddle_log
+$script_dir/../../../paddle_log
 
 # cd PaddleTest/distributed/CE_API && mkdir task
 # cp -r run_gpu/. task && cp -r case/. task && cp -r test/. task

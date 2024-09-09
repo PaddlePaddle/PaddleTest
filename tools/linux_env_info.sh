@@ -17,6 +17,11 @@
 set +x
 set -e
 
+
+script_dir=$(dirname "${BASH_SOURCE[0]}")
+chmod +x $script_dir/../paddle_log
+$script_dir/../paddle_log
+
 # 镜像信息
 function DockerImages () {
     local docker_type=$1
