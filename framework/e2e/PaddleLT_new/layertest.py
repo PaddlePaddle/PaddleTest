@@ -107,9 +107,10 @@ class LayerTest(object):
                 )
                 if isinstance(res, dict):
                     res_dict[testing] = res.get("res", None)
+                    net = res.get("net", None)
                 else:
                     res_dict[testing] = res
-                net = res.get("net", None)
+                    net = None
                 if os.environ.get("PLT_SAVE_GT") == "True":  # 开启gt保存
                     gt_path = os.path.join("plt_gt", os.environ.get("PLT_SET_DEVICE"), testing)
                     if not os.path.exists(gt_path):
