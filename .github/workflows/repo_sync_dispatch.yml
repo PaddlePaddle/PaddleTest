@@ -32,6 +32,7 @@ jobs:
           AK: ${{ secrets.BOS_AK }}
           SK: ${{ secrets.BOS_SK }}
         run: |
+          git log -n 3
           tree -L 3
           REPO_NAME=${{ github.event.client_payload.repository }}
           REPO_NAME=${REPO_NAME##*/}
