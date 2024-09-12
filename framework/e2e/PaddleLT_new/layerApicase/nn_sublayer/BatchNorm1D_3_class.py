@@ -20,11 +20,18 @@ class LayerCase(paddle.nn.Layer):
         return out
 
 
+def create_inputspec():
+    inputspec = ( 
+        paddle.static.InputSpec(shape=(-1, -1), dtype=paddle.float32, stop_gradient=False), 
+    )
+    return inputspec
+
+
 def create_tensor_inputs():
     """
     paddle tensor
     """
-    inputs = ()
+    inputs = (paddle.to_tensor([[0.6964692], [0.28613934]], dtype='float32', stop_gradient=False),)
     return inputs
 
 
@@ -32,6 +39,6 @@ def create_numpy_inputs():
     """
     numpy array
     """
-    inputs = (paddle.to_tensor([[0.6964692], [0.28613934]], dtype='float32', stop_gradient=False), )
+    inputs = (np.array([[0.6964692], [0.28613934]]).astype('float32'), )
     return inputs
 
