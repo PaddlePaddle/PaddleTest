@@ -36,14 +36,10 @@ def test_ShowClickEntry():
 
     entry = paddle.distributed.ShowClickEntry("show", "click")
 
-    emb = paddle.static.nn.sparse_embedding(
-        input=input,
-        size=[sparse_feature_dim, embedding_size],
-        is_test=False,
-        entry=entry,
-        param_attr=paddle.ParamAttr(name="SparseFeatFactors", initializer=paddle.nn.initializer.Uniform()),
-    )
-    assert emb.shape == (64,)
+    Emb = paddle.nn.Embedding(num_embeddings=sparse_feature_dim, embedding_dim=embedding_size, sparse=True,
+    weight_attr=paddle.ParamAttr(name="SparseFeatFactors", initializer=paddle.nn.initializer.Uniform()))
+    emb = Emb(input)
+    assert emb.shape == [1,64]
 
     print("test_ShowClickEntry ... ok")
 

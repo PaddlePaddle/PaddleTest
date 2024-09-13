@@ -33,13 +33,9 @@ def test_CountFilterEntry():
 
     input = paddle.static.data(name="ins", shape=[1], dtype="int64")
 
-    emb = paddle.static.nn.sparse_embedding(
-        input=input,
-        size=[sparse_feature_dim, embedding_size],
-        is_test=False,
-        entry=entry,
-        param_attr=paddle.ParamAttr(name="SparseFeatFactors", initializer=paddle.nn.initializer.Uniform()),
-    )
+    Emb = paddle.nn.Embedding(num_embeddings=sparse_feature_dim, embedding_dim=embedding_size, sparse=True,
+    weight_attr=paddle.ParamAttr(name="SparseFeatFactors", initializer=paddle.nn.initializer.Uniform()))
+    emb = Emb(input)
     print(emb)
     print("test_CountFilterEntry ... ok")
 
