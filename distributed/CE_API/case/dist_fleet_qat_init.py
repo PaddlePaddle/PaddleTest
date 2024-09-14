@@ -39,7 +39,7 @@ def run_example_code():
     data = paddle.static.data(name="X", shape=[None, 1, 28, 28], dtype="float32")
     Conv = paddle.nn.Conv2D(in_channels=1, out_channels=6, kernel_size=3)
     conv2d = Conv(data)
-    bn = paddle.nn.BatchNorm2D(1)(conv2d)
+    bn = paddle.nn.BatchNorm2D(6)(conv2d)
     pool = F.max_pool2d(bn, kernel_size=2, stride=2)
     hidden = paddle.static.nn.fc(pool, size=10)
     loss = paddle.mean(hidden)
