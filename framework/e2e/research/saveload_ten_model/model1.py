@@ -32,7 +32,6 @@ def save_model(model, path, inputs):
     print("Paddle.Save Model Output Mean: " + str(output3.numpy()))
     return pred, output3
 
-
 def jit_save(model, path, inputs):
     """
     保存:paddle.jit.save
