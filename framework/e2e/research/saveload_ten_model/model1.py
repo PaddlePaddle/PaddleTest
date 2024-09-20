@@ -1,4 +1,5 @@
 import paddle
+
 import paddle.nn as nn
 import numpy as np
 from paddle.static import InputSpec
