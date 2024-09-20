@@ -35,5 +35,5 @@ def test_is_grad_enabled2():
     test03
     """
     paddle.enable_static()
-    r3 = paddle.is_grad_enabled()  # False
+    r3 = paddle.is_grad_enabled()
     assert r3
