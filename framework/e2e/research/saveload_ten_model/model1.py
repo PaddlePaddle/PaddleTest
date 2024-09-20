@@ -1,22 +1,25 @@
+"""
+Module Docstring:
+This module contains functions for saving and loading models using PaddlePaddle.
+"""
+import os
 import paddle
-
 import paddle.nn as nn
-import numpy as np
 from paddle.static import InputSpec
 
 # 引用 paddle inference 预测库
 import paddle.inference as paddle_infer
-import os
+import numpy as np
 
 # 生成随机数据
 paddle.seed(33)
 np.random.seed(32)
-import paddle
-import paddle.nn as nn
-import numpy as np
 
 
 def save_model(model, path, inputs):
+    """
+    paddle.save
+    """
     # 保存模型
     model.eval()
 
@@ -31,6 +34,9 @@ def save_model(model, path, inputs):
 
 
 def jit_save(model, path, inputs):
+    """
+    保存:paddle.jit.save
+    """
     # 设置训练模式
     model.eval()
     pred = model(inputs)
@@ -43,6 +49,9 @@ def jit_save(model, path, inputs):
 
 
 def jit_load(model, path, inputs):
+    """
+    加载:paddle.jit.load
+    """
     # 加载模型
     loaded_model = paddle.jit.load(path)
 
@@ -54,6 +63,9 @@ def jit_load(model, path, inputs):
 
 
 def infer(num_image, path, inputs):
+    """
+    paddle.inference
+    """
     # 创建 config
     model_name_or_path = path.split("/demo")[0]
     model_prefix = path.split("/")[-1]
@@ -86,7 +98,9 @@ def infer(num_image, path, inputs):
 
 
 def are_close(a, b, tol=1e-5):
-
+    """
+    判断两个浮点数a和b是否足够接近
+    """
     # 判断两个浮点数a和b是否足够接近，是则返回True；否则返回False；
     # a, b: 要比较的两个浮点数或numpy数组；
     # tol: 容差，默认为1e-9。
@@ -94,6 +108,10 @@ def are_close(a, b, tol=1e-5):
 
 
 class RandomNet(nn.Layer):
+    """
+    一个简单的神经网络
+    """
+
     def __init__(self):
         super(RandomNet, self).__init__()
         # 定义卷积层和ReLU层
@@ -129,6 +147,7 @@ class RandomNet(nn.Layer):
 
     @paddle.jit.to_static
     def forward(self, x):
+        """前向传播函数"""
         for layer in self.layers:
             x = layer(x)
             if isinstance(layer, nn.MaxPool2D):
@@ -155,7 +174,7 @@ if __name__ == "__main__":
     label = np.random.randint(0, 10, (10, 1), dtype="int64")
     inputs = paddle.to_tensor(data)
     labels = paddle.to_tensor(label)
-    path = f"simple/model1/demo1"  # 路径这里用demo，若改infer中对应需要改
+    path = "simple/model1/demo1"  # 路径这里用demo，若改infer中对应需要改
 
     model = RandomNet()
     # 这里可以添加训练、保存、加载和预测的逻辑

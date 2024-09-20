@@ -1,26 +1,27 @@
+"""
+Module Docstring:
+This module contains functions for saving and loading models using PaddlePaddle.
+"""
+import os
 import paddle
 import paddle.nn as nn
-import numpy as np
 from paddle.static import InputSpec
 
 # 引用 paddle inference 预测库
 import paddle.inference as paddle_infer
-import os
+import numpy as np
 
 # 生成随机数据
 paddle.seed(33)
 np.random.seed(32)
-import paddle
-import paddle.nn as nn
-import numpy as np
 
 
 def save_model(model, path, inputs):
+    """保存模型"""
     # 保存模型
     model.eval()
-
     save_model_path = os.path.join(path.split("/")[0], path.split("/")[1], "model.pdparams")
-    # paddle.save(model.state_dict(),save_model_path)
+    paddle.save(model.state_dict(), save_model_path)
     # 加载模型的参数
     model.set_state_dict(paddle.load(save_model_path))
     pred = model(inputs)
@@ -30,29 +31,32 @@ def save_model(model, path, inputs):
 
 
 def jit_save(model, path, inputs):
+    """paddle.jit.save"""
     # 设置训练模式
     model.eval()
     pred = model(inputs)
-    outputs_mean = paddle.mean(pred)
-    print("Save Model Output Mean: " + str(outputs_mean.numpy()))
+    outputs = paddle.mean(pred)
+    print(f"Jit.Save Model Output Mean: {outputs.numpy()}")
     # 保存模型
-    # paddle.jit.save(model, path)
+    paddle.jit.save(model, path)
 
-    return pred, outputs_mean
+    return pred, outputs
 
 
 def jit_load(model, path, inputs):
+    """paddle.jit.load"""
     # 加载模型
     loaded_model = paddle.jit.load(path)
 
     pred = loaded_model(inputs)
     output_mean = paddle.mean(pred)
-    print("Loaded Model Output Mean: " + str(output_mean.numpy()))
+    print(f"Loaded Model Output Mean: {output_mean.numpy()}")
 
     return pred, output_mean
 
 
 def infer(num_image, path, inputs):
+    """推理"""
     # 创建 config
     model_name_or_path = path.split("/demo")[0]
     model_prefix = path.split("/")[-1]
@@ -69,7 +73,7 @@ def infer(num_image, path, inputs):
     # 获取输入的名称
     input_names = predictor.get_input_names()
     input_handle = predictor.get_input_handle(input_names[0])
-    # 设置输入
+    # 设置输入  这里的64是输入图片的尺寸 需要和前面保持一致的
     input_handle.reshape([num_image, 3, 64, 64])
     input_handle.copy_from_cpu(inputs)
     # 运行 predictor
@@ -79,20 +83,26 @@ def infer(num_image, path, inputs):
     output_handle = predictor.get_output_handle(output_names[0])
     pred = output_handle.copy_to_cpu()  # numpy.ndarray 类型
     outputs = np.mean(pred)
-    print("Infer Output Mean: " + str(np.mean(pred)))
+    print(f"Infer Output Mean: {outputs}")
 
     return pred, outputs
 
 
-def are_close(a, b, tol=1e-5):
+def are_close(a, b, tol=1e-3):
+    """
+    判断两个浮点数是否足够接近。
 
-    # 判断两个浮点数a和b是否足够接近，是则返回True；否则返回False；
-    # a, b: 要比较的两个浮点数或numpy数组；
-    # tol: 容差，默认为1e-9。
+    a, b: 要比较的两个浮点数或numpy数组。
+    tol: 容差，默认为1e-9。
+
+    如果a和b足够接近，则返回True；否则返回False。
+    """
     return np.allclose(a, b, atol=tol)
 
 
 class RandomNet(nn.Layer):
+    """一个简单的神经网络"""
+
     def __init__(self):
         super(RandomNet, self).__init__()
         # 定义卷积层和ReLU层
@@ -123,6 +133,7 @@ class RandomNet(nn.Layer):
 
     @paddle.jit.to_static
     def forward(self, x):
+        """前向传播"""
         for layer in self.layers:
             x = layer(x)
             if isinstance(layer, nn.MaxPool2D):
@@ -149,7 +160,7 @@ if __name__ == "__main__":
     label = np.random.randint(0, 10, (10, 1), dtype="int64")
     inputs = paddle.to_tensor(data)
     labels = paddle.to_tensor(label)
-    path = f"simple/model5/demo5"  # 路径这里用demo，若改infer中对应需要改
+    path = "simple/model5/demo5"  # 路径这里用demo，若改infer中对应需要改
 
     model = RandomNet()
     # 这里可以添加训练、保存、加载和预测的逻辑

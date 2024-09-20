@@ -1,24 +1,29 @@
+"""
+Module Docstring:
+This module contains functions for saving and loading models using PaddlePaddle.
+"""
+import os
+import gc
 import paddle
 import paddle.nn as nn
-import numpy as np
 from paddle.static import InputSpec
 
 # 引用 paddle inference 预测库
 import paddle.inference as paddle_infer
-import re
-import os
+import numpy as np
+
 
 # 生成随机数据
 paddle.seed(33)
 np.random.seed(32)
-import paddle
-import paddle.nn as nn
-import numpy as np
-import gc
 
 
 def create_random_model(num_classes=10, max_conv_layers=3, max_fc_layers=2):
+    """创建模型"""
+
     class RandomNet(nn.Layer):
+        """随机网络"""
+
         def __init__(self, input_height, input_width):
             super(RandomNet, self).__init__()
             self.layers = nn.LayerList()
@@ -80,6 +85,7 @@ def create_random_model(num_classes=10, max_conv_layers=3, max_fc_layers=2):
 
         @paddle.jit.to_static
         def forward(self, x):
+            """前向传播"""
             for layer in self.layers:
                 x = layer(x)
                 if isinstance(layer, nn.MaxPool2D):
@@ -95,6 +101,7 @@ def create_random_model(num_classes=10, max_conv_layers=3, max_fc_layers=2):
 
 
 def save_model(model, path, inputs):
+    """保存模型"""
     # 保存模型
     model.eval()
     save_model_path = os.path.join(path.split("/")[0], path.split("/")[1], "model.pdparams")
@@ -108,6 +115,7 @@ def save_model(model, path, inputs):
 
 
 def jit_save(model, path, inputs):
+    """paddle.jit.save"""
     # 设置训练模式
     model.eval()
     pred = model(inputs)
@@ -120,6 +128,7 @@ def jit_save(model, path, inputs):
 
 
 def jit_load(model, path, inputs):
+    """paddle.jit.load"""
     # 加载模型
     loaded_model = paddle.jit.load(path)
 
@@ -131,6 +140,7 @@ def jit_load(model, path, inputs):
 
 
 def infer(num_image, path, inputs):
+    """推理"""
     # 创建 config
     model_name_or_path = path.split("/demo")[0]
     model_prefix = path.split("/")[-1]
@@ -175,6 +185,7 @@ def are_close(a, b, tol=1e-3):
 
 
 def remove_data_format(layer_str):
+    """移除某部分"""
     parts = layer_str.split(",")
     # 过滤掉包含 'data_format=NCHW' 的部分
     filtered_parts = [part.strip() for part in parts if "data_format=NCHW" not in part]
@@ -187,6 +198,7 @@ def remove_data_format(layer_str):
 
 
 def remove_data_float(layer_str):
+    """移除某部分"""
     parts = layer_str.split(",")
     # 过滤掉包含 'data_format=NCHW' 的部分
     filtered_parts = [part.strip() for part in parts if "float32" not in part]
@@ -199,25 +211,29 @@ def remove_data_float(layer_str):
 
 
 def write_model(layers, fc_layers, i, save_model=True):
+    """写入模块"""
     # 将列表中的每个元素转换为字符串，并用换行符连接
     a_str = ",\n            ".join(f"nn.{remove_data_format(a)}" for a in map(str, layers))
     b_str = ",\n            ".join(f"nn.{remove_data_float(b)}" for b in map(str, fc_layers))
 
     # 模板字符串，使用 {} 作为占位符
     template = """
+
+# Module Docstring:
+# This module contains functions for saving and loading models using PaddlePaddle.
+
+import os
 import paddle
 import paddle.nn as nn
-import numpy as np
 from paddle.static import InputSpec
+
 # 引用 paddle inference 预测库
 import paddle.inference as paddle_infer
-import os
+import numpy as np
+
 # 生成随机数据
 paddle.seed(33)
 np.random.seed(32)
-import paddle
-import paddle.nn as nn
-import numpy as np
 
 def save_model(model, path,inputs):
     # 保存模型
@@ -347,7 +363,7 @@ if __name__ == "__main__":
 
 """
     path = f"model{i+1}.py"
-    if save_model == True:
+    if save_model is True:
         with open(path, "w+") as f:
             f.write(template.format(a_str=a_str, b_str=b_str, c=i + 1, d=i + 1))
 
