@@ -20,15 +20,15 @@ def save_model(model, path, inputs):
     """paddle.save"""
     # 保存模型
     model.eval()
-
     save_model_path = os.path.join(path.split("/")[0], path.split("/")[1], "model.pdparams")
-    paddle.save(model.state_dict(),save_model_path)
+    paddle.save(model.state_dict(), save_model_path)
     # 加载模型的参数
     model.set_state_dict(paddle.load(save_model_path))
     pred = model(inputs)
     output3 = paddle.mean(pred)
     print("Paddle.Save Model Output Mean: " + str(output3.numpy()))
     return pred, output3
+
 
 def jit_save(model, path, inputs):
     """paddle.jit.save"""
