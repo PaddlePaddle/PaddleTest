@@ -140,7 +140,10 @@ class RandomNet(nn.Layer):
         return x
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+
+def test_model7():
+    """test model"""
 
     # 转换为Paddle张量
     num_image = 10
@@ -151,9 +154,11 @@ if __name__ == "__main__":
     # assert (size % (2 ** max_conv_layers)) != 0, "不应该能够整除，但却整除了！"
 
     data = np.random.randn(num_image, 3, size, size).astype("float32")
-    label = np.random.randint(0, 10, (10, 1), dtype="int64")
+
+    # label = np.random.randint(0, 10, (10, 1), dtype="int64")
     inputs = paddle.to_tensor(data)
-    labels = paddle.to_tensor(label)
+    # labels = paddle.to_tensor(label)
+
     path = "simple/model7/demo7"  # 路径这里用demo，若改infer中对应需要改
 
     model = RandomNet()

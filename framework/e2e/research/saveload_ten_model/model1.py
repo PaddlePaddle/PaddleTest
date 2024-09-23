@@ -163,8 +163,12 @@ class RandomNet(nn.Layer):
         return x
 
 
+# if __name__ == "__main__":
+
+
 def test_model1():
     """test_model1"""
+
     # 转换为Paddle张量
     num_image = 10
     size = 64
