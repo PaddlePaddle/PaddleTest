@@ -143,6 +143,7 @@ class RandomNet(nn.Layer):
 
 def test_model3():
     """test model"""
+
     # 转换为Paddle张量
     num_image = 10
     size = 64
@@ -152,9 +153,11 @@ def test_model3():
     # assert (size % (2 ** max_conv_layers)) != 0, "不应该能够整除，但却整除了！"
 
     data = np.random.randn(num_image, 3, size, size).astype("float32")
+
     # label = np.random.randint(0, 10, (10, 1), dtype="int64")
     inputs = paddle.to_tensor(data)
     # labels = paddle.to_tensor(label)
+
     path = "simple/model3/demo3"  # 路径这里用demo，若改infer中对应需要改
 
     model = RandomNet()

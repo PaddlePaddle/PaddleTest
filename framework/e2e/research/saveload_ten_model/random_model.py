@@ -240,7 +240,9 @@ def save_model(model, path,inputs):
     model.eval()
 
     save_model_path = os.path.join(path.split("/")[0],path.split("/")[1],"model.pdparams")
+
     paddle.save(model.state_dict(),save_model_path)
+
     #加载模型的参数
     model.set_state_dict(paddle.load(save_model_path))
     pred = model(inputs)
@@ -255,7 +257,9 @@ def jit_save(model,path,inputs):
     outputs_mean = paddle.mean(pred)
     print("Save Model Output Mean: "+ str(outputs_mean.numpy()))
     # 保存模型
+
     paddle.jit.save(model, path)
+
 
     return pred,outputs_mean
 
@@ -374,6 +378,9 @@ def test_model():
     """test model"""
     # 转换为Paddle张量
     num_image = 10
+
+
+
     size = 64
     max_conv_layers = 5
 
@@ -381,9 +388,11 @@ def test_model():
     # assert (size % (2 ** max_conv_layers)) != 0, "不应该能够整除，但却整除了！"
 
     data = np.random.randn(num_image, 3, size, size).astype("float32")
+
     # label = np.random.randint(0, 10, (10, 1), dtype="int64")
     inputs = paddle.to_tensor(data)
     # labels = paddle.to_tensor(label)
+
     # path = "simple/demo" #
 
     for i in range(num_models):
