@@ -368,11 +368,12 @@ if __name__ == "__main__":
             f.write(template.format(a_str=a_str, b_str=b_str, c=i + 1, d=i + 1))
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
+def test_model():
+    """test model"""
     # 转换为Paddle张量
     num_image = 10
-    num_models = 10  # 生成5个随机模型
     size = 64
     max_conv_layers = 5
 
@@ -380,9 +381,9 @@ if __name__ == "__main__":
     # assert (size % (2 ** max_conv_layers)) != 0, "不应该能够整除，但却整除了！"
 
     data = np.random.randn(num_image, 3, size, size).astype("float32")
-    label = np.random.randint(0, 10, (10, 1), dtype="int64")
+    # label = np.random.randint(0, 10, (10, 1), dtype="int64")
     inputs = paddle.to_tensor(data)
-    labels = paddle.to_tensor(label)
+    # labels = paddle.to_tensor(label)
     # path = "simple/demo" #
 
     for i in range(num_models):
