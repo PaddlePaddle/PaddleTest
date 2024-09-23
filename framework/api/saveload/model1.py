@@ -6,7 +6,6 @@ import os
 import paddle
 import paddle.nn as nn
 from paddle.static import InputSpec
-
 # 引用 paddle inference 预测库
 import paddle.inference as paddle_infer
 import numpy as np
