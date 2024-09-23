@@ -24,7 +24,9 @@ def save_model(model, path, inputs):
     model.eval()
 
     save_model_path = os.path.join(path.split("/")[0], path.split("/")[1], "model.pdparams")
+
     paddle.save(model.state_dict(), save_model_path)
+
     # 加载模型的参数
     model.set_state_dict(paddle.load(save_model_path))
     pred = model(inputs)
@@ -43,6 +45,7 @@ def jit_save(model, path, inputs):
     outputs_mean = paddle.mean(pred)
     print("Save Model Output Mean: " + str(outputs_mean.numpy()))
     # 保存模型
+
     paddle.jit.save(model, path)
 
     return pred, outputs_mean
@@ -162,8 +165,10 @@ class RandomNet(nn.Layer):
 
 # if __name__ == "__main__":
 
+
 def test_model1():
-    """test model"""
+    """test_model1"""
+
     # 转换为Paddle张量
     num_image = 10
     size = 64
@@ -190,5 +195,3 @@ def test_model1():
 
     assert output_1 == output_0 and are_close(output_2, output_3), "模型运行失败，可能是数据不一致或计算错误"
     print("恭喜你,模型运行成功，再接再厉！！")
-
-
