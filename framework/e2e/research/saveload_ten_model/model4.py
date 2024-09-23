@@ -143,7 +143,6 @@ class RandomNet(nn.Layer):
         return x
 
 
-
 # if __name__ == "__main__":
 
 def test_model4():
@@ -162,6 +161,7 @@ def test_model4():
     # label = np.random.randint(0, 10, (10, 1), dtype="int64")
     inputs = paddle.to_tensor(data)
     # labels = paddle.to_tensor(label)
+
 
     path = "simple/model4/demo4"  # 路径这里用demo，若改infer中对应需要改
 

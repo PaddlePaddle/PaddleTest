@@ -17,13 +17,11 @@ np.random.seed(32)
 
 
 def save_model(model, path, inputs):
-    """paddle.save"""
+    """保存模型"""
     # 保存模型
     model.eval()
-
     save_model_path = os.path.join(path.split("/")[0], path.split("/")[1], "model.pdparams")
     paddle.save(model.state_dict(), save_model_path)
-
     # 加载模型的参数
     model.set_state_dict(paddle.load(save_model_path))
     pred = model(inputs)
@@ -37,13 +35,12 @@ def jit_save(model, path, inputs):
     # 设置训练模式
     model.eval()
     pred = model(inputs)
-    outputs_mean = paddle.mean(pred)
-    print("Save Model Output Mean: " + str(outputs_mean.numpy()))
+    outputs = paddle.mean(pred)
+    print(f"Jit.Save Model Output Mean: {outputs.numpy()}")
     # 保存模型
-
     paddle.jit.save(model, path)
 
-    return pred, outputs_mean
+    return pred, outputs
 
 
 def jit_load(model, path, inputs):
@@ -53,13 +50,13 @@ def jit_load(model, path, inputs):
 
     pred = loaded_model(inputs)
     output_mean = paddle.mean(pred)
-    print("Loaded Model Output Mean: " + str(output_mean.numpy()))
+    print(f"Loaded Model Output Mean: {output_mean.numpy()}")
 
     return pred, output_mean
 
 
 def infer(num_image, path, inputs):
-    """paddle.inference"""
+    """推理"""
     # 创建 config
     model_name_or_path = path.split("/demo")[0]
     model_prefix = path.split("/")[-1]
@@ -76,7 +73,7 @@ def infer(num_image, path, inputs):
     # 获取输入的名称
     input_names = predictor.get_input_names()
     input_handle = predictor.get_input_handle(input_names[0])
-    # 设置输入
+    # 设置输入  这里的64是输入图片的尺寸 需要和前面保持一致的
     input_handle.reshape([num_image, 3, 64, 64])
     input_handle.copy_from_cpu(inputs)
     # 运行 predictor
@@ -86,44 +83,58 @@ def infer(num_image, path, inputs):
     output_handle = predictor.get_output_handle(output_names[0])
     pred = output_handle.copy_to_cpu()  # numpy.ndarray 类型
     outputs = np.mean(pred)
-    print("Infer Output Mean: " + str(np.mean(pred)))
+    print(f"Infer Output Mean: {outputs}")
 
     return pred, outputs
 
 
-def are_close(a, b, tol=1e-5):
-    """判断两个浮点数a和b是否足够接近，是则返回True；否则返回False；"""
-    # 判断两个浮点数a和b是否足够接近，是则返回True；否则返回False；
-    # a, b: 要比较的两个浮点数或numpy数组；
-    # tol: 容差，默认为1e-9。
+def are_close(a, b, tol=1e-3):
+    """
+    判断两个浮点数是否足够接近。
+
+    a, b: 要比较的两个浮点数或numpy数组。
+    tol: 容差，默认为1e-9。
+
+    如果a和b足够接近，则返回True；否则返回False。
+    """
     return np.allclose(a, b, atol=tol)
 
 
 class RandomNet(nn.Layer):
-    """一个简单的神经网络类"""
+    """一个简单的神经网络"""
 
     def __init__(self):
         super(RandomNet, self).__init__()
         # 定义卷积层和ReLU层
         self.layers = nn.LayerList(
             [
-                nn.Conv2D(3, 100, kernel_size=[3, 3], padding=1),
+                nn.Conv2D(3, 123, kernel_size=[3, 3], padding=1),
+                nn.BatchNorm2D(num_features=123, momentum=0.9, epsilon=1e-05),
                 nn.ReLU(),
-                nn.Conv2D(100, 80, kernel_size=[3, 3], padding=1),
-                nn.ReLU(),
-                nn.Conv2D(80, 83, kernel_size=[3, 3], padding=1),
-                nn.ReLU(),
-                nn.Conv2D(83, 111, kernel_size=[3, 3], padding=1),
+                nn.Conv2D(123, 106, kernel_size=[3, 3], padding=1),
                 nn.ReLU(),
                 nn.MaxPool2D(kernel_size=2, stride=2, padding=0),
+                nn.Conv2D(106, 96, kernel_size=[3, 3], padding=1),
+                nn.ReLU(),
+                nn.MaxPool2D(kernel_size=2, stride=2, padding=0),
+                nn.Conv2D(96, 70, kernel_size=[3, 3], padding=1),
+                nn.ReLU(),
             ]
         )
 
-        self.fc_layers = nn.LayerList([nn.Linear(in_features=113664, out_features=10)])
+        self.fc_layers = nn.LayerList(
+            [
+                nn.Linear(in_features=17920, out_features=579),
+                nn.ReLU(),
+                nn.Linear(in_features=579, out_features=341),
+                nn.ReLU(),
+                nn.Linear(in_features=341, out_features=10),
+            ]
+        )
 
     @paddle.jit.to_static
     def forward(self, x):
-        """前向传播函数"""
+        """前向传播"""
         for layer in self.layers:
             x = layer(x)
             if isinstance(layer, nn.MaxPool2D):
@@ -138,9 +149,8 @@ class RandomNet(nn.Layer):
 
 # if __name__ == "__main__":
 
-def test_model2():
+def test_model9():
     """test model"""
-
     # 转换为Paddle张量
     num_image = 10
     size = 64
@@ -150,12 +160,10 @@ def test_model2():
     # assert (size % (2 ** max_conv_layers)) != 0, "不应该能够整除，但却整除了！"
 
     data = np.random.randn(num_image, 3, size, size).astype("float32")
-
     # label = np.random.randint(0, 10, (10, 1), dtype="int64")
     inputs = paddle.to_tensor(data)
     # labels = paddle.to_tensor(label)
-
-    path = "simple/model2/demo2"  # 路径这里用demo，若改infer中对应需要改
+    path = "simple/model9/demo9"  # 路径这里用demo，若改infer中对应需要改
 
     model = RandomNet()
     # 这里可以添加训练、保存、加载和预测的逻辑

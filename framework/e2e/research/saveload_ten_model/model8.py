@@ -142,7 +142,6 @@ class RandomNet(nn.Layer):
         return x
 
 
-
 # if __name__ == "__main__":
 
 def test_model8():

@@ -379,7 +379,7 @@ def test_model():
     # 转换为Paddle张量
     num_image = 10
 
-    num_models = 10  # 生成5个随机模型
+
 
     size = 64
     max_conv_layers = 5

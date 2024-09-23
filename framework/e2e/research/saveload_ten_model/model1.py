@@ -167,7 +167,7 @@ class RandomNet(nn.Layer):
 
 
 def test_model1():
-    """test_model1"""
+    """test model"""
 
     # 转换为Paddle张量
     num_image = 10
@@ -195,3 +195,4 @@ def test_model1():
 
     assert output_1 == output_0 and are_close(output_2, output_3), "模型运行失败，可能是数据不一致或计算错误"
     print("恭喜你,模型运行成功，再接再厉！！")
+
