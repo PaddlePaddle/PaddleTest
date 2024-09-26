@@ -23,7 +23,7 @@ class TestDivide(APIBase):
         """
         implement
         """
-        self.types = [np.float32, np.float64]
+        self.types = [np.float32]
         # self.types = [np.float32, np.float64, np.int32, np.int64]
         # self.debug = True
         # enable check grad

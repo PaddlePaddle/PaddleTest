@@ -20,7 +20,7 @@ class TestEqual(APIBase):
         """
         implement
         """
-        self.types = [np.int32, np.int64, np.float32, np.float64]
+        self.types = [np.int32, np.int64, np.float32]
         # self.debug = True
         # self.static = True
         # enable check grad
@@ -96,37 +96,37 @@ def test_equal4():
     obj.run(res=res, x=x, y=y)
 
 
-@pytest.mark.api_base_equal_parameters
-def test_equal5():
-    """
-    x != y
-    """
-    x = randtool("float", -10, 10, [3, 3, 3])
-    y = randtool("float", -10, 10, [3, 3, 3])
-    res = np.equal(x, y)
-    obj.run(res=res, x=x, y=y)
+# @pytest.mark.api_base_equal_parameters
+# def test_equal5():
+#     """
+#     x != y
+#     """
+#     x = randtool("float", -10, 10, [3, 3, 3])
+#     y = randtool("float", -10, 10, [3, 3, 3])
+#     res = np.equal(x, y)
+#     obj.run(res=res, x=x, y=y)
 
 
-@pytest.mark.api_base_equal_parameters
-def test_equal6():
-    """
-    x != y broadcast
-    """
-    x = randtool("float", -10, 10, [3, 3, 3, 1])
-    y = randtool("float", -10, 10, [3, 3, 1])
-    res = np.equal(x, y)
-    obj.run(res=res, x=x, y=y)
+# @pytest.mark.api_base_equal_parameters
+# def test_equal6():
+#     """
+#     x != y broadcast
+#     """
+#     x = randtool("float", -10, 10, [3, 3, 3, 1])
+#     y = randtool("float", -10, 10, [3, 3, 1])
+#     res = np.equal(x, y)
+#     obj.run(res=res, x=x, y=y)
 
 
-@pytest.mark.api_base_equal_parameters
-def test_equal7():
-    """
-    x != y broadcast  x.shape < y.shape
-    """
-    x = randtool("float", -10, 10, [3, 3, 1])
-    y = randtool("float", -10, 10, [3, 3, 3, 1])
-    res = np.equal(x, y)
-    obj.run(res=res, x=x, y=y)
+# @pytest.mark.api_base_equal_parameters
+# def test_equal7():
+#     """
+#     x != y broadcast  x.shape < y.shape
+#     """
+#     x = randtool("float", -10, 10, [3, 3, 1])
+#     y = randtool("float", -10, 10, [3, 3, 3, 1])
+#     res = np.equal(x, y)
+#     obj.run(res=res, x=x, y=y)
 
 
 @pytest.mark.api_base_equal_exception

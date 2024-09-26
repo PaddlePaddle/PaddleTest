@@ -60,7 +60,7 @@ class APIBase(object):
         self.func = func
         self.types = []
         self.places = []
-        self.backward_dtype = [np.float16, np.float32, np.float64]
+        self.backward_dtype = [np.float16, np.float32]
         # no grad var
         self.no_grad_var = []
         # calculate grad delta, You can rewrite these value

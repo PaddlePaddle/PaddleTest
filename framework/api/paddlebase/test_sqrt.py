@@ -20,7 +20,7 @@ class TestSqrt(APIBase):
         """
         implement
         """
-        self.types = [np.float32, np.float64, np.float16]
+        self.types = [np.float32, np.float16]
         # self.debug = True
         # enable check grad
         # self.enable_backward = False

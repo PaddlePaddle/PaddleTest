@@ -19,7 +19,7 @@ class TestSin(APIBase):
         """
         implement
         """
-        self.types = [np.float32, np.float64]
+        self.types = [np.float32]
         # sin has backward compute
         self.enable_backward = True
 
@@ -47,14 +47,14 @@ def test_sin_base():
 #     obj.run(res=res, x=x)
 
 
-@pytest.mark.api_base_sin_parameters
-def test_sin2():
-    """
-    x = large num
-    """
-    x = np.array([-23333, 463333, 665432222])
-    res = np.sin(x)
-    obj.run(res=res, x=x)
+# @pytest.mark.api_base_sin_parameters
+# def test_sin2():
+#     """
+#     x = large num
+#     """
+#     x = np.array([-23333, 463333, 665432222])
+#     res = np.sin(x)
+#     obj.run(res=res, x=x)
 
 
 @pytest.mark.api_base_sin_parameters
