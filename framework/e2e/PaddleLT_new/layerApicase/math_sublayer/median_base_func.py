@@ -15,7 +15,7 @@ class LayerCase(paddle.nn.Layer):
         """
         forward
         """
-        out = paddle.median(x,  axis=0, keepdims=False, )
+        out = paddle.median(x,  axis=0, keepdim=False, )
         return out
 
 

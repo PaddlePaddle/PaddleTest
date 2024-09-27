@@ -8,9 +8,12 @@ runner
 
 import os
 import json
-import logging
+
+# import logging
 import traceback
 import numpy as np
+
+from pltools.logger import Logger
 
 framework = ""
 if os.environ.get("FRAMEWORK") == "paddle":
@@ -37,7 +40,13 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
     if isinstance(expect, str):
         raise Exception("expect is exception !!!")
 
-    if isinstance(expect, eval(f"{framework}.Tensor")) or isinstance(expect, np.ndarray):
+    if expect is None or result is None:
+        if expect is None:
+            Logger("PLT_compare").get_log().info(f"{exp_name} 结果为None, 所以跳过 {exp_name} 和 {res_name} 精度对比")
+        if result is None:
+            Logger("PLT_compare").get_log().info(f"{res_name} 结果为None, 所以跳过 {exp_name} 和 {res_name} 精度对比")
+        pass
+    elif isinstance(expect, eval(f"{framework}.Tensor")) or isinstance(expect, np.ndarray):
         if isinstance(result, eval(f"{framework}.Tensor")):
             if framework == "torch":
                 result = result.detach().numpy()
@@ -92,16 +101,19 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
                 )
         else:
             for k, v in expect.items():
-                base_compare(
-                    result=result[k],
-                    expect=expect[k],
-                    res_name=res_name + "[{}]".format(str(k)),
-                    exp_name=exp_name + "[{}]".format(str(k)),
-                    logger=logger,
-                    delta=delta,
-                    rtol=rtol,
-                    exc_dict=exc_dict,
-                )
+                if k in result:
+                    base_compare(
+                        result=result[k],
+                        expect=expect[k],
+                        res_name=res_name + "[{}]".format(str(k)),
+                        exp_name=exp_name + "[{}]".format(str(k)),
+                        logger=logger,
+                        delta=delta,
+                        rtol=rtol,
+                        exc_dict=exc_dict,
+                    )
+                else:
+                    Logger("PLT_compare").get_log().info(f"{exp_name} 有 {k}, 但是 {res_name} 没有 {k}, 所以跳过 {k} 精度对比")
     elif isinstance(expect, list) or isinstance(expect, tuple):
         for i, element in enumerate(expect):
             if isinstance(result, (np.generic, np.ndarray)) or isinstance(result, eval(f"{framework}.Tensor")):
@@ -130,11 +142,46 @@ def base_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1
                 )
     elif isinstance(expect, (bool, int, float)):
         assert expect == result
-    elif expect is None:
-        pass
     else:
         raise Exception("expect is unknown data struction in compare_tool!!!")
 
+    return exc_dict
+
+
+def infer_compare(result, expect, res_name, exp_name, logger, delta=1e-10, rtol=1e-10, exc_dict={}):
+    """
+    比较函数
+    :param result: 待测值
+    :param expect: 基线值
+    :param delta: 误差值
+    :param rtol: 相对误差
+    :return:
+    """
+    # 去除反向结果的数据
+    forward_handled_result = {"logit": []}
+    forward_handled_expect = {"logit": []}
+
+    # 去除非tensor数值的影响
+    if isinstance(expect["logit"], (tuple, list)):
+        for item in expect["logit"]:
+            if not isinstance(item, (int, bool, float)):
+                forward_handled_expect["logit"].append(item)
+
+    if isinstance(result["logit"], (tuple, list)):
+        for item in result["logit"]:
+            if not isinstance(item, (int, bool, float)):
+                forward_handled_result["logit"].append(item)
+
+    exc_dict = base_compare(
+        result=forward_handled_result,
+        expect=forward_handled_expect,
+        res_name=res_name,
+        exp_name=exp_name,
+        logger=logger,
+        delta=delta,
+        rtol=rtol,
+        exc_dict=exc_dict,
+    )
     return exc_dict
 
 
@@ -353,8 +400,6 @@ def perf_compare_kernel_dict(
 
 
 if __name__ == "__main__":
-    from tools.logger import Logger
-
     result = {
         "logit": [paddle.to_tensor([1.0]), paddle.to_tensor([1.0])],
         "data_grad": [paddle.to_tensor([0.0]), paddle.to_tensor([0.0])],

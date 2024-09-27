@@ -15,7 +15,7 @@ class LayerCase(paddle.nn.Layer):
         """
         forward
         """
-        out = paddle.dist(x, y,  p=-inf, )
+        out = paddle.dist(x, y,  p=float("-inf"), )
         return out
 
 

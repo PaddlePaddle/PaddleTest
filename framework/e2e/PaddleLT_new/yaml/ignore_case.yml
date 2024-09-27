@@ -1089,9 +1089,19 @@ yaml/CI_dy^dy2stcinn_train_inputspec.yml:
 
 yaml/dy^dy2stcinn_eval-dy2st^dy2stcinn_eval_benchmark.yml:
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_174.py
+  ########################################################################################
+  # 9.19 commit: c188b1d44ea2f8219b3a1760043633c490cdaa23...f09a9a2bf1b3c6ebee47c7dc5a8da97276305c73
+  - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_l_30e_voc/SIR_182.py
+  - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_s_30e_voc/SIR_179.py
+  ########################################################################################
 
 yaml/dy^dy2stcinn_train-dy2st^dy2stcinn_train_benchmark.yml:
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_174.py
+  ########################################################################################
+  # 9.19 commit: c188b1d44ea2f8219b3a1760043633c490cdaa23...f09a9a2bf1b3c6ebee47c7dc5a8da97276305c73
+  - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_l_30e_voc/SIR_182.py
+  - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_s_30e_voc/SIR_179.py
+  ########################################################################################
 
 # yaml/dy^dy2stcinn_train_inputspec.yml:
   # - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_12.py # hang住CINN

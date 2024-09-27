@@ -16,6 +16,7 @@ class LayerCase(paddle.nn.Layer):
         forward
         """
         out = paddle.broadcast_shape( x_shape=[2, 3, 4, 4, 1], y_shape=[2, 3, 1, 4, 3], )
+        out = paddle.to_tensor(out, stop_gradient=False)
         return out
 
 

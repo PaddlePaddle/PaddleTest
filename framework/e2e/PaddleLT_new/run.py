@@ -17,14 +17,14 @@ import pandas as pd
 import layertest
 from db.layer_db import LayerBenchmarkDB
 from strategy.compare import perf_compare_dict, perf_compare_kernel_dict
-from tools.case_select import CaseSelect
-from tools.logger import Logger
-from tools.yaml_loader import YamlLoader
-from tools.json_loader import JSONLoader
-from tools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle, save_txt
-from tools.upload_bos import UploadBos
-from tools.statistics import split_list, sublayer_perf_gsb_gen, kernel_perf_gsb_gen
-from tools.alarm import Alarm
+from pltools.case_select import CaseSelect
+from pltools.logger import Logger
+from pltools.yaml_loader import YamlLoader
+from pltools.json_loader import JSONLoader
+from pltools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle, save_txt
+from pltools.upload_bos import UploadBos
+from pltools.statistics import split_list, sublayer_perf_gsb_gen, kernel_perf_gsb_gen
+from pltools.alarm import Alarm
 
 
 class Run(object):
@@ -67,6 +67,14 @@ class Run(object):
             import paddle
 
             self.logger.get_log().info(f"Paddle框架commit: {paddle.__git_commit__}, 版本: {paddle.__version__}")
+
+            if os.environ.get("USE_PADDLE_MODEL", "None") == "PaddleOCR":
+                os.system(
+                    "wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleOCR/PaddleOCR.tar.gz --no-proxy "
+                    "&& tar -xzf PaddleOCR.tar.gz && rm -rf PaddleOCR.tar.gz "
+                    "&& cd PaddleOCR && git rev-parse HEAD && git branch "
+                    f"&& {self.py_cmd} -m pip install -r requirements.txt && {self.py_cmd} setup.py install"
+                )
 
         # 下载ground truth用于跨硬件测试
         plt_gt_download_url = os.environ.get("PLT_GT_DOWNLOAD_URL")

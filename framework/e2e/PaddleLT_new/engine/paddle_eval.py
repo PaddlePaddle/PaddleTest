@@ -13,9 +13,9 @@ from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 
-from tools.logger import Logger
+from pltools.logger import Logger
 
-from tools.res_save import save_tensor
+from pltools.res_save import save_tensor
 
 
 class LayerEval(object):
@@ -24,7 +24,7 @@ class LayerEval(object):
     """
 
     # def __init__(self, testing, layerfile, device_id):
-    def __init__(self, testing, layerfile, device_place_id):
+    def __init__(self, testing, layerfile, device_place_id, upstream_net):
         """
         初始化
         """
@@ -36,6 +36,8 @@ class LayerEval(object):
         # paddle.set_device("{}:{}".format(str(self.device), str(device_id)))
 
         self.testing = testing
+        self.upstream_net = upstream_net
+        self.return_net_instance = self.testing.get("return_net_instance", "False")
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 
@@ -53,7 +55,10 @@ class LayerEval(object):
     def _net_instant(self):
         """get net"""
         reset(self.seed)
-        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        if self.upstream_net:
+            net = self.upstream_net
+        else:
+            net = BuildLayer(layerfile=self.layerfile).get_layer()
         return net
 
     def _net_input_and_spec(self):
@@ -85,7 +90,10 @@ class LayerEval(object):
         net = self._net_instant()
         net.eval()
         logit = net(*self._net_input())
-        return {"logit": logit}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit}, "net": net}
+        else:
+            return {"res": {"logit": logit}, "net": None}
 
     def dy2st_eval(self):
         """dy2st eval"""
@@ -94,7 +102,10 @@ class LayerEval(object):
         st_net = paddle.jit.to_static(net, full_graph=True)
         st_net.eval()
         logit = st_net(*data)
-        return {"logit": logit}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit}, "net": st_net}
+        else:
+            return {"res": {"logit": logit}, "net": None}
 
     def dy2st_eval_inputspec(self):
         """dy2st eval"""
@@ -104,7 +115,10 @@ class LayerEval(object):
         st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
         st_net.eval()
         logit = st_net(*data)
-        return {"logit": logit}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit}, "net": st_net}
+        else:
+            return {"res": {"logit": logit}, "net": None}
 
     def dy2st_eval_static_inputspec(self):
         """dy2st eval"""
@@ -114,7 +128,10 @@ class LayerEval(object):
         st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
         st_net.eval()
         logit = st_net(*data)
-        return {"logit": logit}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit}, "net": st_net}
+        else:
+            return {"res": {"logit": logit}, "net": None}
 
     def dy2st_eval_cinn(self):
         """dy2st cinn eval"""
@@ -126,7 +143,10 @@ class LayerEval(object):
         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
         cinn_net.eval()
         logit = cinn_net(*data)
-        return {"logit": logit}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit}, "net": cinn_net}
+        else:
+            return {"res": {"logit": logit}, "net": None}
 
     def dy2st_eval_cinn_inputspec(self):
         """dy2st cinn eval with inputspec"""
@@ -139,7 +159,10 @@ class LayerEval(object):
         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
         cinn_net.eval()
         logit = cinn_net(*data)
-        return {"logit": logit}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit}, "net": cinn_net}
+        else:
+            return {"res": {"logit": logit}, "net": None}
 
     def dy2st_eval_cinn_static_inputspec(self):
         """dy2st cinn eval with inputspec"""
@@ -152,7 +175,10 @@ class LayerEval(object):
         cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
         cinn_net.eval()
         logit = cinn_net(*data)
-        return {"logit": logit}
+        if self.return_net_instance == "True":
+            return {"res": {"logit": logit}, "net": cinn_net}
+        else:
+            return {"res": {"logit": logit}, "net": None}
 
     # def dy2st_eval_cinn_inputspec_legacy_2(self):
     #     """dy2st cinn eval with inputspec"""

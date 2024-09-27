@@ -15,8 +15,8 @@ from db.db import DB
 from db.snapshot import Snapshot
 
 # from strategy.compare import perf_compare
-from tools.logger import Logger
-from tools.res_save import xlsx_save
+from pltools.logger import Logger
+from pltools.res_save import xlsx_save
 
 
 class LayerBenchmarkDB(object):

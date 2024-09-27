@@ -15,7 +15,7 @@ class LayerCase(paddle.nn.Layer):
         """
         forward
         """
-        out = paddle.put_along_axis(arr,  indices=paddle.to_tensor([[[[0]]]], dtype='int32', stop_gradient=False), value=21.0, axis=0, )
+        out = paddle.put_along_axis(arr,  indices=paddle.to_tensor([[[[0]]]], dtype='int32', stop_gradient=False), values=21.0, axis=0, )
         return out
 
 
