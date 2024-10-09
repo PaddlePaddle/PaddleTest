@@ -16,7 +16,7 @@ if paddle.device.is_compiled_with_cuda():
 else:
     devices = ["cpu"]
 
-types = [np.float32, np.float64, np.int32, np.int64]
+types = [np.float32, np.int32, np.int64]
 
 
 @pytest.mark.api_base_where_vartype

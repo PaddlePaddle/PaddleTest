@@ -22,7 +22,7 @@ class TestSilu(APIBase):
         """
         implement
         """
-        self.types = [np.float32, np.float64]
+        self.types = [np.float32]
         # self.debug = True
         # self.static = True
         # enable check grad

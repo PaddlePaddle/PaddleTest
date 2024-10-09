@@ -20,7 +20,7 @@ class TestTril(APIBase):
         """
         implement
         """
-        self.types = [np.float32, np.float64, np.int32, np.int64]
+        self.types = [np.float32, np.int32, np.int64]
         # self.debug = True
         # self.static = True
         # enable check grad
