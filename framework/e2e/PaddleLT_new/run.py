@@ -67,7 +67,7 @@ class Run(object):
             import paddle
 
             self.logger.get_log().info(f"Paddle框架commit: {paddle.__git_commit__}, 版本: {paddle.__version__}")
-
+            os.environ["paddle_commit"] = paddle.__git_commit__
             if os.environ.get("USE_PADDLE_MODEL", "None") == "PaddleOCR":
                 os.system(
                     "wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleOCR/PaddleOCR.tar.gz --no-proxy "
