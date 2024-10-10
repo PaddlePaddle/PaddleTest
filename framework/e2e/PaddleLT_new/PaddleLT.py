@@ -23,39 +23,39 @@ def test_module_layer(title, layerfile, testing, device_place_id):
     # allure.dynamic.feature(case)
     allure.dynamic.feature("case")
 
-    # flags_str = ""
-    # for key, value in os.environ.items():
-    #     if key.startswith("FLAGS_"):
-    #         flags_str = flags_str + key + "=" + value + ";"
-    # flags_str += (
-    #     "paddle_commit="
-    #     + os.environ.get("paddle_commit")
-    #     + ";"
-    #     + "TESTING="
-    #     + os.environ.get("TESTING")
-    #     + ";"
-    #     + "CUDA_VISIBLE_DEVICES="
-    #     + os.environ.get("CUDA_VISIBLE_DEVICES")
-    #     + ";"
-    #     + "FRAMEWORK="
-    #     + os.environ.get("FRAMEWORK")
-    #     + ";"
-    #     + "USE_PADDLE_MODEL="
-    #     + os.environ.get("USE_PADDLE_MODEL")
-    #     + ";"
-    #     + "wheel_url="
-    #     + os.environ.get("wheel_url")
-    #     + ";"
-    #     + "docker_image="
-    #     + os.environ.get("docker_image")
-    #     + ";"
-    # )
-    # for key, value in os.environ.items():
-    #     if key.startswith("PLT_"):
-    #         flags_str = flags_str + key + "=" + value + ";"
+    flags_str = ""
+    for key, value in os.environ.items():
+        if key.startswith("FLAGS_"):
+            flags_str = flags_str + key + "=" + value + ";"
+    flags_str += (
+        "paddle_commit="
+        + os.environ.get("paddle_commit")
+        + ";"
+        + "TESTING="
+        + os.environ.get("TESTING")
+        + ";"
+        + "CUDA_VISIBLE_DEVICES="
+        + os.environ.get("CUDA_VISIBLE_DEVICES")
+        + ";"
+        + "FRAMEWORK="
+        + os.environ.get("FRAMEWORK")
+        + ";"
+        + "USE_PADDLE_MODEL="
+        + os.environ.get("USE_PADDLE_MODEL")
+        + ";"
+        + "wheel_url="
+        + os.environ.get("wheel_url")
+        + ";"
+        + "docker_image="
+        + os.environ.get("docker_image")
+        + ";"
+    )
+    for key, value in os.environ.items():
+        if key.startswith("PLT_"):
+            flags_str = flags_str + key + "=" + value + ";"
 
-    # allure.dynamic.description(flags_str)
-    allure.dynamic.description("Layer Test")
+    allure.dynamic.description(flags_str)
+    # allure.dynamic.description("Layer Test")
     single_test = layertest.LayerTest(
         title=title, layerfile=layerfile, testing=testing, device_place_id=device_place_id
     )
