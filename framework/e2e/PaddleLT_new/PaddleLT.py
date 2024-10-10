@@ -24,14 +24,16 @@ def test_module_layer(title, layerfile, testing, device_place_id):
     allure.dynamic.feature("case")
 
     flags_str = ""
+    if os.environ.get("FRAMEWORK") == "paddle":
+        import paddle
+
+        flags_str += "paddle_commit=" + paddle.__git_commit__ + ";"
+
     for key, value in os.environ.items():
         if key.startswith("FLAGS_"):
             flags_str = flags_str + key + "=" + value + ";"
     flags_str += (
-        "paddle_commit="
-        + os.environ.get("paddle_commit")
-        + ";"
-        + "TESTING="
+        "TESTING="
         + os.environ.get("TESTING")
         + ";"
         + "CUDA_VISIBLE_DEVICES="
