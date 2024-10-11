@@ -33,7 +33,7 @@ def test_module_layer(title, layerfile, testing, device_place_id):
         if key.startswith("FLAGS_"):
             flags_str = flags_str + key + "=" + value + ";"
 
-    flags_str = f"paddle_commit={os.environ.get('paddle_commit')};"
+    flags_str += f"paddle_commit={os.environ.get('paddle_commit')};"
     flags_str += f"TESTING={os.environ.get('TESTING')};"
     flags_str += f"CUDA_VISIBLE_DEVICES={os.environ.get('CUDA_VISIBLE_DEVICES')};"
     flags_str += f"FRAMEWORK={os.environ.get('FRAMEWORK')};"
