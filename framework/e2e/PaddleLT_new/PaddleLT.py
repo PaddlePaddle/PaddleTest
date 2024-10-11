@@ -24,11 +24,6 @@ def test_module_layer(title, layerfile, testing, device_place_id):
     allure.dynamic.feature("case")
 
     flags_str = ""
-    # if os.environ.get("FRAMEWORK") == "paddle":
-    #     import paddle
-
-    #     flags_str += "paddle_commit=" + paddle.__git_commit__ + ";"
-
     for key, value in os.environ.items():
         if key.startswith("FLAGS_"):
             flags_str = flags_str + key + "=" + value + ";"
@@ -47,7 +42,6 @@ def test_module_layer(title, layerfile, testing, device_place_id):
             flags_str = flags_str + key + "=" + value + ";"
 
     allure.dynamic.description(flags_str)
-    # allure.dynamic.description("Layer Test")
     single_test = layertest.LayerTest(
         title=title, layerfile=layerfile, testing=testing, device_place_id=device_place_id
     )
