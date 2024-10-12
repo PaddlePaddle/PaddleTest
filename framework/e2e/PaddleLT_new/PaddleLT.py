@@ -32,7 +32,10 @@ def test_module_layer(title, layerfile, testing, device_place_id):
     flags_str += "\n"
     flags_str += f"paddle_commit={os.environ.get('paddle_commit', 'None')};"
     flags_str += "\n"
-    flags_str += f"wheel_url={os.environ.get('wheel_url', 'None')};"
+    # flags_str += f"wheel_url={os.environ.get('wheel_url', 'None')};"
+    flags_str += (
+        f"wheel_url={os.environ.get('wheel_url', 'None').replace('latest', os.environ.get('paddle_commit', 'None'))};"
+    )
     flags_str += "\n"
     for key, value in os.environ.items():
         if key.startswith("FLAGS_"):
