@@ -48,9 +48,9 @@ class LayerEval(object):
 
     def _unset_flags(self, engine_str="test_engine"):
         """unset flags"""
-        if "FLAGS_cinn_auto_recompute" in os.environ:
-            del os.environ["FLAGS_cinn_auto_recompute"]
-            Logger(engine_str).get_log().info("已取消环境变量FLAGS_cinn_auto_recompute")
+        if "FLAGS_enable_auto_recompute" in os.environ:
+            del os.environ["FLAGS_enable_auto_recompute"]
+            Logger(engine_str).get_log().info("已取消环境变量FLAGS_enable_auto_recompute")
 
     def _net_input(self):
         """get input"""
@@ -143,8 +143,8 @@ class LayerEval(object):
         """dy2st cinn eval"""
 
         if os.environ.get("PLT_enable_auto_recompute", "0") == "1":
-            os.environ["FLAGS_cinn_auto_recompute"] = "1"
-            Logger("dy2st_eval_cinn").get_log().info("已设定环境变量FLAGS_cinn_auto_recompute")
+            os.environ["FLAGS_enable_auto_recompute"] = "1"
+            Logger("dy2st_eval_cinn").get_log().info("已设定环境变量FLAGS_enable_auto_recompute")
         data = self._net_input()
         net = self._net_instant()
 
@@ -164,8 +164,8 @@ class LayerEval(object):
         """dy2st cinn eval with dy inputspec"""
 
         if os.environ.get("PLT_enable_auto_recompute", "0") == "1":
-            os.environ["FLAGS_cinn_auto_recompute"] = "1"
-            Logger("dy2st_eval_cinn_inputspec").get_log().info("已设定环境变量FLAGS_cinn_auto_recompute")
+            os.environ["FLAGS_enable_auto_recompute"] = "1"
+            Logger("dy2st_eval_cinn_inputspec").get_log().info("已设定环境变量FLAGS_enable_auto_recompute")
         data, input_spec = self._net_input_and_spec()
         Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
         net = self._net_instant()
@@ -186,8 +186,8 @@ class LayerEval(object):
         """dy2st cinn eval with st inputspec"""
 
         if os.environ.get("PLT_enable_auto_recompute", "0") == "1":
-            os.environ["FLAGS_cinn_auto_recompute"] = "1"
-            Logger("dy2st_eval_cinn_static_inputspec").get_log().info("已设定环境变量FLAGS_cinn_auto_recompute")
+            os.environ["FLAGS_enable_auto_recompute"] = "1"
+            Logger("dy2st_eval_cinn_static_inputspec").get_log().info("已设定环境变量FLAGS_enable_auto_recompute")
         data, input_spec = self._net_input_and_static_spec()
         Logger("dy2st_eval_cinn_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
