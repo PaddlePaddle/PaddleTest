@@ -186,6 +186,7 @@ def sublayer_perf_gsb_gen(compare_dict, compare_list):
     :return:
     """
     gsb_dict = {}
+    print("compare_dict is: ", compare_dict)
     for compare in compare_list:
         if compare["baseline"] == "ground_truth":
             gsb_dict[compare["latest"] + "^" + "compare"] = {"G": 0, "S": 0, "B": 0, "error": 0}
