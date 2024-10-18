@@ -644,8 +644,6 @@ class Run(object):
                 )
                 gsb_dict = sublayer_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
                 ratio_dict = sublayer_perf_ratio_gen(compare_dict=compare_dict, compare_list=compare_list)
-                print("gsb_dict is: ", gsb_dict)
-                print("ratio_dict is: ", ratio_dict)
                 for key, value in gsb_dict.items():
                     gsb_dict[key] = {**gsb_dict[key], **ratio_dict[key]}
             save_txt(data=gsb_dict, filename="gsb_dict")
