@@ -23,7 +23,7 @@ from pltools.yaml_loader import YamlLoader
 from pltools.json_loader import JSONLoader
 from pltools.res_save import xlsx_save, download_sth, create_tar_gz, extract_tar_gz, load_pickle, save_txt
 from pltools.upload_bos import UploadBos
-from pltools.statistics import split_list, sublayer_perf_gsb_gen, kernel_perf_gsb_gen
+from pltools.statistics import split_list, sublayer_perf_gsb_gen, kernel_perf_gsb_gen, sublayer_perf_ratio_gen
 from pltools.alarm import Alarm
 
 
@@ -643,6 +643,8 @@ class Run(object):
                     latest_layer_type=self.layer_type,
                 )
                 gsb_dict = sublayer_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
+                ratio_dict = sublayer_perf_ratio_gen(compare_dict=compare_dict, compare_list=compare_list)
+                gsb_dict = {**gsb_dict, **ratio_dict}
             save_txt(data=gsb_dict, filename="gsb_dict")
             xlsx_save(
                 sublayer_dict=compare_dict,
