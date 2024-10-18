@@ -632,7 +632,7 @@ class Run(object):
                     baseline_layer_type=baseline_layer_type,
                     latest_layer_type=self.layer_type,
                 )
-                gsb_dict = kernel_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
+                res_dict = kernel_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
             else:
                 compare_dict = perf_compare_dict(
                     compare_list=compare_list,
@@ -644,8 +644,8 @@ class Run(object):
                 )
                 gsb_dict = sublayer_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
                 ratio_dict = sublayer_perf_ratio_gen(compare_dict=compare_dict, compare_list=compare_list)
-                gsb_dict = {**gsb_dict, **ratio_dict}
-            save_txt(data=gsb_dict, filename="gsb_dict")
+                res_dict = {**gsb_dict, **ratio_dict}
+            save_txt(data=res_dict, filename="gsb_dict")
             xlsx_save(
                 sublayer_dict=compare_dict,
                 excel_file=os.environ.get("TESTING").replace("yaml/", "").replace(".yml", "") + ".xlsx",
