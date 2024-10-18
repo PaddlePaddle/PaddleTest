@@ -644,6 +644,8 @@ class Run(object):
                 )
                 gsb_dict = sublayer_perf_gsb_gen(compare_dict=compare_dict, compare_list=compare_list)
                 ratio_dict = sublayer_perf_ratio_gen(compare_dict=compare_dict, compare_list=compare_list)
+                print("gsb_dict is: ", gsb_dict)
+                print("ratio_dict is: ", ratio_dict)
                 res_dict = {**gsb_dict, **ratio_dict}
             save_txt(data=res_dict, filename="gsb_dict")
             xlsx_save(
