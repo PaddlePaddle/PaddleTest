@@ -40,22 +40,22 @@ yaml/CI_dy^dy2stcinn_train.yml:
   - layercase/sublayer1000/Seg_cases/enet_enet_cityscapes_1024x512_80k/SIR_40.py # 55分钟机器偶现报错
 
 yaml/CI_dy^dy2stcinn_train^dy2stcinn_eval_inputspec.yml:
-  - layercase/sublayer1000/Seg_cases/isanet_isanet_resnet50_os8_cityscapes_769x769_80k/SIR_35.py
-  - layercase/sublayer1000/Seg_cases/isanet_isanet_resnet50_os8_cityscapes_769x769_80k/SIR_32.py
+  # - layercase/sublayer1000/Seg_cases/isanet_isanet_resnet50_os8_cityscapes_769x769_80k/SIR_35.py
+  # - layercase/sublayer1000/Seg_cases/isanet_isanet_resnet50_os8_cityscapes_769x769_80k/SIR_32.py
   - layercase/sublayer1000/Det_cases/semi_det_baseline_ppyoloe_plus_crn_s_80e_coco_sup005/SIR_186.py
   - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_l_30e_voc/SIR_185.py
   - layercase/sublayer1000/Det_cases/ppyoloe_ppyoloe_plus_crn_x_80e_coco/SIR_189.py
   - layercase/sublayer1000/Det_cases/ppyoloe_ppyoloe_crn_l_300e_coco/SIR_179.py
   - layercase/sublayer1000/Det_cases/ppyoloe_ppyoloe_plus_crn_l_80e_coco/SIR_189.py
   - layercase/sublayer1000/Det_cases/mot_ocsort_ocsort_ppyoloe/SIR_178.py
-  - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_127.py
+  # - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_127.py
   - layercase/sublayer1000/Det_cases/ppyoloe_ppyoloe_plus_crn_s_80e_coco/SIR_186.py
   - layercase/sublayer1000/Det_cases/ppyoloe_ppyoloe_crn_s_300e_coco/SIR_181.py
   - layercase/sublayer1000/Det_cases/ppyoloe_voc_ppyoloe_plus_crn_s_30e_voc/SIR_182.py
   - layercase/sublayer1000/Det_cases/ppyoloe_ppyoloe_crn_s_400e_coco/SIR_181.py
   - layercase/sublayer1000/Det_cases/smalldet_ppyoloe_plus_sod_crn_l_80e_coco/SIR_177.py
   - layercase/sublayer1000/Det_cases/ppyoloe_ppyoloe_plus_crn_m_80e_coco/SIR_190.py
-  - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_12.py
+  - layercase/sublayer1000/Clas_cases/LeViT_LeViT_128/SIR_12.py  # 超时200秒
   - layercase/sublayer1000/Seg_cases/enet_enet_cityscapes_1024x512_80k/SIR_40.py # 55分钟机器偶现报错
 
 yaml/CI_dy^dy2stcinn_train_inputspec.yml:

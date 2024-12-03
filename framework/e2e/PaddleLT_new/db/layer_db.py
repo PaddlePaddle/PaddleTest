@@ -246,7 +246,7 @@ class LayerBenchmarkDB(object):
                 "testing": latest_testing,
                 "baseline_update_time": baseline_update_time,
                 "latest_update_time": latest_update_time,
-                "relative_fail_list": relative_fail_list,
+                "fail_list": relative_fail_list,
             }
 
             absolute_fail_dict[task] = {
@@ -255,7 +255,7 @@ class LayerBenchmarkDB(object):
                 "testing": latest_testing,
                 "baseline_update_time": baseline_update_time,
                 "latest_update_time": latest_update_time,
-                "absolute_fail_list": absolute_fail_list,
+                "fail_list": absolute_fail_list,
             }
 
         return relative_fail_dict, absolute_fail_dict

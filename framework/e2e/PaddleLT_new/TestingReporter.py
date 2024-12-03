@@ -7,10 +7,11 @@
 """
 
 import os
+import json
 from pltools.res_save import xlsx_save
 from pltools.logger import Logger
 from db.layer_db import LayerBenchmarkDB
-from db.info_map import precision_md5, performance_md5
+from db.info_map import precision_md5, precision_flags, performance_md5
 
 from binary_search import BinarySearch
 
@@ -29,8 +30,13 @@ class TestingReporter(object):
 
         self.storage = "./apibm_config.yml"
         self.task_list = task_list
-        self.date_interval = date_interval
         self.logger = Logger("PLTReporter")
+        self.logger.get_log().info(f"task list: {task_list}")
+        self.logger.get_log().info(f"date interval: {date_interval}")
+        if "," in date_interval:
+            date_interval = date_interval.split(",")
+        self.date_interval = date_interval
+        self.logger.get_log().info(f"self.date_interval: {self.date_interval}")
 
     def get_fail_case_info(self):
         """
@@ -41,25 +47,70 @@ class TestingReporter(object):
             task_list=self.task_list, date_interval=self.date_interval
         )
         xlsx_save(relative_fail_dict, "./relative_fail_dict.xlsx")
+        xlsx_save(absolute_fail_dict, "./absolute_fail_dict.xlsx")
         return relative_fail_dict, absolute_fail_dict
 
-    def binary_search(self):
+    def get_fail_case_num(self, fail_dict):
+        """
+        获取失败case信息
+        """
+        # layer_db = LayerBenchmarkDB(storage=self.storage)
+        # relative_fail_dict, absolute_fail_dict = layer_db.get_precision_fail_case_dict(
+        #     task_list=self.task_list, date_interval=self.date_interval
+        # )
+
+        fail_num_dict = {}
+        for task, value_dict in fail_dict.items():
+            fail_num_dict[task] = len(value_dict["fail_list"])
+        return fail_num_dict
+
+    def _set_flags(self, task):
+        """
+        设定环境变量
+        """
+        task_flags_dict = precision_flags[task]
+        for key, value in task_flags_dict.items():
+            os.environ[key] = value
+            self.logger.get_log().info(f"_set_flags设定环境变量: {key}={value}")
+
+    def _unset_flags(self, task):
+        """
+        取消环境变量
+        """
+        task_flags_dict = precision_flags[task]
+        for key, value in task_flags_dict.items():
+            if key in os.environ:
+                self.logger.get_log().info(f"_unset_flags取消环境变量: {key}={os.environ[key]}")
+                del os.environ[key]
+
+    def binary_search(self, fail_dict, loop_num=1):
         """
         使用二分工具
         """
-        relative_fail_dict, absolute_fail_dict = self.get_fail_case_info()
+        # relative_fail_dict, absolute_fail_dict = self.get_fail_case_info()
         res_dict = {}
-        for task, value_dict in relative_fail_dict.items():
+        fail_info_dict = {}
+        for task, value_dict in fail_dict.items():
+            fail_info_dict[task] = value_dict
+            fail_info_dict[task]["fail_info"] = {}
             res_dict[task] = {}
-            if len(value_dict["relative_fail_list"]) == 0:
+            # 设定环境变量
+            self._set_flags(task=task)
+            if len(value_dict["fail_list"]) == 0:
+                self.logger.get_log().info(f"{task}任务无报错case, 无需进行二分定位")
                 continue
             else:
+                self.logger.get_log().info(f"{task}任务有报错case, 准备进行二分定位")
                 baseline_commit = value_dict["baseline_commit"]
                 latest_commit = value_dict["latest_commit"]
                 testing = value_dict["testing"]
-                for layer_file in value_dict["relative_fail_list"]:
+                for layer_file in value_dict["fail_list"]:
                     bs = BinarySearch(
-                        good_commit=baseline_commit, bad_commit=latest_commit, layerfile=layer_file, testing=testing
+                        good_commit=baseline_commit,
+                        bad_commit=latest_commit,
+                        layerfile=layer_file,
+                        testing=testing,
+                        loop_num=loop_num,
                     )
                     final_commit, commit_list, commit_list_origin, check_info = bs._run()
                     res_dict[task][layer_file] = {
@@ -68,7 +119,18 @@ class TestingReporter(object):
                         "commit_list_origin": commit_list_origin,
                         "check_info": check_info,
                     }
+                    fail_info_dict[task]["fail_info"].update(
+                        {
+                            layer_file: {
+                                "final_commit": final_commit,
+                                "check_info": check_info,
+                            }
+                        }
+                    )
+            # 取消环境变量
+            self._unset_flags(task=task)
 
+        xlsx_save(fail_info_dict, "./binary_search_result.xlsx")
         return res_dict
 
     # def binary_search_old(self):
@@ -109,11 +171,22 @@ class TestingReporter(object):
 
 
 if __name__ == "__main__":
-    reporter = TestingReporter(date_interval=["2024-11-05", "2024-11-07"])
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--date_interval", type=str, default="None", help="时间区间选择")
+    parser.add_argument("--loop_num", type=int, default=1, help="循环验证次数")
+    args = parser.parse_args()
+    reporter = TestingReporter(date_interval=args.date_interval)  # date_interval=2024-11-13,2024-11-14
     # 打印出相对失败case信息
     relative_fail_dict, absolute_fail_dict = reporter.get_fail_case_info()
     print(f"relative_fail_dict:{relative_fail_dict}")
+    relative_fail_num_dict = reporter.get_fail_case_num(fail_dict=relative_fail_dict)
+    print(f"relative_fail_num_dict:{relative_fail_num_dict}")
+    absolute_fail_num_dict = reporter.get_fail_case_num(fail_dict=absolute_fail_dict)
+    print(f"absolute_fail_num_dict:{absolute_fail_num_dict}")
+    # exit(0)
     # 打印出commit定位结果
-    res_dict = reporter.binary_search()
-    print("test end")
+    res_dict = reporter.binary_search(fail_dict=relative_fail_dict, loop_num=args.loop_num)
+    print("binary search end")
     print(f"res_dict:{res_dict}")

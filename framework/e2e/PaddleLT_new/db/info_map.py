@@ -17,6 +17,66 @@ precision_md5 = {
     "paddlelt_train_pir_infersymbolic_inputspec": "07da2ef04135d7ec5d42987705204e1f",
 }
 
+precision_flags = {
+    "paddlelt_eval_cinn": {
+        "MIN_GRAPH_SIZE": "0",
+        "FLAGS_prim_all": "true",
+        "FLAGS_use_cinn": "1",
+        "FLAGS_prim_enable_dynamic": "true",
+        "FLAGS_prim_forward_blacklist": "pd_op.dropout",
+    },
+    "paddlelt_train_cinn": {
+        "MIN_GRAPH_SIZE": "0",
+        "FLAGS_prim_all": "true",
+        "FLAGS_use_cinn": "1",
+        "FLAGS_prim_enable_dynamic": "true",
+        "FLAGS_prim_forward_blacklist": "pd_op.dropout",
+    },
+    "paddlelt_eval_cinn_inputspec": {
+        "MIN_GRAPH_SIZE": "0",
+        "FLAGS_prim_all": "true",
+        "FLAGS_use_cinn": "1",
+        "FLAGS_prim_enable_dynamic": "true",
+        "FLAGS_prim_forward_blacklist": "pd_op.dropout",
+    },
+    "paddlelt_train_cinn_inputspec": {
+        "MIN_GRAPH_SIZE": "0",
+        "FLAGS_prim_all": "true",
+        "FLAGS_use_cinn": "1",
+        "FLAGS_prim_enable_dynamic": "true",
+        "FLAGS_prim_forward_blacklist": "pd_op.dropout",
+    },
+    "paddlelt_train_api_dy2stcinn_static_inputspec": {
+        "MIN_GRAPH_SIZE": "0",
+        "FLAGS_prim_all": "true",
+        "FLAGS_use_cinn": "1",
+        "FLAGS_prim_enable_dynamic": "true",
+        "FLAGS_prim_forward_blacklist": "pd_op.dropout",
+    },
+    "paddlelt_train_api_dy2stcinn_inputspec": {
+        "MIN_GRAPH_SIZE": "0",
+        "FLAGS_prim_all": "true",
+        "FLAGS_use_cinn": "1",
+        "FLAGS_prim_enable_dynamic": "true",
+        "FLAGS_prim_forward_blacklist": "pd_op.dropout",
+    },
+    "paddlelt_train_prim_inputspec": {
+        "FLAGS_prim_all": "true",
+        "FLAGS_prim_enable_dynamic": "true",
+        "FLAGS_enable_pir_in_executor": "1",
+        "FLAGS_prim_forward_blacklist": "pd_op.dropout",
+    },
+    "paddlelt_train_pir_infersymbolic_inputspec": {
+        "FLAGS_prim_all": "true",
+        "FLAGS_prim_enable_dynamic": "true",
+        "FLAGS_enable_pir_api": "1",
+        "FLAGS_enable_pir_in_executor": "1",
+        "MIN_GRAPH_SIZE": "0",
+        "FLAGS_check_infer_symbolic": "1",
+        "FLAGS_prim_forward_blacklist": "pd_op.dropout",
+    },
+}
+
 performance_md5 = {
     "paddlelt_perf_1000_cinn_cinn_A100_latest_as_baseline": "1f7253c6a9014bacc74d07cfd3b14ab2",
     "paddlelt_train_perf_1000_cinn_cinn_A100_latest_as_baseline": "1f7253c6a9014bacc74d07cfd3b14ab2",

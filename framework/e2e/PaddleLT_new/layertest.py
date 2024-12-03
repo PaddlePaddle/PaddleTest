@@ -245,7 +245,7 @@ class LayerTest(object):
 
 
 if __name__ == "__main__":
-    # layerfile = "./layerApicase/math_sublayer/zeros_1_func.py"
+    # layerfile = "layercase/sublayer1000/Clas_cases/Twins_alt_gvt_base/SIR_136.py"
     # testing = "yaml/dy^dy2stcinn_train_inputspec.yml"
     # single_test = LayerTest(title=layerfile, layerfile=layerfile, testing=testing)
     # single_test._case_run()

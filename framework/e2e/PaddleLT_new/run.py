@@ -76,7 +76,18 @@ class Run(object):
                     "wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleOCR/PaddleOCR.tar.gz --no-proxy "
                     "&& tar -xzf PaddleOCR.tar.gz && rm -rf PaddleOCR.tar.gz "
                     "&& cd PaddleOCR && git rev-parse HEAD && git branch "
-                    f"&& {self.py_cmd} -m pip install -r requirements.txt && {self.py_cmd} setup.py install"
+                    f"&& {self.py_cmd} -m pip install -r requirements.txt && {self.py_cmd} setup.py install "
+                    # f"&& {self.py_cmd} -m pip install paddlenlp "
+                )
+            elif os.environ.get("USE_PADDLE_MODEL", "None") == "PaddleNLP":
+                os.system(
+                    "wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleNLP/PaddleNLP-develop.tar.gz --no-proxy "
+                    "&& tar -xzf PaddleNLP-develop.tar.gz && rm -rf PaddleNLP-develop.tar.gz "
+                    "&& cd PaddleNLP-develop && git rev-parse HEAD && git branch "
+                    f"&& {self.py_cmd} -m pip install -r requirements.txt && {self.py_cmd} setup.py install "
+                    f"&& {self.py_cmd} -m pip install yacs && {self.py_cmd} -m pip install sacremoses "
+                    f"&& {self.py_cmd} -m pip install emoji && {self.py_cmd} -m pip install ftfy "
+                    f"&& {self.py_cmd} -m pip install unidecode "
                 )
 
         # 下载ground truth用于跨硬件测试
