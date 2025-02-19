@@ -29,56 +29,77 @@ function DockerImages () {
 
     if [[ "${docker_type}" == "Manual" ]];then
         echo "Select Manual Mode!!!"
-    elif [[ "${docker_type}" == "Centos" ]];then
+    elif [[ "${docker_type}" == "Centos" || "${docker_type}" == "Almalinux" ]];then
         case ${cuda_version} in
         "Cuda102")
             echo "Selected Centos: Cuda102"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda10.2-cudnn7.6-trt7.0-gcc8.2"
             export env_cuda_version="10.2"
             export env_cudnn_version="7.6.5"
             export env_trt_version="7.0.0.11"
             ;;
         "Cuda112")
             echo "Selected Centos: Cuda112"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.2-trt8.0-gcc82"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.2-cudnn8.2-trt8.0-gcc82"
             export env_cuda_version="11.2"
             export env_cudnn_version="8.2.1"
             export env_trt_version="8.0.3.4"
             ;;
         "Cuda116")
             echo "Selected Centos: Cuda116"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4-trt8.4-gcc8.2"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.6-cudnn8.4-trt8.4-gcc8.2"
             export env_cuda_version="11.6"
             export env_cudnn_version="8.4.0"
             export env_trt_version="8.4.0.6"
             ;;
         "Cuda117")
             echo "Selected Centos: Cuda117"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.7-cudnn8.4-trt8.4-gcc8.2"
             export env_cuda_version="11.7"
             export env_cudnn_version="8.4.1"
             export env_trt_version="8.4.2.4"
             ;;
         "Cuda118")
-            echo "Selected Centos: Cuda118"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.8-cudnn8.6-trt8.5-gcc8.2"
+            echo "Selected Almalinux: Cuda118"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda11.8-cudnn8.9-trt8.6-gcc11"
             export env_cuda_version="11.8"
-            export env_cudnn_version="8.6.0"
-            export env_trt_version="8.5.3.1"
+            export env_cudnn_version="8.9.7"
+            export env_trt_version="8.6.1.6"
             ;;
         "Cuda120")
             echo "Selected Centos: Cuda120"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.0-cudnn8.9-trt8.6-gcc12.2"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.0-cudnn8.9-trt8.6-gcc12.2"
             export env_cuda_version="12.0"
             export env_cudnn_version="8.9.1"
             export env_trt_version="8.6.1.6"
             ;;
         "Cuda123")
             echo "Selected Centos: Cuda123"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.3-cudnn9.0-trt8.6-gcc12.2"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.3-cudnn9.1-trt10.5-gcc11"
             export env_cuda_version="12.3"
-            export env_cudnn_version="9.0.0"
-            export env_trt_version="8.6.1.6"
+            export env_cudnn_version="9.1.0"
+            export env_trt_version="10.5.0.18"
+            ;;
+        "Cuda124")
+            echo "Selected Almalinux: Cuda124"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.4-cudnn9.1-trt10.5-gcc11"
+            export env_cuda_version="12.4"
+            export env_cudnn_version="9.1.1"
+            export env_trt_version="10.5.0.18"
+            ;;
+        "Cuda126")
+            echo "Selected Almalinux: Cuda126"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.6-cudnn9.5-trt10.5-gcc11"
+            export env_cuda_version="12.6"
+            export env_cudnn_version="9.5.1"
+            export env_trt_version="10.5.0.18"
+            ;;
+        "Cuda128")
+            echo "Selected Almalinux: Cuda128"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.8-cudnn9.7-trt10.5-gcc11"
+            export env_cuda_version="12.8"
+            export env_cudnn_version="9.7.0"
+            export env_trt_version="10.5.0.18"
             ;;
         *)
             DOCKER_EXIT_CODE=101
@@ -89,49 +110,49 @@ function DockerImages () {
         case ${cuda_version} in
         "Cuda102")
             echo "Selected Ubuntu: Cuda102"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
             export env_cuda_version="10.2"
             export env_cudnn_version="7.6.5"
             export env_trt_version="7.0.0.11"
             ;;
         "Cuda112")
             echo "Selected Ubuntu: Cuda112"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8.2-trt8.0-gcc82"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.2-cudnn8.2-trt8.0-gcc82"
             export env_cuda_version="11.2"
             export env_cudnn_version="8.2.1"
             export env_trt_version="8.0.3.4"
             ;;
         "Cuda116")
             echo "Selected Ubuntu: Cuda116"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6-cudnn8.4-trt8.4-gcc82"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.6-cudnn8.4-trt8.4-gcc82"
             export env_cuda_version="11.6"
             export env_cudnn_version="8.4.0"
             export env_trt_version="8.4.0.6"
             ;;
         "Cuda117")
             echo "Selected Ubuntu: Cuda117"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc82"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.7-cudnn8.4-trt8.4-gcc82"
             export env_cuda_version="11.7"
             export env_cudnn_version="8.4.1"
             export env_trt_version="8.4.2.4"
             ;;
         "Cuda118")
             echo "Selected Ubuntu: Cuda118"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.8-cudnn8.6-trt8.5-gcc82"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:latest-dev-cuda11.8-cudnn8.6-trt8.5-gcc82"
             export env_cuda_version="11.8"
             export env_cudnn_version="8.6.0"
             export env_trt_version="8.5.3.1"
             ;;
         "Cuda120")
             echo "Selected Ubuntu: Cuda120"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.0-cudnn8.9-trt8.6-gcc12.2"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.0-cudnn8.9-trt8.6-gcc12.2"
             export env_cuda_version="12.0"
             export env_cudnn_version="8.9.1"
             export env_trt_version="8.6.1.6"
             ;;
         "Cuda123")
             echo "Selected Ubuntu: Cuda123"
-            export Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.3-cudnn9.0-trt8.6-gcc12.2"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.3-cudnn9.0-trt8.6-gcc12.2"
             export env_cuda_version="12.3"
             export env_cudnn_version="9.0.0"
             export env_trt_version="8.6.1.6"
