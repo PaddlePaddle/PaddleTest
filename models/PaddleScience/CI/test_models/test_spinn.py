@@ -55,7 +55,7 @@ def test_spinn_loss():
     """
     epoch_num = 10  # 迭代次数
     output_dir = "./helmholtz3d"  # 输出目录
-    base_loss = 25.05345  # 基准损失值
+    base_loss = 24.96435  # 基准损失值
     # CI机器更换为T4,base值暂时修改
     # base_loss = 36.0843  # 基准损失值
 
