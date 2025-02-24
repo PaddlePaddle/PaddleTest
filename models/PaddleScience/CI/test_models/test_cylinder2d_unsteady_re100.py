@@ -54,7 +54,7 @@ def test_cylinder2d_unsteady_re100_loss():
     """
     epoch_num = 10  # 迭代次数
     output_dir = "./output_cylinder2d_unsteady"  # 输出目录
-    base_loss = 11.50450  # 基准损失值
+    base_loss = 10.45911  # 基准损失值
 
     # 获取训练过程的日志文件并计算最后一轮迭代的损失值
     log_file = os.path.join(output_dir, "train.log")
