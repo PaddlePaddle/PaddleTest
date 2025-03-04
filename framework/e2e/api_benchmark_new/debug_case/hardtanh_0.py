@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test Hardtanh_0
+test hardtanh_0
 """
 import timeit
 from inspect import isclass
@@ -43,9 +43,9 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.Hardtanh"
-all_data = {"data": {"random": False, "type": "Tensor", "dtype": "float32", "value": [-1.5, 0.3, 2.5]}}
-params = {}
+api = "paddle.nn.functional.hardtanh"
+all_data = {"x": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
+params = {"min": -1.0, "max": 1.0}
 
 inputs = {}
 for data, v in all_data.items():

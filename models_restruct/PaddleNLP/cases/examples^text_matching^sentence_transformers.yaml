@@ -16,7 +16,7 @@ case:
         cmd: python predict.py
         params:
           - --device gpu
-          - --params_path ./checkpoints/model_1000/model_state.pdparams
+          - --params_path ./checkpoints/model_7000/model_state.pdparams
     infer: skipped
     export: skipped
     predict: skipped

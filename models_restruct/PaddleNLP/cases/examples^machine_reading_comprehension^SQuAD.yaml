@@ -4,7 +4,7 @@ case:
       -
         name: pretrain
         path: slm/examples/machine_reading_comprehension/SQuAD/
-        cmd: python run_squad.py
+        cmd: python -m run_squad.py
         params:
           - --model_type bert
           - --model_name_or_path bert-base-uncased

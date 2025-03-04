@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test Linear_0
+test linear_0
 """
 import timeit
 from inspect import isclass
@@ -43,9 +43,12 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.Linear"
-all_data = {"x": {"random": True, "dtype": "float32", "shape": [1, 1], "range": [-1, 1]}}
-params = {"in_features": 1, "out_features": 1}
+api = "paddle.nn.functional.linear"
+all_data = {"x": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1], "range": [-1, 1]}}
+params = {
+    "weight": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1], "range": [-1, 1]},
+    "bias": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1], "range": [-1, 1]},
+}
 
 inputs = {}
 for data, v in all_data.items():
