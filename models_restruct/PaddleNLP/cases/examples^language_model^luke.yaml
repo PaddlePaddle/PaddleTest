@@ -12,6 +12,7 @@ case:
       -
         name: run_squad
         path: slm/model_zoo/luke
+
         cmd: python -m paddle.distributed.launch run_squad.py
         params:
           - --model_type luke
