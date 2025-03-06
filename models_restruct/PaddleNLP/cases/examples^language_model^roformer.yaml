@@ -3,7 +3,7 @@ case:
     train:
       -
         name: run_thucnews
-        path: slm/examples/language_model/roformer
+        path: slm/model_zoo/roformer
         cmd: python -m paddle.distributed.launch run_thucnews.py
         params:
           - --model_type roformer
