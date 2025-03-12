@@ -41,34 +41,34 @@ yaml/CI_dy^dy2stcinn_train.yml:
 
 yaml/CI_dy^dy2stcinn_train^dy2stcinn_eval_inputspec.yml:
   ########################################################################################################################
-  # 2025-03-11新增
-  - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_x101_vd_64x4d_fpn_2x_coco/SIR_71.py
-  - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_x101_vd_64x4d_fpn_2x_coco/SIR_108.py
-  - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r101_fpn_2x_coco/SIR_69.py
-  - layercase/sublayer1000/Det_cases/sniper_faster_rcnn_r50_fpn_1x_sniper_visdrone/SIR_69.py
-  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_rcnn_r50_fpn_1x_coco/SIR_87.py
-  - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_71.py
-  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_89.py
-  - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_x101_vd_64x4d_fpn_1x_coco/SIR_108.py
-  - layercase/sublayer1000/Det_cases/sniper_faster_rcnn_r50_fpn_1x_visdrone/SIR_69.py
-  - layercase/sublayer1000/Det_cases/sparse_rcnn_sparse_rcnn_r50_fpn_3x_pro300_coco/SIR_42.py
-  - layercase/sublayer1000/Det_cases/sparse_rcnn_sparse_rcnn_r50_fpn_3x_pro300_coco/SIR_36.py
-  - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_r50_fpn_1x_coco/SIR_106.py
-  - layercase/sublayer1000/Det_cases/rcnn_enhance_faster_rcnn_enhance_3x_coco/SIR_96.py
-  - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_r101_fpn_1x_coco/SIR_106.py
-  - layercase/sublayer1000/Det_cases/sparse_rcnn_sparse_rcnn_r50_fpn_3x_pro100_coco/SIR_42.py
-  - layercase/sublayer1000/Det_cases/sparse_rcnn_sparse_rcnn_r50_fpn_3x_pro100_coco/SIR_36.py
-  - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_swin_tiny_fpn_2x_coco/SIR_121.py
-  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_fpn_1x_coco/SIR_87.py
-  - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_r50_fpn_2x_coco/SIR_109.py
-  - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r101_vd_fpn_1x_coco/SIR_71.py
-  - layercase/sublayer1000/Det_cases/res2net_mask_rcnn_res2net50_vd_26w_4s_fpn_2x_coco/SIR_132.py
-  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_rcnn_r50_vd_fpn_ssld_2x_coco/SIR_89.py
-  - layercase/sublayer1000/Det_cases/dcn_mask_rcnn_dcn_r50_vd_fpn_2x_coco/SIR_108.py
-  - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r50_vd_fpn_2x_coco/SIR_71.py
-  - layercase/sublayer1000/Det_cases/dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco/SIR_71.py
-  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_89.py
-  - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_145.py
+  # # 2025-03-11新增
+  # - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_x101_vd_64x4d_fpn_2x_coco/SIR_71.py
+  # - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_x101_vd_64x4d_fpn_2x_coco/SIR_108.py
+  # - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r101_fpn_2x_coco/SIR_69.py
+  # - layercase/sublayer1000/Det_cases/sniper_faster_rcnn_r50_fpn_1x_sniper_visdrone/SIR_69.py
+  # - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_rcnn_r50_fpn_1x_coco/SIR_87.py
+  # - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_71.py
+  # - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_89.py
+  # - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_x101_vd_64x4d_fpn_1x_coco/SIR_108.py
+  # - layercase/sublayer1000/Det_cases/sniper_faster_rcnn_r50_fpn_1x_visdrone/SIR_69.py
+  # - layercase/sublayer1000/Det_cases/sparse_rcnn_sparse_rcnn_r50_fpn_3x_pro300_coco/SIR_42.py
+  # - layercase/sublayer1000/Det_cases/sparse_rcnn_sparse_rcnn_r50_fpn_3x_pro300_coco/SIR_36.py
+  # - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_r50_fpn_1x_coco/SIR_106.py
+  # - layercase/sublayer1000/Det_cases/rcnn_enhance_faster_rcnn_enhance_3x_coco/SIR_96.py
+  # - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_r101_fpn_1x_coco/SIR_106.py
+  # - layercase/sublayer1000/Det_cases/sparse_rcnn_sparse_rcnn_r50_fpn_3x_pro100_coco/SIR_42.py
+  # - layercase/sublayer1000/Det_cases/sparse_rcnn_sparse_rcnn_r50_fpn_3x_pro100_coco/SIR_36.py
+  # - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_swin_tiny_fpn_2x_coco/SIR_121.py
+  # - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_fpn_1x_coco/SIR_87.py
+  # - layercase/sublayer1000/Det_cases/mask_rcnn_mask_rcnn_r50_fpn_2x_coco/SIR_109.py
+  # - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r101_vd_fpn_1x_coco/SIR_71.py
+  # - layercase/sublayer1000/Det_cases/res2net_mask_rcnn_res2net50_vd_26w_4s_fpn_2x_coco/SIR_132.py
+  # - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_rcnn_r50_vd_fpn_ssld_2x_coco/SIR_89.py
+  # - layercase/sublayer1000/Det_cases/dcn_mask_rcnn_dcn_r50_vd_fpn_2x_coco/SIR_108.py
+  # - layercase/sublayer1000/Det_cases/faster_rcnn_faster_rcnn_r50_vd_fpn_2x_coco/SIR_71.py
+  # - layercase/sublayer1000/Det_cases/dcn_faster_rcnn_dcn_r101_vd_fpn_1x_coco/SIR_71.py
+  # - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_89.py
+  # - layercase/sublayer1000/Det_cases/cascade_rcnn_cascade_mask_rcnn_r50_vd_fpn_ssld_1x_coco/SIR_145.py
   ########################################################################################################################
   # - layercase/sublayer1000/Seg_cases/isanet_isanet_resnet50_os8_cityscapes_769x769_80k/SIR_35.py
   # - layercase/sublayer1000/Seg_cases/isanet_isanet_resnet50_os8_cityscapes_769x769_80k/SIR_32.py
