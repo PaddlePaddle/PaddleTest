@@ -91,6 +91,7 @@ class BinarySearch(object):
             commit = commit.split(" ")[0]
             # self.logger.get_log().info("commit:{}".format(commit))
             commit_list.append(commit)
+        commit_list.append(self.good_commit)
         return commit_list
 
     def _check_downloadable(self, url):
@@ -305,10 +306,11 @@ class BinarySearch(object):
 
 if __name__ == "__main__":
     bs = BinarySearch(
-        good_commit="2e963d2bd2ca03626bb46cccbd0119b8873523a6",
-        bad_commit="651e66ba06f3ae26c3cf649f83a9a54b486ce75d",
-        layerfile="layercase/sublayer1000/Clas_cases/EfficientNet_EfficientNetB0/SIR_140.py",
+        good_commit="f04aa61cef69114b3ef04eea1e48e5eb867a88da",
+        bad_commit="d97f2ead1562bf0e00cf388a46e1fcf97a5ce73a",
+        layerfile="layerApicase/math_sublayer/median_4_func.py",
         testing="yaml/dy^dy2stcinn_train_inputspec.yml",
+        # testing="yaml/dy^dy2stcinn_eval.yml",
         loop_num=1,
         perf_decay=None,  # ["dy2st_eval_cinn_perf", 0.042814, -0.3]
         test_obj=LayerTest,

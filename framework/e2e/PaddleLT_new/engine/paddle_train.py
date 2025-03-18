@@ -17,6 +17,8 @@ from generator.builder_loss import BuildLoss
 
 from pltools.logger import Logger
 
+from strategy.ordered_dict import OrderedDictProcess
+
 
 class LayerTrain(object):
     """
@@ -24,7 +26,7 @@ class LayerTrain(object):
     """
 
     # def __init__(self, testing, layerfile, device_id):
-    def __init__(self, testing, layerfile, device_place_id, upstream_net):
+    def __init__(self, testing, layerfile, device_place_id, upstream_net, orderdict_usage="None"):
         """
         初始化
         """
@@ -37,6 +39,7 @@ class LayerTrain(object):
 
         self.testing = testing
         self.upstream_net = upstream_net
+        self.orderdict_usage = orderdict_usage
         self.return_net_instance = self.testing.get("return_net_instance", "False")
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
@@ -63,6 +66,8 @@ class LayerTrain(object):
             net = self.upstream_net
         else:
             net = BuildLayer(layerfile=self.layerfile).get_layer()
+        if self.orderdict_usage != "None":
+            net = OrderedDictProcess(net=net, layerfile=self.layerfile, orderdict_usage=self.orderdict_usage).process()
         return net
 
     def _net_optimizer(self):

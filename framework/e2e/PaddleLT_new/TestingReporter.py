@@ -10,6 +10,7 @@ import os
 import json
 from pltools.res_save import xlsx_save
 from pltools.logger import Logger
+from pltools.upload_bos import UploadBos
 from db.layer_db import LayerBenchmarkDB
 from db.info_map import precision_md5, precision_flags, performance_md5
 
@@ -37,6 +38,8 @@ class TestingReporter(object):
             date_interval = date_interval.split(",")
         self.date_interval = date_interval
         self.logger.get_log().info(f"self.date_interval: {self.date_interval}")
+
+        self.AGILE_PIPELINE_BUILD_ID = os.environ.get("AGILE_PIPELINE_BUILD_ID", 0)
 
     def get_fail_case_info(self):
         """
@@ -98,6 +101,8 @@ class TestingReporter(object):
             self._set_flags(task=task)
             if len(value_dict["fail_list"]) == 0:
                 self.logger.get_log().info(f"{task}任务无报错case, 无需进行二分定位")
+                # 取消环境变量
+                self._unset_flags(task=task)
                 continue
             else:
                 self.logger.get_log().info(f"{task}任务有报错case, 准备进行二分定位")
@@ -127,8 +132,8 @@ class TestingReporter(object):
                             }
                         }
                     )
-            # 取消环境变量
-            self._unset_flags(task=task)
+                # 取消环境变量
+                self._unset_flags(task=task)
 
         xlsx_save(fail_info_dict, "./binary_search_result.xlsx")
         return res_dict
@@ -169,6 +174,14 @@ class TestingReporter(object):
     #                 print("commit list is: {}".format(commit_list))
     #                 print("commit list origin is: {}".format(commit_list_origin))
 
+    def _bs_upload(self):
+        """二分结果上传bos"""
+        bos_path = f"PaddleLT/binary_search/build_{self.AGILE_PIPELINE_BUILD_ID}"
+        excel_file = "binary_search_result.xlsx"
+        if os.path.exists(excel_file):
+            UploadBos().upload_to_bos(bos_path="paddle-qa/{}".format(bos_path), file_path=excel_file)
+            self.logger.get_log().info("表格下载链接: https://paddle-qa.bj.bcebos.com/{}/{}".format(bos_path, excel_file))
+
 
 if __name__ == "__main__":
     import argparse
@@ -180,13 +193,14 @@ if __name__ == "__main__":
     reporter = TestingReporter(date_interval=args.date_interval)  # date_interval=2024-11-13,2024-11-14
     # 打印出相对失败case信息
     relative_fail_dict, absolute_fail_dict = reporter.get_fail_case_info()
-    print(f"relative_fail_dict:{relative_fail_dict}")
+    # print(f"relative_fail_dict:{relative_fail_dict}")
     relative_fail_num_dict = reporter.get_fail_case_num(fail_dict=relative_fail_dict)
-    print(f"relative_fail_num_dict:{relative_fail_num_dict}")
+    # print(f"relative_fail_num_dict:{relative_fail_num_dict}")
     absolute_fail_num_dict = reporter.get_fail_case_num(fail_dict=absolute_fail_dict)
-    print(f"absolute_fail_num_dict:{absolute_fail_num_dict}")
+    # print(f"absolute_fail_num_dict:{absolute_fail_num_dict}")
     # exit(0)
     # 打印出commit定位结果
     res_dict = reporter.binary_search(fail_dict=relative_fail_dict, loop_num=args.loop_num)
-    print("binary search end")
-    print(f"res_dict:{res_dict}")
+    reporter._bs_upload()
+    # print("binary search end")
+    # print(f"res_dict:{res_dict}")
