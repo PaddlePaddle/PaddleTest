@@ -1,0 +1,17 @@
+case:
+  linux:
+    train:
+      -
+        name: prepare
+        path: llm/alignment/ppo
+        cmd: wget https://paddlenlp.bj.bcebos.com/datasets/examples/ppo-kk.tgz && tar zxf ppo-kk.tgz
+      -
+        name: reward_server
+        path: llm/alignment/ppo
+        cmd: python reward_server.py
+      -
+        name: grpo
+        path: llm/alignment/ppo
+        cmd: python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py 
+        params:
+          - ../../config/qwen/grpo_argument.json
