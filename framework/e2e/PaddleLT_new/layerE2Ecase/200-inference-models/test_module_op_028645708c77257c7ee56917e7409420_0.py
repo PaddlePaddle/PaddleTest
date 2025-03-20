@@ -50,7 +50,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=True,
-        ), 
+        ),
     ),
     Stage(
         name="backend",
@@ -61,7 +61,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=False,
-        ), 
+        ),
     ),
 ]
 
@@ -215,7 +215,7 @@ paddle_debug_num_allowed_ops = GetPaddleDebugNumAllowedOps()
 
 if type(paddle_debug_num_allowed_ops) is not int:
     def EarlyReturn(block_idx, op_idx):
-        return False      
+        return False
 else:
     def EarlyReturn(block_idx, op_idx):
         return op_idx >= paddle_debug_num_allowed_ops
@@ -868,135 +868,134 @@ class Test_builtin_module_211_0_0(CinnTestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            # parameter_0
-            paddle.static.InputSpec(shape=[64, 3, 3, 3], dtype='float32'),
-            # parameter_1
-            paddle.static.InputSpec(shape=[64], dtype='float32'),
-            # parameter_2
-            paddle.static.InputSpec(shape=[192, 64, 3, 3], dtype='float32'),
-            # parameter_3
-            paddle.static.InputSpec(shape=[192], dtype='float32'),
-            # parameter_4
-            paddle.static.InputSpec(shape=[192, 192, 3, 3], dtype='float32'),
-            # parameter_5
-            paddle.static.InputSpec(shape=[192], dtype='float32'),
-            # parameter_6
-            paddle.static.InputSpec(shape=[192, 192, 3, 3], dtype='float32'),
-            # parameter_7
-            paddle.static.InputSpec(shape=[192], dtype='float32'),
-            # parameter_8
-            paddle.static.InputSpec(shape=[192, 192, 3, 3], dtype='float32'),
-            # parameter_9
-            paddle.static.InputSpec(shape=[192], dtype='float32'),
-            # parameter_10
-            paddle.static.InputSpec(shape=[384, 192, 3, 3], dtype='float32'),
-            # parameter_11
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            # parameter_12
-            paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
-            # parameter_13
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            # parameter_14
-            paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
-            # parameter_15
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            # parameter_16
-            paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
-            # parameter_17
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            # parameter_18
-            paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
-            # parameter_19
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            # parameter_20
-            paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
-            # parameter_21
-            paddle.static.InputSpec(shape=[384], dtype='float32'),
-            # parameter_22
-            paddle.static.InputSpec(shape=[768, 384, 3, 3], dtype='float32'),
-            # parameter_23
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_24
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_25
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_26
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_27
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_28
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_29
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_30
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_31
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_32
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_33
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_34
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_35
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_36
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_37
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_38
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_39
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_40
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_41
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_42
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_43
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_44
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_45
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_46
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_47
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_48
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_49
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_50
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_51
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_52
-            paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
-            # parameter_53
-            paddle.static.InputSpec(shape=[768], dtype='float32'),
-            # parameter_54
-            paddle.static.InputSpec(shape=[2560, 768, 3, 3], dtype='float32'),
-            # parameter_55
-            paddle.static.InputSpec(shape=[2560], dtype='float32'),
-            # parameter_56
-            paddle.static.InputSpec(shape=[2560, 1000], dtype='float32'),
-            # parameter_57
-            paddle.static.InputSpec(shape=[1000], dtype='float32'),
-            # feed_0
-            paddle.static.InputSpec(shape=[None, 3, 224, 224], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                # parameter_0
+                paddle.static.InputSpec(shape=[64, 3, 3, 3], dtype='float32'),
+                # parameter_1
+                paddle.static.InputSpec(shape=[64], dtype='float32'),
+                # parameter_2
+                paddle.static.InputSpec(shape=[192, 64, 3, 3], dtype='float32'),
+                # parameter_3
+                paddle.static.InputSpec(shape=[192], dtype='float32'),
+                # parameter_4
+                paddle.static.InputSpec(shape=[192, 192, 3, 3], dtype='float32'),
+                # parameter_5
+                paddle.static.InputSpec(shape=[192], dtype='float32'),
+                # parameter_6
+                paddle.static.InputSpec(shape=[192, 192, 3, 3], dtype='float32'),
+                # parameter_7
+                paddle.static.InputSpec(shape=[192], dtype='float32'),
+                # parameter_8
+                paddle.static.InputSpec(shape=[192, 192, 3, 3], dtype='float32'),
+                # parameter_9
+                paddle.static.InputSpec(shape=[192], dtype='float32'),
+                # parameter_10
+                paddle.static.InputSpec(shape=[384, 192, 3, 3], dtype='float32'),
+                # parameter_11
+                paddle.static.InputSpec(shape=[384], dtype='float32'),
+                # parameter_12
+                paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
+                # parameter_13
+                paddle.static.InputSpec(shape=[384], dtype='float32'),
+                # parameter_14
+                paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
+                # parameter_15
+                paddle.static.InputSpec(shape=[384], dtype='float32'),
+                # parameter_16
+                paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
+                # parameter_17
+                paddle.static.InputSpec(shape=[384], dtype='float32'),
+                # parameter_18
+                paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
+                # parameter_19
+                paddle.static.InputSpec(shape=[384], dtype='float32'),
+                # parameter_20
+                paddle.static.InputSpec(shape=[384, 384, 3, 3], dtype='float32'),
+                # parameter_21
+                paddle.static.InputSpec(shape=[384], dtype='float32'),
+                # parameter_22
+                paddle.static.InputSpec(shape=[768, 384, 3, 3], dtype='float32'),
+                # parameter_23
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_24
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_25
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_26
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_27
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_28
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_29
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_30
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_31
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_32
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_33
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_34
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_35
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_36
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_37
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_38
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_39
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_40
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_41
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_42
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_43
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_44
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_45
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_46
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_47
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_48
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_49
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_50
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_51
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_52
+                paddle.static.InputSpec(shape=[768, 768, 3, 3], dtype='float32'),
+                # parameter_53
+                paddle.static.InputSpec(shape=[768], dtype='float32'),
+                # parameter_54
+                paddle.static.InputSpec(shape=[2560, 768, 3, 3], dtype='float32'),
+                # parameter_55
+                paddle.static.InputSpec(shape=[2560], dtype='float32'),
+                # parameter_56
+                paddle.static.InputSpec(shape=[2560, 1000], dtype='float32'),
+                # parameter_57
+                paddle.static.InputSpec(shape=[1000], dtype='float32'),
+                # feed_0
+                paddle.static.InputSpec(shape=[None, 3, 224, 224], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def entry(self, use_cinn):
         net = ModuleOp()

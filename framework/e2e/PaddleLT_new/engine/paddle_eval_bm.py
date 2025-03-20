@@ -151,10 +151,7 @@ class LayerEvalBM(object):
 
     def _dy2st_eval_cinn_perf(self, perf_repeat=10):
         net = self._net_instant()
-
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
         cinn_net.eval()
 
         # net.eval()

@@ -152,10 +152,7 @@ class LayerEval(object):
             Logger("dy2st_eval_cinn").get_log().info("已设定环境变量FLAGS_enable_auto_recompute")
         data = self._net_input()
         net = self._net_instant()
-
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
         cinn_net.eval()
         logit = cinn_net(*data)
 
@@ -175,9 +172,7 @@ class LayerEval(object):
         Logger("dy2st_eval_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
         net = self._net_instant()
 
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True, input_spec=input_spec)
         cinn_net.eval()
         logit = cinn_net(*data)
 
@@ -197,9 +192,7 @@ class LayerEval(object):
         Logger("dy2st_eval_cinn_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
 
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True, input_spec=input_spec)
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True, input_spec=input_spec)
         cinn_net.eval()
         logit = cinn_net(*data)
 

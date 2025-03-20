@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test embedding_0
+test Embedding_0
 """
 import timeit
 from inspect import isclass
@@ -43,13 +43,9 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.functional.embedding"
-all_data = {"x": {"random": True, "type": "Tensor", "dtype": "int32", "shape": [1, 1], "range": [0, 1]}}
-params = {
-    "weight": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1], "range": [-1, 1]},
-    "padding_idx": -1,
-    "sparse": False,
-}
+api = "paddle.nn.Embedding"
+all_data = {"x": {"random": True, "dtype": "int32", "shape": [1, 1, 1, 1], "range": [0, 3]}}
+params = {"num_embeddings": 4, "embedding_dim": 4, "padding_idx": None, "sparse": False}
 
 inputs = {}
 for data, v in all_data.items():

@@ -204,10 +204,7 @@ class LayerTrainBM(object):
         loss = self._net_loss()
 
         net.train()
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
-
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
         # 构建optimizer用于训练
         if cinn_net.parameters():
             opt = optimizer.get_opt(net=cinn_net)

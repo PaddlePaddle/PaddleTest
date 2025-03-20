@@ -50,7 +50,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=True,
-        ), 
+        ),
     ),
     Stage(
         name="backend",
@@ -61,7 +61,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=False,
-        ), 
+        ),
     ),
 ]
 
@@ -215,7 +215,7 @@ paddle_debug_num_allowed_ops = GetPaddleDebugNumAllowedOps()
 
 if type(paddle_debug_num_allowed_ops) is not int:
     def EarlyReturn(block_idx, op_idx):
-        return False      
+        return False
 else:
     def EarlyReturn(block_idx, op_idx):
         return op_idx >= paddle_debug_num_allowed_ops
@@ -7240,7 +7240,7 @@ class BlockEntries:
             while_loop_counter_6900 += 1
             if while_loop_counter_6900 > kWhileLoopLimit:
                 break
-            
+
         while_0, while_1, while_2, while_3, while_4, while_5, = full_28, assign_value_1, full_27, reshape__6, assign_value_2, assign_value_0,
 
         # pd_op.full: (1xi32) <- ()
@@ -7481,7 +7481,7 @@ class BlockEntries:
             while_loop_counter_7028 += 1
             if while_loop_counter_7028 > kWhileLoopLimit:
                 break
-            
+
         while_6, while_7, while_8, while_9, while_10, while_11, = full_50, assign_value_4, assign_value_5, assign_value_3, full_49, reshape__10,
 
         # pd_op.full: (1xi32) <- ()
@@ -7800,7 +7800,7 @@ class BlockEntries:
             while_loop_counter_7182 += 1
             if while_loop_counter_7182 > kWhileLoopLimit:
                 break
-            
+
         while_12, while_13, while_14, while_15, while_16, while_17, = assign_value_8, full_75, assign_value_6, reshape__14, full_74, assign_value_7,
 
         # pd_op.full: (1xi32) <- ()
@@ -8119,7 +8119,7 @@ class BlockEntries:
             while_loop_counter_7336 += 1
             if while_loop_counter_7336 > kWhileLoopLimit:
                 break
-            
+
         while_18, while_19, while_20, while_21, while_22, while_23, = assign_value_11, assign_value_10, assign_value_9, reshape__18, full_100, full_99,
 
         # pd_op.full: (1xi32) <- ()
@@ -8438,7 +8438,7 @@ class BlockEntries:
             while_loop_counter_7490 += 1
             if while_loop_counter_7490 > kWhileLoopLimit:
                 break
-            
+
         while_24, while_25, while_26, while_27, while_28, while_29, = reshape__22, full_124, assign_value_14, full_125, assign_value_13, assign_value_12,
 
         # pd_op.full: (1xi32) <- ()
@@ -8757,7 +8757,7 @@ class BlockEntries:
             while_loop_counter_7644 += 1
             if while_loop_counter_7644 > kWhileLoopLimit:
                 break
-            
+
         while_30, while_31, while_32, while_33, while_34, while_35, = reshape__26, assign_value_17, full_149, full_150, assign_value_16, assign_value_15,
 
         # pd_op.full: (1xi32) <- ()
@@ -9076,7 +9076,7 @@ class BlockEntries:
             while_loop_counter_7798 += 1
             if while_loop_counter_7798 > kWhileLoopLimit:
                 break
-            
+
         while_36, while_37, while_38, while_39, while_40, while_41, = full_174, assign_value_19, reshape__30, assign_value_18, full_175, assign_value_20,
 
         # pd_op.full: (1xi32) <- ()
@@ -9395,7 +9395,7 @@ class BlockEntries:
             while_loop_counter_7952 += 1
             if while_loop_counter_7952 > kWhileLoopLimit:
                 break
-            
+
         while_42, while_43, while_44, while_45, while_46, while_47, = full_200, full_199, reshape__34, assign_value_22, assign_value_23, assign_value_21,
 
         # pd_op.full: (1xi32) <- ()
@@ -9714,7 +9714,7 @@ class BlockEntries:
             while_loop_counter_8106 += 1
             if while_loop_counter_8106 > kWhileLoopLimit:
                 break
-            
+
         while_48, while_49, while_50, while_51, while_52, while_53, = reshape__38, assign_value_24, assign_value_26, full_225, assign_value_25, full_224,
 
         # pd_op.full: (1xi32) <- ()
@@ -10033,7 +10033,7 @@ class BlockEntries:
             while_loop_counter_8260 += 1
             if while_loop_counter_8260 > kWhileLoopLimit:
                 break
-            
+
         while_54, while_55, while_56, while_57, while_58, while_59, = assign_value_28, full_249, reshape__42, full_250, assign_value_29, assign_value_27,
 
         # pd_op.full: (1xi32) <- ()
@@ -10352,7 +10352,7 @@ class BlockEntries:
             while_loop_counter_8414 += 1
             if while_loop_counter_8414 > kWhileLoopLimit:
                 break
-            
+
         while_60, while_61, while_62, while_63, while_64, while_65, = assign_value_32, full_275, assign_value_30, reshape__46, full_274, assign_value_31,
 
         # pd_op.full: (1xi32) <- ()
@@ -10671,7 +10671,7 @@ class BlockEntries:
             while_loop_counter_8568 += 1
             if while_loop_counter_8568 > kWhileLoopLimit:
                 break
-            
+
         while_66, while_67, while_68, while_69, while_70, while_71, = assign_value_34, assign_value_33, assign_value_35, full_300, full_299, reshape__50,
 
         # pd_op.full: (1xi32) <- ()
@@ -10990,7 +10990,7 @@ class BlockEntries:
             while_loop_counter_8722 += 1
             if while_loop_counter_8722 > kWhileLoopLimit:
                 break
-            
+
         while_72, while_73, while_74, while_75, while_76, while_77, = full_325, reshape__54, assign_value_37, assign_value_36, full_324, assign_value_38,
 
         # pd_op.full: (1xi32) <- ()
@@ -11309,7 +11309,7 @@ class BlockEntries:
             while_loop_counter_8876 += 1
             if while_loop_counter_8876 > kWhileLoopLimit:
                 break
-            
+
         while_78, while_79, while_80, while_81, while_82, while_83, = full_349, assign_value_40, reshape__58, full_350, assign_value_39, assign_value_41,
 
         # pd_op.full: (1xi32) <- ()
@@ -11628,7 +11628,7 @@ class BlockEntries:
             while_loop_counter_9030 += 1
             if while_loop_counter_9030 > kWhileLoopLimit:
                 break
-            
+
         while_84, while_85, while_86, while_87, while_88, while_89, = assign_value_43, full_375, reshape__62, assign_value_42, full_374, assign_value_44,
 
         # pd_op.full: (1xi32) <- ()
@@ -11947,7 +11947,7 @@ class BlockEntries:
             while_loop_counter_9184 += 1
             if while_loop_counter_9184 > kWhileLoopLimit:
                 break
-            
+
         while_90, while_91, while_92, while_93, while_94, while_95, = assign_value_47, full_400, assign_value_45, assign_value_46, reshape__66, full_399,
 
         # pd_op.full: (1xi32) <- ()
@@ -12266,7 +12266,7 @@ class BlockEntries:
             while_loop_counter_9338 += 1
             if while_loop_counter_9338 > kWhileLoopLimit:
                 break
-            
+
         while_96, while_97, while_98, while_99, while_100, while_101, = assign_value_48, full_424, full_425, assign_value_50, assign_value_49, reshape__70,
 
         # pd_op.full: (1xi32) <- ()
@@ -12585,7 +12585,7 @@ class BlockEntries:
             while_loop_counter_9492 += 1
             if while_loop_counter_9492 > kWhileLoopLimit:
                 break
-            
+
         while_102, while_103, while_104, while_105, while_106, while_107, = assign_value_53, full_450, assign_value_51, assign_value_52, reshape__74, full_449,
 
         # pd_op.full: (1xi32) <- ()
@@ -12904,7 +12904,7 @@ class BlockEntries:
             while_loop_counter_9646 += 1
             if while_loop_counter_9646 > kWhileLoopLimit:
                 break
-            
+
         while_108, while_109, while_110, while_111, while_112, while_113, = assign_value_55, full_474, full_475, reshape__78, assign_value_56, assign_value_54,
 
         # pd_op.full: (1xi32) <- ()
@@ -13223,7 +13223,7 @@ class BlockEntries:
             while_loop_counter_9800 += 1
             if while_loop_counter_9800 > kWhileLoopLimit:
                 break
-            
+
         while_114, while_115, while_116, while_117, while_118, while_119, = reshape__82, full_500, full_499, assign_value_59, assign_value_57, assign_value_58,
 
         # pd_op.full: (1xi32) <- ()
@@ -13542,7 +13542,7 @@ class BlockEntries:
             while_loop_counter_9954 += 1
             if while_loop_counter_9954 > kWhileLoopLimit:
                 break
-            
+
         while_120, while_121, while_122, while_123, while_124, while_125, = assign_value_61, assign_value_62, assign_value_60, reshape__86, full_524, full_525,
 
         # pd_op.full: (1xi32) <- ()
@@ -13861,7 +13861,7 @@ class BlockEntries:
             while_loop_counter_10108 += 1
             if while_loop_counter_10108 > kWhileLoopLimit:
                 break
-            
+
         while_126, while_127, while_128, while_129, while_130, while_131, = full_549, assign_value_64, full_550, reshape__90, assign_value_65, assign_value_63,
 
         # pd_op.full: (1xi32) <- ()
@@ -14180,7 +14180,7 @@ class BlockEntries:
             while_loop_counter_10262 += 1
             if while_loop_counter_10262 > kWhileLoopLimit:
                 break
-            
+
         while_132, while_133, while_134, while_135, while_136, while_137, = assign_value_68, assign_value_67, reshape__94, full_575, assign_value_66, full_574,
 
         # pd_op.full: (1xi32) <- ()
@@ -14499,7 +14499,7 @@ class BlockEntries:
             while_loop_counter_10416 += 1
             if while_loop_counter_10416 > kWhileLoopLimit:
                 break
-            
+
         while_138, while_139, while_140, while_141, while_142, while_143, = full_599, assign_value_70, reshape__98, assign_value_69, assign_value_71, full_600,
 
         # pd_op.full: (1xi32) <- ()
@@ -14818,7 +14818,7 @@ class BlockEntries:
             while_loop_counter_10570 += 1
             if while_loop_counter_10570 > kWhileLoopLimit:
                 break
-            
+
         while_144, while_145, while_146, while_147, while_148, while_149, = full_625, assign_value_72, reshape__102, assign_value_73, assign_value_74, full_624,
 
         # pd_op.full: (1xi32) <- ()
@@ -15137,7 +15137,7 @@ class BlockEntries:
             while_loop_counter_10724 += 1
             if while_loop_counter_10724 > kWhileLoopLimit:
                 break
-            
+
         while_150, while_151, while_152, while_153, while_154, while_155, = full_650, assign_value_77, reshape__106, assign_value_75, assign_value_76, full_649,
 
         # pd_op.full: (1xi32) <- ()
@@ -15456,7 +15456,7 @@ class BlockEntries:
             while_loop_counter_10878 += 1
             if while_loop_counter_10878 > kWhileLoopLimit:
                 break
-            
+
         while_156, while_157, while_158, while_159, while_160, while_161, = full_674, assign_value_79, assign_value_78, reshape__110, full_675, assign_value_80,
 
         # pd_op.full: (1xi32) <- ()
@@ -15775,7 +15775,7 @@ class BlockEntries:
             while_loop_counter_11032 += 1
             if while_loop_counter_11032 > kWhileLoopLimit:
                 break
-            
+
         while_162, while_163, while_164, while_165, while_166, while_167, = full_700, full_699, reshape__114, assign_value_83, assign_value_81, assign_value_82,
 
         # pd_op.full: (1xi32) <- ()
@@ -16094,7 +16094,7 @@ class BlockEntries:
             while_loop_counter_11186 += 1
             if while_loop_counter_11186 > kWhileLoopLimit:
                 break
-            
+
         while_168, while_169, while_170, while_171, while_172, while_173, = assign_value_86, reshape__118, assign_value_84, assign_value_85, full_724, full_725,
 
         # pd_op.full: (1xi32) <- ()
@@ -16413,7 +16413,7 @@ class BlockEntries:
             while_loop_counter_11340 += 1
             if while_loop_counter_11340 > kWhileLoopLimit:
                 break
-            
+
         while_174, while_175, while_176, while_177, while_178, while_179, = assign_value_87, assign_value_89, full_750, assign_value_88, reshape__122, full_749,
 
         # pd_op.full: (1xi32) <- ()
@@ -16732,7 +16732,7 @@ class BlockEntries:
             while_loop_counter_11494 += 1
             if while_loop_counter_11494 > kWhileLoopLimit:
                 break
-            
+
         while_180, while_181, while_182, while_183, while_184, while_185, = assign_value_91, full_775, assign_value_92, full_774, assign_value_90, reshape__126,
 
         # pd_op.full: (1xi32) <- ()
@@ -17051,7 +17051,7 @@ class BlockEntries:
             while_loop_counter_11648 += 1
             if while_loop_counter_11648 > kWhileLoopLimit:
                 break
-            
+
         while_186, while_187, while_188, while_189, while_190, while_191, = assign_value_94, full_800, assign_value_95, reshape__130, assign_value_93, full_799,
 
         # pd_op.full: (1xi32) <- ()
@@ -17370,7 +17370,7 @@ class BlockEntries:
             while_loop_counter_11802 += 1
             if while_loop_counter_11802 > kWhileLoopLimit:
                 break
-            
+
         while_192, while_193, while_194, while_195, while_196, while_197, = reshape__134, full_824, assign_value_96, assign_value_98, full_825, assign_value_97,
 
         # pd_op.full: (1xi32) <- ()
@@ -17689,7 +17689,7 @@ class BlockEntries:
             while_loop_counter_11956 += 1
             if while_loop_counter_11956 > kWhileLoopLimit:
                 break
-            
+
         while_198, while_199, while_200, while_201, while_202, while_203, = assign_value_101, full_849, reshape__138, full_850, assign_value_99, assign_value_100,
 
         # pd_op.full: (1xi32) <- ()
@@ -18008,7 +18008,7 @@ class BlockEntries:
             while_loop_counter_12110 += 1
             if while_loop_counter_12110 > kWhileLoopLimit:
                 break
-            
+
         while_204, while_205, while_206, while_207, while_208, while_209, = assign_value_104, assign_value_102, reshape__142, full_875, full_874, assign_value_103,
 
         # pd_op.full: (1xi32) <- ()
@@ -18327,7 +18327,7 @@ class BlockEntries:
             while_loop_counter_12264 += 1
             if while_loop_counter_12264 > kWhileLoopLimit:
                 break
-            
+
         while_210, while_211, while_212, while_213, while_214, while_215, = full_900, assign_value_105, assign_value_107, reshape__146, assign_value_106, full_899,
 
         # pd_op.full: (1xi32) <- ()
@@ -18646,7 +18646,7 @@ class BlockEntries:
             while_loop_counter_12418 += 1
             if while_loop_counter_12418 > kWhileLoopLimit:
                 break
-            
+
         while_216, while_217, while_218, while_219, while_220, while_221, = reshape__150, assign_value_108, full_924, assign_value_110, full_925, assign_value_109,
 
         # pd_op.full: (1xi32) <- ()
@@ -18965,7 +18965,7 @@ class BlockEntries:
             while_loop_counter_12572 += 1
             if while_loop_counter_12572 > kWhileLoopLimit:
                 break
-            
+
         while_222, while_223, while_224, while_225, while_226, while_227, = assign_value_112, full_949, full_950, assign_value_111, assign_value_113, reshape__154,
 
         # pd_op.full: (1xi32) <- ()
@@ -19284,7 +19284,7 @@ class BlockEntries:
             while_loop_counter_12726 += 1
             if while_loop_counter_12726 > kWhileLoopLimit:
                 break
-            
+
         while_228, while_229, while_230, while_231, while_232, while_233, = full_974, reshape__158, assign_value_116, full_975, assign_value_115, assign_value_114,
 
         # pd_op.full: (1xi32) <- ()
@@ -19603,7 +19603,7 @@ class BlockEntries:
             while_loop_counter_12880 += 1
             if while_loop_counter_12880 > kWhileLoopLimit:
                 break
-            
+
         while_234, while_235, while_236, while_237, while_238, while_239, = assign_value_118, assign_value_119, assign_value_117, reshape__162, full_1000, full_999,
 
         # pd_op.full: (1xi32) <- ()
@@ -19922,7 +19922,7 @@ class BlockEntries:
             while_loop_counter_13034 += 1
             if while_loop_counter_13034 > kWhileLoopLimit:
                 break
-            
+
         while_240, while_241, while_242, while_243, while_244, while_245, = full_1024, assign_value_121, assign_value_122, full_1025, assign_value_120, reshape__170,
 
         # pd_op.full: (1xi32) <- ()
@@ -20485,7 +20485,6 @@ class Test_builtin_module_6478_0_0(CinnTestBase, unittest.TestCase):
             input.stop_gradient = True
 
     def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
         input_spec = [
             # parameter_0
             paddle.static.InputSpec(shape=[64, 3, 3, 3], dtype='float32'),
@@ -20862,11 +20861,11 @@ class Test_builtin_module_6478_0_0(CinnTestBase, unittest.TestCase):
             # feed_0
             paddle.static.InputSpec(shape=[None, 3, 48, 160], dtype='float32'),
         ]
-        build_strategy.build_cinn_pass = use_cinn
+        backend = "CINN" if use_cinn else None
         return paddle.jit.to_static(
             net,
             input_spec=input_spec,
-            build_strategy=build_strategy,
+            backend=backend,
             full_graph=True,
         )
 

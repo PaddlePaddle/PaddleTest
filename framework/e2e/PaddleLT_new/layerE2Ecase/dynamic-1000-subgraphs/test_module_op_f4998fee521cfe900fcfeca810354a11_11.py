@@ -50,7 +50,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=True,
-        ), 
+        ),
     ),
     Stage(
         name="backend",
@@ -61,7 +61,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=False,
-        ), 
+        ),
     ),
 ]
 
@@ -215,7 +215,7 @@ paddle_debug_num_allowed_ops = GetPaddleDebugNumAllowedOps()
 
 if type(paddle_debug_num_allowed_ops) is not int:
     def EarlyReturn(block_idx, op_idx):
-        return False      
+        return False
 else:
     def EarlyReturn(block_idx, op_idx):
         return op_idx >= paddle_debug_num_allowed_ops
@@ -415,7 +415,6 @@ class Test_builtin_module_184_0_0(CinnTestBase, unittest.TestCase):
             input.stop_gradient = True
 
     def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
         input_spec = [
             # parameter_4
             paddle.static.InputSpec(shape=[384], dtype='float32'),
@@ -436,11 +435,11 @@ class Test_builtin_module_184_0_0(CinnTestBase, unittest.TestCase):
             # data_0
             paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
         ]
-        build_strategy.build_cinn_pass = use_cinn
+        backend = "CINN" if use_cinn else None
         return paddle.jit.to_static(
             net,
             input_spec=input_spec,
-            build_strategy=build_strategy,
+            backend=backend,
             full_graph=True,
         )
 
