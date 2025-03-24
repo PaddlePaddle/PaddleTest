@@ -150,7 +150,7 @@ def parse_description_url(des_url, py_version, packages_name='paddlepaddle_gpu',
             platform_str = 'linux_x86_64'
         else:
             platform_str = 'linux_aarch64'
-    elif platform == "Darwin":
+    elif platform_system == "Darwin":
         if machine == "x86_64":
             platform_str = 'macosx_10_9_x86_64'
         else:
