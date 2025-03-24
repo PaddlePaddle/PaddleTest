@@ -1,0 +1,5 @@
+
+wget
+future
+pycryptodome
+requests
