@@ -164,7 +164,7 @@ class TestLayer(unittest.TestCase):
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.base.core._set_prim_all_enabled(with_prim)
             if with_cinn:
                 assert with_prim, "with_cinn=True but with_prim=False is unsupported"
                 net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
