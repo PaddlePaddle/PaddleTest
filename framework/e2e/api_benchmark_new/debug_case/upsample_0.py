@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test Upsample_0
+test upsample_0
 """
 import timeit
 from inspect import isclass
@@ -43,9 +43,9 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.Upsample"
-all_data = {"x": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
-params = {"size": [2, 2], "scale_factor": None, "mode": "nearest"}
+api = "paddle.nn.functional.upsample"
+all_data = {"x": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
+params = {"size": [1, 1], "mode": "nearest", "align_corners": False, "align_mode": 0, "data_format": "NCHW"}
 
 inputs = {}
 for data, v in all_data.items():
