@@ -1,0 +1,25 @@
+train:
+  name: multi
+  params:
+    - --max_steps 2
+    - --save_steps 2
+    - --device gpu
+    - --output_dir ./output/
+eval:
+  name: trained
+  params:
+    - --device gpu
+    - --init_checkpoint_dir ./output/
+infer:
+  name: trained
+  params:
+    - --device gpu
+    - --init_checkpoint_dir ./output/
+export:
+  name: trained
+  params:
+    - --export_output_dir ./inference_model/
+predict:
+  name: trained
+  params:
+    - --inference_model_dir ../../inference_model/
