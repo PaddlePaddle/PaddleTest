@@ -115,7 +115,7 @@ class LayerEvalBM(object):
     def dy2st_eval_perf(self):
         """dygraph eval"""
         net = self._net_instant()
-        st_net = paddle.jit.to_static(net, full_graph=True)
+        st_net = paddle.jit.to_static(net, backend=None, full_graph=True)
         st_net.eval()
 
         def _perf(input_data):

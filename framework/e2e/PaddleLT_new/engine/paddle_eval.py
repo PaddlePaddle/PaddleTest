@@ -110,7 +110,7 @@ class LayerEval(object):
         """dy2st eval"""
         data = self._net_input()
         net = self._net_instant()
-        st_net = paddle.jit.to_static(net, full_graph=True)
+        st_net = paddle.jit.to_static(net, backend=None, full_graph=True)
         st_net.eval()
         logit = st_net(*data)
         if self.return_net_instance == "True":
@@ -123,7 +123,7 @@ class LayerEval(object):
         data, input_spec = self._net_input_and_spec()
         Logger("dy2st_eval_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
         net = self._net_instant()
-        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        st_net = paddle.jit.to_static(net, backend=None, full_graph=True, input_spec=input_spec)
         st_net.eval()
         logit = st_net(*data)
         if self.return_net_instance == "True":
@@ -136,7 +136,7 @@ class LayerEval(object):
         data, input_spec = self._net_input_and_static_spec()
         Logger("dy2st_eval_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
-        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        st_net = paddle.jit.to_static(net, backend=None, full_graph=True, input_spec=input_spec)
         st_net.eval()
         logit = st_net(*data)
         if self.return_net_instance == "True":

@@ -153,7 +153,7 @@ class LayerTrainBM(object):
         loss = self._net_loss()
 
         net.train()
-        st_net = paddle.jit.to_static(net, full_graph=True)
+        st_net = paddle.jit.to_static(net, backend=None, full_graph=True)
 
         # 构建optimizer用于训练
         if st_net.parameters():
