@@ -1,6 +1,6 @@
 numpy
 regex
-nltk==3.5
+nltk
 xlrd==1.2.0
 pybind11
 tool_helpers

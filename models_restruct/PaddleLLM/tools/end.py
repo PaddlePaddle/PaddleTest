@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 logger = logging.getLogger("ce")
 
 
-class PaddleNLP_End(object):
+class PaddleLLM_End(object):
     """
     post processing
     """
@@ -29,7 +29,7 @@ class PaddleNLP_End(object):
         init
         """
         # export qa_yaml_name='model_zoo^bert_convergence_dy2st'
-        # export reponame='PaddleNLP'
+        # export reponame='PaddleLLM'
         # export system='linux_convergence'
         self.reponame = os.environ["reponame"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
@@ -134,7 +134,7 @@ def run():
     platform = os.environ["system"]
     all = re.compile("All").findall(os.environ["AGILE_PIPELINE_NAME"])
     if platform == "linux_convergence" and not all:
-        model = PaddleNLP_End()
+        model = PaddleLLM_End()
         model.build_end()
         return 0
     else:

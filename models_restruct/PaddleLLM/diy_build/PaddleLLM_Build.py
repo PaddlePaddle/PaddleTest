@@ -15,7 +15,7 @@ from Model_Build import Model_Build
 logger = logging.getLogger("ce")
 
 
-class PaddleNLP_Build(Model_Build):
+class PaddleLLM_Build(Model_Build):
     """
     自定义环境准备
     """
@@ -89,7 +89,7 @@ class PaddleNLP_Build(Model_Build):
 
         if os.path.exists(self.reponame):
             os.chdir(self.reponame)
-            logger.info("installing develop PaddleNLP")
+            logger.info("installing develop PaddleLLM")
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system(" python -m pip install -U dist/p****.whl")
             logger.info("installing develop paddlenlp_ops")
@@ -161,7 +161,7 @@ class PaddleNLP_Build(Model_Build):
         """
         使用父类实现好的能力
         """
-        super(PaddleNLP_Build, self).build_env()
+        super(PaddleLLM_Build, self).build_env()
         ret = 0
         ret = self.build_paddlenlp()
         if ret:
@@ -184,5 +184,5 @@ if __name__ == "__main__":
         return args
 
     args = parse_args()
-    model = PaddleNLP_Build(args)
+    model = PaddleLLM_Build(args)
     model.build_paddlenlp()
