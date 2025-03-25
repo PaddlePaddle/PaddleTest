@@ -93,7 +93,9 @@ class PaddleNLP_Build(Model_Build):
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system(" python -m pip install -U dist/p****.whl")
             logger.info("installing develop paddlenlp_ops")
-            cmd_ops_return = os.system("python -m pip install --pre --upgrade paddlenlp_ops -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
+            os.system("wget https://paddlenlp.bj.bcebos.com/wheels/paddlenlp_ops-ci-py3-none-any.whl")
+            os.system("mv paddlenlp_ops-ci-py3-none-any.whl paddlenlp_ops-0.0.0-py3-none-any.whl")
+            cmd_ops_return = os.system("python -m pip install paddlenlp_ops-0.0.0-py3-none-any.whl")
             
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format(self.reponame))
