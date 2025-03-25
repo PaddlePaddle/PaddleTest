@@ -1,5 +1,5 @@
 # 静态图模型推理
-# work_path: PaddleNLP 后续可能修改
+# work_path: PaddleLLM 后续可能修改
 model_name=$1
 ngpus=${2:-8}
 step_name=${3:-"grpo"}

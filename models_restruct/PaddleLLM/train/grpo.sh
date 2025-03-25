@@ -16,8 +16,8 @@ if [[ ${model_name} == "qwen" ]]; then
 elif [[ ${model_name} == "llama" ]]; then
     model_name_or_path="meta-llama/Meta-Llama-3-8B"
 fi
-fi
-output_dir="../../checkpoints/${model_name}/grpo" # 以PaddleNLP/llm为根目录
+
+output_dir="../../checkpoints/${model_name}/grpo" # 以llm为根目录
 
 # 2. 数据准备 
 if [ ! -d "ppo-kk" ]; then
@@ -40,8 +40,8 @@ else
     exit 1  
 fi  
 export CUDA_VISIBLE_DEVICES=${DEVICE}
-export PYTHONPATH=/workspace/PaddleNL/:$PYTHONPATH # 注意系统路径，请根据实际情况修改！！
-export PYTHONPATH=/workspace/PaddleNLP/llm:$PYTHONPATH
+export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/:$PYTHONPATH # 注意系统路径，请根据实际情况修改！！
+export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/llm:$PYTHONPATH
 
 # 4. 启动训练脚本
 echo "启动reward服务"
