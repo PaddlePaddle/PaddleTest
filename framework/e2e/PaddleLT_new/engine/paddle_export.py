@@ -116,10 +116,7 @@ class LayerExport(object):
         """jit.save(layer)"""
         data = self._net_input()
         net = self._net_instant()
-
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
         cinn_net.eval()
         cinn_net(*data)
 
@@ -133,8 +130,6 @@ class LayerExport(object):
         Logger("jit_save_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
         net = self._net_instant()
 
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
         cinn_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
         cinn_net.eval()
         # cinn_net(*self._net_input())
@@ -149,8 +144,6 @@ class LayerExport(object):
         Logger("jit_save_cinn_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
 
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
         cinn_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
         cinn_net.eval()
         # cinn_net(*self._net_input())

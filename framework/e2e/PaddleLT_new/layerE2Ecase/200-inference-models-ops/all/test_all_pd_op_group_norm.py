@@ -51,7 +51,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=True,
-        ), 
+        ),
     ),
     Stage(
         name="backend",
@@ -62,7 +62,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=False,
-        ), 
+        ),
     ),
 ]
 
@@ -176,6 +176,10 @@ import paddle
 def SetEnvVar(env_var2value):
     for env_var, value in env_var2value.items():
         os.environ[env_var] = str(value)
+    if env_var2value.get("FLAGS_prim_all") is not None:
+        prim_all_value = env_var2value.pop("FLAGS_prim_all")
+        env_var2value["FLAGS_prim_forward"] = prim_all_value
+        env_var2value["FLAGS_prim_backward"] = prim_all_value
     paddle.set_flags({
         env_var:value
         for env_var, value in env_var2value.items()
@@ -229,12 +233,11 @@ def IsInteger(dtype):
     return np.dtype(dtype).char in np.typecodes['AllInteger']
 
 def ApplyToStatic(net, use_cinn):
-    build_strategy = paddle.static.BuildStrategy()
-    build_strategy.build_cinn_pass = use_cinn
+    backend = "CINN" if use_cinn else None
     return paddle.jit.to_static(
         net,
         input_spec=net.get_input_spec(),
-        build_strategy=build_strategy,
+        backend=backend,
         full_graph=True,
     )
 
@@ -290,7 +293,7 @@ class CinnTestBase:
         paddle.seed(2024)
         out = net(*self.inputs)
         return out
-    
+
     def prepare_data(self):
         self.inputs = self.get_inputs()
         for input in self.inputs:
@@ -339,7 +342,7 @@ class TestTryRun(unittest.TestCase):
         message = try_run_stderr[-kOutputLimit:]
         raise RuntimeError(f"panicked. last {kOutputLimit} characters of stderr: \n{message}")
 class PrimitiveOp_570ce30057a974964020a5f54a3cd759(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -355,7 +358,7 @@ class PrimitiveOp_570ce30057a974964020a5f54a3cd759(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None], dtype='float16'),
             paddle.static.InputSpec(shape=[None], dtype='float16'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -364,7 +367,7 @@ class PrimitiveOp_570ce30057a974964020a5f54a3cd759(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_302c55e828ab6a358419c8a73f7c142d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_570ce30057a974964020a5f54a3cd759
     def get_inputs(self):
@@ -387,7 +390,7 @@ class TestPrimitiveOp_302c55e828ab6a358419c8a73f7c142d(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_6f02326ba2c2142827ea1bc6c01fdce9(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_570ce30057a974964020a5f54a3cd759
     def get_inputs(self):
@@ -410,7 +413,7 @@ class TestPrimitiveOp_6f02326ba2c2142827ea1bc6c01fdce9(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_3c717249d6509cb62daa60c5d3870b52(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_570ce30057a974964020a5f54a3cd759
     def get_inputs(self):
@@ -433,7 +436,7 @@ class TestPrimitiveOp_3c717249d6509cb62daa60c5d3870b52(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_f6a1f428946445a2bbf6ac92ce97bcb7(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_570ce30057a974964020a5f54a3cd759
     def get_inputs(self):
@@ -456,7 +459,7 @@ class TestPrimitiveOp_f6a1f428946445a2bbf6ac92ce97bcb7(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_d3d123d041c9df2e564bf80060596554(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_570ce30057a974964020a5f54a3cd759
     def get_inputs(self):
@@ -478,7 +481,7 @@ class TestPrimitiveOp_d3d123d041c9df2e564bf80060596554(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_f938c9310aebc85fc03addce3e0a5fbf(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -494,7 +497,7 @@ class PrimitiveOp_f938c9310aebc85fc03addce3e0a5fbf(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None], dtype='float32'),
             paddle.static.InputSpec(shape=[None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -503,7 +506,7 @@ class PrimitiveOp_f938c9310aebc85fc03addce3e0a5fbf(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_94ffba9616c3bf2c20779b68b5f46991(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_f938c9310aebc85fc03addce3e0a5fbf
     def get_inputs(self):
@@ -526,7 +529,7 @@ class TestPrimitiveOp_94ffba9616c3bf2c20779b68b5f46991(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_3fcec4e54f833dc19afd229d018cb7ac(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_f938c9310aebc85fc03addce3e0a5fbf
     def get_inputs(self):
@@ -549,7 +552,7 @@ class TestPrimitiveOp_3fcec4e54f833dc19afd229d018cb7ac(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4404c2c88ed724fb87580e436aa5cfd1(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_f938c9310aebc85fc03addce3e0a5fbf
     def get_inputs(self):
@@ -571,7 +574,7 @@ class TestPrimitiveOp_4404c2c88ed724fb87580e436aa5cfd1(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_5f01ec3482344eebd6424aa0defa0699(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -587,7 +590,7 @@ class PrimitiveOp_5f01ec3482344eebd6424aa0defa0699(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None], dtype='float32'),
             paddle.static.InputSpec(shape=[None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -596,7 +599,7 @@ class PrimitiveOp_5f01ec3482344eebd6424aa0defa0699(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_3f63c75cb785ae99a60e4d388f0085e9(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_5f01ec3482344eebd6424aa0defa0699
     def get_inputs(self):
@@ -619,7 +622,7 @@ class TestPrimitiveOp_3f63c75cb785ae99a60e4d388f0085e9(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_aebf14466c696d09ee29bcf15424eb1b(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_5f01ec3482344eebd6424aa0defa0699
     def get_inputs(self):
@@ -642,7 +645,7 @@ class TestPrimitiveOp_aebf14466c696d09ee29bcf15424eb1b(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_d63cb8368844c9e7bfbc4af2637b7dfc(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_5f01ec3482344eebd6424aa0defa0699
     def get_inputs(self):
@@ -665,7 +668,7 @@ class TestPrimitiveOp_d63cb8368844c9e7bfbc4af2637b7dfc(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_955dcb7daacb6a553060905e23dc63bf(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_5f01ec3482344eebd6424aa0defa0699
     def get_inputs(self):
@@ -688,7 +691,7 @@ class TestPrimitiveOp_955dcb7daacb6a553060905e23dc63bf(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_bc1c51c318f534d530c84822a5fa3a7a(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_5f01ec3482344eebd6424aa0defa0699
     def get_inputs(self):
@@ -710,7 +713,7 @@ class TestPrimitiveOp_bc1c51c318f534d530c84822a5fa3a7a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_724a49cfc6ea8512587afc0d32d89963(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -726,7 +729,7 @@ class PrimitiveOp_724a49cfc6ea8512587afc0d32d89963(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None], dtype='float16'),
             paddle.static.InputSpec(shape=[None], dtype='float16'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -735,7 +738,7 @@ class PrimitiveOp_724a49cfc6ea8512587afc0d32d89963(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4ec60d9689edf7d9f903806affd920ec(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_724a49cfc6ea8512587afc0d32d89963
     def get_inputs(self):
@@ -758,7 +761,7 @@ class TestPrimitiveOp_4ec60d9689edf7d9f903806affd920ec(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_1a4ccedb2b7dfd2e03d2a90bd3a80340(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_724a49cfc6ea8512587afc0d32d89963
     def get_inputs(self):
@@ -781,7 +784,7 @@ class TestPrimitiveOp_1a4ccedb2b7dfd2e03d2a90bd3a80340(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_9a4e47ce8c117868a7f059c039fccc1b(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_724a49cfc6ea8512587afc0d32d89963
     def get_inputs(self):
@@ -803,7 +806,7 @@ class TestPrimitiveOp_9a4e47ce8c117868a7f059c039fccc1b(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_ed4848782d33c4111ab20620caa19bde(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -819,7 +822,7 @@ class PrimitiveOp_ed4848782d33c4111ab20620caa19bde(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[256], dtype='float16'),
             paddle.static.InputSpec(shape=[256], dtype='float16'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -828,7 +831,7 @@ class PrimitiveOp_ed4848782d33c4111ab20620caa19bde(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_682ebb3a9fdf32e3fd9b6ae608f72866(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ed4848782d33c4111ab20620caa19bde
     def get_inputs(self):
@@ -851,7 +854,7 @@ class TestPrimitiveOp_682ebb3a9fdf32e3fd9b6ae608f72866(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_6dd5a9a2e0e4e701f8646b9dcd6771ae(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ed4848782d33c4111ab20620caa19bde
     def get_inputs(self):
@@ -874,7 +877,7 @@ class TestPrimitiveOp_6dd5a9a2e0e4e701f8646b9dcd6771ae(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_763589445f001e9edd8150d545a40b0f(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ed4848782d33c4111ab20620caa19bde
     def get_inputs(self):
@@ -897,7 +900,7 @@ class TestPrimitiveOp_763589445f001e9edd8150d545a40b0f(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_0273e352dfe09b121a4def93de37a5fc(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ed4848782d33c4111ab20620caa19bde
     def get_inputs(self):
@@ -920,7 +923,7 @@ class TestPrimitiveOp_0273e352dfe09b121a4def93de37a5fc(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_b1cbb8809ca1c45ef9d6e00299f1aca3(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ed4848782d33c4111ab20620caa19bde
     def get_inputs(self):
@@ -942,7 +945,7 @@ class TestPrimitiveOp_b1cbb8809ca1c45ef9d6e00299f1aca3(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_6a98db7e533426d5ff860ae716441d5e(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -958,7 +961,7 @@ class PrimitiveOp_6a98db7e533426d5ff860ae716441d5e(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[64], dtype='float32'),
             paddle.static.InputSpec(shape=[64], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -967,7 +970,7 @@ class PrimitiveOp_6a98db7e533426d5ff860ae716441d5e(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_28b7f2c426ffaba2aa2ae9d399b43fe6(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_6a98db7e533426d5ff860ae716441d5e
     def get_inputs(self):
@@ -989,7 +992,7 @@ class TestPrimitiveOp_28b7f2c426ffaba2aa2ae9d399b43fe6(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_cdc1e42658a68f9e75ae88f9a2d03ea1(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1005,7 +1008,7 @@ class PrimitiveOp_cdc1e42658a68f9e75ae88f9a2d03ea1(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[96], dtype='float32'),
             paddle.static.InputSpec(shape=[96], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -1014,7 +1017,7 @@ class PrimitiveOp_cdc1e42658a68f9e75ae88f9a2d03ea1(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_dc5c9236df37dbdcc3f3dfe03adbc696(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_cdc1e42658a68f9e75ae88f9a2d03ea1
     def get_inputs(self):
@@ -1036,7 +1039,7 @@ class TestPrimitiveOp_dc5c9236df37dbdcc3f3dfe03adbc696(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_6b9f1713f740837f81bf8d7ee07d1d46(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1052,7 +1055,7 @@ class PrimitiveOp_6b9f1713f740837f81bf8d7ee07d1d46(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[128], dtype='float32'),
             paddle.static.InputSpec(shape=[128], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -1061,7 +1064,7 @@ class PrimitiveOp_6b9f1713f740837f81bf8d7ee07d1d46(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_78bc5a266f63efaea9d6b3f365d596db(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_6b9f1713f740837f81bf8d7ee07d1d46
     def get_inputs(self):
@@ -1083,7 +1086,7 @@ class TestPrimitiveOp_78bc5a266f63efaea9d6b3f365d596db(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_02f51307263270dc4b2d780c11543fde(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1099,7 +1102,7 @@ class PrimitiveOp_02f51307263270dc4b2d780c11543fde(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[256], dtype='float32'),
             paddle.static.InputSpec(shape=[256], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -1108,7 +1111,7 @@ class PrimitiveOp_02f51307263270dc4b2d780c11543fde(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_b988591fd5d947151c59173d45651435(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_02f51307263270dc4b2d780c11543fde
     def get_inputs(self):
@@ -1131,7 +1134,7 @@ class TestPrimitiveOp_b988591fd5d947151c59173d45651435(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_410f335c5de7e229628d09a1e9fe67dd(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_02f51307263270dc4b2d780c11543fde
     def get_inputs(self):
@@ -1154,7 +1157,7 @@ class TestPrimitiveOp_410f335c5de7e229628d09a1e9fe67dd(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_c682797276d3555422f30e185d6a8d74(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_02f51307263270dc4b2d780c11543fde
     def get_inputs(self):
@@ -1177,7 +1180,7 @@ class TestPrimitiveOp_c682797276d3555422f30e185d6a8d74(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_4c55ab7bdd03213f2b9c3c156a19e369(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_02f51307263270dc4b2d780c11543fde
     def get_inputs(self):
@@ -1200,7 +1203,7 @@ class TestPrimitiveOp_4c55ab7bdd03213f2b9c3c156a19e369(CinnTestBase, unittest.Te
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_62ec583a4465c546c42a76e0ad4b280a(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_02f51307263270dc4b2d780c11543fde
     def get_inputs(self):
@@ -1222,7 +1225,7 @@ class TestPrimitiveOp_62ec583a4465c546c42a76e0ad4b280a(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_b1565df819ad9d3dd6df13099e65cc81(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1238,7 +1241,7 @@ class PrimitiveOp_b1565df819ad9d3dd6df13099e65cc81(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[64], dtype='float16'),
             paddle.static.InputSpec(shape=[64], dtype='float16'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -1247,7 +1250,7 @@ class PrimitiveOp_b1565df819ad9d3dd6df13099e65cc81(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_5501c4fa0fb6eae8cc589094e04f4045(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_b1565df819ad9d3dd6df13099e65cc81
     def get_inputs(self):
@@ -1269,7 +1272,7 @@ class TestPrimitiveOp_5501c4fa0fb6eae8cc589094e04f4045(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_9e1d185c2416418ba9e6cef31e1fcc19(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1285,7 +1288,7 @@ class PrimitiveOp_9e1d185c2416418ba9e6cef31e1fcc19(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[96], dtype='float16'),
             paddle.static.InputSpec(shape=[96], dtype='float16'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -1294,7 +1297,7 @@ class PrimitiveOp_9e1d185c2416418ba9e6cef31e1fcc19(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_a0266b239ece8713de26d765a46be380(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_9e1d185c2416418ba9e6cef31e1fcc19
     def get_inputs(self):
@@ -1316,7 +1319,7 @@ class TestPrimitiveOp_a0266b239ece8713de26d765a46be380(CinnTestBase, unittest.Te
         return self._test_entry()
 
 class PrimitiveOp_ccf1efddfe9f9e8216d158d59c00cfd9(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1332,7 +1335,7 @@ class PrimitiveOp_ccf1efddfe9f9e8216d158d59c00cfd9(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[128], dtype='float16'),
             paddle.static.InputSpec(shape=[128], dtype='float16'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
@@ -1341,7 +1344,7 @@ class PrimitiveOp_ccf1efddfe9f9e8216d158d59c00cfd9(InstanceTrait, paddle.nn.Laye
 
 @unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_cec4d50da0d3c91f14fb0db8fa0d2063(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ccf1efddfe9f9e8216d158d59c00cfd9
     def get_inputs(self):

@@ -99,19 +99,18 @@ class TestPrimitiveOp0(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[10, 3, 64, 256], dtype='float32'),
-            paddle.static.InputSpec(shape=[10, 32, 100, 2], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[10, 3, 64, 256], dtype='float32'),
+                paddle.static.InputSpec(shape=[10, 32, 100, 2], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp0()
