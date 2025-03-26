@@ -6,7 +6,7 @@ ext_args=""
 
 # 1. 模型准备
 echo "清理显存"
-fuser -v /dev/nvidia* 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i ~ /^[0-9]+$/) print $i}' | xargs kill -9 2>/dev/null
+# fuser -v /dev/nvidia* 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i ~ /^[0-9]+$/) print $i}' | xargs kill -9 2>/dev/null
 sleep 3s
 echo "清理Checkpoints"
 rm -rf ../../checkpoints/${model_name}/grpo/* 2>/dev/null 
