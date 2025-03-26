@@ -1,20 +1,20 @@
 # 静态图模型推理
-# work_path: PaddleLLM 后续可能修改
+# work_path: PaddleLLM/llm
 model_name=$1
 ngpus=${2:-8}
 step_name=${3:-"grpo"}
 
 # 1.动转静模型路径
 if [ "$step_name" == "ppo" ] || [ "$step_name" == "grpo" ]; then 
-    model_name_or_path=./llm/checkpoints/$model_name/${step_name}/policy/checkpoint-20
+    model_name_or_path=./checkpoints/$model_name/${step_name}/policy/checkpoint-20
 else
-    model_name_or_path=./llm/checkpoints/$model_name/${step_name}
+    model_name_or_path=./checkpoints/$model_name/${step_name}
 fi
 output_path="$model_name_or_path/inference"
 
 # 2. 静态图导出
 echo "静态图导出..."
-python llm/predict/export_model.py \
+python ./predict/export_model.py \
     --model_name_or_path ${model_name_or_path} \
     --inference_model \
     --output_path ${output_path} \
@@ -22,7 +22,7 @@ python llm/predict/export_model.py \
 
 # 3. 静态图推理
 echo "静态图推理..."
-python llm/predict/predictor.py \
+python ./predict/predictor.py \
     --model_name_or_path ${output_path} \
     --inference_model \
     --dtype "float16" \
