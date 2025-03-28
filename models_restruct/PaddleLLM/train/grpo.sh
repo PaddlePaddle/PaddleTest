@@ -54,8 +54,8 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
     --output_dir ${output_dir} \
-    --max_steps 20 \
-    --save_steps 20 \
+    --max_steps 5 \
+    --save_steps 5 \
     --tensor_parallel_degree 4 \
     --per_device_prompt_batch_size 1 \
     --per_device_train_batch_size 4 \

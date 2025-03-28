@@ -6,7 +6,7 @@ step_name=${3:-"grpo"}
 
 # 1.动转静模型路径
 if [ "$step_name" == "ppo" ] || [ "$step_name" == "grpo" ]; then 
-    model_name_or_path=./checkpoints/$model_name/${step_name}/policy/checkpoint-20
+    model_name_or_path=./checkpoints/$model_name/${step_name}/policy/checkpoint-5
 else
     model_name_or_path=./checkpoints/$model_name/${step_name}
 fi
