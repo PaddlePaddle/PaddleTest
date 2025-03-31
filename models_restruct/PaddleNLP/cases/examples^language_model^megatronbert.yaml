@@ -6,25 +6,25 @@ case:
         path: slm/model_zoo/megatronbert
         cmd: python -m paddle.distributed.launch run_squad.py
         params:
-          - --do_train \
-          - --version_2_with_negative \
-          - --do_predict \
-          - --batch_size=8 \
+          - --do_train
+          - --version_2_with_negative
+          - --do_predict
+          - --batch_size=8
           - --model_name_or_path=megatronbert-cased
-          - --learning_rate=1e-5 \
-          - --output_dir=output/ \
-          - --device=gpu \
+          - --learning_rate=1e-5
+          - --output_dir=output/
+          - --device=gpu
           - --num_train_epochs=1
       -
         name: run_glue
         path: slm/model_zoo/megatronbert
         cmd: python -m paddle.distributed.launch run_glue.py
         params:
-          - --task_name=mnli \
-          - --output_dir=output/ \
-          - --model_name_or_path=megatronbert-cased \
-          - --learning_rate=1e-5 \
-          - --device=gpu \
+          - --task_name=mnli
+          - --output_dir=output/
+          - --model_name_or_path=megatronbert-cased
+          - --learning_rate=1e-5
+          - --device=gpu
           - --num_train_epochs=1
     eval: skipped
     infer: skipped
