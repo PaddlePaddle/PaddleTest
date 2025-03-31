@@ -32,4 +32,5 @@ case:
         cmd: bash ./predict.sh qwen 2 grpo
       -
         name: grpo_export_infer_ngpus2_bf16 # 2卡, sample预测 注意执行路径！
-        cmd: bash infer.sh qwen 2 grpo
+        path: llm/
+        cmd: bash ./infer.sh qwen 2 grpo
