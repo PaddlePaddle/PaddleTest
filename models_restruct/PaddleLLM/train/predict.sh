@@ -25,6 +25,8 @@ else
     exit 1  
 fi  
 export CUDA_VISIBLE_DEVICES=${DEVICE}
+export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/:$PYTHONPATH # 注意系统路径，请根据实际情况修改！！
+export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/llm:$PYTHONPATH
 
 
 python ./predict/predictor.py \

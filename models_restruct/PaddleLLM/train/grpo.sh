@@ -1,4 +1,4 @@
-# work_path: PaddleNLP/llm
+# work_path: PaddleNLP/llm/alignment/ppo
 # grpo 训练
 model_name=$1
 ngpus=${2:-8}

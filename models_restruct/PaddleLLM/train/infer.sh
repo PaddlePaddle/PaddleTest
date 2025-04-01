@@ -12,6 +12,10 @@ else
 fi
 output_path="$model_name_or_path/inference"
 
+export CUDA_VISIBLE_DEVICES=${DEVICE}
+export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/:$PYTHONPATH # 注意系统路径，请根据实际情况修改！！
+export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/llm:$PYTHONPATH
+
 # 2. 静态图导出
 echo "静态图导出..."
 python ./predict/export_model.py \
