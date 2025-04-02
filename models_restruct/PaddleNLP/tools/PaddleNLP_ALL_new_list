@@ -20,11 +20,7 @@ examples^machine_translation^transformer.yaml
 examples^model_compression^ofa.yaml
 examples^multimodal^layoutlm.yaml
 examples^multimodal^layoutxlm.yaml
-examples^question_generation^t5.yaml
-examples^question_generation^unimo-text.yaml
 examples^sentiment_analysis^textcnn.yaml
-examples^text_correction^ernie-csc.yaml
-examples^text_generation^opt.yaml
 examples^text_graph^erniesage.yaml
 examples^text_matching^sentence_transformers.yaml
 examples^text_matching^simnet.yaml
