@@ -1,5 +1,5 @@
-name: Paddle kits repos sync
-run-name: Paddle kits repos sync Runs on ${{ github.event_name }}
+name: PaddleX kits repos sync
+run-name: PaddleX kits repos sync Runs on ${{ github.event_name }}
 on:
   workflow_dispatch:
   repository_dispatch:
@@ -53,6 +53,11 @@ jobs:
             submodules: "false"
             fetch_depth: 1
             path: "PaddleVideo"
+          - repository: "PaddlePaddle/Paddle3D"
+            ref: "develop"
+            submodules: "false"
+            fetch_depth: 1
+            path: "Paddle3D"
     steps:
       - name: PaddleTest Checkout
         uses: actions/checkout@v4

@@ -26,8 +26,8 @@ class LayerCase(paddle.nn.Layer):
 
 def create_inputspec(): 
     inputspec = ( 
-        paddle.static.InputSpec(shape=(-1, -1, -1, -1), dtype=paddle.float32, stop_gradient=False), 
-        paddle.static.InputSpec(shape=(-1, -1, -1, -1), dtype=paddle.int32, stop_gradient=True), 
+        paddle.static.InputSpec(shape=(-1, -1, 5, 5), dtype=paddle.float32, stop_gradient=False), 
+        paddle.static.InputSpec(shape=(-1, -1, 5, 5), dtype=paddle.int32, stop_gradient=True), 
     )
     return inputspec
 

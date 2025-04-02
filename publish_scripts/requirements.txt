@@ -1,0 +1,5 @@
+bce-python-sdk==0.9.29
+wget
+future
+pycryptodome
+requests

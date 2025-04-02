@@ -1,0 +1,32 @@
+name: PaddlePaddle Packages Run Check
+run-name: Runs on ${{ github.event_name }}
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: "0 20 * * *"
+
+jobs:
+  run-check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest, macos-latest, macos-13, ubuntu-24.04-arm, windows-latest]  # x86 和 ARM
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Upgrade pip and install setuptools
+        run: python -m pip install --upgrade pip setuptools 
+
+      - name: Install dependencies
+        run: python -m pip install --pre paddlepaddle -i https://www.paddlepaddle.org.cn/packages/nightly/cpu/
+
+      - name: Run Check
+        run: |
+          python -c "import paddle; paddle.version.show(); paddle.utils.run_check()"

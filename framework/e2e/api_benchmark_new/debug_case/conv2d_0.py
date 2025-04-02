@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test conv2d_0
+test Conv2D_0
 """
 import timeit
 from inspect import isclass
@@ -43,14 +43,9 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.functional.conv2d"
-all_data = {"x": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
-params = {
-    "weight": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]},
-    "bias": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1], "range": [-1, 1]},
-    "stride": 1,
-    "padding": 0,
-}
+api = "paddle.nn.Conv2D"
+all_data = {"x": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
+params = {"in_channels": 1, "out_channels": 1, "kernel_size": 1, "stride": 1, "padding": 0, "dilation": 1, "groups": 1}
 
 inputs = {}
 for data, v in all_data.items():
