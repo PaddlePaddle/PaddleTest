@@ -69,7 +69,7 @@ def test_nonzero2():
         [0, 1, 2, 1, 2]
     ]).astype(np.int64)
     outputs_np = np.stack([x.numpy() for x in outputs], axis=0)
-    npt.assert_allclose(output_np, res)
+    npt.assert_allclose(outputs_np, res)
 
 
 @pytest.mark.api_base_nonzero_parameters
@@ -96,7 +96,7 @@ def test_nonzero4():
     outputs = paddle.nonzero(x, as_tuple_)
     res = np.array([[0, 1, 3]]).astype(np.int64)
     outputs_np = np.stack([x.numpy() for x in outputs], axis=0)
-    npt.assert_allclose(output_np, res)
+    npt.assert_allclose(outputs_np, res)
 
 
 @pytest.mark.api_base_nonzero_parameters
@@ -161,4 +161,4 @@ def test_nonzero6():
         ]
     ).astype(np.int64)
     outputs_np = np.stack([x.numpy() for x in outputs], axis=0)
-    npt.assert_allclose(output_np, res)
+    npt.assert_allclose(outputs_np, res)
