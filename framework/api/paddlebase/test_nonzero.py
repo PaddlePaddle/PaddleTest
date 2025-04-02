@@ -68,7 +68,7 @@ def test_nonzero2():
         [0, 0, 0, 1, 2],
         [0, 1, 2, 1, 2]
     ]).astype(np.int64)
-    outputs_np = np.stack([x.numpy() for x in outputs], axis=0)
+    outputs_np = np.stack([i.numpy() for i in outputs], axis=0)
     npt.assert_allclose(outputs_np, res)
 
 
@@ -95,7 +95,7 @@ def test_nonzero4():
     as_tuple_ = True
     outputs = paddle.nonzero(x, as_tuple_)
     res = np.array([[0, 1, 3]]).astype(np.int64)
-    outputs_np = np.stack([x.numpy() for x in outputs], axis=0)
+    outputs_np = np.stack([i.numpy() for i in outputs], axis=0)
     npt.assert_allclose(outputs_np, res)
 
 
@@ -160,5 +160,5 @@ def test_nonzero6():
             [0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1]
         ]
     ).astype(np.int64)
-    outputs_np = np.stack([x.numpy() for x in outputs], axis=0)
+    outputs_np = np.stack([i.numpy() for i in outputs], axis=0)
     npt.assert_allclose(outputs_np, res)
