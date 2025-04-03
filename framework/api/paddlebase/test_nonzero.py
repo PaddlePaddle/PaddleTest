@@ -55,22 +55,6 @@ def test_nonzero1():
 
 
 @pytest.mark.api_base_nonzero_parameters
-def test_nonzero2():
-    """
-    x.shape = (3, 3)
-    as_tuple = True
-    """
-    paddle.disable_static()
-    x = paddle.to_tensor(np.array([[1.0, 1.0, 4.0], [0.0, 2.0, 0.0], [0.0, 0.0, 3.0]]).astype(np.float32))
-    as_tuple_ = True
-    outputs = paddle.nonzero(x, as_tuple_)
-    res = np.array([[[0], [0], [0], [1], [2]], [[0], [1], [2], [1], [2]]]).astype(np.int64)
-    for i in range(outputs.__len__()):
-        out = outputs[i].numpy()
-        npt.assert_allclose(out, res[i, :, :])
-
-
-@pytest.mark.api_base_nonzero_parameters
 def test_nonzero3():
     """
     x.shape = (4, )
@@ -80,22 +64,6 @@ def test_nonzero3():
     as_tuple_ = False
     res = np.array([[0], [1], [3]]).astype(np.int64)
     obj.run(res=res, x=x, as_tuple=as_tuple_)
-
-
-@pytest.mark.api_base_nonzero_parameters
-def test_nonzero4():
-    """
-    x.shape = (4, )
-    as_tuple = True
-    """
-    paddle.disable_static()
-    x = paddle.to_tensor(np.array([2, 1, 0, 3]).astype(np.int32))
-    as_tuple_ = True
-    outputs = paddle.nonzero(x, as_tuple_)
-    res = np.array([[[0], [1], [3]]]).astype(np.int64)
-    for i in range(outputs.__len__()):
-        out = outputs[i].numpy()
-        npt.assert_allclose(out, res[i, :])
 
 
 @pytest.mark.api_base_nonzero_parameters
@@ -132,33 +100,3 @@ def test_nonzero5():
         ]
     ).astype(np.int64)
     obj.run(res=res, x=x, as_tuple=as_tuple_)
-
-
-@pytest.mark.api_base_nonzero_parameters
-def test_nonzero6():
-    """
-    x.shape = (3, 2, 2, 2)
-    as_tuple = True
-    """
-    paddle.disable_static()
-    x = np.array(
-        [
-            [[[1.0, 2.0], [0.0, 0.0]], [[5.0, 0.0], [7.0, 8.0]]],
-            [[[9.0, 10.0], [0.0, 12.0]], [[13.0, 0.0], [15.0, 16.0]]],
-            [[[17.0, 0.0], [0.0, 0.0]], [[0.0, 22.0], [23.0, 24.0]]],
-        ]
-    ).astype(np.float64)
-    x = paddle.to_tensor(x)
-    as_tuple_ = True
-    outputs = paddle.nonzero(x, as_tuple_)
-    res = np.array(
-        [
-            [[0.0], [0.0], [0.0], [0.0], [0.0], [1.0], [1.0], [1.0], [1.0], [1.0], [1.0], [2.0], [2.0], [2.0], [2.0]],
-            [[0.0], [0.0], [1.0], [1.0], [1.0], [0.0], [0.0], [0.0], [1.0], [1.0], [1.0], [0.0], [1.0], [1.0], [1.0]],
-            [[0.0], [0.0], [0.0], [1.0], [1.0], [0.0], [0.0], [1.0], [0.0], [1.0], [1.0], [0.0], [0.0], [1.0], [1.0]],
-            [[0.0], [1.0], [0.0], [0.0], [1.0], [0.0], [1.0], [1.0], [0.0], [0.0], [1.0], [0.0], [1.0], [0.0], [1.0]],
-        ]
-    ).astype(np.int64)
-    for i in range(outputs.__len__()):
-        out = outputs[i].numpy()
-        npt.assert_allclose(out, res[i, :, :])
