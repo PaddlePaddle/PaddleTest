@@ -1,7 +1,7 @@
 numpy<=1.26.4
 regex
 nltk
-xlrd==1.2.0
+xlrd
 pybind11
 tool_helpers
 editdistance
