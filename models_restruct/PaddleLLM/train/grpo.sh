@@ -40,8 +40,11 @@ else
     exit 1  
 fi  
 export CUDA_VISIBLE_DEVICES=${DEVICE}
-export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/:$PYTHONPATH # 注意系统路径，请根据实际情况修改！！
-export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/llm:$PYTHONPATH
+current_path=$(pwd)
+repo_path=${current_path%%PaddleLLM*}PaddleLLM
+llm_path=${repo_path}/llm
+export PYTHONPATH=$repo_path:$PYTHONPATH
+export PYTHONPATH=$llm_path:$PYTHONPATH
 
 # 4. 启动训练脚本
 echo "启动reward服务"

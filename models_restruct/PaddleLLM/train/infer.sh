@@ -12,8 +12,11 @@ else
 fi
 output_path="$model_name_or_path/inference"
 
-export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/:$PYTHONPATH # 注意系统路径，请根据实际情况修改！！
-export PYTHONPATH=/workspace/TestFrameWork/PaddleLLM/llm:$PYTHONPATH
+current_path=$(pwd)
+repo_path=${current_path%%PaddleLLM*}PaddleLLM
+llm_path=${repo_path}/llm
+export PYTHONPATH=$repo_path:$PYTHONPATH
+export PYTHONPATH=$llm_path:$PYTHONPATH
 
 # 2. 静态图导出
 echo "静态图导出..."
