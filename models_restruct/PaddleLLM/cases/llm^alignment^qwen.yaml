@@ -27,10 +27,10 @@ case:
             threshold: 0.1
             evaluation: "-"  
       -
-        name: grpo_predict_dynamic_ngpus2_default_bf16 # 2卡动态图预测
+        name: grpo_predict_dynamic_ngpus2_default_bf16 # 2卡动态图预测 ${save_steps}
         path: llm/
-        cmd: bash ./predict.sh qwen 2 grpo
+        cmd: bash ./predict.sh qwen 2 grpo 2
       -
-        name: grpo_export_infer_ngpus2_bf16 # 2卡, sample预测 注意执行路径！
+        name: grpo_export_infer_ngpus2_bf16 # 2卡, sample预测 注意执行路径！ ${save_steps}
         path: llm/
-        cmd: bash ./infer.sh qwen 2 grpo
+        cmd: bash ./infer.sh qwen 2 grpo 2

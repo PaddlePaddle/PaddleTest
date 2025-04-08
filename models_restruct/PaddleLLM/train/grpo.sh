@@ -1,7 +1,8 @@
-# work_path: PaddleNLP/llm/alignment/ppo
+# work_path: PaddleLLM/llm/alignment/ppo
 # grpo 训练
 model_name=$1
 ngpus=${2:-8}
+steps=${3:-2}
 ext_args=""
 
 # 1. 模型准备
@@ -57,8 +58,8 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
     --output_dir ${output_dir} \
-    --max_steps 2 \
-    --save_steps 2 \
+    --max_steps ${steps} \
+    --save_steps ${steps} \
     --tensor_parallel_degree 4 \
     --per_device_prompt_batch_size 1 \
     --per_device_train_batch_size 4 \

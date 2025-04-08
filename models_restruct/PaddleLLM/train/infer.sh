@@ -3,10 +3,11 @@
 model_name=$1
 ngpus=${2:-8}
 step_name=${3:-"grpo"}
+save_steps=${4:-2}
 
 # 1.动转静模型路径
 if [ "$step_name" == "ppo" ] || [ "$step_name" == "grpo" ]; then 
-    model_name_or_path=./checkpoints/$model_name/${step_name}/policy/checkpoint-2
+    model_name_or_path=./checkpoints/$model_name/${step_name}/policy/checkpoint-${save_steps}
 else
     model_name_or_path=./checkpoints/$model_name/${step_name}
 fi
