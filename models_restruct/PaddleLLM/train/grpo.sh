@@ -13,7 +13,7 @@ echo "清理Checkpoints"
 rm -rf ../../checkpoints/${model_name}/grpo/* 2>/dev/null 
 
 if [[ ${model_name} == "qwen" ]]; then
-    model_name_or_path="Qwen/Qwen2.5-7B-Instruct-1M"
+    model_name_or_path="Qwen/Qwen2-0.5B"
 elif [[ ${model_name} == "llama" ]]; then
     model_name_or_path="meta-llama/Meta-Llama-3-8B"
 fi
