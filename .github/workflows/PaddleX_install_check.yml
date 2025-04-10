@@ -27,6 +27,16 @@ jobs:
       - name: Install dependencies
         run: python -m pip install --pre paddlepaddle -i https://www.paddlepaddle.org.cn/packages/nightly/cpu/
 
-      - name: Run Check
+      - name: PaddlePaddle Run Check
         run: |
           python -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
+      
+      - name: git clone PaddleX
+        run: |
+          git clone https://github.com/PaddlePaddle/PaddleX.git
+
+      - name: install requirements
+        run: |
+          cd PaddleX
+          pip install -e .[base]
+          pip list 
