@@ -15,9 +15,9 @@ from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 from generator.builder_optimizer import BuildOptimizer
 from generator.builder_loss import BuildLoss
-from tools.res_save import save_pickle
-from tools.statistics import trimmean, mean, best, best_top_k, perf_by_step
-from tools.logger import Logger
+from pltools.res_save import save_pickle
+from pltools.statistics import trimmean, mean, best, best_top_k, perf_by_step
+from pltools.logger import Logger
 
 
 class LayerTrainBM(object):
@@ -26,7 +26,7 @@ class LayerTrainBM(object):
     """
 
     # def __init__(self, testing, layerfile, device_id):
-    def __init__(self, testing, layerfile, device_place_id):
+    def __init__(self, testing, layerfile, device_place_id, upstream_net, orderdict_usage="None"):
         """
         初始化
         """
@@ -45,6 +45,8 @@ class LayerTrainBM(object):
         self.statis_round = 6
 
         self.testing = testing
+        self.upstream_net = upstream_net
+        # self.return_net_instance = self.testing.get("return_net_instance", "False")
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 
@@ -56,7 +58,10 @@ class LayerTrainBM(object):
     def _net_instant(self):
         """get net and data"""
         reset(self.seed)
-        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        if self.upstream_net:
+            net = self.upstream_net
+        else:
+            net = BuildLayer(layerfile=self.layerfile).get_layer()
         return net
 
     def _net_optimizer(self):
@@ -148,7 +153,7 @@ class LayerTrainBM(object):
         loss = self._net_loss()
 
         net.train()
-        st_net = paddle.jit.to_static(net, full_graph=True)
+        st_net = paddle.jit.to_static(net, backend=None, full_graph=True)
 
         # 构建optimizer用于训练
         if st_net.parameters():
@@ -199,10 +204,7 @@ class LayerTrainBM(object):
         loss = self._net_loss()
 
         net.train()
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
-
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
         # 构建optimizer用于训练
         if cinn_net.parameters():
             opt = optimizer.get_opt(net=cinn_net)

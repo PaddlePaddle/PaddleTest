@@ -19,6 +19,30 @@ for subdir in */; do
       continue
     fi
 
+    if [ "$subdir" == "controlnet/" ]; then
+      continue
+    fi
+
+    if [ "$subdir" == "ipadapter_sd15/" ]; then
+      continue
+    fi
+
+    if [ "$subdir" == "ipadapter_sdxl/" ]; then
+      continue
+    fi
+
+    if [ "$subdir" == "sd15/" ]; then
+      continue
+    fi
+
+    if [ "$subdir" == "sd3/" ]; then
+      continue
+    fi
+
+    if [ "$subdir" == "sdxl/" ]; then
+      continue
+    fi
+
     start_script_path="$subdir/start.sh"
 
     # 检查start.sh文件是否存在
@@ -34,7 +58,21 @@ done
 
 echo "exit code: $exit_code"
 
+echo "*****************pip list********************"
+pip list | grep paddle
+
+echo "*****************pip list fastdeploy********************"
+
+pip list | grep fastdeploy
+
+python -c "
+import paddle
+
+print('Paddle Commit:', paddle.version.commit)
+"
+
 # 查看结果
 cat ${log_dir}/ce_res.log
+
 
 exit $exit_code

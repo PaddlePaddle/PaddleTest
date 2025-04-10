@@ -50,7 +50,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=True,
-        ), 
+        ),
     ),
     Stage(
         name="backend",
@@ -61,7 +61,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=False,
-        ), 
+        ),
     ),
 ]
 
@@ -192,6 +192,10 @@ import paddle
 def SetEnvVar(env_var2value):
     for env_var, value in env_var2value.items():
         os.environ[env_var] = str(value)
+    if env_var2value.get("FLAGS_prim_all") is not None:
+        prim_all_value = env_var2value.pop("FLAGS_prim_all")
+        env_var2value["FLAGS_prim_forward"] = prim_all_value
+        env_var2value["FLAGS_prim_backward"] = prim_all_value
     paddle.set_flags({
         env_var:value
         for env_var, value in env_var2value.items()
@@ -215,7 +219,7 @@ paddle_debug_num_allowed_ops = GetPaddleDebugNumAllowedOps()
 
 if type(paddle_debug_num_allowed_ops) is not int:
     def EarlyReturn(block_idx, op_idx):
-        return False      
+        return False
 else:
     def EarlyReturn(block_idx, op_idx):
         return op_idx >= paddle_debug_num_allowed_ops
@@ -898,7 +902,7 @@ class BlockEntries:
             while_loop_counter_776 += 1
             if while_loop_counter_776 > kWhileLoopLimit:
                 break
-            
+
         while_0, while_1, while_2, while_3, while_4, while_5, while_6, while_7, while_8, while_9, = full_with_tensor_2, assign_value_1, full_with_tensor_0, full_12, full_with_tensor_1, full_11, assign_value_2, assign_value_4, assign_value_3, assign_value_5,
 
         # pd_op.matmul: (-1x501x30xf32) <- (-1x501x256xf32, 256x30xf32)
@@ -1422,7 +1426,6 @@ class Test_builtin_module_436_0_0(CinnTestBase, unittest.TestCase):
             input.stop_gradient = True
 
     def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
         input_spec = [
             # parameter_0
             paddle.static.InputSpec(shape=[16, 3, 3, 3], dtype='float32'),
@@ -1805,11 +1808,11 @@ class Test_builtin_module_436_0_0(CinnTestBase, unittest.TestCase):
             # feed_0
             paddle.static.InputSpec(shape=[None, 3, 488, 488], dtype='float32'),
         ]
-        build_strategy.build_cinn_pass = use_cinn
+        backend = "CINN" if use_cinn else None
         return paddle.jit.to_static(
             net,
             input_spec=input_spec,
-            build_strategy=build_strategy,
+            backend=backend,
             full_graph=True,
         )
 

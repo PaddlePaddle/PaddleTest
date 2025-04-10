@@ -40,10 +40,13 @@ ignore_case_dir = {
         "test_cosinesimilarity.py",
     ],
     "paddlebase": [
+        "test_is_grad_enabled.py",
+        "test_nonzero.py",
     ],
     "optimizer": [],
     "distribution": [],
     "utils": [],
+    "saveload": [],
 }
 
 

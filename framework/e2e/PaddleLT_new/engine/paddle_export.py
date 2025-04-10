@@ -12,7 +12,7 @@ from engine.paddle_xtools import reset
 from generator.builder_layer import BuildLayer
 from generator.builder_data import BuildData
 
-from tools.logger import Logger
+from pltools.logger import Logger
 
 
 class LayerExport(object):
@@ -20,7 +20,7 @@ class LayerExport(object):
     构建Layer导出的通用类
     """
 
-    def __init__(self, testing, layerfile, device_place_id):
+    def __init__(self, testing, layerfile, device_place_id, upstream_net, orderdict_usage="None"):
         """
         初始化
         """
@@ -30,6 +30,8 @@ class LayerExport(object):
         paddle.set_device(f"{self.device}:{device_place_id}")
 
         self.testing = testing
+        self.upstream_net = upstream_net
+        # self.return_net_instance = self.testing.get("return_net_instance", "False")
         self.model_dtype = self.testing.get("model_dtype")
         paddle.set_default_dtype(self.model_dtype)
 
@@ -48,7 +50,10 @@ class LayerExport(object):
     def _net_instant(self):
         """get net"""
         reset(self.seed)
-        net = BuildLayer(layerfile=self.layerfile).get_layer()
+        if self.upstream_net:
+            net = self.upstream_net
+        else:
+            net = BuildLayer(layerfile=self.layerfile).get_layer()
         return net
 
     def _net_input_and_spec(self):
@@ -71,12 +76,13 @@ class LayerExport(object):
 
     def jit_save(self):
         """jit.save(layer)"""
-        st_net = paddle.jit.to_static(self._net_instant())
+        st_net = paddle.jit.to_static(self._net_instant(), backend=None)
         st_net.eval()
         st_net(*self._net_input())
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save"))
+        return {"res": None}
 
     def jit_save_inputspec(self):
         """jit.save(layer)"""
@@ -84,12 +90,13 @@ class LayerExport(object):
         Logger("jit_save_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
 
         net = self._net_instant()
-        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        st_net = paddle.jit.to_static(net, backend=None, full_graph=True, input_spec=input_spec)
         st_net.eval()
         # st_net(*self._net_input())
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save_inputspec"))
+        return {"res": None}
 
     def jit_save_static_inputspec(self):
         """jit.save(layer)"""
@@ -97,26 +104,25 @@ class LayerExport(object):
         Logger("jit_save_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
 
         net = self._net_instant()
-        st_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        st_net = paddle.jit.to_static(net, backend=None, full_graph=True, input_spec=input_spec)
         st_net.eval()
         # st_net(*self._net_input())
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(st_net, path=os.path.join(self.path, self.layername, "jit_save_static_inputspec"))
+        return {"res": None}
 
     def jit_save_cinn(self):
         """jit.save(layer)"""
         data = self._net_input()
         net = self._net_instant()
-
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
         cinn_net.eval()
         cinn_net(*data)
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(cinn_net, path=os.path.join(self.path, self.layername, "jit_save_cinn"))
+        return {"res": None}
 
     def jit_save_cinn_inputspec(self):
         """jit.save(layer)"""
@@ -124,14 +130,13 @@ class LayerExport(object):
         Logger("jit_save_cinn_inputspec").get_log().info(f"待测动态InputSpec为: {input_spec}")
         net = self._net_instant()
 
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True, input_spec=input_spec)
         cinn_net.eval()
         # cinn_net(*self._net_input())
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(cinn_net, path=os.path.join(self.path, self.layername, "jit_save_cinn_inputspec"))
+        return {"res": None}
 
     def jit_save_cinn_static_inputspec(self):
         """jit.save(layer)"""
@@ -139,11 +144,10 @@ class LayerExport(object):
         Logger("jit_save_cinn_static_inputspec").get_log().info(f"待测静态InputSpec为: {input_spec}")
         net = self._net_instant()
 
-        build_strategy = paddle.static.BuildStrategy()
-        build_strategy.build_cinn_pass = True
-        cinn_net = paddle.jit.to_static(net, full_graph=True, input_spec=input_spec)
+        cinn_net = paddle.jit.to_static(net, backend="CINN", full_graph=True, input_spec=input_spec)
         cinn_net.eval()
         # cinn_net(*self._net_input())
 
         # paddle.jit.save(net, path=os.path.join(self.path, self.case))
         paddle.jit.save(cinn_net, path=os.path.join(self.path, self.layername, "jit_save_cinn_static_inputspec"))
+        return {"res": None}

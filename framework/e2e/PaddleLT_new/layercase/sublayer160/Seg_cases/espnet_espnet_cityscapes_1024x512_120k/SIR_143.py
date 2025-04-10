@@ -19,7 +19,7 @@ class LayerCase(paddle.nn.Layer):
     ):
         var_3 = paddle.nn.functional.common.interpolate(var_0, scale_factor=2, mode='bilinear', align_corners=True)
         var_4 = paddle.tensor.manipulation.concat([var_1, var_3], axis=1)
-        var_5 = paddle.nn.functional.common.dropout2d(var_4, p=0.0, training=True, data_format='NCHW', name=None)
+        var_5 = paddle.nn.functional.common.dropout2d(var_4, p=0.0, training=self.training, data_format='NCHW', name=None)
         var_6 = paddle.nn.functional.conv._conv_nd(var_5, self.parameter_0, bias=None, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         var_7 = paddle.nn.functional.common.interpolate(var_6, scale_factor=2, mode='bilinear', align_corners=True)
         var_8 = paddle.nn.functional.common.interpolate(var_2, scale_factor=2, mode='bilinear', align_corners=True)
@@ -52,13 +52,12 @@ class TestLayer(unittest.TestCase):
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.base.core._set_prim_all_enabled(with_prim)
             if with_cinn:
-                build_strategy = paddle.static.BuildStrategy()
-                build_strategy.build_cinn_pass = True
-                net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+                assert with_prim, "with_cinn=True but with_prim=False is unsupported"
+                net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
             else:
-                net = paddle.jit.to_static(net, full_graph=True)
+                net = paddle.jit.to_static(net, backend=None, full_graph=True)
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs

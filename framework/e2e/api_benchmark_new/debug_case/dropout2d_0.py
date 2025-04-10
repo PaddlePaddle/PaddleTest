@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test dropout2d_0
+test Dropout2D_0
 """
 import timeit
 from inspect import isclass
@@ -43,9 +43,9 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.functional.dropout2d"
-all_data = {"x": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
-params = {"p": 0.5, "training": False}
+api = "paddle.nn.Dropout2D"
+all_data = {"x": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
+params = {"p": 0.5}
 
 inputs = {}
 for data, v in all_data.items():
