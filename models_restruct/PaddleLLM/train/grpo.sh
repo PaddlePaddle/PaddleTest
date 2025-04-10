@@ -13,7 +13,7 @@ echo "清理Checkpoints"
 rm -rf ../../checkpoints/${model_name}/grpo/* 2>/dev/null 
 
 if [[ ${model_name} == "qwen" ]]; then
-    model_name_or_path="Qwen/Qwen2-0.5B-Instruct"
+    model_name_or_path="Qwen/Qwen2.5-1.5B"
 elif [[ ${model_name} == "llama" ]]; then
     model_name_or_path="meta-llama/Meta-Llama-3-8B"
 fi
@@ -53,8 +53,9 @@ python reward_server.py > reward_server.log 2>&1 &
 echo "开始训练:"
 
 python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.json \
-    --train_datasets "Jsonfile::ppo-kk/34567ppl/train.jsonl" \
-    --eval_datasets "Jsonfile::ppo-kk/5ppl/test.jsonl" \
+    --train_datasets "ppo-kk/34567ppl/train.jsonl" \
+    --eval_datasets "ppo-kk/5ppl/test.jsonl" \
+    --label_key tgt \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
     --output_dir ${output_dir} \
@@ -65,16 +66,17 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --per_device_train_batch_size 4 \
     --max_length 1024 \
     --max_prompt_len 512 \
-    --pipeline_parallel_degree 4 \
-    --sharding_parallel_degree 1 \
+    --pipeline_parallel_degree 1 \
+    --sharding_parallel_degree 4 \
     --sharding "stage1" \
     --recompute 1 \
     ${ext_args}
 
 echo "热启"
 python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.json \
-    --train_datasets "Jsonfile::ppo-kk/34567ppl/train.jsonl" \
-    --eval_datasets "Jsonfile::ppo-kk/5ppl/test.jsonl" \
+    --train_datasets "ppo-kk/34567ppl/train.jsonl" \
+    --eval_datasets "ppo-kk/5ppl/test.jsonl" \
+    --label_key tgt \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
     --output_dir ${output_dir} \
@@ -85,8 +87,8 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --per_device_train_batch_size 4 \
     --max_length 1024 \
     --max_prompt_len 512 \
-    --pipeline_parallel_degree 4 \
-    --sharding_parallel_degree 1 \
+    --pipeline_parallel_degree 1 \
+    --sharding_parallel_degree 4 \
     --sharding "stage1" \
     --recompute 1 \
     ${ext_args}
