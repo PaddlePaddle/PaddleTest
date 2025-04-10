@@ -34,3 +34,36 @@ case:
         name: grpo_export_infer_ngpus2_bf16 # 2卡, sample预测 注意执行路径！ ${save_steps}
         path: llm/
         cmd: bash ./infer.sh qwen 2 grpo 2
+      -
+        name: reinforce_plus_plus_training
+        path: llm/alignment/ppo
+        cmd: bash reinforce_plus_plus.sh qwen 
+        result:
+          policy_loss:
+            base: "compare_path"
+            threshold: 0.1
+            evaluation: "=" # = base值转成str进行按位对齐   
+          reward:
+            base: "compare_path"
+            threshold: 0.1
+            evaluation: "-"
+          values:
+            base: "compare_path"
+            threshold: 0.1
+            evaluation: "-"
+          kl_divergence:
+            base: "compare_path"
+            threshold: 0.1
+            evaluation: "-"
+          interval_samples_per_second:
+            base: "compare_path"
+            threshold: 0.1
+            evaluation: "-"  
+      -
+        name: reinforce_plus_plus_predict_dynamic_ngpus2_default_bf16 # 2卡动态图预测 ${save_steps}
+        path: llm/
+        cmd: bash ./predict.sh qwen 2 reinforce_plus_plus 2
+      -
+        name: reinforce_plus_plus_export_infer_ngpus2_bf16 # 2卡, sample预测 注意执行路径！ ${save_steps}
+        path: llm/
+        cmd: bash ./infer.sh qwen 2 reinforce_plus_plus 2
