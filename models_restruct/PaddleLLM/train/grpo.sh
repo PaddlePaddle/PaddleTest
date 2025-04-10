@@ -13,7 +13,7 @@ echo "清理Checkpoints"
 rm -rf ../../checkpoints/${model_name}/grpo/* 2>/dev/null 
 
 if [[ ${model_name} == "qwen" ]]; then
-    model_name_or_path="Qwen/Qwen2.5-7B-Instruct-1M"
+    model_name_or_path="Qwen/Qwen2-0.5B-Instruct"
 elif [[ ${model_name} == "llama" ]]; then
     model_name_or_path="meta-llama/Meta-Llama-3-8B"
 fi
@@ -60,13 +60,13 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --output_dir ${output_dir} \
     --max_steps ${steps} \
     --save_steps ${steps} \
-    --tensor_parallel_degree 4 \
+    --tensor_parallel_degree 2 \
     --per_device_prompt_batch_size 1 \
     --per_device_train_batch_size 4 \
     --max_length 1024 \
     --max_prompt_len 512 \
-    --pipeline_parallel_degree 1 \
-    --sharding_parallel_degree 2 \
+    --pipeline_parallel_degree 4 \
+    --sharding_parallel_degree 1 \
     --sharding "stage1" \
     --recompute 1 \
     ${ext_args}
@@ -80,13 +80,13 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --output_dir ${output_dir} \
     --max_steps 1 \
     --save_steps 11 \
-    --tensor_parallel_degree 4 \
+    --tensor_parallel_degree 2 \
     --per_device_prompt_batch_size 1 \
     --per_device_train_batch_size 4 \
     --max_length 1024 \
     --max_prompt_len 512 \
-    --pipeline_parallel_degree 1 \
-    --sharding_parallel_degree 2 \
+    --pipeline_parallel_degree 4 \
+    --sharding_parallel_degree 1 \
     --sharding "stage1" \
     --recompute 1 \
     ${ext_args}
