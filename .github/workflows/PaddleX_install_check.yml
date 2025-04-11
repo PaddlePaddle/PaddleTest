@@ -39,4 +39,5 @@ jobs:
         run: |
           cd PaddleX
           pip install -e .[base]
-          pip list 
+          pip list
+          python -c "import paddlex"
