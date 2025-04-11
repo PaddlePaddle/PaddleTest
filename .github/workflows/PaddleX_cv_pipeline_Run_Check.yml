@@ -57,6 +57,7 @@ jobs:
                   --threshold 0.5 \
                   --save_path ./output/ \
                   --device cpu
+            || exit 1
         continue-on-error: true
         
       - name: test instance_segmentation
@@ -68,6 +69,7 @@ jobs:
                   --threshold 0.5 \
                   --save_path ./output \
                   --device cpu
+            || exit 1
         continue-on-error: true
         
       - name: test semantic_segmentation
@@ -79,6 +81,7 @@ jobs:
                   --target_size -1 \
                   --save_path ./output \
                   --device cpu 
+            || exit 1
         continue-on-error: true                  
 
       - name: test image_multilabel_classification
@@ -88,6 +91,7 @@ jobs:
           paddlex --pipeline image_multilabel_classification \
                   --input general_image_classification_001.jpg \
                   --device cpu
+            || exit 1
         continue-on-error: true
         
       - name: test small_object_detection
@@ -99,6 +103,7 @@ jobs:
                   --threshold 0.5 \
                   --save_path ./output \
                   --device cpu
+            || exit 1
         continue-on-error: true
         
       - name: test anomaly_detection
@@ -109,6 +114,7 @@ jobs:
                   --input uad_grid.png \
                   --device cpu  \
                   --save_path ./output
+            || exit 1
         continue-on-error: true
         
       - name: test 3d_bev_detection
@@ -118,6 +124,7 @@ jobs:
           paddlex --pipeline 3d_bev_detection \
                   --input nuscenes_demo_infer.tar \
                   --device cpu
+            || exit 1
         continue-on-error: true
         
       - name: test human_keypoint_detection
@@ -129,6 +136,7 @@ jobs:
                   --det_threshold 0.5 \
                   --save_path ./output/ \
                   --device cpu
+            || exit 1
         continue-on-error: true
         
       - name: test open_vocabulary_detection
@@ -141,6 +149,7 @@ jobs:
                   --thresholds "{'text_threshold': 0.25, 'box_threshold': 0.3}" \
                   --save_path ./output \
                   --device cpu
+            || exit 1
         continue-on-error: true
         
       - name: test open_vocabulary_segmentation
@@ -153,6 +162,7 @@ jobs:
                   --prompt "[[112.9,118.4,513.8,382.1],[4.6,263.6,92.2,336.6],[592.4,260.9,607.2,294.2]]" \
                   --save_path ./output \
                   --device cpu
+            || exit 1
         continue-on-error: true
         
       - name: test rotated_object_detection
@@ -164,6 +174,7 @@ jobs:
                   --threshold 0.5 \
                   --save_path ./output \
                   --device cpu 
+            || exit 1
         continue-on-error: true
         
       - name: test pedestrian_attribute_recognition
@@ -174,6 +185,7 @@ jobs:
                   --input pedestrian_attribute_002.jpg \
                   --device cpu \
                   --save_path ./output/
+            || exit 1
         continue-on-error: true
         
       - name: test vehicle_attribute_recognition
@@ -184,6 +196,7 @@ jobs:
                   --input vehicle_attribute_002.jpg \
                   --device cpu \
                   --save_path ./output/
+            || exit 1
         continue-on-error: true
         
       - name: test PP-ShiTuV2
@@ -193,6 +206,7 @@ jobs:
           tar -xf drink_dataset_v2.0.tar
           wget -q https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_PP-ShiTuV2.py
           python test_PP-ShiTuV2.py
+            || exit 1
         continue-on-error: true
         
       - name: test face_recognition
@@ -203,5 +217,6 @@ jobs:
           wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/friends1.jpg
           wget -q https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_face_recognition.py
           python test_face_recognition.py
+            || exit 1
         continue-on-error: true
         
