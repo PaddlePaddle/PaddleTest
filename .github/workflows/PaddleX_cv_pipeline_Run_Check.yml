@@ -56,8 +56,7 @@ jobs:
                   --input general_object_detection_002.png \
                   --threshold 0.5 \
                   --save_path ./output/ \
-                  --device cpu
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test instance_segmentation
@@ -68,8 +67,7 @@ jobs:
                   --input general_instance_segmentation_004.png \
                   --threshold 0.5 \
                   --save_path ./output \
-                  --device cpu
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test semantic_segmentation
@@ -80,8 +78,7 @@ jobs:
                   --input makassaridn-road_demo.png \
                   --target_size -1 \
                   --save_path ./output \
-                  --device cpu 
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true                  
 
       - name: test image_multilabel_classification
@@ -90,8 +87,7 @@ jobs:
           wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/general_image_classification_001.jpg
           paddlex --pipeline image_multilabel_classification \
                   --input general_image_classification_001.jpg \
-                  --device cpu
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test small_object_detection
@@ -102,8 +98,7 @@ jobs:
                   --input small_object_detection.jpg \
                   --threshold 0.5 \
                   --save_path ./output \
-                  --device cpu
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test anomaly_detection
@@ -113,8 +108,7 @@ jobs:
           paddlex --pipeline anomaly_detection \
                   --input uad_grid.png \
                   --device cpu  \
-                  --save_path ./output
-            || exit 1
+                  --save_path ./output || exit 1
         continue-on-error: true
         
       - name: test 3d_bev_detection
@@ -123,8 +117,7 @@ jobs:
           wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/det_3d/demo_det_3d/nuscenes_demo_infer.tar
           paddlex --pipeline 3d_bev_detection \
                   --input nuscenes_demo_infer.tar \
-                  --device cpu
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test human_keypoint_detection
@@ -135,8 +128,7 @@ jobs:
                   --input keypoint_detection_001.jpg \
                   --det_threshold 0.5 \
                   --save_path ./output/ \
-                  --device cpu
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test open_vocabulary_detection
@@ -148,8 +140,7 @@ jobs:
                   --prompt "bus . walking man . rearview mirror ." \
                   --thresholds "{'text_threshold': 0.25, 'box_threshold': 0.3}" \
                   --save_path ./output \
-                  --device cpu
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test open_vocabulary_segmentation
@@ -161,8 +152,7 @@ jobs:
                   --prompt_type box \
                   --prompt "[[112.9,118.4,513.8,382.1],[4.6,263.6,92.2,336.6],[592.4,260.9,607.2,294.2]]" \
                   --save_path ./output \
-                  --device cpu
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test rotated_object_detection
@@ -173,8 +163,7 @@ jobs:
                   --input rotated_object_detection_001.png \
                   --threshold 0.5 \
                   --save_path ./output \
-                  --device cpu 
-            || exit 1
+                  --device cpu || exit 1
         continue-on-error: true
         
       - name: test pedestrian_attribute_recognition
@@ -184,8 +173,7 @@ jobs:
           paddlex --pipeline pedestrian_attribute_recognition \
                   --input pedestrian_attribute_002.jpg \
                   --device cpu \
-                  --save_path ./output/
-            || exit 1
+                  --save_path ./output/ || exit 1
         continue-on-error: true
         
       - name: test vehicle_attribute_recognition
@@ -195,8 +183,7 @@ jobs:
           paddlex --pipeline vehicle_attribute_recognition \
                   --input vehicle_attribute_002.jpg \
                   --device cpu \
-                  --save_path ./output/
-            || exit 1
+                  --save_path ./output/ || exit 1
         continue-on-error: true
         
       - name: test PP-ShiTuV2
@@ -205,8 +192,7 @@ jobs:
           wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/data/drink_dataset_v2.0.tar
           tar -xf drink_dataset_v2.0.tar
           wget -q https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_PP-ShiTuV2.py
-          python test_PP-ShiTuV2.py
-            || exit 1
+          python test_PP-ShiTuV2.py || exit 1
         continue-on-error: true
         
       - name: test face_recognition
@@ -216,7 +202,6 @@ jobs:
           tar -xf ./face_demo_gallery.tar
           wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/friends1.jpg
           wget -q https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_face_recognition.py
-          python test_face_recognition.py
-            || exit 1
+          python test_face_recognition.py || exit 1
         continue-on-error: true
         
