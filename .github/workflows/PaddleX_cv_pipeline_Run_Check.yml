@@ -121,28 +121,29 @@ jobs:
                   --det_threshold 0.5 \
                   --save_path ./output/ \
                   --device cpu 
+
+      # 不属于cv
+      # - name: test open_vocabulary_detection
+      #   run: |
+      #     cd PaddleX
+      #     wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/open_vocabulary_detection.jpg
+      #     paddlex --pipeline open_vocabulary_detection \
+      #             --input open_vocabulary_detection.jpg \
+      #             --prompt "bus . walking man . rearview mirror ." \
+      #             --thresholds "{'text_threshold': 0.25, 'box_threshold': 0.3}" \
+      #             --save_path ./output \
+      #             --device cpu 
         
-      - name: test open_vocabulary_detection
-        run: |
-          cd PaddleX
-          wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/open_vocabulary_detection.jpg
-          paddlex --pipeline open_vocabulary_detection \
-                  --input open_vocabulary_detection.jpg \
-                  --prompt "bus . walking man . rearview mirror ." \
-                  --thresholds "{'text_threshold': 0.25, 'box_threshold': 0.3}" \
-                  --save_path ./output \
-                  --device cpu 
-        
-      - name: test open_vocabulary_segmentation
-        run: |
-          cd PaddleX
-          wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/open_vocabulary_segmentation.jpg
-          paddlex --pipeline open_vocabulary_segmentation \
-                  --input open_vocabulary_segmentation.jpg \
-                  --prompt_type box \
-                  --prompt "[[112.9,118.4,513.8,382.1],[4.6,263.6,92.2,336.6],[592.4,260.9,607.2,294.2]]" \
-                  --save_path ./output \
-                  --device cpu 
+      # - name: test open_vocabulary_segmentation
+      #   run: |
+      #     cd PaddleX
+      #     wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/open_vocabulary_segmentation.jpg
+      #     paddlex --pipeline open_vocabulary_segmentation \
+      #             --input open_vocabulary_segmentation.jpg \
+      #             --prompt_type box \
+      #             --prompt "[[112.9,118.4,513.8,382.1],[4.6,263.6,92.2,336.6],[592.4,260.9,607.2,294.2]]" \
+      #             --save_path ./output \
+      #             --device cpu 
         
       - name: test rotated_object_detection
         run: |
