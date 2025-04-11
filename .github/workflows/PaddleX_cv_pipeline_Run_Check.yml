@@ -46,7 +46,6 @@ jobs:
           cd PaddleX
           wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/general_image_classification_001.jpg
           paddlex --pipeline image_classification --input general_image_classification_001.jpg --device cpu --save_path ./output/
-        continue-on-error: true
         
       - name: test object_detection
         run: |
