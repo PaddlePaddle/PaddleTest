@@ -65,9 +65,23 @@ def filter_url(page, basename, block_filter):
     return url
 
 
+def deduplicate_links(links):
+    seen = {}
+    for link in links:
+        url = link['url']
+        # 如果已经出现过该 url，跳过 direct link，但保留命名链接
+        if url in seen:
+            # 优先保留非 direct link 的版本
+            if link['name'] != 'direct link' and seen[url]['name'] == 'direct link':
+                seen[url] = link
+        else:
+            seen[url] = link
+    return list(seen.values())
+
+
 def spider_md_links(file_md, repo_name, version):
     """
-    获取单个md文件中的所有超链接
+    获取 md 文件中的所有链接，包括 Markdown 链接和裸露链接/下载命令
     Returns:
     [超链接名](超链接地址 "超链接title")
     string = 'abe(ac)ad)'
@@ -88,6 +102,7 @@ def spider_md_links(file_md, repo_name, version):
 
     with open(file_md, 'r') as fr:
         str = fr.read()
+    # 1. 提取 Markdown 格式的链接
     pattern = r'[[](.*?)[]][(](.*?)[)]'
     link_list = re.findall(pattern, str)
     for link in link_list:
@@ -98,7 +113,17 @@ def spider_md_links(file_md, repo_name, version):
             link_dict['name'] = link[0]
             link_dict['url'] = url
             links.append(link_dict)
-    return links
+    # 2. 提取裸露的 http/https 链接（比如 tar.gz 下载链接）
+    allowed_exts = ('.tar.gz', '.gz', '.zip', '.txt', '.md', '.tar', '.json', '.csv', '.bin', '.idx')
+    raw_url_pattern = r'https?://[^\s)]+'
+    all_links = re.findall(raw_url_pattern, str)
+    filtered_links = [url for url in all_links if url.endswith(allowed_exts)]
+    for link in filtered_links:
+        link_dict = {}
+        link_dict['name'] = 'direct link'
+        link_dict['url'] = link
+        links.append(link_dict)
+    return deduplicate_links(links)
 
 
 def spider_html_block_links(page, block_filter):
