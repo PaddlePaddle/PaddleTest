@@ -1,0 +1,82 @@
+name: PaddleX ocr pipeline Run Check
+run-name: Runs on ${{ github.event_name }}
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: "0 20 * * *"
+
+jobs:
+  run-check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest, macos-latest, macos-13, ubuntu-24.04-arm, windows-latest]  # x86 和 ARM
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Upgrade pip and install setuptools
+        run: python -m pip install --upgrade pip setuptools 
+
+      - name: Install dependencies
+        run: python -m pip install --pre paddlepaddle -i https://www.paddlepaddle.org.cn/packages/nightly/cpu/
+
+      - name: PaddlePaddle Run Check
+        run: |
+          python -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
+      
+      - name: git clone PaddleX
+        run: |
+          git clone https://github.com/PaddlePaddle/PaddleX.git
+
+      - name: install multimodal requirements
+        run: |
+          cd PaddleX
+          pip install -e .[multimodal]
+          
+      - name: test OCR
+        run: |
+          cd PaddleX
+          paddlex --pipeline OCR --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/general_ocr_002.png --use_doc_orientation_classify False --use_doc_unwarping False --use_textline_orientation False --save_path ./output --device cpu
+        
+      - name: test table_recognition
+        run: |
+          cd PaddleX
+          paddlex --pipeline table_recognition --use_doc_orientation_classify=False --use_doc_unwarping=False --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/table_recognition.jpg --save_path ./output --device cpu
+
+      - name: test table_recognition_v2
+        run: |
+          cd PaddleX
+          paddlex --pipeline table_recognition_v2 --use_doc_orientation_classify=False --use_doc_unwarping=False --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/table_recognition_v2.jpg --save_path ./output --device cpu
+
+      - name: test layout_parsing
+        run: |
+          cd PaddleX
+          paddlex --pipeline layout_parsing --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/layout_parsing_demo.png --use_doc_orientation_classify False --use_doc_unwarping False --use_textline_orientation False --save_path ./output --device cpu
+
+      - name: test PP-StructureV3
+        run: |
+          cd PaddleX
+          paddlex --pipeline PP-StructureV3 --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/pp_structure_v3_demo.png --use_doc_orientation_classify False --use_doc_unwarping False --use_textline_orientation False --save_path ./output --device cpu
+
+      - name: test formula_recognition
+        run: |
+          cd PaddleX
+          paddlex --pipeline formula_recognition --input https://paddle-model-ecology.bj.bcebos.com/paddlex/demo_image/pipelines/general_formula_recognition_001.png --use_layout_detection True --use_doc_orientation_classify False --use_doc_unwarping False --layout_threshold 0.5 --layout_nms True --layout_unclip_ratio  1.0 --layout_merge_bboxes_mode "'large'"--save_path ./output --device cpu
+
+      - name: test seal_recognition
+        run: |
+          cd PaddleX
+          paddlex --pipeline seal_recognition --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/seal_text_det.png --use_doc_orientation_classify False --use_doc_unwarping False --device cpu --save_path ./output
+
+      - name: test doc_preprocessor
+        run: |
+          cd PaddleX
+          paddlex --pipeline doc_preprocessor --input https://paddle-model-ecology.bj.bcebos.com/paddlex/demo_image/doc_test_rotated.jpg --use_doc_orientation_classify True --use_doc_unwarping True --save_path ./output --device cpu          
