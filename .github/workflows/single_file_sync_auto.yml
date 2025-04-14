@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/bos_upload.py'
       - 'tools/linux_env_info.sh'
+      - 'tools/bos_tools.py'
   workflow_dispatch:  
 
 jobs:
@@ -32,5 +33,5 @@ jobs:
           python -m pip install bce-python-sdk==0.8.74
           branch=$(echo '${{ github.ref }}' | sed 's#refs/heads/##')
           python tools/bos_upload.py tools/bos_upload.py paddle-qa/CodeSync/${branch}/${{ github.repository }}
+          python tools/bos_upload.py tools/bos_tools.py paddle-qa/CodeSync/${branch}/${{ github.repository }}
           python tools/bos_upload.py tools/linux_env_info.sh paddle-qa/CodeSync/${branch}/${{ github.repository }}
-

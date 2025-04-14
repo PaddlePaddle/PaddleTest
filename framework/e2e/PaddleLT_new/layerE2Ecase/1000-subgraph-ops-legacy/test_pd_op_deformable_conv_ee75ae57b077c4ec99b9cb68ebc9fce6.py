@@ -101,21 +101,20 @@ class TestPrimitiveOp0(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 128, 48, 72], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 48, 72], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 128, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 48, 72], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 128, 48, 72], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 48, 72], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 128, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 48, 72], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp0()
@@ -142,21 +141,20 @@ class TestPrimitiveOp1(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 120, 200], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 120, 200], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 120, 200], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 120, 200], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 120, 200], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 120, 200], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp1()
@@ -183,21 +181,20 @@ class TestPrimitiveOp2(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 14, 20], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 14, 20], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 14, 20], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 14, 20], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 14, 20], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 14, 20], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp2()
@@ -224,21 +221,20 @@ class TestPrimitiveOp3(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 48, 72], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 48, 72], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 48, 72], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 48, 72], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 48, 72], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 48, 72], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp3()
@@ -265,21 +261,20 @@ class TestPrimitiveOp4(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 258, 16, 16], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 16, 16], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 16, 16], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 258, 16, 16], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 16, 16], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 16, 16], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp4()
@@ -306,21 +301,20 @@ class TestPrimitiveOp5(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 258, 12, 12], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 12, 12], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 12, 12], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 258, 12, 12], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 12, 12], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 12, 12], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp5()
@@ -347,21 +341,20 @@ class TestPrimitiveOp6(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 60, 100], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 60, 100], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 60, 100], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 60, 100], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 60, 100], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 60, 100], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp6()
@@ -388,21 +381,20 @@ class TestPrimitiveOp7(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 128, 120, 200], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 2, 120, 200], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 128, 1, 1], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 1, 120, 200], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 128, 120, 200], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 2, 120, 200], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 128, 1, 1], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 1, 120, 200], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp7()
@@ -429,21 +421,20 @@ class TestPrimitiveOp8(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 258, 24, 24], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 24, 24], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 24, 24], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 258, 24, 24], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 24, 24], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 24, 24], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp8()
@@ -470,21 +461,20 @@ class TestPrimitiveOp9(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 36, 36], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 36, 36], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 36, 36], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 36, 36], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 36, 36], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 36, 36], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp9()
@@ -511,21 +501,20 @@ class TestPrimitiveOp10(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 258, 15, 25], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 15, 25], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 258, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 15, 25], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 258, 15, 25], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 15, 25], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 258, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 15, 25], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp10()
@@ -552,21 +541,20 @@ class TestPrimitiveOp11(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 56, 80], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 56, 80], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 56, 80], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 56, 80], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 56, 80], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 56, 80], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp11()
@@ -593,21 +581,20 @@ class TestPrimitiveOp12(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 40, 40], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 40, 40], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 40, 40], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 40, 40], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 40, 40], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 40, 40], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp12()
@@ -634,21 +621,20 @@ class TestPrimitiveOp13(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 258, 40, 40], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 40, 40], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 40, 40], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 258, 40, 40], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 40, 40], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 40, 40], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp13()
@@ -675,21 +661,20 @@ class TestPrimitiveOp14(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 7, 10], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 7, 10], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 7, 10], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 7, 10], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 7, 10], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 7, 10], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp14()
@@ -716,21 +701,20 @@ class TestPrimitiveOp15(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 16, 16], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 16, 16], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 16, 16], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 16, 16], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 16, 16], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 16, 16], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp15()
@@ -757,21 +741,20 @@ class TestPrimitiveOp16(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 512, 40, 40], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 40, 40], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 40, 40], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 512, 40, 40], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 40, 40], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 40, 40], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp16()
@@ -798,21 +781,20 @@ class TestPrimitiveOp17(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 28, 40], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 28, 40], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 28, 40], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 28, 40], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 28, 40], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 28, 40], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp17()
@@ -839,21 +821,20 @@ class TestPrimitiveOp18(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 24, 24], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 24, 24], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 24, 24], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 24, 24], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 24, 24], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 24, 24], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp18()
@@ -880,21 +861,20 @@ class TestPrimitiveOp19(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 128, 60, 100], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 60, 100], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 128, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 60, 100], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 128, 60, 100], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 60, 100], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 128, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 60, 100], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp19()
@@ -921,21 +901,20 @@ class TestPrimitiveOp20(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 12, 12], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 12, 12], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 12, 12], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 12, 12], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 12, 12], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 12, 12], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp20()
@@ -962,21 +941,20 @@ class TestPrimitiveOp21(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 192, 288], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 192, 288], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 192, 288], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 192, 288], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 192, 288], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 192, 288], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp21()
@@ -1003,21 +981,20 @@ class TestPrimitiveOp22(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 30, 50], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 30, 50], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 30, 50], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 30, 50], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 30, 50], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 30, 50], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp22()
@@ -1044,21 +1021,20 @@ class TestPrimitiveOp23(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 512, 16, 16], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 16, 16], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 16, 16], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 512, 16, 16], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 16, 16], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 16, 16], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp23()
@@ -1085,21 +1061,20 @@ class TestPrimitiveOp24(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 512, 12, 12], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 12, 12], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 12, 12], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 512, 12, 12], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 12, 12], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 12, 12], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp24()
@@ -1126,21 +1101,20 @@ class TestPrimitiveOp25(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 128, 96, 144], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 96, 144], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 128, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 96, 144], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 128, 96, 144], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 96, 144], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 128, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 96, 144], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp25()
@@ -1167,21 +1141,20 @@ class TestPrimitiveOp26(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 128, 30, 50], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 30, 50], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 128, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 30, 50], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 128, 30, 50], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 30, 50], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 128, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 30, 50], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp26()
@@ -1208,21 +1181,20 @@ class TestPrimitiveOp27(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 512, 36, 36], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 36, 36], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 36, 36], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 512, 36, 36], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 36, 36], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 36, 36], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp27()
@@ -1249,21 +1221,20 @@ class TestPrimitiveOp28(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 258, 36, 36], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 36, 36], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 36, 36], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 258, 36, 36], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 36, 36], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 258, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 36, 36], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp28()
@@ -1290,21 +1261,20 @@ class TestPrimitiveOp29(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 258, 24, 36], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 24, 36], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 258, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 24, 36], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 258, 24, 36], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 24, 36], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 258, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 24, 36], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp29()
@@ -1331,21 +1301,20 @@ class TestPrimitiveOp30(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 96, 144], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 96, 144], dtype='float32'),
-            paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 96, 144], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 96, 144], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 96, 144], dtype='float32'),
+                paddle.static.InputSpec(shape=[128, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 96, 144], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp30()
@@ -1372,21 +1341,20 @@ class TestPrimitiveOp31(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 128, 192, 288], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 2, 192, 288], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 128, 1, 1], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 1, 192, 288], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 128, 192, 288], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 2, 192, 288], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 128, 1, 1], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 1, 192, 288], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp31()
@@ -1413,21 +1381,20 @@ class TestPrimitiveOp32(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 256, 112, 160], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 112, 160], dtype='float32'),
-            paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 112, 160], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 256, 112, 160], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 112, 160], dtype='float32'),
+                paddle.static.InputSpec(shape=[256, 256, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 112, 160], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp32()
@@ -1454,21 +1421,20 @@ class TestPrimitiveOp33(TestBase, unittest.TestCase):
         for input in self.inputs:
             input.stop_gradient = True
 
-    def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
-        input_spec = [
-            paddle.static.InputSpec(shape=[1, 512, 24, 24], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 18, 24, 24], dtype='float32'),
-            paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
-            paddle.static.InputSpec(shape=[1, 9, 24, 24], dtype='float32'),
-        ]
-        build_strategy.build_cinn_pass = use_cinn
-        return paddle.jit.to_static(
-            net,
-            input_spec=input_spec,
-            build_strategy=build_strategy,
-            full_graph=True,
-        )
+        def apply_to_static(self, net, use_cinn):
+            backend = "CINN" if use_cinn else None
+            input_spec = [
+                paddle.static.InputSpec(shape=[1, 512, 24, 24], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 18, 24, 24], dtype='float32'),
+                paddle.static.InputSpec(shape=[512, 512, 3, 3], dtype='float32'),
+                paddle.static.InputSpec(shape=[1, 9, 24, 24], dtype='float32'),
+            ]
+            return paddle.jit.to_static(
+                net,
+                input_spec=input_spec,
+                backend=backend,
+                full_graph=True,
+            )
 
     def train(self, use_cinn):
         net = PrimitiveOp33()
