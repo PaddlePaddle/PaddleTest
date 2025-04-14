@@ -49,7 +49,9 @@ export PYTHONPATH=$llm_path:$PYTHONPATH
 
 # 4. 启动训练脚本
 echo "启动reward服务"
+cd reward
 python reward_server.py > reward_server.log 2>&1 &
+cd ..
 echo "开始训练:"
 
 python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.json \
