@@ -36,7 +36,7 @@ jobs:
         run: |
           git clone https://github.com/PaddlePaddle/PaddleX.git
 
-      - name: install multimodal requirements
+      - name: install speech requirements
         run: |
           cd PaddleX
           pip install -e .[speech]
