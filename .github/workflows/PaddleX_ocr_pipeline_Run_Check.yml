@@ -61,11 +61,6 @@ jobs:
           cd PaddleX
           paddlex --pipeline layout_parsing --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/layout_parsing_demo.png --use_doc_orientation_classify False --use_doc_unwarping False --use_textline_orientation False --save_path ./output --device cpu
 
-      - name: test PP-StructureV3
-        run: |
-          cd PaddleX
-          paddlex --pipeline PP-StructureV3 --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/pp_structure_v3_demo.png --use_doc_orientation_classify False --use_doc_unwarping False --use_textline_orientation False --save_path ./output --device cpu
-
       - name: test formula_recognition
         run: |
           cd PaddleX
@@ -80,3 +75,8 @@ jobs:
         run: |
           cd PaddleX
           paddlex --pipeline doc_preprocessor --input https://paddle-model-ecology.bj.bcebos.com/paddlex/demo_image/doc_test_rotated.jpg --use_doc_orientation_classify True --use_doc_unwarping True --save_path ./output --device cpu          
+
+      - name: test PP-StructureV3
+        run: |
+          cd PaddleX
+          paddlex --pipeline PP-StructureV3 --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/pp_structure_v3_demo.png --use_doc_orientation_classify False --use_doc_unwarping False --use_textline_orientation False --save_path ./output --device cpu
