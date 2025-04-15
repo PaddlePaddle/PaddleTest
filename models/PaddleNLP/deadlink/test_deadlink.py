@@ -184,11 +184,15 @@ def get_md_links(lan_version, code_path, filename_sub, repo_name):
     for file in files:
         # '/Users/wangying28/Documents/paddle_github/FluidDoc/doc/fluid/
         # beginners_guide/basic_concept/dygraph/DyGraph.md'
-        page_dict = {}
-        page_dict['lan_version'] = lan_version
-        page_dict['page'] = {'url': file, 'name': ''}
-        page_dict['links'] = spider_md_links(file, repo_name, lan_version)
-        pages_links.append(page_dict)
+        if "csrc/third_party" in file:
+            # 跳过第三方库
+            continue
+        else:
+            page_dict = {}
+            page_dict['lan_version'] = lan_version
+            page_dict['page'] = {'url': file, 'name': ''}
+            page_dict['links'] = spider_md_links(file, repo_name, lan_version)
+            pages_links.append(page_dict)
 
     file_pkl = '%s.pkl' % filename_sub
     # 清理环境
