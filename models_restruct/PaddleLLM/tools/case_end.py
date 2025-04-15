@@ -131,14 +131,9 @@ def run():
     """
     执行入口
     """
-    platform = os.environ["system"]
-    all = re.compile("All").findall(os.environ["AGILE_PIPELINE_NAME"])
-    if platform == "linux_convergence" and not all:
-        model = PaddleLLM_End()
-        model.build_end()
-        return 0
-    else:
-        return 0
+    model = PaddleLLM_End()
+    model.build_end()
+    return 0
 
 
 if __name__ == "__main__":
