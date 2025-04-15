@@ -59,6 +59,8 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --eval_datasets "ppo-kk/5ppl/test.jsonl" \
     --label_key tgt \
     --rl_algorithm reinforce_plus_plus \
+    --normalize_advantage 0 \
+    --normalize_reward 1 \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
     --output_dir ${output_dir} \
@@ -66,7 +68,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --save_steps ${steps} \
     --tensor_parallel_degree 2 \
     --per_device_prompt_batch_size 1 \
-    --per_device_train_batch_size 4 \
+    --per_device_train_batch_size 8 \
     --max_length 1024 \
     --max_prompt_len 512 \
     --pipeline_parallel_degree 1 \
@@ -81,6 +83,8 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --eval_datasets "ppo-kk/5ppl/test.jsonl" \
     --label_key tgt \
     --rl_algorithm reinforce_plus_plus \
+    --normalize_advantage 0 \
+    --normalize_reward 1 \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
     --output_dir ${output_dir} \
@@ -88,7 +92,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --save_steps 11 \
     --tensor_parallel_degree 2 \
     --per_device_prompt_batch_size 1 \
-    --per_device_train_batch_size 4 \
+    --per_device_train_batch_size 8 \
     --max_length 1024 \
     --max_prompt_len 512 \
     --pipeline_parallel_degree 1 \
