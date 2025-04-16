@@ -1,0 +1,8 @@
+case:
+  linux:
+    train:
+      -
+        name: grpo_training_conv
+        path: llm/alignment/ppo
+        cmd: bash grpo_conv.sh qwen 
+      

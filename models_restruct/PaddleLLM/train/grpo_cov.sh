@@ -2,7 +2,7 @@
 # grpo 训练
 model_name=$1
 ngpus=${2:-8}
-steps=${3:-200}
+steps=${3:-5}
 ext_args=""
 
 # 1. 模型准备
@@ -10,7 +10,7 @@ echo "清理显存"
 # fuser -v /dev/nvidia* 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i ~ /^[0-9]+$/) print $i}' | xargs kill -9 2>/dev/null
 sleep 3s
 echo "清理Checkpoints"
-rm -rf ../../checkpoints/${model_name}/grpo/* 2>/dev/null 
+rm -rf ../../checkpoints/${model_name}/grpo_conv/* 2>/dev/null 
 
 if [[ ${model_name} == "qwen" ]]; then
     model_name_or_path="Qwen/Qwen2.5-1.5B"
@@ -18,7 +18,7 @@ elif [[ ${model_name} == "llama" ]]; then
     model_name_or_path="meta-llama/Meta-Llama-3-8B"
 fi
 
-output_dir="../../checkpoints/${model_name}/grpo" # 以llm为根目录
+output_dir="../../checkpoints/${model_name}/grpo_conv" # 以llm为根目录
 
 # 2. 数据准备 
 if [ ! -d "ppo-kk" ]; then
@@ -60,49 +60,12 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --label_key tgt \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
-    --offload_level "freeze_model" \
-    --max_dec_len 1024 \
-    --max_length 1536 \
-    --tensor_parallel_output 1 \
-    --sequence_parallel 1 \
-    --per_device_prompt_batch_size 1 \
-    --num_return_sequences 4 \
-    --per_device_train_batch_size 4 \
-    --gradient_accumulation_steps 1 \
-    --output_dir ${output_dir} \
-    --max_steps ${steps} \
-    --save_steps ${steps} \
-    --tensor_parallel_degree 2 \
-    --max_prompt_len 512 \
-    --pipeline_parallel_degree 1 \
-    --sharding_parallel_degree 4 \
-    --sharding "stage1" \
-    --recompute 1 \
-    ${ext_args}
-
-echo "热启"
-python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.json \
-    --train_datasets "ppo-kk/34567ppl/train.jsonl" \
-    --eval_datasets "ppo-kk/5ppl/test.jsonl" \
-    --label_key tgt \
-    --actor_model_name_or_path ${model_name_or_path} \
-    --reward_model_name_or_path "" \
-    --offload_level "freeze_model" \
-    --max_dec_len 1024 \
-    --max_length 1536 \
-    --tensor_parallel_output 1 \
-    --sequence_parallel 1 \
-    --per_device_prompt_batch_size 1 \
-    --num_return_sequences 4 \
-    --per_device_train_batch_size 4 \
-    --gradient_accumulation_steps 1 \
-    --output_dir ${output_dir} \
-    --max_steps 1 \
-    --save_steps 11 \
-    --tensor_parallel_degree 2 \
     --per_device_prompt_batch_size 1 \
     --per_device_train_batch_size 4 \
     --max_length 1024 \
+    --max_steps ${steps} \
+    --save_steps ${steps} \
+    --tensor_parallel_degree 2 \
     --max_prompt_len 512 \
     --pipeline_parallel_degree 1 \
     --sharding_parallel_degree 4 \
