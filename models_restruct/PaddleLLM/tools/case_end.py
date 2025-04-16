@@ -33,7 +33,7 @@ class PaddleLLM_End(object):
         # export system='linux_convergence'
         self.reponame = os.environ["reponame"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
-        self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
+        self.TRAIN_LOG_PATH = os.path.join("/workspace/TestFrameWork/logs", self.reponame, self.qa_yaml_name)
 
     def drow_picture(self, model_name, baseline_info, strategy_info, metric):
         """drowing metrics curve"""

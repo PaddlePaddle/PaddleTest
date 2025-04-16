@@ -60,13 +60,19 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --label_key tgt \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
+    --offload_level "freeze_model" \
+    --max_dec_len 1024 \
+    --max_length 1536 \
+    --tensor_parallel_output 1 \
+    --sequence_parallel 1 \
+    --per_device_prompt_batch_size 1 \
+    --num_return_sequences 4 \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 1 \
     --output_dir ${output_dir} \
     --max_steps ${steps} \
     --save_steps ${steps} \
     --tensor_parallel_degree 2 \
-    --per_device_prompt_batch_size 1 \
-    --per_device_train_batch_size 4 \
-    --max_length 1024 \
     --max_prompt_len 512 \
     --pipeline_parallel_degree 1 \
     --sharding_parallel_degree 4 \
@@ -81,6 +87,15 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --label_key tgt \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
+    --offload_level "freeze_model" \
+    --max_dec_len 1024 \
+    --max_length 1536 \
+    --tensor_parallel_output 1 \
+    --sequence_parallel 1 \
+    --per_device_prompt_batch_size 1 \
+    --num_return_sequences 4 \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 1 \
     --output_dir ${output_dir} \
     --max_steps 1 \
     --save_steps 11 \
