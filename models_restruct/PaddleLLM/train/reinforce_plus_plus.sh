@@ -1,5 +1,5 @@
 # work_path: PaddleLLM/llm/alignment/ppo
-# grpo 训练
+# reinforce_plus_plus 训练
 model_name=$1
 ngpus=${2:-8}
 steps=${3:-2}
@@ -10,7 +10,7 @@ echo "清理显存"
 # fuser -v /dev/nvidia* 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i ~ /^[0-9]+$/) print $i}' | xargs kill -9 2>/dev/null
 sleep 3s
 echo "清理Checkpoints"
-rm -rf ../../checkpoints/${model_name}/grpo/* 2>/dev/null 
+rm -rf ../../checkpoints/${model_name}/reinforce_plus_plus/* 2>/dev/null 
 
 if [[ ${model_name} == "qwen" ]]; then
     model_name_or_path="Qwen/Qwen2.5-1.5B"
@@ -18,7 +18,7 @@ elif [[ ${model_name} == "llama" ]]; then
     model_name_or_path="meta-llama/Meta-Llama-3-8B"
 fi
 
-output_dir="../../checkpoints/${model_name}/grpo" # 以llm为根目录
+output_dir="../../checkpoints/${model_name}/reinforce_plus_plus" # 以llm为根目录
 
 # 2. 数据准备 
 if [ ! -d "ppo-kk" ]; then
@@ -58,6 +58,9 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --train_datasets "ppo-kk/34567ppl/train.jsonl" \
     --eval_datasets "ppo-kk/5ppl/test.jsonl" \
     --label_key tgt \
+    --rl_algorithm reinforce_plus_plus \
+    --normalize_advantage 0 \
+    --normalize_reward 1 \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
     --output_dir ${output_dir} \
@@ -65,7 +68,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --save_steps ${steps} \
     --tensor_parallel_degree 2 \
     --per_device_prompt_batch_size 1 \
-    --per_device_train_batch_size 4 \
+    --per_device_train_batch_size 8 \
     --max_length 1024 \
     --max_prompt_len 512 \
     --pipeline_parallel_degree 1 \
@@ -79,6 +82,9 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --train_datasets "ppo-kk/34567ppl/train.jsonl" \
     --eval_datasets "ppo-kk/5ppl/test.jsonl" \
     --label_key tgt \
+    --rl_algorithm reinforce_plus_plus \
+    --normalize_advantage 0 \
+    --normalize_reward 1 \
     --actor_model_name_or_path ${model_name_or_path} \
     --reward_model_name_or_path "" \
     --output_dir ${output_dir} \
@@ -86,7 +92,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --save_steps 11 \
     --tensor_parallel_degree 2 \
     --per_device_prompt_batch_size 1 \
-    --per_device_train_batch_size 4 \
+    --per_device_train_batch_size 8 \
     --max_length 1024 \
     --max_prompt_len 512 \
     --pipeline_parallel_degree 1 \
