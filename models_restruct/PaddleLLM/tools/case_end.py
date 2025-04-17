@@ -109,8 +109,8 @@ class PaddleLLM_End(object):
             else:
                 logger.info(file)
 
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="loss")
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="ips")
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="train_policy_loss")
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="interval_samples_per_second")
 
     def build_end(self):
         """
