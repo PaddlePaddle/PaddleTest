@@ -45,10 +45,10 @@ class PaddleLLM_End(object):
                 plt.subplot(1, 1, 1)
                 picture_name = (model_name.replace("llm^", "") + key.replace("dy2st", "")).upper()
 
-                x = [i for i in range(len(baseline_info["baseline_" + metric]))]
-                y1 = baseline_info["baseline_" + metric]
+                x = [i for i in range(len(strategy_info["strategy_" + metric]))]
+                # y1 = baseline_info["baseline_" + metric]
                 y2 = strategy_info[key]
-                plt.plot(x, y1, color="g", label="baseline_" + metric)
+                # plt.plot(x, y1, color="g", label="baseline_" + metric)
                 plt.plot(x, y2, color="r", label=key)
                 plt.xlabel("step")
                 plt.ylabel(metric)

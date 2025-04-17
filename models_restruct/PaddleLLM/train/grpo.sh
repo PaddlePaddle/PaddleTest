@@ -72,6 +72,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --output_dir ${output_dir} \
     --max_steps ${steps} \
     --save_steps ${steps} \
+    --eval_steps  ${steps} \
     --tensor_parallel_degree 2 \
     --max_prompt_len 512 \
     --pipeline_parallel_degree 1 \
