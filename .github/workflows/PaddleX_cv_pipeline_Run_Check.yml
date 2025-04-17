@@ -124,21 +124,44 @@ jobs:
         run: |
           cd PaddleX
           paddlex --pipeline vehicle_attribute_recognition --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/vehicle_attribute_002.jpg --device cpu --save_path ./output/ 
+
+      - name: prepare data for linux and mac
+        if: runner.os != 'Windows'
+        run: |
+          cd PaddleX
+          # PP-ShiTuV2
+          wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/data/drink_dataset_v2.0.tar
+          tar -xf drink_dataset_v2.0.tar
+          wget -q https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_PP-ShiTuV2.py
+
+          # face_recognition
+          wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/data/face_demo_gallery.tar
+          tar -xf ./face_demo_gallery.tar
+          wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/friends1.jpg
+          wget -q https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_face_recognition.py
+
+      - name: prepare data for windows
+        if: runner.os == 'Windows'
+        run: |
+          cd PaddleX
+          # PP-ShiTuV2
+          curl https://paddle-model-ecology.bj.bcebos.com/paddlex/data/drink_dataset_v2.0.tar -o drink_dataset_v2.0.tar
+          tar -xf drink_dataset_v2.0.tar
+          curl https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_PP-ShiTuV2.py -o test_PP-ShiTuV2.py
+
+          # face_recognition
+          curl https://paddle-model-ecology.bj.bcebos.com/paddlex/data/face_demo_gallery.tar -o face_demo_gallery.tar
+          tar -xf ./face_demo_gallery.tar
+          curl https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/friends1.jpg -o friends1.jpg
+          curl https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_face_recognition.py -o test_face_recognition.py
+          
+      - name: test PP-ShiTuV2
+        run: |
+          cd PaddleX
+          python test_PP-ShiTuV2.py 
         
-      # - name: test PP-ShiTuV2
-      #   run: |
-      #     cd PaddleX
-      #     wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/data/drink_dataset_v2.0.tar
-      #     tar -xf drink_dataset_v2.0.tar
-      #     wget -q https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_PP-ShiTuV2.py
-      #     python test_PP-ShiTuV2.py 
-        
-      # - name: test face_recognition
-      #   run: |
-      #     cd PaddleX
-      #     wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/data/face_demo_gallery.tar
-      #     tar -xf ./face_demo_gallery.tar
-      #     wget -q https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/friends1.jpg
-      #     wget -q https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_face_recognition.py
-      #     python test_face_recognition.py 
+      - name: test face_recognition
+        run: |
+          cd PaddleX
+          python test_face_recognition.py 
         
