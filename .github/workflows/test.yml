@@ -12,5 +12,8 @@ jobs:
         run: |
           pwd
           ls
+          cd ../
+          pwd
+          ls
           git status
           git log
