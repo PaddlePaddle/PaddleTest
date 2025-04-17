@@ -155,13 +155,13 @@ jobs:
           curl https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/friends1.jpg -o friends1.jpg
           curl https://paddle-qa.bj.bcebos.com/suijiaxin/PaddleX/test_face_recognition.py -o test_face_recognition.py
           
-      - name: test PP-ShiTuV2
-        run: |
-          cd PaddleX
-          python test_PP-ShiTuV2.py 
-        
       - name: test face_recognition
         run: |
           cd PaddleX
           python test_face_recognition.py 
+        
+      - name: test PP-ShiTuV2
+        run: |
+          cd PaddleX
+          python test_PP-ShiTuV2.py 
         
