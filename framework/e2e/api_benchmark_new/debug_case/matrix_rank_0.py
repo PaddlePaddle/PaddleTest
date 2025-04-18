@@ -44,7 +44,7 @@ def _randtool(dtype, low, high, shape):
 
 
 api = "paddle.linalg.matrix_rank"
-all_data = {"x": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1], "range": [-1, 1]}}
+all_data = {"x": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [10, 10, 10], "range": [-1, 1]}}
 params = {"hermitian": False}
 
 inputs = {}
