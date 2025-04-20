@@ -101,9 +101,6 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --max_steps 1 \
     --save_steps 11 \
     --tensor_parallel_degree 2 \
-    --per_device_prompt_batch_size 1 \
-    --per_device_train_batch_size 4 \
-    --max_length 1024 \
     --max_prompt_len 512 \
     --pipeline_parallel_degree 1 \
     --sharding_parallel_degree 4 \
