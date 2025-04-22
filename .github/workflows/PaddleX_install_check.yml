@@ -11,8 +11,8 @@ jobs:
   run-check:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         os: [ubuntu-20.04, ubuntu-latest, macos-latest, macos-13, ubuntu-24.04-arm, windows-latest]  # x86 和 ARM
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
 
