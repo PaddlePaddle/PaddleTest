@@ -5,4 +5,8 @@ case:
         name: grpo_training_conv
         path: llm/alignment/ppo
         cmd: bash grpo_conv.sh qwen 
+      -
+        name: rf++_training_conv
+        path: llm/alignment/ppo
+        cmd: bash reinforce_plus_plus_conv.sh qwen 
       

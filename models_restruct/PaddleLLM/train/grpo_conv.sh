@@ -2,7 +2,7 @@
 # grpo 训练
 model_name=$1
 ngpus=${2:-8}
-steps=${3:-5}
+steps=${3:-10}
 ext_args=""
 
 # 1. 模型准备
