@@ -76,7 +76,7 @@ class PaddleLLM_Build(Model_Build):
             os.system("python -m pip uninstall paddlepaddle -y")
             # os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
 
-        if re.compile("elease").findall(paddle_whl):
+        if re.compile("elease").findall(str(paddle_whl)):
             os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
         else:
             os.system(
