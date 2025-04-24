@@ -54,7 +54,7 @@ python reward_server.py > reward_server.log 2>&1 &
 cd ..
 echo "开始训练:"
 
-python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.json \
+python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.yaml \
     --train_datasets "ppo-kk/34567ppl/train.jsonl" \
     --eval_datasets "ppo-kk/5ppl/test.jsonl" \
     --label_key tgt \
@@ -66,7 +66,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --tensor_parallel_output 1 \
     --sequence_parallel 1 \
     --per_device_prompt_batch_size 1 \
-    --num_return_sequences 4 \
+    --rollout_n 4 \
     --per_device_train_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --output_dir ${output_dir} \
@@ -82,7 +82,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     ${ext_args}
 
 echo "热启"
-python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.json \
+python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.yaml \
     --train_datasets "ppo-kk/34567ppl/train.jsonl" \
     --eval_datasets "ppo-kk/5ppl/test.jsonl" \
     --label_key tgt \
@@ -94,7 +94,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     --tensor_parallel_output 1 \
     --sequence_parallel 1 \
     --per_device_prompt_batch_size 1 \
-    --num_return_sequences 4 \
+    --rollout_n 4 \
     --per_device_train_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --output_dir ${output_dir} \
