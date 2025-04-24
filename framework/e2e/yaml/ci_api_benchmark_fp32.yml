@@ -13283,7 +13283,7 @@ matrix_rank_0:
         random: true
         type: "Tensor"
         dtype: "float32"
-        shape: [1, 1, 1]
+        shape: [10, 10, 10]
         range: [ -1, 1]
     params:
       hermitian: False
