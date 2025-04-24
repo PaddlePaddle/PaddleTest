@@ -84,7 +84,7 @@ class PaddleLLM_Build(Model_Build):
                  https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
             )
 
-        if re.compile("37").findall(paddle_whl) or re.compile("38").findall(paddle_whl):
+        if re.compile("37").findall(str(paddle_whl)) or re.compile("38").findall(str(paddle_whl)):
             os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
 
         if os.path.exists(self.reponame):
