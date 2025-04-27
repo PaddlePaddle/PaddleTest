@@ -98,7 +98,6 @@ class PaddleLLM_End(object):
         """
         baseline_info = {}
         strategy_info = {}
-        logger.info(os.getcwd())
         for file in os.listdir(self.TRAIN_LOG_PATH):
             logger.info("check log file is {}".format(file))
             if re.compile("baseline").findall(file):
