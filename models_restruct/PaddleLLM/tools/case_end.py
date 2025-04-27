@@ -18,8 +18,8 @@ import matplotlib.pyplot as plt
 
 logger = logging.getLogger("ce")
 
-SETTING_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(SETTING_DIR)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = CURRENT_DIR.split("TestFrameWork")[0] + "TestFrameWork" if "TestFrameWork" in CURRENT_DIR else CURRENT_DIR
 
 class PaddleLLM_End(object):
     """
