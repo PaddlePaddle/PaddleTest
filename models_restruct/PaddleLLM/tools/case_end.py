@@ -18,6 +18,8 @@ import matplotlib.pyplot as plt
 
 logger = logging.getLogger("ce")
 
+SETTING_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SETTING_DIR)
 
 class PaddleLLM_End(object):
     """
@@ -33,7 +35,7 @@ class PaddleLLM_End(object):
         # export system='linux_convergence'
         self.reponame = os.environ["reponame"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
-        self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
+        self.TRAIN_LOG_PATH = os.path.join(PROJECT_ROOT, "logs", self.reponame, self.qa_yaml_name)
 
     def drow_picture(self, model_name, baseline_info, strategy_info, metric):
         """drowing metrics curve"""
