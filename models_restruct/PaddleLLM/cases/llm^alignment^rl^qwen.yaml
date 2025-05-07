@@ -3,7 +3,7 @@ case:
     train:
       -
         name: grpo_training
-        path: llm/alignment/ppo
+        path: llm/alignment/rl
         cmd: bash grpo.sh qwen 
       -
         name: grpo_predict_dynamic_ngpus2_default_bf16 # 2卡动态图预测 ${save_steps}
@@ -15,7 +15,7 @@ case:
         cmd: bash ./infer.sh qwen 2 grpo 100
       -
         name: reinforce_plus_plus_training
-        path: llm/alignment/ppo
+        path: llm/alignment/rl
         cmd: bash reinforce_plus_plus.sh qwen 
       -
         name: reinforce_plus_plus_predict_dynamic_ngpus2_default_bf16 # 2卡动态图预测 ${save_steps}

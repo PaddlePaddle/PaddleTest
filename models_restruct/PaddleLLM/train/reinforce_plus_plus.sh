@@ -1,4 +1,4 @@
-# work_path: PaddleLLM/llm/alignment/ppo
+# work_path: PaddleLLM/llm/alignment/rl
 # reinforce_plus_plus 训练
 model_name=$1
 ngpus=${2:-8}
@@ -54,7 +54,7 @@ python reward_server.py > reward_server.log 2>&1 &
 cd ..
 echo "开始训练:"
 
-python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.yaml \
+python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --train_datasets "ppo-kk/34567ppl/train.jsonl" \
     --eval_datasets "ppo-kk/5ppl/test.jsonl" \
     --label_key tgt \
@@ -85,7 +85,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ..
     ${ext_args}
 
 echo "热启"
-python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_ppo.py ../../config/${model_name}/grpo_argument.yaml \
+python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --train_datasets "ppo-kk/34567ppl/train.jsonl" \
     --eval_datasets "ppo-kk/5ppl/test.jsonl" \
     --label_key tgt \
