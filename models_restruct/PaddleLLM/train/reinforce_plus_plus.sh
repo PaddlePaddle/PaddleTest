@@ -1,7 +1,7 @@
 # work_path: PaddleLLM/llm/alignment/rl
 # reinforce_plus_plus 训练
 model_name=$1
-ngpus=${2:-8}
+ngpus=${2:-4}
 steps=${3:-1200}
 ext_args=""
 
@@ -33,7 +33,7 @@ elif [ $ngpus -eq 1 ]; then
 elif [ $ngpus -eq 2 ]; then  
     DEVICE="2,3"  
 elif [ $ngpus -eq 4 ]; then  
-    DEVICE="4,5,6,7"  
+    DEVICE="0,1,2,3"  
 elif [ $ngpus -eq 8 ]; then  
     DEVICE="0,1,2,3,4,5,6,7" 
 else  
@@ -66,6 +66,7 @@ echo "开始训练:"
 
 python -u -m paddle.distributed.launch --devices "0,1,2,3" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --rl_algorithm reinforce_plus_plus \
+    --use_fused_rms_norm true \
     --actor_model_name_or_path ${model_name_or_path} \
     --output_dir ${output_dir} \
     --max_steps ${steps} \
@@ -76,6 +77,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3" run_rl.py ../../confi
 echo "热启"
 python -u -m paddle.distributed.launch --devices "0,1,2,3" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --rl_algorithm reinforce_plus_plus \
+    --use_fused_rms_norm true \
     --actor_model_name_or_path ${model_name_or_path} \
     --output_dir ${output_dir} \
     --max_steps 1 \
