@@ -13,7 +13,7 @@ echo "清理Checkpoints"
 rm -rf ../../checkpoints/${model_name}/reinforce_plus_plus/* 2>/dev/null 
 
 if [[ ${model_name} == "qwen" ]]; then
-    model_name_or_path="Qwen/Qwen2-1.5B"
+    model_name_or_path="Qwen/Qwen2.5-7B-Instruct-1M"
 elif [[ ${model_name} == "llama" ]]; then
     model_name_or_path="meta-llama/Meta-Llama-3-8B"
 fi
@@ -64,7 +64,7 @@ python reward_server.py > reward_server.log 2>&1 &
 cd ..
 echo "开始训练:"
 
-python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
+python -u -m paddle.distributed.launch --devices "0,1,2,3" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --rl_algorithm reinforce_plus_plus \
     --actor_model_name_or_path ${model_name_or_path} \
     --output_dir ${output_dir} \
@@ -74,7 +74,7 @@ python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_rl.py ../
     ${ext_args}
 
 echo "热启"
-python -u -m paddle.distributed.launch --devices "0,1,2,3,4,5,6,7" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
+python -u -m paddle.distributed.launch --devices "0,1,2,3" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --rl_algorithm reinforce_plus_plus \
     --actor_model_name_or_path ${model_name_or_path} \
     --output_dir ${output_dir} \
