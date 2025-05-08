@@ -67,8 +67,6 @@ class PaddleLLM_Build(Model_Build):
             os.system("python -m pip install nltk h5py")
             os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
             os.system("python -m pip uninstall protobuf -y")
-            os.system("python -m pip uninstall protobuf -y")
-            os.system("python -m pip uninstall protobuf -y")
             os.system("python -m pip install protobuf==3.20.2")
             # os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
         else:
@@ -89,16 +87,16 @@ class PaddleLLM_Build(Model_Build):
 
         if os.path.exists(self.reponame):
             os.chdir(self.reponame)
-            logger.info("installing develop PaddleLLM")
+            logger.info("### installing develop paddlenlp")
             os.system("python setup.py bdist_wheel")
-            cmd_return = os.system(" python -m pip install -U dist/p****.whl")
-            logger.info("installing develop paddlenlp_ops")
-            os.system("wget -q https://paddlenlp.bj.bcebos.com/wheels/paddlenlp_ops-ci-py3-none-any.whl")
-            os.system("mv paddlenlp_ops-ci-py3-none-any.whl paddlenlp_ops-0.0.0-py3-none-any.whl")
-            cmd_ops_return = os.system("python -m pip install paddlenlp_ops-0.0.0-py3-none-any.whl")
+            cmd_return = os.system("python -m pip install -U dist/p****.whl")
+            logger.info("### installing develop paddlenlp_ops")
+            os.system("cd csrc")
+            cmd_ops_return = os.system("bash tools/build_wheel.sh")
+            os.system("cd ../")
             
             if cmd_return:
-                logger.info("repo {} python -m pip install-failed".format(self.reponame))
+                logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
             if cmd_ops_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp_ops"))
 
@@ -144,9 +142,6 @@ class PaddleLLM_Build(Model_Build):
             )
         os.chdir(path_now)
 
-        os.system("python -m pip uninstall protobuf -y")
-        os.system("python -m pip uninstall protobuf -y")
-        os.system("python -m pip install protobuf==3.20.2")
         os.system("python -m pip list")
         import paddle
 
