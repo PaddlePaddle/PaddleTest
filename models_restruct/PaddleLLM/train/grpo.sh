@@ -46,7 +46,7 @@ export FLAGS_cascade_attention_max_partition_size=2048
 echo "启动reward服务"
 cd reward
 python reward_server.py > reward_server.log 2>&1 &
-sleep 3s
+sleep 300s
 curl -X 'POST' \
   'http://10.174.137.209:8731/' \
   -H 'accept: application/json' \

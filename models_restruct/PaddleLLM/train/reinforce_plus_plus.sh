@@ -8,7 +8,7 @@ ext_args=""
 # 1. 模型准备
 echo "清理显存"
 # fuser -v /dev/nvidia* 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i ~ /^[0-9]+$/) print $i}' | xargs kill -9 2>/dev/null
-sleep 3s
+sleep 300s
 echo "清理Checkpoints"
 rm -rf ../../checkpoints/${model_name}/reinforce_plus_plus/* 2>/dev/null 
 
