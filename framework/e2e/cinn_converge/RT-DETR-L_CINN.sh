@@ -1,0 +1,1 @@
+python main.py -c paddlex/configs/modules/object_detection/RT-DETR-L.yaml -o Global.mode=train -o Global.dataset_dir=../coco -o Train.num_classes=80 -o Train.epochs_iters=72 -o Train.batch_size=4 -o Train.learning_rate=0.0001 -o Global.device=gpu:0,1,2,3 -o Train.pretrain_weight_path=None -o Global.output='./output/object_detection/RT-DETR-L_CINN' -o Train.dy2st=True

@@ -41,6 +41,7 @@ ignore_case_dir = {
     ],
     "paddlebase": [
         "test_is_grad_enabled.py",
+        "test_nonzero.py",
     ],
     "optimizer": [],
     "distribution": [],

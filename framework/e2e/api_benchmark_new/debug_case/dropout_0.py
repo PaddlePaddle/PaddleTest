@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test dropout_0
+test Dropout_0
 """
 import timeit
 from inspect import isclass
@@ -43,7 +43,7 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.functional.dropout"
+api = "paddle.nn.Dropout"
 all_data = {"x": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
 params = {"p": 0.5}
 
