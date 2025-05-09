@@ -26,21 +26,6 @@ if [ ! -d "ppo-kk" ]; then
 fi
 
 # 3. 设置环境变量
-# if [ $ngpus -eq 0 ]; then  
-#     DEVICE="0"  
-# elif [ $ngpus -eq 1 ]; then  
-#     DEVICE="1"  
-# elif [ $ngpus -eq 2 ]; then  
-#     DEVICE="2,3"  
-# elif [ $ngpus -eq 4 ]; then  
-#     DEVICE="0,1,2,3"  
-# elif [ $ngpus -eq 8 ]; then  
-#     DEVICE="0,1,2,3,4,5,6,7" 
-# else  
-#     echo "Unsupported number of GPUs"  
-#     exit 1  
-# fi  
-# export CUDA_VISIBLE_DEVICES=${DEVICE}
 current_path=$(pwd)
 repo_path=${current_path%%PaddleLLM*}PaddleLLM
 llm_path=${repo_path}/llm
@@ -61,7 +46,24 @@ export FLAGS_cascade_attention_max_partition_size=2048
 echo "启动reward服务"
 cd reward
 python reward_server.py > reward_server.log 2>&1 &
+sleep 3s
 cd ..
+curl -X 'POST' \
+  'http://10.174.137.209:8731/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "src": [
+    "test"
+  ],
+  "tgt": [
+    "test"
+  ],
+  "response": [
+    "test"
+  ]
+}' >> reward_server.log
+
 echo "开始训练:"
 
 python -u -m paddle.distributed.launch --devices "$CUDA_VISIBLE_DEVICES" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
