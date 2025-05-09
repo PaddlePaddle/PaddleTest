@@ -1,5 +1,5 @@
-name: source code sync to bos
-run-name: Source code synchronization
+name: PaddleTest sync to bos
+run-name: PaddleTest synchronization
 on:
   workflow_dispatch:
   push:

@@ -60,12 +60,11 @@ def IsInteger(dtype):
     return np.dtype(dtype).char in np.typecodes['AllInteger']
 
 def ApplyToStatic(net, use_cinn):
-    build_strategy = paddle.static.BuildStrategy()
-    build_strategy.build_cinn_pass = use_cinn
+    backend = "CINN" if use_cinn else None
     return paddle.jit.to_static(
         net,
         input_spec=net.get_input_spec(),
-        build_strategy=build_strategy,
+        backend=backend,
         full_graph=True,
     )
 
@@ -120,7 +119,7 @@ class CinnTestBase:
             net = self.prepare_net()
         out = net(*self.inputs)
         return out
-    
+
     def prepare_data(self):
         self.inputs = self.get_inputs()
         for input in self.inputs:
@@ -151,7 +150,7 @@ class CinnTestBase:
 
 
 class PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -164,14 +163,14 @@ class PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[], dtype='int64'),
             paddle.static.InputSpec(shape=[1], dtype='int64'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -183,7 +182,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -195,7 +194,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -207,7 +206,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -219,7 +218,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -231,7 +230,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -243,7 +242,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class PrimitiveOp_92e3d542e45c79808e3e51765f0815bb(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -256,14 +255,14 @@ class PrimitiveOp_92e3d542e45c79808e3e51765f0815bb(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[1], dtype='float32'),
             paddle.static.InputSpec(shape=[1], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
 class TestPrimitiveOp_53261b325682a62cc6f065b1894033f8(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -275,7 +274,7 @@ class TestPrimitiveOp_53261b325682a62cc6f065b1894033f8(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_0c5d4aa2e73e82a1c8c8e4c9c3569e7c(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -287,7 +286,7 @@ class TestPrimitiveOp_0c5d4aa2e73e82a1c8c8e4c9c3569e7c(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_fddc8e4f61d1364e67c5404528289e34(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -299,7 +298,7 @@ class TestPrimitiveOp_fddc8e4f61d1364e67c5404528289e34(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_1e58eb8c2b6cd0ea724cef544967e59f(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -311,7 +310,7 @@ class TestPrimitiveOp_1e58eb8c2b6cd0ea724cef544967e59f(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_9cf1c9a4d7e36eff494e4892c7dc4521(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -323,7 +322,7 @@ class TestPrimitiveOp_9cf1c9a4d7e36eff494e4892c7dc4521(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_664c18e859c270321a397a08ea531eb9(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -335,7 +334,7 @@ class TestPrimitiveOp_664c18e859c270321a397a08ea531eb9(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_4400835ad7a54bb365b7465f677d5de7(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -347,7 +346,7 @@ class TestPrimitiveOp_4400835ad7a54bb365b7465f677d5de7(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_90c148b4789220d5d5782a677869389d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -359,7 +358,7 @@ class TestPrimitiveOp_90c148b4789220d5d5782a677869389d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_fba4d63d3f9e588b68fb9f4db5a0648c(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -371,7 +370,7 @@ class TestPrimitiveOp_fba4d63d3f9e588b68fb9f4db5a0648c(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_53261b325682a62cc6f065b1894033f8(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -383,7 +382,7 @@ class TestPrimitiveOp_53261b325682a62cc6f065b1894033f8(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -395,7 +394,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -407,7 +406,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -419,7 +418,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -431,7 +430,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -443,7 +442,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -455,7 +454,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_90c148b4789220d5d5782a677869389d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -467,7 +466,7 @@ class TestPrimitiveOp_90c148b4789220d5d5782a677869389d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_c8d1732596fabef173e2f5302787c08d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -479,7 +478,7 @@ class TestPrimitiveOp_c8d1732596fabef173e2f5302787c08d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_14e554f91b2b51be492c1da1e23f7026(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -491,7 +490,7 @@ class TestPrimitiveOp_14e554f91b2b51be492c1da1e23f7026(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_cfc20fa3486576525ffb87835bccf1b8(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -503,7 +502,7 @@ class TestPrimitiveOp_cfc20fa3486576525ffb87835bccf1b8(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_53261b325682a62cc6f065b1894033f8(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -515,7 +514,7 @@ class TestPrimitiveOp_53261b325682a62cc6f065b1894033f8(CinnTestBase, unittest.Te
 
 
 class PrimitiveOp_f909b93da201133270c8be1cec7a2f0a(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -528,14 +527,14 @@ class PrimitiveOp_f909b93da201133270c8be1cec7a2f0a(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[1], dtype='float32'),
             paddle.static.InputSpec(shape=[1], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
 class TestPrimitiveOp_2502d8bccbfcac0307f4ce34dc13a3e8(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_f909b93da201133270c8be1cec7a2f0a
     def get_inputs(self):
@@ -547,7 +546,7 @@ class TestPrimitiveOp_2502d8bccbfcac0307f4ce34dc13a3e8(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3524c9bff6a836f50d798efc806005e9(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -559,7 +558,7 @@ class TestPrimitiveOp_3524c9bff6a836f50d798efc806005e9(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_937630ad62c3c29a1ef811fd0797adfb(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -571,7 +570,7 @@ class TestPrimitiveOp_937630ad62c3c29a1ef811fd0797adfb(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3e56695e9e9a4dfa6078724a40714502(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -583,7 +582,7 @@ class TestPrimitiveOp_3e56695e9e9a4dfa6078724a40714502(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -595,7 +594,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -607,7 +606,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -619,7 +618,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -631,7 +630,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -643,7 +642,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -655,7 +654,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_dfa50655dc3639225cbd3de2a69fc13f(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -667,7 +666,7 @@ class TestPrimitiveOp_dfa50655dc3639225cbd3de2a69fc13f(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_dfa50655dc3639225cbd3de2a69fc13f(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -679,7 +678,7 @@ class TestPrimitiveOp_dfa50655dc3639225cbd3de2a69fc13f(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_397e8971fa90e9ef3900082a23bf2bd0(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -691,7 +690,7 @@ class TestPrimitiveOp_397e8971fa90e9ef3900082a23bf2bd0(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_397e8971fa90e9ef3900082a23bf2bd0(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -703,7 +702,7 @@ class TestPrimitiveOp_397e8971fa90e9ef3900082a23bf2bd0(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_4bae8404a9309158eb45abcb26aac7e4(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -715,7 +714,7 @@ class TestPrimitiveOp_4bae8404a9309158eb45abcb26aac7e4(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_f660704994add1463dd7a3ef52e87f75(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -727,7 +726,7 @@ class TestPrimitiveOp_f660704994add1463dd7a3ef52e87f75(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_19fe9d1a77f14b6acf42597a87897905(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -739,7 +738,7 @@ class TestPrimitiveOp_19fe9d1a77f14b6acf42597a87897905(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_1012d0b8c12a4573a283e08489ff660a(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -751,7 +750,7 @@ class TestPrimitiveOp_1012d0b8c12a4573a283e08489ff660a(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_cd595fca7853bdf2b014db8228852be2(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -763,7 +762,7 @@ class TestPrimitiveOp_cd595fca7853bdf2b014db8228852be2(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_0b3e4b319ace0deb40e101fe621ed7a8(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -775,7 +774,7 @@ class TestPrimitiveOp_0b3e4b319ace0deb40e101fe621ed7a8(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_1dd1d5726996fb84c4da25947fb26fbf(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -787,7 +786,7 @@ class TestPrimitiveOp_1dd1d5726996fb84c4da25947fb26fbf(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_fe54d766fac9494caf39dac89f5ffee9(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -799,7 +798,7 @@ class TestPrimitiveOp_fe54d766fac9494caf39dac89f5ffee9(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_c2eafb7befd9a2ad8736d445efc376de(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -811,7 +810,7 @@ class TestPrimitiveOp_c2eafb7befd9a2ad8736d445efc376de(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3f31c854d08c430caba2084fe92e0bac(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -823,7 +822,7 @@ class TestPrimitiveOp_3f31c854d08c430caba2084fe92e0bac(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -835,7 +834,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -847,7 +846,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -859,7 +858,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -871,7 +870,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -883,7 +882,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -895,7 +894,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_451fe16d7aaf28645686c2539757d0ec(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -907,7 +906,7 @@ class TestPrimitiveOp_451fe16d7aaf28645686c2539757d0ec(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3e2fd9aafb2f6372ca808b09067d1eda(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -919,7 +918,7 @@ class TestPrimitiveOp_3e2fd9aafb2f6372ca808b09067d1eda(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_2ad5dcf3585109e0aed13a7467f930e3(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_92e3d542e45c79808e3e51765f0815bb
     def get_inputs(self):
@@ -931,7 +930,7 @@ class TestPrimitiveOp_2ad5dcf3585109e0aed13a7467f930e3(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -943,7 +942,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -955,7 +954,7 @@ class TestPrimitiveOp_3fbc1e6a8c29fe35264e89d4ea82b11d(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -967,7 +966,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -979,7 +978,7 @@ class TestPrimitiveOp_693fe48fdd1efe31992989e7942799ca(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):
@@ -991,7 +990,7 @@ class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.Te
 
 
 class TestPrimitiveOp_47ce023c27c90bebd395c45e0a347f86(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_d1204107b08f75d2ff849140bb1cab0a
     def get_inputs(self):

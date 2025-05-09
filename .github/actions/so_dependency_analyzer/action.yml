@@ -1,0 +1,51 @@
+name: PaddlePaddle Packages Dependency So Analysis
+description: "PaddlePaddle Packages Dependency So Analysis Tool"
+
+inputs:
+  ce_task_name:
+    description: "Ce Task Name"
+    required: true
+  is_cuda:
+    description: "Is CUDA"
+    required: false
+    default: "True"
+  python_version:
+    description: "Python Version"
+    required: false
+    default: "3.10"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python_version }}
+
+    - name: Download and Analyze Wheel
+      shell: bash
+      run: |
+        set -x
+        python -m pip install requests
+        mkdir -p SoAnalysisDir
+        python publish_scripts/so_dependency_analyzer/wheel_download.py \
+          --ce_task_name=${{ inputs.ce_task_name }} \
+          --is_cuda=${{ inputs.is_cuda }} \
+          --python_version=${{ inputs.python_version }} \
+          --output_dir=SoAnalysisDir
+
+        so_dependency_file=$(readlink -f publish_scripts/so_dependency_analyzer/so_dependency_analyzer.py)
+        cd SoAnalysisDir
+        unzip *.whl -d .
+        python $so_dependency_file extract 
+        result_file_path=$(readlink -f so_dependencies_static.json)
+        description_file_path=$(readlink -f description.txt)
+        echo "result_file_path=${result_file_path}" >> $GITHUB_ENV
+        echo "description_file_path=${description_file_path}" >> $GITHUB_ENV
+        echo "ce_task_name=${{ inputs.ce_task_name }}" >> $GITHUB_ENV
+        echo "is_cuda=${{ inputs.is_cuda }}" >> $GITHUB_ENV
+        echo "python_version=${{ inputs.python_version }}" >> $GITHUB_ENV
+
+outputs:
+  result_file_path:
+    description: 'The path of the result file'
