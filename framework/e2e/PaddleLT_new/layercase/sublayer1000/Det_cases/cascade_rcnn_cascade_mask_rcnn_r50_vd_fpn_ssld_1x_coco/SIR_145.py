@@ -50,7 +50,7 @@ def create_inputspec():
 def create_tensor_inputs():
     inputs = (
         paddle.rand(shape=[4, 4], dtype=paddle.float32),
-        paddle.randint(low=0, high=10, shape=[1], dtype=paddle.int32),
+        paddle.randint(low=0, high=4, shape=[1], dtype=paddle.int32),
         paddle.rand(shape=[1, 256, 176, 264], dtype=paddle.float32),
         paddle.rand(shape=[1, 256, 88, 132], dtype=paddle.float32),
         paddle.rand(shape=[1, 256, 44, 66], dtype=paddle.float32),
@@ -62,7 +62,7 @@ def create_tensor_inputs():
 def create_numpy_inputs():
     inputs = (
         np.random.random(size=[4, 4]).astype('float32'),
-        np.random.randint(low=0, high=10, size=[1], dtype='int32'),
+        np.random.randint(low=0, high=4, size=[1], dtype='int32'),
         np.random.random(size=[1, 256, 176, 264]).astype('float32'),
         np.random.random(size=[1, 256, 88, 132]).astype('float32'),
         np.random.random(size=[1, 256, 44, 66]).astype('float32'),
