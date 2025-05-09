@@ -47,7 +47,6 @@ echo "启动reward服务"
 cd reward
 python reward_server.py > reward_server.log 2>&1 &
 sleep 3s
-cd ..
 curl -X 'POST' \
   'http://10.174.137.209:8731/' \
   -H 'accept: application/json' \
@@ -63,6 +62,7 @@ curl -X 'POST' \
     "test"
   ]
 }' >> reward_server.log
+cd ..
 
 echo "开始训练:"
 

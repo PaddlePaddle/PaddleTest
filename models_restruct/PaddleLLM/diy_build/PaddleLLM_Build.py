@@ -91,14 +91,14 @@ class PaddleLLM_Build(Model_Build):
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system("python -m pip install -U dist/p****.whl")
             logger.info("### installing develop paddlenlp_ops")
-            # os.chdir(os.path.join(self.reponame, "csrc"))
-            # cmd_ops_return = os.system("bash tools/build_wheel.sh")
-            # os.chdir(self.reponame)
+            os.system("wget https://paddlenlp.bj.bcebos.com/wheels/paddlenlp_ops-ci-py3-none-any.whl")
+            os.system("mv paddlenlp_ops-ci-py3-none-any.whl paddlenlp_ops-0.0.0-py3-none-any.whl")
+            cmd_ops_return = os.system("python -m pip install paddlenlp_ops-0.0.0-py3-none-any.whl")
             
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
-            # if cmd_ops_return:
-            #     logger.info("repo {} python -m pip install-failed".format("paddlenlp_ops"))
+            if cmd_ops_return:
+                logger.info("repo {} python -m pip install-failed".format("paddlenlp_ops"))
 
             logger.info("installing develop ppdiffusers")
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
