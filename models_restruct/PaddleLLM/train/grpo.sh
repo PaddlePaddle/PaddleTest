@@ -22,7 +22,7 @@ output_dir="../../checkpoints/${model_name}/grpo" # 以llm为根目录
 
 # 2. 数据准备 
 if [ ! -d "ppo-kk" ]; then
-    wget https://paddlenlp.bj.bcebos.com/datasets/examples/ppo-kk.tgz && tar zxf ppo-kk.tgz
+    wget -q https://paddlenlp.bj.bcebos.com/datasets/examples/ppo-kk.tgz && tar zxf ppo-kk.tgz
 fi
 
 # 3. 设置环境变量
@@ -46,7 +46,7 @@ export FLAGS_cascade_attention_max_partition_size=2048
 echo "启动reward服务"
 cd reward
 python reward_server.py > reward_server.log 2>&1 &
-sleep 300s
+sleep 30s
 curl -X 'POST' \
   'http://10.174.137.209:8731/' \
   -H 'accept: application/json' \

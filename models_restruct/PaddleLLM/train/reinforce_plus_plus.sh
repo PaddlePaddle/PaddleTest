@@ -8,7 +8,7 @@ ext_args=""
 # 1. 模型准备
 echo "清理显存"
 # fuser -v /dev/nvidia* 2>/dev/null | awk '{for(i=1;i<=NF;i++) if ($i ~ /^[0-9]+$/) print $i}' | xargs kill -9 2>/dev/null
-sleep 300s
+sleep 30s
 echo "清理Checkpoints"
 rm -rf ../../checkpoints/${model_name}/reinforce_plus_plus/* 2>/dev/null 
 
@@ -22,7 +22,7 @@ output_dir="../../checkpoints/${model_name}/reinforce_plus_plus" # 以llm为根�
 
 # 2. 数据准备 
 if [ ! -d "ppo-kk" ]; then
-    wget https://paddlenlp.bj.bcebos.com/datasets/examples/ppo-kk.tgz && tar zxf ppo-kk.tgz
+    wget -q https://paddlenlp.bj.bcebos.com/datasets/examples/ppo-kk.tgz && tar zxf ppo-kk.tgz
 fi
 
 # 3. 设置环境变量
