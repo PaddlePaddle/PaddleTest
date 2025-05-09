@@ -5,6 +5,11 @@ case:
         name: grpo_training
         path: llm/alignment/rl
         cmd: bash grpo.sh qwen 
+        result:
+          eval_accuracy:
+            base: 0.5
+            threshold: 0.01
+            evaluation: "-"
       -
         name: grpo_predict_dynamic_ngpus2_default_bf16 # 2卡动态图预测 ${save_steps}
         path: llm/
@@ -17,6 +22,11 @@ case:
         name: reinforce_plus_plus_training
         path: llm/alignment/rl
         cmd: bash reinforce_plus_plus.sh qwen 
+        result:
+          eval_accuracy:
+            base: 0.45
+            threshold: 0.01
+            evaluation: "-"
       -
         name: reinforce_plus_plus_predict_dynamic_ngpus2_default_bf16 # 2卡动态图预测 ${save_steps}
         path: llm/
