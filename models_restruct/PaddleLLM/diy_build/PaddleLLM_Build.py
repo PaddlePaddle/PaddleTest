@@ -10,7 +10,6 @@ import argparse
 import numpy as np
 import yaml
 from Model_Build import Model_Build
-import paddle
 
 
 logger = logging.getLogger("ce")
@@ -92,6 +91,7 @@ class PaddleLLM_Build(Model_Build):
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system("python -m pip install -U dist/p****.whl")
             logger.info("### installing develop paddlenlp_ops")
+            import paddle
             if paddle.version.cuda() == "11.8":
                 os.system("wget -q https://paddlenlp.bj.bcebos.com/wheels/paddlenlp_ops-ci-py3-none-any.whl")
                 os.system("mv paddlenlp_ops-ci-py3-none-any.whl paddlenlp_ops-0.0.0-py3-none-any.whl")
