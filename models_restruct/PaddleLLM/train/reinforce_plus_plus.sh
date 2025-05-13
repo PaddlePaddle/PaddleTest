@@ -1,7 +1,7 @@
 # work_path: PaddleLLM/llm/alignment/rl
 # reinforce_plus_plus 训练
 model_name=$1
-ngpus=${2:-4}
+ngpus=${2:-4,5,6,7}
 steps=${3:-1200}
 ext_args=""
 
@@ -45,7 +45,7 @@ export FLAGS_cascade_attention_max_partition_size=2048
 # 4. 启动训练脚本
 echo "开始训练:"
 
-python -u -m paddle.distributed.launch --devices "$CUDA_VISIBLE_DEVICES" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
+python -u -m paddle.distributed.launch --devices "$ngpus" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --rl_algorithm reinforce_plus_plus \
     --use_fused_rms_norm true \
     --actor_model_name_or_path ${model_name_or_path} \

@@ -1,7 +1,7 @@
 # work_path: PaddleLLM/llm/alignment/rl
 # grpo 训练
 model_name=$1
-ngpus=${2:-4}
+ngpus=${2:-0,1,2,3}
 steps=${3:-1200}
 ext_args=""
 
@@ -45,7 +45,7 @@ export FLAGS_cascade_attention_max_partition_size=2048
 # 4. 启动训练脚本
 echo "开始训练:"
 
-python -u -m paddle.distributed.launch --devices "$CUDA_VISIBLE_DEVICES" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
+python -u -m paddle.distributed.launch --devices "$ngpus" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --use_fused_rms_norm true \
     --actor_model_name_or_path ${model_name_or_path} \
     --output_dir ${output_dir} \
@@ -53,4 +53,3 @@ python -u -m paddle.distributed.launch --devices "$CUDA_VISIBLE_DEVICES" run_rl.
     --save_steps ${steps} \
     --eval_steps  ${steps} \
     ${ext_args}
-    
