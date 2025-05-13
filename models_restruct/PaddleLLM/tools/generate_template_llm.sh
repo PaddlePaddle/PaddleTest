@@ -1,7 +1,8 @@
 paddle_commit=`python -c "import paddle; print(paddle.version.commit)"`
 paddlenlp_commit=`cd ./PaddleLLM && git rev-parse HEAD`
+current_path=`basename "$(dirname "$PWD")"`
 ipipe_url=https://console.cloud.baidu-int.com/devops/ipipe/workspaces/${AGILE_WORKSPACE_ID}/pipeline-builds/${AGILE_PIPELINE_BUILD_ID}/stage-builds/${AGILE_STAGE_BUILD_ID}/view
-allure_url=https://ipipe-report.baidu-int.com/bos/$(basename "$PWD")/report/#behaviors
+allure_url=https://ipipe-report.baidu-int.com/bos/${current_path}/report/#behaviors
 
 cat <<EOF > ./utils/default_template_llm.html
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">

@@ -1,8 +1,6 @@
 export https_proxy=${HTTPS_PROXY}
 export http_proxy=${HTTP_PROXY}
-export root_path=$(dirname "$PWD")
-ipipe_url=https://console.cloud.baidu-int.com/devops/ipipe/workspaces/${AGILE_WORKSPACE_ID}/pipeline-builds/${AGILE_PIPELINE_BUILD_ID}/stage-builds/${AGILE_STAGE_BUILD_ID}/view
-allure_url=https://ipipe-report.baidu-int.com/bos/$(basename "$PWD")/report/#behaviors
+export root_path=$PWD
 
 
 ####    测试框架下载    #####
@@ -19,6 +17,7 @@ rm -rf task
 wget -q --no-proxy  https://paddle-qa.bj.bcebos.com/CodeSync/develop/PaddleNLP.tar --no-check-certificate
 rm -rf PaddleNLP && tar xf PaddleNLP.tar && rm -rf PaddleNLP.tar 
 #cd PaddleNLP && git fetch origin pull/10569/head:PR_10569 && git checkout PR_10569 && cd -
+cd PaddleNLP && git revert 759ae99609fbcefe065a4f74b686d5a442b4a0bf && cd -
 mv -v PaddleNLP ./TestFrameWork/PaddleLLM
 
 unset http_proxy && unset http_proxy
@@ -69,7 +68,7 @@ cp -r /root/paddlejob/workspace/env_run/agent/allure-2.19.0 ./
 allure-2.19.0/bin/allure generate result/ -o report
 
 bash tools/generate_template_llm.sh
-# cd utils && python emails.py --reponame PaddleLLM --reporturl_name default_template_llm  --email_addr liujie44@baidu.com --email_sub PaddleLLM_CE && cd -
-cd utils && python emails.py --reponame PaddleLLM --reporturl_name default_template_llm  --email_addr liujie44@baidu.com,fangzeyang@baidu.com,gongenlei@baidu.com,liujihua@baidu.com,yujun06@baidu.com,zhonghui03@baidu.com,zhuweiguo@baidu.com --email_sub PaddleLLM_CE && cd -
+cd utils && python emails.py --reponame PaddleLLM --reporturl_name default_template_llm  --email_addr liujie44@baidu.com --email_sub PaddleLLM_CE && cd -
+# cd utils && python emails.py --reponame PaddleLLM --reporturl_name default_template_llm  --email_addr liujie44@baidu.com,fangzeyang@baidu.com,gongenlei@baidu.com,liujihua@baidu.com,yujun06@baidu.com,zhonghui03@baidu.com,zhuweiguo@baidu.com --email_sub PaddleLLM_CE && cd -
 
 cp -r $root_path /root/paddlejob/workspace/env_run/agent/history/
