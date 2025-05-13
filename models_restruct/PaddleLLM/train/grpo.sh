@@ -43,27 +43,6 @@ export FLAGS_mla_use_tensorcore=0
 export FLAGS_cascade_attention_max_partition_size=2048
 
 # 4. 启动训练脚本
-echo "启动reward服务"
-cd reward
-python reward_server.py > reward_server.log 2>&1 &
-sleep 30s
-curl -X 'POST' \
-  'http://10.174.137.209:8731/' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "src": [
-    "test"
-  ],
-  "tgt": [
-    "test"
-  ],
-  "response": [
-    "test"
-  ]
-}' >> reward_server.log
-cd ..
-
 echo "开始训练:"
 
 python -u -m paddle.distributed.launch --devices "$CUDA_VISIBLE_DEVICES" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
@@ -74,15 +53,4 @@ python -u -m paddle.distributed.launch --devices "$CUDA_VISIBLE_DEVICES" run_rl.
     --save_steps ${steps} \
     --eval_steps  ${steps} \
     ${ext_args}
-
-echo "热启"
-python -u -m paddle.distributed.launch --devices "$CUDA_VISIBLE_DEVICES" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
-    --use_fused_rms_norm true \
-    --actor_model_name_or_path ${model_name_or_path} \
-    --output_dir ${output_dir} \
-    --max_steps 1 \
-    --save_steps 11 \
-    ${ext_args}
-
-echo "kill reward 服务"
-pkill -9 -f reward_server.py
+    
