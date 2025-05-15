@@ -45,6 +45,7 @@ export FLAGS_cascade_attention_max_partition_size=2048
 # 4. 启动训练脚本
 echo "开始训练:"
 unset http_proxy && unset https_proxy
+unset HTTP_PROXY && unset HTTPS_PROXY
 python -u -m paddle.distributed.launch --devices "$ngpus" run_rl.py ../../config/${model_name}/grpo_argument.yaml \
     --use_fused_rms_norm true \
     --actor_model_name_or_path ${model_name_or_path} \
