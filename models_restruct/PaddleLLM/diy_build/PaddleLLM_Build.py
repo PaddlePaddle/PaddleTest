@@ -86,7 +86,7 @@ class PaddleLLM_Build(Model_Build):
                 f"paddlenlp_ops-3.0.0b4.post{today}+cuda{cuda_version}sm{sm_version}paddle3b5fe1f-py3-none-any.whl"
             )
             if os.path.exists(paddlenlp_ops_whl):
-                print("paddlenlp_ops_whl has been downloaded, skip")
+                logger.info("paddlenlp_ops_whl has been downloaded, skip")
                 cmd_ops_return = 0
             else:
                 os.system("wget -q https://paddlenlp.bj.bcebos.com/wheels/{}".format(paddlenlp_ops_whl))
