@@ -9,6 +9,7 @@ import logging
 import argparse
 import numpy as np
 import yaml
+import importlib.util
 from Model_Build import Model_Build
 
 
@@ -75,10 +76,15 @@ class PaddleLLM_Build(Model_Build):
             logger.info("### installing develop paddlenlp")
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system("python -m pip install -U dist/p****.whl")
-            logger.info("### installing develop paddlenlp_ops")
-            os.chdir(os.path.join(self.reponame, "csrc"))
-            cmd_ops_return = os.system("bash tools/build_wheel.sh")
-            
+            if importlib.util.find_spec("paddlenlp_ops") is not None:
+                print("paddlenlp_ops 已安装")
+                cmd_ops_return = 0
+            else:
+                print("paddlenlp_ops 未安装")
+                logger.info("### installing develop paddlenlp_ops")
+                os.chdir("csrc")
+                cmd_ops_return = os.system("bash tools/build_wheel.sh")
+                
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
             if cmd_ops_return:
