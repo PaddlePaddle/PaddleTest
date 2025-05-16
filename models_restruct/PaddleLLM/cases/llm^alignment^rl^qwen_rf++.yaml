@@ -6,6 +6,8 @@ case:
         path: llm/alignment/rl
         cmd: bash reinforce_plus_plus.sh qwen 
         result:
+          train_policy_loss:
+            base: 0.08
           eval_accuracy:
             base: 0.45
             threshold: 0.01

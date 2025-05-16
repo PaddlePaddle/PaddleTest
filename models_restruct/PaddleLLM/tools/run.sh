@@ -34,12 +34,22 @@ export paddle_whl=None  #${paddle_whl}
 export timeout=72000
 
 ####    for test    #####
-sed -i "s/1200/5/g" train/grpo.sh
-sed -i "s/1200/5/g" train/reinforce_plus_plus.sh
+# sed -i "s/1200/5/g" train/grpo.sh
+# sed -i "s/1200/5/g" train/reinforce_plus_plus.sh
 cp -r train/grpo.sh train/reinforce_plus_plus.sh PaddleLLM/llm/alignment/rl/
 cp -r train/predict.sh train/infer.sh PaddleLLM/llm/
 set +e
 env | grep -i proxy
+
+cd PaddleLLM/llm/alignment/rl/reward
+nohup python reward_server.py > reward_server.log 2>&1 &
+reward_pid=$!
+sleep 60s
+if ! pgrep -f reward_server.py > /dev/null; then
+    echo "reward_server 启动失败"
+    exit 1
+fi
+cd -
 
 # grpo
 python main.py --models_file='tools/PaddleLLM_grpo' --step="${step:-train}" --reponame="${reponame:-PaddleClas}" --paddle_whl="${paddle_whl:-None}" --set_cuda='0,1,2,3' --timeout="${timeout:-3600}"  --plot='True' > run_grpo.log 2>&1 &
@@ -51,6 +61,8 @@ rf_pid=$!
 wait $grpo_pid
 wait $rf_pid
 #sleep 20h
+echo "kill reward 服务"
+kill -9 $reward_pid || pkill -9 -f reward_server.py
 
 #wget https://xly-devops.bj.bcebos.com/tools/allure-2.19.0.zip && unzip allure-2.19.0.zip 
 cp -r /root/paddlejob/workspace/env_run/agent/allure-2.19.0 ./

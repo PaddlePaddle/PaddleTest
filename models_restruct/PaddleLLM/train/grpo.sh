@@ -43,11 +43,16 @@ export FLAGS_mla_use_tensorcore=0
 export FLAGS_cascade_attention_max_partition_size=2048
 
 # 4. 启动训练脚本
-echo "启动reward服务"
-cd reward
-nohup python reward_server.py > reward_server.log 2>&1 &
-sleep 60s
-cd ..
+if ! pgrep -f reward_server.py > /dev/null; then
+    echo "reward服务未运行"
+    cd reward
+    nohup python reward_server.py > reward_server.log 2>&1 &
+    sleep 60s
+    cd ..
+else
+    echo "reward服务已运行"
+fi
+
 echo "开始训练:"
 python -u -m paddle.distributed.launch --devices "$ngpus" --log_dir  "log_grpo" \
     run_rl.py ../../config/${model_name}/grpo_argument.yaml \
@@ -58,6 +63,3 @@ python -u -m paddle.distributed.launch --devices "$ngpus" --log_dir  "log_grpo" 
     --save_steps ${steps} \
     --eval_steps  ${steps} \
     ${ext_args}
-
-echo "kill reward 服务"
-pkill -9 -f reward_server.py

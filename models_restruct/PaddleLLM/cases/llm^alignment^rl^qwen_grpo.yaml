@@ -6,6 +6,8 @@ case:
         path: llm/alignment/rl
         cmd: bash grpo.sh qwen 
         result:
+          train_policy_loss:
+            base: 0.08
           eval_accuracy:
             base: 0.5
             threshold: 0.01
