@@ -15,7 +15,7 @@ rm -rf PaddleTest
 ####    套件库下载    #####
 wget -q --no-proxy  https://paddle-qa.bj.bcebos.com/CodeSync/develop/PaddleNLP.tar --no-check-certificate
 rm -rf PaddleNLP && tar xf PaddleNLP.tar && rm -rf PaddleNLP.tar 
-cd PaddleNLP && git fetch origin pull/10596/head:PR_10596 && git checkout PR_10596 && cd -
+# cd PaddleNLP && git fetch origin pull/10596/head:PR_10596 && git checkout PR_10596 && cd -
 cd PaddleNLP && git revert 759ae99609fbcefe065a4f74b686d5a442b4a0bf && cd -
 mv -v PaddleNLP ./TestFrameWork/PaddleLLM
 unset http_proxy && unset http_proxy
@@ -41,15 +41,16 @@ cp -r train/predict.sh train/infer.sh PaddleLLM/llm/
 set +e
 env | grep -i proxy
 
-cd PaddleLLM/llm/alignment/rl/reward
-nohup python reward_server.py > reward_server.log 2>&1 &
-reward_pid=$!
-sleep 60s
 if ! pgrep -f reward_server.py > /dev/null; then
-    echo "reward_server 启动失败"
-    exit 1
+    echo "reward服务未运行"
+    cd PaddleLLM/llm/alignment/rl/reward
+    nohup python reward_server.py > reward_server.log 2>&1 &
+    reward_pid=$!
+    sleep 60s
+    cd -
+else
+    echo "reward服务已运行"
 fi
-cd -
 
 # grpo
 python main.py --models_file='tools/PaddleLLM_grpo' --step="${step:-train}" --reponame="${reponame:-PaddleClas}" --paddle_whl="${paddle_whl:-None}" --set_cuda='0,1,2,3' --timeout="${timeout:-3600}"  --plot='True' > run_grpo.log 2>&1 &
