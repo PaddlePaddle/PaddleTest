@@ -85,8 +85,12 @@ class PaddleLLM_Build(Model_Build):
             paddlenlp_ops_whl = (
                 f"paddlenlp_ops-3.0.0b4.post{today}+cuda{cuda_version}sm{sm_version}paddle3b5fe1f-py3-none-any.whl"
             )
-            os.system("wget -q https://paddlenlp.bj.bcebos.com/wheels/{}".format(paddlenlp_ops_whl))
-            cmd_ops_return = os.system("python -m pip install -U {}".format(paddlenlp_ops_whl))            
+            if os.path.exists(paddlenlp_ops_whl):
+                print("paddlenlp_ops_whl has been downloaded, skip")
+                cmd_ops_return = 0
+            else:
+                os.system("wget -q https://paddlenlp.bj.bcebos.com/wheels/{}".format(paddlenlp_ops_whl))
+                cmd_ops_return = os.system("python -m pip install -U {} --force-reinstall".format(paddlenlp_ops_whl))
                 
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
