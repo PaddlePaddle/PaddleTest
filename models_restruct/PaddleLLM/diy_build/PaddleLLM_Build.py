@@ -9,7 +9,7 @@ import logging
 import argparse
 import numpy as np
 import yaml
-import importlib.util
+from datetime import datetime
 from Model_Build import Model_Build
 
 
@@ -76,14 +76,12 @@ class PaddleLLM_Build(Model_Build):
             logger.info("### installing develop paddlenlp")
             os.system("python setup.py bdist_wheel")
             cmd_return = os.system("python -m pip install -U dist/p****.whl")
-            if importlib.util.find_spec("paddlenlp_ops") is not None:
-                print("paddlenlp_ops 已安装")
-                cmd_ops_return = 0
-            else:
-                print("paddlenlp_ops 未安装")
-                logger.info("### installing develop paddlenlp_ops")
-                os.chdir("csrc")
-                cmd_ops_return = os.system("bash tools/build_wheel.sh")
+            logger.info("### installing develop paddlenlp_ops")
+            today = datetime.today().strftime("%Y%m%d")
+            paddlenlp_ops_whl = " \
+                https://paddlenlp.bj.bcebos.com/wheels/paddlenlp_ops-3.0.0b4.post20250515+cuda12.8sm80paddle3b5fe1f-py3-none-any.whl"
+            paddlenlp_ops_whl = re.sub(r"post\d{8}", f"post{today}", paddlenlp_ops_whl)
+            cmd_ops_return = os.system("python -m pip install -U {}".format(paddlenlp_ops_whl))
                 
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
