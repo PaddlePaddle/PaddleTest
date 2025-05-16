@@ -11,7 +11,6 @@ import numpy as np
 import yaml
 from datetime import datetime
 from Model_Build import Model_Build
-import paddle
 
 
 logger = logging.getLogger("ce")
@@ -79,7 +78,8 @@ class PaddleLLM_Build(Model_Build):
             cmd_return = os.system("python -m pip install -U dist/p****.whl")
             logger.info("### installing develop paddlenlp_ops")
             today = datetime.today().strftime("%Y%m%d")
-            cuda_version=paddle.version.cuda()
+            import paddle
+            cuda_version=float(paddle.version.cuda())
             prop = paddle.device.cuda.get_device_properties()
             sm_version = prop.major * 10 + prop.minor
             paddlenlp_ops_whl = (

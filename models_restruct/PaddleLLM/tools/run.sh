@@ -7,9 +7,9 @@ export root_path=$PWD
 wget -q ${CE_Link} --no-proxy 
 unzip -q -P ${CE_pass} TestFrameWork.zip
 ####    测试case脚本下载    #####
-git clone https://github.com/Liujie0926/PaddleTest.git -b add_PaddleLLM
-#wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy 
-#tar xf PaddleTest.tar.gz
+# git clone https://github.com/Liujie0926/PaddleTest.git -b add_PaddleLLM
+wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy 
+tar xf PaddleTest.tar.gz
 cp -r ./PaddleTest/models_restruct/PaddleLLM/. ./TestFrameWork/
 rm -rf PaddleTest
 ####    套件库下载    #####
@@ -55,6 +55,7 @@ fi
 # grpo
 python main.py --models_file='tools/PaddleLLM_grpo' --step="${step:-train}" --reponame="${reponame:-PaddleClas}" --paddle_whl="${paddle_whl:-None}" --set_cuda='0,1,2,3' --timeout="${timeout:-3600}"  --plot='True' > run_grpo.log 2>&1 &
 grpo_pid=$!
+sleep 100s
 # rf++
 python main.py --models_file='tools/PaddleLLM_rf++' --step="${step:-train}" --reponame="${reponame:-PaddleClas}" --paddle_whl="${paddle_whl:-None}" --set_cuda='4,5,6,7' --timeout="${timeout:-3600}"  --plot='True' > run_rf++.log 2>&1 &
 rf_pid=$!
