@@ -42,6 +42,9 @@ export FLAGS_force_cublaslt_no_reduced_precision_reduction=True
 export FLAGS_mla_use_tensorcore=0
 export FLAGS_cascade_attention_max_partition_size=2048
 
+export FLAGS_embedding_deterministic=1        
+export FLAGS_cudnn_deterministic=1
+
 # 4. 启动训练脚本
 if ! pgrep -f reward_server.py > /dev/null; then
     echo "reward服务未运行"
@@ -63,4 +66,5 @@ python -u -m paddle.distributed.launch --devices "$ngpus" --log_dir  "log_grpo" 
     --max_steps ${steps} \
     --save_steps ${steps} \
     --eval_steps  ${steps} \
+    --kl_loss_coeff 0.000
     ${ext_args}

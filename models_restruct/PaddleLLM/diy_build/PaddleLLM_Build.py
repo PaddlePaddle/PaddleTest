@@ -11,6 +11,7 @@ import numpy as np
 import yaml
 from datetime import datetime
 from Model_Build import Model_Build
+import requests
 
 
 logger = logging.getLogger("ce")
@@ -75,7 +76,8 @@ class PaddleLLM_Build(Model_Build):
             os.chdir(self.reponame)
             logger.info("### installing develop paddlenlp")
             os.system("python setup.py bdist_wheel")
-            cmd_return = os.system("python -m pip install -U dist/p****.whl")
+            cmd_return = os.system("python -m pip install -U dist/p****.whl --force-reinstall")
+
             logger.info("### installing develop paddlenlp_ops")
             today = datetime.today().strftime("%Y%m%d")
             import paddle
@@ -85,13 +87,19 @@ class PaddleLLM_Build(Model_Build):
             paddlenlp_ops_whl = (
                 f"paddlenlp_ops-3.0.0b4.post{today}+cuda{cuda_version}sm{sm_version}paddle3b5fe1f-py3-none-any.whl"
             )
+            paddlenlp_ops_url = ("https://paddlenlp.bj.bcebos.com/wheels/{}".format(paddlenlp_ops_whl))
             if os.path.exists(paddlenlp_ops_whl):
                 logger.info("paddlenlp_ops_whl has been downloaded, skip")
                 cmd_ops_return = 0
             else:
-                os.system("wget -q https://paddlenlp.bj.bcebos.com/wheels/{}".format(paddlenlp_ops_whl))
-                cmd_ops_return = os.system("python -m pip install -U {} --force-reinstall".format(paddlenlp_ops_whl))
-                
+                response = requests.head(paddlenlp_ops_url, timeout=10)
+                if response.status_code == 200:
+                    os.system("wget -q {}".format(paddlenlp_ops_url))
+                    cmd_ops_return = os.system("python -m pip install -U {} --force-reinstall".format(paddlenlp_ops_whl))
+                else:
+                    logger.info("bos文件不存在，执行构建脚本")
+                    os.chdir(os.path.join(self.reponame, "csrc"))
+                    cmd_ops_return = os.system("bash tools/build_wheel.sh")
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
             if cmd_ops_return:
