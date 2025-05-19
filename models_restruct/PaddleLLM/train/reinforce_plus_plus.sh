@@ -45,6 +45,7 @@ export FLAGS_cascade_attention_max_partition_size=2048
 # 4. 启动训练脚本
 if ! pgrep -f reward_server.py > /dev/null; then
     echo "reward服务未运行"
+    unset http_proxy && unset https_proxy
     cd reward
     nohup python reward_server.py > reward_server.log 2>&1 &
     sleep 60s

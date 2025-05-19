@@ -23,7 +23,7 @@ echo "<p><b>Paddle Commit:</b> $paddle_commit</p>"
 echo "<p><b>PaddleNLP Commit:</b> $paddlenlp_commit</p>"
 echo "<h3>评估结果</h3>"
 echo "<table border='1'>"
-echo "<tr><th>Model</th><th>Eval Accuracy</th><th>Base</th><th>Status</th></tr>"
+echo "<tr><th>Model</th><th>Eval Accuracy</th><th>Base</th><th>Status</th><th>Log</th></tr>"
 } > "$html_file"
 
 # 遍历所有 *_training.log 文件
@@ -44,11 +44,21 @@ find "$log_dir" -type f -name "*_training.log" | while read -r logfile; do
 
     # 判断是否异常（小于 base 就认为异常）
     status="正常"
-    awk_res=$(awk -v a="$acc" -v b="$base" 'BEGIN {if (a < b) print "异常"; else print "正常"}')
+    awk_res=$(awk -v a="$acc" -v b="$base" 'BEGIN { if (a == "" || a == "None" || a < b) print "异常"; else print "正常"}')
     status="$awk_res"
 
+    # 输出异常日志
+    err_log=""
+    if [ "$status" = "异常" ]; then
+        if [ "$awk_res" = "none" ]; then
+            err_log=$(tail -n 20 "$logfile")
+        elif [ "$awk_res" = "0.0" ] && grep -q "reward server failed" "$logfile"; then
+            err_log="reward服务异常"
+        fi
+    fi
+
     # 写入HTML表格
-    echo "<tr><td>$model</td><td>$acc</td><td>$base</td><td>$status</td></tr>" >> "$html_file"
+    echo "<tr><td>$model</td><td>$acc</td><td>$base</td><td>$status</td><td>$err_log</td></tr>" >> "$html_file"
 done
 
 # HTML结束
