@@ -81,6 +81,7 @@ class PaddleLLM_Build(Model_Build):
 
             logger.info("### installing develop paddlenlp_ops")
             today = datetime.today().strftime("%Y%m%d")
+            today = "20250516"
             import paddle
             cuda_version=float(paddle.version.cuda())
             prop = paddle.device.cuda.get_device_properties()
@@ -99,18 +100,19 @@ class PaddleLLM_Build(Model_Build):
                     cmd_ops_return = os.system("python -m pip install -U {} --force-reinstall".format(paddlenlp_ops_whl))
                 else:
                     logger.info("bos文件不存在，执行构建脚本或使用当前环境历史版本")
-                    if os.system("pgrep -f 'bash tools/build_wheel.sh' > /dev/null") != 0:
-                        logger.info("未检测到构建脚本，开始执行...")
-                        os.chdir("csrc")
-                        cmd_ops_return = os.system("bash tools/build_wheel.sh")
-                    else:
-                        # 如果已有进程，就等待它结束
-                        logger.info("检测到构建脚本正在运行，等待其完成...")
-                        while os.system("pgrep -f 'bash tools/build_wheel.sh' > /dev/null") == 0:
-                            time.sleep(100)
-                        cmd_ops_return = 0
-                    # 构建完成后，执行后续逻辑
-                    logger.info("构建已完成，执行后续任务...")
+                    # if os.system("pgrep -f 'bash tools/build_wheel.sh' > /dev/null") != 0:
+                    #     logger.info("未检测到构建脚本，开始执行...")
+                    #     os.chdir("csrc")
+                    #     cmd_ops_return = os.system("bash tools/build_wheel.sh")
+                    # else:
+                    #     # 如果已有进程，就等待它结束
+                    #     logger.info("检测到构建脚本正在运行，等待其完成...")
+                    #     while os.system("pgrep -f 'bash tools/build_wheel.sh' > /dev/null") == 0:
+                    #         time.sleep(100)
+                    #     cmd_ops_return = 0
+                    # # 构建完成后，执行后续逻辑
+                    # logger.info("构建已完成，执行后续任务...")
+                    cmd_ops_return = 0
                       
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
