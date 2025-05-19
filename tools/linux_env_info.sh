@@ -101,6 +101,13 @@ function DockerImages () {
             export env_cudnn_version="9.7.0"
             export env_trt_version="10.5.0.18"
             ;;
+        "Cuda129")
+            echo "Selected Almalinux: Cuda129"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda12.9-cudnn9.9-trt10.5-gcc11"
+            export env_cuda_version="12.9"
+            export env_cudnn_version="9.9.0"
+            export env_trt_version="10.5.0.18"
+            ;;
         *)
             DOCKER_EXIT_CODE=101
             ;;
@@ -157,6 +164,27 @@ function DockerImages () {
             export env_cudnn_version="9.0.0"
             export env_trt_version="8.6.1.6"
             ;;   
+        "Cuda126")
+            echo "Selected Ubuntu: Cuda126"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/latest-dev-cuda12.6-cudnn9.5-trt10.5.0.18-ubuntu24:latest"
+            export env_cuda_version="12.6"
+            export env_cudnn_version="9.5.1"
+            export env_trt_version="10.5.0.18"
+            ;;
+        "Cuda128")
+            echo "Selected Ubuntu: Cuda128"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/latest-dev-cuda12.8-cudnn9.7-trt10.5-gcc12:latest"
+            export env_cuda_version="12.8"
+            export env_cudnn_version="9.7.0"
+            export env_trt_version="10.5.0.18"
+            ;;
+        "Cuda129")
+            echo "Selected Ubuntu: Cuda129"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:latest-dev-cuda12.9-cudnn9.9-trt10.5-gcc13.3"
+            export env_cuda_version="12.9"
+            export env_cudnn_version="9.9.0"
+            export env_trt_version="10.5.0.18"
+            ;;
         *)
             DOCKER_EXIT_CODE=101
             ;;
