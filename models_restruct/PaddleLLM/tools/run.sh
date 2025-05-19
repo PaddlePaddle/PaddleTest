@@ -17,7 +17,7 @@ wget -q --no-proxy  https://paddle-qa.bj.bcebos.com/CodeSync/develop/PaddleNLP.t
 rm -rf PaddleNLP && tar xf PaddleNLP.tar && rm -rf PaddleNLP.tar 
 # cd PaddleNLP && git fetch origin pull/10596/head:PR_10596 && git checkout PR_10596 && cd -
 # fix CUDA error 801 with PR 10570 in docker 
-sed -i '/from transformer_engine import transformer_engine_paddle as tex/,/paddle\.float8_e5m2: tex\.DType\.kFloat8E5M2,/d' PAddleNLP/paddlenlp/quantization/qat_utils.py
+sed -i '/from transformer_engine import transformer_engine_paddle as tex/,/^    }/d' PaddleNLP/paddlenlp/quantization/qat_utils.py
 mv -v PaddleNLP ./TestFrameWork/PaddleLLM
 unset http_proxy && unset https_proxy
 

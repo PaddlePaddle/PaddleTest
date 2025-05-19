@@ -98,7 +98,7 @@ class PaddleLLM_Build(Model_Build):
                     cmd_ops_return = os.system("python -m pip install -U {} --force-reinstall".format(paddlenlp_ops_whl))
                 else:
                     logger.info("bos文件不存在，执行构建脚本")
-                    os.chdir(os.path.join(self.reponame, "csrc"))
+                    os.chdir("csrc")
                     cmd_ops_return = os.system("bash tools/build_wheel.sh")
             if cmd_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
