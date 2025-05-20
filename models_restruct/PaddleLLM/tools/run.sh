@@ -52,6 +52,16 @@ if ! pgrep -f reward_server.py > /dev/null; then
 else
     echo "reward服务已运行"
 fi
+
+#paddlenlp_ops安装判断
+whl_file=$(find "$root_path/../" -maxdepth 1 -type f -name "p*.whl" | head -n 1)
+if [ -n "$whl_file" ]; then
+    echo "发现文件：$whl_file，移动到PaddleLLM"
+    mv "$whl_file" PaddleLLM/
+else
+    echo "未找到符合条件的 .whl 文件"
+fi
+
 # grpo
 python main.py --models_file='tools/PaddleLLM_grpo' --step="${step:-train}" --reponame="${reponame:-PaddleClas}" --paddle_whl="${paddle_whl:-None}" --set_cuda='0,1,2,3' --timeout="${timeout:-3600}"  --plot='True' > run_grpo.log 2>&1 &
 grpo_pid=$!
