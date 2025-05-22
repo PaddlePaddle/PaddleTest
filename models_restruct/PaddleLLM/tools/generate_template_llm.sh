@@ -8,8 +8,8 @@ allure_url=https://ipipe-report.baidu-int.com/bos/${root_path}/report/#behaviors
 log_dir="${current_path}/logs/PaddleLLM"
 # 假设设置各模型的base值
 declare -A base_values=(
-    [grpo]=0.5
-    [reinforce_plus_plus]=0.45
+    [grpo]=0.540
+    [reinforce_plus_plus]=0.690
 )
 html_file="./utils/default_template_llm.html"
 
@@ -44,7 +44,7 @@ find "$log_dir" -type f -name "*_training.log" | while read -r logfile; do
 
     # 判断是否异常（小于 base 就认为异常）
     status="正常"
-    awk_res=$(awk -v a="$acc" -v b="$base" 'BEGIN { if (a == "" || a == "none" || a < b) print "异常"; else print "正常"}')
+    awk_res=$(awk -v a="$acc" -v b="$base" 'BEGIN { if (a == "" || a == "none" || a != b) print "异常"; else print "正常"}')
     status="$awk_res"
 
     # 输出异常日志
