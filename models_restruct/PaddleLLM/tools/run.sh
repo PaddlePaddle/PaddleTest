@@ -7,9 +7,9 @@ export root_path=$PWD
 wget -q ${CE_Link} --no-proxy 
 unzip -q -P ${CE_pass} TestFrameWork.zip
 ####    测试case脚本下载    #####
-git clone https://github.com/Liujie0926/PaddleTest.git -b fix_CE
-# wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy 
-# tar xf PaddleTest.tar.gz
+# git clone https://github.com/Liujie0926/PaddleTest.git -b fix_CE
+wget -q https://xly-devops.bj.bcebos.com/PaddleTest/PaddleTest.tar.gz --no-proxy 
+tar xf PaddleTest.tar.gz
 cp -r ./PaddleTest/models_restruct/PaddleLLM/. ./TestFrameWork/
 rm -rf PaddleTest
 ####    套件库下载    #####
