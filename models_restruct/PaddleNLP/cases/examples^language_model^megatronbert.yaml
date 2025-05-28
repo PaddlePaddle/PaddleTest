@@ -3,32 +3,29 @@ case:
     train:
       -
         name: run_squad
-        path: slm/examples/language_model/luke
+        path: slm/model_zoo/megatronbert
         cmd: python -m paddle.distributed.launch run_squad.py
         params:
-          - --model_type luke
-          - --device gpu
-          - --learning_rate 15e-6
-          - --num_train_epochs 1
-          - --batch_size 8
-          - --do_predict
           - --do_train
-          - --model_name_or_path luke-large
-          - --logging_steps 1
-          - --max_steps 2
-          - --save_step 2
+          - --version_2_with_negative
+          - --do_predict
+          - --batch_size=8
+          - --model_name_or_path=megatronbert-cased
+          - --learning_rate=1e-5
+          - --output_dir=output/
+          - --device=gpu
+          - --num_train_epochs=1
       -
-        name: run_open_entity
-        path: slm/examples/language_model/luke
-        cmd: python -m paddle.distributed.launch run_open_entity.py
+        name: run_glue
+        path: slm/model_zoo/megatronbert
+        cmd: python -m paddle.distributed.launch run_glue.py
         params:
-          - --model_type luke-large
-          - --data_dir data/
-          - --output_dir ./output
-          - --device gpu
-          - --learning_rate 1e-5
-          - --num_train_epochs 1
-          - --batch_size 2
+          - --task_name=mnli
+          - --output_dir=output/
+          - --model_name_or_path=megatronbert-cased
+          - --learning_rate=1e-5
+          - --device=gpu
+          - --num_train_epochs=1
     eval: skipped
     infer: skipped
     export: skipped

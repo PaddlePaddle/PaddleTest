@@ -1,0 +1,15 @@
+FROM registry.baidubce.com/device/paddle-xpu:ubuntu20-x86_64-gcc84-py310
+ARG PADDLE_VERSION=3.0.0rc1
+# ARG PYTHON_VERSION=3.10
+
+# 确保 Python3.10 存在，并设置其为默认 Python 版本
+# RUN ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python && \
+#     ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 && \
+#     ln -sf /usr/bin/pip${PYTHON_VERSION} /usr/bin/pip && \
+#     ln -sf /usr/bin/pip${PYTHON_VERSION} /usr/bin/pip3 && \
+   
+
+# # 确保 PATH 优先搜索 /usr/bin
+# ENV PATH="/usr/bin:${PATH}"
+
+RUN python -m pip install --no-cache-dir paddlepaddle-xpu==${PADDLE_VERSION} -i https://www.paddlepaddle.org.cn/packages/stable/xpu/ && python -m pip cache purge

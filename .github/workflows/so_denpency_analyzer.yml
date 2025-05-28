@@ -1,0 +1,103 @@
+name: PaddlePaddle Packages Dependency So Analysis
+run-name: PaddlePaddle Packages Dependency So Analysis
+
+on:
+  workflow_dispatch:
+    inputs:
+      baselinesetting:
+        description: 'so denpendency baseline setting'
+        required: false
+        default: 'OFF'
+      branch_name:
+        required: false
+        type: string
+        default: 'Develop'
+  workflow_call:
+    inputs:
+      baselinesetting:
+        required: false
+        type: string
+        default: 'OFF'
+      branch_name:
+        required: false
+        type: string
+        default: 'Develop'
+  schedule:
+    - cron: "0 20 * * *"
+
+jobs:
+  so-analysis:
+    environment: CodeSync
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ce_task_name:
+          - "TagBuild-Training-Linux-Gpu-Cuda11.8-Cudnn8.6-Mkl-Avx-Gcc8.2-SelfBuiltPypiUse"
+          - "TagBuild-Training-Linux-Cpu-Mkl-Avx-Gcc82-SelfBuiltPypiUse"
+          - "TagBuild-Training-Linux-Cpu-ARM-SelfBuiltPypiUse"
+          - "TagBuild-Training-Linux-Gpu-Cuda12.6-Cudnn9.5-Trt10.5-Mkl-Avx-Gcc11-SelfBuiltPypiUse"
+        python_version: ["3.8", "3.10", "3.13"]
+        is_cuda: ["True", "False"]
+        exclude:
+          - ce_task_name: "TagBuild-Training-Linux-Cpu-Mkl-Avx-Gcc82-SelfBuiltPypiUse"
+            is_cuda: "True"
+          - ce_task_name: "TagBuild-Training-Linux-Cpu-ARM-SelfBuiltPypiUse"
+            is_cuda: "True"
+          - ce_task_name: "TagBuild-Training-Linux-Gpu-Cuda12.6-Cudnn9.5-Trt10.5-Mkl-Avx-Gcc11-SelfBuiltPypiUse"
+            is_cuda: "False"
+          - ce_task_name: "TagBuild-Training-Linux-Gpu-Cuda11.8-Cudnn8.6-Mkl-Avx-Gcc8.2-SelfBuiltPypiUse"
+            is_cuda: "False"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            .github
+            publish_scripts
+            tools
+          fetch-depth: 1
+
+      - name: Wheel Download and Analysis
+        id: analyze
+        uses: ./.github/actions/so_dependency_analyzer
+        with:
+          ce_task_name: ${{ github.event.inputs.branch_name || inputs.branch_name || 'Develop'}}-${{ matrix.ce_task_name }}
+          is_cuda: ${{ matrix.is_cuda }}
+          python_version: ${{ matrix.python_version }}
+        
+      - name: Upload so analysis result
+        env:
+          AK: ${{ secrets.BOS_AK }}
+          SK: ${{ secrets.BOS_SK }}
+          BASELINE_SETTING: ${{ github.event.inputs.baselinesetting || inputs.baselinesetting || 'OFF' }}
+        run: |
+          set -x
+          tree -L 3
+          echo "The ce_task_name input passed to the analyze step is: ${ce_task_name}"
+          echo "The python_version input passed to the analyze step is: ${python_version}"
+          echo "The result file is at: ${result_file_path}"
+          cat ${result_file_path}
+          echo "The description of the result file is:${description_file_path}"
+          cp ${description_file_path} ./
+          cp ${result_file_path} ./
+          commit_id=$(grep "^commit_id:" description.txt | cut -d':' -f2)
+          echo ${commit_id}
+          python -m pip install bce-python-sdk==0.9.29
+          if [[ ${BASELINE_SETTING} == "ON" ]];then
+            python tools/bos_tools.py description.txt paddle-qa/so_analysis/${ce_task_name}/baseline/${python_version//./}
+            python tools/bos_tools.py so_dependencies_static.json paddle-qa/so_analysis/${ce_task_name}/baseline/${python_version//./}
+          else
+            python tools/bos_tools.py description.txt paddle-qa/so_analysis/${ce_task_name}/${commit_id}/${python_version//./}
+            python tools/bos_tools.py so_dependencies_static.json paddle-qa/so_analysis/${ce_task_name}/${commit_id}/${python_version//./}
+            wget https://paddle-qa.bj.bcebos.com/so_analysis/${ce_task_name}/baseline/${python_version//./}/so_dependencies_static.json -O baseline_so_dependencies_static.json
+            exit_code=0
+            python publish_scripts/so_dependency_analyzer/so_dependency_analyzer.py compare baseline_so_dependencies_static.json so_dependencies_static.json || exit_code=$?
+            if [ ${exit_code} -eq 0 ];then
+              echo "No change detected in so dependencies."
+              exit 0
+            else
+              echo "Change detected in so dependencies."
+              exit 1
+            fi
+          fi
