@@ -10,10 +10,10 @@ docker container ls -a --filter "name=${docker_name}" --format "{{.ID}}" | xargs
 
 mkdir root_tmp
 
-nvidia-docker run --rm -i --name ${docker_name} --privileged --shm-size=128g --net=host \
+docker run --rm -i --gpus all --name ${docker_name} --shm-size=128g --net=host \
   -w /workspace \
   -v $PWD:/workspace \
-  -v root_tmp:/root \
+  -v $PWD/root_tmp:/root \
   -e "AK=${AK}" -e "SK=${SK}" \
   -e "http_proxy=${http_proxy}" \
   -e "https_proxy=${https_proxy}" \
