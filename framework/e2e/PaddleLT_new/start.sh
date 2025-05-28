@@ -27,6 +27,7 @@ ldconfig;
 
 source ./PTSTools/tools/set_env/set_env.sh ${PTS_ENV_VARS}  # 设定PTS环境变量
 source ./${test_scene}
+${python_ver} -m pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ${python_ver} -m pip install -r requirement.txt
 ${python_ver} -m pip install -r ./PTSTools/LogParseUpload/requirement.txt;
 cp -r ./PTSTools/Uploader/apibm_config.yml .
