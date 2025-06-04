@@ -76,7 +76,7 @@ def test_trace_axis2():
     offset=-1, axis1=2, axis2=-2
     """
     x_data = np.arange(12).reshape((2, 3, 2)).astype(np.float32)
-    res = np.array([7.0, 19.0])
+    res = np.array([1.0, 7.0])
     obj2.run(res=res, x=x_data, offset=-1, axis1=2, axis2=-2)
 
 
