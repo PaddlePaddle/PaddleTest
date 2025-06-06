@@ -7,7 +7,6 @@ on:
   schedule:
     - cron: "0 20 * * *"
 
-
 jobs:
   run-check:
     runs-on: [self-hosted, GPU-2Card]
@@ -20,7 +19,6 @@ jobs:
           - InstallCheck-Py3.10-ubuntu20.04
           - InstallCheck-Py3.10-ubuntu22.04
           - InstallCheck-Py3.10-ubuntu24.04
-
     steps:
       - name: Run Paddle installation check in Docker
         id: run_check
@@ -34,6 +32,7 @@ jobs:
               python3 -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
               exit 1
             ' || result=$?
+
           echo "result=$result"
           if [ $result -ne 0 ]; then
             echo "failed=true" >> $GITHUB_OUTPUT
@@ -42,10 +41,7 @@ jobs:
           fi
           exit 0
 
-      - name: Print output
-        run: echo "Output failed=${{ steps.run_check.outputs.failed }}"
-
-      - name: Record failure
+      - name: Save failure result
         if: steps.run_check.outputs.failed == 'true'
         run: |
           mkdir -p artifacts
@@ -59,8 +55,18 @@ jobs:
           path: artifacts/failed.txt
           if-no-files-found: ignore
 
-      - name: Check if failure exists and create issue
-        if: success() || failure()
+  create-issue-if-needed:
+    runs-on: ubuntu-latest
+    needs: run-check
+    if: always()
+    steps:
+      - name: Download failed list
+        uses: actions/download-artifact@v4
+        with:
+          name: failed-combos
+          path: artifacts
+
+      - name: Create issue if there are failures
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -80,7 +86,6 @@ jobs:
               return;
             }
 
-            // 检查是否已有相同 issue
             const existingIssues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -100,13 +105,13 @@ jobs:
 
             const list = failedVersions.map(v => `- ❌ ${v.trim()}`).join('\n');
             const body = `
-              以下 CUDA + 系统镜像组合的 Paddle 安装检查失败：
-              ${list}
+以下 CUDA + 系统镜像组合的 Paddle 安装检查失败：
+${list}
 
-              Workflow: [查看运行详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+Workflow: [查看运行详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
-              @XieYunshen 请关注此问题。
-              `;
+@XieYunshen 请关注此问题。
+`;
 
             await github.rest.issues.create({
               owner: context.repo.owner,
