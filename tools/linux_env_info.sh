@@ -112,6 +112,40 @@ function DockerImages () {
             DOCKER_EXIT_CODE=101
             ;;
         esac
+    elif [[ "${docker_type}" == "UbuntuTiny" ]];then
+        case ${cuda_version} in
+        "Cuda118TRT")
+            echo "Selected Ubuntu: Cuda118 With TensorRT"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:cuda118-dev-trt8.6"
+            export env_cuda_version="11.8"
+            export env_cudnn_version="8.9.6"
+            export env_trt_version="8.6.1.6"
+            ;;
+        "Cuda118")
+            echo "Selected Ubuntu: Cuda118"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:cuda118-dev"
+            export env_cuda_version="11.8"
+            export env_cudnn_version="8.9.6"
+            export env_trt_version=""
+            ;;
+        "Cuda126")
+            echo "Selected Ubuntu: Cuda126"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:cuda126-dev"
+            export env_cuda_version="12.6"
+            export env_cudnn_version="9.3.0"
+            export env_trt_version=""
+            ;;
+        "Cuda129")
+            echo "Selected Ubuntu: Cuda129"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:cuda129-dev"
+            export env_cuda_version="12.9"
+            export env_cudnn_version="9.9.0"
+            export env_trt_version=""
+            ;;
+        *)
+            DOCKER_EXIT_CODE=101
+            ;;
+        esac
     else
         docker_type="Ubuntu"
         case ${cuda_version} in
