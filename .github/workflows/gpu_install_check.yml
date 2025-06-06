@@ -32,35 +32,46 @@ jobs:
               python3 -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
               exit 1
             ' || result=$?
-
           echo "result=$result"
           if [ $result -ne 0 ]; then
-            echo "failed=true" >> $GITHUB_OUTPUT
-          else
-            echo "failed=false" >> $GITHUB_OUTPUT
+            echo "${{ matrix.cuda-version }} | ${{ matrix.images_version }}" >> failed.txt
           fi
           exit 0
 
-      - name: Save failure result
-        if: steps.run_check.outputs.failed == 'true'
-        run: |
-          mkdir -p artifacts
-          echo "${{ matrix.cuda-version }} | ${{ matrix.images_version }}" >> artifacts/failed.txt
-
-      - name: Upload failed list
+      - name: Upload individual failure result
         if: always()
         uses: actions/upload-artifact@v4
         with:
+          name: failed-${{ matrix.cuda-version }}-${{ matrix.images_version }}
+          path: failed.txt
+          if-no-files-found: ignore
+
+  collect-failures:
+    runs-on: ubuntu-latest
+    needs: run-check
+    steps:
+      - name: Download all failure artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Merge all failed.txt files
+        run: |
+          find artifacts -name 'failed.txt' -exec cat {} + > all_failed.txt || true
+
+      - name: Upload merged failure list
+        uses: actions/upload-artifact@v4
+        with:
           name: failed-combos
-          path: artifacts/failed.txt
+          path: all_failed.txt
           if-no-files-found: ignore
 
   create-issue-if-needed:
     runs-on: ubuntu-latest
-    needs: run-check
+    needs: collect-failures
     if: always()
     steps:
-      - name: Download failed list
+      - name: Download merged failure list
         uses: actions/download-artifact@v4
         with:
           name: failed-combos
@@ -72,20 +83,17 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const path = 'artifacts/failed.txt';
+            const path = 'artifacts/all_failed.txt';
             const issueTitle = '❌ Paddle GPU 安装验证失败(Nightly)';
-
             if (!fs.existsSync(path)) {
               console.log('没有失败记录，无需创建 issue');
               return;
             }
-
             const failedVersions = fs.readFileSync(path, 'utf-8').split('\n').filter(Boolean);
             if (failedVersions.length === 0) {
-              console.log('failed.txt 文件为空');
+              console.log('all_failed.txt 文件为空');
               return;
             }
-
             const existingIssues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -93,16 +101,13 @@ jobs:
               labels: 'auto-generated',
               per_page: 100
             });
-
             const alreadyExists = existingIssues.data.some(issue =>
               issue.title.includes(issueTitle)
             );
-
             if (alreadyExists) {
               console.log('已有相同标题的 open issue，跳过创建');
               return;
             }
-
             const list = failedVersions.map(v => `- ❌ ${v.trim()}`).join('\n');
             const body = `
             以下 CUDA + 系统镜像组合的 Paddle 安装检查失败：
@@ -112,7 +117,6 @@ jobs:
 
             @XieYunshen 请关注此问题。
             `;
-
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
