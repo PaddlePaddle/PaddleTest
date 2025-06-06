@@ -55,15 +55,16 @@ jobs:
         with:
           path: artifacts
 
-      - name: Merge all failed.txt files
+      - name: Merge all failed.txt files (deduplicated)
         run: |
-          find artifacts -name 'failed.txt' -exec cat {} + > all_failed.txt || true
+          mkdir -p merged
+          find artifacts -name 'failed.txt' -exec cat {} + | sort | uniq > merged/all_failed.txt || true
 
       - name: Upload merged failure list
         uses: actions/upload-artifact@v4
         with:
           name: failed-combos
-          path: all_failed.txt
+          path: merged/all_failed.txt
           if-no-files-found: ignore
 
   create-issue-if-needed:
