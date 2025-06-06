@@ -105,13 +105,13 @@ jobs:
 
             const list = failedVersions.map(v => `- ❌ ${v.trim()}`).join('\n');
             const body = `
-以下 CUDA + 系统镜像组合的 Paddle 安装检查失败：
-${list}
+            以下 CUDA + 系统镜像组合的 Paddle 安装检查失败：
+            ${list}
 
-Workflow: [查看运行详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            Workflow: [查看运行详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
-@XieYunshen 请关注此问题。
-`;
+            @XieYunshen 请关注此问题。
+            `;
 
             await github.rest.issues.create({
               owner: context.repo.owner,
