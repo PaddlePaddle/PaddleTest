@@ -1,0 +1,99 @@
+name: PaddlePaddle Gpu Packages Install Check
+run-name: Runs on ${{ github.event_name }}
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: "0 20 * * *"
+
+jobs:
+  run-check:
+    runs-on: [self-hosted, GPU-2Card]
+    strategy:
+      matrix:
+        cuda-version: ['cu118', 'cu126']
+        images_version:
+          - InstallCheck-Py3.10-alalinux8
+          - InstallCheck-Py3.10-ubuntu20.04
+          - InstallCheck-Py3.10-ubuntu22.04
+          - InstallCheck-Py3.10-ubuntu24.04
+
+    steps:
+      - name: Run Paddle installation check in Docker
+        id: run_check
+        continue-on-error: true
+        env:
+          CUDA_VERSION: ${{ matrix.cuda-version }}
+        run: |
+          echo "Testing $CUDA_VERSION on ${{ matrix.images_version }}"
+          docker run --rm --gpus all --net=host \
+            ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddleqa:${{ matrix.images_version }} \
+            /bin/bash -ec '
+              python3 -m pip install --pre paddlepaddle-gpu -i https://www.paddlepaddle.org.cn/packages/nightly/${{ CUDA_VERSION }}/ &&
+              python3 -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
+            '
+
+      - name: Record failure
+        if: failure()
+        run: |
+          mkdir -p artifacts
+          echo "${{ matrix.cuda-version }} | ${{ matrix.images_version }}" >> artifacts/failed.txt
+
+      - name: Check if failure exists and create issue
+        if: success() || failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'artifacts/failed.txt';
+            const issueTitle = '❌ Paddle GPU 安装验证失败';
+
+            if (!fs.existsSync(path)) {
+              console.log('没有失败记录，无需创建 issue');
+              return;
+            }
+
+            const failedVersions = fs.readFileSync(path, 'utf-8').split('\n').filter(Boolean);
+            if (failedVersions.length === 0) {
+              console.log('failed.txt 文件为空');
+              return;
+            }
+
+            // 检查是否已有相同 issue
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'auto-generated',
+              per_page: 100
+            });
+
+            const alreadyExists = existingIssues.data.some(issue =>
+              issue.title.includes(issueTitle)
+            );
+
+            if (alreadyExists) {
+              console.log('已有相同标题的 open issue，跳过创建');
+              return;
+            }
+
+            const list = failedVersions.map(v => `- ❌ ${v.trim()}`).join('\n');
+            const body = `
+              以下 CUDA + 系统镜像组合的 Paddle 安装检查失败：
+              ${list}
+
+              Workflow: [查看运行详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+              @XieYunshen 请关注此问题。
+              `;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body,
+              labels: ['ci-failure', 'gpu', 'auto-generated'],
+              assignees: ['XieYunshen']
+            });
