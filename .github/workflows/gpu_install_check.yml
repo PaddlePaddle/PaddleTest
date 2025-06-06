@@ -7,10 +7,12 @@ on:
   schedule:
     - cron: "0 20 * * *"
 
+
 jobs:
   run-check:
     runs-on: [self-hosted, GPU-2Card]
     strategy:
+      max-parallel: 2
       matrix:
         cuda-version: ['cu118', 'cu126']
         images_version:
@@ -23,22 +25,39 @@ jobs:
       - name: Run Paddle installation check in Docker
         id: run_check
         continue-on-error: true
-        env:
-          CUDA_VERSION: ${{ matrix.cuda-version }}
         run: |
-          echo "Testing $CUDA_VERSION on ${{ matrix.images_version }}"
+          echo "Testing Cuda${{ matrix.cuda-version }} on ${{ matrix.images_version }}"
           docker run --rm --gpus all --net=host \
             ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddleqa:${{ matrix.images_version }} \
             /bin/bash -ec '
-              python3 -m pip install --pre paddlepaddle-gpu -i https://www.paddlepaddle.org.cn/packages/nightly/${{ CUDA_VERSION }}/ &&
+              python3 -m pip install --pre paddlepaddle-gpu -i https://www.paddlepaddle.org.cn/packages/nightly/${{ matrix.cuda-version }}/ &&
               python3 -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
-            '
+              exit 1
+            ' || result=$?
+          echo "result=$result"
+          if [ $result -ne 0 ]; then
+            echo "failed=true" >> $GITHUB_OUTPUT
+          else
+            echo "failed=false" >> $GITHUB_OUTPUT
+          fi
+          exit 0
+
+      - name: Print output
+        run: echo "Output failed=${{ steps.run_check.outputs.failed }}"
 
       - name: Record failure
-        if: failure()
+        if: steps.run_check.outputs.failed == 'true'
         run: |
           mkdir -p artifacts
           echo "${{ matrix.cuda-version }} | ${{ matrix.images_version }}" >> artifacts/failed.txt
+
+      - name: Upload failed list
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-combos
+          path: artifacts/failed.txt
+          if-no-files-found: ignore
 
       - name: Check if failure exists and create issue
         if: success() || failure()
@@ -48,7 +67,7 @@ jobs:
           script: |
             const fs = require('fs');
             const path = 'artifacts/failed.txt';
-            const issueTitle = '❌ Paddle GPU 安装验证失败';
+            const issueTitle = '❌ Paddle GPU 安装验证失败(Nightly)';
 
             if (!fs.existsSync(path)) {
               console.log('没有失败记录，无需创建 issue');
