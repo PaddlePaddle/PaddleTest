@@ -28,9 +28,8 @@ jobs:
           docker run --rm --gpus all --net=host \
             ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddleqa:${{ matrix.images_version }} \
             /bin/bash -ec '
-              #python3 -m pip install --pre paddlepaddle-gpu -i https://www.paddlepaddle.org.cn/packages/nightly/${{ matrix.cuda-version }}/ &&
-              #python3 -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
-              exit 1
+              python3 -m pip install --pre paddlepaddle-gpu -i https://www.paddlepaddle.org.cn/packages/nightly/${{ matrix.cuda-version }}/ &&
+              python3 -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
             ' || result=$?
           echo "result=$result"
           if [ $result -ne 0 ]; then
