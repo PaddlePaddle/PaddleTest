@@ -25,6 +25,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "Testing Cuda${{ matrix.cuda-version }} on ${{ matrix.images_version }}"
+          result=0
           docker run --rm --gpus all --net=host \
             ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddleqa:${{ matrix.images_version }} \
             /bin/bash -ec '
