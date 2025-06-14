@@ -45,8 +45,8 @@ def _randtool(dtype, low, high, shape):
 
 api = "paddle.inner"
 all_data = {
-    "x": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]},
-    "y": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]},
+    "x": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 2], "range": [-1, 1]},
+    "y": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 2], "range": [-1, 1]},
 }
 params = {}
 
