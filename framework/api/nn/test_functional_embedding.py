@@ -57,10 +57,7 @@ def cal_embedding(x, weight, padding_idx=None):
         padding_idx = weight.shape[0] + padding_idx if padding_idx < 0 else padding_idx
     res = []
     for i in x.flatten():
-        if i == padding_idx:
-            res.append([0] * embedding_dim)
-        else:
-            res.append(weight[i])
+        res.append(weight[i])
     return np.array(res).reshape(new_shape)
 
 
