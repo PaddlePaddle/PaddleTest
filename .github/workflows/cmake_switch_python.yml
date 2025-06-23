@@ -1,0 +1,144 @@
+name: PaddlePaddle CMake Wheel Build
+run-name: Runs on ${{ github.event_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      agile_branch:
+        description: 'Branch for compilation'
+        required: false
+        default: 'develop'
+      agile_revision:
+        description: 'Git commit or revision hash'
+        required: false
+        default: 'ef256258ca705ee3b4d709d7dec0332f33988c22'
+
+  workflow_call:
+    inputs:
+      agile_branch:
+        required: false
+        type: string
+        default: 'develop'
+      agile_revision:
+        required: false
+        type: string
+        default: 'ef256258ca705ee3b4d709d7dec0332f33988c22'
+
+  repository_dispatch:
+    types: [cebuild-mac-arm]
+
+jobs:
+  prepare-source:
+    runs-on: [self-hosted]
+    env:
+      AGILE_COMPILE_BRANCH: ${{ github.event.client_payload.agile_branch || github.event.inputs.agile_branch || inputs.agile_branch || 'develop' }}
+      AGILE_REVISION: ${{ github.event.client_payload.agile_revision || github.event.inputs.agile_revision || inputs.agile_revision || 'ef256258ca705ee3b4d709d7dec0332f33988c22' }}
+
+    steps:
+      - name: Prepare Paddle Source Code
+        id: set-output
+        run: |
+          set -xe
+          workspace=$(pwd)
+
+          echo "开始清空当前目录下所有文件..."
+          rm -rf "$workspace"/*
+          echo "当前目录已清空，开始重新下载 Paddle.tar..."
+          url="https://paddle-qa.bj.bcebos.com/CodeSync/${AGILE_COMPILE_BRANCH}/${AGILE_REVISION}/Paddle.tar"
+          wget -q --no-proxy ${url} --no-check-certificate || wget_failed=101
+          if [[ "${wget_failed}" == "101" ]]; then
+            echo "wget failed, start cloning..."
+            git clone https://github.com/PaddlePaddle/Paddle.git --depth=100 -b ${AGILE_COMPILE_BRANCH} Paddle
+          else
+            tar xf Paddle.tar
+          fi
+
+          cd Paddle
+          git reset --hard ${AGILE_REVISION}
+          git submodule update --init --recursive
+          git log -10
+          mkdir -p BUILD_RESULT
+
+  build-wheels:
+    runs-on: [self-hosted]
+    needs: prepare-source
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+    env:
+      AGILE_COMPILE_BRANCH: develop
+      AGILE_REVISION: ef256258ca705ee3b4d709d7dec0332f33988c22
+      GENERATOR: Ninja
+      MACOSX_DEPLOYMENT_TARGET: 10.11
+      PADDLE_DEV_NAME: paddlepaddle/paddle:dev
+      COVERALLS_UPLOAD: OFF
+      WITH_DEB: OFF
+      RUN_TEST: OFF
+      WITH_DISTRIBUTE: ON
+      WITH_FLUID_ONLY: ON
+      WITH_INFERENCE_API_TEST: OFF
+      INSTALL_PREFIX: /Users/paddle/CI_install_path
+      WITH_AVX: ON
+      PROC_RUN: 6
+      WITH_CACHE: ON
+      WITH_NIGHTLY_BUILD: ${IPIPE_WITH_NIGHTLY_BUILD}
+      NINJAJOBS: 6
+
+    steps:
+      - name: Prepare build environment
+        run: |
+          cd Paddle
+          GIT_COMMIT_TIME=$(git --no-pager show -s --format=%ci HEAD)
+          DATE_ONLY=$(echo $GIT_COMMIT_TIME | sed "s/ .*//;s/-//g")
+          echo "GIT_COMMIT_TIME=$GIT_COMMIT_TIME"
+          echo "DATE_ONLY=$DATE_ONLY"
+          if [[ "${WITH_NIGHTLY_BUILD}" == "ON" ]]; then
+            echo "PADDLE_VERSION_SUFFIX=.dev${DATE_ONLY}" >> $GITHUB_ENV
+          fi
+
+      - name: Build Paddle for Python ${{ matrix.python-version }}
+        run: |
+          cd Paddle
+          python${{ matrix.python-version }} -m venv myenv --clear
+          source myenv/bin/activate
+
+          echo "已切换到 Python 版本：$(python3 --version)"
+
+          python -m pip install -U pip
+          python -m pip install wheel setuptools
+          python -m pip install -r python/requirements.txt
+          python -m pip install -r paddle/scripts/compile_requirements.txt
+
+          bash -x paddle/scripts/paddle_build.sh mac_m1_arm || exit 1
+          cp ./build/python/dist/*.whl ./BUILD_RESULT || true
+          rm -rf ./build
+          
+  upload_bos:
+    environment: CodeSync
+    runs-on: [self-hosted]
+    needs: build-wheels
+    env:
+      AK: ${{ secrets.BOS_CREDENTIAL_AK }}
+      SK: ${{ secrets.BOS_CREDENTIAL_SK }}
+    steps:
+      - name: Setup Python 3.10 and Upload to BOS
+        run: |
+          cd Paddle
+          set -xe
+          PYTHON_BIN=python3.10
+          
+          $PYTHON_BIN -m venv myenv --clear
+          source myenv/bin/activate
+          python -m pip install bce-python-sdk==0.9.29
+
+          wget -q --no-proxy --no-check-certificate https://paddle-qa.bj.bcebos.com/CodeSync/develop/PaddlePaddle/PaddleTest/tools/bos_tools.py
+          push_file=$PWD/bos_tools.py
+
+          cd ./BUILD_RESULT
+
+          for whl_file in $(ls *.whl); do
+            python $push_file $whl_file ${whl_package}
+          done
+
