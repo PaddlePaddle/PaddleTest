@@ -173,7 +173,7 @@ class Run(object):
 
             return "none", "none"
         else:
-            Exception("unknown benchmark datebase mode, only support insert, select or non-db")
+            raise Exception("unknown benchmark database mode, only support insert, select or non-db")
 
     def _gt_upload(self):
         """精度groundtruth上传"""
