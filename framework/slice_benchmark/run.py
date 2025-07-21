@@ -151,13 +151,13 @@ class SliceTestRun(object):
         if isinstance(res, str):
             grade = res
         else:
-            if res <= -0.3:
+            if res <= -0.2:
                 grade = "worse"
-            elif -0.3 < res <= -0.15:
+            elif -0.2 < res <= -0.1:
                 grade = "doubt"
-            elif -0.15 < res <= 0.15:
+            elif -0.1 < res <= 0.1:
                 grade = "equal"
-            elif res > 0.15:
+            elif res > 0.1:
                 grade = "better"
         return grade
 
