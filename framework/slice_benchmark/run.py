@@ -210,6 +210,7 @@ if __name__ == "__main__":
     # baseline_res_dict = test.get_baseline()
     # print(baseline_res_dict)
 
-    # test.insert_baseline()
-
-    test.ci_test()
+    if os.environ["SLICE_TEST_MODE"] == "insert_baseline":
+        test.insert_baseline()
+    else:
+        test.ci_test()

@@ -9,5 +9,6 @@ export SLICE_BM_SEED="${SLICE_BM_SEED:-2025}"
 export SLICE_BENCHMARK_FRAMEWORKS="${SLICE_BENCHMARK_FRAMEWORKS:-paddle}"
 export SLICE_TEST_WHL="${SLICE_TEST_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuSome-LinuxCentos-Gcc82-Cuda118-Cudnn86-Trt85-Py310-CINN-Compile/latest/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl}"
 export SLICE_TEST_PY="${SLICE_TEST_PY:-python3.10}"
+export SLICE_TEST_MODE="${SLICE_TEST_MODE:-test_ci}" # 可选项: test_ci 测试, insert_baseline 录入基线
 
 export FLAGS_share_tensor_for_grad_tensor_holder=True
