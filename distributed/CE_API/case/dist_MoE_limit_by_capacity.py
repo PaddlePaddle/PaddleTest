@@ -20,6 +20,7 @@
 import numpy as np
 import paddle
 from paddle.distributed.models.moe import utils
+from paddle.distributed import ParallelEnv
 
 from utils import run_priority
 
@@ -59,7 +60,9 @@ class TestLimitByCapacityAPI(object):
         self.out = limit_by_capacity(self.expert_count, self.capacity, self.n_worker)
         self.expert_count = self.expert_count.astype("int64")
         self.capacity = self.capacity.astype("int64")
-        self.place = paddle.CUDAPlace(0)
+        dev_id = ParallelEnv().dev_id
+        self.place = paddle.CUDAPlace(dev_id)
+        # self.place = paddle.CUDAPlace(0)
 
     def setUp(self):
         """setUp"""

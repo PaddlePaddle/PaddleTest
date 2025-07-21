@@ -20,6 +20,7 @@
 import numpy as np
 import paddle
 from paddle.distributed.models.moe import utils
+from paddle.distributed import ParallelEnv
 
 from utils import run_priority
 
@@ -73,7 +74,10 @@ class TestAssignPosAPI(object):
         y = count(self.x, 16)
         self.cum_count = np.cumsum(y).astype(self.x.dtype)
         self.out = assign_pos(self.x, self.cum_count)
-        self.place = paddle.CUDAPlace(0)
+
+        dev_id = ParallelEnv().dev_id
+        self.place = paddle.CUDAPlace(dev_id)
+        # self.place = paddle.CUDAPlace(0)
 
     @run_priority(level="P0")
     def test_MoE_assign_pos_static(self):

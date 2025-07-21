@@ -45,7 +45,7 @@ def test_ShardingStage2():
     layer = MLP()
     batch = paddle.rand(shape=[8, 8])
     opt = paddle.optimizer.AdamW(parameters=layer.parameters())
-    opt = dist.shard_optimizer(opt, dist.ShardingStage2(mesh))
+    opt = dist.shard_optimizer(opt, dist.ShardingStage2("x", mesh))
     for _ in range(5):
         loss = layer(batch)
         loss.backward()

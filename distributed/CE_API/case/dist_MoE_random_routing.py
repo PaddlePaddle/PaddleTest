@@ -20,6 +20,7 @@
 import numpy as np
 import paddle
 from paddle.distributed.models.moe import utils
+from paddle.distributed import ParallelEnv
 
 from utils import run_priority
 
@@ -52,7 +53,9 @@ class TestRandomRoutingAPIFp32:
         self.prob = np.random.random((self.x.shape[0],)).astype(self.dtype)
         self.topk_value = np.random.random(self.x.shape).astype(self.dtype)
         self.out = random_routing(self.x, self.topk_value, self.prob).astype(self.dtype)
-        self.place = paddle.CUDAPlace(0)
+        dev_id = ParallelEnv().dev_id
+        self.place = paddle.CUDAPlace(dev_id)
+        # self.place = paddle.CUDAPlace(0)
 
     @run_priority(level="P0")
     def test_MoE_random_routing_dygraph(self):

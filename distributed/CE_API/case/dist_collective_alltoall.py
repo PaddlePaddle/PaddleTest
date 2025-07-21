@@ -43,7 +43,7 @@ def test_collective_alltoall():
             np_data2 = np.array([[19, 20, 21], [22, 23, 24]]).astype(t)
         data1 = paddle.to_tensor(np_data1)
         data2 = paddle.to_tensor(np_data2)
-        paddle.distributed.alltoall([data1, data2], out_tensor_list)
+        paddle.distributed.alltoall(out_tensor_list, [data1, data2])
         assert len(out_tensor_list) == 2
         print("test_collective_alltoall %s... ok" % t)
 

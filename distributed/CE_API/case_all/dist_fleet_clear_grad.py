@@ -1,0 +1,74 @@
+#!/bin/env python
+# -*- coding: utf-8 -*-
+# encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
+# ======================================================================
+#
+# Copyright (c) 2024 Baidu.com, Inc. All Rights Reserved
+#
+# ======================================================================
+"""
+/***************************************************************************
+  *
+  * Copyright (c) 2025 Baidu.com, Inc. All Rights Reserved
+  * @file dist_fleet_clear_grad.py
+  * @author lvkunpeng@baidu.com
+  * @date 2025-07-04
+  * @brief
+  *
+  **************************************************************************/
+"""
+import paddle
+import paddle.nn as nn
+from paddle.distributed import fleet
+from utils import run_priority
+
+
+class LinearNet(nn.Layer):
+    """LinearNet"""
+
+    def __init__(self):
+        super().__init__()
+        self._linear1 = nn.Linear(10, 10)
+        self._linear2 = nn.Linear(10, 1)
+
+    def forward(self, x):
+        """forward"""
+        return self._linear2(self._linear1(x))
+
+
+@run_priority(level="P0")
+def test_fleet_clear_grad():
+    """test_fleet_clear_grad"""
+    # 1. initialize fleet environment
+    fleet.init(is_collective=True)
+
+    # 2. create layer & optimizer
+    layer = LinearNet()
+    loss_fn = nn.MSELoss()
+    adam = paddle.optimizer.Adam(
+        learning_rate=0.001, parameters=layer.parameters())
+
+    # 3. get data_parallel model using fleet
+    adam = fleet.distributed_optimizer(adam)
+    dp_layer = fleet.distributed_model(layer)
+
+    # 4. run layer
+    inputs = paddle.randn([10, 10], dtype='float32')
+    outputs = dp_layer(inputs)
+    labels = paddle.randn([10, 1], dtype='float32')
+    loss = loss_fn(outputs, labels)
+
+    loss.backward()
+
+    adam.step()
+    adam.clear_grad()
+
+    for p in dp_layer.parameters():
+        if p.grad is not None:
+            assert paddle.all(p.grad == 0)
+
+    if fleet.worker_index() == 0:
+        print("test_fleet_clear_grad ... ok")
+
+if __name__ == "__main__":
+    test_fleet_clear_grad()

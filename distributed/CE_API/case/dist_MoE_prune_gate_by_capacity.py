@@ -20,6 +20,7 @@
 import numpy as np
 import paddle
 from paddle.distributed.models.moe import utils
+from paddle.distributed import ParallelEnv
 
 from utils import run_priority
 
@@ -86,7 +87,9 @@ class TestPruneGateByCapacityAPI(object):
         self.out = prune_gate_by_capacity(self.gate_idx, self.expert_count, self.n_expert, self.n_worker).astype(
             self.dtype
         )
-        self.place = paddle.CUDAPlace(0)
+        dev_id = ParallelEnv().dev_id
+        self.place = paddle.CUDAPlace(dev_id)
+        # self.place = paddle.CUDAPlace(0)
 
     def setUp(self):
         """setUp"""

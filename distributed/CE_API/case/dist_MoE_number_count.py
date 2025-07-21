@@ -20,6 +20,7 @@
 import numpy as np
 import paddle
 from paddle.distributed.models.moe import utils
+from paddle.distributed import ParallelEnv
 
 from utils import run_priority
 
@@ -41,7 +42,9 @@ class TestNumberCountAPI(object):
         self.upper_num = 320
         self.x = np.random.randint(-1, self.upper_num, size=(6000, 200)).astype("int64")
         self.out = count(self.x, self.upper_num)
-        self.place = paddle.CUDAPlace(0)
+        dev_id = ParallelEnv().dev_id
+        self.place = paddle.CUDAPlace(dev_id)
+        # self.place = paddle.CUDAPlace(0)
 
     @run_priority(level="P0")
     def test_MoE_number_count_static(self):
