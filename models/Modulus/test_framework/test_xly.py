@@ -427,5 +427,4 @@ if __name__ == "__main__":
     if not os.path.exists("html_result"):
         os.makedirs("html_result") 
     get_html("./test_data.json","./html_result/index.html")
-    send_email('auto_send@baidu.com',['suijiaxin@baidu.com'],'debug CE')
     sys.exit(code)
