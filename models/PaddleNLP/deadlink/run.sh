@@ -27,7 +27,7 @@ mkdir result
 cd result
 cp -r $root_path/${REPO}_${BRANCH}_md_result* ./
 NUM="$(grep 404 ${REPO}_${BRANCH}_md_result.txt | wc -l)"
-FAILLINK="$(grep 404 ${REPO}_${BRANCH}_md_result.txt )"
+FAILLINK="$(grep 404 ${REPO}_${BRANCH}_md_result.txt | wc -l)"
 if [ "${FAILLINK}" -gt "0" ]
 then
     echo "FAIL_NUM: " ${NUM} " links"
