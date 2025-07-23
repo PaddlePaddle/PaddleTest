@@ -1,4 +1,4 @@
-name: PaddlePaddle CMake Wheel Mac Arm Build
+name: PaddlePaddle CMake Wheel Build by Mac Arm
 run-name: Runs on ${{ github.event_name }}
 
 on:
