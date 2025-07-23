@@ -1,0 +1,42 @@
+global:
+  name: demo
+  baseline: ./baseline_output
+#  payload:
+#    top_p: 0.7
+
+
+cases:
+  - messages:
+      - role: system
+        content: You are a helpful assistant.
+      - role: user
+        content: 牛顿的三大运动定律是什么？
+
+  - messages:
+      - role: system
+        content: You are a helpful assistant.
+      - role: user
+        content: 世界上最大的哺乳动物是什么？
+
+  - messages:
+      - role: system
+        content: You are a helpful assistant.
+      - role: user
+        content: 小明比小红高，小红比小亮矮。那么谁最高？
+
+  - messages:
+      - role: system
+        content: You are a helpful assistant.
+      - role: user
+        content: 如果所有猫都会跳舞，而汤姆是猫。那么汤姆会跳舞吗？
+
+  - messages:
+      - role: system
+        content: You are a helpful assistant.
+      - role: user
+        content: |
+          华为公司面试官：一头牛重800公斤，一座桥承重700千克，问牛怎么过桥?
+          面试者:把牛卖了，买华为手机，带着华为手机过河，你懂的，华为手机就是牛！
+          面试官：你被录用了，有什么想说的吗？
+          面试者：告诉你一个秘密，我小名叫遥遥！
+          解释一下上面的含义。
