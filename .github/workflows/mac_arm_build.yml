@@ -37,7 +37,7 @@ on:
 
 jobs:
   prepare-build-upload:
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, MacOS-CPU]
     environment: CodeSync
     env:
       AGILE_COMPILE_BRANCH: ${{ github.event.client_payload.agile_branch || github.event.inputs.agile_branch || inputs.agile_branch || 'develop' }}
