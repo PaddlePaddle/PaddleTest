@@ -25,7 +25,7 @@ class SliceTestRun(object):
 
         self.wheel_link = os.environ.get("SLICE_TEST_WHL", None)
         self.py_version = os.environ.get("SLICE_TEST_PY", None)
-        self.framework = os.environ.get("SLICE_TEST_FRAMEWORK", "paddle")
+        self.framework = os.environ.get("SLICE_BENCHMARK_FRAMEWORKS", "paddle")
         self.db_config = "apibm_config.yml"
         self.bm = SliceBenchMark()
 
@@ -104,7 +104,7 @@ class SliceTestRun(object):
         db.update(table="slice_job", data=update_data, condition=f"id = {task_id}")
         return res_dict, fail_cases_list
 
-    def get_baseline(self):
+    def get_baseline(self, framework="paddle"):
         """
         获取基线数据
         """
@@ -113,7 +113,7 @@ class SliceTestRun(object):
         db = SliceBenchmarkDB(**db_config["Config"]["slice_benchmark"]["MYSQL"])
         baseline_id = db.select_by_condition(
             table="slice_job",
-            condition=f"comment = 'slice基线任务' and status = 'done' and md5_id = '{self.md5}' and base = 1",
+            condition=f"comment = 'slice基线任务' and framework = '{framework}' and status = 'done' and md5_id = '{self.md5}' and base = 1",
         )[-1]["id"]
 
         baseline_res_dict = db.select_by_condition(table="slice_case", condition=f"jid = {baseline_id}")
@@ -131,8 +131,20 @@ class SliceTestRun(object):
         ci 测试
         """
         latest_res_dict, fail_cases_list = self.run_test_and_insert_data(comment="slice测试CI任务", base=0)
-        baseline_res_dict = self.get_baseline()
+        baseline_res_dict = self.get_baseline(framework="paddle")
+        print("开始使用本次CI测试结果, 与paddle基线进行性能对比 =============================>")
         perf_compare_res_dict, fail_perf_dict = self.res_dict_compare(baseline_res_dict, latest_res_dict)
+        print("已完成paddle基线性能对比 =============================>")
+
+        # 打印torch性能对比信息
+        try:
+            print("开始使用本次CI测试结果, 与torch基线进行性能对比 =============================>")
+            torch_res_dict = self.get_baseline(framework="torch")
+            self.torch_res_dict_compare(torch_res_dict, latest_res_dict)
+            print("已完成torch基线性能对比 =============================>")
+        except Exception as e:
+            print(e)
+            print("未能完成torch基线性能对比")
 
         if len(fail_cases_list) > 0:
             print(f"slice测试失败, 存在功能失败case, 失败case有: {fail_cases_list}")
@@ -203,11 +215,33 @@ class SliceTestRun(object):
                 print(f"{case_name}: 基线数据不存在, 本次测试数据{perf_value}, 无对比值")
 
         return perf_compare_res_dict, fail_perf_dict
+    
+    def torch_res_dict_compare(self, torch_res_dict, latest_res_dict):
+        """
+        性能字典数据对比
+        """
+        fail_perf_dict = {}
+        perf_compare_res_dict = {}
+        for case_name_origin, perf_value in latest_res_dict.items():
+            case_name = case_name_origin.replace("paddle", "torch")
+            if case_name in torch_res_dict:
+                perf_compare_res, grade = self.perf_compare(torch_res_dict[case_name], perf_value)
+                if grade == "worse" or grade == "doubt":
+                    fail_perf_dict[case_name] = perf_compare_res
+                perf_compare_res_dict[case_name] = perf_compare_res
+                print(
+                    f"{case_name}: 基线数据{torch_res_dict[case_name]}, 本次测试数据{perf_value}, 相对性能提升{perf_compare_res}, 评分级别{grade}"
+                )
+            else:
+                perf_compare_res_dict[case_name] = "基线数据不存在"
+                print(f"{case_name}: 基线数据不存在, 本次测试数据{perf_value}, 无对比值")
+
+        return perf_compare_res_dict, fail_perf_dict
 
 
 if __name__ == "__main__":
     test = SliceTestRun()
-    # baseline_res_dict = test.get_baseline()
+    # baseline_res_dict = test.get_baseline(framework="paddle")
     # print(baseline_res_dict)
 
     if os.environ["SLICE_TEST_MODE"] == "insert_baseline":
