@@ -247,38 +247,59 @@ base_case = [
 
 
 def generate_test_cases(
-    dtypes=["float16"],
     frameworks=["paddle", "torch"],
 ):
     """
-    Generate test cases for different frameworks and dtypes.
+    Generate test cases for different frameworks.
     """
-    # 生成不同 dytpes 的测试用例
-    all_test_cases = []
+    # 1. getitem fp16 前向与反向
+    # 2. setitem fp16 前向与反向 (value is scalar)
+    # 3. setitem fp32 前向与反向 (value is tensor)
+    configurations = [
+        {"is_setitem": False, "is_tensor": False, "dtype": "float16"},
+        {"is_setitem": True, "is_tensor": False, "dtype": "float16"},
+        {"is_setitem": True, "is_tensor": True, "dtype": "float32"},
+    ]
+
+    # 存储未命名的 case 和其关联的 dtype
+    cases_without_name = []
+
     for case in base_case:
-        for is_setitem in [True, False]:
-            for is_grad in [True, False]:
-                for is_tensor in [True, False]:
-                    if not is_setitem and is_tensor:
-                        continue
-                    for dtype in dtypes:
-                        for framework in frameworks:
-                            api_name = "setitem" if is_setitem else "getitem"
-                            if is_setitem and is_tensor:
-                                api_name = "SetitemTensor"
-                            elif is_setitem:
-                                api_name = "Setitem"
-                            else:
-                                api_name = "Getitem"
-                            grad_name = "backward" if is_grad else "forward"
-                            case_with_dtype = replace(
-                                case,
-                                dtype=dtype,
-                                framework=framework,
-                                is_setitem=is_setitem,
-                                is_tensor=is_tensor,
-                                is_grad=is_grad,
-                                name=f"{api_name} - {grad_name} - {case.name} - {dtype} - {framework}",
-                            )
-                            all_test_cases.append(case_with_dtype)
-    return all_test_cases
+        for config in configurations:
+            for is_grad in [False, True]:
+                for framework in frameworks:
+
+                    # 创建一个新的 case 对象，不包含 name 和 dtype 字段
+                    # name 将在 generate_name 中添加
+                    unnamed_case = replace(
+                        case,
+                        framework=framework,
+                        is_setitem=config["is_setitem"],
+                        is_tensor=config["is_tensor"],
+                        is_grad=is_grad,
+                        dtype=config["dtype"],
+                    )
+                    cases_without_name.append(unnamed_case)
+
+    return generate_name(cases_without_name)
+
+
+def generate_name(cases_without_name):
+    case_with_name = []
+    for case in cases_without_name:
+        dtype = case.dtype
+        if case.is_setitem and case.is_tensor:
+            api_name = "SetitemTensor"
+        elif case.is_setitem:
+            api_name = "Setitem"
+        else:
+            api_name = "Getitem"
+
+        grad_name = "backward" if case.is_grad else "forward"
+
+        name = f"{api_name} - {grad_name} - {case.name} - {dtype} - {case.framework}"
+
+        named_case = replace(case, name=name)
+        case_with_name.append(named_case)
+
+    return case_with_name

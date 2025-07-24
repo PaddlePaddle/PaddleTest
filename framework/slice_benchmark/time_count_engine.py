@@ -94,7 +94,7 @@ class SliceBenchMark:
             paddle.set_device(f"gpu:{self.device_id}")
 
     def _load_case(self):
-        self.cases = generate_test_cases(frameworks=self.frameworks, dtypes=["float32"])
+        self.cases = generate_test_cases(frameworks=self.frameworks)
         cases_names = [case.name for case in self.cases]
         assert len(set(cases_names)) == len(cases_names), "Duplicate cases Error"
         pprint(f"Successfully load {len(self.cases)} cases:")
