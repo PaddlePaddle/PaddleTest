@@ -29,9 +29,10 @@ def get_base_port():
 PID_FILE = "pid_port"
 LOG_FILE = "server.log"
 base_port = get_base_port()
-FD_PORT = int(os.environ.get("FD_PORT", base_port + 1))
-FD_WORKER_QUEUE_PORT = int(os.environ.get("FD_WORKER_QUEUE_PORT", base_port + 2))
-FD_METRICS_PORT = int(os.environ.get("FD_METRICS_PORT", base_port + 3))
+FLASK_PORT = int(os.environ.get("FLASK_PORT", base_port + 1))
+FD_PORT = int(os.environ.get("FD_PORT", base_port + 2))
+FD_WORKER_QUEUE_PORT = int(os.environ.get("FD_WORKER_QUEUE_PORT", base_port + 3))
+FD_METRICS_PORT = int(os.environ.get("FD_METRICS_PORT", base_port + 4))
 DEFAULT_PARAMS = {
     "--port": FD_PORT,
     "--engine-worker-queue-port": FD_WORKER_QUEUE_PORT,
@@ -485,7 +486,8 @@ def wait_for_infer():
 
 
 if __name__ == '__main__':
+    print(f"FLASK_PORT: {FLASK_PORT}")
     print(f"FD_PORT: {FD_PORT}")
     print(f"FD_WORKER_QUEUE_PORT: {FD_WORKER_QUEUE_PORT}")
     print(f"FD_METRICS_PORT: {FD_METRICS_PORT}")
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=FLASK_PORT, debug=False)
