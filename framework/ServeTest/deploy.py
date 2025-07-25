@@ -30,12 +30,12 @@ PID_FILE = "pid_port"
 LOG_FILE = "server.log"
 base_port = get_base_port()
 FLASK_PORT = int(os.environ.get("FLASK_PORT", base_port + 1))
-FD_PORT = int(os.environ.get("FD_PORT", base_port + 2))
-FD_WORKER_QUEUE_PORT = int(os.environ.get("FD_WORKER_QUEUE_PORT", base_port + 3))
+FD_API_PORT = int(os.environ.get("FD_API_PORT", base_port + 2))
+FD_ENGINE_QUEUE_PORT = int(os.environ.get("FD_ENGINE_QUEUE_PORT", base_port + 3))
 FD_METRICS_PORT = int(os.environ.get("FD_METRICS_PORT", base_port + 4))
 DEFAULT_PARAMS = {
-    "--port": FD_PORT,
-    "--engine-worker-queue-port": FD_WORKER_QUEUE_PORT,
+    "--port": FD_API_PORT,
+    "--engine-worker-queue-port": FD_ENGINE_QUEUE_PORT,
     "--metrics-port": FD_METRICS_PORT,
     "--enable-logprob": True,
 }
@@ -162,7 +162,7 @@ def stop_server(signum=None, frame=None):
     except Exception as e:
         print(f"Failed to stop server: {e}")
 
-        for port in [FD_PORT, FD_WORKER_QUEUE_PORT, FD_METRICS_PORT]:
+        for port in [FD_API_PORT, FD_ENGINE_QUEUE_PORT, FD_METRICS_PORT]:
             try:
                 output = subprocess.check_output(f"lsof -i:{port} -t", shell=True).decode().strip()
                 for pid in output.splitlines():
@@ -203,11 +203,11 @@ def start_service():
 
         final_config = merge_configs(base_config, override_config)
 
-        global FD_PORT
-        global FD_WORKER_QUEUE_PORT
+        global FD_API_PORT
+        global FD_ENGINE_QUEUE_PORT
         global FD_METRICS_PORT
-        FD_PORT = final_config["--port"]
-        FD_WORKER_QUEUE_PORT = final_config["--engine-worker-queue-port"]
+        FD_API_PORT = final_config["--port"]
+        FD_ENGINE_QUEUE_PORT = final_config["--engine-worker-queue-port"]
         FD_METRICS_PORT = final_config["--metrics-port"]
 
         # 构建命令
@@ -246,8 +246,8 @@ def start_service():
             "log_file": LOG_FILE,
             "cmd": cmd,
             "port_info": {
-                "api_port": FD_PORT,
-                "queue_port": FD_WORKER_QUEUE_PORT,
+                "api_port": FD_API_PORT,
+                "queue_port": FD_ENGINE_QUEUE_PORT,
                 "metrics_port": FD_METRICS_PORT
             }
         }
@@ -279,11 +279,11 @@ def switch_service():
 
         final_config = merge_configs(base_config, override_config)
 
-        global FD_PORT
-        global FD_WORKER_QUEUE_PORT
+        global FD_API_PORT
+        global FD_ENGINE_QUEUE_PORT
         global FD_METRICS_PORT
-        FD_PORT = final_config["--port"]
-        FD_WORKER_QUEUE_PORT = final_config["--engine-worker-queue-port"]
+        FD_API_PORT = final_config["--port"]
+        FD_ENGINE_QUEUE_PORT = final_config["--engine-worker-queue-port"]
         FD_METRICS_PORT = final_config["--metrics-port"]
 
         # 构建命令
@@ -322,8 +322,8 @@ def switch_service():
             "log_file": LOG_FILE,
             "cmd": cmd,
             "port_info": {
-                "api_port": FD_PORT,
-                "queue_port": FD_WORKER_QUEUE_PORT,
+                "api_port": FD_API_PORT,
+                "queue_port": FD_ENGINE_QUEUE_PORT,
                 "metrics_port": FD_METRICS_PORT
             }
         }
@@ -355,8 +355,8 @@ def service_status():
 
     # 检查端口是否监听
     ports_status = {
-        "api_port": FD_PORT if is_port_in_use(FD_PORT) else None,
-        "queue_port": FD_WORKER_QUEUE_PORT if is_port_in_use(FD_WORKER_QUEUE_PORT) else None,
+        "api_port": FD_API_PORT if is_port_in_use(FD_API_PORT) else None,
+        "queue_port": FD_ENGINE_QUEUE_PORT if is_port_in_use(FD_ENGINE_QUEUE_PORT) else None,
         "metrics_port": FD_METRICS_PORT if is_port_in_use(FD_METRICS_PORT) else None
     }
 
@@ -449,8 +449,8 @@ def wait_for_infer():
 
             if health:
                 ports_status = {
-                    "api_port": FD_PORT if is_port_in_use(FD_PORT) else None,
-                    "queue_port": FD_WORKER_QUEUE_PORT if is_port_in_use(FD_WORKER_QUEUE_PORT) else None,
+                    "api_port": FD_API_PORT if is_port_in_use(FD_API_PORT) else None,
+                    "queue_port": FD_ENGINE_QUEUE_PORT if is_port_in_use(FD_ENGINE_QUEUE_PORT) else None,
                     "metrics_port": FD_METRICS_PORT if is_port_in_use(FD_METRICS_PORT) else None
                 }
                 msg["status"] = "服务启动完成"
@@ -487,7 +487,7 @@ def wait_for_infer():
 
 if __name__ == '__main__':
     print(f"FLASK_PORT: {FLASK_PORT}")
-    print(f"FD_PORT: {FD_PORT}")
-    print(f"FD_WORKER_QUEUE_PORT: {FD_WORKER_QUEUE_PORT}")
+    print(f"FD_API_PORT: {FD_API_PORT}")
+    print(f"FD_ENGINE_QUEUE_PORT: {FD_ENGINE_QUEUE_PORT}")
     print(f"FD_METRICS_PORT: {FD_METRICS_PORT}")
     app.run(host='0.0.0.0', port=FLASK_PORT, debug=False)
