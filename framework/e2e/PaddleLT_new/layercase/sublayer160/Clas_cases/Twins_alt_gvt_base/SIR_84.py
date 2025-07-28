@@ -31,7 +31,7 @@ class LayerCase(paddle.nn.Layer):
         var_2 = var_1.flatten(2)
         var_3 = var_2.transpose([0, 2, 1])
         var_4 = paddle.nn.functional.norm.layer_norm(var_3, normalized_shape=[96], weight=self.parameter_3, bias=self.parameter_2, epsilon=1e-05)
-        var_5 = paddle.nn.functional.common.dropout(var_4, p=0.0, axis=None, training=True, mode='upscale_in_train', name=None)
+        var_5 = paddle.nn.functional.common.dropout(var_4, p=0.0, axis=None, training=self.training, mode='upscale_in_train', name=None)
         return var_5
 
 
@@ -55,13 +55,12 @@ class TestLayer(unittest.TestCase):
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.base.core._set_prim_all_enabled(with_prim)
             if with_cinn:
-                build_strategy = paddle.static.BuildStrategy()
-                build_strategy.build_cinn_pass = True
-                net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+                assert with_prim, "with_cinn=True but with_prim=False is unsupported"
+                net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
             else:
-                net = paddle.jit.to_static(net, full_graph=True)
+                net = paddle.jit.to_static(net, backend=None, full_graph=True)
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs

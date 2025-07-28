@@ -19,7 +19,8 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [10, 3840, 1, 1], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_1 = paddle.nn.functional.common.dropout(var_0, p=0.2, axis=None, training=True, mode='upscale_in_train', name=None)
+        paddle.seed(33)
+        var_1 = paddle.nn.functional.common.dropout(var_0, p=0.2, axis=None, training=self.training, mode='upscale_in_train', name=None)
         var_2 = paddle.nn.functional.conv._conv_nd(var_1, self.parameter_0, bias=self.parameter_1, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         var_3 = var_2.squeeze(axis=-1)
         var_4 = var_3.squeeze(axis=-1)
@@ -27,9 +28,9 @@ class LayerCase(paddle.nn.Layer):
 
 
 
-def create_inputspec(): 
-    inputspec = ( 
-        paddle.static.InputSpec(shape=(-1, 3840, -1, -1), dtype=paddle.float32, stop_gradient=False), 
+def create_inputspec():
+    inputspec = (
+        paddle.static.InputSpec(shape=(-1, 3840, -1, -1), dtype=paddle.float32, stop_gradient=False),
     )
     return inputspec
 
@@ -53,14 +54,13 @@ class TestLayer(unittest.TestCase):
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.base.core._set_prim_all_enabled(with_prim)
             if with_cinn:
-                build_strategy = paddle.static.BuildStrategy()
-                build_strategy.build_cinn_pass = True
-                net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+                assert with_prim, "with_cinn=True but with_prim=False is unsupported"
+                net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
             else:
-                net = paddle.jit.to_static(net, full_graph=True)
-        paddle.seed(123)
+                net = paddle.jit.to_static(net, backend=None, full_graph=True)
+        paddle.seed(33)
         outs = net(*self.inputs)
         return outs
     def test_ast_prim_cinn(self):

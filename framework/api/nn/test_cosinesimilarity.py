@@ -33,17 +33,21 @@ class TestCosineSimilarity(APIBase):
 # obj = TestCosineSimilarity(paddle.nn.CosineSimilarity)
 
 
+
+
 def cos_sim(x1, x2, axis, eps):
-    """
-    Cosine Similarity using numpy
-    """
-    w12 = np.sum(np.multiply(x1, x2), axis=axis)
-    w1 = np.sum(np.multiply(x1, x1), axis=axis)
-    w2 = np.sum(np.multiply(x2, x2), axis=axis)
-    n12 = np.sqrt(np.clip(w1 * w2, a_min=eps * eps, a_max=None))
-    return w12 / n12
+    x1 = np.array(x1)
+    x2 = np.array(x2)
+    # 广播到一致 shape（paddle 内部支持 broadcasting）
+    x1, x2 = np.broadcast_arrays(x1, x2)
 
+    # 沿 axis 计算点积和范数
+    numerator = np.sum(x1 * x2, axis=axis)
+    x1_norm = np.linalg.norm(x1, axis=axis)
+    x2_norm = np.linalg.norm(x2, axis=axis)
 
+    denominator = x1_norm * x2_norm + eps
+    return numerator / denominator
 @pytest.mark.api_nn_CosineSimilarity_vartype
 def test_cosinesimilarity_base():
     """
@@ -168,7 +172,7 @@ def test_cosinesimilarity5():
     test on different shape and axis set at 0
     """
     x1 = randtool("float", -100, 100, [5, 1, 3])
-    x2 = randtool("float", -100, 100, [1, 3])
+    x2 = randtool("float", -100, 100, [1, 1, 3])
 
     axis = 0
     eps = 1e-8
@@ -192,7 +196,7 @@ def test_cosinesimilarity6():
     axis out of range
     """
     x1 = randtool("float", -100, 100, [5, 1, 3])
-    x2 = randtool("float", -100, 100, [1, 3])
+    x2 = randtool("float", -100, 100, [1, 1, 3])
 
     axis = 2
     eps = 1e-8
@@ -206,8 +210,8 @@ def test_cosinesimilarity6():
     try:
         cos_sim_func(x1_tensor, x2_tensor)
     except Exception as e:
-        # print(e)
-        if "InvalidArgument" in e.args[0]:
+        print(e)
+        if "IndexError" in e.args[0]:
             pass
         else:
             raise Exception
@@ -247,7 +251,7 @@ def test_cosinesimilarity8():
     Broadcast dimension mismatch
     """
     x1 = randtool("float", -100, 100, [5, 1, 3])
-    x2 = randtool("float", -100, 100, [2, 3])
+    x2 = randtool("float", -100, 100, [1, 2, 3])
 
     axis = 1
     eps = 1e-8

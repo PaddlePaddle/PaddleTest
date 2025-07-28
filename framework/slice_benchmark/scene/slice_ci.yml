@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# 最外层测试入口, 通过环境变量设定测试相关的一切信息(除了docker/whl/py以外)
+export SLICE_BENCHMARK_DEVICE="${SLICE_BENCHMARK_DEVICE:-gpu}"
+export SLICE_BENCHMARK_DEVICE_ID="${SLICE_BENCHMARK_DEVICE_ID:-0}"
+export SLICE_BENCHMARK_REPEAT="${SLICE_BENCHMARK_REPEAT:-50}" 
+export SLICE_BENCHMARK_WARMUP="${SLICE_BENCHMARK_WARMUP:-5}"
+export SLICE_BM_SEED="${SLICE_BM_SEED:-2025}"
+export SLICE_BENCHMARK_FRAMEWORKS="${SLICE_BENCHMARK_FRAMEWORKS:-paddle}"
+export SLICE_TEST_WHL="${SLICE_TEST_WHL:-https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuSome-LinuxCentos-Gcc82-Cuda118-Cudnn86-Trt85-Py310-CINN-Compile/latest/paddlepaddle_gpu-0.0.0-cp310-cp310-linux_x86_64.whl}"
+export SLICE_TEST_PY="${SLICE_TEST_PY:-python3.10}"
+export SLICE_TEST_MODE="${SLICE_TEST_MODE:-test_ci}" # 可选项: test_ci 测试, insert_baseline 录入基线
+
+export FLAGS_share_tensor_for_grad_tensor_holder=True

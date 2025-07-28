@@ -9,7 +9,7 @@ fi
 exit_code=0
 
 export MODEL_NAME="runwayml/stable-diffusion-v1-5"
-export DATASET_NAME="lambdalabs/pokemon-blip-captions"
+export DATASET_NAME="lambdalabs/naruto-blip-captions"
 export OUTPUT_DIR="sd-pokemon-model"
 
 echo "*******text_to_image single_train begin***********"
@@ -140,7 +140,7 @@ rm -rf ${OUTPUT_DIR}
 # sdxl
 export MODEL_NAME="stabilityai/stable-diffusion-xl-base-1.0"
 export VAE_NAME="madebyollin/sdxl-vae-fp16-fix"
-export DATASET_NAME="lambdalabs/pokemon-blip-captions"
+export DATASET_NAME="lambdalabs/naruto-blip-captions"
 RESOLUTION=768
 # export OUTPUT_DIR="sd-pokemon-model-sdxl"
 

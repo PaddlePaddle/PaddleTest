@@ -48,12 +48,12 @@ class LayerCase(paddle.nn.Layer):
         var_11 = var_7.matmul(var_10)
         var_12 = var_11.__add__(var_1)
         var_13 = paddle.nn.functional.activation.softmax(var_12, axis=-1)
-        var_14 = paddle.nn.functional.common.dropout(var_13, p=0.0, axis=None, training=True, mode='upscale_in_train', name=None)
+        var_14 = paddle.nn.functional.common.dropout(var_13, p=0.0, axis=None, training=self.training, mode='upscale_in_train', name=None)
         var_15 = var_14.matmul(var_9)
         var_16 = var_15.transpose((0, 2, 1, 3,))
         var_17 = var_16.reshape((0, -1, 128,))
         var_18 = paddle.nn.functional.common.linear(x=var_17, weight=self.parameter_5, bias=self.parameter_2, name=None)
-        var_19 = paddle.nn.functional.common.dropout(var_18, p=0.0, axis=None, training=True, mode='upscale_in_train', name=None)
+        var_19 = paddle.nn.functional.common.dropout(var_18, p=0.0, axis=None, training=self.training, mode='upscale_in_train', name=None)
         return var_19
 
 
@@ -79,13 +79,12 @@ class TestLayer(unittest.TestCase):
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.base.core._set_prim_all_enabled(with_prim)
             if with_cinn:
-                build_strategy = paddle.static.BuildStrategy()
-                build_strategy.build_cinn_pass = True
-                net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+                assert with_prim, "with_cinn=True but with_prim=False is unsupported"
+                net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
             else:
-                net = paddle.jit.to_static(net, full_graph=True)
+                net = paddle.jit.to_static(net, backend=None, full_graph=True)
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs

@@ -8,6 +8,7 @@ import unittest
 import numpy as np
 from dataclasses import dataclass
 import typing as t
+import itertools
 
 @dataclass
 class Stage:
@@ -50,7 +51,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=True,
-        ), 
+        ),
     ),
     Stage(
         name="backend",
@@ -61,7 +62,7 @@ cinn_stages = [
             FLAGS_use_cinn=True,
             FLAGS_check_infer_symbolic=False,
             FLAGS_enable_fusion_fallback=False,
-        ), 
+        ),
     ),
 ]
 
@@ -98,26 +99,60 @@ def IsCinnStageEnableDiff():
         assert GetCurrentCinnStage() is not None
     return enabled
 
-last_cinn_stage_exit_code = None
-def LastCINNStageFailed():
-    global last_cinn_stage_exit_code
-    if last_cinn_stage_exit_code is not None:
-        return last_cinn_stage_exit_code != 0
-    last_stage = GetPrevCinnStage(GetCurrentCinnStage())
+def GetExitCodeAndStdErr(cmd, env):
+    env = {
+        k:v
+        for k, v in env.items()
+        if v is not None
+    }
+    import subprocess
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=env,
+    )
+    return result.returncode, result.stderr
+
+def GetStageExitCodeAndStdErr(stage):
+    return GetExitCodeAndStdErr(
+        [sys.executable, __file__],
+        env=dict(
+            PADDLE_DEBUG_CINN_STAGE_NAME=stage.name,
+            PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
+            PYTHONPATH=os.getenv('PYTHONPATH'),
+            ATHENA_ENABLE_TRY_RUN="False",
+        ),
+    )
+
+def AthenaTryRunEnabled():
+    return os.getenv('ATHENA_ENABLE_TRY_RUN') not in {
+        "0",
+        "False",
+        "false",
+        "OFF"
+    }
+
+def GetNeedSkipAndSkipMessage():
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    if not IsCinnStageEnableDiff():
+        return False, ""
+    last_stage = GetPrevCinnStage(current_stage)
     if last_stage is None:
-        return False
-    env_vars = dict(
-        PADDLE_DEBUG_CINN_STAGE_NAME=last_stage.name,
-        PADDLE_DEBUG_CINN_STAGE_ENABLE_DIFF='0',
-    )
-    env_vars_str = " ".join(
-        f"{env_var}={value}"
-        for env_var, value in env_vars.items()
-    )
-    last_cinn_stage_exit_code = os.system(
-        f"{env_vars_str} {sys.executable} {__file__} > /dev/null 2>&1"
-    )
-    return last_cinn_stage_exit_code != 0
+        return False, ""
+    exitcode, stderr = GetStageExitCodeAndStdErr(last_stage)
+    if exitcode != 0:
+        return True, "last stage failed."
+    return False, ""
+
+def GetCurrentStageTryRunExitCodeAndStdErr():
+    if not AthenaTryRunEnabled():
+        return False, ""
+    current_stage = GetCurrentCinnStage()
+    assert current_stage is not None
+    return GetStageExitCodeAndStdErr(current_stage)
 
 def SetDefaultEnv(**env_var2value):
     for env_var, value in env_var2value.items():
@@ -141,6 +176,10 @@ import paddle
 def SetEnvVar(env_var2value):
     for env_var, value in env_var2value.items():
         os.environ[env_var] = str(value)
+    if env_var2value.get("FLAGS_prim_all") is not None:
+        prim_all_value = env_var2value.pop("FLAGS_prim_all")
+        env_var2value["FLAGS_prim_forward"] = prim_all_value
+        env_var2value["FLAGS_prim_backward"] = prim_all_value
     paddle.set_flags({
         env_var:value
         for env_var, value in env_var2value.items()
@@ -194,12 +233,11 @@ def IsInteger(dtype):
     return np.dtype(dtype).char in np.typecodes['AllInteger']
 
 def ApplyToStatic(net, use_cinn):
-    build_strategy = paddle.static.BuildStrategy()
-    build_strategy.build_cinn_pass = use_cinn
+    backend = "CINN" if use_cinn else None
     return paddle.jit.to_static(
         net,
         input_spec=net.get_input_spec(),
-        build_strategy=build_strategy,
+        backend=backend,
         full_graph=True,
     )
 
@@ -236,7 +274,7 @@ class CinnTestBase:
         paddle.seed(2024)
         self.prepare_data()
 
-    def test_train(self):
+    def _test_entry(self):
         dy_outs = self.train(use_cinn=False)
         cinn_outs = self.train(use_cinn=GetEnvVarEnableCinn())
 
@@ -255,7 +293,7 @@ class CinnTestBase:
         paddle.seed(2024)
         out = net(*self.inputs)
         return out
-    
+
     def prepare_data(self):
         self.inputs = self.get_inputs()
         for input in self.inputs:
@@ -287,9 +325,24 @@ class CinnTestBase:
 
 
 
-last_stage_failed = (IsCinnStageEnableDiff() and LastCINNStageFailed())
+need_skip, skip_message = GetNeedSkipAndSkipMessage()
+try_run_exit_code, try_run_stderr = GetCurrentStageTryRunExitCodeAndStdErr()
+class TestTryRun(unittest.TestCase):
+    def test_panic(self):
+        if not AthenaTryRunEnabled():
+            return
+        if try_run_exit_code == 0:
+            # All unittest cases passed.
+            return
+        if try_run_exit_code > 0:
+            # program failed but not panic.
+            return
+        # program panicked.
+        kOutputLimit = 65536
+        message = try_run_stderr[-kOutputLimit:]
+        raise RuntimeError(f"panicked. last {kOutputLimit} characters of stderr: \n{message}")
 class PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -303,39 +356,59 @@ class PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_91a85761701982e53d3c9aefee45ccec(CinnTestBase, unittest.TestCase):
-    
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_eb099f0001fff0bf6795d369635c6928(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.04714285582304001]], [[0.24956832826137543]], [[0.06141399219632149]], [[0.27293410897254944]], [[0.020540714263916016]], [[0.47400450706481934]]], dtype='float32').reshape([6, 1, 1]),
-            paddle.to_tensor([[[0.6053178310394287]], [[0.6067324876785278]], [[0.7563060522079468]], [[0.6030699014663696]], [[0.6912596821784973]], [[0.6188269853591919]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.4903222918510437]], [[0.017263727262616158]], [[0.18628959357738495]], [[0.49630385637283325]], [[0.09281773865222931]], [[0.2962408661842346]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.5850968956947327]], [[0.5074724555015564]], [[0.6066060066223145]], [[0.8039957284927368]], [[0.5899691581726074]], [[0.6660019159317017]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_02ce98b787078fb5db949c316ce3dc84(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ce375dbcec06c9eeac07667add12d278(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
     def get_inputs(self):
         return [
-            paddle.to_tensor([[[0.43553808331489563]], [[0.202225923538208]], [[0.1559573858976364]], [[0.39463528990745544]], [[0.45692548155784607]], [[0.21347668766975403]]], dtype='float32').reshape([6, 1, 1]),
-            paddle.to_tensor([[[0.6967204213142395]], [[0.5455881357192993]], [[0.774244487285614]], [[0.5381509065628052]], [[0.5265048742294312]], [[0.7456739544868469]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.19032423198223114]], [[0.4854525625705719]], [[0.26192378997802734]], [[0.3409883975982666]], [[0.2677820026874542]], [[0.31758973002433777]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.7518750429153442]], [[0.6700993180274963]], [[0.5388509035110474]], [[0.7544915676116943]], [[0.5203503370285034]], [[0.7041540741920471]]], dtype='float32').reshape([6, 1, 1]),
         ]
 
 
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -349,15 +422,16 @@ class PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, None, None, None, None], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None, None, None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
     def get_inputs(self):
@@ -367,81 +441,18 @@ class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -455,15 +466,16 @@ class PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, None], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_a929203e3767fdbf9f28631d4035808b(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
     def get_inputs(self):
@@ -473,9 +485,19 @@ class TestPrimitiveOp_a929203e3767fdbf9f28631d4035808b(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
     def get_inputs(self):
@@ -485,81 +507,19 @@ class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_7837eb9c20d5f70502fabaaf04eced81(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
     def get_inputs(self):
@@ -569,9 +529,4022 @@ class TestPrimitiveOp_7837eb9c20d5f70502fabaaf04eced81(CinnTestBase, unittest.Te
         ]
 
 
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_75aeed24fc04a1265ee35faaeb56814b(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 12096, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 12096, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_af7abc8f3c07a92290a9b6159b7d361b(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([8, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([8, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7(InstanceTrait, paddle.nn.Layer):
+
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1):
+        input_0 = arg_0
+        input_1 = arg_1
+        return input_0 - input_1
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, None, None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None, None, None], dtype='float32'),
+        ]
+
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_87d269adc9beade292d159442257c398(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[[[0.10314705222845078, 0.4166870415210724]], [[0.39106929302215576, 0.08782759308815002]], [[0.12779450416564941, 0.1573505848646164]], [[0.1394997388124466, 0.21213169395923615]], [[0.18512240052223206, 0.08317950367927551]], [[0.3243594765663147, 0.45078641176223755]]]], dtype='float32').reshape([1, 6, 1, 2]),
+            paddle.to_tensor([[[[0.028633873909711838, 0.306168794631958]], [[0.3193291425704956, 0.09081225097179413]], [[0.08506157994270325, 0.29002857208251953]], [[0.04719119146466255, 0.3807370364665985]], [[0.11347969621419907, 0.4741647243499756]], [[0.32951560616493225, 0.25431615114212036]]]], dtype='float32').reshape([1, 6, 1, 2]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e9005032449bd776bfb9304806141b5f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[[[0.19120168685913086, 0.44401031732559204]], [[0.08718405663967133, 0.4174824655056]], [[0.020174739882349968, 0.04101495072245598]], [[0.09167716652154922, 0.4122407138347626]], [[0.3388717770576477, 0.13130366802215576]], [[0.19049964845180511, 0.4378237724304199]]]], dtype='float32').reshape([1, 6, 1, 2]),
+            paddle.to_tensor([[[[0.028633873909711838, 0.306168794631958]], [[0.3193291425704956, 0.09081225097179413]], [[0.08506157994270325, 0.29002857208251953]], [[0.04719119146466255, 0.3807370364665985]], [[0.11347969621419907, 0.4741647243499756]], [[0.32951560616493225, 0.25431615114212036]]]], dtype='float32').reshape([1, 6, 1, 2]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_fefef4bdfcd9cce79c39c609f2e20ff5(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 1, 21824, 2], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([[[[0.018874194473028183, 0.3943251371383667]], [[0.489003986120224, 0.09215033799409866]], [[0.4628400206565857, 0.35706427693367004]], [[0.056388091295957565, 0.28063154220581055]], [[0.12517590820789337, 0.21209801733493805]], [[0.03224913030862808, 0.1864347755908966]]]], dtype='float32').reshape([1, 6, 1, 2]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_99bddb5fd63ecd93cc59d50704818428(InstanceTrait, paddle.nn.Layer):
+
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1):
+        input_0 = arg_0
+        input_1 = arg_1
+        return input_0 - input_1
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None], dtype='float32'),
+        ]
+
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ccfe353d4249fe863d4248942eb4fa87(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([16]),
+            paddle.to_tensor([0.2909735143184662, 0.010913570411503315, 0.0806470587849617, 0.4106960594654083, 0.4162905514240265, 0.36055994033813477, 0.3140185475349426, 0.003748880932107568, 0.04940030723810196, 0.2235841155052185, 0.0921073630452156, 0.17765606939792633, 0.37185192108154297, 0.493120938539505, 0.45139777660369873, 0.33103498816490173], dtype='float32').reshape([16]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_52d045906ed4f7bbcb72db184420aba6(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.2909735143184662, 0.010913570411503315, 0.0806470587849617, 0.4106960594654083, 0.4162905514240265, 0.36055994033813477, 0.3140185475349426, 0.003748880932107568, 0.04940030723810196, 0.2235841155052185, 0.0921073630452156, 0.17765606939792633, 0.37185192108154297, 0.493120938539505, 0.45139777660369873, 0.33103498816490173], dtype='float32').reshape([16]),
+            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([16]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_372aad51121867288b938e82c520cce6(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.uniform([300], dtype='float32', min=0, max=0.5),
+            paddle.uniform([300], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_6e02c6ca3972717e5b5b70e1ebc41e36(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([53, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([53, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_46108a7e718b8a74de52e964e79844c4(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([1843, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5041acbd54fa82e0e4fbd0e09bd4d2e8(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b(InstanceTrait, paddle.nn.Layer):
+
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1):
+        input_0 = arg_0
+        input_1 = arg_1
+        return input_0 - input_1
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+        ]
+
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_52d6c0904952e02947e994d334c88237(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d(InstanceTrait, paddle.nn.Layer):
+
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1):
+        input_0 = arg_0
+        input_1 = arg_1
+        return input_0 - input_1
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
+            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
+        ]
+
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_38dc692e168c69c6d9272c552d7727e9(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_d109edba22197a28f327a5ce013141b7(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.18990939855575562, 0.1248941719532013, 0.008715460076928139, 0.21032527089118958], [0.41519421339035034, 0.15251046419143677, 0.16149607300758362, 0.03320919722318649], [0.48878535628318787, 0.1396007090806961, 0.2985183000564575, 0.4686850309371948], [0.03975801542401314, 0.08918409049510956, 0.28840014338493347, 0.23289448022842407], [0.1120392307639122, 0.4989103078842163, 0.18055790662765503, 0.17557470500469208]], dtype='float32').reshape([5, 4]),
+            paddle.to_tensor([[0.18163979053497314, 0.024795718491077423, 0.4699985682964325, 0.19071434438228607], [0.40156644582748413, 0.14831048250198364, 0.3825436234474182, 0.06344301998615265], [0.0646076649427414, 0.4657474756240845, 0.21960116922855377, 0.08167774975299835], [0.04965473711490631, 0.17732058465480804, 0.2329808622598648, 0.46616584062576294], [0.04275279864668846, 0.43736329674720764, 0.38577529788017273, 0.032283488661050797]], dtype='float32').reshape([5, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_753e4f9951039e8fb6243310705899f2(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 5376, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 5376, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f5fa8fd6e8dbb3ede852ba786a043675(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.1260291039943695, 0.15440817177295685, 0.44132575392723083, 0.23122310638427734], [0.06492435932159424, 0.1747225522994995, 0.3389858603477478, 0.19406650960445404], [0.23776832222938538, 0.08723751455545425, 0.4276411235332489, 0.47581541538238525], [0.06492435932159424, 0.1747225522994995, 0.3389858603477478, 0.19406650960445404], [0.23776832222938538, 0.08723751455545425, 0.4276411235332489, 0.47581541538238525]], dtype='float32').reshape([5, 4]),
+            paddle.to_tensor([[0.3867417275905609, 0.4711776077747345, 0.14979702234268188, 0.1971801221370697], [0.08052731305360794, 0.054691899567842484, 0.08715111017227173, 0.29852408170700073], [0.31692051887512207, 0.0038026263937354088, 0.19727309048175812, 0.41226065158843994], [0.08052731305360794, 0.054691899567842484, 0.08715111017227173, 0.29852408170700073], [0.31692051887512207, 0.0038026263937354088, 0.19727309048175812, 0.41226065158843994]], dtype='float32').reshape([5, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a2946d84238f53ce27cca88f4db87352(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.3040970265865326], [0.14878807961940765], [0.10303381830453873], [0.2967050075531006], [0.25913557410240173], [0.3326629102230072], [0.00745149701833725], [0.07239554077386856], [0.18927383422851562]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.059051621705293655], [0.3663615584373474], [0.19655629992485046], [0.2655533254146576], [0.11371004581451416], [0.4892984926700592], [0.1961444914340973], [0.37420839071273804], [0.28486770391464233]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ec6ed9c8556d25c4c545a32cfbacf0cf(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.09477832168340683], [0.034025467932224274], [0.10373926907777786], [0.18074949085712433], [0.021398765966296196], [0.28882426023483276], [0.0583321675658226], [0.009847324341535568], [0.10192611813545227]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.3668404221534729], [0.49808135628700256], [0.4367183446884155], [0.4672515094280243], [0.2122543603181839], [0.3522672653198242], [0.4979040324687958], [0.4118877649307251], [0.1997719407081604]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_b6f4cb06e460510d2ab01209f9e7d5ba(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.3040970265865326], [0.14878807961940765], [0.49822190403938293], [0.4209156930446625], [0.25913557410240173], [0.3326629102230072], [0.04537851735949516], [0.4687543213367462], [0.3520947992801666]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.0376352034509182], [0.04618304222822189], [0.19655629992485046], [0.2655533254146576], [0.07565709203481674], [0.4892984926700592], [0.1961444914340973], [0.37420839071273804], [0.28486770391464233]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a010f5b08aa8f0ce7852505a49f7e0ab(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.09477832168340683], [0.034025467932224274], [0.19512628018856049], [0.2819446623325348], [0.021398765966296196], [0.4702199399471283], [0.48925352096557617], [0.009847324341535568], [0.10192611813545227]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.3668404221534729], [0.25006723403930664], [0.4367183446884155], [0.3702875077724457], [0.01806609332561493], [0.3522672653198242], [0.4979040324687958], [0.4118877649307251], [0.1997719407081604]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_6e947e8fa7473285a2e40c92aa976900(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.4014131426811218], [0.22237733006477356], [0.10303381830453873], [0.2967050075531006], [0.4305284917354584], [0.34510764479637146], [0.00745149701833725], [0.07239554077386856], [0.18927383422851562]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.059051621705293655], [0.3663615584373474], [0.11374413222074509], [0.05777735263109207], [0.11371004581451416], [0.33100050687789917], [0.13957619667053223], [0.23278938233852386], [0.17369438707828522]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_b48d272c12bbd7145344fcb9f949139e(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.3714483380317688], [0.40653151273727417], [0.10373926907777786], [0.18074949085712433], [0.06578893959522247], [0.28882426023483276], [0.0583321675658226], [0.4913760721683502], [0.3878237009048462]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.03673207759857178], [0.49808135628700256], [0.20493631064891815], [0.4672515094280243], [0.2122543603181839], [0.12291333824396133], [0.29448965191841125], [0.30679893493652344], [0.03264906257390976]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_6f249e979a0d0b2f0f9017ab34254d66(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.042099811136722565], [-0.008985240943729877], [-0.07179616391658783], [-0.08217840641736984], [-0.04579147323966026], [-0.01613505743443966], [0.03250643610954285], [-0.06761632859706879], [-0.0010444661602377892]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_61b9c5109b61635609356188467c1af2(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.4014131426811218], [0.22237733006477356], [0.49822190403938293], [0.4209156930446625], [0.4305284917354584], [0.34510764479637146], [0.04537851735949516], [0.4687543213367462], [0.3520947992801666]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.0376352034509182], [0.04618304222822189], [0.11374413222074509], [0.05777735263109207], [0.07565709203481674], [0.33100050687789917], [0.13957619667053223], [0.23278938233852386], [0.17369438707828522]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9b1e0453e3828f85bda07e573686950f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.3714483380317688], [0.40653151273727417], [0.19512628018856049], [0.2819446623325348], [0.06578893959522247], [0.4702199399471283], [0.48925352096557617], [0.4913760721683502], [0.3878237009048462]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.03673207759857178], [0.25006723403930664], [0.20493631064891815], [0.3702875077724457], [0.01806609332561493], [0.12291333824396133], [0.29448965191841125], [0.30679893493652344], [0.03264906257390976]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_91b3c8771668c91b55a39deeb88d391c(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.12176238745450974], [0.027568111196160316], [-0.003771738614886999], [-0.03208067640662193], [0.016935473307967186], [0.004899502266198397], [-0.018346304073929787], [0.043553732335567474], [0.06336329877376556]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.042099811136722565], [-0.008985240943729877], [-0.07179616391658783], [-0.08217840641736984], [-0.04579147323966026], [-0.01613505743443966], [0.03250643610954285], [-0.06761632859706879], [-0.0010444660438224673]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_04ce7972960f2010ef98fd8aca4a31c0(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.0], [-0.0], [-0.0], [-0.0], [-0.0], [-0.0], [0.0], [-0.0], [-0.0]], dtype='float32').reshape([9, 1]),
+            paddle.to_tensor([[0.6542461514472961], [1.325928807258606], [-18.035297393798828], [-1.5616170167922974], [3.7038791179656982], [4.293203353881836], [2.771824598312378], [2.552480697631836], [1.0164837837219238]], dtype='float32').reshape([9, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1b2649627c56cc22f68d3cbea932371b(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 21824, 15], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 21824, 15], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_fbacd960e0fe2310355ff69289a7e3a1(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[[0.26062268018722534]], [[0.2570710778236389]], [[0.04414169862866402]], [[0.4075968861579895]], [[0.16307249665260315]], [[0.10365521907806396]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.5722702741622925]], [[0.5543661713600159]], [[0.7235136032104492]], [[0.6537460684776306]], [[0.5871701836585999]], [[0.6656426191329956]]], dtype='float32').reshape([6, 1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_024c5b64e54e5bca60361ee32613f26f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[[0.2581157684326172]], [[0.31390249729156494]], [[0.0015883301384747028]], [[0.03974016010761261]], [[0.008811354637145996]], [[0.026530742645263672]]], dtype='float32').reshape([6, 1, 1]),
+            paddle.to_tensor([[[0.6381211876869202]], [[0.780073344707489]], [[0.5910294651985168]], [[0.8165431618690491]], [[0.7205658555030823]], [[0.6160933375358582]]], dtype='float32').reshape([6, 1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f4efdd4f4553731eda82c2570b8cda74(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 1, 8, 8], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 1, 8, 8], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8dac5e4051eb5020bab30e818a52caac(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([5583, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_d38a2e0decf3979f291c75b05f5eb6ef(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_03b1906bab8cf1f48b4606ade5191acd(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([11109, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 11109, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4f0222eca32e6403f4049a2fb3b688ff(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 11109, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([11109, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ceee798c4915aba31571cb0b31d28a50(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.45334216952323914, 0.2170143872499466, 0.09240340441465378, 0.3702944219112396], [0.050374746322631836, 0.4309077262878418, 0.05133437737822533, 0.4838007390499115], [0.10587071627378464, 0.2261684685945511, 0.270550012588501, 0.302103191614151], [0.050374746322631836, 0.4309077262878418, 0.05133437737822533, 0.4838007390499115], [0.10587071627378464, 0.2261684685945511, 0.270550012588501, 0.302103191614151], [0.48106878995895386, 0.2545732855796814, 0.20539993047714233, 0.12893365323543549], [0.48106878995895386, 0.2545732855796814, 0.20539993047714233, 0.12893365323543549]], dtype='float32').reshape([7, 4]),
+            paddle.to_tensor([[0.031834136694669724, 0.4225893020629883, 0.07138904929161072, 0.06927811354398727], [0.08372370898723602, 0.14431768655776978, 0.20945705473423004, 0.3641917109489441], [0.14540904760360718, 0.04399137198925018, 0.15887200832366943, 0.3243864178657532], [0.08372370898723602, 0.14431768655776978, 0.20945705473423004, 0.3641917109489441], [0.14540904760360718, 0.04399137198925018, 0.15887200832366943, 0.3243864178657532], [0.04791528731584549, 0.0874236524105072, 0.02765001356601715, 0.41541239619255066], [0.04791528731584549, 0.0874236524105072, 0.02765001356601715, 0.41541239619255066]], dtype='float32').reshape([7, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0e93be1b02e7657a17ee401eb2ea5cf9(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.uniform([36], dtype='float32', min=0, max=0.5),
+            paddle.uniform([36], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_6a0d88c3b31ac0ec78be6d8038ebdb82(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([64, 5], dtype='float32', min=0, max=0.5),
+            paddle.uniform([64, 5], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_18b385f2773e20549fa68a071089e091(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([103, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([103, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_65608d6135b06e6d6d2f2c625bed656b(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.3536610007286072, 0.4108772277832031, 0.4120214581489563, 0.15821325778961182, 0.2899235188961029, 0.08802277594804764], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.20842023193836212, 0.2758379578590393, 0.27349337935447693, 0.37534666061401367, 0.46773508191108704, 0.21818071603775024], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1b3cb9bf43ba4400de4963db86a58f1e(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.0032873579766601324, 0.4201934039592743, 0.23457805812358856, 0.10703792423009872, 0.2224547415971756, 0.4281674027442932], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.42704054713249207, 0.06060203164815903, 0.37507253885269165, 0.2784046232700348, 0.22594958543777466, 0.4257948100566864], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f55c36cf5b044dd4ab6b17fe367c2a63(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.28813254833221436, 0.21503736078739166, 0.4214804172515869, 0.27635470032691956, 0.17865359783172607, 0.20482513308525085], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.11142879724502563, 0.011232888326048851, 0.26740866899490356, 0.2513158917427063, 0.18938873708248138, 0.4642762541770935], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_bf1a4efc2a5be880579cca658dc1f5a4(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.011191552504897118, 0.10982688516378403, 0.01682184264063835, 0.1927325576543808, 0.01876295544207096, 0.3875589072704315], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.48052719235420227, 0.1542738527059555, 0.4869168698787689, 0.44539231061935425, 0.05634588375687599, 0.15570500493049622], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_496cd5927d1a34cd41961469c871cd78(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.28813254833221436, 0.21503736078739166, 0.4120214581489563, 0.27635470032691956, 0.17865359783172607, 0.20482513308525085], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.20842023193836212, 0.2758379578590393, 0.27349337935447693, 0.37534666061401367, 0.46773508191108704, 0.4642762541770935], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5e3a43da2c61b8749d2e59fccb7af351(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.011191552504897118, 0.10982688516378403, 0.01682184264063835, 0.1927325576543808, 0.01876295544207096, 0.3875589072704315], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.48052719235420227, 0.1542738527059555, 0.4869168698787689, 0.44539231061935425, 0.22594958543777466, 0.4257948100566864], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9e591fbe1279bf75757a5d266cdb1edc(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.3536610007286072, 0.4108772277832031, 0.4120214581489563, 0.37534666061401367, 0.46773508191108704, 0.21818071603775024], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.20842023193836212, 0.2758379578590393, 0.27349337935447693, 0.37534666061401367, 0.46773508191108704, 0.21818071603775024], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e23eb0453e2ebde7105e784503d570f3(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.42704054713249207, 0.4201934039592743, 0.37507253885269165, 0.2784046232700348, 0.22594958543777466, 0.4281674027442932], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.42704054713249207, 0.06060203164815903, 0.37507253885269165, 0.2784046232700348, 0.22594958543777466, 0.4257948100566864], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_55f3274ad82714dcb8b7f6079ffad0c3(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([-0.08293336629867554, 0.039500463753938675, -0.07242836803197861, -0.0063262986950576305, 0.0004034579615108669, -0.0601547546684742], dtype='float32').reshape([6]),
+            paddle.to_tensor([-0.0, 0.0, -0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_354ab121616f830fd6c19010b2712baf(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.28104060888290405, 0.3433575928211212, 0.3427574038505554, 0.26677995920181274, 0.37882930040359497, 0.15310174226760864], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.19978067278862, 0.11313512176275253, 0.34444454312324524, 0.2638353109359741, 0.18402117490768433, 0.334550678730011], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_449032947ae747eb02693ef02f0a22ea(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.2151639461517334, 0.24039772152900696, 0.3048253059387207, 0.19272127747535706, 0.22420215606689453, 0.4269810914993286], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.24585936963558197, 0.13205036520957947, 0.2518693506717682, 0.3190624415874481, 0.03755442053079605, 0.27163195610046387], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8785223f80c2309cca1e501304576fee(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.3536610007286072, 0.4108772277832031, 0.4214804172515869, 0.37534666061401367, 0.46773508191108704, 0.21818071603775024], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.11142879724502563, 0.011232888326048851, 0.26740866899490356, 0.2513158917427063, 0.18938873708248138, 0.21818071603775024], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_362fc48280c695aa5a43adba84961f42(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.42704054713249207, 0.4201934039592743, 0.37507253885269165, 0.2784046232700348, 0.22594958543777466, 0.4281674027442932], dtype='float32').reshape([6]),
+            paddle.to_tensor([0.42704054713249207, 0.06060203164815903, 0.37507253885269165, 0.2784046232700348, 0.05634588375687599, 0.15570500493049622], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4ff29522c483e03fc7ea65deba5e8b97(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([-0.3600830137729645, -1.356072187423706, -0.31671351194381714, -0.0987783744931221, 0.27822980284690857, -0.8415104746818542], dtype='float32').reshape([6]),
+            paddle.to_tensor([-0.3302001357078552, 0.35923993587493896, -0.7783507704734802, 0.9026613831520081, 1.5511441230773926, -1.55256986618042], dtype='float32').reshape([6]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c3bcf4b67acf338be83bdb48afe35f46(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1724, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_045a98baadfb88e03cde610ce9c1d450(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e426acc2a8a3c866ade65ea71932622b(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_d74641dcf65210e4b5830168bed45ff6(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([24]),
+            paddle.to_tensor([0.06547129154205322, 0.3520807921886444, 0.27590739727020264, 0.4183047115802765, 0.002627317328006029, 0.10778693109750748, 0.01656929776072502, 0.45648184418678284, 0.1689268946647644, 0.08148221671581268, 0.13071513175964355, 0.3767329156398773, 0.06336052715778351, 0.07223091274499893, 0.2992863357067108, 0.15668466687202454, 0.09348373860120773, 0.40829095244407654, 0.10485347360372543, 0.2989916503429413, 0.15048211812973022, 0.1865820735692978, 0.09113980829715729, 0.4154464900493622], dtype='float32').reshape([24]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f1cb37019d8c6154aa1206bcecfdc027(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.06547129154205322, 0.3520807921886444, 0.27590739727020264, 0.4183047115802765, 0.002627317328006029, 0.10778693109750748, 0.01656929776072502, 0.45648184418678284, 0.1689268946647644, 0.08148221671581268, 0.13071513175964355, 0.3767329156398773, 0.06336052715778351, 0.07223091274499893, 0.2992863357067108, 0.15668466687202454, 0.09348373860120773, 0.40829095244407654, 0.10485347360372543, 0.2989916503429413, 0.15048211812973022, 0.1865820735692978, 0.09113980829715729, 0.4154464900493622], dtype='float32').reshape([24]),
+            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([24]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f9ae28f4b9ed38df400b9f4572347da4(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([1492, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c30566f865b772c4133c13423736f4f0(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3ed75efcd84ec090d0b5f8a4bdcffa95(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([3024, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3024, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a1d0e3e7e00154ab42eff6103c79fdb5(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3024, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3024, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_21e7e3ce8f02db157ee0452f1a8c2ed9(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([4]),
+            paddle.to_tensor([0.3792111277580261, 0.10003672540187836, 0.020990679040551186, 0.20467160642147064], dtype='float32').reshape([4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e23fa4f638c8e75537e2301da3e1e62a(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.3792111277580261, 0.10003672540187836, 0.020990679040551186, 0.20467160642147064], dtype='float32').reshape([4]),
+            paddle.to_tensor([0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+class PrimitiveOp_4d28e76b50ed241aed2c5946f80248f2(InstanceTrait, paddle.nn.Layer):
+
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, arg_0, arg_1):
+        input_0 = arg_0
+        input_1 = arg_1
+        return input_0 - input_1
+
+    def get_input_spec(self):
+        return [
+            paddle.static.InputSpec(shape=[None], dtype='int32'),
+            paddle.static.InputSpec(shape=[None], dtype='int32'),
+        ]
+
+    instance_ = None
+    static_instance_with_cinn_ = None
+    static_instance_without_cinn_ = None
+
+
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_88abd78c6b8823b63b747f20ccf526af(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_4d28e76b50ed241aed2c5946f80248f2
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([4], dtype='int32').reshape([1]),
+            paddle.to_tensor([2], dtype='int32').reshape([1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_6de5048b4b9678ffe6cdcce96f01d92f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_4d28e76b50ed241aed2c5946f80248f2
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([7], dtype='int32').reshape([1]),
+            paddle.to_tensor([3], dtype='int32').reshape([1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1fec3c3516d2d97d6db296dfc55fd873(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.27087801694869995, 0.37351852655410767, 0.1502891331911087, 0.03503761440515518], [0.25920575857162476, 0.34242770075798035, 0.41760972142219543, 0.47303900122642517], [0.06809993833303452, 0.011022460646927357, 0.284585177898407, 0.206710547208786], [0.11169467121362686, 0.28669610619544983, 0.405585378408432, 0.332348108291626], [0.11169467121362686, 0.28669610619544983, 0.405585378408432, 0.332348108291626], [0.06809993833303452, 0.011022460646927357, 0.284585177898407, 0.206710547208786]], dtype='float32').reshape([6, 4]),
+            paddle.to_tensor([[0.28134751319885254, 0.022692793980240822, 0.0855255052447319, 0.17527784407138824], [0.2161128669977188, 0.39540958404541016, 0.0035284191835671663, 0.37471628189086914], [0.4997601807117462, 0.3553926348686218, 0.30597954988479614, 0.07525495439767838], [0.22065651416778564, 0.0568452924489975, 0.3599752187728882, 0.4124413728713989], [0.22065651416778564, 0.0568452924489975, 0.3599752187728882, 0.4124413728713989], [0.4997601807117462, 0.3553926348686218, 0.30597954988479614, 0.07525495439767838]], dtype='float32').reshape([6, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3c53af4cf026de769cc911f1f7dd2df2(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.14227204024791718, 0.015205265022814274, 0.479422390460968, 0.037695787847042084], [0.4243708848953247, 0.44288864731788635, 0.05272933468222618, 0.3776725232601166], [0.40000101923942566, 0.26815491914749146, 0.45970141887664795, 0.3749796450138092], [0.13961364328861237, 0.21997308731079102, 0.31210434436798096, 0.369531512260437], [0.14227204024791718, 0.015205265022814274, 0.479422390460968, 0.037695787847042084]], dtype='float32').reshape([5, 4]),
+            paddle.to_tensor([[0.36492958664894104, 0.3209315538406372, 0.05252284184098244, 0.24992012977600098], [0.3101741075515747, 0.012804357334971428, 0.07701271027326584, 0.31653836369514465], [0.03936240077018738, 0.191122904419899, 0.46247345209121704, 0.07134407758712769], [0.2856120765209198, 0.18546554446220398, 0.16545166075229645, 0.29950112104415894], [0.36492958664894104, 0.3209315538406372, 0.05252284184098244, 0.24992012977600098]], dtype='float32').reshape([5, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_56bd3d7f1023b32564a39a9793b4d622(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([10, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([10, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_768eb7246e7ca917431bdf45c78c234f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.16707240045070648]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.46800416707992554]], dtype='float32').reshape([1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_31959ef247def5fdf7b83ea92f7553ce(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.03597502410411835]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.48410019278526306]], dtype='float32').reshape([1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5eaceeb94d976d688a55f8fb5dc82df8(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.24377180635929108]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.22265328466892242]], dtype='float32').reshape([1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3c7bcc40effa0881f1c4c5f018a9da8d(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.3414774537086487]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.38656848669052124]], dtype='float32').reshape([1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_34b544448f3bab5d14bc210d30454421(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.13390283286571503]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.0]], dtype='float32').reshape([1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f30e91e42141c371f11033daef222eaf(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[-0.0009522558539174497]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[0.13390283286571503]], dtype='float32').reshape([1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ce6b4a999d6b7e9e854ea7524ce154e9(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.0]], dtype='float32').reshape([1, 1]),
+            paddle.to_tensor([[141.616455078125]], dtype='float32').reshape([1, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_88a860191078d5b01e6da69d35643e33(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.30872491002082825], [0.10002264380455017], [0.030900035053491592], [0.05756419524550438], [0.13353675603866577], [0.17648190259933472]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.37052908539772034], [0.1666908711194992], [0.19357992708683014], [0.4992569386959076], [0.4388372004032135], [0.25200337171554565]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2854574ab30d5a0005e560a035503389(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.06679902225732803], [0.2054377794265747], [0.1237405389547348], [0.06167442724108696], [0.43354904651641846], [0.24444907903671265]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.14124219119548798], [0.23925189673900604], [0.43415820598602295], [0.15889577567577362], [0.4757535755634308], [0.4532786011695862]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_216f8b79dae4222ce8bb67b2d22eaec4(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.30872491002082825], [0.32114145159721375], [0.030900035053491592], [0.3291957676410675], [0.13353675603866577], [0.17648190259933472]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.007817946374416351], [0.1666908711194992], [0.19357992708683014], [0.4992569386959076], [0.4388372004032135], [0.25200337171554565]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e3a53e0d19b4d01b4b25b7061bb9cf31(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.06679902225732803], [0.2054377794265747], [0.36668092012405396], [0.306477427482605], [0.43354904651641846], [0.24444907903671265]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.030296431854367256], [0.23925189673900604], [0.27806979417800903], [0.09709051251411438], [0.4757535755634308], [0.4532786011695862]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1a9a4aa3e70f0dc924e7b66ee8dee40d(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.3794514834880829], [0.10002264380455017], [0.24930144846439362], [0.05756419524550438], [0.35914668440818787], [0.47518736124038696]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.37052908539772034], [0.13874346017837524], [0.10015410929918289], [0.2557911276817322], [0.1847122311592102], [0.24399599432945251]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_de1b01af2fa964a3c3a320b41444cd59(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.2596014738082886], [0.2903253138065338], [0.1237405389547348], [0.06167442724108696], [0.4700954556465149], [0.43061691522598267]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.14124219119548798], [0.04379585385322571], [0.43415820598602295], [0.15889577567577362], [0.3719024062156677], [0.0006744983256794512]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_30e34fd84a19d6200f6991f73d4a5f46(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.01203993335366249], [-0.014768431894481182], [-0.06071321293711662], [-0.016336694359779358], [0.0300133116543293], [0.11517009139060974]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_133c2261f1c8b241841b63a3ff9705e8(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.3794514834880829], [0.32114145159721375], [0.24930144846439362], [0.3291957676410675], [0.35914668440818787], [0.47518736124038696]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.007817946374416351], [0.13874346017837524], [0.10015410929918289], [0.2557911276817322], [0.1847122311592102], [0.24399599432945251]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_6537bfc0540b711f0d10f725e0eccfff(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.2596014738082886], [0.2903253138065338], [0.36668092012405396], [0.306477427482605], [0.4700954556465149], [0.43061691522598267]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.030296431854367256], [0.04379585385322571], [0.27806979417800903], [0.09709051251411438], [0.3719024062156677], [0.0006744983256794512]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ceefd0413d0fb93ae19235a57abf8ea1(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.0852174460887909], [0.044966477900743484], [0.013216112740337849], [0.01536997128278017], [0.017128251492977142], [0.09939897805452347]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.01203993335366249], [-0.014768431894481182], [-0.06071321293711662], [-0.016336694359779358], [0.0300133116543293], [0.11517009139060974]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_06a601b7b2b5298983b5ec3ead92f054(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.0], [-0.0], [-0.0], [-0.0], [0.0], [0.0]], dtype='float32').reshape([6, 1]),
+            paddle.to_tensor([[0.8587151765823364], [1.3284320831298828], [5.593878269195557], [2.062896728515625], [-0.752269446849823], [-0.1586647480726242]], dtype='float32').reshape([6, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8e783a69220c3bd21b4c640955b1496f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.36314505338668823, 0.17775830626487732, 0.007170602213591337, 0.368211030960083], [0.2536947727203369, 0.3276306986808777, 0.39289578795433044, 0.43836668133735657], [0.43826091289520264, 0.1463669091463089, 0.4693319499492645, 0.21501290798187256], [0.12051281332969666, 0.27820393443107605, 0.36120638251304626, 0.4211972951889038]], dtype='float32').reshape([4, 4]),
+            paddle.to_tensor([[0.2706713080406189, 0.03754601627588272, 0.48711419105529785, 0.30066564679145813], [0.01926414482295513, 0.4779687821865082, 0.32117971777915955, 0.22273361682891846], [0.07403239607810974, 0.02667119912803173, 0.19554656744003296, 0.08552394062280655], [0.3826271891593933, 0.3794417977333069, 0.023598158732056618, 0.4623686969280243]], dtype='float32').reshape([4, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ad01ba209aa563c77d8a0f5ecf6c7ca2(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([84, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([84, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_d413d6b030ae7fe5e5eec262cba99447(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([2079, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c9974a25c3a903db57910dc8479426a9(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_15aa17eea687877cf988c12a2c059c6d(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_358bc8c1eb98b6e964028dcc0f56dec2(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3e74c37d8bb717381d9cbf8cc71d3873(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.052074551582336426, 0.0013483166694641113, 0.3143507242202759, 0.32349565625190735], [0.052074551582336426, 0.0013483166694641113, 0.3143507242202759, 0.32349565625190735], [0.19163744151592255, 0.10948680341243744, 0.4201567471027374, 0.33648818731307983], [0.46398067474365234, 0.4569913446903229, 0.1717483401298523, 0.019833119586110115], [0.22265176475048065, 0.12112267315387726, 0.2827220857143402, 0.4936140775680542], [0.23343715071678162, 0.2062709480524063, 0.021989166736602783, 0.4471513330936432], [0.19306720793247223, 0.49120891094207764, 0.13184387981891632, 0.23211033642292023]], dtype='float32').reshape([7, 4]),
+            paddle.to_tensor([[0.1295413076877594, 0.010945144109427929, 0.15747995674610138, 0.16650742292404175], [0.1295413076877594, 0.010945144109427929, 0.15747995674610138, 0.16650742292404175], [0.3081156313419342, 0.3513484299182892, 0.35494178533554077, 0.002102403435856104], [0.11219993978738785, 0.22716888785362244, 0.16132095456123352, 0.3774318993091583], [0.09414543211460114, 0.32321110367774963, 0.18374331295490265, 0.23529015481472015], [0.011972378939390182, 0.39854028820991516, 0.15316088497638702, 0.2882484197616577], [0.07908590137958527, 0.00963156670331955, 0.03709285333752632, 0.21938718855381012]], dtype='float32').reshape([7, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_40f637a1c203bb54d195c3251937c47a(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([16384, 5], dtype='float32', min=0, max=0.5),
+            paddle.uniform([16384, 5], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_691fd97a65d1ec77739972ae555392e0(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 1, 64, 64], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 1, 64, 64], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_6f8b2cddf4ba54c4226f23edf14a71ed(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([4526, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_871a2fe8b2cd4bef8abc69ae815a6f69(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_fcb8107f4be5eea7babae7f8cd89696e(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([9261, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 9261, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2f56d38e40cb258115066d09088cf23a(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 9261, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([9261, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0189e9eb564fc1b4d73fe07c9bada61e(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([1046, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0aaa9b442ea85f5e0775dd5dd207bf11(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_21a50b949a46359c33f1a60837b3d774(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([2100, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 2100, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_67dd1ecbca2884ee78c7cd1a7eea2215(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 2100, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2100, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_515f52247eb0925eb57e78c260d58f96(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.uniform([2, 1, 960, 960], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2, 1, 960, 960], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5fd8b26a228d6da45c81eb007efacba4(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.23855331540107727, 0.45583200454711914, 0.3746899962425232, 0.28685587644577026], [0.021694358438253403, 0.1993866115808487, 0.4208736717700958, 0.16542096436023712], [0.021694358438253403, 0.1993866115808487, 0.4208736717700958, 0.16542096436023712], [0.4860404431819916, 0.30145347118377686, 0.253828227519989, 0.3820991814136505], [0.10010343790054321, 0.3633846640586853, 0.421720415353775, 0.11834581941366196], [0.1605677306652069, 0.18443766236305237, 0.08222973346710205, 0.3699661195278168]], dtype='float32').reshape([6, 4]),
+            paddle.to_tensor([[0.3215140402317047, 0.1946406066417694, 0.37133708596229553, 0.2861347496509552], [0.41785287857055664, 0.11162210255861282, 0.03265773877501488, 0.22165927290916443], [0.41785287857055664, 0.11162210255861282, 0.03265773877501488, 0.22165927290916443], [0.14107610285282135, 0.23125948011875153, 0.24717748165130615, 0.015134178102016449], [0.24230819940567017, 0.21138975024223328, 0.3077313303947449, 0.43541643023490906], [0.04108081012964249, 0.40799108147621155, 0.32088136672973633, 0.4069526493549347]], dtype='float32').reshape([6, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_293d93bbcf6e674049780843ff641a48(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([100, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([100, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_484c4717d7d523b2132e885910718081(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([100, 1, 4], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([[1.5318437814712524, 4.40413236618042, 4.046511173248291, 0.10578850656747818], [4.511455535888672, 0.8805773258209229, 0.038609277456998825, 4.896485805511475]], dtype='float32').reshape([2, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_07ed5983b01422c9e20bc8c43f0c8f5a(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5506a7d5add76bd5c93be0c3ec95da8f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([300, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([300, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2de57540fe6d2140fb7ba7156cb52e6e(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([300, 1, 4], dtype='float32', min=0, max=0.5),
+            paddle.to_tensor([[1.6731966733932495, 0.09393339604139328, 0.3160341680049896, 0.7564866542816162], [6.351454734802246, 0.11645545065402985, 0.36461472511291504, 0.908490777015686]], dtype='float32').reshape([2, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a0179f08627a970d3515b9fd125f681f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.057828549295663834], [0.022255240008234978], [0.08091912418603897], [0.022901371121406555], [0.25592753291130066]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.2749200761318207], [0.46262967586517334], [0.03016461431980133], [0.20059402287006378], [0.2718239426612854]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ac9ca864da8a2c6bbe1dcf2bc8f90c04(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.1068728119134903], [0.2669721841812134], [0.11313679069280624], [0.41974976658821106], [0.17963165044784546]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.11126096546649933], [0.2779003977775574], [0.12715952098369598], [0.47248581051826477], [0.3944278955459595]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2d308e6912bc7affcb8aa33d6954ce50(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.24352209270000458], [0.11840708553791046], [0.20973068475723267], [0.31463444232940674], [0.25592753291130066]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.08773402124643326], [0.46262967586517334], [0.004426985047757626], [0.064740389585495], [0.2718239426612854]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9810c5bb043be9e413a5615cdcfccc81(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.4568329155445099], [0.2669721841812134], [0.11313679069280624], [0.41974976658821106], [0.3077079951763153]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.11126096546649933], [0.2779003977775574], [0.12715952098369598], [0.03098335675895214], [0.22021512687206268]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_dd27b04772107ce3855a10aee82de25f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.057828549295663834], [0.022255240008234978], [0.08091912418603897], [0.022901371121406555], [0.4846023917198181]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.2749200761318207], [0.015816230326890945], [0.03016461431980133], [0.20059402287006378], [0.0772194042801857]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f70170acfdaa409ca895cc476f1c705d(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.1068728119134903], [0.473810613155365], [0.3731231987476349], [0.48226043581962585], [0.17963165044784546]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.0596802644431591], [0.2538567781448364], [0.03441440314054489], [0.47248581051826477], [0.3944278955459595]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_eaa40068d118647f9805ba556de84c4d(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.04359088093042374], [0.005178023129701614], [0.0143120801076293], [0.09541353583335876], [-0.08889515697956085]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1b8d6f0986aadc4b1b93731800296050(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.24352209270000458], [0.11840708553791046], [0.20973068475723267], [0.31463444232940674], [0.4846023917198181]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.08773402124643326], [0.015816230326890945], [0.004426985047757626], [0.064740389585495], [0.0772194042801857]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3140fcbb8a7e8d7c213fa1e5fa0a4982(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.4568329155445099], [0.473810613155365], [0.3731231987476349], [0.48226043581962585], [0.3077079951763153]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.0596802644431591], [0.2538567781448364], [0.03441440314054489], [0.03098335675895214], [0.22021512687206268]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_efad91307dddd2c99df0a5cde825b219(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.061871644109487534], [0.02256525307893753], [0.0695381686091423], [0.11277145892381668], [0.03564310818910599]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.04359088093042374], [0.005178023129701614], [0.0143120801076293], [0.09541353583335876], [-0.08889515697956085]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_53ea4b7a20a2edfa2a61d82158c3fcd9(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [-0.0]], dtype='float32').reshape([5, 1]),
+            paddle.to_tensor([[0.2954626977443695], [0.7705311179161072], [0.7941837906837463], [0.1539212465286255], [3.494035005569458]], dtype='float32').reshape([5, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_9f31b45242dcc5467d9b1b85f0c9a8f5(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 1, 128, 128], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 1, 128, 128], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_45ad59ec02e8dac8c8aaf6f67c7ceba3(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([2335, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_612891a7a353c91837ac4919967fae96(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0cf1b79d6b0bda99fe30897e159b4ad8(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([4725, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 4725, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_482a57e3f8a9d1754788fd87985c8f0e(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 4725, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4725, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4766bbffdf867eac22fa20905a1b6dc8(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([2986, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_924544f70a756421ac046c8343d1bf55(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8d5f52ddf8383c305d82d62c38a7f453(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([6069, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_fc25a83b16b04b6ad5a3de78a8e76b5e(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([6069, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_64b50e36c958ee8397d8b2ad50b14ff8(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([3783, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_55f113a47c1a0423f4389f595ea21ae5(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_dba09ba03ffefda8f2726c71385338fb(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([7581, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 7581, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_b9f8e1c85db4557fff30430af9b30c7d(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 7581, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([7581, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_80c271ec998c36d91accf2075aa68a64(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 1, 16, 16], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 1, 16, 16], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_f3a508b496778ed0b643bc983d4abc57(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([256, 5], dtype='float32', min=0, max=0.5),
+            paddle.uniform([256, 5], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e76620bcf0d595eda1ab5ed69cc6b979(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 512, 512], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 512, 512], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_31057b564e2ce865aa8bdc7b1e119a3a(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([20]),
+            paddle.to_tensor([0.36599239706993103, 0.3145686388015747, 0.19165191054344177, 0.1554550975561142, 0.40944790840148926, 0.17192474007606506, 0.2483786940574646, 0.048821281641721725, 0.024080220609903336, 0.2903681993484497, 0.4420175552368164, 0.10293441265821457, 0.03416132181882858, 0.018455103039741516, 0.028468554839491844, 0.3479263484477997, 0.2903174161911011, 0.1279190480709076, 0.02567509189248085, 0.19478610157966614], dtype='float32').reshape([20]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_500f9b22cb466474d2b72779583ea843(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([0.36599239706993103, 0.3145686388015747, 0.19165191054344177, 0.1554550975561142, 0.40944790840148926, 0.17192474007606506, 0.2483786940574646, 0.048821281641721725, 0.024080220609903336, 0.2903681993484497, 0.4420175552368164, 0.10293441265821457, 0.03416132181882858, 0.018455103039741516, 0.028468554839491844, 0.3479263484477997, 0.2903174161911011, 0.1279190480709076, 0.02567509189248085, 0.19478610157966614], dtype='float32').reshape([20]),
+            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([20]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_b05e2362c9c35f67b30a3e389f199ea7(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.004064901731908321], [0.173634335398674], [0.06731393188238144], [0.34006810188293457]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.3180879056453705], [0.30447274446487427], [0.4898376762866974], [0.2543194890022278]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4bbb5bd6682d7949320695bc3f31efed(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.07578111439943314], [0.05176808685064316], [0.15565119683742523], [0.19638481736183167]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.43786975741386414], [0.2647301256656647], [0.4768783748149872], [0.3339034616947174]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5ebb0572db411b2c0ebfc52cda0da7cc(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.23596063256263733], [0.18666329979896545], [0.06731393188238144], [0.3615970313549042]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.15059156715869904], [0.024037236347794533], [0.4898376762866974], [0.2543194890022278]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3ff4f1caf345617209ef1d55fe81ec65(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.07578111439943314], [0.05176808685064316], [0.18972070515155792], [0.19638481736183167]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.43786975741386414], [0.2647301256656647], [0.011273171752691269], [0.1107817143201828]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2afb1a30812f0335db5e43a59f30f1e4(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.004064901731908321], [0.173634335398674], [0.1498268097639084], [0.34006810188293457]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.3180879056453705], [0.30447274446487427], [0.15876974165439606], [0.10897774249315262]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_99f3221f6dcf4fdfcf8bd22231e5ac56(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.16424576938152313], [0.19745327532291412], [0.15565119683742523], [0.40988653898239136]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.05201704055070877], [0.07029230147600174], [0.4768783748149872], [0.3339034616947174]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_bc1c076bb08b395b049f8685a065b824(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[-0.06615357100963593], [-0.05127071216702461], [-0.07252560555934906], [0.026742246001958847]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_82c4fa4df5ab920efb61f33f838742e2(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.23596063256263733], [0.18666329979896545], [0.1498268097639084], [0.3615970313549042]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.15059156715869904], [0.024037236347794533], [0.15876974165439606], [0.10897774249315262]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c0b3dc6a816217c4f36096b9033c8c54(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.16424576938152313], [0.19745327532291412], [0.18972070515155792], [0.40988653898239136]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[0.05201704055070877], [0.07029230147600174], [0.011273171752691269], [0.1107817143201828]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_48ac8bc98b2216caedd2a41f7567a35d(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.009580861777067184], [0.020679686218500137], [-0.0015958439325913787], [0.07555964589118958]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[-0.06615357100963593], [-0.05127071216702461], [-0.07252560555934906], [0.026742246001958847]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_18f6b9c188b37eb7e3d034734896be19(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[-0.0], [-0.0], [-0.0], [0.0]], dtype='float32').reshape([4, 1]),
+            paddle.to_tensor([[7.904762268066406], [3.479279041290283], [-44.44655227661133], [0.6460776925086975]], dtype='float32').reshape([4, 1]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_2bdf48ae6973d8a4487566beb1fae511(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([47, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([47, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5df4cf33f5ca94860b6a0ac4862226ff(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([2041, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cfefc4344a6648f59ac39526bc0c219f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_a325bb76560ca99b51e435c001af07da(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 1, 32, 32], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 1, 32, 32], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1505b6ac78a5252a396889880f9fe89b(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 6804, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 6804, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_141697edc617b1779c58e9bda9baa65f(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.1973254680633545, 0.3945632874965668, 0.42581862211227417, 0.0971364974975586], [0.26572689414024353, 0.4469430446624756, 0.36746591329574585, 0.19318506121635437], [0.027497222647070885, 0.04026518762111664, 0.32225924730300903, 0.31956151127815247], [0.027497222647070885, 0.04026518762111664, 0.32225924730300903, 0.31956151127815247], [0.02640474960207939, 0.3619937300682068, 0.11369562149047852, 0.09356130659580231]], dtype='float32').reshape([5, 4]),
+            paddle.to_tensor([[0.42569056153297424, 0.40476614236831665, 0.003342805430293083, 0.34760746359825134], [0.09902610629796982, 0.273882657289505, 0.09757425636053085, 0.00905204750597477], [0.03670821711421013, 0.12110532820224762, 0.23715703189373016, 0.03839582949876785], [0.03670821711421013, 0.12110532820224762, 0.23715703189373016, 0.03839582949876785], [0.19607597589492798, 0.15236368775367737, 0.25079742074012756, 0.43224745988845825]], dtype='float32').reshape([5, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5eedd941575a8025b1f6142513fa4c9d(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([56, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([56, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_8d1d7d8b8ae55f1bf113903015c32fb0(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([4210, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_67b454d979ab8fedbc5f4bbf682b5d41(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_fadf83c28010ecd5bd8925902fc6620e(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
+    def get_inputs(self):
+        return [
+            paddle.uniform([8400, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0906bc96c54199c50c23766f6e035159(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
+    def get_inputs(self):
+        return [
+            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
+            paddle.uniform([8400, 2], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_67e9eacd28f930d2ca34753392341347(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.to_tensor([[0.2590278387069702, 0.4339483678340912, 0.38404205441474915, 0.006194727495312691], [0.34459492564201355, 0.05118449404835701, 0.0501624271273613, 0.26491138339042664], [0.23044975101947784, 0.3831656873226166, 0.2908661663532257, 0.1766575127840042], [0.2590278387069702, 0.4339483678340912, 0.38404205441474915, 0.006194727495312691], [0.0905582457780838, 0.2991955280303955, 0.0021958444267511368, 0.05272003635764122], [0.4587711989879608, 0.2022458165884018, 0.29737505316734314, 0.2715875506401062], [0.0905582457780838, 0.2991955280303955, 0.0021958444267511368, 0.05272003635764122]], dtype='float32').reshape([7, 4]),
+            paddle.to_tensor([[0.47678452730178833, 0.011638985946774483, 0.18055753409862518, 0.12816102802753448], [0.2774321138858795, 0.4765121340751648, 0.0685686469078064, 0.2301367074251175], [0.0375455878674984, 0.35230088233947754, 0.3526265025138855, 0.4745047986507416], [0.47678452730178833, 0.011638985946774483, 0.18055753409862518, 0.12816102802753448], [0.25345200300216675, 0.1298045665025711, 0.17488865554332733, 0.42795100808143616], [0.2667299509048462, 0.14024020731449127, 0.38425540924072266, 0.28632017970085144], [0.25345200300216675, 0.1298045665025711, 0.17488865554332733, 0.42795100808143616]], dtype='float32').reshape([7, 4]),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5c1607c584dc7e104775c4f773344f40(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
+    def get_inputs(self):
+        return [
+            paddle.uniform([52, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([52, 4], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_0dd79751e325816d3c3f5495758327f0(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -585,15 +4558,16 @@ class PrimitiveOp_0dd79751e325816d3c3f5495758327f0(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 12096, 2], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_968fbf05dda988a8cd65895aa4dbfa47(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_0dd79751e325816d3c3f5495758327f0
     def get_inputs(self):
@@ -603,235 +4577,18 @@ class TestPrimitiveOp_968fbf05dda988a8cd65895aa4dbfa47(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_af7abc8f3c07a92290a9b6159b7d361b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([8, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([8, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-
-class PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1):
-        input_0 = arg_0
-        input_1 = arg_1
-        return input_0 - input_1
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, None, None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None, None, None], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dabba7fe0741275dfcdc1ed73b9802f8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[[0.009778277017176151, 0.02429402805864811]], [[0.0029977455269545317, 0.20873524248600006]], [[0.46495717763900757, 0.0797295793890953]], [[0.39304178953170776, 0.019942941144108772]], [[0.1783885955810547, 0.41458258032798767]], [[0.47772762179374695, 0.20179226994514465]]]], dtype='float32').reshape([1, 6, 1, 2]),
-            paddle.to_tensor([[[[0.358097106218338, 0.35106879472732544]], [[0.4313538074493408, 0.08216709643602371]], [[0.05587208271026611, 0.3657324016094208]], [[0.31227242946624756, 0.3250352442264557]], [[0.4644756019115448, 0.35592329502105713]], [[0.12418679893016815, 0.4918902516365051]]]], dtype='float32').reshape([1, 6, 1, 2]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7eb8e2e75859be7d760cee2a82bf9707(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[[0.3234972059726715, 0.20493970811367035]], [[0.3132672607898712, 0.17412687838077545]], [[0.014389144256711006, 0.3884662687778473]], [[0.3867090344429016, 0.06462222337722778]], [[0.17619918286800385, 0.07482553273439407]], [[0.027263877913355827, 0.33704501390457153]]]], dtype='float32').reshape([1, 6, 1, 2]),
-            paddle.to_tensor([[[[0.358097106218338, 0.35106879472732544]], [[0.4313538074493408, 0.08216709643602371]], [[0.05587208271026611, 0.3657324016094208]], [[0.31227242946624756, 0.3250352442264557]], [[0.4644756019115448, 0.35592329502105713]], [[0.12418679893016815, 0.4918902516365051]]]], dtype='float32').reshape([1, 6, 1, 2]),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_c5c8a13052fe23a22c84469701570109(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -845,241 +4602,37 @@ class PrimitiveOp_c5c8a13052fe23a22c84469701570109(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[1, None, None, None], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None, 1, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2074ab14bd0a265b1de2b8bb93fdbf31(CinnTestBase, unittest.TestCase):
-    
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1aa9c152aeebcfce1f4e52a690b6a76e(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_c5c8a13052fe23a22c84469701570109
     def get_inputs(self):
         return [
             paddle.uniform([1, 1, 21824, 2], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor([[[[0.29133909940719604, 0.4853375554084778]], [[0.36761757731437683, 0.4571003019809723]], [[0.46794551610946655, 0.1688530147075653]], [[0.2670198976993561, 0.1982056200504303]], [[0.12026780098676682, 0.48663008213043213]], [[0.2773101329803467, 0.48897823691368103]]]], dtype='float32').reshape([1, 6, 1, 2]),
+            paddle.to_tensor([[[[0.018874194473028183, 0.3943251371383667]], [[0.489003986120224, 0.09215033799409866]], [[0.4628400206565857, 0.35706427693367004]], [[0.056388091295957565, 0.28063154220581055]], [[0.12517590820789337, 0.21209801733493805]], [[0.03224913030862808, 0.1864347755908966]]]], dtype='float32').reshape([1, 6, 1, 2]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-
-class PrimitiveOp_99bddb5fd63ecd93cc59d50704818428(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1):
-        input_0 = arg_0
-        input_1 = arg_1
-        return input_0 - input_1
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_55e8ed499f2a3bcd8b91a2a8e96cbbb4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([16]),
-            paddle.to_tensor([0.3780723512172699, 0.10681550204753876, 0.21278166770935059, 0.23138809204101562, 0.32906362414360046, 0.22839735448360443, 0.13309429585933685, 0.0206376351416111, 0.05156761035323143, 0.46504005789756775, 0.13148869574069977, 0.449235200881958, 0.08905600011348724, 0.015455592423677444, 0.3863491714000702, 0.4747481942176819], dtype='float32').reshape([16]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_25a7ceff1e2612cd942241b9353c5a2d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.3780723512172699, 0.10681550204753876, 0.21278166770935059, 0.23138809204101562, 0.32906362414360046, 0.22839735448360443, 0.13309429585933685, 0.0206376351416111, 0.05156761035323143, 0.46504005789756775, 0.13148869574069977, 0.449235200881958, 0.08905600011348724, 0.015455592423677444, 0.3863491714000702, 0.4747481942176819], dtype='float32').reshape([16]),
-            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([16]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_1d41c4f35c9bcc31e08344f76597024f(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1093,15 +4646,16 @@ class PrimitiveOp_1d41c4f35c9bcc31e08344f76597024f(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[300], dtype='float32'),
             paddle.static.InputSpec(shape=[300], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_e3862a2257d0a7b8b364fc904b57cdcf(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_1d41c4f35c9bcc31e08344f76597024f
     def get_inputs(self):
@@ -1111,285 +4665,18 @@ class TestPrimitiveOp_e3862a2257d0a7b8b364fc904b57cdcf(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e3862a2257d0a7b8b364fc904b57cdcf(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_1d41c4f35c9bcc31e08344f76597024f
-    def get_inputs(self):
-        return [
-            paddle.uniform([300], dtype='float32', min=0, max=0.5),
-            paddle.uniform([300], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6e02c6ca3972717e5b5b70e1ebc41e36(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([53, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([53, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_ce10a710f7565f96c00a1389a91699d4(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1403,27 +4690,37 @@ class PrimitiveOp_ce10a710f7565f96c00a1389a91699d4(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 4], dtype='float32'),
             paddle.static.InputSpec(shape=[None, 4], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c8fcf76e1ccec496fe7d7fa2cf77661e(CinnTestBase, unittest.TestCase):
-    
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_ccc5cd8a7bb63ca2c8c97aca09f67bb2(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1437,407 +4734,37 @@ class PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 1], dtype='float32'),
             paddle.static.InputSpec(shape=[None, 1], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_05acc76b7a5d1e22834543fd33de1564(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1843, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_686422e12c80392d343002ed877ae454(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-
-class PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1):
-        input_0 = arg_0
-        input_1 = arg_1
-        return input_0 - input_1
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_52d6c0904952e02947e994d334c88237(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-
-class PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1):
-        input_0 = arg_0
-        input_1 = arg_1
-        return input_0 - input_1
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
-            paddle.static.InputSpec(shape=[None, None], dtype='float32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_38dc692e168c69c6d9272c552d7727e9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c8fcf76e1ccec496fe7d7fa2cf77661e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b9a650a7e9391931f30b34078c4bdac3(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0660882219672203, 0.47173580527305603, 0.263930082321167, 0.1906377077102661], [0.08412470668554306, 0.41810542345046997, 0.11181697994470596, 0.21970145404338837], [0.15435844659805298, 0.23323611915111542, 0.2906814217567444, 0.22473807632923126], [0.43175461888313293, 0.4601755738258362, 0.09878799319267273, 0.04755397140979767], [0.2544768452644348, 0.316487193107605, 0.2239605039358139, 0.27877798676490784]], dtype='float32').reshape([5, 4]),
-            paddle.to_tensor([[0.4106596112251282, 0.14335723221302032, 0.02330786921083927, 0.11569497734308243], [0.42931506037712097, 0.01977924257516861, 0.230007603764534, 0.057321660220623016], [0.2798386216163635, 0.10481530427932739, 0.4301333725452423, 0.38091546297073364], [0.3798501193523407, 0.11627687513828278, 0.3571585416793823, 0.09328742325305939], [0.4864861071109772, 0.2632262408733368, 0.27916863560676575, 0.29254499077796936]], dtype='float32').reshape([5, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_aedece1b298498e3693fa2b7e488785d(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -1851,15 +4778,16 @@ class PrimitiveOp_aedece1b298498e3693fa2b7e488785d(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 5376, 2], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_39ff3ebe61c4806058d6c962f4ef9475(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_aedece1b298498e3693fa2b7e488785d
     def get_inputs(self):
@@ -1869,357 +4797,18 @@ class TestPrimitiveOp_39ff3ebe61c4806058d6c962f4ef9475(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1d596efcb9d2732b85dc08040cf23b5e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.2620193064212799, 0.11581896245479584, 0.053561560809612274, 0.08257486671209335], [0.03958377614617348, 0.3950630724430084, 0.20495222508907318, 0.3324486017227173], [0.3044680953025818, 0.4422242343425751, 0.3617860674858093, 0.3761495053768158], [0.03958377614617348, 0.3950630724430084, 0.20495222508907318, 0.3324486017227173], [0.3044680953025818, 0.4422242343425751, 0.3617860674858093, 0.3761495053768158]], dtype='float32').reshape([5, 4]),
-            paddle.to_tensor([[0.4025401175022125, 0.3901353180408478, 0.36967140436172485, 0.09798751771450043], [0.3619749844074249, 0.07483921945095062, 0.3436369299888611, 0.2519150972366333], [0.28524336218833923, 0.36912211775779724, 0.19368404150009155, 0.3241569995880127], [0.3619749844074249, 0.07483921945095062, 0.3436369299888611, 0.2519150972366333], [0.28524336218833923, 0.36912211775779724, 0.19368404150009155, 0.3241569995880127]], dtype='float32').reshape([5, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dbf0f22c4f3a7340ebbd00c64a90cf2c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.08568544685840607], [0.03848660737276077], [0.08805205672979355], [0.03215041384100914], [0.05588645488023758], [0.1058163195848465], [0.12910811603069305], [0.009429873898625374], [0.23962129652500153]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39208778738975525], [0.3591558635234833], [0.15294159948825836], [0.27551141381263733], [0.2135521024465561], [0.3570266664028168], [0.3142800033092499], [0.4077095687389374], [0.48227444291114807]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1dd8422d0d5d1bc60990131be414319e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.08652636408805847], [0.050644610077142715], [0.09682576358318329], [0.37938541173934937], [0.28843000531196594], [0.07827463001012802], [0.009334404021501541], [0.027887742966413498], [0.1417359560728073]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.49722179770469666], [0.4310191571712494], [0.3834795355796814], [0.30722612142562866], [0.2178652435541153], [0.28443190455436707], [0.2855451703071594], [0.22062554955482483], [0.498458594083786]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4f3532d8815f2a1e2c847f8d2ee8e106(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.36820653080940247], [0.03848660737276077], [0.08805205672979355], [0.03780742734670639], [0.23160281777381897], [0.18210230767726898], [0.21688763797283173], [0.009429873898625374], [0.23962129652500153]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39208778738975525], [0.2094176560640335], [0.1283661276102066], [0.27551141381263733], [0.03479340672492981], [0.3570266664028168], [0.11812948435544968], [0.2456916868686676], [0.48227444291114807]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f9a778069b418f7d6f8803c18b3921f6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.39371946454048157], [0.050644610077142715], [0.09682576358318329], [0.37938541173934937], [0.37218934297561646], [0.31943804025650024], [0.009334404021501541], [0.027887742966413498], [0.1417359560728073]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.49722179770469666], [0.4310191571712494], [0.3834795355796814], [0.30722612142562866], [0.2178652435541153], [0.11710164695978165], [0.23001685738563538], [0.22062554955482483], [0.498458594083786]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4d62f21a69b8d75a4b3559a2e7458fd9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.08568544685840607], [0.1383717805147171], [0.2306109517812729], [0.03215041384100914], [0.05588645488023758], [0.1058163195848465], [0.12910811603069305], [0.02052994631230831], [0.24312002956867218]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.1547079086303711], [0.3591558635234833], [0.15294159948825836], [0.019754718989133835], [0.2135521024465561], [0.2554653286933899], [0.3142800033092499], [0.4077095687389374], [0.42899003624916077]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dfcef0fef8fab4a05f88bbd205b63c07(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.08652636408805847], [0.38375985622406006], [0.22444428503513336], [0.3983890116214752], [0.28843000531196594], [0.07827463001012802], [0.3716101050376892], [0.20676524937152863], [0.260421484708786]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39656439423561096], [0.12202204018831253], [0.0054341829381883144], [0.014495838433504105], [0.0013494952581822872], [0.28443190455436707], [0.2855451703071594], [0.20876038074493408], [0.38022154569625854]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6ab8d4e15efa4ab6685b1d4b16a9055c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.023871352896094322], [0.0072302743792533875], [0.028566552326083183], [-0.012393927201628685], [-0.014890296384692192], [-0.004542335867881775], [-0.037730999290943146], [0.046309053897857666], [0.10882711410522461]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_57300b75399eb3a297d1b5ae346d5b8b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.36820653080940247], [0.1383717805147171], [0.2306109517812729], [0.03780742734670639], [0.23160281777381897], [0.18210230767726898], [0.21688763797283173], [0.02052994631230831], [0.24312002956867218]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.1547079086303711], [0.2094176560640335], [0.1283661276102066], [0.019754718989133835], [0.03479340672492981], [0.2554653286933899], [0.11812948435544968], [0.2456916868686676], [0.42899003624916077]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e99dda31b438944e774c2dd8272ee17a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.39371946454048157], [0.38375985622406006], [0.22444428503513336], [0.3983890116214752], [0.37218934297561646], [0.31943804025650024], [0.3716101050376892], [0.20676524937152863], [0.260421484708786]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39656439423561096], [0.12202204018831253], [0.0054341829381883144], [0.014495838433504105], [0.0013494952581822872], [0.11710164695978165], [0.23001685738563538], [0.20876038074493408], [0.38022154569625854]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_473ed62fcf0ad6ec79b1600d60c809ee(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.000607388443313539], [-0.018595393747091293], [0.022392649203538895], [0.00693031121045351], [0.07298476994037628], [-0.014844009652733803], [0.013983488082885742], [0.00044922734377905726], [0.022267237305641174]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.023871352896094322], [0.0072302743792533875], [0.028566552326083183], [-0.012393927201628685], [-0.014890296384692192], [-0.004542335867881775], [-0.037730999290943146], [0.046309053897857666], [0.10882711410522461]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_abcce45492f97a3cf126b8f399949a6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0], [0.0], [0.0], [-0.0], [-0.0], [-0.0], [-0.0], [0.0], [0.0]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[40.3016242980957], [1.388820767402649], [-0.27571114897727966], [2.788365364074707], [1.20401930809021], [0.6939953565597534], [3.698253870010376], [-102.08600616455078], [-3.887320041656494]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1b2649627c56cc22f68d3cbea932371b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 21824, 15], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 21824, 15], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_acb2b446c113941f8ae47e1572ee95c3(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[0.06146731972694397]], [[0.38457757234573364]], [[0.1499379724264145]], [[0.2519291639328003]], [[0.4287847876548767]], [[0.48430103063583374]]], dtype='float32').reshape([6, 1, 1]),
-            paddle.to_tensor([[[0.7040383219718933]], [[0.5041806101799011]], [[0.5248106718063354]], [[0.5276604890823364]], [[0.8099044561386108]], [[0.5424766540527344]]], dtype='float32').reshape([6, 1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e307239dd03430cb7079aef3b0aa6f2a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[0.03920156881213188]], [[0.022001300007104874]], [[0.24809589982032776]], [[0.39565593004226685]], [[0.10346271097660065]], [[0.42565131187438965]]], dtype='float32').reshape([6, 1, 1]),
-            paddle.to_tensor([[[0.7184906005859375]], [[0.5257463455200195]], [[0.6536774635314941]], [[0.6953741312026978]], [[0.7265492677688599]], [[0.5624583959579468]]], dtype='float32').reshape([6, 1, 1]),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_ef457a8c2827717ad98c98ab5f8f38cd(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -2233,15 +4822,16 @@ class PrimitiveOp_ef457a8c2827717ad98c98ab5f8f38cd(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 1, None, None], dtype='float32'),
             paddle.static.InputSpec(shape=[None, 1, None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_14bae7859044d7ac7a1e855f2042d793(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ef457a8c2827717ad98c98ab5f8f38cd
     def get_inputs(self):
@@ -2251,597 +4841,106 @@ class TestPrimitiveOp_14bae7859044d7ac7a1e855f2042d793(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dce5143f377b8806b1983e2a0455ea5a(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_020166d3e610c630b624bfc38a43917b(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0bb38f68bc16b8f377f654f15e8f6895(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([5583, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_028644fad5a60156742605d1a0604df3(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_37b14280938c93f8570b3df785eeb1b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03b1906bab8cf1f48b4606ade5191acd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([11109, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 11109, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4f0222eca32e6403f4049a2fb3b688ff(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 11109, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([11109, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dce5143f377b8806b1983e2a0455ea5a(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([5480, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1724, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1724, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2ee5247c11c6647ab647c3ba412596ca(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.13856299221515656, 0.4353436827659607, 0.2094043344259262, 0.2879944443702698], [0.08696585893630981, 0.2929264307022095, 0.17700904607772827, 0.2517296075820923], [0.18547385931015015, 0.4464535713195801, 0.4669950008392334, 0.4609496593475342], [0.08696585893630981, 0.2929264307022095, 0.17700904607772827, 0.2517296075820923], [0.18547385931015015, 0.4464535713195801, 0.4669950008392334, 0.4609496593475342], [0.04176447167992592, 0.43585583567619324, 0.007390841841697693, 0.41927239298820496], [0.04176447167992592, 0.43585583567619324, 0.007390841841697693, 0.41927239298820496]], dtype='float32').reshape([7, 4]),
-            paddle.to_tensor([[0.3110031485557556, 0.12883557379245758, 0.014142144471406937, 0.29536378383636475], [0.03524753451347351, 0.44889235496520996, 0.32588690519332886, 0.4541289508342743], [0.3971027433872223, 0.4102397561073303, 0.28529155254364014, 0.39603105187416077], [0.03524753451347351, 0.44889235496520996, 0.32588690519332886, 0.4541289508342743], [0.3971027433872223, 0.4102397561073303, 0.28529155254364014, 0.39603105187416077], [0.43009355664253235, 0.49960651993751526, 0.3261641263961792, 0.4162203073501587], [0.43009355664253235, 0.49960651993751526, 0.3261641263961792, 0.4162203073501587]], dtype='float32').reshape([7, 4]),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_68c54afeecef7d10269c3554546ff3ce(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0e93be1b02e7657a17ee401eb2ea5cf9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.uniform([36], dtype='float32', min=0, max=0.5),
-            paddle.uniform([36], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0e93be1b02e7657a17ee401eb2ea5cf9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.uniform([36], dtype='float32', min=0, max=0.5),
-            paddle.uniform([36], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6a0d88c3b31ac0ec78be6d8038ebdb82(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([64, 5], dtype='float32', min=0, max=0.5),
-            paddle.uniform([64, 5], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_18b385f2773e20549fa68a071089e091(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([103, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([103, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8b8646482c76ef0cc3a8840014a75d00(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.08038189262151718, 0.0575774721801281, 0.3921468257904053], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.1027945876121521, 0.3881237208843231, 0.152043879032135, 0.21335071325302124, 0.38008421659469604, 0.12074317038059235], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ae96253cfd7568e986d861da85f3af2f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.4957810342311859, 0.08107513189315796, 0.33436471223831177, 0.4922436773777008, 0.36378422379493713, 0.13394984602928162], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2527327835559845, 0.1542942374944687, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_54ff2d0396fef3ecaa5346e0d5811295(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.24978351593017578, 0.11446373909711838, 0.06451474130153656, 0.04623079672455788, 0.3613818883895874, 0.4987070560455322], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2304920107126236, 0.0650036409497261, 0.457919716835022, 0.030212104320526123, 0.35011738538742065, 0.12877273559570312], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8fc350a0642ca1eee42599eb3bcda7e6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2845926582813263, 0.16627027094364166, 0.25496557354927063, 0.29948753118515015, 0.21094956994056702, 0.2771330177783966], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.23068910837173462, 0.1622818112373352, 0.3164260983467102, 0.16976673901081085, 0.15035927295684814, 0.22009573876857758], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_989f2114979a7884f0b0ca404ba695ce(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.24978351593017578, 0.11446373909711838, 0.06451474130153656, 0.04623079672455788, 0.3613818883895874, 0.3921468257904053], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2304920107126236, 0.3881237208843231, 0.457919716835022, 0.21335071325302124, 0.38008421659469604, 0.12877273559570312], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8cff451749268b28a898dd3399de8eb2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2845926582813263, 0.1542942374944687, 0.25496557354927063, 0.29948753118515015, 0.21094956994056702, 0.2771330177783966], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2527327835559845, 0.1622818112373352, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c4cefd8604ec773bae6ee8cd8740d8db(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.21335071325302124, 0.38008421659469604, 0.3921468257904053], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.1027945876121521, 0.3881237208843231, 0.152043879032135, 0.21335071325302124, 0.38008421659469604, 0.12074317038059235], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ade7d3f0ac72a7e36b62e89bbd6b2cc7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.4957810342311859, 0.1542942374944687, 0.470980703830719, 0.4922436773777008, 0.36378422379493713, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2527327835559845, 0.1542942374944687, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_3b31f71a1dc3b2bd3a84e6516c438c8c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.039449259638786316, 0.00019726960454136133, 0.024178875610232353, 0.002077957382425666, 0.0006825195741839707, 0.02110004797577858], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.0006146249361336231, 0.0, 0.0, 0.0, 0.0, -0.0], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_52d3eee2ce8e716ae1212a9dea1b69a8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.18181054294109344, 0.4303266406059265, 0.22994780540466309, 0.1468663066625595, 0.21883083879947662, 0.2564449906349182], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2401377558708191, 0.08973369002342224, 0.26121723651885986, 0.03822144865989685, 0.35574963688850403, 0.3137398958206177], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_239165a78e3bbb76d225e4f3a0cd1477(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.3742569088935852, 0.11768468469381332, 0.4026727080345154, 0.4088471829891205, 0.3186711072921753, 0.24385617673397064], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.25764089822769165, 0.16427603363990784, 0.2856958508491516, 0.2346271276473999, 0.18065442144870758, 0.2486143708229065], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_64c1ad6254405a9fadac3cd392be9c4d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.21335071325302124, 0.38008421659469604, 0.4987070560455322], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.1027945876121521, 0.0650036409497261, 0.152043879032135, 0.030212104320526123, 0.35011738538742065, 0.12074317038059235], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9ce8b4d942fb0b384c967fa1d9e3c3f0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.4957810342311859, 0.16627027094364166, 0.470980703830719, 0.4922436773777008, 0.36378422379493713, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.23068910837173462, 0.1542942374944687, 0.3164260983467102, 0.16976673901081085, 0.15035927295684814, 0.22009573876857758], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5c1be02e8773f94c2bee9eb11fee73ad(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.3436858057975769, 1.4903305768966675, 1.41582190990448, 0.12286394089460373, 0.18381407856941223, 1.4178187847137451], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.5765213966369629, -0.856249988079071, -0.8509345054626465, -0.6730365753173828, -1.298005223274231, -0.8900416493415833], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_57e2653570c78928800aab0f941d01e1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1724, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d76594d7bc73a01590ff4d5f569ebf93(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_52d6c0904952e02947e994d334c88237(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_38dc692e168c69c6d9272c552d7727e9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_57e2653570c78928800aab0f941d01e1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_9fec7ada1680728cff3c134be87b6aa2(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -2855,15 +4954,16 @@ class PrimitiveOp_9fec7ada1680728cff3c134be87b6aa2(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 8400, 2], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_0bd7d880fc7306d155fe38898579c30a(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_9fec7ada1680728cff3c134be87b6aa2
     def get_inputs(self):
@@ -2873,489 +4973,62 @@ class TestPrimitiveOp_0bd7d880fc7306d155fe38898579c30a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_69cefdcc79ddad326fae6984d3c01b5a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([24]),
-            paddle.to_tensor([0.16727307438850403, 0.29837217926979065, 0.19894284009933472, 0.48071572184562683, 0.3676881194114685, 0.4198280870914459, 0.17023754119873047, 0.16682079434394836, 0.41211000084877014, 0.27952146530151367, 0.03478027507662773, 0.25146594643592834, 0.3347516655921936, 0.07699854671955109, 0.16147416830062866, 0.18425174057483673, 0.1390560418367386, 0.17906422913074493, 0.1935458481311798, 0.2319454848766327, 0.13256007432937622, 0.057637352496385574, 0.14197881519794464, 0.27830740809440613], dtype='float32').reshape([24]),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_624cb25fd91fddfaf37bb1c8c91fd675(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8d5c4ef7476afda985a09d0fd3bd5879(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.16727307438850403, 0.29837217926979065, 0.19894284009933472, 0.48071572184562683, 0.3676881194114685, 0.4198280870914459, 0.17023754119873047, 0.16682079434394836, 0.41211000084877014, 0.27952146530151367, 0.03478027507662773, 0.25146594643592834, 0.3347516655921936, 0.07699854671955109, 0.16147416830062866, 0.18425174057483673, 0.1390560418367386, 0.17906422913074493, 0.1935458481311798, 0.2319454848766327, 0.13256007432937622, 0.057637352496385574, 0.14197881519794464, 0.27830740809440613], dtype='float32').reshape([24]),
-            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([24]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f4ad3e30e2f4714495615515f0ad398(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_0f10e2debc63670bb923b1923d95d362(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1492, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb30f13e2bbdd96dfc91a7c85e7d5d11(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_3ed75efcd84ec090d0b5f8a4bdcffa95(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([3024, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3024, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1d0e3e7e00154ab42eff6103c79fdb5(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3024, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3024, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f4ad3e30e2f4714495615515f0ad398(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a4e823eb61d9b61aba09226acd691f40(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([4]),
-            paddle.to_tensor([0.09576865285634995, 0.21895988285541534, 0.47236356139183044, 0.28012216091156006], dtype='float32').reshape([4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bb686935ff7497e52ed3e1c147aa8a15(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.09576865285634995, 0.21895988285541534, 0.47236356139183044, 0.28012216091156006], dtype='float32').reshape([4]),
-            paddle.to_tensor([0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([4]),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_1917ea0a108920c4069ffa6dfbed0f79(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -3369,15 +5042,16 @@ class PrimitiveOp_1917ea0a108920c4069ffa6dfbed0f79(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[1], dtype='int32'),
             paddle.static.InputSpec(shape=[1], dtype='int32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_8cdd6eeef482a5f5c2da614c8ee3b44b(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_1917ea0a108920c4069ffa6dfbed0f79
     def get_inputs(self):
@@ -3387,9 +5061,19 @@ class TestPrimitiveOp_8cdd6eeef482a5f5c2da614c8ee3b44b(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_56c4a2e44901467a3e8ec6b3b0b1c5e2(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_1917ea0a108920c4069ffa6dfbed0f79
     def get_inputs(self):
@@ -3399,873 +5083,63 @@ class TestPrimitiveOp_56c4a2e44901467a3e8ec6b3b0b1c5e2(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_63559ac1b87833b3478865af8647836c(CinnTestBase, unittest.TestCase):
 
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d9a63d5e912ab50e13dd8f29dcfd2c40(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.48869359493255615, 0.25505194067955017, 0.2965860962867737, 0.1435116082429886], [0.29652026295661926, 0.17479072511196136, 0.12994545698165894, 0.3918682336807251], [0.03457598015666008, 0.21453428268432617, 0.40904825925827026, 0.13430796563625336], [0.4367668628692627, 0.10261180251836777, 0.21258141100406647, 0.15890343487262726], [0.4367668628692627, 0.10261180251836777, 0.21258141100406647, 0.15890343487262726], [0.03457598015666008, 0.21453428268432617, 0.40904825925827026, 0.13430796563625336]], dtype='float32').reshape([6, 4]),
-            paddle.to_tensor([[0.17786620557308197, 0.3837328553199768, 0.4018065929412842, 0.052461110055446625], [0.1788792461156845, 0.17232021689414978, 0.44501304626464844, 0.18641409277915955], [0.23814435303211212, 0.0061455052345991135, 0.03816644474864006, 0.24216414988040924], [0.18565472960472107, 0.4981105327606201, 0.3184441328048706, 0.44102829694747925], [0.18565472960472107, 0.4981105327606201, 0.3184441328048706, 0.44102829694747925], [0.23814435303211212, 0.0061455052345991135, 0.03816644474864006, 0.24216414988040924]], dtype='float32').reshape([6, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a5ae8a733e11dc71ae541a385555c8c7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.31454479694366455, 0.10439124703407288, 0.16489987075328827, 0.18370254337787628], [0.11546322703361511, 0.26400521397590637, 0.06056874617934227, 0.09392143040895462], [0.4271167516708374, 0.453997939825058, 0.2668359875679016, 0.30915793776512146], [0.05479086562991142, 0.4311014413833618, 0.2002004086971283, 0.21852238476276398], [0.31454479694366455, 0.10439124703407288, 0.16489987075328827, 0.18370254337787628]], dtype='float32').reshape([5, 4]),
-            paddle.to_tensor([[0.26386094093322754, 0.27112436294555664, 0.39497309923171997, 0.42580345273017883], [0.47162744402885437, 0.0874064713716507, 0.2927992045879364, 0.4740701913833618], [0.15716779232025146, 0.0017121427226811647, 0.13402105867862701, 0.2784697711467743], [0.2673611044883728, 0.20431914925575256, 0.4392146170139313, 0.18085090816020966], [0.26386094093322754, 0.27112436294555664, 0.39497309923171997, 0.42580345273017883]], dtype='float32').reshape([5, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_56bd3d7f1023b32564a39a9793b4d622(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([10, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([10, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1cbcd7991ed6fdb0c9c5b0ce675977d4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.11903903633356094]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.3555246889591217]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d41f96ee1b152bb09b6faa5f12d868b8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0831770971417427]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.45340871810913086]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_05f1cc7c1bf89a05d469eb24c2730477(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.33794644474983215]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.2977246940135956]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ad03b962229cddadf6f2e39118379806(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.12983585894107819]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.45340871810913086]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1cbcd7991ed6fdb0c9c5b0ce675977d4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.11903903633356094]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.3555246889591217]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a06e94cca90c7caf756fbb7ab054eaab(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0831770971417427]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.43772584199905396]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9553c98238d3d876f3f0e0fe7f49f6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.07083103060722351]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.0]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_05f1cc7c1bf89a05d469eb24c2730477(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.33794644474983215]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.2977246940135956]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a0b8984f934abc666cf9a570906a85b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.12983585894107819]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.43772584199905396]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6e566f0e9601517bfacd01266c4611de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.012383874505758286]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.07083103060722351]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_594049bfdd18338219bc9314c2f732df(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[6.719618320465088]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5238a0ed6b632fd19c88e5f35d3f4b47(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.20998290181159973], [0.18442489206790924], [0.1968512237071991], [0.20288529992103577], [0.21599259972572327], [0.19651634991168976]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.3895230293273926], [0.4666270613670349], [0.17671829462051392], [0.3581591248512268], [0.42263373732566833], [0.24344341456890106]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_792a83a8650844cd06cca95700a8fbf1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4151418209075928], [0.2509276866912842], [0.13929075002670288], [0.03818127512931824], [0.08567338436841965], [0.23274247348308563]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.4103717803955078], [0.39778658747673035], [0.40150901675224304], [0.42183321714401245], [0.1773831695318222], [0.48681026697158813]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_789850f723c6754bce6385edefe0a3f5(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.20998290181159973], [0.4498758018016815], [0.24683597683906555], [0.20288529992103577], [0.21599259972572327], [0.19651634991168976]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.15491808950901031], [0.16919776797294617], [0.1292070597410202], [0.12714418768882751], [0.33482757210731506], [0.2098187357187271]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dc789da2137c74034b4363355f450b61(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4901370406150818], [0.2509276866912842], [0.2429288774728775], [0.06132770702242851], [0.08567338436841965], [0.23274247348308563]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.4103717803955078], [0.39778658747673035], [0.40150901675224304], [0.42183321714401245], [0.09941722452640533], [0.25498807430267334]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_306651a096272fa6d733b41ea8025470(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.22682112455368042], [0.18442489206790924], [0.1968512237071991], [0.46012169122695923], [0.40794169902801514], [0.4862612187862396]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.3895230293273926], [0.4666270613670349], [0.17671829462051392], [0.3581591248512268], [0.42263373732566833], [0.24344341456890106]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c77c433ea911e2411aac58d395d8556e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4151418209075928], [0.3606884777545929], [0.13929075002670288], [0.03818127512931824], [0.28175589442253113], [0.3325986862182617]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.1010279506444931], [0.2909882366657257], [0.2298392504453659], [0.29276591539382935], [0.1773831695318222], [0.48681026697158813]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1606ef2561d5873d54f91490159d98b3(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.0467146635055542], [-0.060889631509780884], [-0.02047661691904068], [-0.05326319485902786], [9.980075992643833e-05], [-0.037149399518966675]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6f8b324f7e7b0868e1c9528cbc26d0cc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.22682112455368042], [0.4498758018016815], [0.24683597683906555], [0.46012169122695923], [0.40794169902801514], [0.4862612187862396]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.15491808950901031], [0.16919776797294617], [0.1292070597410202], [0.12714418768882751], [0.33482757210731506], [0.2098187357187271]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ecb901fe7978d0cea63d57c249161309(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4901370406150818], [0.3606884777545929], [0.2429288774728775], [0.06132770702242851], [0.28175589442253113], [0.3325986862182617]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.1010279506444931], [0.2909882366657257], [0.2298392504453659], [0.29276591539382935], [0.09941722452640533], [0.25498807430267334]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_264093c99d91c0e58506e35590b0d9ba(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.02797812409698963], [0.019563326612114906], [0.0015397188253700733], [-0.07706371694803238], [0.01333153247833252], [0.021454868838191032]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[-0.0467146635055542], [-0.060889631509780884], [-0.02047661691904068], [-0.05326319485902786], [9.980086178984493e-05], [-0.037149399518966675]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b0a42593a2c026c8062f5eede8020720(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.0], [-0.0], [-0.0], [-0.0], [0.0], [-0.0]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[2.6696853637695312], [4.1124372482299805], [14.298932075500488], [0.30884212255477905], [0.9925139546394348], [2.731513738632202]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc98259315ae6586ac9df6a85b6c5562(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.1824364960193634, 0.11383223533630371, 0.15641945600509644, 0.39408645033836365], [0.44869938492774963, 0.021236063912510872, 0.01257316768169403, 0.1094929650425911], [0.23305965960025787, 0.25187548995018005, 0.1086021214723587, 0.40324482321739197], [0.4280799329280853, 0.38631755113601685, 0.44555965065956116, 0.33409902453422546]], dtype='float32').reshape([4, 4]),
-            paddle.to_tensor([[0.1865062266588211, 0.10327757894992828, 0.31373849511146545, 0.37114739418029785], [0.4478083550930023, 0.3082262873649597, 0.22778934240341187, 0.13071022927761078], [0.07917411625385284, 0.3322516679763794, 0.15485522150993347, 0.46097493171691895], [0.12284959852695465, 0.0587301105260849, 0.26185959577560425, 0.17734073102474213]], dtype='float32').reshape([4, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ad01ba209aa563c77d8a0f5ecf6c7ca2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([84, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([84, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d3c2c2cf2a99e2e53e9cb3104d1d7037(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_5244d132153e4997ca11e889d8292a19(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2079, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c250574f3749206292125dd9ec423b77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_15aa17eea687877cf988c12a2c059c6d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_358bc8c1eb98b6e964028dcc0f56dec2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d3c2c2cf2a99e2e53e9cb3104d1d7037(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a9ea8ff0bae1a32aa2249436f11ffaaa(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.21805590391159058, 0.369320809841156, 0.46295464038848877, 0.32399559020996094], [0.21805590391159058, 0.369320809841156, 0.46295464038848877, 0.32399559020996094], [0.45063576102256775, 0.08473407477140427, 0.2964290678501129, 0.17995186150074005], [0.35198330879211426, 0.0768512561917305, 0.0005001812824048102, 0.43629372119903564], [0.23088055849075317, 0.3435775935649872, 0.022802097722887993, 0.006141966208815575], [0.1841537058353424, 0.24625396728515625, 0.19545932114124298, 0.41149935126304626], [0.0622473768889904, 0.010412028059363365, 0.32384076714515686, 0.019491543993353844]], dtype='float32').reshape([7, 4]),
-            paddle.to_tensor([[0.11718153953552246, 0.18766602873802185, 0.3853262960910797, 0.17273500561714172], [0.11718153953552246, 0.18766602873802185, 0.3853262960910797, 0.17273500561714172], [0.11498585343360901, 0.39520618319511414, 0.019509049132466316, 0.21388070285320282], [0.11598620563745499, 0.13958659768104553, 0.2296896129846573, 0.40918001532554626], [0.08412293344736099, 0.36157235503196716, 0.21181900799274445, 0.0409696027636528], [0.4178256392478943, 0.11422522366046906, 0.3132604658603668, 0.10981956124305725], [0.3702118396759033, 0.0816604271531105, 0.2898832857608795, 0.05852610245347023]], dtype='float32').reshape([7, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_40f637a1c203bb54d195c3251937c47a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([16384, 5], dtype='float32', min=0, max=0.5),
-            paddle.uniform([16384, 5], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_19bcde026d279fc2319de30a93e14494(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ef457a8c2827717ad98c98ab5f8f38cd
     def get_inputs(self):
@@ -4275,489 +5149,106 @@ class TestPrimitiveOp_19bcde026d279fc2319de30a93e14494(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e16d1298a6a509575e0c4f4d15de3a17(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_d63a15256c4746d2e5436d5cf7185344(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_cce03e69dd1eed4a017258fb89e0d98e(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4526, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_bb94b189bae654f68d357ad24ad78b31(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ec11672a6152cbe658064c630cc61cbe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_fcb8107f4be5eea7babae7f8cd89696e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([9261, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 9261, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2f56d38e40cb258115066d09088cf23a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 9261, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([9261, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e16d1298a6a509575e0c4f4d15de3a17(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([4586, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_437575c72e6763468f38fbb580627186(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 4], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_22c71f0cf10bd2b51ecdebcf1c120533(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([1046, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b62a7e7d7aeb8dfe79317e11a31487f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_21a50b949a46359c33f1a60837b3d774(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([2100, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 2100, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_67dd1ecbca2884ee78c7cd1a7eea2215(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 2100, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2100, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_437575c72e6763468f38fbb580627186(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_515f52247eb0925eb57e78c260d58f96(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.uniform([2, 1, 960, 960], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2, 1, 960, 960], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d3a19ffbad53f86cf6124faf17bca69f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.1983117163181305, 0.4262564480304718, 0.44021251797676086, 0.45081812143325806], [0.3675566613674164, 0.2470126450061798, 0.4268859326839447, 0.33921435475349426], [0.3675566613674164, 0.2470126450061798, 0.4268859326839447, 0.33921435475349426], [0.33047568798065186, 0.14772096276283264, 0.16170357167720795, 0.1762121468782425], [0.1535663604736328, 0.11277178674936295, 0.3490486741065979, 0.19976338744163513], [0.052271824330091476, 0.46588462591171265, 0.35674288868904114, 0.013300606049597263]], dtype='float32').reshape([6, 4]),
-            paddle.to_tensor([[0.4848327338695526, 0.167837992310524, 0.48880672454833984, 0.4181344211101532], [0.32352542877197266, 0.27273812890052795, 0.30801448225975037, 0.2090080976486206], [0.32352542877197266, 0.27273812890052795, 0.30801448225975037, 0.2090080976486206], [0.005183657631278038, 0.49299538135528564, 0.12437743693590164, 0.14061975479125977], [0.10720117390155792, 0.40686947107315063, 0.33792147040367126, 0.4700213372707367], [0.44660133123397827, 0.26956701278686523, 0.28133127093315125, 0.14439621567726135]], dtype='float32').reshape([6, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_293d93bbcf6e674049780843ff641a48(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([100, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([100, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_32469e7c3a76900c5c34599e508cf549(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -4771,111 +5262,37 @@ class PrimitiveOp_32469e7c3a76900c5c34599e508cf549(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[100, 1, None], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4c0273208412600b6eafd8a44aa9f1e7(CinnTestBase, unittest.TestCase):
-    
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3f9e3e917e7c028b08f35fdeb44e7726(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_32469e7c3a76900c5c34599e508cf549
     def get_inputs(self):
         return [
             paddle.uniform([100, 1, 4], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor([[0.39817842841148376, 12.484559059143066, 2.655482292175293, 1.6678518056869507], [2.003458261489868, 1.472330927848816, 0.9269778728485107, 0.15994922816753387]], dtype='float32').reshape([2, 4]),
+            paddle.to_tensor([[1.5318437814712524, 4.40413236618042, 4.046511173248291, 0.10578850656747818], [4.511455535888672, 0.8805773258209229, 0.038609277456998825, 4.896485805511475]], dtype='float32').reshape([2, 4]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_8b891c3c0afc2d4183664ce45c3a7b49(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -4889,15 +5306,16 @@ class PrimitiveOp_8b891c3c0afc2d4183664ce45c3a7b49(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 6069, 2], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_ea82364bb78e0e4eedc177c19e5452e0(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_8b891c3c0afc2d4183664ce45c3a7b49
     def get_inputs(self):
@@ -4907,21 +5325,18 @@ class TestPrimitiveOp_ea82364bb78e0e4eedc177c19e5452e0(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5506a7d5add76bd5c93be0c3ec95da8f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([300, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([300, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_af27d48e9942876178a44f8989dc4d03(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -4935,159 +5350,38 @@ class PrimitiveOp_af27d48e9942876178a44f8989dc4d03(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[300, 1, None], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d626780282058141aa20d73283d3ee6c(CinnTestBase, unittest.TestCase):
-    
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_eab6cd2003abf2c018fb2e066a422b47(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_af27d48e9942876178a44f8989dc4d03
     def get_inputs(self):
         return [
             paddle.uniform([300, 1, 4], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor([[1.776720643043518, 0.14957483112812042, 0.3515414893627167, 1.572020173072815], [4.945065021514893, 5.548974990844727, 1.1182193756103516, 0.07188649475574493]], dtype='float32').reshape([2, 4]),
+            paddle.to_tensor([[1.6731966733932495, 0.09393339604139328, 0.3160341680049896, 0.7564866542816162], [6.351454734802246, 0.11645545065402985, 0.36461472511291504, 0.908490777015686]], dtype='float32').reshape([2, 4]),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6e064d47fc2ef1aad541cfaac0081039(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.27102693915367126], [0.21676185727119446], [0.3153221905231476], [0.01315593346953392], [0.1262916475534439]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.4706946909427643], [0.39319300651550293], [0.19910383224487305], [0.3212777376174927], [0.29648688435554504]], dtype='float32').reshape([5, 1]),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cac090a0c6006c4ff68fabaed33f11a6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.39167019724845886], [0.046127624809741974], [0.04106692224740982], [0.014858669601380825], [0.17310704290866852]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.16876435279846191], [0.1894516497850418], [0.3004133403301239], [0.4173230230808258], [0.3782731890678406]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_68f0d019e4c9fd642d19ba5994ae6632(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.3077138066291809], [0.21676185727119446], [0.36836960911750793], [0.01315593346953392], [0.1262916475534439]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.3776218891143799], [0.017230553552508354], [0.12865380942821503], [0.0789160430431366], [0.29648688435554504]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_46a3ac494b39c23c2c6c2ad758ea68ee(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.39167019724845886], [0.046127624809741974], [0.13554736971855164], [0.2480829954147339], [0.17310704290866852]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.04191706329584122], [0.1894516497850418], [0.11870089173316956], [0.0004433089052326977], [0.28320610523223877]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77363bca5aab326a7078b852be665c33(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.27102693915367126], [0.3185052275657654], [0.3153221905231476], [0.430990993976593], [0.4189223051071167]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.4706946909427643], [0.39319300651550293], [0.19910383224487305], [0.3212777376174927], [0.27562597393989563]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_16a674fb86173a0a7b96accf14c24b02(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4086301028728485], [0.391907662153244], [0.04106692224740982], [0.014858669601380825], [0.4931931793689728]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.16876435279846191], [0.1280040442943573], [0.3004133403301239], [0.4173230230808258], [0.3782731890678406]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_26701ed506c04a30ea9dbe81ee2556d7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.07234402745962143], [-0.048308003693819046], [-0.026102447882294655], [-0.060440488159656525], [0.03520594909787178]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_3c14aeb1c83e16814c4b64af6530f2a5(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.3077138066291809], [0.3185052275657654], [0.36836960911750793], [0.430990993976593], [0.4189223051071167]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.3776218891143799], [0.017230553552508354], [0.12865380942821503], [0.0789160430431366], [0.27562597393989563]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_15432243cbc4d9fe3899ec0e1153673d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4086301028728485], [0.391907662153244], [0.13554736971855164], [0.2480829954147339], [0.4931931793689728]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.04191706329584122], [0.1280040442943573], [0.11870089173316956], [0.0004433089052326977], [0.28320610523223877]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32464289f44b3279d82a52003896bdb9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.025636205449700356], [0.07950747758150101], [0.0040383669547736645], [0.08718772977590561], [0.03009037673473358]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[-0.07234402745962143], [-0.048308003693819046], [-0.026102447882294655], [-0.060440488159656525], [0.03520594909787178]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6aaa08ff2c87645dd7e343b5022045c0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.0], [-0.0], [-0.0], [-0.0], [0.0]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[-1.821947693824768], [1.6075907945632935], [7.4636149406433105], [1.6932224035263062], [-0.1700069159269333]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_f4eed4ac0bd1910c2ef37732dde94533(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ef457a8c2827717ad98c98ab5f8f38cd
     def get_inputs(self):
@@ -5097,801 +5391,151 @@ class TestPrimitiveOp_f4eed4ac0bd1910c2ef37732dde94533(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_7626e99753a2093ffbccf2e42f3f110d(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_df1fa1f7cbd3e8ff8fbaf296352cf42c(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_4410ed931f972a4c6acc93d61c62b82a(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2335, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_e2e8c1d1e374a0011460b7f067edc9c3(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5360d447777f71181e9df638492f3aa1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0cf1b79d6b0bda99fe30897e159b4ad8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([4725, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 4725, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_482a57e3f8a9d1754788fd87985c8f0e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 4725, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4725, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_df1fa1f7cbd3e8ff8fbaf296352cf42c(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([2383, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_df4cb3e0133b5df466a7321a93627e00(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_c1b59c49444d489a019b764e26552ca4(CinnTestBase, unittest.TestCase):
+
+    def get_test_class(self):
+        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
+    def get_inputs(self):
+        return [
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2986, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_3e10ba9e20218d67d52adaea42f2035e(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_39ca18dab82687d088e82d42c4e52504(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([3783, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1be842004c1ded63014828f8c93c5ebd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8d5f52ddf8383c305d82d62c38a7f453(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([6069, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_fc25a83b16b04b6ad5a3de78a8e76b5e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([6069, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_df4cb3e0133b5df466a7321a93627e00(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_10117e11107ef9c9838ff68488843148(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f67919162c1f60ec850e0ef57ffb2e6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dba09ba03ffefda8f2726c71385338fb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([7581, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 7581, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b9f8e1c85db4557fff30430af9b30c7d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 7581, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([7581, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_10117e11107ef9c9838ff68488843148(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_5eb26b92970518f687a0bea510e387ba(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ef457a8c2827717ad98c98ab5f8f38cd
     def get_inputs(self):
@@ -5901,105 +5545,18 @@ class TestPrimitiveOp_5eb26b92970518f687a0bea510e387ba(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3a508b496778ed0b643bc983d4abc57(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([256, 5], dtype='float32', min=0, max=0.5),
-            paddle.uniform([256, 5], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_654c5f6af86ec6b7bca9d326c0167e14(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -6013,15 +5570,16 @@ class PrimitiveOp_654c5f6af86ec6b7bca9d326c0167e14(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 512, 512], dtype='float32'),
             paddle.static.InputSpec(shape=[None, 512, 512], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_033ed509de49dffc0537d194bb79278b(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_654c5f6af86ec6b7bca9d326c0167e14
     def get_inputs(self):
@@ -6031,369 +5589,63 @@ class TestPrimitiveOp_033ed509de49dffc0537d194bb79278b(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4bd2d697bf6182f52895306cc885df7c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([20]),
-            paddle.to_tensor([0.4473949074745178, 0.08388441801071167, 0.17490623891353607, 0.2467467337846756, 0.14741015434265137, 0.14820529520511627, 0.4406585693359375, 0.37450501322746277, 0.04052567854523659, 0.48126161098480225, 0.4376707375049591, 0.2969852685928345, 0.2029794454574585, 0.15935193002223969, 0.2048863172531128, 0.25172749161720276, 0.38391077518463135, 0.35427677631378174, 0.34242749214172363, 0.49203726649284363], dtype='float32').reshape([20]),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_86164f0e7305dc2ddca165c81350b86b(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_09380d0d6e063af8224ede249c2f0ebe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.4473949074745178, 0.08388441801071167, 0.17490623891353607, 0.2467467337846756, 0.14741015434265137, 0.14820529520511627, 0.4406585693359375, 0.37450501322746277, 0.04052567854523659, 0.48126161098480225, 0.4376707375049591, 0.2969852685928345, 0.2029794454574585, 0.15935193002223969, 0.2048863172531128, 0.25172749161720276, 0.38391077518463135, 0.35427677631378174, 0.34242749214172363, 0.49203726649284363], dtype='float32').reshape([20]),
-            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([20]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_01bb10db17854f1b70da84dea0683b7d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.1317010074853897], [0.1832035928964615], [0.005624867510050535], [0.382903516292572]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.4710065722465515], [0.27305787801742554], [0.37650251388549805], [0.3584076464176178]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1a0b2eb921f5a565e0e6ec6b8f868f8b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.2849007844924927], [0.1524905115365982], [0.36212438344955444], [0.4171924889087677]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.3558596074581146], [0.34534937143325806], [0.45495909452438354], [0.43209323287010193]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6b057d51f5ce2a7ef4b1604848a7e43f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.1317010074853897], [0.1832035928964615], [0.005624867510050535], [0.382903516292572]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.4710065722465515], [0.27305787801742554], [0.1443967968225479], [0.18359437584877014]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f54ee33ad5572909cc204d2f34c47ceb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.407511442899704], [0.41122034192085266], [0.36212438344955444], [0.47452500462532043]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.3558596074581146], [0.24631327390670776], [0.38240188360214233], [0.43209323287010193]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8757f20916feccccae702f6990bca23f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.21841885149478912], [0.4341205954551697], [0.17934243381023407], [0.48898959159851074]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.11861217021942139], [0.1668710708618164], [0.37650251388549805], [0.3584076464176178]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dc8042352da3be90258765fe14bec82f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.2849007844924927], [0.1524905115365982], [0.386353075504303], [0.4171924889087677]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.17836087942123413], [0.34534937143325806], [0.45495909452438354], [0.29443272948265076]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62106d4632ce0001929f0696891a2a61(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.006892362609505653], [-0.06635904312133789], [0.016340315341949463], [0.024487247690558434]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_47d77aaf788cd9fc4f442a835c572b03(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.21841885149478912], [0.4341205954551697], [0.17934243381023407], [0.48898959159851074]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.11861217021942139], [0.1668710708618164], [0.1443967968225479], [0.18359437584877014]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f9ba8564672e52eccfb9552453f64491(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.407511442899704], [0.41122034192085266], [0.386353075504303], [0.47452500462532043]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.17836087942123413], [0.24631327390670776], [0.38240188360214233], [0.29443272948265076]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb8ae06b21b230a17f188b9522134849(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.022870756685733795], [0.04407133534550667], [0.00013807702634949237], [0.05499931797385216]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[-0.006892362609505653], [-0.06635904312133789], [0.016340315341949463], [0.024487247690558434]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6691748a8a87d09f2a04ccd61d787fb7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.0], [-0.0], [0.0], [0.0]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[1.301361322402954], [2.505718946456909], [-117.34202575683594], [0.5547717809677124]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2bdf48ae6973d8a4487566beb1fae511(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([47, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([47, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c2dca27c7255126b7a4f8c21d919d4ec(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_1a2e214275646ed6004d5a299f6d4c42(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([2041, 1], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03fa676653657fea35ebb0dd3545f434(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_15aa17eea687877cf988c12a2c059c6d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_358bc8c1eb98b6e964028dcc0f56dec2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c2dca27c7255126b7a4f8c21d919d4ec(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_033ed509de49dffc0537d194bb79278b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_654c5f6af86ec6b7bca9d326c0167e14
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 512, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 512, 512], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_aae057c2bbb4508044ffb10c39a7e238(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_ef457a8c2827717ad98c98ab5f8f38cd
     def get_inputs(self):
@@ -6403,9 +5655,18 @@ class TestPrimitiveOp_aae057c2bbb4508044ffb10c39a7e238(CinnTestBase, unittest.Te
         ]
 
 
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 class PrimitiveOp_7182d24cb9ed83c3e793bde3926531e9(InstanceTrait, paddle.nn.Layer):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -6419,15 +5680,16 @@ class PrimitiveOp_7182d24cb9ed83c3e793bde3926531e9(InstanceTrait, paddle.nn.Laye
             paddle.static.InputSpec(shape=[None, 6804, 2], dtype='float32'),
             paddle.static.InputSpec(shape=[None, None, None], dtype='float32'),
         ]
-        
+
     instance_ = None
     static_instance_with_cinn_ = None
     static_instance_without_cinn_ = None
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
+
+@unittest.skipIf(need_skip, skip_message)
 class TestPrimitiveOp_68b802329411cbd7dc7461a50172405a(CinnTestBase, unittest.TestCase):
-    
+
     def get_test_class(self):
         return PrimitiveOp_7182d24cb9ed83c3e793bde3926531e9
     def get_inputs(self):
@@ -6437,6844 +5699,59 @@ class TestPrimitiveOp_68b802329411cbd7dc7461a50172405a(CinnTestBase, unittest.Te
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ad43aa4f62461977c2e13b01428b556c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4905618131160736, 0.4396417438983917, 0.38613632321357727, 0.30494746565818787], [0.48475587368011475, 0.07337385416030884, 0.278387188911438, 0.3098049461841583], [0.29222574830055237, 0.4004157781600952, 0.19416268169879913, 0.0951867327094078], [0.29222574830055237, 0.4004157781600952, 0.19416268169879913, 0.0951867327094078], [0.26826053857803345, 0.21500079333782196, 0.11182934045791626, 0.27236950397491455]], dtype='float32').reshape([5, 4]),
-            paddle.to_tensor([[0.3478876054286957, 0.4785013496875763, 0.05671229213476181, 0.23212681710720062], [0.25702235102653503, 0.06689565628767014, 0.20180051028728485, 0.24164846539497375], [0.3288941979408264, 0.4574975371360779, 0.30252569913864136, 0.07800009846687317], [0.3288941979408264, 0.4574975371360779, 0.30252569913864136, 0.07800009846687317], [0.40340694785118103, 0.1492466926574707, 0.29067420959472656, 0.32166600227355957]], dtype='float32').reshape([5, 4]),
-        ]
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_195a9fdc9db3f7e665bc737d1f0dd5b0(CinnTestBase, unittest.TestCase):
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5eedd941575a8025b1f6142513fa4c9d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([56, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([56, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6323ab2df95c965ae5a18b5d2ee768b0(CinnTestBase, unittest.TestCase):
-    
     def get_test_class(self):
         return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 4], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 4], dtype='float32', min=0, max=0.5),
         ]
 
 
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
+
+@unittest.skipIf(need_skip, skip_message)
+class TestPrimitiveOp_76667dad2097593a65237b9460ed139f(CinnTestBase, unittest.TestCase):
+
     def get_test_class(self):
         return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
     def get_inputs(self):
         return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_66124f9c2801dcc6c590188b3dabe282(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_20c42f8fe5fe3cbd282332085a2c3eae
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_fadf83c28010ecd5bd8925902fc6620e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([8400, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0906bc96c54199c50c23766f6e035159(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([8400, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6323ab2df95c965ae5a18b5d2ee768b0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_ce10a710f7565f96c00a1389a91699d4
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_266177bacdbc6e0a792e0f610c2e9b39(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.15494532883167267, 0.2111409604549408, 0.16940054297447205, 0.07837673276662827], [0.22056446969509125, 0.49623557925224304, 0.30928391218185425, 0.13696753978729248], [0.1627940982580185, 0.29646024107933044, 0.267007052898407, 0.4014988839626312], [0.15494532883167267, 0.2111409604549408, 0.16940054297447205, 0.07837673276662827], [0.0711192935705185, 0.08745941519737244, 0.3294025659561157, 0.2732483148574829], [0.333394855260849, 0.2548178434371948, 0.49965474009513855, 0.017060736194252968], [0.0711192935705185, 0.08745941519737244, 0.3294025659561157, 0.2732483148574829]], dtype='float32').reshape([7, 4]),
-            paddle.to_tensor([[0.46240881085395813, 0.32869765162467957, 0.24423934519290924, 0.25821471214294434], [0.06261877715587616, 0.2492293268442154, 0.43208566308021545, 0.3304005563259125], [0.17018108069896698, 0.49496328830718994, 0.39770105481147766, 0.4668426513671875], [0.46240881085395813, 0.32869765162467957, 0.24423934519290924, 0.25821471214294434], [0.13235357403755188, 0.3676305413246155, 0.23703737556934357, 0.31373870372772217], [0.06706759333610535, 0.2564274072647095, 0.31626176834106445, 0.42102324962615967], [0.13235357403755188, 0.3676305413246155, 0.23703737556934357, 0.31373870372772217]], dtype='float32').reshape([7, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5c1607c584dc7e104775c4f773344f40(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([52, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([52, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_91a85761701982e53d3c9aefee45ccec(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[0.04714285582304001]], [[0.24956832826137543]], [[0.06141399219632149]], [[0.27293410897254944]], [[0.020540714263916016]], [[0.47400450706481934]]], dtype='float32').reshape([6, 1, 1]),
-            paddle.to_tensor([[[0.6053178310394287]], [[0.6067324876785278]], [[0.7563060522079468]], [[0.6030699014663696]], [[0.6912596821784973]], [[0.6188269853591919]]], dtype='float32').reshape([6, 1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_02ce98b787078fb5db949c316ce3dc84(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[0.43553808331489563]], [[0.202225923538208]], [[0.1559573858976364]], [[0.39463528990745544]], [[0.45692548155784607]], [[0.21347668766975403]]], dtype='float32').reshape([6, 1, 1]),
-            paddle.to_tensor([[[0.6967204213142395]], [[0.5455881357192993]], [[0.774244487285614]], [[0.5381509065628052]], [[0.5265048742294312]], [[0.7456739544868469]]], dtype='float32').reshape([6, 1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a929203e3767fdbf9f28631d4035808b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1024, 5], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1024, 5], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7837eb9c20d5f70502fabaaf04eced81(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4096, 5], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4096, 5], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_75aeed24fc04a1265ee35faaeb56814b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 12096, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 12096, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_af7abc8f3c07a92290a9b6159b7d361b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([8, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([8, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dabba7fe0741275dfcdc1ed73b9802f8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[[0.009778277017176151, 0.02429402805864811]], [[0.0029977455269545317, 0.20873524248600006]], [[0.46495717763900757, 0.0797295793890953]], [[0.39304178953170776, 0.019942941144108772]], [[0.1783885955810547, 0.41458258032798767]], [[0.47772762179374695, 0.20179226994514465]]]], dtype='float32').reshape([1, 6, 1, 2]),
-            paddle.to_tensor([[[[0.358097106218338, 0.35106879472732544]], [[0.4313538074493408, 0.08216709643602371]], [[0.05587208271026611, 0.3657324016094208]], [[0.31227242946624756, 0.3250352442264557]], [[0.4644756019115448, 0.35592329502105713]], [[0.12418679893016815, 0.4918902516365051]]]], dtype='float32').reshape([1, 6, 1, 2]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_7eb8e2e75859be7d760cee2a82bf9707(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[[0.3234972059726715, 0.20493970811367035]], [[0.3132672607898712, 0.17412687838077545]], [[0.014389144256711006, 0.3884662687778473]], [[0.3867090344429016, 0.06462222337722778]], [[0.17619918286800385, 0.07482553273439407]], [[0.027263877913355827, 0.33704501390457153]]]], dtype='float32').reshape([1, 6, 1, 2]),
-            paddle.to_tensor([[[[0.358097106218338, 0.35106879472732544]], [[0.4313538074493408, 0.08216709643602371]], [[0.05587208271026611, 0.3657324016094208]], [[0.31227242946624756, 0.3250352442264557]], [[0.4644756019115448, 0.35592329502105713]], [[0.12418679893016815, 0.4918902516365051]]]], dtype='float32').reshape([1, 6, 1, 2]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_230bfc952c4fdced01186382fb750057(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 1, 21824, 2], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor([[[[0.29133909940719604, 0.4853375554084778]], [[0.36761757731437683, 0.4571003019809723]], [[0.46794551610946655, 0.1688530147075653]], [[0.2670198976993561, 0.1982056200504303]], [[0.12026780098676682, 0.48663008213043213]], [[0.2773101329803467, 0.48897823691368103]]]], dtype='float32').reshape([1, 6, 1, 2]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_55e8ed499f2a3bcd8b91a2a8e96cbbb4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([16]),
-            paddle.to_tensor([0.3780723512172699, 0.10681550204753876, 0.21278166770935059, 0.23138809204101562, 0.32906362414360046, 0.22839735448360443, 0.13309429585933685, 0.0206376351416111, 0.05156761035323143, 0.46504005789756775, 0.13148869574069977, 0.449235200881958, 0.08905600011348724, 0.015455592423677444, 0.3863491714000702, 0.4747481942176819], dtype='float32').reshape([16]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_25a7ceff1e2612cd942241b9353c5a2d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.3780723512172699, 0.10681550204753876, 0.21278166770935059, 0.23138809204101562, 0.32906362414360046, 0.22839735448360443, 0.13309429585933685, 0.0206376351416111, 0.05156761035323143, 0.46504005789756775, 0.13148869574069977, 0.449235200881958, 0.08905600011348724, 0.015455592423677444, 0.3863491714000702, 0.4747481942176819], dtype='float32').reshape([16]),
-            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([16]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_372aad51121867288b938e82c520cce6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.uniform([300], dtype='float32', min=0, max=0.5),
-            paddle.uniform([300], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_372aad51121867288b938e82c520cce6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.uniform([300], dtype='float32', min=0, max=0.5),
-            paddle.uniform([300], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0388175443d5f0af0087911a194535d6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 23, 23, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6e02c6ca3972717e5b5b70e1ebc41e36(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([53, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([53, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c58c6688c673867f3ad109f15937fb6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a95bfb21cf73e07e5e7d5e491f3804b7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_52d6c0904952e02947e994d334c88237(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_38dc692e168c69c6d9272c552d7727e9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c58c6688c673867f3ad109f15937fb6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1777, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1777, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b9a650a7e9391931f30b34078c4bdac3(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0660882219672203, 0.47173580527305603, 0.263930082321167, 0.1906377077102661], [0.08412470668554306, 0.41810542345046997, 0.11181697994470596, 0.21970145404338837], [0.15435844659805298, 0.23323611915111542, 0.2906814217567444, 0.22473807632923126], [0.43175461888313293, 0.4601755738258362, 0.09878799319267273, 0.04755397140979767], [0.2544768452644348, 0.316487193107605, 0.2239605039358139, 0.27877798676490784]], dtype='float32').reshape([5, 4]),
-            paddle.to_tensor([[0.4106596112251282, 0.14335723221302032, 0.02330786921083927, 0.11569497734308243], [0.42931506037712097, 0.01977924257516861, 0.230007603764534, 0.057321660220623016], [0.2798386216163635, 0.10481530427932739, 0.4301333725452423, 0.38091546297073364], [0.3798501193523407, 0.11627687513828278, 0.3571585416793823, 0.09328742325305939], [0.4864861071109772, 0.2632262408733368, 0.27916863560676575, 0.29254499077796936]], dtype='float32').reshape([5, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_753e4f9951039e8fb6243310705899f2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 5376, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 5376, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1d596efcb9d2732b85dc08040cf23b5e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.2620193064212799, 0.11581896245479584, 0.053561560809612274, 0.08257486671209335], [0.03958377614617348, 0.3950630724430084, 0.20495222508907318, 0.3324486017227173], [0.3044680953025818, 0.4422242343425751, 0.3617860674858093, 0.3761495053768158], [0.03958377614617348, 0.3950630724430084, 0.20495222508907318, 0.3324486017227173], [0.3044680953025818, 0.4422242343425751, 0.3617860674858093, 0.3761495053768158]], dtype='float32').reshape([5, 4]),
-            paddle.to_tensor([[0.4025401175022125, 0.3901353180408478, 0.36967140436172485, 0.09798751771450043], [0.3619749844074249, 0.07483921945095062, 0.3436369299888611, 0.2519150972366333], [0.28524336218833923, 0.36912211775779724, 0.19368404150009155, 0.3241569995880127], [0.3619749844074249, 0.07483921945095062, 0.3436369299888611, 0.2519150972366333], [0.28524336218833923, 0.36912211775779724, 0.19368404150009155, 0.3241569995880127]], dtype='float32').reshape([5, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dbf0f22c4f3a7340ebbd00c64a90cf2c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.08568544685840607], [0.03848660737276077], [0.08805205672979355], [0.03215041384100914], [0.05588645488023758], [0.1058163195848465], [0.12910811603069305], [0.009429873898625374], [0.23962129652500153]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39208778738975525], [0.3591558635234833], [0.15294159948825836], [0.27551141381263733], [0.2135521024465561], [0.3570266664028168], [0.3142800033092499], [0.4077095687389374], [0.48227444291114807]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1dd8422d0d5d1bc60990131be414319e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.08652636408805847], [0.050644610077142715], [0.09682576358318329], [0.37938541173934937], [0.28843000531196594], [0.07827463001012802], [0.009334404021501541], [0.027887742966413498], [0.1417359560728073]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.49722179770469666], [0.4310191571712494], [0.3834795355796814], [0.30722612142562866], [0.2178652435541153], [0.28443190455436707], [0.2855451703071594], [0.22062554955482483], [0.498458594083786]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4f3532d8815f2a1e2c847f8d2ee8e106(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.36820653080940247], [0.03848660737276077], [0.08805205672979355], [0.03780742734670639], [0.23160281777381897], [0.18210230767726898], [0.21688763797283173], [0.009429873898625374], [0.23962129652500153]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39208778738975525], [0.2094176560640335], [0.1283661276102066], [0.27551141381263733], [0.03479340672492981], [0.3570266664028168], [0.11812948435544968], [0.2456916868686676], [0.48227444291114807]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f9a778069b418f7d6f8803c18b3921f6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.39371946454048157], [0.050644610077142715], [0.09682576358318329], [0.37938541173934937], [0.37218934297561646], [0.31943804025650024], [0.009334404021501541], [0.027887742966413498], [0.1417359560728073]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.49722179770469666], [0.4310191571712494], [0.3834795355796814], [0.30722612142562866], [0.2178652435541153], [0.11710164695978165], [0.23001685738563538], [0.22062554955482483], [0.498458594083786]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4d62f21a69b8d75a4b3559a2e7458fd9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.08568544685840607], [0.1383717805147171], [0.2306109517812729], [0.03215041384100914], [0.05588645488023758], [0.1058163195848465], [0.12910811603069305], [0.02052994631230831], [0.24312002956867218]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.1547079086303711], [0.3591558635234833], [0.15294159948825836], [0.019754718989133835], [0.2135521024465561], [0.2554653286933899], [0.3142800033092499], [0.4077095687389374], [0.42899003624916077]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dfcef0fef8fab4a05f88bbd205b63c07(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.08652636408805847], [0.38375985622406006], [0.22444428503513336], [0.3983890116214752], [0.28843000531196594], [0.07827463001012802], [0.3716101050376892], [0.20676524937152863], [0.260421484708786]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39656439423561096], [0.12202204018831253], [0.0054341829381883144], [0.014495838433504105], [0.0013494952581822872], [0.28443190455436707], [0.2855451703071594], [0.20876038074493408], [0.38022154569625854]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6ab8d4e15efa4ab6685b1d4b16a9055c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.023871352896094322], [0.0072302743792533875], [0.028566552326083183], [-0.012393927201628685], [-0.014890296384692192], [-0.004542335867881775], [-0.037730999290943146], [0.046309053897857666], [0.10882711410522461]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_57300b75399eb3a297d1b5ae346d5b8b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.36820653080940247], [0.1383717805147171], [0.2306109517812729], [0.03780742734670639], [0.23160281777381897], [0.18210230767726898], [0.21688763797283173], [0.02052994631230831], [0.24312002956867218]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.1547079086303711], [0.2094176560640335], [0.1283661276102066], [0.019754718989133835], [0.03479340672492981], [0.2554653286933899], [0.11812948435544968], [0.2456916868686676], [0.42899003624916077]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e99dda31b438944e774c2dd8272ee17a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.39371946454048157], [0.38375985622406006], [0.22444428503513336], [0.3983890116214752], [0.37218934297561646], [0.31943804025650024], [0.3716101050376892], [0.20676524937152863], [0.260421484708786]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.39656439423561096], [0.12202204018831253], [0.0054341829381883144], [0.014495838433504105], [0.0013494952581822872], [0.11710164695978165], [0.23001685738563538], [0.20876038074493408], [0.38022154569625854]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_473ed62fcf0ad6ec79b1600d60c809ee(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.000607388443313539], [-0.018595393747091293], [0.022392649203538895], [0.00693031121045351], [0.07298476994037628], [-0.014844009652733803], [0.013983488082885742], [0.00044922734377905726], [0.022267237305641174]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[0.023871352896094322], [0.0072302743792533875], [0.028566552326083183], [-0.012393927201628685], [-0.014890296384692192], [-0.004542335867881775], [-0.037730999290943146], [0.046309053897857666], [0.10882711410522461]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_abcce45492f97a3cf126b8f399949a6f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0], [0.0], [0.0], [-0.0], [-0.0], [-0.0], [-0.0], [0.0], [0.0]], dtype='float32').reshape([9, 1]),
-            paddle.to_tensor([[40.3016242980957], [1.388820767402649], [-0.27571114897727966], [2.788365364074707], [1.20401930809021], [0.6939953565597534], [3.698253870010376], [-102.08600616455078], [-3.887320041656494]], dtype='float32').reshape([9, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1b2649627c56cc22f68d3cbea932371b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 21824, 15], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 21824, 15], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_acb2b446c113941f8ae47e1572ee95c3(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[0.06146731972694397]], [[0.38457757234573364]], [[0.1499379724264145]], [[0.2519291639328003]], [[0.4287847876548767]], [[0.48430103063583374]]], dtype='float32').reshape([6, 1, 1]),
-            paddle.to_tensor([[[0.7040383219718933]], [[0.5041806101799011]], [[0.5248106718063354]], [[0.5276604890823364]], [[0.8099044561386108]], [[0.5424766540527344]]], dtype='float32').reshape([6, 1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e307239dd03430cb7079aef3b0aa6f2a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[[0.03920156881213188]], [[0.022001300007104874]], [[0.24809589982032776]], [[0.39565593004226685]], [[0.10346271097660065]], [[0.42565131187438965]]], dtype='float32').reshape([6, 1, 1]),
-            paddle.to_tensor([[[0.7184906005859375]], [[0.5257463455200195]], [[0.6536774635314941]], [[0.6953741312026978]], [[0.7265492677688599]], [[0.5624583959579468]]], dtype='float32').reshape([6, 1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f4efdd4f4553731eda82c2570b8cda74(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 1, 8, 8], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 1, 8, 8], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_792aae5d0779f8e92a53f142d5ffab77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6d9c0599eb4cf3f8061d85583c865735(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_03b1906bab8cf1f48b4606ade5191acd(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([11109, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 11109, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4f0222eca32e6403f4049a2fb3b688ff(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 11109, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([11109, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_792aae5d0779f8e92a53f142d5ffab77(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([5480, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([5480, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2ee5247c11c6647ab647c3ba412596ca(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.13856299221515656, 0.4353436827659607, 0.2094043344259262, 0.2879944443702698], [0.08696585893630981, 0.2929264307022095, 0.17700904607772827, 0.2517296075820923], [0.18547385931015015, 0.4464535713195801, 0.4669950008392334, 0.4609496593475342], [0.08696585893630981, 0.2929264307022095, 0.17700904607772827, 0.2517296075820923], [0.18547385931015015, 0.4464535713195801, 0.4669950008392334, 0.4609496593475342], [0.04176447167992592, 0.43585583567619324, 0.007390841841697693, 0.41927239298820496], [0.04176447167992592, 0.43585583567619324, 0.007390841841697693, 0.41927239298820496]], dtype='float32').reshape([7, 4]),
-            paddle.to_tensor([[0.3110031485557556, 0.12883557379245758, 0.014142144471406937, 0.29536378383636475], [0.03524753451347351, 0.44889235496520996, 0.32588690519332886, 0.4541289508342743], [0.3971027433872223, 0.4102397561073303, 0.28529155254364014, 0.39603105187416077], [0.03524753451347351, 0.44889235496520996, 0.32588690519332886, 0.4541289508342743], [0.3971027433872223, 0.4102397561073303, 0.28529155254364014, 0.39603105187416077], [0.43009355664253235, 0.49960651993751526, 0.3261641263961792, 0.4162203073501587], [0.43009355664253235, 0.49960651993751526, 0.3261641263961792, 0.4162203073501587]], dtype='float32').reshape([7, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0e93be1b02e7657a17ee401eb2ea5cf9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.uniform([36], dtype='float32', min=0, max=0.5),
-            paddle.uniform([36], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0e93be1b02e7657a17ee401eb2ea5cf9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.uniform([36], dtype='float32', min=0, max=0.5),
-            paddle.uniform([36], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6a0d88c3b31ac0ec78be6d8038ebdb82(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([64, 5], dtype='float32', min=0, max=0.5),
-            paddle.uniform([64, 5], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_18b385f2773e20549fa68a071089e091(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([103, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([103, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8b8646482c76ef0cc3a8840014a75d00(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.08038189262151718, 0.0575774721801281, 0.3921468257904053], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.1027945876121521, 0.3881237208843231, 0.152043879032135, 0.21335071325302124, 0.38008421659469604, 0.12074317038059235], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ae96253cfd7568e986d861da85f3af2f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.4957810342311859, 0.08107513189315796, 0.33436471223831177, 0.4922436773777008, 0.36378422379493713, 0.13394984602928162], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2527327835559845, 0.1542942374944687, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_54ff2d0396fef3ecaa5346e0d5811295(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.24978351593017578, 0.11446373909711838, 0.06451474130153656, 0.04623079672455788, 0.3613818883895874, 0.4987070560455322], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2304920107126236, 0.0650036409497261, 0.457919716835022, 0.030212104320526123, 0.35011738538742065, 0.12877273559570312], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8fc350a0642ca1eee42599eb3bcda7e6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2845926582813263, 0.16627027094364166, 0.25496557354927063, 0.29948753118515015, 0.21094956994056702, 0.2771330177783966], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.23068910837173462, 0.1622818112373352, 0.3164260983467102, 0.16976673901081085, 0.15035927295684814, 0.22009573876857758], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_989f2114979a7884f0b0ca404ba695ce(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.24978351593017578, 0.11446373909711838, 0.06451474130153656, 0.04623079672455788, 0.3613818883895874, 0.3921468257904053], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2304920107126236, 0.3881237208843231, 0.457919716835022, 0.21335071325302124, 0.38008421659469604, 0.12877273559570312], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8cff451749268b28a898dd3399de8eb2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2845926582813263, 0.1542942374944687, 0.25496557354927063, 0.29948753118515015, 0.21094956994056702, 0.2771330177783966], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2527327835559845, 0.1622818112373352, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c4cefd8604ec773bae6ee8cd8740d8db(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.21335071325302124, 0.38008421659469604, 0.3921468257904053], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.1027945876121521, 0.3881237208843231, 0.152043879032135, 0.21335071325302124, 0.38008421659469604, 0.12074317038059235], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ade7d3f0ac72a7e36b62e89bbd6b2cc7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.4957810342311859, 0.1542942374944687, 0.470980703830719, 0.4922436773777008, 0.36378422379493713, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2527327835559845, 0.1542942374944687, 0.470980703830719, 0.32545068860054016, 0.27355799078941345, 0.35376250743865967], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_3b31f71a1dc3b2bd3a84e6516c438c8c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.039449259638786316, 0.00019726960454136133, 0.024178875610232353, 0.002077957382425666, 0.0006825195741839707, 0.02110004797577858], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.0006146249361336231, 0.0, 0.0, 0.0, 0.0, -0.0], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_52d3eee2ce8e716ae1212a9dea1b69a8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.18181054294109344, 0.4303266406059265, 0.22994780540466309, 0.1468663066625595, 0.21883083879947662, 0.2564449906349182], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.2401377558708191, 0.08973369002342224, 0.26121723651885986, 0.03822144865989685, 0.35574963688850403, 0.3137398958206177], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_239165a78e3bbb76d225e4f3a0cd1477(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.3742569088935852, 0.11768468469381332, 0.4026727080345154, 0.4088471829891205, 0.3186711072921753, 0.24385617673397064], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.25764089822769165, 0.16427603363990784, 0.2856958508491516, 0.2346271276473999, 0.18065442144870758, 0.2486143708229065], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_64c1ad6254405a9fadac3cd392be9c4d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.2608264982700348, 0.4725295603275299, 0.30785173177719116, 0.21335071325302124, 0.38008421659469604, 0.4987070560455322], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.1027945876121521, 0.0650036409497261, 0.152043879032135, 0.030212104320526123, 0.35011738538742065, 0.12074317038059235], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9ce8b4d942fb0b384c967fa1d9e3c3f0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.4957810342311859, 0.16627027094364166, 0.470980703830719, 0.4922436773777008, 0.36378422379493713, 0.35376250743865967], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.23068910837173462, 0.1542942374944687, 0.3164260983467102, 0.16976673901081085, 0.15035927295684814, 0.22009573876857758], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5c1be02e8773f94c2bee9eb11fee73ad(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.3436858057975769, 1.4903305768966675, 1.41582190990448, 0.12286394089460373, 0.18381407856941223, 1.4178187847137451], dtype='float32').reshape([6]),
-            paddle.to_tensor([0.5765213966369629, -0.856249988079071, -0.8509345054626465, -0.6730365753173828, -1.298005223274231, -0.8900416493415833], dtype='float32').reshape([6]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a72878964a0e483b4d3c4102d94541d2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bf6534e22c43df77b7a5aea125cba6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_52d6c0904952e02947e994d334c88237(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_38dc692e168c69c6d9272c552d7727e9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3549, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3549, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a72878964a0e483b4d3c4102d94541d2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1742, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1742, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e426acc2a8a3c866ade65ea71932622b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_69cefdcc79ddad326fae6984d3c01b5a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([24]),
-            paddle.to_tensor([0.16727307438850403, 0.29837217926979065, 0.19894284009933472, 0.48071572184562683, 0.3676881194114685, 0.4198280870914459, 0.17023754119873047, 0.16682079434394836, 0.41211000084877014, 0.27952146530151367, 0.03478027507662773, 0.25146594643592834, 0.3347516655921936, 0.07699854671955109, 0.16147416830062866, 0.18425174057483673, 0.1390560418367386, 0.17906422913074493, 0.1935458481311798, 0.2319454848766327, 0.13256007432937622, 0.057637352496385574, 0.14197881519794464, 0.27830740809440613], dtype='float32').reshape([24]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8d5c4ef7476afda985a09d0fd3bd5879(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.16727307438850403, 0.29837217926979065, 0.19894284009933472, 0.48071572184562683, 0.3676881194114685, 0.4198280870914459, 0.17023754119873047, 0.16682079434394836, 0.41211000084877014, 0.27952146530151367, 0.03478027507662773, 0.25146594643592834, 0.3347516655921936, 0.07699854671955109, 0.16147416830062866, 0.18425174057483673, 0.1390560418367386, 0.17906422913074493, 0.1935458481311798, 0.2319454848766327, 0.13256007432937622, 0.057637352496385574, 0.14197881519794464, 0.27830740809440613], dtype='float32').reshape([24]),
-            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([24]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_367efeaffffb39edf014e07940175ec1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 42, 42, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c19782b9171af293d660dd3abb7b129a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 21, 21, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b747f17c9767b2f817cd1e5c98fbdf75(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_919b78e5f2f145edf32c93c4595e1139(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_3ed75efcd84ec090d0b5f8a4bdcffa95(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([3024, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3024, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1d0e3e7e00154ab42eff6103c79fdb5(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3024, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3024, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b747f17c9767b2f817cd1e5c98fbdf75(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1527, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1527, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_82617b9af541ee665e20f7afbba3a185(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 12, 12, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a4e823eb61d9b61aba09226acd691f40(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([4]),
-            paddle.to_tensor([0.09576865285634995, 0.21895988285541534, 0.47236356139183044, 0.28012216091156006], dtype='float32').reshape([4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_bb686935ff7497e52ed3e1c147aa8a15(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.09576865285634995, 0.21895988285541534, 0.47236356139183044, 0.28012216091156006], dtype='float32').reshape([4]),
-            paddle.to_tensor([0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([4]),
-        ]
-
-
-
-class PrimitiveOp_4d28e76b50ed241aed2c5946f80248f2(InstanceTrait, paddle.nn.Layer):
-    
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, arg_0, arg_1):
-        input_0 = arg_0
-        input_1 = arg_1
-        return input_0 - input_1
-
-    def get_input_spec(self):
-        return [
-            paddle.static.InputSpec(shape=[None], dtype='int32'),
-            paddle.static.InputSpec(shape=[None], dtype='int32'),
-        ]
-        
-    instance_ = None
-    static_instance_with_cinn_ = None
-    static_instance_without_cinn_ = None
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_88abd78c6b8823b63b747f20ccf526af(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_4d28e76b50ed241aed2c5946f80248f2
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([4], dtype='int32').reshape([1]),
-            paddle.to_tensor([2], dtype='int32').reshape([1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6de5048b4b9678ffe6cdcce96f01d92f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_4d28e76b50ed241aed2c5946f80248f2
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([7], dtype='int32').reshape([1]),
-            paddle.to_tensor([3], dtype='int32').reshape([1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_180f6ba1845e2f17d908d9b250386175(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 11, 11, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d9a63d5e912ab50e13dd8f29dcfd2c40(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.48869359493255615, 0.25505194067955017, 0.2965860962867737, 0.1435116082429886], [0.29652026295661926, 0.17479072511196136, 0.12994545698165894, 0.3918682336807251], [0.03457598015666008, 0.21453428268432617, 0.40904825925827026, 0.13430796563625336], [0.4367668628692627, 0.10261180251836777, 0.21258141100406647, 0.15890343487262726], [0.4367668628692627, 0.10261180251836777, 0.21258141100406647, 0.15890343487262726], [0.03457598015666008, 0.21453428268432617, 0.40904825925827026, 0.13430796563625336]], dtype='float32').reshape([6, 4]),
-            paddle.to_tensor([[0.17786620557308197, 0.3837328553199768, 0.4018065929412842, 0.052461110055446625], [0.1788792461156845, 0.17232021689414978, 0.44501304626464844, 0.18641409277915955], [0.23814435303211212, 0.0061455052345991135, 0.03816644474864006, 0.24216414988040924], [0.18565472960472107, 0.4981105327606201, 0.3184441328048706, 0.44102829694747925], [0.18565472960472107, 0.4981105327606201, 0.3184441328048706, 0.44102829694747925], [0.23814435303211212, 0.0061455052345991135, 0.03816644474864006, 0.24216414988040924]], dtype='float32').reshape([6, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a5ae8a733e11dc71ae541a385555c8c7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.31454479694366455, 0.10439124703407288, 0.16489987075328827, 0.18370254337787628], [0.11546322703361511, 0.26400521397590637, 0.06056874617934227, 0.09392143040895462], [0.4271167516708374, 0.453997939825058, 0.2668359875679016, 0.30915793776512146], [0.05479086562991142, 0.4311014413833618, 0.2002004086971283, 0.21852238476276398], [0.31454479694366455, 0.10439124703407288, 0.16489987075328827, 0.18370254337787628]], dtype='float32').reshape([5, 4]),
-            paddle.to_tensor([[0.26386094093322754, 0.27112436294555664, 0.39497309923171997, 0.42580345273017883], [0.47162744402885437, 0.0874064713716507, 0.2927992045879364, 0.4740701913833618], [0.15716779232025146, 0.0017121427226811647, 0.13402105867862701, 0.2784697711467743], [0.2673611044883728, 0.20431914925575256, 0.4392146170139313, 0.18085090816020966], [0.26386094093322754, 0.27112436294555664, 0.39497309923171997, 0.42580345273017883]], dtype='float32').reshape([5, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_56bd3d7f1023b32564a39a9793b4d622(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([10, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([10, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1cbcd7991ed6fdb0c9c5b0ce675977d4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.11903903633356094]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.3555246889591217]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d41f96ee1b152bb09b6faa5f12d868b8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0831770971417427]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.45340871810913086]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_05f1cc7c1bf89a05d469eb24c2730477(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.33794644474983215]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.2977246940135956]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ad03b962229cddadf6f2e39118379806(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.12983585894107819]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.45340871810913086]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1cbcd7991ed6fdb0c9c5b0ce675977d4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.11903903633356094]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.3555246889591217]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a06e94cca90c7caf756fbb7ab054eaab(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0831770971417427]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.43772584199905396]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9553c98238d3d876f3f0e0fe7f49f6de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.07083103060722351]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.0]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_05f1cc7c1bf89a05d469eb24c2730477(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.33794644474983215]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.2977246940135956]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a0b8984f934abc666cf9a570906a85b6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.12983585894107819]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.43772584199905396]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6e566f0e9601517bfacd01266c4611de(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.012383874505758286]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[0.07083103060722351]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_594049bfdd18338219bc9314c2f732df(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.0]], dtype='float32').reshape([1, 1]),
-            paddle.to_tensor([[6.719618320465088]], dtype='float32').reshape([1, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5238a0ed6b632fd19c88e5f35d3f4b47(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.20998290181159973], [0.18442489206790924], [0.1968512237071991], [0.20288529992103577], [0.21599259972572327], [0.19651634991168976]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.3895230293273926], [0.4666270613670349], [0.17671829462051392], [0.3581591248512268], [0.42263373732566833], [0.24344341456890106]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_792a83a8650844cd06cca95700a8fbf1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4151418209075928], [0.2509276866912842], [0.13929075002670288], [0.03818127512931824], [0.08567338436841965], [0.23274247348308563]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.4103717803955078], [0.39778658747673035], [0.40150901675224304], [0.42183321714401245], [0.1773831695318222], [0.48681026697158813]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_789850f723c6754bce6385edefe0a3f5(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.20998290181159973], [0.4498758018016815], [0.24683597683906555], [0.20288529992103577], [0.21599259972572327], [0.19651634991168976]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.15491808950901031], [0.16919776797294617], [0.1292070597410202], [0.12714418768882751], [0.33482757210731506], [0.2098187357187271]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dc789da2137c74034b4363355f450b61(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4901370406150818], [0.2509276866912842], [0.2429288774728775], [0.06132770702242851], [0.08567338436841965], [0.23274247348308563]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.4103717803955078], [0.39778658747673035], [0.40150901675224304], [0.42183321714401245], [0.09941722452640533], [0.25498807430267334]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_306651a096272fa6d733b41ea8025470(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.22682112455368042], [0.18442489206790924], [0.1968512237071991], [0.46012169122695923], [0.40794169902801514], [0.4862612187862396]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.3895230293273926], [0.4666270613670349], [0.17671829462051392], [0.3581591248512268], [0.42263373732566833], [0.24344341456890106]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_c77c433ea911e2411aac58d395d8556e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4151418209075928], [0.3606884777545929], [0.13929075002670288], [0.03818127512931824], [0.28175589442253113], [0.3325986862182617]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.1010279506444931], [0.2909882366657257], [0.2298392504453659], [0.29276591539382935], [0.1773831695318222], [0.48681026697158813]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1606ef2561d5873d54f91490159d98b3(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.0467146635055542], [-0.060889631509780884], [-0.02047661691904068], [-0.05326319485902786], [9.980075992643833e-05], [-0.037149399518966675]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6f8b324f7e7b0868e1c9528cbc26d0cc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.22682112455368042], [0.4498758018016815], [0.24683597683906555], [0.46012169122695923], [0.40794169902801514], [0.4862612187862396]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.15491808950901031], [0.16919776797294617], [0.1292070597410202], [0.12714418768882751], [0.33482757210731506], [0.2098187357187271]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ecb901fe7978d0cea63d57c249161309(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4901370406150818], [0.3606884777545929], [0.2429288774728775], [0.06132770702242851], [0.28175589442253113], [0.3325986862182617]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[0.1010279506444931], [0.2909882366657257], [0.2298392504453659], [0.29276591539382935], [0.09941722452640533], [0.25498807430267334]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_264093c99d91c0e58506e35590b0d9ba(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.02797812409698963], [0.019563326612114906], [0.0015397188253700733], [-0.07706371694803238], [0.01333153247833252], [0.021454868838191032]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[-0.0467146635055542], [-0.060889631509780884], [-0.02047661691904068], [-0.05326319485902786], [9.980086178984493e-05], [-0.037149399518966675]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b0a42593a2c026c8062f5eede8020720(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.0], [-0.0], [-0.0], [-0.0], [0.0], [-0.0]], dtype='float32').reshape([6, 1]),
-            paddle.to_tensor([[2.6696853637695312], [4.1124372482299805], [14.298932075500488], [0.30884212255477905], [0.9925139546394348], [2.731513738632202]], dtype='float32').reshape([6, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc98259315ae6586ac9df6a85b6c5562(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.1824364960193634, 0.11383223533630371, 0.15641945600509644, 0.39408645033836365], [0.44869938492774963, 0.021236063912510872, 0.01257316768169403, 0.1094929650425911], [0.23305965960025787, 0.25187548995018005, 0.1086021214723587, 0.40324482321739197], [0.4280799329280853, 0.38631755113601685, 0.44555965065956116, 0.33409902453422546]], dtype='float32').reshape([4, 4]),
-            paddle.to_tensor([[0.1865062266588211, 0.10327757894992828, 0.31373849511146545, 0.37114739418029785], [0.4478083550930023, 0.3082262873649597, 0.22778934240341187, 0.13071022927761078], [0.07917411625385284, 0.3322516679763794, 0.15485522150993347, 0.46097493171691895], [0.12284959852695465, 0.0587301105260849, 0.26185959577560425, 0.17734073102474213]], dtype='float32').reshape([4, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_34d594e2342292a8df4dd93baf321763(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 48, 48, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_062112f4306a0eb96a52aef08f1165b4(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 24, 24, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ad01ba209aa563c77d8a0f5ecf6c7ca2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([84, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([84, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_91529f4ce60f8760c837e733a685a65d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cc789a49551a286bc9469df13afb9726(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_15aa17eea687877cf988c12a2c059c6d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_358bc8c1eb98b6e964028dcc0f56dec2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_91529f4ce60f8760c837e733a685a65d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2066, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2066, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a9ea8ff0bae1a32aa2249436f11ffaaa(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.21805590391159058, 0.369320809841156, 0.46295464038848877, 0.32399559020996094], [0.21805590391159058, 0.369320809841156, 0.46295464038848877, 0.32399559020996094], [0.45063576102256775, 0.08473407477140427, 0.2964290678501129, 0.17995186150074005], [0.35198330879211426, 0.0768512561917305, 0.0005001812824048102, 0.43629372119903564], [0.23088055849075317, 0.3435775935649872, 0.022802097722887993, 0.006141966208815575], [0.1841537058353424, 0.24625396728515625, 0.19545932114124298, 0.41149935126304626], [0.0622473768889904, 0.010412028059363365, 0.32384076714515686, 0.019491543993353844]], dtype='float32').reshape([7, 4]),
-            paddle.to_tensor([[0.11718153953552246, 0.18766602873802185, 0.3853262960910797, 0.17273500561714172], [0.11718153953552246, 0.18766602873802185, 0.3853262960910797, 0.17273500561714172], [0.11498585343360901, 0.39520618319511414, 0.019509049132466316, 0.21388070285320282], [0.11598620563745499, 0.13958659768104553, 0.2296896129846573, 0.40918001532554626], [0.08412293344736099, 0.36157235503196716, 0.21181900799274445, 0.0409696027636528], [0.4178256392478943, 0.11422522366046906, 0.3132604658603668, 0.10981956124305725], [0.3702118396759033, 0.0816604271531105, 0.2898832857608795, 0.05852610245347023]], dtype='float32').reshape([7, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_40f637a1c203bb54d195c3251937c47a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([16384, 5], dtype='float32', min=0, max=0.5),
-            paddle.uniform([16384, 5], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_691fd97a65d1ec77739972ae555392e0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 1, 64, 64], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 1, 64, 64], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a8ac04f93f4fc769ff3ade2683d2b9e7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cacf6ebbc2a34067425e5653b7587486(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_fcb8107f4be5eea7babae7f8cd89696e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([9261, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 9261, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2f56d38e40cb258115066d09088cf23a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 9261, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([9261, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a8ac04f93f4fc769ff3ade2683d2b9e7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4586, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4586, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a11065e362014a6c69078a814da23d14(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0529d819cea1398b9a6635ac513e131f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_21a50b949a46359c33f1a60837b3d774(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([2100, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 2100, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_67dd1ecbca2884ee78c7cd1a7eea2215(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 2100, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2100, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a11065e362014a6c69078a814da23d14(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([1073, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1073, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_515f52247eb0925eb57e78c260d58f96(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.uniform([2, 1, 960, 960], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2, 1, 960, 960], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_d3a19ffbad53f86cf6124faf17bca69f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.1983117163181305, 0.4262564480304718, 0.44021251797676086, 0.45081812143325806], [0.3675566613674164, 0.2470126450061798, 0.4268859326839447, 0.33921435475349426], [0.3675566613674164, 0.2470126450061798, 0.4268859326839447, 0.33921435475349426], [0.33047568798065186, 0.14772096276283264, 0.16170357167720795, 0.1762121468782425], [0.1535663604736328, 0.11277178674936295, 0.3490486741065979, 0.19976338744163513], [0.052271824330091476, 0.46588462591171265, 0.35674288868904114, 0.013300606049597263]], dtype='float32').reshape([6, 4]),
-            paddle.to_tensor([[0.4848327338695526, 0.167837992310524, 0.48880672454833984, 0.4181344211101532], [0.32352542877197266, 0.27273812890052795, 0.30801448225975037, 0.2090080976486206], [0.32352542877197266, 0.27273812890052795, 0.30801448225975037, 0.2090080976486206], [0.005183657631278038, 0.49299538135528564, 0.12437743693590164, 0.14061975479125977], [0.10720117390155792, 0.40686947107315063, 0.33792147040367126, 0.4700213372707367], [0.44660133123397827, 0.26956701278686523, 0.28133127093315125, 0.14439621567726135]], dtype='float32').reshape([6, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e954254e5fbefe9b4490b02c5f49f257(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 46, 46, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_293d93bbcf6e674049780843ff641a48(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([100, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([100, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_97dfafb64bccf9246bec94eb095d109b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([100, 1, 4], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor([[0.39817842841148376, 12.484559059143066, 2.655482292175293, 1.6678518056869507], [2.003458261489868, 1.472330927848816, 0.9269778728485107, 0.15994922816753387]], dtype='float32').reshape([2, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1f89c3af7552a58fe9b15dcec9b41985(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 44, 44, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_07ed5983b01422c9e20bc8c43f0c8f5a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5506a7d5add76bd5c93be0c3ec95da8f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([300, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([300, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_89849624a078fdf071708d8f96e5f22a(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([300, 1, 4], dtype='float32', min=0, max=0.5),
-            paddle.to_tensor([[1.776720643043518, 0.14957483112812042, 0.3515414893627167, 1.572020173072815], [4.945065021514893, 5.548974990844727, 1.1182193756103516, 0.07188649475574493]], dtype='float32').reshape([2, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6e064d47fc2ef1aad541cfaac0081039(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.27102693915367126], [0.21676185727119446], [0.3153221905231476], [0.01315593346953392], [0.1262916475534439]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.4706946909427643], [0.39319300651550293], [0.19910383224487305], [0.3212777376174927], [0.29648688435554504]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cac090a0c6006c4ff68fabaed33f11a6(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.39167019724845886], [0.046127624809741974], [0.04106692224740982], [0.014858669601380825], [0.17310704290866852]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.16876435279846191], [0.1894516497850418], [0.3004133403301239], [0.4173230230808258], [0.3782731890678406]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_68f0d019e4c9fd642d19ba5994ae6632(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.3077138066291809], [0.21676185727119446], [0.36836960911750793], [0.01315593346953392], [0.1262916475534439]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.3776218891143799], [0.017230553552508354], [0.12865380942821503], [0.0789160430431366], [0.29648688435554504]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_46a3ac494b39c23c2c6c2ad758ea68ee(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.39167019724845886], [0.046127624809741974], [0.13554736971855164], [0.2480829954147339], [0.17310704290866852]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.04191706329584122], [0.1894516497850418], [0.11870089173316956], [0.0004433089052326977], [0.28320610523223877]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77363bca5aab326a7078b852be665c33(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.27102693915367126], [0.3185052275657654], [0.3153221905231476], [0.430990993976593], [0.4189223051071167]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.4706946909427643], [0.39319300651550293], [0.19910383224487305], [0.3212777376174927], [0.27562597393989563]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_16a674fb86173a0a7b96accf14c24b02(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4086301028728485], [0.391907662153244], [0.04106692224740982], [0.014858669601380825], [0.4931931793689728]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.16876435279846191], [0.1280040442943573], [0.3004133403301239], [0.4173230230808258], [0.3782731890678406]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_26701ed506c04a30ea9dbe81ee2556d7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.07234402745962143], [-0.048308003693819046], [-0.026102447882294655], [-0.060440488159656525], [0.03520594909787178]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_3c14aeb1c83e16814c4b64af6530f2a5(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.3077138066291809], [0.3185052275657654], [0.36836960911750793], [0.430990993976593], [0.4189223051071167]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.3776218891143799], [0.017230553552508354], [0.12865380942821503], [0.0789160430431366], [0.27562597393989563]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_15432243cbc4d9fe3899ec0e1153673d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4086301028728485], [0.391907662153244], [0.13554736971855164], [0.2480829954147339], [0.4931931793689728]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[0.04191706329584122], [0.1280040442943573], [0.11870089173316956], [0.0004433089052326977], [0.28320610523223877]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32464289f44b3279d82a52003896bdb9(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.025636205449700356], [0.07950747758150101], [0.0040383669547736645], [0.08718772977590561], [0.03009037673473358]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[-0.07234402745962143], [-0.048308003693819046], [-0.026102447882294655], [-0.060440488159656525], [0.03520594909787178]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6aaa08ff2c87645dd7e343b5022045c0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.0], [-0.0], [-0.0], [-0.0], [0.0]], dtype='float32').reshape([5, 1]),
-            paddle.to_tensor([[-1.821947693824768], [1.6075907945632935], [7.4636149406433105], [1.6932224035263062], [-0.1700069159269333]], dtype='float32').reshape([5, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_9f31b45242dcc5467d9b1b85f0c9a8f5(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 1, 128, 128], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 1, 128, 128], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_32d88ff426f1ae89ee8cb29638b00110(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 38, 38, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0a3f5e24b483c89e2cfe6cb2e1426590(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 92, 92, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ecb9439dd0e465697068e88f303ba79e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_77134f31c324c9851cefae55031bdacc(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0cf1b79d6b0bda99fe30897e159b4ad8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([4725, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 4725, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_482a57e3f8a9d1754788fd87985c8f0e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 4725, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4725, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ecb9439dd0e465697068e88f303ba79e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2383, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2383, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_db5d863d15f5409acda9efda25784065(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a1af9f4e8b51e4a32f271137bb261886(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8d5f52ddf8383c305d82d62c38a7f453(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([6069, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_fc25a83b16b04b6ad5a3de78a8e76b5e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 6069, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([6069, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_db5d863d15f5409acda9efda25784065(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3030, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3030, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_73c0d011019499def6ab3f217d4bd8f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_152f8cd835eb75edcae9c8969dda1351(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dba09ba03ffefda8f2726c71385338fb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([7581, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 7581, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_b9f8e1c85db4557fff30430af9b30c7d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 7581, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([7581, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_73c0d011019499def6ab3f217d4bd8f1(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([3787, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([3787, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_80c271ec998c36d91accf2075aa68a64(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 1, 16, 16], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 1, 16, 16], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3a508b496778ed0b643bc983d4abc57(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([256, 5], dtype='float32', min=0, max=0.5),
-            paddle.uniform([256, 5], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62d8fc1bb9de4a3d518136d70c332e88(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 22, 22, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e76620bcf0d595eda1ab5ed69cc6b979(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 512, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 512, 512], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4bd2d697bf6182f52895306cc885df7c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype='float32').reshape([20]),
-            paddle.to_tensor([0.4473949074745178, 0.08388441801071167, 0.17490623891353607, 0.2467467337846756, 0.14741015434265137, 0.14820529520511627, 0.4406585693359375, 0.37450501322746277, 0.04052567854523659, 0.48126161098480225, 0.4376707375049591, 0.2969852685928345, 0.2029794454574585, 0.15935193002223969, 0.2048863172531128, 0.25172749161720276, 0.38391077518463135, 0.35427677631378174, 0.34242749214172363, 0.49203726649284363], dtype='float32').reshape([20]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_09380d0d6e063af8224ede249c2f0ebe(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_99bddb5fd63ecd93cc59d50704818428
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([0.4473949074745178, 0.08388441801071167, 0.17490623891353607, 0.2467467337846756, 0.14741015434265137, 0.14820529520511627, 0.4406585693359375, 0.37450501322746277, 0.04052567854523659, 0.48126161098480225, 0.4376707375049591, 0.2969852685928345, 0.2029794454574585, 0.15935193002223969, 0.2048863172531128, 0.25172749161720276, 0.38391077518463135, 0.35427677631378174, 0.34242749214172363, 0.49203726649284363], dtype='float32').reshape([20]),
-            paddle.to_tensor([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype='float32').reshape([20]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_01bb10db17854f1b70da84dea0683b7d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.1317010074853897], [0.1832035928964615], [0.005624867510050535], [0.382903516292572]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.4710065722465515], [0.27305787801742554], [0.37650251388549805], [0.3584076464176178]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1a0b2eb921f5a565e0e6ec6b8f868f8b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.2849007844924927], [0.1524905115365982], [0.36212438344955444], [0.4171924889087677]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.3558596074581146], [0.34534937143325806], [0.45495909452438354], [0.43209323287010193]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6b057d51f5ce2a7ef4b1604848a7e43f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.1317010074853897], [0.1832035928964615], [0.005624867510050535], [0.382903516292572]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.4710065722465515], [0.27305787801742554], [0.1443967968225479], [0.18359437584877014]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f54ee33ad5572909cc204d2f34c47ceb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.407511442899704], [0.41122034192085266], [0.36212438344955444], [0.47452500462532043]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.3558596074581146], [0.24631327390670776], [0.38240188360214233], [0.43209323287010193]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_8757f20916feccccae702f6990bca23f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.21841885149478912], [0.4341205954551697], [0.17934243381023407], [0.48898959159851074]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.11861217021942139], [0.1668710708618164], [0.37650251388549805], [0.3584076464176178]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_dc8042352da3be90258765fe14bec82f(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.2849007844924927], [0.1524905115365982], [0.386353075504303], [0.4171924889087677]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.17836087942123413], [0.34534937143325806], [0.45495909452438354], [0.29443272948265076]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_62106d4632ce0001929f0696891a2a61(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.006892362609505653], [-0.06635904312133789], [0.016340315341949463], [0.024487247690558434]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.0], [0.0], [0.0], [0.0]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_47d77aaf788cd9fc4f442a835c572b03(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.21841885149478912], [0.4341205954551697], [0.17934243381023407], [0.48898959159851074]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.11861217021942139], [0.1668710708618164], [0.1443967968225479], [0.18359437584877014]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f9ba8564672e52eccfb9552453f64491(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.407511442899704], [0.41122034192085266], [0.386353075504303], [0.47452500462532043]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[0.17836087942123413], [0.24631327390670776], [0.38240188360214233], [0.29443272948265076]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cb8ae06b21b230a17f188b9522134849(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.022870756685733795], [0.04407133534550667], [0.00013807702634949237], [0.05499931797385216]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[-0.006892362609505653], [-0.06635904312133789], [0.016340315341949463], [0.024487247690558434]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_6691748a8a87d09f2a04ccd61d787fb7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[-0.0], [-0.0], [0.0], [0.0]], dtype='float32').reshape([4, 1]),
-            paddle.to_tensor([[1.301361322402954], [2.505718946456909], [-117.34202575683594], [0.5547717809677124]], dtype='float32').reshape([4, 1]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_2bdf48ae6973d8a4487566beb1fae511(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([47, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([47, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cd5f48fd0a0dc75571e19fa8fddc71b8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_f3ce80ebd0d4a4ba74bc78d438add8f7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_15aa17eea687877cf988c12a2c059c6d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_358bc8c1eb98b6e964028dcc0f56dec2(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 4116, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4116, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_cd5f48fd0a0dc75571e19fa8fddc71b8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([2084, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([2084, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_e76620bcf0d595eda1ab5ed69cc6b979(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 512, 512], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 512, 512], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_a325bb76560ca99b51e435c001af07da(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_291a3baba83aebcfbb0959b81157d6f7
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 1, 32, 32], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 1, 32, 32], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_1505b6ac78a5252a396889880f9fe89b(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_19d0a8a77ea8ac0dd0fb5dcf3895371d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 6804, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 6804, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ad43aa4f62461977c2e13b01428b556c(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.4905618131160736, 0.4396417438983917, 0.38613632321357727, 0.30494746565818787], [0.48475587368011475, 0.07337385416030884, 0.278387188911438, 0.3098049461841583], [0.29222574830055237, 0.4004157781600952, 0.19416268169879913, 0.0951867327094078], [0.29222574830055237, 0.4004157781600952, 0.19416268169879913, 0.0951867327094078], [0.26826053857803345, 0.21500079333782196, 0.11182934045791626, 0.27236950397491455]], dtype='float32').reshape([5, 4]),
-            paddle.to_tensor([[0.3478876054286957, 0.4785013496875763, 0.05671229213476181, 0.23212681710720062], [0.25702235102653503, 0.06689565628767014, 0.20180051028728485, 0.24164846539497375], [0.3288941979408264, 0.4574975371360779, 0.30252569913864136, 0.07800009846687317], [0.3288941979408264, 0.4574975371360779, 0.30252569913864136, 0.07800009846687317], [0.40340694785118103, 0.1492466926574707, 0.29067420959472656, 0.32166600227355957]], dtype='float32').reshape([5, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_04a7c952bd6d7d552aefd90150c9bae8(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 19, 19, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_4dbb4969d19b1636651799c02c9cb347(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 84, 84, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5eedd941575a8025b1f6142513fa4c9d(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([56, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([56, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_127472bdb620c0be0bd3b5b64ded6cf7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ba0043b2de27b0634ba412b7f49006eb(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_fadf83c28010ecd5bd8925902fc6620e(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_7f482685ae5a5b9ab6841c9c12afa34b
-    def get_inputs(self):
-        return [
-            paddle.uniform([8400, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_0906bc96c54199c50c23766f6e035159(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_e847dd8b2666f129b4077cb10bb59b7d
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 8400, 2], dtype='float32', min=0, max=0.5),
-            paddle.uniform([8400, 2], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_127472bdb620c0be0bd3b5b64ded6cf7(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([4260, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([4260, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_266177bacdbc6e0a792e0f610c2e9b39(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.to_tensor([[0.15494532883167267, 0.2111409604549408, 0.16940054297447205, 0.07837673276662827], [0.22056446969509125, 0.49623557925224304, 0.30928391218185425, 0.13696753978729248], [0.1627940982580185, 0.29646024107933044, 0.267007052898407, 0.4014988839626312], [0.15494532883167267, 0.2111409604549408, 0.16940054297447205, 0.07837673276662827], [0.0711192935705185, 0.08745941519737244, 0.3294025659561157, 0.2732483148574829], [0.333394855260849, 0.2548178434371948, 0.49965474009513855, 0.017060736194252968], [0.0711192935705185, 0.08745941519737244, 0.3294025659561157, 0.2732483148574829]], dtype='float32').reshape([7, 4]),
-            paddle.to_tensor([[0.46240881085395813, 0.32869765162467957, 0.24423934519290924, 0.25821471214294434], [0.06261877715587616, 0.2492293268442154, 0.43208566308021545, 0.3304005563259125], [0.17018108069896698, 0.49496328830718994, 0.39770105481147766, 0.4668426513671875], [0.46240881085395813, 0.32869765162467957, 0.24423934519290924, 0.25821471214294434], [0.13235357403755188, 0.3676305413246155, 0.23703737556934357, 0.31373870372772217], [0.06706759333610535, 0.2564274072647095, 0.31626176834106445, 0.42102324962615967], [0.13235357403755188, 0.3676305413246155, 0.23703737556934357, 0.31373870372772217]], dtype='float32').reshape([7, 4]),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_ea7f130c75e933ee2ce60e9115ad4ea0(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_2de6dca2a045b3dda212f3bb608192c8
-    def get_inputs(self):
-        return [
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-            paddle.uniform([1, 3, 76, 76, 1], dtype='float32', min=0, max=0.5),
-        ]
-
-
-@unittest.skipIf(last_stage_failed, "last stage failed")
-class TestPrimitiveOp_5c1607c584dc7e104775c4f773344f40(CinnTestBase, unittest.TestCase):
-    
-    def get_test_class(self):
-        return PrimitiveOp_b00cf09a76c3e09bb2e75ad6ee396540
-    def get_inputs(self):
-        return [
-            paddle.uniform([52, 4], dtype='float32', min=0, max=0.5),
-            paddle.uniform([52, 4], dtype='float32', min=0, max=0.5),
-        ]
-
-
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
+            paddle.uniform([4210, 1], dtype='float32', min=0, max=0.5),
+        ]
+
+
+    def test_entry(self):
+        if AthenaTryRunEnabled():
+            if try_run_exit_code == 0:
+                # All unittest cases passed.
+                return
+            if try_run_exit_code < 0:
+                # program panicked.
+                raise RuntimeError(f"panicked. panic stderr have been reported by the unittest `TestTryRun.test_panic`.")
+        return self._test_entry()
 
 
 if __name__ == '__main__':

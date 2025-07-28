@@ -399,7 +399,6 @@ class TestGroupOp(unittest.TestCase):
           input.stop_gradient = True
 
     def apply_to_static(self, net, use_cinn):
-        build_strategy = paddle.static.BuildStrategy()
         input_spec = [
             paddle.static.InputSpec(shape=[None, None], dtype='float32'),
             paddle.static.InputSpec(shape=[1], dtype='int64'),
@@ -411,11 +410,11 @@ class TestGroupOp(unittest.TestCase):
             paddle.static.InputSpec(shape=[1920], dtype='float16'),
             paddle.static.InputSpec(shape=[1920], dtype='float16'),
         ]
-        build_strategy.build_cinn_pass = use_cinn
+        backend = "CINN" if use_cinn else None
         return paddle.jit.to_static(
             net,
             input_spec=input_spec,
-            build_strategy=build_strategy,
+            backend=backend,
             full_graph=True,
         )
 
