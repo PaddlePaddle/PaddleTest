@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-test prelu_0
+test PReLU_0
 """
 import timeit
 from inspect import isclass
@@ -43,12 +43,9 @@ def _randtool(dtype, low, high, shape):
         assert False, "dtype is not supported"
 
 
-api = "paddle.nn.functional.prelu"
-all_data = {"x": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
-params = {
-    "weight": {"random": True, "type": "Tensor", "dtype": "float32", "shape": [1], "range": [0, 1]},
-    "data_format": "NCHW",
-}
+api = "paddle.nn.PReLU"
+all_data = {"x": {"random": True, "dtype": "float32", "shape": [1, 1, 1, 1], "range": [-1, 1]}}
+params = {"num_parameters": 1, "init": 0.25}
 
 inputs = {}
 for data, v in all_data.items():

@@ -6,7 +6,7 @@ echo ${cur_path}
 work_path=${root_path}/PaddleMIX/
 echo ${work_path}
 
-log_dir=${root_path}/log
+log_dir=${root_path}/log_application
 
 if [ ! -d "$log_dir" ]; then
     mkdir -p "$log_dir"
@@ -19,20 +19,23 @@ exit_code=0
 bash prepare.sh
 
 cd ${work_path}
-
-# echo "*******application vision_language_chat begin***********"
-# (python vision_language_chat.py) 2>&1 | tee ${log_dir}/vision_language_chat.log
-# tmp_exit_code=${PIPESTATUS[0]}
-# exit_code=$(($exit_code + ${tmp_exit_code}))
-# if [ ${tmp_exit_code} -eq 0 ]; then
-#     echo "application vision_language_chat run success" >>"${log_dir}/ce_res.log"
-# else
-#     echo "application vision_language_chat run fail" >>"${log_dir}/ce_res.log"
-# fi
-# echo "*******application vision_language_chat end***********"
+export FLAGS_use_cuda_managed_memory=true
+export FLAGS_allocator_strategy=auto_growth
+export FLAGS_embedding_deterministic=1
+export FLAGS_cudnn_deterministic=1
+echo "*******application vision_language_chat begin***********"
+(python vision_language_chat.py) 2>&1 | tee ${log_dir}/vision_language_chat.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "application vision_language_chat run success" >>"${log_dir}/ce_res.log"
+else
+    echo "application vision_language_chat run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******application vision_language_chat end***********"
 
 echo "*******application grounded_sam begin***********"
-(python grounded_sam.py) 2>&1 | tee ${log_dir}/grounded_sam.log
+(python applications/CVinW/grounded_sam.py) 2>&1 | tee ${log_dir}/grounded_sam.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -43,7 +46,7 @@ fi
 echo "*******application grounded_sam end***********"
 
 echo "*******application automatic_label begin***********"
-(python automatic_label.py) 2>&1 | tee ${log_dir}/automatic_label.log
+(python applications/Automatic_label/automatic_label.py) 2>&1 | tee ${log_dir}/automatic_label.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
 if [ ${tmp_exit_code} -eq 0 ]; then
@@ -63,6 +66,17 @@ else
     echo "application grounded_sam_inpainting run fail" >>"${log_dir}/ce_res.log"
 fi
 echo "*******application grounded_sam_inpainting end***********"
+
+echo "*******application grounded_sam_chatglm_qa begin***********"
+(python grounded_sam_chatglm.py) 2>&1 | tee ${log_dir}/grounded_sam_chatglm_qa.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "application grounded_sam_chatglm_qa run success" >>"${log_dir}/ce_res.log"
+else
+    echo "application grounded_sam_chatglm_qa run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******application grounded_sam_chatglm_qa end***********"
 
 echo "*******application grounded_sam_chatglm begin***********"
 (python grounded_sam_chatglm.py) 2>&1 | tee ${log_dir}/grounded_sam_chatglm.log
@@ -108,16 +122,16 @@ else
 fi
 echo "*******application text_guided_image_upscaling end***********"
 
-# echo "*******application dual_text_image_guided_generation begin***********"
-# (python dual_text_image_guided_generation.py) | tee ${log_dir}/dual_text_image_guided_generation.log
-# tmp_exit_code=${PIPESTATUS[0]}
-# exit_code=$(($exit_code + ${tmp_exit_code}))
-# if [ ${tmp_exit_code} -eq 0 ]; then
-#     echo "application dual_text_image_guided_generation run success" >> "${log_dir}/ce_res.log"
-# else
-#     echo "application dual_text_image_guided_generation run fail" >> "${log_dir}/ce_res.log"
-# fi
-# echo "*******application dual_text_image_guided_generation end***********"
+echo "*******application dual_text_image_guided_generation begin***********"
+(python dual_text_image_guided_generation.py) | tee ${log_dir}/dual_text_image_guided_generation.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "application dual_text_image_guided_generation run success" >> "${log_dir}/ce_res.log"
+else
+    echo "application dual_text_image_guided_generation run fail" >> "${log_dir}/ce_res.log"
+fi
+echo "*******application dual_text_image_guided_generation end***********"
 
 echo "*******application image2image_text_guided_generation begin***********"
 (python image2image_text_guided_generation.py) 2>&1 | tee ${log_dir}/image2image_text_guided_generation.log
@@ -211,6 +225,54 @@ else
 fi
 echo "*******application auodio_image2image end***********"
 
+echo "*******application script_grounded_sam_chatglm begin***********"
+(python applications/Inpainting/grounded_sam_chatglm.py) 2>&1 | tee ${log_dir}/script_grounded_sam_chatglm.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "application script_grounded_sam_chatglm run success" >>"${log_dir}/ce_res.log"
+else
+    echo "application script_grounded_sam_chatglm run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******application script_grounded_sam_chatglm end***********"
+
+echo "*******application script_grounded_sam_inpainting begin***********"
+(python applications/Inpainting/grounded_sam_inpainting.py) 2>&1 | tee ${log_dir}/script_grounded_sam_inpainting.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "application script_grounded_sam_inpainting run success" >>"${log_dir}/ce_res.log"
+else
+    echo "application script_grounded_sam_inpainting run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******application script_grounded_sam_inpainting end***********"
+
+echo "*******application gradio_autolable begin***********"
+(python applications/gradio_autolable.py) 2>&1 | tee ${log_dir}/gradio_autolable.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "application gradio_autolable run success" >>"${log_dir}/ce_res.log"
+else
+    echo "application gradio_autolable run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******application gradio_autolable end***********"
+
+echo "*******application gradio_text2image begin***********"
+(python applications/gradio_text2image.py) 2>&1 | tee ${log_dir}/gradio_text2image.log
+tmp_exit_code=${PIPESTATUS[0]}
+exit_code=$(($exit_code + ${tmp_exit_code}))
+if [ ${tmp_exit_code} -eq 0 ]; then
+    echo "application gradio_text2image run success" >>"${log_dir}/ce_res.log"
+else
+    echo "application gradio_text2image run fail" >>"${log_dir}/ce_res.log"
+fi
+echo "*******application gradio_text2image end***********"
+
+unset FLAGS_use_cuda_managed_memory
+unset FLAGS_allocator_strategy
+unset FLAGS_embedding_deterministic
+unset FLAGS_cudnn_deterministic
 cat ${log_dir}/ce_res.log
 
 echo exit_code:${exit_code}

@@ -3,7 +3,7 @@ case:
     train:
       -
         name: train
-        path: examples/text_matching/sentence_transformers
+        path: slm/examples/text_matching/sentence_transformers
         cmd: python -m paddle.distributed.launch  train.py
         params:
           - --device gpu
@@ -12,11 +12,11 @@ case:
     eval:
       -
         name: eval
-        path: examples/text_matching/sentence_transformers
+        path: slm/examples/text_matching/sentence_transformers
         cmd: python predict.py
         params:
           - --device gpu
-          - --params_path ./checkpoints/model_7000/model_state.pdparams
+          - --params_path ./checkpoints/model_1000/model_state.pdparams
     infer: skipped
     export: skipped
     predict: skipped
@@ -25,7 +25,7 @@ case:
     train:
       -
         name: train
-        path: examples/text_matching/sentence_transformers
+        path: slm/examples/text_matching/sentence_transformers
         cmd: python -m paddle.distributed.launch  train.py
         params:
           - --device gpu
@@ -34,7 +34,7 @@ case:
     eval:
       -
         name: train
-        path: examples/text_matching/sentence_transformers
+        path: slm/examples/text_matching/sentence_transformers
         cmd: python predict.py
         params:
           - --device gpu

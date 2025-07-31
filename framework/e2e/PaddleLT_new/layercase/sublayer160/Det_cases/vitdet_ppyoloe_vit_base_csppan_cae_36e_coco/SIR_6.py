@@ -60,12 +60,12 @@ class LayerCase(paddle.nn.Layer):
         var_15 = var_11.matmul(var_14)
         var_16 = var_15.__mul__(0.125)
         var_17 = paddle.nn.functional.activation.softmax(var_16, axis=-1)
-        var_18 = paddle.nn.functional.common.dropout(var_17, p=0.0, axis=None, training=True, mode='upscale_in_train', name=None)
+        var_18 = paddle.nn.functional.common.dropout(var_17, p=0.0, axis=None, training=self.training, mode='upscale_in_train', name=None)
         var_19 = var_18.matmul(var_13)
         var_20 = var_19.transpose((0, 2, 1, 3,))
         var_21 = var_20.reshape((-1, var_3, var_4,))
         var_22 = paddle.nn.functional.common.linear(x=var_21, weight=self.parameter_5, bias=self.parameter_0, name=None)
-        var_23 = paddle.nn.functional.common.dropout(var_22, p=0.0, axis=None, training=True, mode='upscale_in_train', name=None)
+        var_23 = paddle.nn.functional.common.dropout(var_22, p=0.0, axis=None, training=self.training, mode='upscale_in_train', name=None)
         var_24 = self.parameter_3.__mul__(var_23)
         return var_24
 
@@ -90,13 +90,12 @@ class TestLayer(unittest.TestCase):
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.base.core._set_prim_all_enabled(with_prim)
             if with_cinn:
-                build_strategy = paddle.static.BuildStrategy()
-                build_strategy.build_cinn_pass = True
-                net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+                assert with_prim, "with_cinn=True but with_prim=False is unsupported"
+                net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
             else:
-                net = paddle.jit.to_static(net, full_graph=True)
+                net = paddle.jit.to_static(net, backend=None, full_graph=True)
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs

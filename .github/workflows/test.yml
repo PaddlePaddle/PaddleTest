@@ -1,0 +1,19 @@
+name: test pr tar
+run-name:  Runs on ${{ github.event_name }}
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened]
+jobs:
+  test_tar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get dir
+        run: |
+          pwd
+          ls
+          cd ../
+          pwd
+          ls
+          git status
+          git log

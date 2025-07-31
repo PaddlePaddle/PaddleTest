@@ -38,13 +38,13 @@ class LayerCase(paddle.nn.Layer):
         var_2,    # (shape: [1, 2048, 64, 128], dtype: paddle.float32, stop_gradient: False)
     ):
         var_3 = var_0.__add__(var_1)
-        var_4 = paddle.nn.functional.common.dropout2d(var_3, p=0.1, training=True, data_format='NCHW', name=None)
+        var_4 = paddle.nn.functional.common.dropout2d(var_3, p=0.1, training=self.training, data_format='NCHW', name=None)
         var_5 = paddle.nn.functional.conv._conv_nd(var_4, self.parameter_2, bias=self.parameter_0, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_6 = paddle.nn.functional.common.dropout2d(var_1, p=0.1, training=True, data_format='NCHW', name=None)
+        var_6 = paddle.nn.functional.common.dropout2d(var_1, p=0.1, training=self.training, data_format='NCHW', name=None)
         var_7 = paddle.nn.functional.conv._conv_nd(var_6, self.parameter_4, bias=self.parameter_3, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_8 = paddle.nn.functional.common.dropout2d(var_0, p=0.1, training=True, data_format='NCHW', name=None)
+        var_8 = paddle.nn.functional.common.dropout2d(var_0, p=0.1, training=self.training, data_format='NCHW', name=None)
         var_9 = paddle.nn.functional.conv._conv_nd(var_8, self.parameter_4, bias=self.parameter_3, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_10 = paddle.nn.functional.common.dropout2d(var_2, p=0.1, training=True, data_format='NCHW', name=None)
+        var_10 = paddle.nn.functional.common.dropout2d(var_2, p=0.1, training=self.training, data_format='NCHW', name=None)
         var_11 = paddle.nn.functional.conv._conv_nd(var_10, self.parameter_1, bias=self.parameter_5, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         return var_5, var_7, var_9, var_11
 
@@ -73,13 +73,12 @@ class TestLayer(unittest.TestCase):
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.base.core._set_prim_all_enabled(with_prim)
             if with_cinn:
-                build_strategy = paddle.static.BuildStrategy()
-                build_strategy.build_cinn_pass = True
-                net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+                assert with_prim, "with_cinn=True but with_prim=False is unsupported"
+                net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
             else:
-                net = paddle.jit.to_static(net, full_graph=True)
+                net = paddle.jit.to_static(net, backend=None, full_graph=True)
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs

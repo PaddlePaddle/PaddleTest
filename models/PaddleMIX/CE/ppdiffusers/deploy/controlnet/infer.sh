@@ -1,5 +1,5 @@
 #!/bin/bash
-
+log_dir=${root_path}/deploy_log
 export FLAGS_use_cuda_managed_memory=true
 export USE_PPXFORMERS=False
 
@@ -9,6 +9,7 @@ export USE_PPXFORMERS=False
     --scheduler "ddim" \
     --backend paddle \
     --device gpu \
+    --tune False \
     --task_name text2img) 2>&1 | tee ${log_dir}/controlnet_inference_text2img.log
 tmp_exit_code=${PIPESTATUS[0]}
 exit_code=$(($exit_code + ${tmp_exit_code}))
@@ -53,6 +54,7 @@ echo "*******ppdiffusers/deploy/controlnet controlnet_inference_inpaint end*****
 
 # tensorrt
 # tune
+#
 (python infer.py \
     --model_dir static_model/stable-diffusion-v1-5-canny/ \
     --scheduler "ddim" \
@@ -61,7 +63,7 @@ echo "*******ppdiffusers/deploy/controlnet controlnet_inference_inpaint end*****
     --task_name all \
     --width 512 \
     --height 512 \
-    --inference_steps 30 \
+    --inference_steps 5 \
     --tune True \
     --use_fp16 False) 2>&1 | tee ${log_dir}/controlnet_inference_tensorrt_tune.log
 tmp_exit_code=${PIPESTATUS[0]}

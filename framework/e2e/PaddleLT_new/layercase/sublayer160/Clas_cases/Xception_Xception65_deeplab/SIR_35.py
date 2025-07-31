@@ -19,7 +19,7 @@ class LayerCase(paddle.nn.Layer):
         self,
         var_0,    # (shape: [22, 2048, 10, 10], dtype: paddle.float32, stop_gradient: False)
     ):
-        var_1 = paddle.nn.functional.common.dropout(var_0, p=0.5, axis=None, training=True, mode='downscale_in_infer', name=None)
+        var_1 = paddle.nn.functional.common.dropout(var_0, p=0.5, axis=None, training=self.training, mode='downscale_in_infer', name=None)
         var_2 = paddle.nn.functional.pooling.adaptive_avg_pool2d(var_1, output_size=1, data_format='NCHW', name=None)
         var_3 = paddle.tensor.manipulation.squeeze(var_2, axis=[2, 3])
         var_4 = paddle.nn.functional.common.linear(x=var_3, weight=self.parameter_1, bias=self.parameter_0, name=None)
@@ -46,13 +46,12 @@ class TestLayer(unittest.TestCase):
         self.net = LayerCase()
     def train(self, net, to_static, with_prim=False, with_cinn=False):
         if to_static:
-            paddle.set_flags({'FLAGS_prim_all': with_prim})
+            paddle.base.core._set_prim_all_enabled(with_prim)
             if with_cinn:
-                build_strategy = paddle.static.BuildStrategy()
-                build_strategy.build_cinn_pass = True
-                net = paddle.jit.to_static(net, build_strategy=build_strategy, full_graph=True)
+                assert with_prim, "with_cinn=True but with_prim=False is unsupported"
+                net = paddle.jit.to_static(net, backend="CINN", full_graph=True)
             else:
-                net = paddle.jit.to_static(net, full_graph=True)
+                net = paddle.jit.to_static(net, backend=None, full_graph=True)
         paddle.seed(123)
         outs = net(*self.inputs)
         return outs

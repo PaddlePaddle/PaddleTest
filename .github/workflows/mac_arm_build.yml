@@ -1,0 +1,222 @@
+name: PaddlePaddle Wheel Build On Mac Arm
+run-name: Runs on ${{ github.event_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      agile_branch:
+        description: 'Branch for compilation'
+        required: false
+        default: 'develop'
+      agile_revision:
+        description: 'Git commit or revision hash'
+        required: false
+        default: 'ef256258ca705ee3b4d709d7dec0332f33988c22'
+      ManualTrigger:
+        description: 'Set to ON to force skip upload'
+        required: false
+        default: 'OFF'
+
+  workflow_call:
+    inputs:
+      agile_branch:
+        required: false
+        type: string
+        default: 'develop'
+      agile_revision:
+        required: false
+        type: string
+        default: 'ef256258ca705ee3b4d709d7dec0332f33988c22'
+      ManualTrigger:
+        required: false
+        type: string
+        default: 'OFF'
+
+  repository_dispatch:
+    types: [cebuild-mac-arm]
+
+jobs:
+  prepare-build-upload:
+    runs-on: [self-hosted, MacOS-CPU]
+    environment: CodeSync
+    env:
+      AGILE_COMPILE_BRANCH: ${{ github.event.client_payload.agile_branch || github.event.inputs.agile_branch || inputs.agile_branch || 'develop' }}
+      AGILE_REVISION: ${{ github.event.client_payload.agile_revision || github.event.inputs.agile_revision || inputs.agile_revision || 'ef256258ca705ee3b4d709d7dec0332f33988c22' }}
+      ManualTrigger: ${{ github.event.client_payload.ManualTrigger || github.event.inputs.ManualTrigger || inputs.ManualTrigger || 'OFF' }}
+      GENERATOR: Ninja
+      MACOSX_DEPLOYMENT_TARGET: 10.11
+      PADDLE_DEV_NAME: paddlepaddle/paddle:dev
+      COVERALLS_UPLOAD: OFF
+      WITH_DEB: OFF
+      RUN_TEST: OFF
+      WITH_DISTRIBUTE: ON
+      WITH_FLUID_ONLY: ON
+      WITH_INFERENCE_API_TEST: OFF
+      INSTALL_PREFIX: /Users/paddle/CI_install_path
+      WITH_AVX: ON
+      PROC_RUN: 6
+      WITH_CACHE: ON
+      WITH_NIGHTLY_BUILD: ${IPIPE_WITH_NIGHTLY_BUILD}
+      NINJAJOBS: 6
+      AK: ${{ secrets.BOS_CREDENTIAL_AK }}
+      SK: ${{ secrets.BOS_CREDENTIAL_SK }}
+
+    steps:
+      - name: Prepare Paddle Source Code
+        run: |
+          set -xe
+          workspace=$(pwd)
+
+          echo "开始清空当前目录下所有文件..."
+          rm -rf "$workspace"/*
+          echo "当前目录已清空，开始重新下载 Paddle.tar..."
+          url="https://paddle-qa.bj.bcebos.com/CodeSync/${AGILE_COMPILE_BRANCH}/${AGILE_REVISION}/Paddle.tar"
+          wget -q --no-proxy ${url} --no-check-certificate || wget_failed=101
+          if [[ "${wget_failed}" == "101" ]]; then
+            echo "wget failed, start cloning..."
+            git clone https://github.com/PaddlePaddle/Paddle.git --depth=100 -b ${AGILE_COMPILE_BRANCH} Paddle
+          else
+            tar xf Paddle.tar
+          fi
+
+          cd Paddle
+          git reset --hard ${AGILE_REVISION}
+          git submodule update --init --recursive
+          git log -10
+          mkdir -p BUILD_RESULT
+
+      - name: Prepare build environment
+        run: |
+          cd Paddle
+          GIT_COMMIT_TIME=$(git --no-pager show -s --format=%ci HEAD)
+          DATE_ONLY=$(echo $GIT_COMMIT_TIME | sed "s/ .*//;s/-//g")
+          echo "GIT_COMMIT_TIME=$GIT_COMMIT_TIME"
+          echo "DATE_ONLY=$DATE_ONLY"
+          if [[ "${WITH_NIGHTLY_BUILD}" == "ON" ]]; then
+            echo "PADDLE_VERSION_SUFFIX=.dev${DATE_ONLY}" >> $GITHUB_ENV
+          fi
+
+      - name: Build Paddle for Python 3.9
+        run: |
+          cd Paddle
+          export PY_VERSION=3.9
+          python${PY_VERSION} -m venv myenv --clear
+          source myenv/bin/activate
+          echo "已切换到 Python 版本：$(python3 --version)"
+          echo "当前 Python 位置：$(which python3)"
+
+          python -m pip install -U pip
+          python -m pip install wheel setuptools
+          python -m pip install -r python/requirements.txt
+          python -m pip install -r paddle/scripts/compile_requirements.txt
+
+          bash -x paddle/scripts/paddle_build.sh mac_m1_arm || exit 1
+          cp ./build/python/dist/*.whl ./BUILD_RESULT || true
+          rm -rf ./build
+
+      - name: Build Paddle for Python 3.10
+        run: |
+          cd Paddle
+          export PY_VERSION=3.10
+          python${PY_VERSION} -m venv myenv --clear
+          source myenv/bin/activate
+          echo "已切换到 Python 版本：$(python3 --version)"
+          echo "当前 Python 位置：$(which python3)"
+
+          python -m pip install -U pip
+          python -m pip install wheel setuptools
+          python -m pip install -r python/requirements.txt
+          python -m pip install -r paddle/scripts/compile_requirements.txt
+
+          bash -x paddle/scripts/paddle_build.sh mac_m1_arm || exit 1
+          cp ./build/python/dist/*.whl ./BUILD_RESULT || true
+          rm -rf ./build
+
+      - name: Build Paddle for Python 3.11
+        run: |
+          cd Paddle
+          export PY_VERSION=3.11
+          python${PY_VERSION} -m venv myenv --clear
+          source myenv/bin/activate
+          echo "已切换到 Python 版本：$(python3 --version)"
+          echo "当前 Python 位置：$(which python3)"
+
+          python -m pip install -U pip
+          python -m pip install wheel setuptools
+          python -m pip install -r python/requirements.txt
+          python -m pip install -r paddle/scripts/compile_requirements.txt
+
+          bash -x paddle/scripts/paddle_build.sh mac_m1_arm || exit 1
+          cp ./build/python/dist/*.whl ./BUILD_RESULT || true
+          rm -rf ./build
+      
+      - name: Build Paddle for Python 3.12
+        run: |
+          cd Paddle
+          export PY_VERSION=3.12
+          python${PY_VERSION} -m venv myenv --clear
+          source myenv/bin/activate
+          echo "已切换到 Python 版本：$(python3 --version)"
+          echo "当前 Python 位置：$(which python3)"
+
+          python -m pip install -U pip
+          python -m pip install wheel setuptools
+          python -m pip install -r python/requirements.txt
+          python -m pip install -r paddle/scripts/compile_requirements.txt
+
+          bash -x paddle/scripts/paddle_build.sh mac_m1_arm || exit 1
+          cp ./build/python/dist/*.whl ./BUILD_RESULT || true
+          rm -rf ./build
+
+      - name: Build Paddle for Python 3.13
+        run: |
+          cd Paddle
+          export PY_VERSION=3.13
+          python${PY_VERSION} -m venv myenv --clear
+          source myenv/bin/activate
+          echo "已切换到 Python 版本：$(python3 --version)"
+          echo "当前 Python 位置：$(which python3)"
+
+          python -m pip install -U pip
+          python -m pip install wheel setuptools
+          python -m pip install -r python/requirements.txt
+          python -m pip install -r paddle/scripts/compile_requirements.txt
+
+          bash -x paddle/scripts/paddle_build.sh mac_m1_arm || exit 1
+          cp ./build/python/dist/*.whl ./BUILD_RESULT || true
+          rm -rf ./build
+
+      - name: Setup Python 3.10 and Upload Wheels to BOS
+        run: |
+          cd Paddle
+          set -xe
+          PYTHON_BIN=python3.10
+          
+          ${PYTHON_BIN} -m venv myenv --clear
+          source myenv/bin/activate
+          python -m pip install bce-python-sdk==0.9.29
+
+          wget -q --no-proxy --no-check-certificate https://paddle-qa.bj.bcebos.com/CodeSync/develop/PaddlePaddle/PaddleTest/tools/bos_tools.py
+          push_file=$PWD/bos_tools.py
+          skip_pypi_upload="N"
+
+          is_tag=$(git describe --tags --exact-match) || is_tag=""
+          if [[ ( "${is_tag}" == "" && "${AGILE_COMPILE_BRANCH}" != "develop") || "${ManualTrigger}" == "ON" ]]; then
+            skip_pypi_upload="Y"
+          fi
+
+          if [[ "${is_tag}" == "" ]]; then
+            whl_package="paddle-whl/nightly/cpu/paddlepaddle"
+          else
+            whl_package="paddle-whl/stable/cpu/paddlepaddle"
+          fi
+
+          cd ./BUILD_RESULT
+
+          if [[ "${skip_pypi_upload}" != "Y" ]]; then
+            for whl_file in $(ls *.whl); do
+              python ${push_file} ${whl_file} ${whl_package}
+            done
+          else
+            echo "Skip upload to BOS: skip_pypi_upload=${skip_pypi_upload}"
+          fi
