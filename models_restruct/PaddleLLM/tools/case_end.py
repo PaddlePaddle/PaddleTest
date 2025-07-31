@@ -18,6 +18,8 @@ import matplotlib.pyplot as plt
 
 logger = logging.getLogger("ce")
 
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = CURRENT_DIR.split("TestFrameWork")[0] + "TestFrameWork" if "TestFrameWork" in CURRENT_DIR else CURRENT_DIR
 
 class PaddleLLM_End(object):
     """
@@ -33,7 +35,7 @@ class PaddleLLM_End(object):
         # export system='linux_convergence'
         self.reponame = os.environ["reponame"]
         self.qa_yaml_name = os.environ["qa_yaml_name"]
-        self.TRAIN_LOG_PATH = os.path.join("logs", self.reponame, self.qa_yaml_name)
+        self.TRAIN_LOG_PATH = os.path.join(PROJECT_ROOT, "logs", self.reponame, self.qa_yaml_name)
 
     def drow_picture(self, model_name, baseline_info, strategy_info, metric):
         """drowing metrics curve"""
@@ -43,12 +45,12 @@ class PaddleLLM_End(object):
             elif re.compile(metric).findall(key):
                 print(len(value))
                 plt.subplot(1, 1, 1)
-                picture_name = (model_name.replace("model_zoo^", "") + key.replace("dy2st", "")).upper()
+                picture_name = (model_name.replace("llm^", "") + key.replace("dy2st", "")).upper()
 
-                x = [i for i in range(len(baseline_info["baseline_" + metric]))]
-                y1 = baseline_info["baseline_" + metric]
+                x = [i for i in range(len(strategy_info["strategy_" + metric]))]
+                # y1 = baseline_info["baseline_" + metric]
                 y2 = strategy_info[key]
-                plt.plot(x, y1, color="g", label="baseline_" + metric)
+                # plt.plot(x, y1, color="g", label="baseline_" + metric)
                 plt.plot(x, y2, color="r", label=key)
                 plt.xlabel("step")
                 plt.ylabel(metric)
@@ -101,16 +103,16 @@ class PaddleLLM_End(object):
             if re.compile("baseline").findall(file):
                 baseline_info["baseline_loss"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
                 baseline_info["baseline_ips"] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
-            elif re.compile("dy2st").findall(file) or re.compile("ir").findall(file):
+            elif re.compile("training").findall(file) or re.compile("conv").findall(file):
                 strategy_loss = file.split("train_")[-1].replace(".log", "") + "_loss"
                 strategy_ips = file.split("train_")[-1].replace(".log", "") + "_ips"
                 strategy_info[strategy_loss] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "loss")
                 strategy_info[strategy_ips] = self.get_metrics(self.TRAIN_LOG_PATH + "/" + file, "ips")
             else:
-                logger.info("this log file not convergence task ")
+                logger.info(file)
 
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="loss")
-        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="ips")
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="train_policy_loss")
+        self.drow_picture(self.qa_yaml_name, baseline_info, strategy_info, metric="interval_samples_per_second")
 
     def build_end(self):
         """
@@ -131,14 +133,9 @@ def run():
     """
     执行入口
     """
-    platform = os.environ["system"]
-    all = re.compile("All").findall(os.environ["AGILE_PIPELINE_NAME"])
-    if platform == "linux_convergence" and not all:
-        model = PaddleLLM_End()
-        model.build_end()
-        return 0
-    else:
-        return 0
+    model = PaddleLLM_End()
+    model.build_end()
+    return 0
 
 
 if __name__ == "__main__":

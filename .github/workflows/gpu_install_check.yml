@@ -1,0 +1,128 @@
+name: PaddlePaddle Gpu Packages Install Check
+run-name: Runs on ${{ github.event_name }}
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: "0 20 * * *"
+
+jobs:
+  run-check:
+    runs-on: [self-hosted, GPU-2Card]
+    strategy:
+      max-parallel: 2
+      matrix:
+        cuda-version: ['cu118', 'cu126']
+        images_version:
+          - InstallCheck-Py3.10-alalinux8
+          - InstallCheck-Py3.10-ubuntu20.04
+          - InstallCheck-Py3.10-ubuntu22.04
+          - InstallCheck-Py3.10-ubuntu24.04
+    steps:
+      - name: Run Paddle installation check in Docker
+        id: run_check
+        continue-on-error: true
+        run: |
+          echo "Testing Cuda${{ matrix.cuda-version }} on ${{ matrix.images_version }}"
+          result=0
+          docker run --rm --gpus all --net=host \
+            ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddleqa:${{ matrix.images_version }} \
+            /bin/bash -ec '
+              python3 -m pip install --pre paddlepaddle-gpu -i https://www.paddlepaddle.org.cn/packages/nightly/${{ matrix.cuda-version }}/ &&
+              python3 -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
+            ' || result=$?
+          echo "result=$result"
+          if [ $result -ne 0 ]; then
+            echo "${{ matrix.cuda-version }} | ${{ matrix.images_version }}" >> failed.txt
+          fi
+          exit 0
+
+      - name: Upload individual failure result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-${{ matrix.cuda-version }}-${{ matrix.images_version }}
+          path: failed.txt
+          if-no-files-found: ignore
+
+  collect-failures:
+    runs-on: ubuntu-latest
+    needs: run-check
+    steps:
+      - name: Download all failure artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Merge all failed.txt files (deduplicated)
+        run: |
+          mkdir -p merged
+          find artifacts -name 'failed.txt' -exec cat {} + | sort | uniq > merged/all_failed.txt || true
+
+      - name: Upload merged failure list
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-combos
+          path: merged/all_failed.txt
+          if-no-files-found: ignore
+
+  create-issue-if-needed:
+    runs-on: ubuntu-latest
+    needs: collect-failures
+    if: always()
+    steps:
+      - name: Download merged failure list
+        uses: actions/download-artifact@v4
+        with:
+          name: failed-combos
+          path: artifacts
+
+      - name: Create issue if there are failures
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'artifacts/all_failed.txt';
+            const issueTitle = '❌ Paddle GPU 安装验证失败(Nightly)';
+            if (!fs.existsSync(path)) {
+              console.log('没有失败记录，无需创建 issue');
+              return;
+            }
+            const failedVersions = fs.readFileSync(path, 'utf-8').split('\n').filter(Boolean);
+            if (failedVersions.length === 0) {
+              console.log('all_failed.txt 文件为空');
+              return;
+            }
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'auto-generated',
+              per_page: 100
+            });
+            const alreadyExists = existingIssues.data.some(issue =>
+              issue.title.includes(issueTitle)
+            );
+            if (alreadyExists) {
+              console.log('已有相同标题的 open issue，跳过创建');
+              return;
+            }
+            const list = failedVersions.map(v => `- ❌ ${v.trim()}`).join('\n');
+            const body = `
+            以下 CUDA + 系统镜像组合的 Paddle 安装检查失败：
+            ${list}
+
+            Workflow: [查看运行详情](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            @XieYunshen 请关注此问题。
+            `;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body,
+              labels: ['ci-failure', 'gpu', 'auto-generated'],
+              assignees: ['XieYunshen']
+            });

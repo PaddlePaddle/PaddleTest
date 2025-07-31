@@ -1,7 +1,7 @@
 numpy<=1.26.4
 regex
-nltk==3.5
-xlrd==1.2.0
+nltk
+xlrd
 pybind11
 tool_helpers
 editdistance
@@ -27,3 +27,4 @@ evaluate==0.2.2
 sacremoses
 pythainlp
 kytea
+pgl

@@ -2,22 +2,26 @@ case:
   linux:
     train:
       -
-        name: run_thucnews
-        path: slm/examples/language_model/roformer
-        cmd: python -m paddle.distributed.launch run_thucnews.py
+        name: prepare
+        path: slm/model_zoo/rembert
+        cmd: mkdir data && cd data && wget https://dl.fbaipublicfiles.com/XNLI/XNLI-MT-1.0.zip --no-check-certificate \
+        && unzip XNLI-MT-1.0.zip && rm XNLI-MT-1.0.zip && mv XNLI-MT-1.0/multinli/multinli.train.en.tsv ./
+      -
+        name: run_main
+        path: slm/model_zoo/rembert
+        cmd: python -m paddle.distributed.launch main.py
         params:
-          - --model_type roformer
-          - --model_name_or_path roformer-chinese-base
-          - --max_seq_length 256
-          - --batch_size 64
-          - --learning_rate 2e-5
-          - --num_train_epochs 3
-          - --logging_steps 1
-          - --save_steps 2
-          - --output_dir ./thucnews/
+          - --model_type rembert
+          - --data_dir data/
+          - --output_dir output/
           - --device gpu
-          - --use_amp True
-          - --max_steps 2
+          - --learning_rate 1e-5
+          - --num_train_epochs 3
+          - --train_batch_size 16
+          - --do_train
+          - --do_eval
+          - --task xnli
+          - --eval_step 2
     eval: skipped
     infer: skipped
     export: skipped

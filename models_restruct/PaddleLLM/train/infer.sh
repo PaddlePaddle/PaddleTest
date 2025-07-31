@@ -3,7 +3,7 @@
 model_name=$1
 ngpus=${2:-8}
 step_name=${3:-"grpo"}
-save_steps=${4:-2}
+save_steps=${4:-1200}
 
 # 1.动转静模型路径
 if [ "$step_name" == "ppo" ] || [ "$step_name" == "grpo" ] || [ "$step_name" == "reinforce_plus_plus" ]; then 

@@ -4,12 +4,15 @@
 """
 import os
 import re
+import time
 from platform import platform
 import logging
 import argparse
 import numpy as np
 import yaml
+from datetime import datetime
 from Model_Build import Model_Build
+import requests
 
 
 logger = logging.getLogger("ce")
@@ -62,97 +65,58 @@ class PaddleLLM_Build(Model_Build):
         print("set timeout as:", os.environ["timeout"])
         print("set no_proxy as:", os.environ["no_proxy"])
 
-        if platform == "linux" or platform == "linux_convergence":
-            os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
-            os.system("python -m pip install nltk h5py")
-            os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
-            os.system("python -m pip uninstall protobuf -y")
-            os.system("python -m pip uninstall protobuf -y")
-            os.system("python -m pip uninstall protobuf -y")
-            os.system("python -m pip install protobuf==3.20.2")
-            # os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
-        else:
-            os.system("python -m pip install  --user -r requirements_win.txt -i https://mirror.baidu.com/pypi/simple")
-            os.system("python -m pip uninstall paddlepaddle -y")
-            # os.system("python -m pip install {}".format(paddle_whl))  # install paddle for lac requirement paddle>=1.6
+        os.system("python -m pip install -U setuptools -i https://mirror.baidu.com/pypi/simple")
+        os.system("python -m pip install --user -r requirements_nlp.txt -i https://mirror.baidu.com/pypi/simple")
+        os.system("python -m pip uninstall protobuf -y")
+        os.system("python -m pip install protobuf==3.20.2")
 
-        if re.compile("elease").findall(paddle_whl):
-            os.system("python -m pip install -U  paddleslim -i https://mirror.baidu.com/pypi/simple")
-        else:
-            os.system(
-                "python -m pip install \
-                 https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl"
-            )
-
-        if re.compile("37").findall(paddle_whl) or re.compile("38").findall(paddle_whl):
-            os.system("python -m pip install pgl==2.2.4 -i https://mirror.baidu.com/pypi/simple")
-
+        os.system("python -m pip install \
+                 https://paddle-qa.bj.bcebos.com/PaddleSlim/paddleslim-0.0.0.dev0-py3-none-any.whl")
+            
         if os.path.exists(self.reponame):
             os.chdir(self.reponame)
-            logger.info("installing develop PaddleLLM")
+            logger.info("### installing develop paddlenlp")
             os.system("python setup.py bdist_wheel")
-            cmd_return = os.system(" python -m pip install -U dist/p****.whl")
-            logger.info("installing develop paddlenlp_ops")
-            os.system("wget https://paddlenlp.bj.bcebos.com/wheels/paddlenlp_ops-ci-py3-none-any.whl")
-            os.system("mv paddlenlp_ops-ci-py3-none-any.whl paddlenlp_ops-0.0.0-py3-none-any.whl")
-            cmd_ops_return = os.system("python -m pip install paddlenlp_ops-0.0.0-py3-none-any.whl")
-            
+            cmd_return = os.system("python -m pip install -U dist/p****.whl --force-reinstall")
+
+            logger.info("### installing develop paddlenlp_ops")
+            today = datetime.today().strftime("%Y%m%d")
+            # today = "20250516"
+            import paddle
+            cuda_version=float(paddle.version.cuda())
+            prop = paddle.device.cuda.get_device_properties()
+            sm_version = prop.major * 10 + prop.minor
+            paddlenlp_ops_whl = (
+                f"paddlenlp_ops-3.0.0b4.post{today}+cuda{cuda_version}sm{sm_version}paddle3b5fe1f-py3-none-any.whl"
+            )
+            paddlenlp_ops_url = ("https://paddlenlp.bj.bcebos.com/wheels/{}".format(paddlenlp_ops_whl))
+            if os.path.exists(paddlenlp_ops_whl):
+                logger.info("paddlenlp_ops_whl has been downloaded, skip")
+                cmd_ops_return = 0
+            else:
+                response = requests.head(paddlenlp_ops_url, timeout=10)
+                if response.status_code == 200:
+                    os.system("wget -q {}".format(paddlenlp_ops_url))
+                    cmd_ops_return = os.system("python -m pip install -U {} --force-reinstall".format(paddlenlp_ops_whl))
+                else:
+                    logger.info("ipipe had biuld paddlenlp_ops, but maybe failed, use history version")
+                    # os.chdir("csrc")
+                    # cmd_ops_return = os.system("bash tools/build_wheel.sh")
+                    cmd_ops_return = 0
+                      
             if cmd_return:
-                logger.info("repo {} python -m pip install-failed".format(self.reponame))
+                logger.info("repo {} python -m pip install-failed".format("paddlenlp"))
             if cmd_ops_return:
                 logger.info("repo {} python -m pip install-failed".format("paddlenlp_ops"))
 
             logger.info("installing develop ppdiffusers")
             os.system("python -m pip install ppdiffusers==0.14.0 -f https://www.paddlepaddle.org.cn/whl/paddlenlp.html")
 
-            os.system(
-                'sed -i "s/save_step: 10000/save_step: 1/g" \
-                    examples/machine_translation/transformer/configs/transformer.base.yaml'
-            )
-            os.system(
-                'sed -i "s/print_step: 100/print_step: 1/g" \
-                    examples/machine_translation/transformer/configs/transformer.base.yaml'
-            )
-            os.system(
-                'sed -i "s/epoch: 30/epoch: 1/g" \
-                    examples/machine_translation/transformer/configs/transformer.base.yaml'
-            )
-            os.system(
-                'sed -i "s/max_iter: None/max_iter: 2/g" \
-                    examples/machine_translation/transformer/configs/transformer.base.yaml'
-            )
-            os.system(
-                'sed -i "s/batch_size: 4096/batch_size: 1000/g" \
-                    examples/machine_translation/transformer/configs/transformer.base.yaml'
-            )
-
-            # if platform == "linux_convergence":
-            #     print("pass donwload hf datasets")
-            # else:
-            #     from datasets import load_dataset
-
-            #     train_squad = load_dataset("squad", split="train",
-            #  cache_dir="/root/.cache/huggingface/datasets")
-            #     train_sst2 = load_dataset("glue", "sst2", split="train",
-            #  cache_dir="/root/.cache/huggingface/datasets")
-
-            #     print("download hf datasets", train_squad, train_sst2)
-
-        if re.compile("CUDA11").findall(self.models_file):
-            os.system(
-                "python -m pip install fastdeploy-gpu-python -f https://www.paddlepaddle.org.cn/whl/fastdeploy.html"
-            )
         os.chdir(path_now)
-
-        os.system("python -m pip uninstall protobuf -y")
-        os.system("python -m pip uninstall protobuf -y")
-        os.system("python -m pip install protobuf==3.20.2")
-        os.system("python -m pip list")
         import paddle
-
-        # import paddlenlp
-        print("paddle final commit", paddle.version.commit)
-        # print("paddlenlp final commit", paddlenlp.version.commit)
+        logger.info("paddle final commit: {}".format(paddle.version.commit))
+        import paddlenlp
+        logger.info("paddlenlp commit: {}".format(paddlenlp.version.commit))
         os.system("python -m pip list")
 
         return 0
