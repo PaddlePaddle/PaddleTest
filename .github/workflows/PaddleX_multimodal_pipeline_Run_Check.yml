@@ -1,0 +1,52 @@
+name: PaddleX multimodal pipeline Run Check
+run-name: Runs on ${{ github.event_name }}
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  schedule:
+    - cron: "0 20 * * *"
+
+jobs:
+  run-check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest, macos-latest, macos-13, ubuntu-24.04-arm, windows-latest]  # x86 和 ARM
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Upgrade pip and install setuptools
+        run: python -m pip install --upgrade pip setuptools 
+
+      - name: Install dependencies
+        run: python -m pip install --pre paddlepaddle -i https://www.paddlepaddle.org.cn/packages/nightly/cpu/
+
+      - name: PaddlePaddle Run Check
+        run: |
+          python -c "import paddle; paddle.version.show(); paddle.utils.run_check()"
+      
+      - name: git clone PaddleX
+        run: |
+          git clone https://github.com/PaddlePaddle/PaddleX.git
+
+      - name: install multimodal requirements
+        run: |
+          cd PaddleX
+          pip install -e .[multimodal]
+          
+      - name: test open_vocabulary_detection
+        run: |
+          cd PaddleX
+          paddlex --pipeline open_vocabulary_detection --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/open_vocabulary_detection.jpg --prompt "bus . walking man . rearview mirror ." --thresholds "{'text_threshold': 0.25, 'box_threshold': 0.3}" --save_path ./output --device cpu 
+        
+      - name: test open_vocabulary_segmentation
+        run: |
+          cd PaddleX
+          paddlex --pipeline open_vocabulary_segmentation --input https://paddle-model-ecology.bj.bcebos.com/paddlex/imgs/demo_image/open_vocabulary_segmentation.jpg --prompt_type box --prompt "[[112.9,118.4,513.8,382.1],[4.6,263.6,92.2,336.6],[592.4,260.9,607.2,294.2]]" --save_path ./output --device cpu 
