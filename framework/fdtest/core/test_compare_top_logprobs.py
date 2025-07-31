@@ -3,8 +3,6 @@
 # @author yubaoku
 
 from core import *
-import requests
-import json
 
 
 def get_response(data):
@@ -19,6 +17,23 @@ def get_response(data):
     payload = build_request_payload(TEMPLATE, data)
     resp = send_request(URL, payload)
     return resp.json()
+
+
+def assert_top_logprobs_prefix_match(small_top, large_top, token_index):
+    """
+    Assert that all entries in small_top are a prefix of large_top,
+    comparing both token and logprob values.
+    """
+    for j in range(len(small_top)):
+        s_token = small_top[j]["token"]
+        l_token = large_top[j]["token"]
+        assert s_token == l_token, \
+            "Token mismatch at token {} pos {}: '{}' != '{}'".format(token_index + 1, j + 1, s_token, l_token)
+
+        s_prob = small_top[j]["logprob"]
+        l_prob = large_top[j]["logprob"]
+        assert s_prob == l_prob, \
+            "Logprob mismatch at token {} pos {}: {} != {}".format(token_index + 1, j + 1, s_prob, l_prob)
 
 
 def compare_top_logprobs(base_data, top_logprobs_values=[5, 10]):
@@ -48,30 +63,19 @@ def compare_top_logprobs(base_data, top_logprobs_values=[5, 10]):
         response = get_response(data)
         responses[val] = response
 
-    for val in top_logprobs_values:
-        output = responses[val]["choices"][0]
-        token_logprobs_list = output.get("logprobs", {}).get("content", [])
-        print("\nTop {} LogProbs:".format(val))
-        for i, token_info in enumerate(token_logprobs_list):
-            top_items = token_info.get("top_logprobs", [])
-            print("  Token {}: {}".format(i + 1, [item['token'] for item in top_items]))
-
     # Assertion for prefix consistency
     if len(top_logprobs_values) >= 2:
         small = top_logprobs_values[0]
         large = top_logprobs_values[1]
 
-        min_len = min(len(responses[small]["choices"][0]["logprobs"]["content"]),
-                      len(responses[large]["choices"][0]["logprobs"]["content"]))
+        small_contents = responses[small]["choices"][0]["logprobs"]["content"]
+        large_contents = responses[large]["choices"][0]["logprobs"]["content"]
+        min_len = min(len(small_contents), len(large_contents))
 
         for i in range(min_len):
-            small_top_tokens = [item["token"] for item in
-                                responses[small]["choices"][0]["logprobs"]["content"][i]["top_logprobs"]]
-            large_top_tokens = [item["token"] for item in
-                                responses[large]["choices"][0]["logprobs"]["content"][i]["top_logprobs"]]
-            for j, token in enumerate(small_top_tokens):
-                assert token == large_top_tokens[j], \
-                    "Mismatch at token {} pos {}: '{}' != '{}'".format(i + 1, j + 1, token, large_top_tokens[j])
+            small_top = small_contents[i]["top_logprobs"]
+            large_top = large_contents[i]["top_logprobs"]
+            assert_top_logprobs_prefix_match(small_top, large_top, i)
 
 
 def test_compare_top_logprobs():
@@ -94,4 +98,11 @@ def test_compare_top_logprobs():
 
 
 if __name__ == '__main__':
+    """
+    Test the compare_top_logprobs function with a sample input data.
+    Returns:
+        None
+        AssertionError: If there is a mismatch between the top logprobs values.
+
+    """
     test_compare_top_logprobs()
