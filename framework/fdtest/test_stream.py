@@ -1,0 +1,56 @@
+from core import *
+import requests
+import json
+
+def test_stream_and_not_stream():
+    data = {"stream": True, "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful assistant."
+        },
+        {
+          "role": "user",
+          "content": "牛顿的三大运动定律是什么？"
+        },
+
+      ],"max_tokens": 100,}
+    payload = build_request_payload(TEMPLATE, data)
+    req = send_request(URL, payload)
+    resp_chunks = []
+    for line in req.iter_lines():
+        if line:
+            # OpenAI 风格流响应前缀是 "data: ...", 去掉前缀
+            decoded = line.decode("utf-8")
+            if decoded.startswith("data: "):
+                decoded = decoded[len("data: "):]
+            if decoded == "[DONE]":
+                break
+            resp_chunks.append(json.loads(decoded))
+    final_content = "".join([
+        chunk["choices"][0]["delta"]["content"]
+        for chunk in resp_chunks
+        if "choices" in chunk and "delta" in chunk["choices"][0] and "content" in chunk["choices"][0]["delta"]
+    ])
+    print(final_content)
+
+    data = {"stream": False, "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful assistant."
+        },
+        {
+          "role": "user",
+          "content": "牛顿的三大运动定律是什么？"
+        },
+
+      ],"max_tokens": 100,}
+    payload = build_request_payload(TEMPLATE, data)
+    req = send_request(URL, payload)
+    print(json.dumps(req.json(), indent=2, ensure_ascii=False))
+    req = req.json()
+
+    assert final_content == req["choices"][0]["message"]["content"]
+
+
+if __name__ == '__main__':
+  test_stream_and_not_stream()
