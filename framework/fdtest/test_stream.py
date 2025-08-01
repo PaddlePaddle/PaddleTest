@@ -3,29 +3,32 @@ import requests
 import json
 
 def test_stream_and_not_stream():
-    data = {"stream": True, "messages": [
-        {
-          "role": "system",
-          "content": "You are a helpful assistant."
-        },
-        {
-          "role": "user",
-          "content": "牛顿的三大运动定律是什么？"
-        },
+    # 测试接口在 stream 模式和非 stream 模式下返回的内容是否一致
 
-      ],"max_tokens": 100,}
+    # 发送 stream=True 的请求，解析流式响应
+    data = {
+        "stream": True,
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "牛顿的三大运动定律是什么？"},
+        ],
+        "max_tokens": 100,
+    }
     payload = build_request_payload(TEMPLATE, data)
     req = send_request(URL, payload)
+
+    # 解析流式响应内容
     resp_chunks = []
     for line in req.iter_lines():
         if line:
-            # OpenAI 风格流响应前缀是 "data: ...", 去掉前缀
             decoded = line.decode("utf-8")
             if decoded.startswith("data: "):
                 decoded = decoded[len("data: "):]
             if decoded == "[DONE]":
                 break
             resp_chunks.append(json.loads(decoded))
+
+    # 拼接最终生成内容
     final_content = "".join([
         chunk["choices"][0]["delta"]["content"]
         for chunk in resp_chunks
@@ -33,24 +36,15 @@ def test_stream_and_not_stream():
     ])
     print(final_content)
 
-    data = {"stream": False, "messages": [
-        {
-          "role": "system",
-          "content": "You are a helpful assistant."
-        },
-        {
-          "role": "user",
-          "content": "牛顿的三大运动定律是什么？"
-        },
-
-      ],"max_tokens": 100,}
+    # 发送 stream=False 的请求，获取完整响应
+    data["stream"] = False
     payload = build_request_payload(TEMPLATE, data)
     req = send_request(URL, payload)
     print(json.dumps(req.json(), indent=2, ensure_ascii=False))
     req = req.json()
 
+    # 对比 stream 与非 stream 响应内容是否一致
     assert final_content == req["choices"][0]["message"]["content"]
 
-
 if __name__ == '__main__':
-  test_stream_and_not_stream()
+    test_stream_and_not_stream()  # 运行测试函数
