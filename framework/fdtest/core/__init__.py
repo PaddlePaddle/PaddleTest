@@ -8,7 +8,7 @@ from .logger import Logger
 base_logger = Logger(loggername="FDSentry", save_level="channel", log_path="./fd_logs").get_logger()
 base_logger.setLevel("INFO")
 from .request_template import *
-from .utils import build_request_payload, send_request
+from .utils import build_request_payload, send_request, get_stream_chunks
 
 # 检查环境变量是否存在
 URL = os.environ.get("URL")
