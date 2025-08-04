@@ -13,16 +13,29 @@ from flask import Flask, jsonify, request, Response
 
 app = Flask(__name__)
 
+
+def get_base_port():
+    nv_visible_devices = os.environ.get("NVIDIA_VISIBLE_DEVICES", "")
+    if not nv_visible_devices or nv_visible_devices.lower() == "all":
+        return 8000
+    # 提取第一个数字
+    match = re.search(r'\d+', nv_visible_devices)
+    if match:
+        return int(match.group(0)) * 100 + 8000
+    return 8000
+
+
 # 默认参数值
 PID_FILE = "pid_port"
 LOG_FILE = "server.log"
-FD_PORT = 8128
-FD_WORKER_QUEUE_PORT = 8133
-FD_METRICS_PORT = 8135
-
+base_port = get_base_port()
+FLASK_PORT = int(os.environ.get("FLASK_PORT", base_port + 1))
+FD_API_PORT = int(os.environ.get("FD_API_PORT", base_port + 2))
+FD_ENGINE_QUEUE_PORT = int(os.environ.get("FD_ENGINE_QUEUE_PORT", base_port + 3))
+FD_METRICS_PORT = int(os.environ.get("FD_METRICS_PORT", base_port + 4))
 DEFAULT_PARAMS = {
-    "--port": FD_PORT,
-    "--engine-worker-queue-port": FD_WORKER_QUEUE_PORT,
+    "--port": FD_API_PORT,
+    "--engine-worker-queue-port": FD_ENGINE_QUEUE_PORT,
     "--metrics-port": FD_METRICS_PORT,
     "--enable-logprob": True,
 }
@@ -76,19 +89,24 @@ def is_server_running():
     """检查服务是否正在运行"""
     pid_port = get_server_pid()
     if pid_port is None:
-        return False, "Server not running..."
+        return False, {"status": "Server not running..."}
 
     server_pid, port = pid_port["PID"], pid_port["PORT"]
     health_check_endpoint = f"http://0.0.0.0:{port}/health"
+
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, 'r') as f:
+            msg = f.readlines()
+    result = parse_tqdm_progress(msg)
 
     try:
         response = requests.get(
             health_check_endpoint,
             timeout=2
         )
-        return response.status_code == 200, response.text
+        return response.status_code == 200, result
     except requests.exceptions.RequestException as e:
-        return False, str(e)
+        return False, result
 
 
 def parse_tqdm_progress(log_lines):
@@ -130,23 +148,29 @@ def stop_server(signum=None, frame=None):
             sys.exit(0)
         return jsonify({"status": "error", "message": "Service is not running"}), 400
 
-    server_pid, port = pid_port["PID"], pid_port["PORT"]
+    server_pid, _ = pid_port["PID"], pid_port["PORT"]
 
     # 清理PID文件
     if os.path.exists(PID_FILE):
         os.remove(PID_FILE)
+    if os.path.exists("gemm_profiles.json"):
+        os.remove("gemm_profiles.json")
 
     try:
         # 终止进程组（包括所有子进程）
         os.killpg(os.getpgid(pid_port["PID"]), signal.SIGTERM)
-
-        output = subprocess.check_output(f"lsof -i:{port} -t", shell=True).decode().strip()
-        for pid in output.splitlines():
-            os.kill(int(pid), signal.SIGKILL)
-            print(f"Killed process on port {port}, pid={pid}")
     except Exception as e:
         print(f"Failed to stop server: {e}")
-    # 若log目录存在，则重命名为log_pid
+
+        for port in [FD_API_PORT, FD_ENGINE_QUEUE_PORT, FD_METRICS_PORT]:
+            try:
+                output = subprocess.check_output(f"lsof -i:{port} -t", shell=True).decode().strip()
+                for pid in output.splitlines():
+                    os.kill(int(pid), signal.SIGKILL)
+                    print(f"Killed process on port {port}, pid={pid}")
+            except Exception as e:
+                print(f"Failed to killed process on port: {e}")
+    # 若log目录存在，则重命名为log_timestamp
     if os.path.isdir('./log'):
         os.rename('./log', './log_{}'.format(time.strftime("%Y%m%d%H%M%S")))
 
@@ -166,7 +190,11 @@ def start_service():
     """启动大模型推理服务"""
     # 检查服务是否已在运行
     if is_server_running()[0]:
-        return jsonify({"status": "error", "message": "服务已启动，无需start"}), 400
+        return Response(
+            json.dumps({"status": "error", "message": "服务已启动，无需start"}, ensure_ascii=False),
+            status=400,
+            content_type='application/json'
+        )
 
     try:
         base_config = DEFAULT_PARAMS
@@ -175,17 +203,21 @@ def start_service():
 
         final_config = merge_configs(base_config, override_config)
 
-        global FD_PORT
-        global FD_WORKER_QUEUE_PORT
+        global FD_API_PORT
+        global FD_ENGINE_QUEUE_PORT
         global FD_METRICS_PORT
-        FD_PORT = final_config["--port"]
-        FD_WORKER_QUEUE_PORT = final_config["--engine-worker-queue-port"]
+        FD_API_PORT = final_config["--port"]
+        FD_ENGINE_QUEUE_PORT = final_config["--engine-worker-queue-port"]
         FD_METRICS_PORT = final_config["--metrics-port"]
 
         # 构建命令
         cmd = build_command(final_config)
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return Response(
+            json.dumps({"status": "error", "message": str(e)}, ensure_ascii=False),
+            status=500,
+            content_type='application/json'
+        )
 
     print("cmd", cmd)
 
@@ -206,15 +238,31 @@ def start_service():
         with open(PID_FILE, 'w') as f:
             yaml.dump({"PID": process.pid, "PORT": final_config["--port"]}, f)
 
-        return jsonify({
+        json_data = {
             "status": "success",
-            "message": "Service started",
+            "message": "服务启动命令已执行",
             "pid": process.pid,
             "config": final_config,
-            "log_file": LOG_FILE
-        }), 200
+            "log_file": LOG_FILE,
+            "cmd": cmd,
+            "port_info": {
+                "api_port": FD_API_PORT,
+                "queue_port": FD_ENGINE_QUEUE_PORT,
+                "metrics_port": FD_METRICS_PORT
+            }
+        }
+
+        return Response(
+            json.dumps(json_data, ensure_ascii=False),
+            status=200,
+            content_type='application/json'
+        )
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return Response(
+            json.dumps({"status": "error", "message": str(e)}, ensure_ascii=False),
+            status=500,
+            content_type='application/json'
+        )
 
 
 @app.route('/switch', methods=['POST'])
@@ -222,6 +270,7 @@ def switch_service():
     """切换模型服务"""
     # kill掉已有服务
     stop_server()
+    time.sleep(2)
 
     try:
         base_config = DEFAULT_PARAMS
@@ -230,17 +279,21 @@ def switch_service():
 
         final_config = merge_configs(base_config, override_config)
 
-        global FD_PORT
-        global FD_WORKER_QUEUE_PORT
+        global FD_API_PORT
+        global FD_ENGINE_QUEUE_PORT
         global FD_METRICS_PORT
-        FD_PORT = final_config["--port"]
-        FD_WORKER_QUEUE_PORT = final_config["--engine-worker-queue-port"]
+        FD_API_PORT = final_config["--port"]
+        FD_ENGINE_QUEUE_PORT = final_config["--engine-worker-queue-port"]
         FD_METRICS_PORT = final_config["--metrics-port"]
 
         # 构建命令
         cmd = build_command(final_config)
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return Response(
+            json.dumps({"status": "error", "message": str(e)}, ensure_ascii=False),
+            status=500,
+            content_type='application/json'
+        )
 
     print("cmd", cmd)
 
@@ -261,15 +314,31 @@ def switch_service():
         with open(PID_FILE, 'w') as f:
             yaml.dump({"PID": process.pid, "PORT": final_config["--port"]}, f)
 
-        return jsonify({
+        json_data = {
             "status": "success",
-            "message": "Service started",
+            "message": "服务启动命令已执行",
             "pid": process.pid,
             "config": final_config,
-            "log_file": LOG_FILE
-        }), 200
+            "log_file": LOG_FILE,
+            "cmd": cmd,
+            "port_info": {
+                "api_port": FD_API_PORT,
+                "queue_port": FD_ENGINE_QUEUE_PORT,
+                "metrics_port": FD_METRICS_PORT
+            }
+        }
+
+        return Response(
+            json.dumps(json_data, ensure_ascii=False),
+            status=200,
+            content_type='application/json'
+        )
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return Response(
+            json.dumps({"status": "error", "message": str(e)}, ensure_ascii=False),
+            status=500,
+            content_type='application/json'
+        )
 
 
 @app.route('/status', methods=['GET', 'POST'])
@@ -277,30 +346,25 @@ def service_status():
     """检查服务状态"""
     health, msg = is_server_running()
 
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE, 'r') as f:
-            msg = f.readlines()
-    result = parse_tqdm_progress(msg)
-
     if not health:
         return Response(
-            json.dumps(result, ensure_ascii=False),
+            json.dumps(msg, ensure_ascii=False),
             status=500,
             content_type='application/json'
         )
 
     # 检查端口是否监听
     ports_status = {
-        "api_port": FD_PORT if is_port_in_use(FD_PORT) else None,
-        "queue_port": FD_WORKER_QUEUE_PORT if is_port_in_use(FD_WORKER_QUEUE_PORT) else None,
+        "api_port": FD_API_PORT if is_port_in_use(FD_API_PORT) else None,
+        "queue_port": FD_ENGINE_QUEUE_PORT if is_port_in_use(FD_ENGINE_QUEUE_PORT) else None,
         "metrics_port": FD_METRICS_PORT if is_port_in_use(FD_METRICS_PORT) else None
     }
 
-    result["status"] = "服务启动完成"
-    result["ports_status"] = ports_status
+    msg["status"] = "服务启动完成"
+    msg["ports_status"] = ports_status
 
     return Response(
-        json.dumps(result, ensure_ascii=False),
+        json.dumps(msg, ensure_ascii=False),
         status=200,
         content_type='application/json'
     )
@@ -319,14 +383,9 @@ def get_config():
     """获取当前server配置"""
     health, msg = is_server_running()
 
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE, 'r') as f:
-            msg = f.readlines()
-    result = parse_tqdm_progress(msg)
-
     if not health:
         return Response(
-            json.dumps(result, ensure_ascii=False),
+            json.dumps(msg, ensure_ascii=False),
             status=500,
             content_type='application/json'
         )
@@ -372,6 +431,63 @@ def get_config():
         )
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+@app.route('/wait_for_infer', methods=['POST'])
+def wait_for_infer():
+    timeout = int(request.args.get('timeout', 120))  # 可选超时时间，默认120秒
+    interval = 2
+    response_interval = 10
+    start_time = time.time()
+    next_response_time = start_time
 
+    def generate():
+        nonlocal next_response_time
+        while True:
+            health, msg = is_server_running()
+            now = time.time()
+
+            elapsed = time.time() - start_time
+
+            if health:
+                ports_status = {
+                    "api_port": FD_API_PORT if is_port_in_use(FD_API_PORT) else None,
+                    "queue_port": FD_ENGINE_QUEUE_PORT if is_port_in_use(FD_ENGINE_QUEUE_PORT) else None,
+                    "metrics_port": FD_METRICS_PORT if is_port_in_use(FD_METRICS_PORT) else None
+                }
+                msg["status"] = "服务启动完成"
+                msg["ports_status"] = ports_status
+                yield json.dumps(msg, ensure_ascii=False) + "\n"
+                break
+
+            if elapsed >= timeout:
+                def tail_file(path, lines=50):
+                    try:
+                        with open(path, "r", encoding="utf-8", errors="ignore") as f:
+                            return ''.join(f.readlines()[-lines:])
+                    except Exception as e:
+                        return f"[无法读取 {path}]: {e}\n"
+
+                result = f"服务启动超时，耗时：[{timeout}s]\n\n"
+                result += "==== server.log tail 50 ====\n"
+                result += tail_file("server.log")
+                result += "\n==== log/workerlog.0 tail 50 ====\n"
+                result += tail_file("log/workerlog.0")
+
+                yield result
+                break
+
+            if now >= next_response_time:
+                msg["status"] = f"服务启动中，耗时：[{int(elapsed)}s]"
+                yield json.dumps(msg, ensure_ascii=False) + "\n"
+                next_response_time += response_interval
+
+            time.sleep(interval)
+
+    return Response(generate(), status=200, content_type='text/plain')
+
+
+if __name__ == '__main__':
+    print(f"FLASK_PORT: {FLASK_PORT}")
+    print(f"FD_API_PORT: {FD_API_PORT}")
+    print(f"FD_ENGINE_QUEUE_PORT: {FD_ENGINE_QUEUE_PORT}")
+    print(f"FD_METRICS_PORT: {FD_METRICS_PORT}")
+    app.run(host='0.0.0.0', port=FLASK_PORT, debug=False)

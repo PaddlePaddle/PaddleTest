@@ -25,7 +25,6 @@ os.environ["FLAGS_share_tensor_for_grad_tensor_holder"] = "True"
 
 from pprint import pprint
 
-import paddle
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -64,6 +63,8 @@ class SliceBenchMark:
         """
         初始化
         """
+        self.enable_paddle = False
+        self.enable_torch = False
         self._set_env()
         self._set_seed()
         self._load_case()
@@ -83,15 +84,22 @@ class SliceBenchMark:
         self.frameworks = []
         if "paddle" in frameworks:
             self.frameworks.append("paddle")
+            self.enable_paddle = True
         if "torch" in frameworks:
             self.frameworks.append("torch")
+            self.enable_torch = True
 
     def _set_seed(self):
         np.random.seed(self.seed)
 
     def _set_device(self):
         if self.device == "gpu" or self.device == "cuda":
-            paddle.set_device(f"gpu:{self.device_id}")
+            if self.enable_paddle:
+                import paddle
+                paddle.set_device(f"gpu:{self.device_id}")
+            if self.enable_torch:
+                import torch                
+                torch.cuda.set_device(self.device_id)
 
     def _load_case(self):
         self.cases = generate_test_cases(frameworks=self.frameworks)
@@ -115,22 +123,29 @@ class SliceBenchMark:
     def perf_single_case(self, case: SliceTestCase):
         """slice perf"""
         runner = create_case_runner(case, self.device, self.device_id)
-        paddle.device.synchronize()
-        start_event = [paddle.device.Event(enable_timing=True) for i in range(self.n_repeat)]
-        end_event = [paddle.device.Event(enable_timing=True) for i in range(self.n_repeat)]
-        paddle.device.synchronize()
+        if case.framework == "paddle":
+            import paddle
+            start_event = [paddle.device.Event(enable_timing=True) for _ in range(self.n_repeat)]
+            end_event = [paddle.device.Event(enable_timing=True) for _ in range(self.n_repeat)]
+            sync_api = paddle.device.synchronize
+        elif case.framework == "torch":
+            import torch
+            start_event = [torch.cuda.Event(enable_timing=True) for _ in range(self.n_repeat)]
+            end_event = [torch.cuda.Event(enable_timing=True) for _ in range(self.n_repeat)]
+            sync_api = torch.cuda.synchronize
+        sync_api()
         # warmup
         for _ in range(self.n_warmup):
             runner.run()
 
-        paddle.device.synchronize()
+        sync_api()
 
         # 开始统计耗时
         for i in range(self.n_repeat):
             start_event[i].record()
             runner.run()
             end_event[i].record()
-        paddle.device.synchronize()
+        sync_api()
 
         total_time_array = np.array([s.elapsed_time(e) for s, e in zip(start_event, end_event)])
 
