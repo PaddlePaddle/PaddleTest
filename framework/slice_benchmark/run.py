@@ -27,8 +27,7 @@ class SliceTestRun(object):
         self.wheel_link = os.environ.get("SLICE_TEST_WHL", None)
         self.py_version = os.environ.get("SLICE_TEST_PY", None)
         self.framework = os.environ.get("SLICE_BENCHMARK_FRAMEWORKS", "paddle")
-        # self.db_config = "apibm_config.yml"
-        self.db_config = "/paddle/baidu/paddle/PTSTools/Uploader/apibm_config.yml"
+        self.db_config = "apibm_config.yml"
         self.bm = SliceBenchMark()
 
         if self.framework == "paddle":
