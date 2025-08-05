@@ -3,17 +3,18 @@
 # @author Zeref996
 # encoding=utf-8 vi:ts=4:sw=4:expandtab:ft=python
 """
-slice 测试启动 
+slice 测试启动
 """
 
 import os
 import json
 import shutil
-import yaml
 from datetime import datetime
+import yaml
 from time_count_engine import SliceBenchMark
 from db.mysql_helper import SliceBenchmarkDB
 from db.snapshot import Snapshot
+from slicebm_utils.threshold import perf_compare
 
 
 class SliceTestRun(object):
@@ -26,7 +27,8 @@ class SliceTestRun(object):
         self.wheel_link = os.environ.get("SLICE_TEST_WHL", None)
         self.py_version = os.environ.get("SLICE_TEST_PY", None)
         self.framework = os.environ.get("SLICE_BENCHMARK_FRAMEWORKS", "paddle")
-        self.db_config = "apibm_config.yml"
+        # self.db_config = "apibm_config.yml"
+        self.db_config = "/paddle/baidu/paddle/PTSTools/Uploader/apibm_config.yml"
         self.bm = SliceBenchMark()
 
         if self.framework == "paddle":
@@ -102,7 +104,7 @@ class SliceTestRun(object):
             "update_time": test_complete_time,
         }
         db.update(table="slice_job", data=update_data, condition=f"id = {task_id}")
-        return res_dict, fail_cases_list
+        return res_dict, fail_cases_list, task_id
 
     def get_baseline(self, framework="paddle"):
         """
@@ -130,7 +132,7 @@ class SliceTestRun(object):
         """
         ci 测试
         """
-        latest_res_dict, fail_cases_list = self.run_test_and_insert_data(comment="slice测试CI任务", base=0)
+        latest_res_dict, fail_cases_list, task_id = self.run_test_and_insert_data(comment="slice测试CI任务", base=0)
         baseline_res_dict = self.get_baseline(framework="paddle")
         print("开始使用本次CI测试结果, 与paddle基线进行性能对比 =============================>")
         perf_compare_res_dict, fail_perf_dict = self.res_dict_compare(baseline_res_dict, latest_res_dict)
@@ -150,50 +152,23 @@ class SliceTestRun(object):
             print(f"slice测试失败, 存在功能失败case, 失败case有: {fail_cases_list}")
         if len(fail_perf_dict) > 0:
             print(f"slice测试失败, 存在性能下降case, 失败case性能变化: {fail_perf_dict}")
+
+        with open(self.db_config, encoding="utf-8") as f:
+            db_config = yaml.load(f, Loader=yaml.FullLoader)
+        db = SliceBenchmarkDB(**db_config["Config"]["slice_benchmark"]["MYSQL"])
         if len(fail_cases_list) + len(fail_perf_dict) > 0:
+            update_data = {
+                "result": "失败",
+                "update_time": self.timestamp(),
+            }
+            db.update(table="slice_job", data=update_data, condition=f"id = {task_id}")
             raise Exception("slice测试失败")
-
-    def perf_grade(self, res):
-        """
-        评分标准
-        :param res: 性能对比结果
-        :return:
-        """
-        grade = ""
-        if isinstance(res, str):
-            grade = res
         else:
-            if res <= -0.2:
-                grade = "worse"
-            elif -0.2 < res <= -0.1:
-                grade = "doubt"
-            elif -0.1 < res <= 0.1:
-                grade = "equal"
-            elif res > 0.1:
-                grade = "better"
-        return grade
-
-    def perf_compare(self, baseline, latest):
-        """
-        比较函数
-        :param latest: 待测值
-        :param baseline: 基线值
-        :return: 比例值
-        """
-        if isinstance(baseline, str) or isinstance(baseline, str):
-            res = "error"
-            return res
-        else:
-            if baseline == 0 or latest == 0:
-                res = 0
-            else:
-                if latest > baseline:
-                    res = (latest - baseline) / baseline * -1
-                else:
-                    res = (baseline - latest) / latest
-        grade = self.perf_grade(res)
-        return res, grade
-        # return "{:.2f}%".format(res * 100)
+            update_data = {
+                "result": "成功",
+                "update_time": self.timestamp(),
+            }
+            db.update(table="slice_job", data=update_data, condition=f"id = {task_id}")
 
     def res_dict_compare(self, baseline_res_dict, latest_res_dict):
         """
@@ -203,7 +178,7 @@ class SliceTestRun(object):
         perf_compare_res_dict = {}
         for case_name, perf_value in latest_res_dict.items():
             if case_name in baseline_res_dict:
-                perf_compare_res, grade = self.perf_compare(baseline_res_dict[case_name], perf_value)
+                perf_compare_res, grade = perf_compare(baseline_res_dict[case_name], perf_value, case_name)
                 if grade == "worse" or grade == "doubt":
                     fail_perf_dict[case_name] = perf_compare_res
                 perf_compare_res_dict[case_name] = perf_compare_res
@@ -215,7 +190,7 @@ class SliceTestRun(object):
                 print(f"{case_name}: 基线数据不存在, 本次测试数据{perf_value}, 无对比值")
 
         return perf_compare_res_dict, fail_perf_dict
-    
+
     def torch_res_dict_compare(self, torch_res_dict, latest_res_dict):
         """
         性能字典数据对比
@@ -225,7 +200,7 @@ class SliceTestRun(object):
         for case_name_origin, perf_value in latest_res_dict.items():
             case_name = case_name_origin.replace("paddle", "torch")
             if case_name in torch_res_dict:
-                perf_compare_res, grade = self.perf_compare(torch_res_dict[case_name], perf_value)
+                perf_compare_res, grade = perf_compare(torch_res_dict[case_name], perf_value, case_name)
                 if grade == "worse" or grade == "doubt":
                     fail_perf_dict[case_name] = perf_compare_res
                 perf_compare_res_dict[case_name] = perf_compare_res
