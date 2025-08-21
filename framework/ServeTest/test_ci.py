@@ -1,5 +1,6 @@
 import json
 import os
+import pytest
 
 import requests
 
@@ -99,7 +100,16 @@ def test_diff():
     chunks = get_stream_chunks(response)
     # for idx, chunk in enumerate(chunks):
     #         print(f"\nchunk[{idx}]:\n{json.dumps(chunk, indent=2, ensure_ascii=False)}")
-    result = "".join([x['choices'][0]['delta']['content'] for x in chunks])
+    try:
+        result = "".join([x['choices'][0]['delta']['content'] for x in chunks])
+    except Exception as e:
+        print(f"解析失败: {e}")
+        # 打印log/worklog.0
+        if os.path.exists('log/worklog.0'):
+            with open('log/worklog.0', 'r') as file:
+                log_contents = file.read()
+                print(log_contents)
+                pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
     # 对比baseline
     with open("./baseline.txt", "r", encoding="utf-8") as f:
