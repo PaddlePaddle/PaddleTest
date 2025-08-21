@@ -96,19 +96,19 @@ def test_diff():
 
     print("fastdeploy answer is :")
 
-    response = send_request(URL, payload)
-    chunks = get_stream_chunks(response)
-    # for idx, chunk in enumerate(chunks):
-    #         print(f"\nchunk[{idx}]:\n{json.dumps(chunk, indent=2, ensure_ascii=False)}")
     try:
+        response = send_request(URL, payload)
+        chunks = get_stream_chunks(response)
+        # for idx, chunk in enumerate(chunks):
+        #         print(f"\nchunk[{idx}]:\n{json.dumps(chunk, indent=2, ensure_ascii=False)}")
         result = "".join([x['choices'][0]['delta']['content'] for x in chunks])
     except Exception as e:
         print(f"解析失败: {e}")
         # 打印log/worklog.0
-        if os.path.exists('log/worklog.0'):
-            with open('log/worklog.0', 'r') as file:
+        if os.path.exists('log/workerlog.0'):
+            with open('log/workerlog.0', 'r') as file:
                 log_contents = file.read()
-                print(log_contents)
+                print("################# workerlog.0 ##################", log_contents)
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
     # 对比baseline
