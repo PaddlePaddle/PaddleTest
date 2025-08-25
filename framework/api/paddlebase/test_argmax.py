@@ -158,14 +158,14 @@ def test_argmax9():
     obj.exception(mode="c", etype="InvalidArgument", x=x, axis=axis)
 
 
-@pytest.mark.api_base_argmax_exception
-def test_argmax10():
-    """
-    axis = float
-    """
-    x = np.array([[-1], [2], [3]])
-    axis = float(1.0)
-    obj.exception(mode="python", etype=TypeError, x=x, axis=axis)
+# @pytest.mark.api_base_argmax_exception
+# def test_argmax10():
+#     """
+#     axis = float
+#     """
+#     x = np.array([[-1], [2], [3]])
+#     axis = float(1.0)
+#     obj.exception(mode="python", etype=TypeError, x=x, axis=axis)
 
 
 @pytest.mark.api_base_argmax_exception

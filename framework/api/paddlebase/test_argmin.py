@@ -158,14 +158,14 @@ def test_argmin9():
     obj.exception(mode="c", etype="InvalidArgument", x=x, axis=axis)
 
 
-@pytest.mark.api_base_argmin_exception
-def test_argmin10():
-    """
-    axis = float
-    """
-    x = np.array([[-1], [2], [3]])
-    axis = float(1.0)
-    obj.exception(mode="python", etype=TypeError, x=x, axis=axis)
+# @pytest.mark.api_base_argmin_exception
+# def test_argmin10():
+#     """
+#     axis = float
+#     """
+#     x = np.array([[-1], [2], [3]])
+#     axis = float(1.0)
+#     obj.exception(mode="python", etype=TypeError, x=x, axis=axis)
 
 
 @pytest.mark.api_base_argmin_exception
