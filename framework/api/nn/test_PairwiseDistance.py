@@ -85,7 +85,7 @@ def test_dygraph_positive_inf_norm():
     res_out = np.array([1.0, 1.0])
     res_grad = np.array([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]) / 3
     assert np.allclose(out, res_out)
-    # assert np.allclose(grad, res_grad)
+    assert np.allclose(grad, res_grad)
 
 
 @pytest.mark.api_nn_PairwiseDistance_parameters
@@ -97,7 +97,7 @@ def test_dygraph_negative_inf_norm():
     res_out = np.array([1.0, 1.0])
     res_grad = np.array([[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]) / 3
     assert np.allclose(out, res_out)
-    # assert np.allclose(grad, res_grad)
+    assert np.allclose(grad, res_grad)
 
 
 @pytest.mark.api_nn_PairwiseDistance_vartype
