@@ -391,14 +391,15 @@ def test_ones32():
     obj.run(res=res, shape=shape, dtype=dtype)
 
 
-@pytest.mark.api_base_ones_exception
+@pytest.mark.api_base_zeros_parameters
 def test_ones33():
     """
     shape_type=list,dtype='BOOL'
     """
     shape = [1, 2, 3, 4]
     dtype = "BOOL"
-    obj.exception(mode="python", etype=TypeError, shape=shape, dtype=dtype)
+    res = np.ones(shape)
+    obj.run(res=res, shape=shape, dtype=dtype)
 
 
 @pytest.mark.api_base_ones_exception
