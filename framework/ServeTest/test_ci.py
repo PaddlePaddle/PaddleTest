@@ -65,33 +65,32 @@ def get_stream_chunks(response):
 
 
 def test_diff():
-    # 如果将chat_template拼接在输入中，需要把disable_chat_template设为True
-    # 注：sft后模型模版，预训练模型没法识别这些特殊token
-    text = (
-        "<|im_start|>system\n"
-        "<global_setting>\n"
-        "think_mode=True\n"
-        "</global_setting><|im_end|>\n"
-        "\n"
-        "<|im_start|>user\n"
-        "写巴黎圣母院，模仿《滕王阁序》<|im_end|>\n"
-        "\n"
-        "<|im_start|>assistant\n"
-        "<think>"
-    )
-
-    # tokenizer_config.json需要配置chat_template
-    # text = "写巴黎圣母院，模仿《滕王阁序》"
     payload = {
+        "model": "null",
         "messages": [
-            {"role": "user", "content": text},
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "解释一下温故而知新",
+                    },
+                ],
+             },
         ],
         "stream": True,
-        "max_tokens": 64,
         "temperature": 1.0,
         "seed": 21,
         "top_p": 0,
-        "disable_chat_template": True
+        "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
+        "metadata": {
+            "chat_template_kwargs": {
+                "options": {
+                    "thinking_mode": "close",
+                },
+            },
+            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
+        }
     }
 
     print("fastdeploy answer is :")
