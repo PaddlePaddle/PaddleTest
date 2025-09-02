@@ -1,1 +1,1 @@
-<response>温故而知新是一句成语，意思是复习旧知识，从而得到新知识。</response><|im_end|>
+<response>温故而知新是一句成语，意思是复习旧知识从而得到新知识。</response><|im_end|>
