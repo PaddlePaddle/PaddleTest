@@ -64,7 +64,7 @@ def get_stream_chunks(response):
     return chunks
 
 
-def test_diff():
+def test_text_diff():
     payload = {
         "model": "null",
         "messages": [
@@ -118,5 +118,164 @@ def test_diff():
     #     f.writelines(result)
 
 
+def test_picture_diff():
+    payload = {
+        "model": "null",
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "bos://nlp-sr-text2img/luobin06/dataset/doc_images/ChineseDocVQA/4e5278fdb82c881c69122c09f902e029.png",
+                        },
+                        "tokenizer_options": {
+                            "resolution": 4096,
+                            "version": "v1"
+                        }
+                    },
+                    {"type": "text", "text": "哪个银行？"},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "bos://nlp-sr-text2img/luobin06/dataset/doc_images/ChineseDocVQA/4e5278fdb82c881c69122c09f902e029.png",
+                        },
+                        "tokenizer_options": {
+                            "resolution": 4096,
+                            "version": "v1"
+                        }
+                    },
+                    {"type": "text", "text": "哪个银行？"},
+                ],
+             },
+        ],
+        "stream": True,
+        "temperature": 1.0,
+        "seed": 21,
+        "top_p": 0,
+        "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
+        "metadata": {
+            "chat_template_kwargs": {
+                "options": {
+                    "thinking_mode": "close",
+                },
+            },
+            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
+        }
+    }
+
+    print("fastdeploy answer is :")
+
+    try:
+        response = send_request(URL, payload)
+        chunks = get_stream_chunks(response)
+        # for idx, chunk in enumerate(chunks):
+        #         print(f"\nchunk[{idx}]:\n{json.dumps(chunk, indent=2, ensure_ascii=False)}")
+        result = "".join([x['choices'][0]['delta']['content'] for x in chunks])
+    except Exception as e:
+        print(f"解析失败: {e}")
+        # 打印log/worklog.0
+        if os.path.exists('log/workerlog.0'):
+            with open('log/workerlog.0', 'r') as file:
+                log_contents = file.read()
+                print("################# workerlog.0 ##################", log_contents)
+                pytest.fail(f"解析失败: {e}")
+    print("\nresult:\n", result)
+    # 对比baseline
+    with open("./baseline_pic.txt", "r", encoding="utf-8") as f:
+        baseline = f.read()
+    # with open("./baseline_pic.txt", "w", encoding="utf-8") as f:
+    #     f.writelines(result)
+    assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
+
+
+def test_chat_usage_stream():
+    """测试流式chat usage"""
+    payload = {
+        "model": "null",
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "解释一下温故而知新",
+                    },
+                ],
+            },
+        ],
+        "stream": True,
+        "stream_options": {"include_usage": True, "continuous_usage_stats": True},
+        "temperature": 1.0,
+        "seed": 21,
+        "top_p": 0,
+        "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
+        "metadata": {
+            "min_tokens": 10,
+            "chat_template_kwargs": {
+                "options": {
+                    "thinking_mode": "close",
+                },
+            },
+            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
+        },
+        "max_tokens": 50,
+    }
+
+    response = send_request(url=URL, payload=payload)
+    chunks = get_stream_chunks(response)
+    result = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
+    print("Response:", result)
+    assert result != "", "结果为空"
+    usage = chunks[-1]["usage"]
+    total_tokens = usage["completion_tokens"] + usage["prompt_tokens"]
+    assert payload["max_tokens"] >= usage["completion_tokens"], "completion_tokens大于max_tokens"
+    assert payload["metadata"]["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
+    assert usage["total_tokens"] == total_tokens, "total_tokens不等于prompt_tokens + completion_tokens"
+
+
+def test_chat_usage_non_stream():
+    """测试非流式chat usage"""
+    payload = {
+        "model": "null",
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "解释一下温故而知新",
+                    },
+                ],
+            },
+        ],
+        "stream": False,
+        "temperature": 1.0,
+        "seed": 21,
+        "top_p": 0,
+        "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
+        "metadata": {
+            "min_tokens": 50,
+            "chat_template_kwargs": {
+                "options": {
+                    "thinking_mode": "close",
+                },
+            },
+            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
+        },
+        "max_tokens": 50,
+    }
+
+    response = send_request(url=URL, payload=payload).json()
+    usage = response["usage"]
+    result = response["choices"][0]["message"]["content"]
+    assert result != "", "结果为空"
+    total_tokens = usage["completion_tokens"] + usage["prompt_tokens"]
+    assert payload["max_tokens"] >= usage["completion_tokens"], "completion_tokens大于max_tokens"
+    assert payload["metadata"]["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
+    assert usage["total_tokens"] == total_tokens, "total_tokens不等于prompt_tokens + completion_tokens"
+
+
 if __name__ == '__main__':
-    test_diff()
+    test_text_diff()
