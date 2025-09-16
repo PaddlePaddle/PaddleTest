@@ -26,5 +26,5 @@ compare:
     baseline: 'dy_train'
     latest: 'dy2st_train_inputspec'
     precision:
-      delta: 0.0001
-      rtol: 0.00001
+      delta: 0.001
+      rtol: 0.0001
