@@ -15,7 +15,7 @@
 
 --url（必填）
 
-类型：str
+类型：str 
 示例：http://localhost:8000/v1/chat/completions
 FastDeploy 服务 URL，必须以 http:// 或 https:// 开头。
 
