@@ -1,0 +1,4 @@
+speculative_config:
+  method: mtp
+  num_speculative_tokens: 1
+  model: /MODELDATA/safetensor_ckpt_step1600/mtp/
