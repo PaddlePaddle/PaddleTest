@@ -256,7 +256,7 @@ def test_chat_usage_non_stream():
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
         "metadata": {
-            "min_tokens": 50,
+            "min_tokens": 10,
             "chat_template_kwargs": {
                 "options": {
                     "thinking_mode": "close",
