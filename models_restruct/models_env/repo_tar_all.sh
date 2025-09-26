@@ -112,6 +112,16 @@ do
             && [[ ! $line =~ "release/2.3-fc-ernie-fix" ]] \
             && [[ ${repo_name} == "Paddle" ]]; then
             tar_reponame
+        # PaddleClas
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+            && [[ ! $line =~ "HEAD" ]] \
+            && [[ ${repo_name} == "PaddleClas" ]]; then
+            tar_reponame
+        # # PaddleGAN
+        # elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+        #     && [[ ! $line =~ "HEAD" ]] \
+        #     && [[ ${repo_name} == "PaddleGAN" ]]; then
+        #     tar_reponame
         # PaddleOCR
         elif ([[ $line =~ "release" ]] || [[ $line =~ "dygraph" ]]) \
             && [[ ! $line =~ "HEAD" ]] \
@@ -124,6 +134,16 @@ do
             && [[ ! $line =~ "revert-7437-dygraph" ]] \
             && [[ ${repo_name} == "PaddleOCR" ]]; then
             tar_reponame
+        # PaddleSpeech
+        elif ([[ $line =~ "r1.2" ]] || [[ $line =~ "develop" ]]) \
+            && [[ ! $line =~ "HEAD" ]] \
+            && [[ ${repo_name} == "PaddleSpeech" ]]; then
+            tar_reponame
+        # Paddle3D
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+            && [[ ! $line =~ "HEAD" ]] \
+            && [[ ${repo_name} == "Paddle3D" ]]; then
+            tar_reponame
         # PaddleNLP
         elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]] \
             || [[ $line =~ "refactor-training-loop" ]] || [[ $line =~ "fleety" ]]) \
@@ -133,6 +153,26 @@ do
             && [[ ! $line =~ "release/2.2" ]] \
             && [[ ${repo_name} == "PaddleNLP" ]]; then
             tar_reponame
+        # PaddleDetection
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+            && [[ ! $line =~ "HEAD" ]] \
+            && [[ ${repo_name} == "PaddleDetection" ]]; then
+            tar_reponame
+        # PaddleSeg
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+            && [[ ! $line =~ "HEAD" ]] \
+            && [[ ${repo_name} == "PaddleSeg" ]]; then
+            tar_reponame
+        # PaddleSlim
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+            && [[ ! $line =~ "HEAD" ]] \
+            && [[ ${repo_name} == "PaddleSlim" ]]; then
+            tar_reponame
+        # # PaddleRec
+        # elif ([[ $line =~ "release" ]] || [[ $line =~ "master" ]]) \
+        #     && [[ ! $line =~ "HEAD" ]] \
+        #     && [[ ${repo_name} == "PaddleRec" ]]; then
+        #     tar_reponame
         # PaddleX
         elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
             && [[ ! $line =~ "HEAD" ]] \
