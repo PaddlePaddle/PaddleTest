@@ -1,0 +1,1 @@
+<response>The first image shows a bank branch with the signage "中国工商银行" (Industrial and Commercial Bank of China), and the second image also shows a bank branch with the signage "中国工商银行" (Industrial and Commercial Bank of China). Therefore, both images are related to Industrial and Commercial Bank of China.</response><|im_end|>

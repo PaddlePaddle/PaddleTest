@@ -111,11 +111,11 @@ def test_text_diff():
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
     # 对比baseline
-    with open("./baseline.txt", "r", encoding="utf-8") as f:
+    with open("./baseline_text_mtp.txt", "r", encoding="utf-8") as f:
         baseline = f.read()
-    assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-    # with open("./baseline.txt", "w", encoding="utf-8") as f:
+    # with open("./baseline_text_mtp.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
+    assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
 
 
 def test_picture_diff():
@@ -183,9 +183,9 @@ def test_picture_diff():
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
     # 对比baseline
-    with open("./baseline_pic.txt", "r", encoding="utf-8") as f:
+    with open("./baseline_pic_mtp.txt", "r", encoding="utf-8") as f:
         baseline = f.read()
-    # with open("./baseline_pic.txt", "w", encoding="utf-8") as f:
+    # with open("./baseline_pic_mtp.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
 

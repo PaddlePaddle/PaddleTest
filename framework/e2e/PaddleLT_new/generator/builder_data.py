@@ -75,6 +75,8 @@ class BuildData(object):
                             data.append(torch.tensor(i, requires_grad=True))
                 elif isinstance(i, float):
                     data.append(paddle.to_tensor(i, stop_gradient=False))
+                elif isinstance(i, np.float32):
+                    data.append(paddle.to_tensor(i, stop_gradient=False))
                 elif isinstance(i, int):
                     data.append(paddle.to_tensor(i, stop_gradient=True))
                 else:

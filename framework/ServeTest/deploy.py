@@ -7,6 +7,7 @@ import socket
 import subprocess
 import sys
 import time
+import traceback
 
 import requests
 import yaml
@@ -58,10 +59,12 @@ FLASK_PORT = get_available_port("FLASK_PORT", base_port + 1)
 FD_API_PORT = get_available_port("FD_API_PORT", FLASK_PORT + 1)
 FD_ENGINE_QUEUE_PORT = get_available_port("FD_ENGINE_QUEUE_PORT", FD_API_PORT + 1)
 FD_METRICS_PORT = get_available_port("FD_METRICS_PORT", FD_ENGINE_QUEUE_PORT + 1)
+FD_CACHE_QUEUE_PORT = get_available_port("FD_CACHE_QUEUE_PORT", FD_METRICS_PORT + 1)
 DEFAULT_PARAMS = {
     "--port": FD_API_PORT,
     "--engine-worker-queue-port": FD_ENGINE_QUEUE_PORT,
     "--metrics-port": FD_METRICS_PORT,
+    "--cache-queue-port": FD_CACHE_QUEUE_PORT,
     "--enable-logprob": True,
 }
 
@@ -78,6 +81,7 @@ def build_command(config):
     # 添加配置参数
     for key, value in config.items():
         if "--enable" in key:
+            value = bool(value if isinstance(value, bool) else eval(value))
             if value:
                 cmd.append(key)
         else:
@@ -175,19 +179,34 @@ def stop_server(signum=None, frame=None):
         # 终止进程组（包括所有子进程）
         os.killpg(os.getpgid(pid_port["PID"]), signal.SIGTERM)
     except Exception as e:
-        print(f"Failed to stop server: {e}")
+        print(f"Failed to stop server: {e}, {str(traceback.format_exc())}")
+    try:
+        result = subprocess.run(
+            f"ps -efww | grep '\-\-cache_queue_port {FD_CACHE_QUEUE_PORT}' | grep -v grep", shell=True, capture_output=True, text=True
+        )
+        for line in result.stdout.strip().split("\n"):
+            if not line:
+                continue
+            parts = line.split()
+            pid = int(parts[1])
+            print(f"Killing PID: {pid}")
+            os.kill(pid, signal.SIGKILL)
+    except Exception as e:
+        print(f"Failed to kill cache manager process: {e}, {str(traceback.format_exc())}")
 
-    for port in [FD_API_PORT, FD_ENGINE_QUEUE_PORT, FD_METRICS_PORT]:
+    for port in [FD_API_PORT, FD_ENGINE_QUEUE_PORT, FD_METRICS_PORT, FD_CACHE_QUEUE_PORT]:
         try:
             output = subprocess.check_output(f"lsof -i:{port} -t", shell=True).decode().strip()
             for pid in output.splitlines():
                 os.kill(int(pid), signal.SIGKILL)
                 print(f"Killed process on port {port}, pid={pid}")
         except Exception as e:
-            print(f"Failed to killed process on port: {e}")
+            print(f"Failed to kill process on port: {e}, {str(traceback.format_exc())}")
     # 若log目录存在，则重命名为log_timestamp
     if os.path.isdir("./log"):
         os.rename("./log", "./log_{}".format(time.strftime("%Y%m%d%H%M%S")))
+    if os.path.exists("gemm_profiles.json"):
+        os.remove("gemm_profiles.json")
 
     if signum:
         sys.exit(0)
@@ -229,8 +248,10 @@ def start_service():
         # 构建命令
         cmd = build_command(final_config)
     except Exception as e:
+        error_msg = f"Failed to start service: {e}, {str(traceback.format_exc())}"
+        print(error_msg)
         return Response(
-            json.dumps({"status": "error", "message": str(e)}, ensure_ascii=False),
+            json.dumps({"status": "error", "message": error_msg}, ensure_ascii=False),
             status=500,
             content_type="application/json",
         )
@@ -264,8 +285,10 @@ def start_service():
 
         return Response(json.dumps(json_data, ensure_ascii=False), status=200, content_type="application/json")
     except Exception as e:
+        error_msg = f"Failed to start service: {e}, {str(traceback.format_exc())}"
+        print(error_msg)
         return Response(
-            json.dumps({"status": "error", "message": str(e)}, ensure_ascii=False),
+            json.dumps({"status": "error", "message": error_msg}, ensure_ascii=False),
             status=500,
             content_type="application/json",
         )
@@ -295,8 +318,10 @@ def switch_service():
         # 构建命令
         cmd = build_command(final_config)
     except Exception as e:
+        error_msg = f"Failed to switch service: {e}, {str(traceback.format_exc())}"
+        print(error_msg)
         return Response(
-            json.dumps({"status": "error", "message": str(e)}, ensure_ascii=False),
+            json.dumps({"status": "error", "message": error_msg}, ensure_ascii=False),
             status=500,
             content_type="application/json",
         )
@@ -330,8 +355,10 @@ def switch_service():
 
         return Response(json.dumps(json_data, ensure_ascii=False), status=200, content_type="application/json")
     except Exception as e:
+        error_msg = f"Failed to switch service: {e}, {str(traceback.format_exc())}"
+        print(error_msg)
         return Response(
-            json.dumps({"status": "error", "message": str(e)}, ensure_ascii=False),
+            json.dumps({"status": "error", "message": error_msg}, ensure_ascii=False),
             status=500,
             content_type="application/json",
         )
@@ -406,8 +433,10 @@ def get_config():
         )
 
     except Exception as e:
+        error_msg = f"{e}, {str(traceback.format_exc())}"
+        print(error_msg)
         return Response(
-            json.dumps({"message": "api_server.log解析失败，请检查log", "error": str(e)}, ensure_ascii=False),
+            json.dumps({"message": "api_server.log解析失败，请检查log", "error": error_msg}, ensure_ascii=False),
             status=500,
             content_type="application/json",
         )
@@ -447,7 +476,7 @@ def wait_for_infer():
                         with open(path, "r", encoding="utf-8", errors="ignore") as f:
                             return "".join(f.readlines()[-lines:])
                     except Exception as e:
-                        return f"[无法读取 {path}]: {e}\n"
+                        return f"[无法读取 {path}]: {e}, {str(traceback.format_exc())}\n"
 
                 result = f"服务启动超时，耗时：[{timeout}s]\n\n"
                 result += "==== server.log tail 50 ====\n"
