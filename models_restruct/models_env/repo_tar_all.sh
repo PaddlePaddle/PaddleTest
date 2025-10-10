@@ -14,7 +14,7 @@ unset http_proxy
 unset https_proxy
 set -xe
 
-export repo_name_all=${repo_name_all:-"PaddleNLP PaddleCustomDevice Paddle PaddleOCR PaddleMIX ERNIE PaddleX FastDeploy"}
+export repo_name_all=${repo_name_all:-"PaddleNLP PaddleFormers PaddleCustomDevice Paddle PaddleOCR PaddleMIX ERNIE PaddleX FastDeploy"}
 # Paddle  需要包含 PaddlePaddle  release 字段，需要打包 develop release/2.3 release/2.4
 # PaddleClas  需要包含 develop  release 字段，需要打包 develop release/2.3 release/2.4 release/2.5
 # PaddleGAN  需要包含 develop  release 字段，需要打包 develop release/2.1
@@ -152,6 +152,14 @@ do
             && [[ ! $line =~ "release/2.1" ]] \
             && [[ ! $line =~ "release/2.2" ]] \
             && [[ ${repo_name} == "PaddleNLP" ]]; then
+            tar_reponame
+        # PaddleFormers
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]] \
+            && [[ ! $line =~ "HEAD" ]] \
+            && [[ ! $line =~ "release/v0.1" ]] \
+            && [[ ! $line =~ "release/v0.2" ]] \
+            && [[ ! $line =~ "release/v0.3" ]] \
+            && [[ ${repo_name} == "PaddleFormers" ]]; then
             tar_reponame
         # PaddleDetection
         elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
