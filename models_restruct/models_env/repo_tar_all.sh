@@ -154,7 +154,7 @@ do
             && [[ ${repo_name} == "PaddleNLP" ]]; then
             tar_reponame
         # PaddleFormers
-        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]] \
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
             && [[ ! $line =~ "HEAD" ]] \
             && [[ ! $line =~ "release/v0.1" ]] \
             && [[ ! $line =~ "release/v0.2" ]] \
