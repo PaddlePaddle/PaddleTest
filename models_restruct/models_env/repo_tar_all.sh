@@ -72,8 +72,8 @@ do
 
     if [[ -d ${repo_name} ]];then
         # 对PaddleNLP增加submodule
-        if [[ ${repo_name} == "PaddleNLP" ]]; then
-            cd PaddleNLP
+        if [[ ${repo_name} == "PaddleNLP" ]] || [[ ${repo_name} == "FastDeploy" ]]; then
+            cd ${repo_name}
             git submodule update --init --recursive
             cd ..
         fi
