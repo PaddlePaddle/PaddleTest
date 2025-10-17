@@ -113,7 +113,7 @@ do
             && [[ ${repo_name} == "Paddle" ]]; then
             tar_reponame
         # PaddleClas
-        elif [[ $line =~ "develop" ]]
+        elif [[ $line =~ "develop" ]] \
             && [[ ${repo_name} == "PaddleClas" ]]; then
             tar_reponame
         # # PaddleGAN
@@ -122,15 +122,15 @@ do
         #     && [[ ${repo_name} == "PaddleGAN" ]]; then
         #     tar_reponame
         # PaddleOCR
-        elif ([[ $line =~ "main" ]] || [[ $line =~ "develop" ]])
+        elif ([[ $line =~ "main" ]] || [[ $line =~ "develop" ]]) \
             && [[ ${repo_name} == "PaddleOCR" ]]; then
             tar_reponame
         # PaddleSpeech
-        elif [[ $line =~ "develop" ]]
+        elif [[ $line =~ "develop" ]] \
             && [[ ${repo_name} == "PaddleSpeech" ]]; then
             tar_reponame
         # Paddle3D
-        elif [[ $line =~ "develop" ]]
+        elif [[ $line =~ "develop" ]] \
             && [[ ${repo_name} == "Paddle3D" ]]; then
             tar_reponame
         # PaddleNLP
@@ -150,15 +150,15 @@ do
             && [[ ${repo_name} == "PaddleFormers" ]]; then
             tar_reponame
         # PaddleDetection
-        elif [[ $line =~ "develop" ]]
+        elif [[ $line =~ "develop" ]] \
             && [[ ${repo_name} == "PaddleDetection" ]]; then
             tar_reponame
         # PaddleSeg
-        elif [[ $line =~ "develop" ]]
+        elif [[ $line =~ "develop" ]] \
             && [[ ${repo_name} == "PaddleSeg" ]]; then
             tar_reponame
         # PaddleSlim
-        elif [[ $line =~ "develop" ]]
+        elif [[ $line =~ "develop" ]] \
             && [[ ${repo_name} == "PaddleSlim" ]]; then
             tar_reponame
         # # PaddleRec
@@ -167,11 +167,11 @@ do
         #     && [[ ${repo_name} == "PaddleRec" ]]; then
         #     tar_reponame
         # PaddleX
-        elif [[ $line =~ "develop" ]]
+        elif [[ $line =~ "develop" ]] \
             && [[ ${repo_name} == "PaddleX" ]]; then
             tar_reponame
         # PaddleMIX
-        elif [[ $line =~ "develop" ]]
+        elif [[ $line =~ "develop" ]] \
             && [[ ${repo_name} == "PaddleMIX" ]]; then
             tar_reponame
         # PaddleCustomDevice
