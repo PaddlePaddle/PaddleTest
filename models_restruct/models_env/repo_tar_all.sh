@@ -101,15 +101,7 @@ do
         git branch -r |while read line
         do
         # Paddle
-        if ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
-            && [[ ! $line =~ "HEAD" ]] \
-            && [[ ! $line =~ "release/0" ]] \
-            && [[ ! $line =~ "release/lite-0.1" ]] \
-            && [[ ! $line =~ "release/1" ]] \
-            && [[ ! $line =~ "release/2.0" ]] \
-            && [[ ! $line =~ "release/2.1" ]] \
-            && [[ ! $line =~ "release/2.2" ]] \
-            && [[ ! $line =~ "release/2.3-fc-ernie-fix" ]] \
+        if ([[ $line =~ "develop" ]] || [[ $line =~ "fleety_20250421" ]]) \
             && [[ ${repo_name} == "Paddle" ]]; then
             tar_reponame
         # PaddleClas
