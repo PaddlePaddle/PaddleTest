@@ -200,8 +200,12 @@ do
             && [[ ${repo_name} == "PaddleCustomDevice" ]]; then
             tar_reponame
         # FastDeploy
-        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]) \
+        elif ([[ $line =~ "release" ]] || [[ $line =~ "develop" ]]  || [[ $line =~ "experimental" ]]) \
             && [[ ! $line =~ "HEAD" ]] \
+            && [[ ! $line =~ "online" ]] \
+            && [[ ! $line =~ "release/1.1.0" ]] \
+            && [[ ! $line =~ "release/2.0.0" ]] \
+            && [[ ! $line =~ "release/2.0.1" ]] \
             && [[ ${repo_name} == "FastDeploy" ]]; then
             tar_reponame 
         # ERNIE
