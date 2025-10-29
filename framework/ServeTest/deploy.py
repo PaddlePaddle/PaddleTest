@@ -85,7 +85,10 @@ def build_command(config):
             if value:
                 cmd.append(key)
         else:
-            cmd.extend([key, str(value)])
+            if value:
+                cmd.extend([key, str(value)])
+            else:
+                cmd.append(key)
 
     return cmd
 
