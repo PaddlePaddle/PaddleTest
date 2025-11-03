@@ -8,6 +8,7 @@ ServeTest
 import sys
 import requests
 import copy
+import json
 from config.request_template import *
 import concurrent.futures
 from logger import base_logger
@@ -87,6 +88,36 @@ def send_request(url, payload, timeout=600, stream=False):
     except requests.exceptions.RequestException as e:
         base_logger.error(f"❌ 请求失败：{e}")
         return None
+
+
+def get_stream_chunks(response):
+    """解析流式返回，生成chunk List[dict]"""
+    chunks = []
+
+    if response.status_code == 200:
+        for line in response.iter_lines(decode_unicode=True):
+            if line:
+                if line.startswith("data: "):
+                    line = line[len("data: "):]
+
+                if line.strip() == "[DONE]":
+                    break
+
+                try:
+                    chunk = json.loads(line)
+                    chunks.append(chunk)
+
+                    # 实时打印 delta 内容
+                    # delta = chunk.get("choices", [{}])[0].get("delta", {})
+                    # content = delta.get("content", "")
+                    # print("#####chunk", chunk, flush=True)
+                except Exception as e:
+                    print(f"解析失败: {e}, 行内容: {line}")
+    else:
+        print(f"请求失败，状态码: {response.status_code}")
+        print("返回内容：", response.text)
+
+    return chunks
 
 
 def response(args):
