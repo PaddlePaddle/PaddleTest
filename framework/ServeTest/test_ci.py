@@ -175,6 +175,7 @@ def test_picture_diff():
         result = "".join([x['choices'][0]['delta']['content'] for x in chunks])
     except Exception as e:
         print(f"解析失败: {e}")
+        print("chunks：", chunks)
         # 打印log/worklog.0
         if os.path.exists('log/workerlog.0'):
             with open('log/workerlog.0', 'r') as file:
