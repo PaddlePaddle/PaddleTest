@@ -102,7 +102,7 @@ def test_text_to_image_diff():
     result = ""
 
     try:
-        response = send_request(URL, payload)
+        response = send_request(URL, payload, timeout=1200)
         chunks = get_stream_chunks(response)
         # for idx, chunk in enumerate(chunks):
         #         print(f"\nchunk[{idx}]:\n{json.dumps(chunk, indent=2, ensure_ascii=False)}")
@@ -162,6 +162,7 @@ def test_text_to_image_diff():
             print(f"current 子数组:  {d['b']}")
 
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
+    assert not diffs, f"与baseline存在diff，diffs: {diffs[:10]}"
 
 
 if __name__ == '__main__':
