@@ -81,13 +81,14 @@ def test_text_to_image_diff():
         "messages": [
             {
                 "role": "user",
-                "content": "一个杯子，造型简约而现代，线条流畅，具有一定的艺术美感。",
+                "content": "一张长椅，静静地放置在户外环境中。长椅的木质表面呈现出自然的纹理，给人一种复古而温馨的感觉。"
+                           "背景是一片宁静的公园景色，绿树成荫，小径通幽。",
              },
         ],
         "stream": True,
         "stream_options": {"include_usage": True, "continuous_usage_stats": True},
         "temperature": 0.7,
-        "seed": 22,
+        "seed": 21,
         "top_p": 0,
         "stop": ["停止生成"],
         "disable_chat_template": False,
@@ -139,6 +140,9 @@ def test_text_to_image_diff():
 
     # with open("./baseline_t2i_tokens.txt", "w", encoding="utf-8") as f:
     #     json.dump(completion_token_ids, f)
+    #
+    # with open("./baseline_t2i.txt", "w", encoding="utf-8") as f:
+    #     f.writelines(result)
 
     with open("./baseline_t2i.txt", "r", encoding="utf-8") as f:
         baseline = f.read()
