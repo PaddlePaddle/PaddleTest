@@ -77,7 +77,7 @@ def linear_interpolation_using_numpy(x, size, scale_factor=None, align_corners=T
         #      out_h = static_cast<int>(in_h * scale_h);
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
-        out_w = np.int_(np.around(in_w * scale_w))
+        out_w = np.int_(in_w * scale_w)
     out = np.zeros((batch_size, channel, out_w))
 
     ratio_w = 0.0
@@ -140,26 +140,27 @@ def bilinear_interpolation_using_numpy(
         #      out_h = static_cast<int>(in_h * scale_h);
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
-        out_h = np.int_(np.around(in_h * scale_h))
-        out_w = np.int_(np.around(in_w * scale_w))
+        out_h = np.int_(in_h * scale_h)
+        out_w = np.int_(in_w * scale_w)
 
     ratio_h = ratio_w = 0.0
-    if out_h > 1:
-        if align_corners:
+    if align_corners:
+        if out_h > 1:
             ratio_h = (in_h - 1.0) / (out_h - 1.0)
+    else:
+        if scale_h > 0:
+            ratio_h = 1.0 / scale_h
         else:
-            if scale_h > 0:
-                ratio_h = 1.0 / scale_h
-            else:
-                ratio_h = 1.0 * in_h / out_h
-    if out_w > 1:
-        if align_corners:
+            ratio_h = in_h / out_h
+
+    if align_corners:
+        if out_w > 1:
             ratio_w = (in_w - 1.0) / (out_w - 1.0)
+    else:
+        if scale_w > 0:
+            ratio_w = 1.0 / scale_w
         else:
-            if scale_w > 0:
-                ratio_w = 1.0 / scale_w
-            else:
-                ratio_w = 1.0 * in_w / out_w
+            ratio_w = in_w / out_w
 
     out = np.zeros((batch_size, channel, out_h, out_w))
 
@@ -240,22 +241,32 @@ def trilinear_interpolation_using_numpy(
                 ratio_d = 1.0 / scale_d
             else:
                 ratio_d = 1.0 * in_d / out_d
-    if out_h > 1:
-        if align_corners:
+    if align_corners:
+        if out_d > 1:
+            ratio_d = (in_d - 1.0) / (out_d - 1.0)
+    else:
+        if scale_d > 0:
+            ratio_d = 1.0 / scale_d
+        else:
+            ratio_d = in_d / out_d
+
+    if align_corners:
+        if out_h > 1:
             ratio_h = (in_h - 1.0) / (out_h - 1.0)
+    else:
+        if scale_h > 0:
+            ratio_h = 1.0 / scale_h
         else:
-            if scale_h > 0:
-                ratio_h = 1.0 / scale_h
-            else:
-                ratio_h = 1.0 * in_h / out_h
-    if out_w > 1:
-        if align_corners:
+            ratio_h = in_h / out_h
+
+    if align_corners:
+        if out_w > 1:
             ratio_w = (in_w - 1.0) / (out_w - 1.0)
+    else:
+        if scale_w > 0:
+            ratio_w = 1.0 / scale_w
         else:
-            if scale_w > 0:
-                ratio_w = 1.0 / scale_w
-            else:
-                ratio_w = 1.0 * in_w / out_w
+            ratio_w = in_w / out_w
 
     out = np.zeros((batch_size, channel, out_d, out_h, out_w))
 
@@ -346,22 +357,24 @@ def nearest_neighbor_interpolation_using_numpy(x, size, scale_factor=None, align
         out_w = np.int_(np.around(in_w * scale_w))
 
     ratio_h = ratio_w = 0.0
-    if out_h > 1:
-        if align_corners:
+    if align_corners:
+        if out_h > 1:
             ratio_h = (in_h - 1.0) / (out_h - 1.0)
+    else:
+        if scale_h > 0:
+            ratio_h = 1.0 / scale_h
         else:
-            if scale_h > 0:
-                ratio_h = 1.0 / scale_h
-            else:
-                ratio_h = 1.0 * in_h / out_h
-    if out_w > 1:
-        if align_corners:
+            ratio_h = in_h / out_h
+
+    if align_corners:
+        if out_w > 1:
             ratio_w = (in_w - 1.0) / (out_w - 1.0)
+    else:
+        if scale_w > 0:
+            ratio_w = 1.0 / scale_w
         else:
-            if scale_w > 0:
-                ratio_w = 1.0 / scale_w
-            else:
-                ratio_w = 1.0 * in_w / out_w
+            ratio_w = in_w / out_w
+
     out = np.zeros((batch_size, channels, out_h, out_w))
 
     if align_corners:
@@ -441,23 +454,23 @@ def bicubic_interpolation_using_numpy(x, size, scale_factor=None, align_corners=
         out_w = np.int_(np.around(in_w * scale_w))
 
     ratio_h = ratio_w = 0.0
-    if out_h > 1:
-        if align_corners:
+    if align_corners:
+        if out_h > 1:
             ratio_h = (in_h - 1.0) / (out_h - 1.0)
+    else:
+        if scale_h > 0:
+            ratio_h = 1.0 / scale_h
         else:
-            if scale_h > 0:
-                ratio_h = 1.0 / scale_h
-            else:
-                ratio_h = 1.0 * in_h / out_h
+            ratio_h = in_h / out_h
 
-    if out_w > 1:
-        if align_corners:
+    if align_corners:
+        if out_w > 1:
             ratio_w = (in_w - 1.0) / (out_w - 1.0)
+    else:
+        if scale_w > 0:
+            ratio_w = 1.0 / scale_w
         else:
-            if scale_w > 0:
-                ratio_w = 1.0 / scale_w
-            else:
-                ratio_w = 1.0 * in_w / out_w
+            ratio_w = in_w / out_w
 
     out = np.zeros((batch_size, channels, out_h, out_w))
 

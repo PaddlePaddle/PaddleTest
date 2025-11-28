@@ -8,6 +8,7 @@ test_functional_celu.py \
 test_CELU.py \
 test_adaptive_avg_pool3D.py \
 test_initializer_truncated_normal_new.py \
+test_upsample.py \
 test_initializer_truncated_normal.py"
 bug=0
 
