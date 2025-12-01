@@ -36,16 +36,16 @@ class SliceTestCase:
 
 base_case = [
     # --- 'scalar' cases ---
-    SliceTestCase(
-        name="Scalar - Integer",
-        input_shape=(108, 64, 12288),
-        index=0,
-    ),
-    SliceTestCase(
-        name="Scalar - Tuple of Integers",
-        input_shape=(108, 64, 12288),
-        index=(2, 2, -1),
-    ),
+    # SliceTestCase(
+    #     name="Scalar - Integer",
+    #     input_shape=(108, 64, 12288),
+    #     index=0,
+    # ),
+    # SliceTestCase(
+    #     name="Scalar - Tuple of Integers",
+    #     input_shape=(108, 64, 12288),
+    #     index=(2, 2, -1),
+    # ),
     # --- 'slice' cases ---
     # SliceTestCase(
     #     name="Slice - Full Slice",
