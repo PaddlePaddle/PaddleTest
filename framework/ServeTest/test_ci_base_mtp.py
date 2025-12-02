@@ -83,14 +83,12 @@ def test_text_diff():
         "seed": 21,
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "metadata": {
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
-        }
+        },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     print("fastdeploy answer is :")
@@ -155,14 +153,12 @@ def test_picture_diff():
         "seed": 21,
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "metadata": {
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
-        }
+        },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     print("fastdeploy answer is :")
@@ -211,15 +207,13 @@ def test_chat_usage_stream():
         "seed": 21,
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         "max_tokens": 50,
     }
 
@@ -231,7 +225,7 @@ def test_chat_usage_stream():
     usage = chunks[-1]["usage"]
     total_tokens = usage["completion_tokens"] + usage["prompt_tokens"]
     assert payload["max_tokens"] >= usage["completion_tokens"], "completion_tokens大于max_tokens"
-    assert payload["metadata"]["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
+    assert payload["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
     assert usage["total_tokens"] == total_tokens, "total_tokens不等于prompt_tokens + completion_tokens"
 
 
@@ -255,15 +249,13 @@ def test_chat_usage_non_stream():
         "seed": 21,
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         "max_tokens": 50,
     }
 
@@ -273,7 +265,7 @@ def test_chat_usage_non_stream():
     assert result != "", "结果为空"
     total_tokens = usage["completion_tokens"] + usage["prompt_tokens"]
     assert payload["max_tokens"] >= usage["completion_tokens"], "completion_tokens大于max_tokens"
-    assert payload["metadata"]["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
+    assert payload["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
     assert usage["total_tokens"] == total_tokens, "total_tokens不等于prompt_tokens + completion_tokens"
 
 
@@ -291,15 +283,13 @@ def test_non_stream_with_logprobs():
         "logprobs": True,
         "top_logprobs": 5,
         "seed": 21,
-        "metadata": {
-            "min_tokens": 1,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 1,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     response = send_request(URL, payload)
@@ -337,15 +327,13 @@ def test_stream_with_logprobs():
         "logprobs": True,
         "top_logprobs": 5,
         "seed": 21,
-        "metadata": {
-            "min_tokens": 1,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 1,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     response = send_request(URL, payload)

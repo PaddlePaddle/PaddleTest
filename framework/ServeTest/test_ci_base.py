@@ -102,14 +102,12 @@ def test_text_diff():
         "seed": 21,
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "metadata": {
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
-        }
+        },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     print("fastdeploy answer is :")
@@ -132,9 +130,9 @@ def test_text_diff():
     # 对比baseline
     with open("./baseline.txt", "r", encoding="utf-8") as f:
         baseline = f.read()
-    assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
     # with open("./baseline.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
+    assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
 
 
 def test_picture_diff():
@@ -174,14 +172,12 @@ def test_picture_diff():
         "seed": 21,
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "metadata": {
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
-        }
+        },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     print("fastdeploy answer is :")
@@ -231,15 +227,13 @@ def test_chat_usage_stream():
         "seed": 21,
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         "max_tokens": 50,
     }
 
@@ -251,7 +245,7 @@ def test_chat_usage_stream():
     usage = chunks[-1]["usage"]
     total_tokens = usage["completion_tokens"] + usage["prompt_tokens"]
     assert payload["max_tokens"] >= usage["completion_tokens"], "completion_tokens大于max_tokens"
-    assert payload["metadata"]["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
+    assert payload["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
     assert usage["total_tokens"] == total_tokens, "total_tokens不等于prompt_tokens + completion_tokens"
 
 
@@ -275,15 +269,13 @@ def test_chat_usage_non_stream():
         "seed": 21,
         "top_p": 0,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         "max_tokens": 50,
     }
 
@@ -293,7 +285,7 @@ def test_chat_usage_non_stream():
     assert result != "", "结果为空"
     total_tokens = usage["completion_tokens"] + usage["prompt_tokens"]
     assert payload["max_tokens"] >= usage["completion_tokens"], "completion_tokens大于max_tokens"
-    assert payload["metadata"]["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
+    assert payload["min_tokens"] <= usage["completion_tokens"], "completion_tokens小于min_tokens"
     assert usage["total_tokens"] == total_tokens, "total_tokens不等于prompt_tokens + completion_tokens"
 
 
@@ -308,15 +300,13 @@ def test_non_chat_usage_stream():
         "seed": 566,
         # "top_p": 0,
         "stream_options": {"include_usage": True, "continuous_usage_stats": True},
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
     completion_url = URL.replace("chat/completions", "completions")
 
@@ -327,7 +317,7 @@ def test_non_chat_usage_stream():
     total_tokens = usage["completion_tokens"] + usage["prompt_tokens"]
     assert payload["max_tokens"] >= usage["completion_tokens"], f"completion_tokens大于max_tokens, usage: {usage}"
     assert (
-        payload["metadata"]["min_tokens"] <= usage["completion_tokens"]
+        payload["min_tokens"] <= usage["completion_tokens"]
     ), f"completion_tokens小于min_tokens, usage: {usage}"
     assert (
         usage["total_tokens"] == total_tokens
@@ -344,19 +334,18 @@ def test_non_chat_usage_non_stream():
         # "temperature": 1.0,
         "seed": 566,
         # "top_p": 0,
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
     completion_url = URL.replace("chat/completions", "completions")
 
     response = send_request(url=completion_url, payload=payload)
+    print(payload)
     print(response.text)
     chunks = get_stream_chunks(response)
 
@@ -364,7 +353,7 @@ def test_non_chat_usage_non_stream():
     total_tokens = usage["completion_tokens"] + usage["prompt_tokens"]
     assert payload["max_tokens"] >= usage["completion_tokens"], f"completion_tokens大于max_tokens, usage: {usage}"
     assert (
-        payload["metadata"]["min_tokens"] <= usage["completion_tokens"]
+        payload["min_tokens"] <= usage["completion_tokens"]
     ), f"completion_tokens小于min_tokens, usage: {usage}"
     assert (
         usage["total_tokens"] == total_tokens
@@ -386,15 +375,13 @@ def test_stop_sequence():
         "top_p": 0,
         "logprobs": True,
         "top_logprobs": 5,
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     resp = send_request(URL, payload).json()
@@ -422,15 +409,13 @@ def test_stop_sequence1():
         "top_p": 0,
         "logprobs": True,
         "top_logprobs": 5,
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     resp = send_request(URL, payload).json()
@@ -457,15 +442,13 @@ def test_stop_sequence2():
         "top_p": 0,
         "logprobs": True,
         "top_logprobs": 5,
-        "metadata": {
-            "min_tokens": 10,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 10,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     resp = send_request(URL, payload).json()
@@ -491,35 +474,104 @@ def test_non_stream_with_logprobs():
         "logprobs": True,
         "top_logprobs": 5,
         "seed": 21,
-        "metadata": {
-            "min_tokens": 1,
-            "chat_template_kwargs": {
-                "options": {
-                    "thinking_mode": "close",
-                },
+        "min_tokens": 1,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
             },
-            "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
         },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
     response = send_request(URL, payload)
     print(json.dumps(response.json(), indent=2, ensure_ascii=False))
     resp_json = response.json()
 
-    # 校验返回内容与概率信息
-    assert resp_json["choices"][0]["message"]["content"] == "<response>牛顿"
-    assert resp_json["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
-    assert resp_json["choices"][0]["logprobs"]["content"][0]["logprob"] == -3.2186455882765586e-06
-    assert resp_json["choices"][0]["logprobs"]["content"][0]["top_logprobs"][0] == {
-        "token": "<response>",
-        "logprob": -3.2186455882765586e-06,
-        "bytes": [60, 114, 101, 115, 112, 111, 110, 115, 101, 62],
-        "top_logprobs": None,
+    if os.getenv("STATIC_C8") == "1":
+        print("STATIC_C8 baseline")
+        # 校验返回内容与概率信息
+        assert resp_json["choices"][0]["message"]["content"] == "<response>牛顿"
+        assert resp_json["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
+        assert resp_json["choices"][0]["logprobs"]["content"][0]["logprob"] == -3.528532761265524e-05
+        assert resp_json["choices"][0]["logprobs"]["content"][0]["top_logprobs"][0] == {
+            "token": "<response>",
+            "logprob": -3.528532761265524e-05,
+            "bytes": [60, 114, 101, 115, 112, 111, 110, 115, 101, 62],
+            "top_logprobs": None,
+        }
+
+        assert resp_json["usage"]["prompt_tokens"] == 52
+        assert resp_json["usage"]["completion_tokens"] == 3
+        assert resp_json["usage"]["total_tokens"] == 55
+    else:
+        # 校验返回内容与概率信息
+        assert resp_json["choices"][0]["message"]["content"] == "<response>牛顿"
+        assert resp_json["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
+        assert resp_json["choices"][0]["logprobs"]["content"][0]["logprob"] == -3.2186455882765586e-06
+        assert resp_json["choices"][0]["logprobs"]["content"][0]["top_logprobs"][0] == {
+            "token": "<response>",
+            "logprob": -3.2186455882765586e-06,
+            "bytes": [60, 114, 101, 115, 112, 111, 110, 115, 101, 62],
+            "top_logprobs": None,
+        }
+
+        assert resp_json["usage"]["prompt_tokens"] == 50
+        assert resp_json["usage"]["completion_tokens"] == 3
+        assert resp_json["usage"]["total_tokens"] == 53
+
+
+def test_stream_with_logprobs():
+    """
+    测试流式响应开启 logprobs 后，首个 token 的概率信息是否正确。
+    """
+    payload = {
+        "stream": True,
+        "stream_options": {"include_usage": True, "continuous_usage_stats": True},
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "牛顿的三大运动定律是什么？"},
+        ],
+        "max_tokens": 3,
+        "logprobs": True,
+        "top_logprobs": 5,
+        "seed": 21,
+        "min_tokens": 1,
+        "chat_template_kwargs": {
+            "options": {
+                "thinking_mode": "close",
+            },
+        },
+        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
     }
 
-    assert resp_json["usage"]["prompt_tokens"] == 50
-    assert resp_json["usage"]["completion_tokens"] == 3
-    assert resp_json["usage"]["total_tokens"] == 53
+    response = send_request(URL, payload)
+    chunks = get_stream_chunks(response)
+    chunk_1 = chunks[1]
+
+    # usage = chunks[-1]["usage"]
+    print(json.dumps(chunks[1], indent=2, ensure_ascii=False))
+
+    if os.getenv("STATIC_C8") == "1":
+        print("STATIC_C8 baseline")
+        # 校验概率字段
+        assert chunk_1["choices"][0]["delta"]["content"] == "<response>"
+        assert chunk_1["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
+        assert chunk_1["choices"][0]["logprobs"]["content"][0]["logprob"] == -3.528532761265524e-05
+        assert chunk_1["choices"][0]["logprobs"]["content"][0]["top_logprobs"][0] == {
+            "token": "<response>",
+            "logprob": -3.528532761265524e-05,
+            "bytes": [60, 114, 101, 115, 112, 111, 110, 115, 101, 62],
+        }
+    else:
+        # 校验概率字段
+        assert chunk_1["choices"][0]["delta"]["content"] == "<response>"
+        assert chunk_1["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
+        assert chunk_1["choices"][0]["logprobs"]["content"][0]["logprob"] == -3.2186455882765586e-06
+        assert chunk_1["choices"][0]["logprobs"]["content"][0]["top_logprobs"][0] == {
+            "token": "<response>",
+            "logprob": -3.2186455882765586e-06,
+            "bytes": [60, 114, 101, 115, 112, 111, 110, 115, 101, 62],
+        }
 
 
 if __name__ == '__main__':
