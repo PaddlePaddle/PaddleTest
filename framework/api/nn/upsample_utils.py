@@ -78,17 +78,22 @@ def linear_interpolation_using_numpy(x, size, scale_factor=None, align_corners=T
         #      out_w = static_cast<int>(in_w * scale_w);
         # so it's possible to have numerical instability to make the test fail
         out_w = np.int_(in_w * scale_w)
+    if out_w == in_w:
+        out = x
+        if data_format == "NWC":
+            out = np.transpose(out, (0, 2, 1))  # NCW => NWC
+        return out
     out = np.zeros((batch_size, channel, out_w))
 
     ratio_w = 0.0
-    if out_w > 1:
-        if align_corners:
+    if align_corners:
+        if out_w > 1:
             ratio_w = (in_w - 1.0) / (out_w - 1.0)
+    else:
+        if scale_w > 0:
+            ratio_w = 1.0 / scale_w
         else:
-            if scale_w > 0:
-                ratio_w = 1.0 / scale_w
-            else:
-                ratio_w = 1.0 * in_w / out_w
+            ratio_w = in_w / out_w
 
     for j in range(out_w):
         if align_mode == 0 and not align_corners:
