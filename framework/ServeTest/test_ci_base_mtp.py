@@ -309,7 +309,7 @@ def test_non_stream_with_logprobs():
 
     assert resp_json["usage"]["prompt_tokens"] == 52
     assert resp_json["usage"]["completion_tokens"] == 3
-    assert resp_json["usage"]["total_tokens"] == 53
+    assert resp_json["usage"]["total_tokens"] == 55
 
 
 def test_stream_with_logprobs():
