@@ -154,16 +154,15 @@ def test_text_to_image_diff():
 
     if not diffs:
         print("✅ completion_token_ids 完全一致")
-        return
-
-    print(f"❌ 共发现 {len(diffs)} 处差异：")
-    for i, d in enumerate(diffs[:10]):
-        print(f"\n[{i + 1}] 路径: {d['path']}")
-        print(f"👉 {d['msg']}")
-        if "a" in d and isinstance(d["a"], list):
-            print(f"baseline 子数组: {d['a']}")
-        if "b" in d and isinstance(d["b"], list):
-            print(f"current 子数组:  {d['b']}")
+    else:
+        print(f"❌ 共发现 {len(diffs)} 处差异：")
+        for i, d in enumerate(diffs[:10]):
+            print(f"\n[{i + 1}] 路径: {d['path']}")
+            print(f"👉 {d['msg']}")
+            if "a" in d and isinstance(d["a"], list):
+                print(f"baseline 子数组: {d['a']}")
+            if "b" in d and isinstance(d["b"], list):
+                print(f"current 子数组:  {d['b']}")
 
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
     assert not diffs, f"与baseline存在diff，diffs: {diffs[:10]}"
