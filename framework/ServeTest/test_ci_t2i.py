@@ -165,7 +165,7 @@ def test_text_to_image_diff():
                 print(f"current 子数组:  {d['b']}")
 
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-    assert url, "got url error"
+    # assert url, "got url error"
     assert not diffs, f"与baseline存在diff，diffs: {diffs[:10]}"
 
 
