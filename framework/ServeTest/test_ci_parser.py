@@ -92,9 +92,8 @@ def test_reasoning_parser():
     try:
         response = send_request(URL, payload)
         chunks = get_stream_chunks(response)
-        for idx, chunk in enumerate(chunks):
-            # print(f"\nchunk[{idx}]:\n{json.dumps(chunk, indent=2, ensure_ascii=False)}")
-            print(f"\nchunk[{idx}]:\n{json.dumps(chunk, ensure_ascii=False)}")
+        # for idx, chunk in enumerate(chunks):
+        #     print(f"\nchunk[{idx}]:\n{json.dumps(chunk, ensure_ascii=False)}")
         reasoning_result = "".join([x['choices'][0]['delta']['reasoning_content'] for x in chunks])
         result = "".join([x['choices'][0]['delta']['content'] for x in chunks])
     except Exception as e:
