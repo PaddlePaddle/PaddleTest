@@ -103,7 +103,7 @@ def test_text_to_image_diff():
     result = ""
 
     try:
-        response = send_request(URL, payload, timeout=1200)
+        response = send_request(URL, payload, timeout=600)
         chunks = get_stream_chunks(response)
         # for idx, chunk in enumerate(chunks):
         #         print(f"\nchunk[{idx}]:\n{json.dumps(chunk, indent=2, ensure_ascii=False)}")
