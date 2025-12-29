@@ -235,7 +235,7 @@ def test_prefix_cache_video():
                   "video_url": {
                     "url": original_video["video_url"]["url"],
                   },
-                  "enable_chunks": True,
+                  "enable_chunks": False,
                   "tokenizer_options": {
                     "frames": 10,
                     "end_ts": 290,
