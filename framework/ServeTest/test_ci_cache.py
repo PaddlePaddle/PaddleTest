@@ -97,6 +97,9 @@ def test_prefix_cache_text():
     print("fastdeploy answer is :")
 
     try:
+        # prefix cache存在diff，跳过第一次请求
+        response = send_request(URL, payload)
+        chunks = get_stream_chunks(response)
         response = send_request(URL, payload)
         chunks = get_stream_chunks(response)
         # for idx, chunk in enumerate(chunks):
@@ -113,8 +116,8 @@ def test_prefix_cache_text():
     print("\nresult:\n", result)
 
     # 对比baseline
-    # with open("/MODELDATA/baseline_cache_text.txt", "w", encoding="utf-8") as f:
-    #     f.writelines(result)
+    with open("/MODELDATA/baseline_cache_text_bak.txt", "w", encoding="utf-8") as f:
+        f.writelines(result)
     response = send_request(URL, payload)
     chunks = get_stream_chunks(response)
     result_2 = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
@@ -130,7 +133,7 @@ def test_prefix_cache_text():
         with open("/MODELDATA/baseline_cache_text.txt", "r", encoding="utf-8") as f:
             baseline = f.read()
         assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        # assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
+        assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
 
     prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
     cached_tokens = chunks[-1]["usage"]["prompt_tokens_details"]["cached_tokens"]
