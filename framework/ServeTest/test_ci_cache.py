@@ -238,7 +238,8 @@ def test_prefix_cache_video():
                   "enable_chunks": True,
                   "tokenizer_options": {
                     "frames": 10,
-                    "end_ts": 290
+                    "end_ts": 290,
+                    "version": "v1020"
                   }
                 },
                 {
