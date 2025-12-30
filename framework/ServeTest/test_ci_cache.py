@@ -1,6 +1,7 @@
 import json
 import os
 import pytest
+import re
 import copy
 
 import requests
@@ -60,6 +61,60 @@ def get_stream_chunks(response):
     return chunks
 
 
+def extract_logprobs(chunks):
+    """
+    提取 stream chunks 中的 logprobs（跳过 usage / 空 choices chunk）
+    """
+    results = []
+
+    for chunk in chunks:
+        choices = chunk.get("choices")
+        if not choices:
+            continue
+
+        choice = choices[0]
+        logprobs = choice.get("logprobs")
+        if not logprobs or not logprobs.get("content"):
+            continue
+
+        token_infos = []
+        for item in logprobs["content"]:
+            token_infos.append({
+                "token": item["token"],
+                "logprob": item["logprob"],
+                "top_logprobs": [
+                    {
+                        "token": tlp["token"],
+                        "logprob": tlp["logprob"],
+                    }
+                    for tlp in item.get("top_logprobs", [])
+                ]
+            })
+
+        results.append(token_infos)
+
+    return results
+
+
+def extract_last_entropy(log_path: str, req_id: str):
+    """
+    从日志中提取指定 req_id 的最后一条 entropy 值
+    """
+    pattern = re.compile(
+        rf"req_id:\s*{re.escape(req_id)}_\d+.*entropy:\s*([0-9]*\.?[0-9]+)"
+    )
+
+    last_entropy = None
+
+    with open(log_path, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            match = pattern.search(line)
+            if match:
+                last_entropy = float(match.group(1))
+
+    return last_entropy
+
+
 def test_prefix_cache_text():
     payload = {
         "model": "null",
@@ -85,6 +140,8 @@ def test_prefix_cache_text():
         "temperature": 0.8,
         "seed": 21,
         "top_p": 0,
+        "logprobs": True,
+        "top_logprobs": 3,
         "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
         "chat_template_kwargs": {
             "options": {
@@ -103,8 +160,11 @@ def test_prefix_cache_text():
         response = send_request(URL, payload)
         chunks = get_stream_chunks(response)
         # for idx, chunk in enumerate(chunks):
-        #     print(f"\nchunk[{idx}]:\n{json.dumps(chunk, ensure_ascii=False)}")
+        #     print(f"\nchunk[{idx}]:\n{json.dumps(chunk, indent=2, ensure_ascii=False)}")
+        req_id = chunks[-1]["id"]
         result = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
+        logprobs = extract_logprobs(chunks)
+        entropy = extract_last_entropy("log/data_processor.log", req_id)
     except Exception as e:
         print(f"解析失败: {e}")
         # 打印log/worklog.0
@@ -114,14 +174,56 @@ def test_prefix_cache_text():
                 print("################# workerlog.0 ##################", log_contents)
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
+    # print("\nlogprobs:\n", logprobs)
+    # mtp accept ratio
+    mtp_ratio_base = {
+        "accepted_tokens": 167,
+        "rejected_tokens": 29,
+        "accept_ratio": 0.4131736526946108,
+        "average_accept_length": 1.7040816326530612,
+        "accept_ratio_per_head": [
+          0.7040816326530612
+        ]
+      }
 
     # 对比baseline
     # with open("/MODELDATA/baseline_cache_text.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
     response = send_request(URL, payload)
     chunks = get_stream_chunks(response)
+    req_id_2 = chunks[-1]["id"]
     result_2 = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
+    logprobs_2 = extract_logprobs(chunks)
+    speculate_metrics_2 = chunks[-2]["choices"][0]["speculate_metrics"]
+    entropy_2 = extract_last_entropy("log/data_processor.log", req_id_2)
     print("chunks:", chunks[-1])
+    print("speculate_metrics:", speculate_metrics_2)
+    print("entropy_2:", entropy_2)
+    assert logprobs == logprobs_2, (
+        "logprobs 前后不一致\n"
+        f"logprobs_1: {json.dumps(logprobs, ensure_ascii=False, indent=2)}\n"
+        f"logprobs_2: {json.dumps(logprobs_2, ensure_ascii=False, indent=2)}"
+    )
+    base_entropy = 0.1566898212183909
+    assert abs(entropy - entropy_2) < 1e-12, (
+        "entropy 前后不一致\n"
+        f"entropy_1: {req_id}:{entropy}\n"
+        f"entropy_2: {req_id_2}:{entropy_2}"
+    )
+    assert abs(entropy - base_entropy) < 1e-12 and abs(entropy_2 - base_entropy) < 1e-12, (
+        "entropy 与期望值不一致\n"
+        f"expected: {base_entropy}\n"
+        f"entropy_1: {req_id}:{entropy}\n"
+        f"entropy_2: {req_id_2}:{entropy_2}"
+    )
+    assert entropy == entropy_2, (
+        "entropy 前后不一致\n"
+        f"entropy_1: {req_id}:{entropy}\n"
+        f"entropy_2: {req_id_2}:{entropy_2}"
+    )
+    assert speculate_metrics_2 == mtp_ratio_base, (
+        f"speculate_metrics存在diff，" f"speculate_metrics_2: {speculate_metrics_2}\n " f"baseline: {mtp_ratio_base}"
+    )
     if os.getenv("TEST_CUDA_GRAPH") == "1":
         print("TEST_CUDA_GRAPH=1, CUDA_GRAPH baseline")
         with open("/MODELDATA/baseline_cache_text_cuda.txt", "r", encoding="utf-8") as f:
