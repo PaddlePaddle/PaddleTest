@@ -136,6 +136,10 @@ def test_text_to_image_diff():
             with open('log/workerlog.0', 'r') as file:
                 log_contents = file.read()
                 print("################# workerlog.0 ##################", log_contents)
+        if os.path.exists('log/fastdeploy.log'):
+            with open('log/fastdeploy.log', 'r') as file:
+                log_contents = file.read()
+                print("################# fastdeploy.log ##################", log_contents)
                 pytest.fail(f"解析失败: {e}")
 
     # with open("./baseline_t2i_tokens.txt", "w", encoding="utf-8") as f:
