@@ -9,6 +9,7 @@ import sys
 import requests
 import copy
 import json
+import re
 from config.request_template import *
 import concurrent.futures
 from logger import base_logger
@@ -184,3 +185,57 @@ def response(args):
     # ✅ 最后按顺序返回 response 列表
     req_list = [result_dict[i] for i in range(len(case_data))]
     return req_list
+
+
+def extract_logprobs(chunks):
+    """
+    提取 stream chunks 中的 logprobs（跳过 usage / 空 choices chunk）
+    """
+    results = []
+
+    for chunk in chunks:
+        choices = chunk.get("choices")
+        if not choices:
+            continue
+
+        choice = choices[0]
+        logprobs = choice.get("logprobs")
+        if not logprobs or not logprobs.get("content"):
+            continue
+
+        token_infos = []
+        for item in logprobs["content"]:
+            token_infos.append({
+                "token": item["token"],
+                "logprob": item["logprob"],
+                "top_logprobs": [
+                    {
+                        "token": tlp["token"],
+                        "logprob": tlp["logprob"],
+                    }
+                    for tlp in item.get("top_logprobs", [])
+                ]
+            })
+
+        results.append(token_infos)
+
+    return results
+
+
+def extract_last_entropy(log_path: str, req_id: str):
+    """
+    从日志中提取指定 req_id 的最后一条 entropy 值
+    """
+    pattern = re.compile(
+        rf"req_id:\s*{re.escape(req_id)}_\d+.*entropy:\s*([0-9]*\.?[0-9]+)"
+    )
+
+    last_entropy = None
+
+    with open(log_path, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            match = pattern.search(line)
+            if match:
+                last_entropy = float(match.group(1))
+
+    return last_entropy
