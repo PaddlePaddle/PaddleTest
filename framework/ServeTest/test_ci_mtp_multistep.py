@@ -62,7 +62,7 @@ def get_stream_chunks(response):
     return chunks
 
 
-def test_prefix_cache_text():
+def test_prefix_cache_mtp_multistep():
     payload = {
         "model": "null",
         "messages": [
@@ -124,14 +124,12 @@ def test_prefix_cache_text():
     # print("\nlogprobs:\n", logprobs)
     # mtp accept ratio
     mtp_ratio_base = {
-        "accepted_tokens": 167,
-        "rejected_tokens": 29,
-        "accept_ratio": 0.4131736526946108,
-        "average_accept_length": 1.7040816326530612,
-        "accept_ratio_per_head": [
-          0.7040816326530612
-        ]
-      }
+        'accepted_tokens': 167,
+        'rejected_tokens': 165,
+        'accept_ratio': 0.5029940119760479,
+        'average_accept_length': 2.0120481927710845,
+        'accept_ratio_per_head': [0.6987951807228916, 0.3793103448275862, 0.18181818181818182]
+    }
 
     # 对比baseline
     # with open("/MODELDATA/baseline_cache_text.txt", "w", encoding="utf-8") as f:
@@ -151,7 +149,7 @@ def test_prefix_cache_text():
         f"logprobs_1: {json.dumps(logprobs, ensure_ascii=False, indent=2)}\n"
         f"logprobs_2: {json.dumps(logprobs_2, ensure_ascii=False, indent=2)}"
     )
-    base_entropy = 0.1566898212183909
+    base_entropy = 0.1566898174695409
     assert abs(entropy - entropy_2) < 1e-12, (
         "entropy 前后不一致\n"
         f"entropy_1: {req_id}:{entropy}\n"
@@ -186,179 +184,8 @@ def test_prefix_cache_text():
 
     prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
     cached_tokens = chunks[-1]["usage"]["prompt_tokens_details"]["cached_tokens"]
-    # TODO:暂时关闭cached_tokens校验
     assert cached_tokens == prompt_tokens // 64 * 64, "cached_tokens数量有问题"
-
-
-def test_prefix_cache_picture():
-    payload = {
-        "model": "null",
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": "bos://nlp-sr-text2img/luobin06/dataset/doc_images/ChineseDocVQA/4e5278fdb82c881c69122c09f902e029.png",
-                        },
-                        "tokenizer_options": {"resolution": 4096, "version": "v1"},
-                    },
-                    {"type": "text", "text": "哪个银行？"},
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": "bos://nlp-sr-text2img/luobin06/dataset/doc_images/ChineseDocVQA/4e5278fdb82c881c69122c09f902e029.png",
-                        },
-                        "tokenizer_options": {"resolution": 4096, "version": "v1"},
-                    },
-                    {"type": "text", "text": "哪个银行？"},
-                ],
-            },
-        ],
-        "stream": True,
-        "stream_options": {"include_usage": True, "continuous_usage_stats": True},
-        "temperature": 1.0,
-        "seed": 21,
-        "top_p": 0,
-        "max_tokens": 200,
-        "stop": ["</s>", "<eos>", "<|endoftext|>", "<|im_end|>"],
-        "chat_template_kwargs": {
-            "options": {
-                "thinking_mode": "close",
-            },
-        },
-        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
-    }
-
-    print(json.dumps(payload, ensure_ascii=False))
-
-    print("fastdeploy answer is :")
-
-    try:
-        response = send_request(URL, payload)
-        chunks = get_stream_chunks(response)
-        for idx, chunk in enumerate(chunks):
-            print(f"\nchunk[{idx}]:\n{json.dumps(chunk, ensure_ascii=False)}")
-        result = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
-    except Exception as e:
-        print(f"解析失败: {e}")
-        # 打印log/worklog.0
-        if os.path.exists("log/workerlog.0"):
-            with open("log/workerlog.0", "r") as file:
-                log_contents = file.read()
-                print("################# workerlog.0 ##################", log_contents)
-                pytest.fail(f"解析失败: {e}")
-    print("\nresult:\n", result)
-
-    # 对比baseline
-    # with open("/MODELDATA/baseline_cache_pic.txt", "w", encoding="utf-8") as f:
-    #     f.writelines(result)
-    with open("/MODELDATA/baseline_cache_pic.txt", "r", encoding="utf-8") as f:
-        baseline = f.read()
-    assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-
-    response = send_request(URL, payload)
-    chunks = get_stream_chunks(response)
-    result_2 = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
-    print("chunks:", chunks[-1])
-
-    assert result_2 == baseline, f"与baseline存在diff，result: {result}\n baseline: {result_2}"
-
-    prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
-    cached_tokens = chunks[-1]["usage"]["prompt_tokens_details"]["cached_tokens"]
-    # TODO:暂时关闭cached_tokens校验
-    assert cached_tokens == prompt_tokens // 64 * 64, "cached_tokens数量有问题"
-
-
-def test_prefix_cache_video():
-    """
-    测试prefix cache disable-chunked-mm-input不影响精度
-    """
-    with open("/MODELDATA/video_for_fastdeploy", "r", encoding="utf-8") as f:
-        data = json.loads(f.read())
-    original_video = next(item for item in data["messages"][0]["content"] if item["type"] == "video_url")
-    payload = {
-        "stream": True,
-        "stream_options": {"include_usage": True, "continuous_usage_stats": True},
-        "messages": [
-            {
-              "content": [
-                {
-                  "type": "video_url",
-                  "video_url": {
-                    "url": original_video["video_url"]["url"],
-                  },
-                  "enable_chunks": False,
-                  "tokenizer_options": {
-                    "frames": 10,
-                    "end_ts": 290,
-                    "version": "v1020"
-                  }
-                },
-                {
-                  "text": "简单介绍视频内容",
-                  "type": "text"
-                }
-              ],
-              "role": "user"
-            }
-          ],
-        "temperature": 1.0,
-        "seed": 21,
-        "top_p": 0,
-        "max_tokens": 200,
-        "chat_template_kwargs": {
-            "options": {
-                "thinking_mode": "close",
-            },
-        },
-        "bad_words_token_ids": [101031, 101032, 101027, 101028, 101023, 101024],
-    }
-    print(json.dumps(payload, indent=2, ensure_ascii=False))
-
-    try:
-        response = send_request(URL, payload)
-        chunks = get_stream_chunks(response)
-        for idx, chunk in enumerate(chunks):
-            print(f"\nchunk[{idx}]:\n{json.dumps(chunk, ensure_ascii=False)}")
-        result = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
-    except Exception as e:
-        print(f"解析失败: {e}")
-        # 打印log/worklog.0
-        if os.path.exists("log/workerlog.0"):
-            with open("log/workerlog.0", "r") as file:
-                log_contents = file.read()
-                print("################# workerlog.0 ##################", log_contents)
-                pytest.fail(f"解析失败: {e}")
-    print("\nresult:\n", result)
-    # 对比baseline
-    # with open("/MODELDATA/baseline_cache_video.txt", "w", encoding="utf-8") as f:
-    #     f.writelines(result)
-
-    response = send_request(URL, payload)
-    chunks = get_stream_chunks(response)
-    result_2 = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
-    print("chunks:", chunks[-1])
-
-    if os.getenv("TEST_CUDA_GRAPH") == "1":
-        print("TEST_CUDA_GRAPH=1, CUDA_GRAPH baseline")
-        with open("/MODELDATA/baseline_cache_video_cuda.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
-        assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
-    else:
-        # 关cudagraph无法锁住两轮结果
-        with open("/MODELDATA/baseline_cache_video.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
-        assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        # assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
-    prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
-    cached_tokens = chunks[-1]["usage"]["prompt_tokens_details"]["cached_tokens"]
-    # 视频输入触发回退，23符合预期
-    # TODO:暂时关闭cached_tokens校验
-    assert cached_tokens == 0, "cached_tokens数量有问题"
 
 
 if __name__ == '__main__':
-    test_prefix_cache_text()
+    test_prefix_cache_mtp_multistep()
