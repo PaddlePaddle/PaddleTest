@@ -123,15 +123,24 @@ def test_prefix_cache_text():
     print("\nresult:\n", result)
     # print("\nlogprobs:\n", logprobs)
     # mtp accept ratio
-    mtp_ratio_base = {
-        "accepted_tokens": 167,
-        "rejected_tokens": 29,
-        "accept_ratio": 0.4131736526946108,
-        "average_accept_length": 1.7040816326530612,
-        "accept_ratio_per_head": [
-          0.7040816326530612
-        ]
-      }
+    if os.getenv("AGILE_COMPILE_BRANCH") == "release/v2.1.0":
+        mtp_ratio_base = {
+            "accepted_tokens": 167,
+            "rejected_tokens": 29,
+            "accept_ratio": 0.4131736526946108,
+            "average_accept_length": 1.7040816326530612,
+            "accept_ratio_per_head": [
+              0.7040816326530612
+            ]
+          }
+    else:
+        mtp_ratio_base = {
+            'accepted_tokens': 167,
+            'rejected_tokens': 25,
+            'accept_ratio': 0.4251497005988024,
+            'average_accept_length': 1.7395833333333333,
+            'accept_ratio_per_head': [0.7395833333333334]
+        }
 
     # 对比baseline
     # with open("/MODELDATA/baseline_cache_text.txt", "w", encoding="utf-8") as f:
@@ -151,7 +160,10 @@ def test_prefix_cache_text():
         f"logprobs_1: {json.dumps(logprobs, ensure_ascii=False, indent=2)}\n"
         f"logprobs_2: {json.dumps(logprobs_2, ensure_ascii=False, indent=2)}"
     )
-    base_entropy = 0.1566898212183909
+    if os.getenv("AGILE_COMPILE_BRANCH") == "release/v2.1.0":
+        base_entropy = 0.1566898212183909
+    else:
+        base_entropy = 0.15668981881014696
     assert abs(entropy - entropy_2) < 1e-12, (
         "entropy 前后不一致\n"
         f"entropy_1: {req_id}:{entropy}\n"
