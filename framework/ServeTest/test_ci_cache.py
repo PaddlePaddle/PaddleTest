@@ -128,7 +128,7 @@ def test_prefix_cache_text():
         'rejected_tokens': 25,
         'accept_ratio': 0.4251497005988024,
         'average_accept_length': 1.7395833333333333,
-        'accepted_tokens_per_head': [96, 71]
+        'accepted_tokens_per_head': [96, 71],
         'accept_ratio_per_head': [0.7395833333333334]
     }
 
