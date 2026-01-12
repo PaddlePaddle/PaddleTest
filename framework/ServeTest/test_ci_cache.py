@@ -123,24 +123,14 @@ def test_prefix_cache_text():
     print("\nresult:\n", result)
     # print("\nlogprobs:\n", logprobs)
     # mtp accept ratio
-    if os.getenv("AGILE_COMPILE_BRANCH") == "release/v2.1.0":
-        mtp_ratio_base = {
-            "accepted_tokens": 167,
-            "rejected_tokens": 29,
-            "accept_ratio": 0.4131736526946108,
-            "average_accept_length": 1.7040816326530612,
-            "accept_ratio_per_head": [
-              0.7040816326530612
-            ]
-          }
-    else:
-        mtp_ratio_base = {
-            'accepted_tokens': 167,
-            'rejected_tokens': 25,
-            'accept_ratio': 0.4251497005988024,
-            'average_accept_length': 1.7395833333333333,
-            'accept_ratio_per_head': [0.7395833333333334]
-        }
+    mtp_ratio_base = {
+        'accepted_tokens': 167,
+        'rejected_tokens': 25,
+        'accept_ratio': 0.4251497005988024,
+        'average_accept_length': 1.7395833333333333,
+        'accepted_tokens_per_head': [96, 71]
+        'accept_ratio_per_head': [0.7395833333333334]
+    }
 
     # 对比baseline
     # with open("/MODELDATA/baseline_cache_text.txt", "w", encoding="utf-8") as f:
@@ -160,10 +150,7 @@ def test_prefix_cache_text():
         f"logprobs_1: {json.dumps(logprobs, ensure_ascii=False, indent=2)}\n"
         f"logprobs_2: {json.dumps(logprobs_2, ensure_ascii=False, indent=2)}"
     )
-    if os.getenv("AGILE_COMPILE_BRANCH") == "release/v2.1.0":
-        base_entropy = 0.1566898212183909
-    else:
-        base_entropy = 0.15668981881014696
+    base_entropy = 0.15668981881014696
     assert abs(entropy - entropy_2) < 1e-12, (
         "entropy 前后不一致\n"
         f"entropy_1: {req_id}:{entropy}\n"
@@ -183,22 +170,13 @@ def test_prefix_cache_text():
     assert speculate_metrics_2 == mtp_ratio_base, (
         f"speculate_metrics存在diff，" f"speculate_metrics_2: {speculate_metrics_2}\n " f"baseline: {mtp_ratio_base}"
     )
-    if os.getenv("TEST_CUDA_GRAPH") == "1":
-        print("TEST_CUDA_GRAPH=1, CUDA_GRAPH baseline")
-        with open("/MODELDATA/baseline_cache_text_cuda.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
-        assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
-    else:
-        # 关cudagraph无法锁住两轮结果
-        with open("/MODELDATA/baseline_cache_text.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
-        assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
+    with open("/MODELDATA/baseline_cache_text.txt", "r", encoding="utf-8") as f:
+        baseline = f.read()
+    assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
+    assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
 
     prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
     cached_tokens = chunks[-1]["usage"]["prompt_tokens_details"]["cached_tokens"]
-    # TODO:暂时关闭cached_tokens校验
     assert cached_tokens == prompt_tokens // 64 * 64, "cached_tokens数量有问题"
 
 
