@@ -257,7 +257,6 @@ def test_prefix_cache_picture():
 
     prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
     cached_tokens = chunks[-1]["usage"]["prompt_tokens_details"]["cached_tokens"]
-    # TODO:暂时关闭cached_tokens校验
     assert cached_tokens == prompt_tokens // 64 * 64, "cached_tokens数量有问题"
 
 
@@ -310,10 +309,12 @@ def test_prefix_cache_video():
     try:
         response = send_request(URL, payload)
         chunks = get_stream_chunks(response)
-        response = send_request(URL, payload)
-        chunks = get_stream_chunks(response)
         for idx, chunk in enumerate(chunks):
             print(f"\nchunk[{idx}]:\n{json.dumps(chunk, ensure_ascii=False)}")
+        result_first = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
+        print("\nresult_first:\n", result_first)
+        response = send_request(URL, payload)
+        chunks = get_stream_chunks(response)
         result = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
     except Exception as e:
         print(f"解析失败: {e}")
@@ -325,26 +326,18 @@ def test_prefix_cache_video():
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
     # 对比baseline
-    # with open("/MODELDATA/baseline_cache_video.txt", "w", encoding="utf-8") as f:
-    #     f.writelines(result)
+    # with open("/MODELDATA/baseline_cache_video_first.txt", "w", encoding="utf-8") as f:
+    #     f.writelines(result_first)
 
     response = send_request(URL, payload)
     chunks = get_stream_chunks(response)
     result_2 = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
     print("chunks:", chunks[-1])
 
-    if os.getenv("TEST_CUDA_GRAPH") == "1":
-        print("TEST_CUDA_GRAPH=1, CUDA_GRAPH baseline")
-        with open("/MODELDATA/baseline_cache_video_cuda.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
-        assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
-    else:
-        # 关cudagraph无法锁住两轮结果
-        with open("/MODELDATA/baseline_cache_video.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
-        assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        # assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
+    with open("/MODELDATA/baseline_cache_video_first.txt", "r", encoding="utf-8") as f:
+        baseline = f.read()
+    assert result_first == baseline, f"与baseline存在diff，result: {result_first}\n baseline: {baseline}"
+    assert result_2 == result, f"cache后相同请求存在diff，result: {result}\n result_2: {result_2}"
     prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
     cached_tokens = chunks[-1]["usage"]["prompt_tokens_details"]["cached_tokens"]
     # 视频输入触发回退，23符合预期
