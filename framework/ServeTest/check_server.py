@@ -67,7 +67,7 @@ def main():
                 sys.exit(0)
 
         except requests.RequestException as e:
-            print(f"[{int(elapsed)}s] request failed: {e}")
+            print(f"[{int(elapsed)}s] request failed")
         time.sleep(2)
 
 
