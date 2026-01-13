@@ -45,7 +45,7 @@ def get_stream_chunks(response):
         for line in response.iter_lines(decode_unicode=True):
             if line:
                 if line.startswith("data: "):
-                    line = line[len("data: ") :]
+                    line = line[len("data: "):]
 
                 if line.strip() == "[DONE]":
                     break
