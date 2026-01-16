@@ -353,8 +353,12 @@ def test_prefix_cache_video():
     result_2 = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
     print("chunks:", chunks[-1])
 
-    with open("/MODELDATA/baseline_cache_video_first_master.txt", "r", encoding="utf-8") as f:
-        baseline = f.read()
+    if os.getenv("AGILE_COMPILE_BRANCH") == "master":
+        with open("/MODELDATA/baseline_cache_video_first_master.txt", "r", encoding="utf-8") as f:
+            baseline = f.read()
+    else:
+        with open("/MODELDATA/baseline_cache_video_first.txt", "r", encoding="utf-8") as f:
+            baseline = f.read()
     assert result_first == baseline, f"与baseline存在diff，result: {result_first}\n baseline: {baseline}"
     assert result_2 == result, f"cache后相同请求存在diff，result: {result}\n result_2: {result_2}"
     prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
