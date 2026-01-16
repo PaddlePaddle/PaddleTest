@@ -128,19 +128,29 @@ def test_text_diff():
                 print("################# workerlog.0 ##################", log_contents)
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
-    # with open("/MODELDATA/baseline_text_1131_static_c8.txt", "w", encoding="utf-8") as f:
+    # with open("/MODELDATA/baseline_text_master_static_c8.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
     # 对比baseline
-    if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
-        if os.getenv("STATIC_C8") == "1":
+    if os.getenv("STATIC_C8") == "1":
+        if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
             with open("/MODELDATA/baseline_text_1131_static_c8.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
+        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
+            with open("/MODELDATA/baseline_text_master_static_c8.txt", "r", encoding="utf-8") as f:
+                baseline = f.read()
         else:
-            with open("/MODELDATA/baseline_1131.txt", "r", encoding="utf-8") as f:
+            with open("./baseline.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
     else:
-        with open("./baseline.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
+        if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
+            with open("/MODELDATA/baseline_1131.txt", "r", encoding="utf-8") as f:
+                baseline = f.read()
+        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
+            with open("/MODELDATA/baseline_text_master.txt", "r", encoding="utf-8") as f:
+                baseline = f.read()
+        else:
+            with open("./baseline.txt", "r", encoding="utf-8") as f:
+                baseline = f.read()
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
 
 
@@ -207,12 +217,15 @@ def test_picture_diff():
                 pytest.fail(f"解析失败: {e}")
         print("chunks：", chunks)
     print("\nresult:\n", result)
-    # with open("/MODELDATA/baseline_pic_1131_static_c8.txt", "w", encoding="utf-8") as f:
+    # with open("/MODELDATA/baseline_pic_master_static_c8.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
     # 对比baseline
-    if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
-        if os.getenv("STATIC_C8") == "1":
+    if os.getenv("STATIC_C8") == "1":
+        if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
             with open("/MODELDATA/baseline_pic_1131_static_c8.txt", "r", encoding="utf-8") as f:
+                baseline = f.read()
+        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
+            with open("/MODELDATA/baseline_pic_master_static_c8.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
         else:
             with open("./baseline_pic.txt", "r", encoding="utf-8") as f:
@@ -518,6 +531,15 @@ def test_non_stream_with_logprobs():
                 baseline = json.load(f)
 
             assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
+        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
+            logprobs = resp_json["choices"][0]["logprobs"]
+            print(logprobs)
+            # with open("/MODELDATA/base_logprobs_master_non_stream_static_c8.txt", "w", encoding="utf-8") as f:
+            #     json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
+            with open("/MODELDATA/base_logprobs_master_non_stream_static_c8.txt", "r", encoding="utf-8") as f:
+                baseline = json.load(f)
+
+            assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
         else:
             assert resp_json["choices"][0]["message"]["content"] == "<response>牛顿"
             assert resp_json["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
@@ -537,6 +559,14 @@ def test_non_stream_with_logprobs():
             logprobs = resp_json["choices"][0]["logprobs"]
             print(logprobs)
             with open("/MODELDATA/base_logprobs_1131_non_stream.txt", "r", encoding="utf-8") as f:
+                baseline = json.load(f)
+            assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
+        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
+            logprobs = resp_json["choices"][0]["logprobs"]
+            print(logprobs)
+            # with open("/MODELDATA/base_logprobs_master_non_stream.txt", "w", encoding="utf-8") as f:
+            #     json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
+            with open("/MODELDATA/base_logprobs_master_non_stream.txt", "r", encoding="utf-8") as f:
                 baseline = json.load(f)
             assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
         else:
@@ -599,6 +629,15 @@ def test_stream_with_logprobs():
                 baseline = json.load(f)
 
             assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
+        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
+            logprobs = extract_logprobs(chunks)
+            print(logprobs)
+            # with open("/MODELDATA/base_logprobs_master_stream_static_c8.txt", "w", encoding="utf-8") as f:
+            #     json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
+            with open("/MODELDATA/base_logprobs_master_stream_static_c8.txt", "r", encoding="utf-8") as f:
+                baseline = json.load(f)
+
+            assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
         else:
             assert chunk_1["choices"][0]["delta"]["content"] == "<response>"
             assert chunk_1["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
@@ -613,6 +652,14 @@ def test_stream_with_logprobs():
             logprobs = extract_logprobs(chunks)
             print(logprobs)
             with open("/MODELDATA/base_logprobs_1131.txt", "r", encoding="utf-8") as f:
+                baseline = json.load(f)
+            assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
+        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
+            logprobs = extract_logprobs(chunks)
+            print(logprobs)
+            # with open("/MODELDATA/base_logprobs_master_stream.txt", "w", encoding="utf-8") as f:
+            #     json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
+            with open("/MODELDATA/base_logprobs_master_stream.txt", "r", encoding="utf-8") as f:
                 baseline = json.load(f)
             assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
         else:
