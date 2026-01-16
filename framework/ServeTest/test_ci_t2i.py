@@ -142,13 +142,13 @@ def test_text_to_image_diff():
                 print("################# fastdeploy.log ##################", log_contents)
                 pytest.fail(f"解析失败: {e}")
 
-    # with open("./baseline_t2i_tokens.txt", "w", encoding="utf-8") as f:
+    # with open("/cot/baseline_t2i_tokens.txt", "w", encoding="utf-8") as f:
     #     json.dump(completion_token_ids, f)
-    #
-    # with open("./baseline_t2i.txt", "w", encoding="utf-8") as f:
+    # 
+    # with open("/cot/baseline_t2i.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
 
-    with open("./baseline_t2i.txt", "r", encoding="utf-8") as f:
+    with open("/cot/baseline_t2i.txt", "r", encoding="utf-8") as f:
         baseline = f.read()
 
     with open("/cot/baseline_t2i_tokens.txt", "r", encoding="utf-8") as f:
