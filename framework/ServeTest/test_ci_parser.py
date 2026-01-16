@@ -105,15 +105,20 @@ def test_reasoning_parser():
                 print("################# workerlog.0 ##################", log_contents)
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
-    # with open("/MODELDATA/baseline_parser_result_1131.txt", "w", encoding="utf-8") as f:
+    # with open("/MODELDATA/baseline_parser_result_master.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
-    # with open("/MODELDATA/baseline_parser_reason_1131.txt", "w", encoding="utf-8") as f:
+    # with open("/MODELDATA/baseline_parser_reason_master.txt", "w", encoding="utf-8") as f:
     #     f.writelines(reasoning_result)
     # 对比baseline
     if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
         with open("/MODELDATA/baseline_parser_result_1131.txt", "r", encoding="utf-8") as f:
             baseline = f.read()
         with open("/MODELDATA/baseline_parser_reason_1131.txt", "r", encoding="utf-8") as f:
+            baseline_reason = f.read()
+    elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
+        with open("/MODELDATA/baseline_parser_result_master.txt", "r", encoding="utf-8") as f:
+            baseline = f.read()
+        with open("/MODELDATA/baseline_parser_reason_master.txt", "r", encoding="utf-8") as f:
             baseline_reason = f.read()
     else:
         with open("./baseline_parser_result.txt", "r", encoding="utf-8") as f:

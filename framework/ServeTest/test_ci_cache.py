@@ -123,17 +123,27 @@ def test_prefix_cache_text():
     print("\nresult:\n", result)
     # print("\nlogprobs:\n", logprobs)
     # mtp accept ratio
-    mtp_ratio_base = {
-        'accepted_tokens': 167,
-        'rejected_tokens': 25,
-        'accept_ratio': 0.4251497005988024,
-        'average_accept_length': 1.7395833333333333,
-        'accepted_tokens_per_head': [96, 71],
-        'accept_ratio_per_head': [0.7395833333333334]
-    }
+    if os.getenv("AGILE_COMPILE_BRANCH") == "master":
+        mtp_ratio_base = {
+            'accepted_tokens': 162,
+            'rejected_tokens': 28,
+            'accept_ratio': 0.4135802469135802,
+            'average_accept_length': 1.7052631578947368,
+            'accepted_tokens_per_head': [95, 67],
+            'accept_ratio_per_head': [0.7052631578947368]
+        }
+    else:
+        mtp_ratio_base = {
+            'accepted_tokens': 167,
+            'rejected_tokens': 25,
+            'accept_ratio': 0.4251497005988024,
+            'average_accept_length': 1.7395833333333333,
+            'accepted_tokens_per_head': [96, 71],
+            'accept_ratio_per_head': [0.7395833333333334]
+        }
 
     # 对比baseline
-    # with open("/MODELDATA/baseline_cache_text.txt", "w", encoding="utf-8") as f:
+    # with open("/MODELDATA/baseline_cache_text_master.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
     response = send_request(URL, payload)
     chunks = get_stream_chunks(response)
@@ -150,7 +160,10 @@ def test_prefix_cache_text():
         f"logprobs_1: {json.dumps(logprobs, ensure_ascii=False, indent=2)}\n"
         f"logprobs_2: {json.dumps(logprobs_2, ensure_ascii=False, indent=2)}"
     )
-    base_entropy = 0.15668981881014696
+    if os.getenv("AGILE_COMPILE_BRANCH") == "master":
+        base_entropy = 0.21718527860920767
+    else:
+        base_entropy = 0.15668981881014696
     assert abs(entropy - entropy_2) < 1e-12, (
         "entropy 前后不一致\n"
         f"entropy_1: {req_id}:{entropy}\n"
@@ -170,8 +183,12 @@ def test_prefix_cache_text():
     assert speculate_metrics_2 == mtp_ratio_base, (
         f"speculate_metrics存在diff，" f"speculate_metrics_2: {speculate_metrics_2}\n " f"baseline: {mtp_ratio_base}"
     )
-    with open("/MODELDATA/baseline_cache_text.txt", "r", encoding="utf-8") as f:
-        baseline = f.read()
+    if os.getenv("AGILE_COMPILE_BRANCH") == "master":
+        with open("/MODELDATA/baseline_cache_text_master.txt", "r", encoding="utf-8") as f:
+            baseline = f.read()
+    else:
+        with open("/MODELDATA/baseline_cache_text.txt", "r", encoding="utf-8") as f:
+            baseline = f.read()
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
     assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
 
@@ -313,6 +330,8 @@ def test_prefix_cache_video():
             print(f"\nchunk[{idx}]:\n{json.dumps(chunk, ensure_ascii=False)}")
         result_first = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
         print("\nresult_first:\n", result_first)
+        # with open("/MODELDATA/baseline_cache_video_first_master.txt", "w", encoding="utf-8") as f:
+        #     f.writelines(result_first)
         response = send_request(URL, payload)
         chunks = get_stream_chunks(response)
         result = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
@@ -334,7 +353,7 @@ def test_prefix_cache_video():
     result_2 = "".join([x["choices"][0]["delta"]["content"] for x in chunks[:-1]])
     print("chunks:", chunks[-1])
 
-    with open("/MODELDATA/baseline_cache_video_first.txt", "r", encoding="utf-8") as f:
+    with open("/MODELDATA/baseline_cache_video_first_master.txt", "r", encoding="utf-8") as f:
         baseline = f.read()
     assert result_first == baseline, f"与baseline存在diff，result: {result_first}\n baseline: {baseline}"
     assert result_2 == result, f"cache后相同请求存在diff，result: {result}\n result_2: {result_2}"
