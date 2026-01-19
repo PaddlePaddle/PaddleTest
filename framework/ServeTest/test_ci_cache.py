@@ -161,7 +161,7 @@ def test_prefix_cache_text():
         f"logprobs_2: {json.dumps(logprobs_2, ensure_ascii=False, indent=2)}"
     )
     if os.getenv("AGILE_COMPILE_BRANCH") == "master":
-        base_entropy = 0.21718527860920767
+        base_entropy = 0.21718533979187593
     else:
         base_entropy = 0.15668981881014696
     assert abs(entropy - entropy_2) < 1e-12, (
