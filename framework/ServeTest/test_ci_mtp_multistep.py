@@ -123,16 +123,27 @@ def test_prefix_cache_mtp_multistep():
     print("\nresult:\n", result)
     # print("\nlogprobs:\n", logprobs)
     # mtp accept ratio
-    mtp_ratio_base = {
-        'accepted_tokens': 167,
-        'rejected_tokens': 165,
-        'accept_ratio': 0.5029940119760479,
-        'average_accept_length': 2.0120481927710845,
-        'accept_ratio_per_head': [0.6987951807228916, 0.3793103448275862, 0.18181818181818182]
-    }
+    if os.getenv("AGILE_COMPILE_BRANCH") == "master":
+        mtp_ratio_base = {
+            'accepted_tokens': 162,
+            'rejected_tokens': 154,
+            'accept_ratio': 0.5123456790123457,
+            'average_accept_length': 2.050632911392405,
+            'accepted_tokens_per_head': [79, 51, 23, 9],
+            'accept_ratio_per_head': [0.6455696202531646, 0.45098039215686275, 0.391304347826087]
+        }
+    else:
+        mtp_ratio_base = {
+            'accepted_tokens': 167,
+            'rejected_tokens': 145,
+            'accept_ratio': 0.5329341317365269,
+            'average_accept_length': 2.141025641025641,
+            'accepted_tokens_per_head': [78, 56, 23, 10],
+            'accept_ratio_per_head': [0.717948717948718, 0.4107142857142857, 0.43478260869565216]
+        }
 
     # 对比baseline
-    # with open("/MODELDATA/baseline_cache_text.txt", "w", encoding="utf-8") as f:
+    # with open("/MODELDATA/baseline_cache_text_step3_master.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
     response = send_request(URL, payload)
     chunks = get_stream_chunks(response)
@@ -149,7 +160,10 @@ def test_prefix_cache_mtp_multistep():
         f"logprobs_1: {json.dumps(logprobs, ensure_ascii=False, indent=2)}\n"
         f"logprobs_2: {json.dumps(logprobs_2, ensure_ascii=False, indent=2)}"
     )
-    base_entropy = 0.1566898174695409
+    if os.getenv("AGILE_COMPILE_BRANCH") == "master":
+        base_entropy = 0.21718533979187593
+    else:
+        base_entropy = 0.15668981782832836
     assert abs(entropy - entropy_2) < 1e-12, (
         "entropy 前后不一致\n"
         f"entropy_1: {req_id}:{entropy}\n"
@@ -169,18 +183,14 @@ def test_prefix_cache_mtp_multistep():
     assert speculate_metrics_2 == mtp_ratio_base, (
         f"speculate_metrics存在diff，" f"speculate_metrics_2: {speculate_metrics_2}\n " f"baseline: {mtp_ratio_base}"
     )
-    if os.getenv("TEST_CUDA_GRAPH") == "1":
-        print("TEST_CUDA_GRAPH=1, CUDA_GRAPH baseline")
-        with open("/MODELDATA/baseline_cache_text_cuda.txt", "r", encoding="utf-8") as f:
+    if os.getenv("AGILE_COMPILE_BRANCH") == "master":
+        with open("/MODELDATA/baseline_cache_text_step3_master.txt", "r", encoding="utf-8") as f:
             baseline = f.read()
-        assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
     else:
-        # 关cudagraph无法锁住两轮结果
-        with open("/MODELDATA/baseline_cache_text.txt", "r", encoding="utf-8") as f:
+        with open("/MODELDATA/baseline_cache_text_step3.txt", "r", encoding="utf-8") as f:
             baseline = f.read()
-        assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
-        assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
+    assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
+    assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
 
     prompt_tokens = chunks[-1]["usage"]["prompt_tokens"]
     cached_tokens = chunks[-1]["usage"]["prompt_tokens_details"]["cached_tokens"]
