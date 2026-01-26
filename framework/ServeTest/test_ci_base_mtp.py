@@ -117,7 +117,7 @@ def test_text_diff():
         with open("/MODELDATA/baseline_text_mtp_master.txt", "r", encoding="utf-8") as f:
             baseline = f.read()
     else:
-        with open("./baseline_text_mtp.txt", "r", encoding="utf-8") as f:
+        with open(f"/MODELDATA/baseline_text_mtp_{TEST_BRANCH}.txt", "r", encoding="utf-8") as f:
             baseline = f.read()
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
 
@@ -188,11 +188,8 @@ def test_picture_diff():
     if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
         with open("/MODELDATA/baseline_pic_mtp_1131.txt", "r", encoding="utf-8") as f:
             baseline = f.read()
-    elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
-        with open("/MODELDATA/baseline_pic_mtp_master.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
     else:
-        with open("./baseline_pic_mtp.txt", "r", encoding="utf-8") as f:
+        with open(f"/MODELDATA/baseline_pic_mtp_{TEST_BRANCH}.txt", "r", encoding="utf-8") as f:
             baseline = f.read()
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
 
@@ -306,38 +303,20 @@ def test_non_stream_with_logprobs():
     response = send_request(URL, payload)
     print(json.dumps(response.json(), indent=2, ensure_ascii=False))
     resp_json = response.json()
+    logprobs = resp_json["choices"][0]["logprobs"]
+    print(logprobs)
+    if os.getenv("BASELINE") == "1":
+        with open(f"/MODELDATA/base_logprobs_mtp_{TEST_BRANCH}_non_stream.txt", "w", encoding="utf-8") as f:
+            json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
 
     if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
-        logprobs = resp_json["choices"][0]["logprobs"]
-        print(logprobs)
-        # with open("/MODELDATA/base_logprobs_mtp_1131_non_stream.txt", "w", encoding="utf-8") as f:
-        #     json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
         with open("/MODELDATA/base_logprobs_mtp_1131_non_stream.txt", "r", encoding="utf-8") as f:
             baseline = json.load(f)
         assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
-    elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
-        logprobs = resp_json["choices"][0]["logprobs"]
-        print(logprobs)
-        # with open("/MODELDATA/base_logprobs_mtp_master_non_stream.txt", "w", encoding="utf-8") as f:
-        #     json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
-        with open("/MODELDATA/base_logprobs_mtp_master_non_stream.txt", "r", encoding="utf-8") as f:
+    else:
+        with open(f"/MODELDATA/base_logprobs_mtp_{TEST_BRANCH}_non_stream.txt", "r", encoding="utf-8") as f:
             baseline = json.load(f)
         assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
-    else:
-        # 校验返回内容与概率信息
-        assert resp_json["choices"][0]["message"]["content"] == "<response>牛顿"
-        assert resp_json["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
-        assert resp_json["choices"][0]["logprobs"]["content"][0]["logprob"] == -4.053033626405522e-05
-        assert resp_json["choices"][0]["logprobs"]["content"][0]["top_logprobs"][0] == {
-            "token": "<response>",
-            "logprob": -4.053033626405522e-05,
-            "bytes": [60, 114, 101, 115, 112, 111, 110, 115, 101, 62],
-            "top_logprobs": None,
-        }
-
-        assert resp_json["usage"]["prompt_tokens"] == 52
-        assert resp_json["usage"]["completion_tokens"] == 3
-        assert resp_json["usage"]["total_tokens"] == 55
 
 
 def test_stream_with_logprobs():
@@ -370,33 +349,20 @@ def test_stream_with_logprobs():
 
     # usage = chunks[-1]["usage"]
     print(json.dumps(chunks[1], indent=2, ensure_ascii=False))
+    logprobs = extract_logprobs(chunks)
+    print(logprobs)
+    if os.getenv("BASELINE") == "1":
+        with open(f"/MODELDATA/base_logprobs_mtp_{TEST_BRANCH}_stream.txt", "w", encoding="utf-8") as f:
+            json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
 
     if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
-        logprobs = extract_logprobs(chunks)
-        print(logprobs)
-        # with open("/MODELDATA/base_logprobs_mtp_1131.txt", "w", encoding="utf-8") as f:
-        #     json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
         with open("/MODELDATA/base_logprobs_mtp_1131.txt", "r", encoding="utf-8") as f:
             baseline = json.load(f)
         assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
-    elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
-        logprobs = extract_logprobs(chunks)
-        print(logprobs)
-        # with open("/MODELDATA/base_logprobs_mtp_master_stream.txt", "w", encoding="utf-8") as f:
-        #     json.dump(logprobs, f, ensure_ascii=False, indent=2, sort_keys=True)
-        with open("/MODELDATA/base_logprobs_mtp_master_stream.txt", "r", encoding="utf-8") as f:
+    else:
+        with open(f"/MODELDATA/base_logprobs_mtp_{TEST_BRANCH}_stream.txt", "r", encoding="utf-8") as f:
             baseline = json.load(f)
         assert logprobs == baseline, f"logprobs不一致,result:{logprobs}, baseline:{baseline}"
-    else:
-        # 校验概率字段
-        assert chunk_1["choices"][0]["delta"]["content"] == "<response>"
-        assert chunk_1["choices"][0]["logprobs"]["content"][0]["token"] == "<response>"
-        assert chunk_1["choices"][0]["logprobs"]["content"][0]["logprob"] == -4.053033626405522e-05
-        assert chunk_1["choices"][0]["logprobs"]["content"][0]["top_logprobs"][0] == {
-            "token": "<response>",
-            "logprob": -4.053033626405522e-05,
-            "bytes": [60, 114, 101, 115, 112, 111, 110, 115, 101, 62],
-        }
 
 
 if __name__ == '__main__':
