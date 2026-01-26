@@ -10,10 +10,14 @@ import requests
 import copy
 import json
 import re
+import os
 from config.request_template import *
 import concurrent.futures
 from logger import base_logger
 from case_loader import load_yaml_case
+
+
+TEST_BRANCH = os.getenv("TEST_BRANCH") if os.getenv("TEST_BRANCH") else "default"
 
 
 def build_request_payload(template_name: str, case_data: dict, payload: dict = None) -> dict:

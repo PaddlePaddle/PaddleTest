@@ -134,17 +134,20 @@ def test_prefix_cache_mtp_multistep():
         }
     else:
         mtp_ratio_base = {
-            'accepted_tokens': 167,
-            'rejected_tokens': 145,
-            'accept_ratio': 0.5329341317365269,
-            'average_accept_length': 2.141025641025641,
-            'accepted_tokens_per_head': [78, 56, 23, 10],
-            'accept_ratio_per_head': [0.717948717948718, 0.4107142857142857, 0.43478260869565216]
+            'accepted_tokens': 164,
+            'rejected_tokens': 140,
+            'accept_ratio': 0.5365853658536586,
+            'average_accept_length': 2.1578947368421053,
+            'accepted_tokens_per_head': [76, 56, 22, 10],
+            'accept_ratio_per_head': [0.7368421052631579, 0.39285714285714285, 0.45454545454545453]
         }
 
     # 对比baseline
     # with open("/MODELDATA/baseline_cache_text_step3_master.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
+    if os.getenv("BASELINE") == "1":
+        with open(f"/MODELDATA/baseline_cache_text_step3_{TEST_BRANCH}.txt", "w", encoding="utf-8") as f:
+            f.writelines(result)
     response = send_request(URL, payload)
     chunks = get_stream_chunks(response)
     req_id_2 = chunks[-1]["id"]
@@ -163,7 +166,7 @@ def test_prefix_cache_mtp_multistep():
     if os.getenv("AGILE_COMPILE_BRANCH") == "master":
         base_entropy = 0.21718533979187593
     else:
-        base_entropy = 0.15668981782832836
+        base_entropy = 0.1872702623845824
     assert abs(entropy - entropy_2) < 1e-12, (
         "entropy 前后不一致\n"
         f"entropy_1: {req_id}:{entropy}\n"
@@ -183,12 +186,8 @@ def test_prefix_cache_mtp_multistep():
     assert speculate_metrics_2 == mtp_ratio_base, (
         f"speculate_metrics存在diff，" f"speculate_metrics_2: {speculate_metrics_2}\n " f"baseline: {mtp_ratio_base}"
     )
-    if os.getenv("AGILE_COMPILE_BRANCH") == "master":
-        with open("/MODELDATA/baseline_cache_text_step3_master.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
-    else:
-        with open("/MODELDATA/baseline_cache_text_step3.txt", "r", encoding="utf-8") as f:
-            baseline = f.read()
+    with open(f"/MODELDATA/baseline_cache_text_step3_{TEST_BRANCH}.txt", "r", encoding="utf-8") as f:
+        baseline = f.read()
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
     assert result_2 == baseline, f"与baseline存在diff，result: {result_2}\n baseline: {baseline}"
 

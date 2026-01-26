@@ -3,6 +3,7 @@ import os
 import pytest
 
 import requests
+from utils import *
 
 
 HOST = os.environ.get("HOST")
@@ -112,6 +113,9 @@ def test_text_diff():
     #     f.writelines(result)
     # 对比baseline
     if os.getenv("DYNAMIC_C8") == "1":
+        if os.getenv("BASELINE") == "1":
+            with open(f"/MODELDATA/baseline_text_mtp_{TEST_BRANCH}_dynamic_c8.txt", "w", encoding="utf-8") as f:
+                f.writelines(result)
         if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
             with open("/MODELDATA/baseline_text_mtp_1131_dynamic_c8.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
@@ -119,9 +123,12 @@ def test_text_diff():
             with open("/MODELDATA/baseline_text_mtp_master_dynamic_c8.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
         else:
-            with open("./baseline_text_mtp.txt", "r", encoding="utf-8") as f:
+            with open(f"/MODELDATA/baseline_text_mtp_{TEST_BRANCH}_dynamic_c8.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
     else:
+        if os.getenv("BASELINE") == "1":
+            with open(f"/MODELDATA/baseline_text_mtp_{TEST_BRANCH}.txt", "w", encoding="utf-8") as f:
+                f.writelines(result)
         if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
             with open("/MODELDATA/baseline_text_mtp_1131.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
@@ -129,7 +136,7 @@ def test_text_diff():
             with open("/MODELDATA/baseline_text_mtp_master.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
         else:
-            with open("./baseline_text_mtp.txt", "r", encoding="utf-8") as f:
+            with open(f"/MODELDATA/baseline_text_mtp_{TEST_BRANCH}.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
 
@@ -200,24 +207,24 @@ def test_picture_diff():
     #     f.writelines(result)
     # 对比baseline
     if os.getenv("DYNAMIC_C8") == "1":
+        if os.getenv("BASELINE") == "1":
+            with open(f"/MODELDATA/baseline_pic_mtp_{TEST_BRANCH}_dynamic_c8.txt", "w", encoding="utf-8") as f:
+                f.writelines(result)
         if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
             with open("/MODELDATA/baseline_pic_mtp_1131_dynamic_c8.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
-        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
-            with open("/MODELDATA/baseline_pic_mtp_master_dynamic_c8.txt", "r", encoding="utf-8") as f:
-                baseline = f.read()
         else:
-            with open("./baseline_pic_mtp.txt", "r", encoding="utf-8") as f:
+            with open(f"/MODELDATA/baseline_pic_mtp_{TEST_BRANCH}_dynamic_c8.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
     else:
+        if os.getenv("BASELINE") == "1":
+            with open(f"/MODELDATA/baseline_pic_mtp_{TEST_BRANCH}.txt", "w", encoding="utf-8") as f:
+                f.writelines(result)
         if os.getenv("AGILE_COMPILE_BRANCH") == "release/online/20251131":
             with open("/MODELDATA/baseline_pic_mtp_1131.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
-        elif os.getenv("AGILE_COMPILE_BRANCH") == "master":
-            with open("/MODELDATA/baseline_pic_mtp_master.txt", "r", encoding="utf-8") as f:
-                baseline = f.read()
         else:
-            with open("./baseline_pic_mtp.txt", "r", encoding="utf-8") as f:
+            with open(f"/MODELDATA/baseline_pic_mtp_{TEST_BRANCH}.txt", "r", encoding="utf-8") as f:
                 baseline = f.read()
     assert result == baseline, f"与baseline存在diff，result: {result}\n baseline: {baseline}"
 
