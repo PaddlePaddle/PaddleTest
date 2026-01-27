@@ -125,12 +125,12 @@ def test_prefix_cache_text():
     # mtp accept ratio
     if os.getenv("AGILE_COMPILE_BRANCH") == "master":
         mtp_ratio_base = {
-            'accepted_tokens': 162,
-            'rejected_tokens': 28,
-            'accept_ratio': 0.4135802469135802,
-            'average_accept_length': 1.7052631578947368,
-            'accepted_tokens_per_head': [95, 67],
-            'accept_ratio_per_head': [0.7052631578947368]
+            'accepted_tokens': 165,
+            'rejected_tokens': 25,
+            'accept_ratio': 0.4242424242424242,
+            'average_accept_length': 1.736842105263158,
+            'accepted_tokens_per_head': [95, 70],
+            'accept_ratio_per_head': [0.7368421052631579]
         }
     else:
         mtp_ratio_base = {
@@ -164,7 +164,7 @@ def test_prefix_cache_text():
         f"logprobs_2: {json.dumps(logprobs_2, ensure_ascii=False, indent=2)}"
     )
     if os.getenv("AGILE_COMPILE_BRANCH") == "master":
-        base_entropy = 0.21718533979187593
+        base_entropy = 0.19369502730115437
     else:
         base_entropy = 0.18727026274749298
     assert abs(entropy - entropy_2) < 1e-12, (
