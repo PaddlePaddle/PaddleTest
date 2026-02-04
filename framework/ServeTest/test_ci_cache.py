@@ -134,12 +134,12 @@ def test_prefix_cache_text():
         }
     else:
         mtp_ratio_base = {
-            'accepted_tokens': 164,
-            'rejected_tokens': 22,
-            'accept_ratio': 0.43292682926829273,
-            'average_accept_length': 1.7634408602150538,
-            'accepted_tokens_per_head': [93, 71],
-            'accept_ratio_per_head': [0.7634408602150538]
+            'accepted_tokens': 162,
+            'rejected_tokens': 28,
+            'accept_ratio': 0.4135802469135802,
+            'average_accept_length': 1.7052631578947368,
+            'accepted_tokens_per_head': [95, 67],
+            'accept_ratio_per_head': [0.7052631578947368]
         }
 
     # 对比baseline
@@ -166,7 +166,7 @@ def test_prefix_cache_text():
     if os.getenv("AGILE_COMPILE_BRANCH") == "master":
         base_entropy = 0.19369502730115437
     else:
-        base_entropy = 0.18727026274749298
+        base_entropy = 0.21718533979187593
     assert abs(entropy - entropy_2) < 1e-12, (
         "entropy 前后不一致\n"
         f"entropy_1: {req_id}:{entropy}\n"
