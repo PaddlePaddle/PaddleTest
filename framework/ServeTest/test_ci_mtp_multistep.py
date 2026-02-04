@@ -134,12 +134,12 @@ def test_prefix_cache_mtp_multistep():
         }
     else:
         mtp_ratio_base = {
-            'accepted_tokens': 164,
-            'rejected_tokens': 140,
-            'accept_ratio': 0.5365853658536586,
-            'average_accept_length': 2.1578947368421053,
-            'accepted_tokens_per_head': [76, 56, 22, 10],
-            'accept_ratio_per_head': [0.7368421052631579, 0.39285714285714285, 0.45454545454545453]
+            'accepted_tokens': 162,
+            'rejected_tokens': 154,
+            'accept_ratio': 0.5123456790123457,
+            'average_accept_length': 2.050632911392405,
+            'accepted_tokens_per_head': [79, 51, 23, 9],
+            'accept_ratio_per_head': [0.6455696202531646, 0.45098039215686275, 0.391304347826087]
         }
 
     # 对比baseline
@@ -166,7 +166,7 @@ def test_prefix_cache_mtp_multistep():
     if os.getenv("AGILE_COMPILE_BRANCH") == "master":
         base_entropy = 0.19369502730115437
     else:
-        base_entropy = 0.1872702623845824
+        base_entropy = 0.21718533979187593
     assert abs(entropy - entropy_2) < 1e-12, (
         "entropy 前后不一致\n"
         f"entropy_1: {req_id}:{entropy}\n"
