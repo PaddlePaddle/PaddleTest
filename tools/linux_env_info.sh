@@ -109,7 +109,7 @@ function DockerImages () {
             export env_trt_version="10.5.0.18"
             ;;
         "Cuda130")
-            echo "Selected Almalinux: Cuda129"
+            echo "Selected Almalinux: Cuda130"
             export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda13.0-cudnn9.13-trt10.13-gcc11"
             export env_cuda_version="13.0"
             export env_cudnn_version="9.13.0"
@@ -147,6 +147,13 @@ function DockerImages () {
             export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:cuda129-dev"
             export env_cuda_version="12.9"
             export env_cudnn_version="9.9.0"
+            export env_trt_version=""
+            ;;
+        "Cuda130")
+            echo "Selected Ubuntu: Cuda130"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle:cuda130-dev"
+            export env_cuda_version="13.0"
+            export env_cudnn_version="9.13.0"
             export env_trt_version=""
             ;;
         *)
