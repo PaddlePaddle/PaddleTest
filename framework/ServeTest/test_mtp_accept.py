@@ -37,9 +37,9 @@ def print_stats(name, values):
 
 
 def test_accept_ratio_stats():
-    if os.getenv("test_branch") == "master":
-        per_head_baseline = 0.984689
-        accept_ratio_baseline = 0.4988832952561951
+    if os.getenv("STEP") == "3":
+        per_head_baseline = 0.946714
+        accept_ratio_baseline = 0.738918
     else:
         per_head_baseline = 0.984689
         accept_ratio_baseline = 0.4988832952561951
@@ -111,8 +111,8 @@ def test_entropy_stats():
     entropy_utils.py[line:103] ... entropy: 0.9563972363643617
     """
 
-    if os.getenv("test_branch") == "master":
-        entropy_baseline = 0.425077
+    if os.getenv("STEP") == "3":
+        entropy_baseline = 0.327155
     else:
         entropy_baseline = 0.425077
 
