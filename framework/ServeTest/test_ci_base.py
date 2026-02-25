@@ -126,7 +126,11 @@ def test_text_diff():
             with open('log/workerlog.0', 'r') as file:
                 log_contents = file.read()
                 print("################# workerlog.0 ##################", log_contents)
-                pytest.fail(f"解析失败: {e}")
+        if os.path.exists('log/fastdeploy.log'):
+            with open('log/fastdeploy.log', 'r') as file:
+                log_contents = file.read()
+                print("################# fastdeploy.log ##################", log_contents)
+        pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
     # with open("/MODELDATA/baseline_text_master_static_c8.txt", "w", encoding="utf-8") as f:
     #     f.writelines(result)
