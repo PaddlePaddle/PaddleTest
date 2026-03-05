@@ -105,8 +105,10 @@ def test_text_diff():
         # 打印log/worklog.0
         if os.path.exists('log/workerlog.0'):
             with open('log/workerlog.0', 'r') as file:
-                log_contents = file.read()
-                print("################# workerlog.0 ##################", log_contents)
+                lines = file.readlines()
+                log_contents = "".join(lines[-200:])
+                print("################# workerlog.0 (last 200 lines) ##################")
+                print(log_contents)
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
     # 对比baseline
@@ -180,8 +182,10 @@ def test_picture_diff():
         # 打印log/worklog.0
         if os.path.exists('log/workerlog.0'):
             with open('log/workerlog.0', 'r') as file:
-                log_contents = file.read()
-                print("################# workerlog.0 ##################", log_contents)
+                lines = file.readlines()
+                log_contents = "".join(lines[-200:])
+                print("################# workerlog.0 (last 200 lines) ##################")
+                print(log_contents)
                 pytest.fail(f"解析失败: {e}")
     print("\nresult:\n", result)
     # 对比baseline
