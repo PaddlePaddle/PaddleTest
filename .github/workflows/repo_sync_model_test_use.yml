@@ -107,9 +107,10 @@ jobs:
           SK: ${{ secrets.BOS_SK }}
         run: |
           tree -L 3
+          BRANCH=${{ matrix.ref }}
           REPO_NAME=${{ matrix.repository }}
           REPO_NAME=${REPO_NAME##*/}
           file_name=$REPO_NAME.tar
           tar -cf $REPO_NAME.tar ${{ matrix.path }}
           python -m pip install bce-python-sdk==0.8.74
-          python tools/bos_upload.py ${file_name} paddle-qa/CodeSync/ModelRepo/${REPO_NAME}
+          python tools/bos_upload.py ${file_name} paddle-qa/CodeSync/ModelRepo/${REPO_NAME}/${BRANCH}
