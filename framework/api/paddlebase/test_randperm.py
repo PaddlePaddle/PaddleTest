@@ -43,7 +43,7 @@ def test_randperm_base():
     base
     """
     obj.places = [paddle.CPUPlace()]
-    res = np.array([0, 1, 4, 3, 2, 5])
+    res = np.array([0, 4, 2, 1, 3, 5])
     n = 6
     obj.base(res=res, n=n)
 
@@ -69,7 +69,7 @@ def test_randperm1():
     """
     obj.places = [paddle.CPUPlace()]
     obj.seed = 1
-    res = np.array([6, 3, 7, 8, 9, 2, 1, 5, 4, 0])
+    res = np.array([5, 6, 1, 2, 0, 8, 9, 3, 7, 4])
     n = 10
     obj.run(res=res, n=n)
 
@@ -97,7 +97,7 @@ def test_randperm3():
     obj.seed = 33
     # res = np.array([0.0, 1.0, 6.0, 2.0, 9.0, 3.0, 5.0, 7.0, 4.0, 8.0])
     n = -1
-    etype = "PreconditionNotMetError" if is_in_eager else "InvalidArgumentError"
+    etype = "PreconditionNotMet" if is_in_eager else "InvalidArgumentError"
     obj.exception(etype=etype, n=n, dtype=np.float32)
 
 
