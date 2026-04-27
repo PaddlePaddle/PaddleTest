@@ -1,4 +1,4 @@
-# method:__sub__||method:__rmul__||api:paddle.tensor.ops.exp||method:__radd__||api:paddle.tensor.ops.reciprocal||api:paddle.tensor.manipulation.concat
+# method:__sub__||method:__rmul__||api:paddle.exp||method:__radd__||api:paddle.reciprocal||api:paddle.tensor.manipulation.concat
 import paddle
 import unittest
 import numpy as np
@@ -14,9 +14,9 @@ class LayerCase(paddle.nn.Layer):
     ):
         var_2 = var_1.__sub__(var_0)
         var_3 = var_2.__rmul__(-50)
-        var_4 = paddle.tensor.ops.exp(var_3)
+        var_4 = paddle.exp(var_3)
         var_5 = var_4.__radd__(1)
-        var_6 = paddle.tensor.ops.reciprocal(var_5)
+        var_6 = paddle.reciprocal(var_5)
         var_7 = paddle.tensor.manipulation.concat([var_1, var_0, var_6], axis=1)
         return var_7
 

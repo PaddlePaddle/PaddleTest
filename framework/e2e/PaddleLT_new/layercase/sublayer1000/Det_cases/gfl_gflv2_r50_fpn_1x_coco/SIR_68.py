@@ -1,4 +1,4 @@
-# method:reshape||api:paddle.nn.functional.activation.softmax||method:topk||method:mean||api:paddle.tensor.manipulation.concat||method:reshape||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.relu||api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.ops.sigmoid
+# method:reshape||api:paddle.nn.functional.activation.softmax||method:topk||method:mean||api:paddle.tensor.manipulation.concat||method:reshape||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.relu||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.sigmoid
 import paddle
 import unittest
 import numpy as np
@@ -38,7 +38,7 @@ class LayerCase(paddle.nn.Layer):
         var_8 = paddle.nn.functional.conv._conv_nd(var_7, self.parameter_1, bias=self.parameter_0, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         var_9 = paddle.nn.functional.activation.relu(var_8)
         var_10 = paddle.nn.functional.conv._conv_nd(var_9, self.parameter_2, bias=self.parameter_3, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_11 = paddle.tensor.ops.sigmoid(var_10)
+        var_11 = paddle.nn.functional.sigmoid(var_10)
         return var_11
 
 

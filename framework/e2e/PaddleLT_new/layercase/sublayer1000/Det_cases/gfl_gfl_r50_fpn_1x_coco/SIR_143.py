@@ -1,4 +1,4 @@
-# api:paddle.tensor.ops.sigmoid||api:paddle.tensor.creation.zeros||api:paddle.nn.functional.loss.binary_cross_entropy_with_logits||method:pow||method:__mul__||method:__ge__||method:__lt__||api:paddle.tensor.logic.logical_and||method:nonzero||method:squeeze
+# api:paddle.nn.functional.sigmoid||api:paddle.tensor.creation.zeros||api:paddle.nn.functional.loss.binary_cross_entropy_with_logits||method:pow||method:__mul__||method:__ge__||method:__lt__||api:paddle.tensor.logic.logical_and||method:nonzero||method:squeeze
 import paddle
 import unittest
 import numpy as np
@@ -12,7 +12,7 @@ class LayerCase(paddle.nn.Layer):
         var_0,    # (shape: [15200, 80], dtype: paddle.float32, stop_gradient: False)
         var_1,    # (shape: [15200], dtype: paddle.int64, stop_gradient: True)
     ):
-        var_2 = paddle.tensor.ops.sigmoid(var_0)
+        var_2 = paddle.nn.functional.sigmoid(var_0)
         var_3 = paddle.tensor.creation.zeros([15200, 80], dtype='float32')
         var_4 = paddle.nn.functional.loss.binary_cross_entropy_with_logits(var_0, var_3, reduction='none')
         var_5 = var_2.pow(2.0)

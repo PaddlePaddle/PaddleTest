@@ -1,4 +1,4 @@
-# api:paddle.nn.functional.conv._conv_nd||method:__mul__||method:__mul__||api:paddle.nn.functional.conv._conv_nd||method:__mul__||method:__add__||api:paddle.nn.functional.activation.elu||method:__mul__||api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.math.divide||api:paddle.tensor.math.sign||api:paddle.tensor.layer_function_generator.abs||api:paddle.tensor.ops.floor||api:paddle.tensor.math.multiply||method:__mul__||method:__sub__||api:paddle.tensor.manipulation.concat||method:flatten||method:transpose
+# api:paddle.nn.functional.conv._conv_nd||method:__mul__||method:__mul__||api:paddle.nn.functional.conv._conv_nd||method:__mul__||method:__add__||api:paddle.nn.functional.activation.elu||method:__mul__||api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.math.divide||api:paddle.tensor.math.sign||api:paddle.tensor.layer_function_generator.abs||api:paddle.floor||api:paddle.tensor.math.multiply||method:__mul__||method:__sub__||api:paddle.tensor.manipulation.concat||method:flatten||method:transpose
 import paddle
 import unittest
 import numpy as np
@@ -52,7 +52,7 @@ class LayerCase(paddle.nn.Layer):
         var_11 = paddle.tensor.math.divide(var_10, var_1)
         var_12 = paddle.tensor.math.sign(var_11)
         var_13 = paddle.tensor.abs(var_11)
-        var_14 = paddle.tensor.ops.floor(var_13)
+        var_14 = paddle.floor(var_13)
         var_15 = paddle.tensor.math.multiply(var_12, var_14)
         var_16 = var_15.__mul__(var_1)
         var_17 = var_10.__sub__(var_16)

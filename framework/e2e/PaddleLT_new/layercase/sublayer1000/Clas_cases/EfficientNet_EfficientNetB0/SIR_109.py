@@ -1,4 +1,4 @@
-# api:paddle.tensor.attribute.shape||method:__getitem__||api:paddle.tensor.random.rand||method:__radd__||api:paddle.tensor.ops.floor||api:paddle.tensor.math.multiply||method:__truediv__||api:paddle.tensor.math.add
+# api:paddle.tensor.attribute.shape||method:__getitem__||api:paddle.tensor.random.rand||method:__radd__||api:paddle.floor||api:paddle.tensor.math.multiply||method:__truediv__||api:paddle.tensor.math.add
 import paddle
 import unittest
 import numpy as np
@@ -16,7 +16,7 @@ class LayerCase(paddle.nn.Layer):
         var_3 = var_2.__getitem__(0)
         var_4 = paddle.tensor.random.rand(shape=[var_3, 1, 1, 1])
         var_5 = var_4.__radd__(0.975)
-        var_6 = paddle.tensor.ops.floor(var_5)
+        var_6 = paddle.floor(var_5)
         var_7 = paddle.tensor.math.multiply(var_0, var_6)
         var_8 = var_7.__truediv__(0.975)
         var_9 = paddle.tensor.math.add(var_8, var_1)

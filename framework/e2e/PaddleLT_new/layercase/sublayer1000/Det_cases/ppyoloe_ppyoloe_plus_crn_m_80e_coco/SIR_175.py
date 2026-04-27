@@ -1,4 +1,4 @@
-# api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.ops.sigmoid||method:flatten||method:transpose||method:flatten||method:transpose
+# api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.sigmoid||method:flatten||method:transpose||method:flatten||method:transpose
 import paddle
 import unittest
 import numpy as np
@@ -21,7 +21,7 @@ class LayerCase(paddle.nn.Layer):
         var_1,    # (shape: [1, 80, 30, 30], dtype: paddle.float32, stop_gradient: False)
     ):
         var_2 = paddle.nn.functional.conv._conv_nd(var_0, self.parameter_1, bias=self.parameter_0, stride=[1, 1], padding=[1, 1], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_3 = paddle.tensor.ops.sigmoid(var_1)
+        var_3 = paddle.nn.functional.sigmoid(var_1)
         var_4 = var_3.flatten(2)
         var_5 = var_4.transpose([0, 2, 1])
         var_6 = var_2.flatten(2)

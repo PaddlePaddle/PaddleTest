@@ -1,4 +1,4 @@
-# api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.ops.sigmoid||method:__mul__
+# api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.sigmoid||method:__mul__
 import paddle
 import unittest
 import numpy as np
@@ -21,7 +21,7 @@ class LayerCase(paddle.nn.Layer):
         var_1,    # (shape: [1, 576, 1, 1], dtype: paddle.float32, stop_gradient: False)
     ):
         var_2 = paddle.nn.functional.conv._conv_nd(var_1, self.parameter_0, bias=self.parameter_1, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_3 = paddle.tensor.ops.sigmoid(var_2)
+        var_3 = paddle.nn.functional.sigmoid(var_2)
         var_4 = var_0.__mul__(var_3)
         return var_4
 

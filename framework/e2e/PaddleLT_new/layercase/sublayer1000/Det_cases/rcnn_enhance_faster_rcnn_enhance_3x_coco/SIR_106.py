@@ -1,4 +1,4 @@
-# api:paddle.tensor.math.clip||api:paddle.tensor.ops.exp||api:paddle.tensor.ops.exp||method:__rmul__||method:__sub__||method:__rmul__||method:__sub__||method:__rmul__||method:__add__||method:__rmul__||method:__add__||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.manipulation.concat
+# api:paddle.tensor.math.clip||api:paddle.exp||api:paddle.exp||method:__rmul__||method:__sub__||method:__rmul__||method:__sub__||method:__rmul__||method:__add__||method:__rmul__||method:__add__||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.manipulation.concat
 import paddle
 import unittest
 import numpy as np
@@ -15,8 +15,8 @@ class LayerCase(paddle.nn.Layer):
         var_3,    # (shape: [6, 1, 1], dtype: paddle.float32, stop_gradient: True)
     ):
         var_4 = paddle.tensor.math.clip(var_0, -10000000000.0, 4.135166556742356)
-        var_5 = paddle.tensor.ops.exp(var_3)
-        var_6 = paddle.tensor.ops.exp(var_4)
+        var_5 = paddle.exp(var_3)
+        var_6 = paddle.exp(var_4)
         var_7 = var_5.__rmul__(0.5)
         var_8 = var_1.__sub__(var_7)
         var_9 = var_6.__rmul__(0.5)
