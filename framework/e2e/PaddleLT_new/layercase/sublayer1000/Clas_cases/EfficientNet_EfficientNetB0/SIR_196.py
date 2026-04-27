@@ -1,4 +1,4 @@
-# api:paddle.nn.functional.pooling.adaptive_avg_pool2d||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.swish||api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.ops.sigmoid||api:paddle.tensor.math.multiply
+# api:paddle.nn.functional.pooling.adaptive_avg_pool2d||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.swish||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.sigmoid||api:paddle.tensor.math.multiply
 import paddle
 import unittest
 import numpy as np
@@ -31,7 +31,7 @@ class LayerCase(paddle.nn.Layer):
         var_2 = paddle.nn.functional.conv._conv_nd(var_1, self.parameter_0, bias=self.parameter_2, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         var_3 = paddle.nn.functional.activation.swish(var_2)
         var_4 = paddle.nn.functional.conv._conv_nd(var_3, self.parameter_1, bias=self.parameter_3, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_5 = paddle.tensor.ops.sigmoid(var_4)
+        var_5 = paddle.nn.functional.sigmoid(var_4)
         var_6 = paddle.tensor.math.multiply(var_0, var_5)
         return var_6
 

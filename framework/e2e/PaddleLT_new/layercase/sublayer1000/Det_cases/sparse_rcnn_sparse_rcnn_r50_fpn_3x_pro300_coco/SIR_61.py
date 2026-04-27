@@ -1,4 +1,4 @@
-# method:flatten||api:paddle.tensor.ops.sigmoid||method:flatten||api:paddle.tensor.manipulation.concat||method:__gt__||method:all
+# method:flatten||api:paddle.nn.functional.sigmoid||method:flatten||api:paddle.tensor.manipulation.concat||method:__gt__||method:all
 import paddle
 import unittest
 import numpy as np
@@ -14,7 +14,7 @@ class LayerCase(paddle.nn.Layer):
         var_2,    # (shape: [2], dtype: paddle.int32, stop_gradient: True)
     ):
         var_3 = var_0.flatten(start_axis=0, stop_axis=1)
-        var_4 = paddle.tensor.ops.sigmoid(var_3)
+        var_4 = paddle.nn.functional.sigmoid(var_3)
         var_5 = var_1.flatten(start_axis=0, stop_axis=1)
         var_6 = paddle.tensor.manipulation.concat([var_2])
         var_7 = var_6.__gt__(-1)

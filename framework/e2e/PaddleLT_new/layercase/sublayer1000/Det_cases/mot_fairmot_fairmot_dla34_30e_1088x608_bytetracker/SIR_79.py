@@ -1,4 +1,4 @@
-# method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__neg__||api:paddle.tensor.ops.exp||method:__mul__||method:__add__||method:__add__||method:__add__||method:__mul__
+# method:__neg__||api:paddle.exp||method:__mul__||method:__neg__||api:paddle.exp||method:__mul__||method:__add__||method:__add__||method:__add__||method:__mul__
 import paddle
 import unittest
 import numpy as np
@@ -21,10 +21,10 @@ class LayerCase(paddle.nn.Layer):
         var_1,    # (shape: [], dtype: paddle.float32, stop_gradient: False)
     ):
         var_2 = self.parameter_0.__neg__()
-        var_3 = paddle.tensor.ops.exp(var_2)
+        var_3 = paddle.exp(var_2)
         var_4 = var_3.__mul__(var_1)
         var_5 = self.parameter_1.__neg__()
-        var_6 = paddle.tensor.ops.exp(var_5)
+        var_6 = paddle.exp(var_5)
         var_7 = var_6.__mul__(var_0)
         var_8 = var_4.__add__(var_7)
         var_9 = self.parameter_0.__add__(self.parameter_1)

@@ -1,4 +1,4 @@
-# method:split||method:unsqueeze||method:__sub__||method:__sub__||method:split||method:unsqueeze||method:__sub__||method:__mul__||api:paddle.tensor.math.sum||method:__mul__||api:paddle.tensor.math.sum||method:__mul__||api:paddle.tensor.math.sum||method:sqrt||method:__mul__||api:paddle.tensor.math.sum||method:sqrt||api:paddle.tensor.math.min||method:pow||method:pow||method:__mul__||method:__add__||method:__truediv__||method:pow||method:pow||method:__mul__||method:__add__||method:__truediv__||method:__add__||method:__rmul__||api:paddle.tensor.ops.exp||method:__truediv__||method:__rmul__||method:__add__||method:__truediv__
+# method:split||method:unsqueeze||method:__sub__||method:__sub__||method:split||method:unsqueeze||method:__sub__||method:__mul__||api:paddle.tensor.math.sum||method:__mul__||api:paddle.tensor.math.sum||method:__mul__||api:paddle.tensor.math.sum||method:sqrt||method:__mul__||api:paddle.tensor.math.sum||method:sqrt||api:paddle.tensor.math.min||method:pow||method:pow||method:__mul__||method:__add__||method:__truediv__||method:pow||method:pow||method:__mul__||method:__add__||method:__truediv__||method:__add__||method:__rmul__||api:paddle.exp||method:__truediv__||method:__rmul__||method:__add__||method:__truediv__
 import paddle
 import unittest
 import numpy as np
@@ -50,7 +50,7 @@ class LayerCase(paddle.nn.Layer):
         var_35 = var_31.__truediv__(var_34)
         var_36 = var_30.__add__(var_35)
         var_37 = var_36.__rmul__(-6.0)
-        var_38 = paddle.tensor.ops.exp(var_37)
+        var_38 = paddle.exp(var_37)
         var_39 = var_25.__truediv__(12)
         var_40 = var_39.__rmul__(6.283185307179586)
         var_41 = var_40.__add__(1e-09)

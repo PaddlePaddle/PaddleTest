@@ -1,4 +1,4 @@
-# api:paddle.nn.functional.pooling.adaptive_avg_pool2d||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.relu||api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.ops.sigmoid||method:__mul__||api:paddle.nn.functional.pooling.adaptive_avg_pool2d||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.relu||api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.ops.sigmoid||method:__mul__||api:paddle.nn.functional.pooling.adaptive_avg_pool2d||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.relu||api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.ops.sigmoid||method:__mul__||api:paddle.tensor.manipulation.concat||api:paddle.tensor.manipulation.concat||api:paddle.tensor.manipulation.concat||api:paddle.tensor.attribute.shape||method:__getitem__||method:__getitem__||method:__getitem__||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.linalg.transpose||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.attribute.shape||method:__getitem__||method:__getitem__||method:__getitem__||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.linalg.transpose||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.attribute.shape||method:__getitem__||method:__getitem__||method:__getitem__||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.linalg.transpose||api:paddle.tensor.manipulation.reshape
+# api:paddle.nn.functional.pooling.adaptive_avg_pool2d||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.relu||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.sigmoid||method:__mul__||api:paddle.nn.functional.pooling.adaptive_avg_pool2d||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.relu||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.sigmoid||method:__mul__||api:paddle.nn.functional.pooling.adaptive_avg_pool2d||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.activation.relu||api:paddle.nn.functional.conv._conv_nd||api:paddle.nn.functional.sigmoid||method:__mul__||api:paddle.tensor.manipulation.concat||api:paddle.tensor.manipulation.concat||api:paddle.tensor.manipulation.concat||api:paddle.tensor.attribute.shape||method:__getitem__||method:__getitem__||method:__getitem__||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.linalg.transpose||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.attribute.shape||method:__getitem__||method:__getitem__||method:__getitem__||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.linalg.transpose||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.attribute.shape||method:__getitem__||method:__getitem__||method:__getitem__||api:paddle.tensor.manipulation.reshape||api:paddle.tensor.linalg.transpose||api:paddle.tensor.manipulation.reshape
 import paddle
 import unittest
 import numpy as np
@@ -68,19 +68,19 @@ class LayerCase(paddle.nn.Layer):
         var_7 = paddle.nn.functional.conv._conv_nd(var_6, self.parameter_8, bias=self.parameter_9, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         var_8 = paddle.nn.functional.activation.relu(var_7)
         var_9 = paddle.nn.functional.conv._conv_nd(var_8, self.parameter_2, bias=self.parameter_6, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_10 = paddle.tensor.ops.sigmoid(var_9)
+        var_10 = paddle.nn.functional.sigmoid(var_9)
         var_11 = var_0.__mul__(var_10)
         var_12 = paddle.nn.functional.pooling.adaptive_avg_pool2d(var_1, output_size=1, data_format='NCHW', name=None)
         var_13 = paddle.nn.functional.conv._conv_nd(var_12, self.parameter_11, bias=self.parameter_7, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         var_14 = paddle.nn.functional.activation.relu(var_13)
         var_15 = paddle.nn.functional.conv._conv_nd(var_14, self.parameter_4, bias=self.parameter_0, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_16 = paddle.tensor.ops.sigmoid(var_15)
+        var_16 = paddle.nn.functional.sigmoid(var_15)
         var_17 = var_1.__mul__(var_16)
         var_18 = paddle.nn.functional.pooling.adaptive_avg_pool2d(var_2, output_size=1, data_format='NCHW', name=None)
         var_19 = paddle.nn.functional.conv._conv_nd(var_18, self.parameter_3, bias=self.parameter_1, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
         var_20 = paddle.nn.functional.activation.relu(var_19)
         var_21 = paddle.nn.functional.conv._conv_nd(var_20, self.parameter_5, bias=self.parameter_10, stride=[1, 1], padding=[0, 0], padding_algorithm='EXPLICIT', dilation=[1, 1], groups=1, data_format='NCHW', channel_dim=1, op_type='conv2d', use_cudnn=True)
-        var_22 = paddle.tensor.ops.sigmoid(var_21)
+        var_22 = paddle.nn.functional.sigmoid(var_21)
         var_23 = var_2.__mul__(var_22)
         var_24 = paddle.tensor.manipulation.concat([var_3, var_11], axis=1)
         var_25 = paddle.tensor.manipulation.concat([var_4, var_17], axis=1)

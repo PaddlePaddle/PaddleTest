@@ -1,4 +1,4 @@
-# api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.manipulation.split||api:paddle.tensor.ops.sigmoid||api:paddle.vision.ops.deform_conv2d
+# api:paddle.nn.functional.conv._conv_nd||api:paddle.tensor.manipulation.split||api:paddle.nn.functional.sigmoid||api:paddle.vision.ops.deform_conv2d
 import paddle
 import unittest
 import numpy as np
@@ -31,7 +31,7 @@ class LayerCase(paddle.nn.Layer):
         out = paddle.tensor.manipulation.split(var_1, num_or_sections=[18, 9], axis=1)
         var_2 = out[0]
         var_3 = out[1]
-        var_4 = paddle.tensor.ops.sigmoid(var_3)
+        var_4 = paddle.nn.functional.sigmoid(var_3)
         var_5 = paddle.vision.ops.deform_conv2d(x=var_0, offset=var_2, weight=self.parameter_1, bias=self.parameter_0, stride=[1, 1], padding=[1, 1], dilation=[1, 1], deformable_groups=1, groups=1, mask=var_4)
         return var_5
 
