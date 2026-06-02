@@ -115,6 +115,13 @@ function DockerImages () {
             export env_cudnn_version="9.13.0"
             export env_trt_version="10.13.3.9"
             ;;
+        "Cuda132")
+            echo "Selected Almalinux: Cuda132"
+            export Image_version="ccr-2vdh3abv-pub.cnc.bj.baidubce.com/paddlepaddle/paddle_manylinux_devel:cuda13.2-cudnn9.20-trt10.16-gcc11"
+            export env_cuda_version="13.2"
+            export env_cudnn_version="9.20.0"
+            export env_trt_version="10.16.1.14"
+            ;;
         *)
             DOCKER_EXIT_CODE=101
             ;;
