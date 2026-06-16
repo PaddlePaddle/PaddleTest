@@ -21,52 +21,29 @@ jobs:
           - repository: "PaddlePaddle/PaddleClas"
             ref: "develop"
             submodules: "false"
-            fetch_depth: 1
+            fetch_depth: 10
             path: "PaddleClas"
           - repository: "PaddlePaddle/PaddleOCR"
             ref: "main"
             submodules: "false"
-            fetch_depth: 1
             path: "PaddleOCR"
           - repository: "PaddlePaddle/PaddleDetection"
             ref: "develop"
             submodules: "false"
-            fetch_depth: 1
+            fetch_depth: 10
             path: "PaddleDetection"
           - repository: "PaddlePaddle/PaddleSeg"
             ref: "develop"
             submodules: "false"
-            fetch_depth: 1
+            fetch_depth: 10
             path: "PaddleSeg"
-          - repository: "PaddlePaddle/PaddleTS"
-            ref: "release_v1.1"
-            submodules: "false"
-            fetch_depth: 1
-            path: "PaddleTS"
-          - repository: "PaddlePaddle/PaddleNLP"
-            ref: "release/2.9"
-            submodules: "false"
-            fetch_depth: 1
-            path: "PaddleNLP"
-          - repository: "PaddlePaddle/PaddleVideo"
-            ref: "develop"
-            submodules: "false"
-            fetch_depth: 1
-            path: "PaddleVideo"
-          - repository: "PaddlePaddle/Paddle3D"
-            ref: "develop"
-            submodules: "false"
-            fetch_depth: 1
-            path: "Paddle3D"
           - repository: "PaddlePaddle/PaddleX"
             ref: "develop"
             submodules: "false"
-            fetch_depth: 1
             path: "PaddleX"
           - repository: "PaddlePaddle/PaddleFormers"
             ref: "develop"
             submodules: "false"
-            fetch_depth: 1
             path: "PaddleFormers"
           - repository: "PaddlePaddle/PaddleTest"
             ref: "develop"
