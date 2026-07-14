@@ -22,11 +22,9 @@ MACHINE_TYPE=`uname -m`
 echo "MACHINE_TYPE: "${MACHINE_TYPE}
 config_list='ppyolo_r50vd_dcn_1x_coco ppyolov2_r50vd_dcn_365e_coco yolov3_darknet53_270e_coco solov2_r50_fpn_1x_coco faster_rcnn_r50_fpn_1x_coco mask_rcnn_r50_1x_coco s2anet_conv_2x_dota ssd_mobilenet_v1_300_120e_voc ttfnet_darknet53_1x_coco fcos_r50_fpn_1x_coco'
 config_list_cpp='ppyolo_r50vd_dcn_1x_coco ppyolov2_r50vd_dcn_365e_coco yolov3_darknet53_270e_coco faster_rcnn_r50_fpn_1x_coco mask_rcnn_r50_1x_coco s2anet_conv_2x_dota ssd_mobilenet_v1_300_120e_voc ttfnet_darknet53_1x_coco fcos_r50_fpn_1x_coco'
-config_skip_trt8='ppyolo_r50vd_dcn_1x_coco ppyolov2_r50vd_dcn_365e_coco solov2_r50_fpn_1x_coco faster_rcnn_r50_fpn_1x_coco mask_rcnn_r50_1x_coco ttfnet_darknet53_1x_coco fcos_r50_fpn_1x_coco s2anet_conv_2x_dota'
 config_skip_bs2='solov2_r50_fpn_1x_coco mask_rcnn_r50_1x_coco s2anet_conv_2x_dota'
 config_skip_video='mask_rcnn_r50_1x_coco'
 config_s2anet='s2anet_conv_2x_dota'
-mode_list='trt_fp32 trt_fp16 trt_int8 paddle'
 err_sign=false
 print_result_python(){
     if [ $? -ne 0 ];then
@@ -42,14 +40,14 @@ print_result_python(){
         echo -e "${config}_${mode},python_infer,SUCCESS"
     fi
 }
-python_trt(){
+python_gpu(){
+    mode=paddle
     python deploy/python/infer.py \
            --model_dir=./inference_model/${config} \
            --image_file=${image} \
            --device=GPU \
-           --run_mode=${mode} \
+           --run_mode=paddle \
            --threshold=0.5 \
-           --trt_calib_mode=${trt_calib_mode} \
            --output_dir=python_infer_output/${config}_${mode} >logs/${config}_${mode}.log 2>&1
     print_result_python
 }
@@ -109,19 +107,7 @@ python tools/export_model.py \
        -c configs/${model} \
        --output_dir=inference_model \
        -o weights=https://paddledet.bj.bcebos.com/models/${config}.pdparams
-for mode in ${mode_list}
-do
-if [[ ${mode} == 'trt_int8' ]];then
-    trt_calib_mode=True
-else
-    trt_calib_mode=False
-fi
-if [[ ${mode} == 'trt_int8' ]] && [[ -n `echo "${config_skip_trt8}" | grep -w "${config}"` ]];then
-    echo -e "***skip trt_int8 for ${config}"
-else
-    python_trt
-fi
-done
+python_gpu
 python_cpu
 python_mkldnn
 if [[ -n `echo "${config_skip_bs2}" | grep -w "${config}"` ]];then
@@ -143,16 +129,12 @@ tar -xvf paddle_inference.tgz
 mv paddle_inference_install_dir paddle_inference
 sed -i "s|/path/to/paddle_inference|../paddle_inference|g" scripts/build.sh
 sed -i "s|WITH_GPU=OFF|WITH_GPU=ON|g" scripts/build.sh
-sed -i "s|WITH_TENSORRT=OFF|WITH_TENSORRT=ON|g" scripts/build.sh
 sed -i "s|CUDA_LIB=/path/to/cuda/lib|CUDA_LIB=/usr/local/cuda/lib64|g" scripts/build.sh
 if [[ "$MACHINE_TYPE" == "aarch64" ]]
 then
 sed -i "s|WITH_MKL=ON|WITH_MKL=OFF|g" scripts/build.sh
-sed -i "s|TENSORRT_INC_DIR=/path/to/tensorrt/include|TENSORRT_INC_DIR=/usr/include/aarch64-linux-gnu|g" scripts/build.sh
-sed -i "s|TENSORRT_LIB_DIR=/path/to/tensorrt/lib|TENSORRT_LIB_DIR=/usr/lib/aarch64-linux-gnu|g" scripts/build.sh
 sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/aarch64-linux-gnu|g" scripts/build.sh
 else
-sed -i "s|TENSORRT_LIB_DIR=/path/to/tensorrt/lib|TENSORRT_LIB_DIR=/usr/local/TensorRT6-cuda10.1-cudnn7/lib|g" scripts/build.sh
 sed -i "s|CUDNN_LIB=/path/to/cudnn/lib|CUDNN_LIB=/usr/lib/x86_64-linux-gnu|g" scripts/build.sh
 fi
 sh scripts/build.sh
@@ -171,8 +153,9 @@ print_result_cpp(){
         echo -e "${config}_${mode},cpp_infer,SUCCESS"
     fi
 }
-cpp_trt(){
-    ./deploy/cpp/build/main --model_dir=inference_model/${config} --image_file=${image} --output_dir=cpp_infer_output/${config}_${mode} --device=GPU --run_mode=${mode} --threshold=0.5 --trt_calib_mode=${trt_calib_mode} >logs_cpp/${config}_${mode}.log 2>&1
+cpp_gpu(){
+    mode=paddle
+    ./deploy/cpp/build/main --model_dir=inference_model/${config} --image_file=${image} --output_dir=cpp_infer_output/${config}_${mode} --device=GPU --run_mode=paddle --threshold=0.5 >logs_cpp/${config}_${mode}.log 2>&1
 print_result_cpp
 }
 cpp_cpu(){
@@ -201,19 +184,7 @@ image=demo/000000570688.jpg
 if [[ -n `echo "${config_s2anet}" | grep -w "${config}"` ]];then
     image=demo/P0072__1.0__0___0.png
 fi
-for mode in ${mode_list}
-do
-if [[ ${mode} == 'trt_int8' ]];then
-    trt_calib_mode=True
-else
-    trt_calib_mode=False
-fi
-if [[ ${mode} == 'trt_int8' ]] && [[ -n `echo "${config_skip_trt8}" | grep -w "${config}"` ]];then
-    echo -e "***skip trt_int8 for ${config}"
-else
-    cpp_trt
-fi
-done
+cpp_gpu
 cpp_cpu
 cpp_mkldnn
 if [[ -n `echo "${config_skip_bs2}" | grep -w "${config}"` ]];then

@@ -89,7 +89,6 @@ def argsparser():
         default="GPU",
         help="Choose the device you want to run, it can be: CPU/GPU/XPU, default is GPU",
     )
-    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
     parser.add_argument(
         "--batch_size",
         default=32,
@@ -109,11 +108,6 @@ def argsparser():
         type=int,
         help="Warmup steps for performance test.",
     )
-    parser.add_argument(
-        "--use_trt",
-        action="store_true",
-        help="Whether to use inference engin TensorRT.",
-    )
     parser.add_argument("--use_l3", type=bool, default=False, help="Whether use L3_cache or not.")
     parser.add_argument(
         "--precision",
@@ -128,9 +122,8 @@ def argsparser():
         "--deploy_backend",
         type=str,
         default="paddle_inference",
-        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+        help="deploy backend, it can be: `paddle_inference`, `onnxruntime`",
     )
-    parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     return parser
 
@@ -311,45 +304,17 @@ def main(FLAGS):
             model_filename=FLAGS.model_filename,
             params_filename=FLAGS.params_filename,
             precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
             use_l3=FLAGS.use_l3,
             use_mkldnn=FLAGS.use_mkldnn,
-            batch_size=FLAGS.batch_size,
             device=FLAGS.device,
-            min_subgraph_size=5,
-            use_dynamic_shape=FLAGS.use_dynamic_shape,
             cpu_threads=FLAGS.cpu_threads,
-        )
-    elif FLAGS.deploy_backend == "tensorrt":
-        from backend.tensorrt import TensorRTEngine
-
-        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
-        token_dir = os.path.dirname(FLAGS.model_path)
-        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
-        print(engine_file)
-        predictor = TensorRTEngine(
-            onnx_model_file=FLAGS.model_path,
-            shape_info={
-                "x0": [[1, 128], [1, 128], [1, 128]],
-                "x1": [[1, 128], [1, 128], [1, 128]],
-                "x2": [[1, 128], [1, 128], [1, 128]],
-            },
-            max_batch_size=FLAGS.batch_size,
-            precision=FLAGS.precision,
-            engine_file_path=engine_file,
-            calibration_cache_file=FLAGS.calibration_file,
-            verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
         from backend.onnxruntime import ONNXRuntimeEngine
 
-        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
         token_dir = os.path.dirname(FLAGS.model_path)
-        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
-            precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
             use_mkldnn=FLAGS.use_mkldnn,
             device=FLAGS.device,
         )
@@ -380,7 +345,6 @@ def main(FLAGS):
 
 
 if __name__ == "__main__":
-    # If the device is not set to cpu, the nv-trt will report an error when executing
     paddle.set_device("cpu")
     parser = argsparser()
     FLAGS = parser.parse_args()

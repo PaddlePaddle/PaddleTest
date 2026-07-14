@@ -174,32 +174,7 @@ def test_ocr_accuracy_predict_mkl(yml_name, enable_mkldnn):
     category = r.group(1)
     print(category)
     model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
-    model.test_ocr_rec_predict(False, 0, enable_mkldnn)
-
-
-@allure.story("predict")
-@pytest.mark.parametrize("yml_name", get_model_list())
-@pytest.mark.parametrize("use_tensorrt", [True, False])
-def test_ocr_accuracy_predict_trt(yml_name, use_tensorrt):
-    """
-    test_ocr_accuracy_predict_trt
-    """
-    model_name = os.path.splitext(os.path.basename(yml_name))[0]
-    if use_tensorrt is True:
-        hardware = "_tensorRT"
-    else:
-        hardware = "_GPU"
-    allure.dynamic.title(model_name + hardware + "_predict")
-    allure.dynamic.description("预测库预测")
-
-    if model_name == "re_vi_layoutxlm_xfund_zh":
-        pytest.skip("not supported")
-
-    r = re.search("/(.*)/", yml_name)
-    category = r.group(1)
-    print(category)
-    model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
-    model.test_ocr_rec_predict(True, use_tensorrt, 0)
+    model.test_ocr_rec_predict(False, enable_mkldnn)
 
 
 def test_ocr_accuracy_predict_recovery():

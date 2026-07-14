@@ -129,17 +129,6 @@ predict:
       - --use_tensorrt=False
       - --enable_mkldnn=True
       - --det_model_dir=./models_inference/${qa_yaml_name}/Student
-  -
-    name: trained_tensorRT
-    cmd: python tools/infer/predict_det.py
-    params:
-      - --image_dir=doc/imgs_en/img_10.jpg
-      - --det_algorithm=${algorithm}
-      - --use_gpu=True
-      - --use_tensorrt=True
-      - --enable_mkldnn=False
-      - --det_model_dir=./models_inference/${qa_yaml_name}/Student
-
 api:
   name: trained_C_plus_plus_GPU
   path: deploy/cpp_infer

@@ -15,6 +15,5 @@
 """
 
 from .paddle_inference import PaddleInferenceEngine
-from .tensorrt import TensorRTEngine
 from .monitor import Monitor
 from .onnxruntime import ONNXRuntimeEngine

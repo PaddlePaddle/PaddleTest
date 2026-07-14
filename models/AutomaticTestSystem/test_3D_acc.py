@@ -165,32 +165,7 @@ def test_3D_accuracy_predict_python(yml_name, use_gpu):
 
     category = get_category(yml_name)
     model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
-    model.test_3D_predict_python(use_gpu, False)
-
-
-@allure.story("predict")
-@pytest.mark.parametrize("yml_name", get_model_list())
-@pytest.mark.parametrize("use_gpu", [True])
-def test_3D_accuracy_predict_python_trt(yml_name, use_gpu):
-    """
-    test_3D_accuracy_predict_python_trt
-    """
-    model_name = os.path.splitext(os.path.basename(yml_name))[0]
-    hardware = "_TensorRT"
-    allure.dynamic.title(model_name + hardware + "_predict")
-    allure.dynamic.description("预测库python预测")
-    pytest.skip("not supported for tensorRT predict")
-    if paddle.is_compiled_with_cuda() is False:
-        pytest.skip("CPU not supported for tensorRT predict")
-    category = get_category(yml_name)
-    if (category == "pointpillars") or (category == "centerpoint") or (category == "squeezesegv3"):
-        pytest.skip("not supoorted for tensorRT predict")
-    if sys.platform == "darwin":
-        pytest.skip("mac skip tensorRT predict")
-
-    category = get_category(yml_name)
-    model = Test3DModelFunction(model=model_name, yml=yml_name, category=category)
-    model.test_3D_predict_python(use_gpu, True)
+    model.test_3D_predict_python(use_gpu)
 
 
 @allure.story("train")

@@ -6,4 +6,3 @@ onnx
 GPUtil
 psutil
 pynvml
-tensorrt

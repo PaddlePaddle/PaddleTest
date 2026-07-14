@@ -44,10 +44,8 @@ def argsparser():
         "--deploy_backend",
         type=str,
         default="paddle_inference",
-        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+        help="deploy backend, it can be: `paddle_inference`, `onnxruntime`",
     )
-    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
-    parser.add_argument("--use_trt", type=bool, default=False, help="Whether use TensorRT or not.")
     parser.add_argument("--use_l3", type=bool, default=False, help="Whether use L3_cache or not.")
     parser.add_argument("--precision", type=str, default="paddle", help="mode of running(fp32/fp16/int8)")
     parser.add_argument(
@@ -59,7 +57,6 @@ def argsparser():
     parser.add_argument("--batch_size", type=int, default=1, help="Batch size of model input.")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
-    parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
     parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
@@ -92,19 +89,7 @@ def get_current_memory_mb():
     return round(cpu_mem, 4), round(gpu_mem, 4)
 
 
-def reader_wrapper(reader, input_field="image"):
-    """
-    reader wrapper func
-    """
-
-    def gen():
-        for data in reader:
-            yield np.array(data[input_field]).astype(np.float32)
-
-    return gen
-
-
-def eval(predictor, val_loader, anno_file, rerun_flag=False):
+def eval(predictor, val_loader, anno_file):
     """
     eval main func
     """
@@ -121,9 +106,7 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
     use_xpu = True if FLAGS.device == "XPU" else False
 
     monitor = Monitor(0, use_gpu, 0, use_xpu)
-
-    if not rerun_flag:
-        monitor.start()
+    monitor.start()
     for batch_id, data in enumerate(val_loader):
         data_all = {k: np.array(v) for k, v in data.items()}
 
@@ -142,8 +125,6 @@ def eval(predictor, val_loader, anno_file, rerun_flag=False):
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
-        if rerun_flag:
-            return
         postprocess = YOLOPostProcess(score_threshold=0.001, nms_threshold=0.65, multi_label=True)
         res = postprocess(np.array(outs), data_all["scale_factor"])
         bboxes_list.append(res["bbox"])
@@ -244,49 +225,21 @@ def main():
         predictor = PaddleInferenceEngine(
             model_dir=FLAGS.model_path,
             precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
             use_l3=FLAGS.use_l3,
             use_mkldnn=FLAGS.use_mkldnn,
-            batch_size=FLAGS.batch_size,
             device=FLAGS.device,
-            min_subgraph_size=3,
-            use_dynamic_shape=FLAGS.use_dynamic_shape,
             cpu_threads=FLAGS.cpu_threads,
-        )
-    elif FLAGS.deploy_backend == "tensorrt":
-        from backend.tensorrt import TensorRTEngine
-
-        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
-        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
-        predictor = TensorRTEngine(
-            onnx_model_file=FLAGS.model_path,
-            shape_info=None,
-            max_batch_size=FLAGS.batch_size,
-            precision=FLAGS.precision,
-            engine_file_path=engine_file,
-            calibration_cache_file=FLAGS.calibration_file,
-            calibration_loader=reader_wrapper(val_loader),
-            verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
         from backend.onnxruntime import ONNXRuntimeEngine
 
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
-            precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
             use_mkldnn=FLAGS.use_mkldnn,
             device=FLAGS.device,
         )
-    else:
-        raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
 
-    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
-
-    eval(predictor, val_loader, anno_file, rerun_flag=rerun_flag)
-
-    if rerun_flag:
-        print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
+    eval(predictor, val_loader, anno_file)
 
 
 if __name__ == "__main__":

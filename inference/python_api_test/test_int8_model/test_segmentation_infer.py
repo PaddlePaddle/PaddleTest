@@ -16,7 +16,6 @@
 
 import argparse
 import time
-import os
 import sys
 import cv2
 import numpy as np
@@ -48,11 +47,10 @@ def argsparser():
         "--deploy_backend",
         type=str,
         default="paddle_inference",
-        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
+        help="deploy backend, it can be: `paddle_inference`, `onnxruntime`",
     )
     parser.add_argument("--dataset_config", type=str, default=None, help="path of dataset config.")
     parser.add_argument("--benchmark", type=bool, default=False, help="Whether to run benchmark or not.")
-    parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt engine or not.")
     parser.add_argument("--use_l3", type=bool, default=False, help="Whether use L3_cache or not.")
     parser.add_argument(
         "--device",
@@ -70,13 +68,12 @@ def argsparser():
     )
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
-    parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
     parser.add_argument("--small_data", action="store_true", default=False, help="Whether use small data to eval.")
     return parser
 
 
-def eval(predictor, loader, eval_dataset, rerun_flag):
+def eval(predictor, loader, eval_dataset):
     """
     eval mIoU func
     """
@@ -93,9 +90,7 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
     use_xpu = True if FLAGS.device == "XPU" else False
 
     monitor = Monitor(0, use_gpu, 0, use_xpu)
-
-    if not rerun_flag:
-        monitor.start()
+    monitor.start()
     print("Start evaluating (total_samples: {}, total_iters: {}).".format(FLAGS.total_samples, FLAGS.sample_nums))
 
     for batch_id, data in enumerate(loader):
@@ -120,9 +115,6 @@ def eval(predictor, loader, eval_dataset, rerun_flag):
         time_min = min(time_min, timed)
         time_max = max(time_max, timed)
         predict_time += timed
-        if rerun_flag:
-            return
-
         logit = reverse_transform(paddle.to_tensor(outs[0]), trans_info, mode="bilinear")
         pred = paddle.to_tensor(logit)
         if len(pred.shape) == 4:  # for humanseg model whose prediction is distribution but not class id
@@ -250,48 +242,21 @@ def main():
             model_filename=FLAGS.model_filename,
             params_filename=FLAGS.params_filename,
             precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
             use_l3=FLAGS.use_l3,
             use_mkldnn=FLAGS.use_mkldnn,
-            batch_size=FLAGS.batch_size,
             device=FLAGS.device,
-            min_subgraph_size=3,
-            use_dynamic_shape=True,
             cpu_threads=FLAGS.cpu_threads,
-        )
-    elif FLAGS.deploy_backend == "tensorrt":
-        from backend.tensorrt import TensorRTEngine
-
-        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
-        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
-        predictor = TensorRTEngine(
-            onnx_model_file=FLAGS.model_path,
-            shape_info=None,
-            max_batch_size=FLAGS.batch_size,
-            precision=FLAGS.precision,
-            engine_file_path=engine_file,
-            calibration_cache_file=FLAGS.calibration_file,
-            verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
         from backend.onnxruntime import ONNXRuntimeEngine
 
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
-            precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
             use_mkldnn=FLAGS.use_mkldnn,
             device=FLAGS.device,
         )
-    else:
-        raise ValueError("deploy_backend not support {}".format(FLAGS.deploy_backend))
 
-    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
-
-    eval(predictor, eval_loader, eval_dataset, rerun_flag)
-
-    if rerun_flag:
-        print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
+    eval(predictor, eval_loader, eval_dataset)
 
 
 if __name__ == "__main__":

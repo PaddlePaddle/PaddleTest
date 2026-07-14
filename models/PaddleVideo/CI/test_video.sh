@@ -83,28 +83,11 @@ INFER(){
            --use_tensorrt=False >log/${model}/${model}_infer.log 2>&1
     print_result
 }
-TRT(){
-    mode=trt
-    python tools/predict.py \
-           --input_file data/k400/videos/abseiling/_UtLXOVn5Jk_000083_000093.mp4 \
-           --config ${config} \
-           --model_file inference/${model}/${model}.pdmodel \
-           --params_file inference/${model}/${model}.pdiparams \
-           --use_gpu=True \
-           --use_tensorrt=True \
-           --batch_size=${trt_bs} >log/${model}/${model}_trt.log 2>&1
-    print_result
-}
 model_list='TSM ppTSN'
 for model in ${model_list}
 do
 typeset -l model_small
 model_small=${model}
-if [[ ${model} == 'TSM' ]];then
-trt_bs=8
-else
-trt_bs=2
-fi
 config=`cat model_list_video | grep ${model_small}`
 cd log
 mkdir ${model}
@@ -113,7 +96,6 @@ TRAIN
 EVAL
 EXPORT
 INFER
-TRT
 done
 if [ "${err_sign}" = true ];then
     exit 1

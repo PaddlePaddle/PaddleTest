@@ -3,16 +3,11 @@ export FLAGS_call_stack_level=2
 # V100 total:690.25s
 cases="./test_resnet50_gpu.py \
        ./test_resnet50_mkldnn.py \
-       ./test_resnet50_trt_fp16.py \
-       ./test_resnet50_trt_fp32.py \
        ./test_resnet50_slim.py \
        ./test_swin_transformer_gpu.py \
-       ./test_swin_transformer_trt_fp32.py \
        ./test_tnt_small_gpu.py \
-       ./test_tnt_small_trt_fp32.py \
        ./test_vgg11_gpu.py \
        ./test_vgg11_mkldnn.py \
-       ./test_ViT_base_patch16_224_trt_fp32.py \
       "
 ignore=""
 bug=0

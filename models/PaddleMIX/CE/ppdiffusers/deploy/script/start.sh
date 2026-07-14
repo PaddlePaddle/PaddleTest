@@ -30,16 +30,6 @@ fi
 echo "*******ppdiffusers/deploy/controlnet end***********"
 
 
-# controlnet_tensorrt
-(bash scripts/benchmark_paddle_deploy_tensorrt.sh) 2>&1 | tee ${log_dir}/controlnet_tensorrt.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/controlnet_tensorrt  success" >>"${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/controlnet_tensorrt  fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/controlnet_tensorrt end***********"
 cd ..
 
 
@@ -56,16 +46,6 @@ else
 fi
 echo "*******ppdiffusers/deploy/ipadapter_sd15 end***********"
 
-# ipadapter/sd15 tensorrt
-(bash scripts/benchmark_paddle_deploy_tensorrt.sh) 2>&1 | tee ${log_dir}/ipadapter_sd15_tensorrt.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/ipadapter_sd15_tensorrt  success" >>"${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/ipadapter_sd15_tensorrt  fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/ipadapter_sd15_tensorrt end***********"
 cd ../../
 
 # ipadapter sdxl
@@ -80,16 +60,6 @@ else
 fi
 echo "*******ppdiffusers/deploy/ipadapter_sdxl end***********"
 
-# ipadapter sdxl tensorrt
-(bash scripts/benchmark_paddle_deploy_tensorrt.sh) 2>&1 | tee ${log_dir}/ipadapter_sdxl_tensorrt.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/ipadapter_sdxl_tensorrt  success" >>"${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/ipadapter_sdxl_tensorrt  fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/ipadapter_sdxl_tensorrt end***********"
 cd ../../
 
 # sd15
@@ -105,16 +75,6 @@ fi
 echo "*******ppdiffusers/deploy/sd15 end***********"
 
 
-# sd15_tensorrt
-(bash scripts/benchmark_paddle_deploy_tensorrt.sh) 2>&1 | tee ${log_dir}/sd15_tensorrt.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/sd15_tensorrt  success" >>"${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/sd15_tensorrt  fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/sd15_tensorrt end***********"
 cd ..
 
 # sdxl
@@ -130,16 +90,6 @@ fi
 echo "*******ppdiffusers/deploy/sdxl end***********"
 
 
-# sdxl_tensorrt
-(bash scripts/benchmark_paddle_deploy_tensorrt.sh) 2>&1 | tee ${log_dir}/sdxl_tensorrt.log
-tmp_exit_code=${PIPESTATUS[0]}
-exit_code=$(($exit_code + ${tmp_exit_code}))
-if [ ${tmp_exit_code} -eq 0 ]; then
-    echo "ppdiffusers/deploy/sdxl_tensorrt  success" >>"${log_dir}/ce_res.log"
-else
-    echo "ppdiffusers/deploy/sdxl_tensorrt  fail" >>"${log_dir}/ce_res.log"
-fi
-echo "*******ppdiffusers/deploy/sdxl_tensorrt end***********"
 cd ..
 
 # sd3 

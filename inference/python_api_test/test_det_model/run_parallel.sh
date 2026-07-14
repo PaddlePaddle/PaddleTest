@@ -4,21 +4,17 @@ export FLAGS_call_stack_level=2
 # ./test_ppyolov2_mkldnn.py \
 cases="./test_fast_rcnn_mkldnn.py \
        ./test_fast_rcnn_gpu.py \
-       ./test_fast_rcnn_trt_fp32.py \
        ./test_ppyolo_mkldnn.py \
        ./test_ppyolo_gpu.py \
-       ./test_ppyolo_trt_fp32.py \
        ./test_ppyolov2_gpu.py \
        ./test_yolov3_gpu.py \
        ./test_yolov3_mkldnn.py \
-       ./test_yolov3_trt_fp32.py \
        ../test_nlp_model/test_bert_gpu.py \
        ../test_nlp_model/test_bert_mkldnn.py \
        ../test_nlp_model/test_ernie_gpu.py \
        ../test_nlp_model/test_ernie_mkldnn.py \
        ../test_ocr_model/test_ocr_det_mv3_db_gpu.py \
        ../test_ocr_model/test_ocr_det_mv3_db_mkldnn.py \
-       ../test_ocr_model/test_ocr_det_mv3_db_trt_fp32.py \
       "
 bug=0
 

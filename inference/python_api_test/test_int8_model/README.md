@@ -11,30 +11,6 @@
 sh prepare.sh
 ```
 
-## Paddle Inference TensorRT测试
-- INT8
-
-```shell
-sh run_trt_int8.sh > eval_trt_int8_acc.log 2>&1 &
-```
-
-收集重要log信息：
-```shell
-grep -i Benchmark eval_trt_int8_acc.log
-```
-
-- FP16
-
-```shell
-sh run_trt_fp16.sh > eval_trt_fp16_acc.log 2>&1 &
-```
-
-收集重要log信息：
-```shell
-grep -i Benchmark eval_trt_fp16_acc.log
-```
-
-
 ## Paddle Inference MKLDNN测试
 - INT8
 

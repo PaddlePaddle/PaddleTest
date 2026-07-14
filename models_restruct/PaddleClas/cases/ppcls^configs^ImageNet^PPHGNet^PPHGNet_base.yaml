@@ -29,9 +29,6 @@ case:
         name: trained
       -
         name: trained_mkldnn
-      -
-        name: trained_trt
-
   linux_convergence:
     base: ./base/ImageNet_base.yaml
     train:
@@ -73,9 +70,6 @@ case:
         name: function
       -
         name: function_mkldnn
-      -
-        name: function_trt
-
   windows_cpu:
     base: ./base/ImageNet_base.yaml
     train:

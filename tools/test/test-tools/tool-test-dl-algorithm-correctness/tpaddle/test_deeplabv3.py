@@ -97,7 +97,7 @@ def test_config():
 
 def test_gpu_bz1():
     """
-    compared trt gpu batch_size=1 deeplabv3p_resnet50 outputs with true val
+    compared gpu batch_size=1 deeplabv3p_resnet50 outputs with true val
     """
     check_model_exist()
 

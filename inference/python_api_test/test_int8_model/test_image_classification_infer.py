@@ -45,7 +45,6 @@ def argsparser():
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether to use mkldnn")
     parser.add_argument("--cpu_num_threads", type=int, default=10, help="Number of cpu threads")
     parser.add_argument("--precision", type=str, default="paddle", help="mode of running(fp32/fp16/int8)")
-    parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt")
     parser.add_argument("--use_l3", type=bool, default=False, help="Whether use L3_cache or not.")
     parser.add_argument("--gpu_mem", type=int, default=8000, help="GPU memory")
     parser.add_argument(
@@ -56,19 +55,11 @@ def argsparser():
     )
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--ir_optim", type=bool, default=True)
-    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
-    parser.add_argument("--calibration_file", type=str, default=None, help="quant onnx model calibration cache file.")
     parser.add_argument(
         "--deploy_backend",
         type=str,
         default="paddle_inference",
-        help="deploy backend, it can be: `paddle_inference`, `tensorrt`, `onnxruntime`",
-    )
-    parser.add_argument(
-        "--input_name",
-        type=str,
-        default="x",
-        help="input name of image classification model, this is only used by nv-trt",
+        help="deploy backend, it can be: `paddle_inference`, `onnxruntime`",
     )
     parser.add_argument(
         "--small_data",
@@ -87,18 +78,6 @@ def eval_reader(data_dir, batch_size, crop_size, resize_size):
     val_reader = ImageNetDataset(mode="val", data_dir=data_dir, crop_size=crop_size, resize_size=resize_size)
     val_loader = DataLoader(val_reader, batch_size=batch_size, shuffle=False, drop_last=False, num_workers=0)
     return val_loader
-
-
-def reader_wrapper(reader, input_field="inputs"):
-    """
-    reader wrapper func
-    """
-
-    def gen():
-        for batch_id, (image, label) in enumerate(reader):
-            yield np.array(image).astype(np.float32)
-
-    return gen
 
 
 def eval(predictor, FLAGS):
@@ -126,11 +105,7 @@ def eval(predictor, FLAGS):
     use_xpu = True if FLAGS.device == "XPU" else False
 
     monitor = Monitor(0, use_gpu, 0, use_xpu)
-
-    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
-    # in collect shape mode ,we do not start monitor!
-    if not rerun_flag:
-        monitor.start()
+    monitor.start()
     for batch_id, (image, label) in enumerate(val_loader):
         image = np.array(image)
         # classfication model usually having only one input
@@ -169,9 +144,6 @@ def eval(predictor, FLAGS):
         if batch_id % 100 == 0:
             print("Eval iter:", batch_id)
             sys.stdout.flush()
-        if rerun_flag:
-            return
-
     monitor.stop()
     monitor_result = monitor.output()
 
@@ -192,12 +164,8 @@ def eval(predictor, FLAGS):
     result = np.mean(np.array(results), axis=0)
     fp_message = FLAGS.precision
     print_msg = "Paddle-Inference-GPU"
-    if FLAGS.use_trt and FLAGS.deploy_backend == "paddle_inference":
-        print_msg = "using Paddle-TensorRT"
-    elif FLAGS.use_mkldnn:
+    if FLAGS.use_mkldnn:
         print_msg = "using Paddle-MKLDNN"
-    elif FLAGS.deploy_backend == "tensorrt":
-        print_msg = "using NV-TensorRT"
     time_avg = predict_time / sample_nums
     print(
         "[Benchmark]{}\t{}\tbatch size: {}.Inference time(ms): min={}, max={}, avg={}".format(
@@ -279,56 +247,20 @@ def main(FLAGS):
             model_filename=FLAGS.model_filename,
             params_filename=FLAGS.params_filename,
             precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
             use_l3=FLAGS.use_l3,
             use_mkldnn=FLAGS.use_mkldnn,
-            batch_size=FLAGS.batch_size,
             device=FLAGS.device,
-            min_subgraph_size=3,
-            use_dynamic_shape=FLAGS.use_dynamic_shape,
             cpu_threads=FLAGS.cpu_threads,
-        )
-    elif FLAGS.deploy_backend == "tensorrt":
-        from backend.tensorrt import TensorRTEngine
-
-        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
-        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
-        print(engine_file)
-        predictor = TensorRTEngine(
-            onnx_model_file=FLAGS.model_path,
-            shape_info={FLAGS.input_name: [[1, 3, 224, 224], [1, 3, 224, 224], [1, 3, 224, 224]]},
-            max_batch_size=FLAGS.batch_size,
-            precision=FLAGS.precision,
-            engine_file_path=engine_file,
-            calibration_cache_file=FLAGS.calibration_file,
-            calibration_loader=reader_wrapper(
-                eval_reader(
-                    FLAGS.data_path,
-                    batch_size=FLAGS.batch_size,
-                    crop_size=FLAGS.img_size,
-                    resize_size=FLAGS.resize_size,
-                )
-            ),
-            verbose=False,
         )
     elif FLAGS.deploy_backend == "onnxruntime":
         from backend.onnxruntime import ONNXRuntimeEngine
 
-        model_name = os.path.split(FLAGS.model_path)[-1].rstrip(".onnx")
-        engine_file = "{}_{}_model.trt".format(model_name, FLAGS.precision)
-        print(engine_file)
         predictor = ONNXRuntimeEngine(
             onnx_model_file=FLAGS.model_path,
-            precision=FLAGS.precision,
-            use_trt=FLAGS.use_trt,
             use_mkldnn=FLAGS.use_mkldnn,
             device=FLAGS.device,
         )
     eval(predictor, FLAGS)
-    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
-    if rerun_flag:
-        print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
-        return
 
 
 if __name__ == "__main__":
