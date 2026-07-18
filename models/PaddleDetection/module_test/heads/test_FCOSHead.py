@@ -34,7 +34,6 @@ class Config:
             sqrt_score=False,
             fcos_loss="FCOSLoss",
             nms="MultiClassNMS",
-            trt=False,
         )
         self.net.eval()
         feat1 = paddle.rand(shape=[4, 256, 32, 32])

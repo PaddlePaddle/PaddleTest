@@ -34,7 +34,6 @@ class Config:
             angle_max=90,
             use_varifocal_loss=True,
             static_assigner_epoch=-1,
-            trt=False,
             export_onnx=False,
             static_assigner=fcosrassigner,
             assigner=rotatedassigner,

@@ -338,7 +338,6 @@ def res2db(env, benchmark_res, mode_list, metric_list):
                 "model_name": model,
                 "batch_size": info["batch_size"],
                 "fp_mode": "int8",
-                "use_trt": False,
                 "use_mkldnn": True,
                 "jingdu": info["jingdu"]["value"],
                 "jingdu_unit": info["jingdu"]["unit"],
@@ -354,7 +353,6 @@ def res2db(env, benchmark_res, mode_list, metric_list):
                 "python_version": env["python_version"],
                 "cuda_version": env["cuda_version"],
                 "cudnn_version": env["cudnn_version"],
-                "trt_version": env["trt_version"],
                 "device": env["device"],
                 "thread_num": 1,
             }
@@ -376,11 +374,10 @@ def run():
     python_version = sys.argv[6]
     cuda_version = sys.argv[7]
     cudnn_version = sys.argv[8]
-    trt_version = sys.argv[9]
-    device = sys.argv[10]
-    modes = sys.argv[11]
-    metrics = sys.argv[12]
-    save_file = sys.argv[13]
+    device = sys.argv[9]
+    modes = sys.argv[10]
+    metrics = sys.argv[11]
+    save_file = sys.argv[12]
 
     mode_list = modes.split(",")
     metric_list = metrics.split(",")
@@ -395,7 +392,6 @@ def run():
         "python_version": python_version,
         "cuda_version": cuda_version,
         "cudnn_version": cudnn_version,
-        "trt_version": trt_version,
         "device": device,
         "threshold": "时延/内存/显存 0.05，精度 0.01",
     }

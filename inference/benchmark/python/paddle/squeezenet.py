@@ -14,7 +14,6 @@ import numpy as np
 
 from paddle.inference import Config
 from paddle.inference import create_predictor
-from paddle.inference import PrecisionType
 
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -40,25 +39,11 @@ def init_predictor(args):
         args : input args
 
     """
-    use_calib_mode = False
-    if args.trt_precision == "int8":
-        use_calib_mode = True
-
     config = Config("./squeezenet/inference.pdmodel", "./squeezenet/inference.pdiparams")
 
     config.enable_memory_optim()
-    trt_precision_map = {"fp32": PrecisionType.Float32, "fp16": PrecisionType.Half, "int8": PrecisionType.Int8}
     if args.device == "gpu":
         config.enable_use_gpu(1000, 0)
-        if args.use_trt:
-            config.enable_tensorrt_engine(
-                1 << 30,  # workspace_size
-                10,  # max_batch_size
-                3,  # min_subgraph_size
-                trt_precision_map[args.trt_precision],  # precision
-                False,  # use_static
-                use_calib_mode,  # use_calib_mode
-            )
     elif args.device == "cpu" and args.use_mkldnn:
         config.enable_mkldnn()
 
@@ -99,11 +84,7 @@ def parse_args():
     parser.add_argument("--warmup_times", type=int, default=10, help="warmup_times.")
     parser.add_argument("--repeats", type=int, default=1000, help="repeats.")
     parser.add_argument("--device", type=str, default="gpu", help="[gpu,cpu,xpu]")
-    parser.add_argument("--use_trt", type=bool, default=False, help="Whether use trt.")
-    parser.add_argument("--trt_precision", type=str, default="fp32", help="Whether use gpu.")
-    parser.add_argument(
-        "--use_mkldnn", type=int, default=False, help="trt precision, choice = ['fp32', 'fp16', 'int8']"
-    )
+    parser.add_argument("--use_mkldnn", type=int, default=False, help="use mkldnn")
     return parser.parse_args()
 
 
@@ -119,9 +100,6 @@ def summary_config(args, infer_time: float):
     logger.info("Batch size: {0}, Num of samples: {1}".format(args.batch_size, args.repeats))
     logger.info("----------------------- Conf info -----------------------")
     logger.info("device: {0}".format(args.device))
-    if args.use_trt:
-        logger.info("enable_tensorrt: {0}".format(args.use_trt))
-        logger.info("trt_precision: {0}".format(args.trt_precision))
     logger.info("----------------------- Perf info -----------------------")
     logger.info(
         "Average latency(ms): {0}, QPS: {1}".format(

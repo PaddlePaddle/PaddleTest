@@ -403,7 +403,6 @@ csp_darknet_CSPDarkNet_0:
       width_mult: 1.0
       depthwise: False
       act: 'silu'
-      trt: False
       return_idx: [2, 3, 4]
   DataGenerator:
     DataGenerator_name: "diy.data.struct_img_dataset.DictImageWithoutLabel"

@@ -50,13 +50,7 @@ class KeyPointDetector(Detector):
     Args:
         model_dir (str): root path of model.pdiparams, model.pdmodel and infer_cfg.yml
         device (str): Choose the device you want to run, it can be: CPU/GPU/XPU, default is CPU
-        run_mode (str): mode of running(paddle/trt_fp32/trt_fp16)
         batch_size (int): size of pre batch in inference
-        trt_min_shape (int): min shape for dynamic shape in trt
-        trt_max_shape (int): max shape for dynamic shape in trt
-        trt_opt_shape (int): opt shape for dynamic shape in trt
-        trt_calib_mode (bool): If the model is produced by TRT offline quantitative
-            calibration, trt_calib_mode need to set True
         cpu_threads (int): cpu threads
         enable_mkldnn (bool): whether to open MKLDNN
         use_dark(bool): whether to use postprocess in DarkPose
@@ -66,12 +60,7 @@ class KeyPointDetector(Detector):
         self,
         model_dir,
         device="CPU",
-        run_mode="paddle",
         batch_size=1,
-        trt_min_shape=1,
-        trt_max_shape=1280,
-        trt_opt_shape=640,
-        trt_calib_mode=False,
         cpu_threads=1,
         enable_mkldnn=False,
         output_dir="output",
@@ -81,20 +70,17 @@ class KeyPointDetector(Detector):
         """
         default
         """
+        pred_config = self.set_config(model_dir)
         super(KeyPointDetector, self).__init__(
+            pred_config=pred_config,
             model_dir=model_dir,
             device=device,
-            run_mode=run_mode,
             batch_size=batch_size,
-            trt_min_shape=trt_min_shape,
-            trt_max_shape=trt_max_shape,
-            trt_opt_shape=trt_opt_shape,
-            trt_calib_mode=trt_calib_mode,
             cpu_threads=cpu_threads,
             enable_mkldnn=enable_mkldnn,
-            output_dir=output_dir,
-            threshold=threshold,
         )
+        self.output_dir = output_dir
+        self.threshold = threshold
         self.use_dark = use_dark
 
     def set_config(self, model_dir):
@@ -316,10 +302,8 @@ class PredictConfig_KeyPoint:
         self.arch = yml_conf["arch"]
         self.archcls = KEYPOINT_SUPPORT_MODELS[yml_conf["arch"]]
         self.preprocess_infos = yml_conf["Preprocess"]
-        self.min_subgraph_size = yml_conf["min_subgraph_size"]
         self.labels = yml_conf["label_list"]
         self.tagmap = False
-        self.use_dynamic_shape = yml_conf["use_dynamic_shape"]
         if self.archcls == "keypoint_bottomup":
             self.tagmap = True
         self.print_config()
@@ -367,12 +351,7 @@ def main():
     detector = KeyPointDetector(
         FLAGS.model_dir,
         device=FLAGS.device,
-        run_mode=FLAGS.run_mode,
         batch_size=FLAGS.batch_size,
-        trt_min_shape=FLAGS.trt_min_shape,
-        trt_max_shape=FLAGS.trt_max_shape,
-        trt_opt_shape=FLAGS.trt_opt_shape,
-        trt_calib_mode=FLAGS.trt_calib_mode,
         cpu_threads=FLAGS.cpu_threads,
         enable_mkldnn=FLAGS.enable_mkldnn,
         threshold=FLAGS.threshold,
@@ -397,8 +376,7 @@ def main():
             }
             perf_info = detector.det_times.report(average=True)
             model_dir = FLAGS.model_dir
-            mode = FLAGS.run_mode
-            model_info = {"model_name": model_dir.strip("/").split("/")[-1], "precision": mode.split("_")[-1]}
+            model_info = {"model_name": model_dir.strip("/").split("/")[-1], "precision": "fp32"}
             data_info = {"batch_size": 1, "shape": "dynamic_shape", "data_num": perf_info["img_num"]}
             det_log = PaddleInferBenchmark(detector.config, model_info, data_info, perf_info, mems)
             det_log("KeyPoint")

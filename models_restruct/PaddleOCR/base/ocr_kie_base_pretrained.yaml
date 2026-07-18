@@ -147,7 +147,6 @@ predict:
       - --vis_font_path=./doc/fonts/simfang.ttf
       - --ocr_order_method="tb-yx"
       - --use_gpu=${use_gpu}
-      - --use_tensorrt=False
       - --enable_mkldnn=False
   -
     name: trained_mkldnn
@@ -160,7 +159,6 @@ predict:
       - --vis_font_path=./doc/fonts/simfang.ttf
       - --ocr_order_method="tb-yx"
       - --use_gpu=False
-      - --use_tensorrt=False
       - --enable_mkldnn=True
   -
     name: pretrained
@@ -173,7 +171,6 @@ predict:
       - --vis_font_path=./doc/fonts/simfang.ttf
       - --ocr_order_method=tb-yx
       - --use_gpu=${use_gpu}
-      - --use_tensorrt=False
       - --enable_mkldnn=False
   -
     name: pretrained_mkldnn
@@ -186,5 +183,4 @@ predict:
       - --vis_font_path=./doc/fonts/simfang.ttf
       - --ocr_order_method=tb-yx
       - --use_gpu=False
-      - --use_tensorrt=False
       - --enable_mkldnn=True

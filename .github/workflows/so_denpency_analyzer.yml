@@ -36,7 +36,6 @@ jobs:
           - "TagBuild-Training-Linux-Gpu-Cuda11.8-Cudnn8.6-Mkl-Avx-Gcc8.2-SelfBuiltPypiUse"
           - "TagBuild-Training-Linux-Cpu-Mkl-Avx-Gcc82-SelfBuiltPypiUse"
           - "TagBuild-Training-Linux-Cpu-ARM-SelfBuiltPypiUse"
-          - "TagBuild-Training-Linux-Gpu-Cuda12.6-Cudnn9.5-Trt10.5-Mkl-Avx-Gcc11-SelfBuiltPypiUse"
         python_version: ["3.8", "3.10", "3.13"]
         is_cuda: ["True", "False"]
         exclude:
@@ -44,8 +43,6 @@ jobs:
             is_cuda: "True"
           - ce_task_name: "TagBuild-Training-Linux-Cpu-ARM-SelfBuiltPypiUse"
             is_cuda: "True"
-          - ce_task_name: "TagBuild-Training-Linux-Gpu-Cuda12.6-Cudnn9.5-Trt10.5-Mkl-Avx-Gcc11-SelfBuiltPypiUse"
-            is_cuda: "False"
           - ce_task_name: "TagBuild-Training-Linux-Gpu-Cuda11.8-Cudnn8.6-Mkl-Avx-Gcc8.2-SelfBuiltPypiUse"
             is_cuda: "False"
     steps:

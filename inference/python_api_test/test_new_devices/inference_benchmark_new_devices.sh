@@ -5,12 +5,10 @@ export FLAGS_conv_workspace_size_limit=32
 export FLAGS_initial_cpu_memory_in_mb=0
 
 backend_type_list=(MLU)
-enable_trt_list=(false)
 enable_gpu_list=(false)
 enable_mkldnn_list=(false)
 enable_gpu=false
 enable_pir=false
-enable_trt=false
 precision=fp32
 gpu_id=$1
 batch_size_list=(1)
@@ -58,9 +56,9 @@ run_benchmark(){
     for batch_size in ${batch_size_var[@]};do
       for enable_gpu in ${enable_gpu_list[@]};do
         if [ ${enable_gpu} = "true" ]; then
-          python benchmark.py --model_dir=${model_dir} --config_file ${config_file} --precision ${precision} --enable_gpu=${enable_gpu} --enable_pir=${enable_pir} --gpu_id=${gpu_id} --enable_trt=${enable_trt} --backend_type=${backend_type} --batch_size=${batch_size} --subgraph_size=${subgraph_size_var} --paddle_model_file "$model_file" --paddle_params_file "$params_file" --return_result=true
+          python benchmark.py --model_dir=${model_dir} --config_file ${config_file} --precision ${precision} --enable_gpu=${enable_gpu} --enable_pir=${enable_pir} --gpu_id=${gpu_id} --backend_type=${backend_type} --batch_size=${batch_size} --subgraph_size=${subgraph_size_var} --paddle_model_file "$model_file" --paddle_params_file "$params_file" --return_result=true
         elif [ ${enable_gpu} = "false" ]; then
-          python benchmark.py --model_dir=${model_dir} --config_file ${config_file} --precision ${precision} --enable_gpu=${enable_gpu} --enable_pir=${enable_pir} --gpu_id=${gpu_id} --enable_trt=${enable_trt} --backend_type=${backend_type} --batch_size=${batch_size} --subgraph_size=${subgraph_size_var} --paddle_model_file "$model_file" --paddle_params_file "$params_file" --return_result=true
+          python benchmark.py --model_dir=${model_dir} --config_file ${config_file} --precision ${precision} --enable_gpu=${enable_gpu} --enable_pir=${enable_pir} --gpu_id=${gpu_id} --backend_type=${backend_type} --batch_size=${batch_size} --subgraph_size=${subgraph_size_var} --paddle_model_file "$model_file" --paddle_params_file "$params_file" --return_result=true
         fi
       done
     done

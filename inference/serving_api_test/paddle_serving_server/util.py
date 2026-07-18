@@ -67,7 +67,6 @@ def default_args():
     args.max_body_size = 512 * 1024 * 1024
     args.use_encryption_model = False
     args.use_multilang = False
-    args.use_trt = False
     args.use_lite = False
     args.use_xpu = False
     args.product_name = None

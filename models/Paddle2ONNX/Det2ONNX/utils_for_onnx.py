@@ -60,9 +60,6 @@ def argsparser():
         "--infer_output_np", type=str, default="infer_output_np", help="Directory of output np.array for onnx acc test."
     )
     parser.add_argument(
-        "--run_mode", type=str, default="paddle", help="mode of running(paddle/trt_fp32/trt_fp16/trt_int8)"
-    )
-    parser.add_argument(
         "--device",
         type=str,
         default="cpu",
@@ -77,15 +74,6 @@ def argsparser():
     )
     parser.add_argument("--enable_mkldnn", type=ast.literal_eval, default=False, help="Whether use mkldnn with CPU.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of threads with CPU.")
-    parser.add_argument("--trt_min_shape", type=int, default=1, help="min_shape for TensorRT.")
-    parser.add_argument("--trt_max_shape", type=int, default=1280, help="max_shape for TensorRT.")
-    parser.add_argument("--trt_opt_shape", type=int, default=640, help="opt_shape for TensorRT.")
-    parser.add_argument(
-        "--trt_calib_mode",
-        type=bool,
-        default=False,
-        help="If the model is produced by TRT offline quantitative " "calibration, trt_calib_mode need to set True.",
-    )
     parser.add_argument("--save_images", action="store_true", help="Save visualization image results.")
     parser.add_argument("--save_mot_txts", action="store_true", help="Save tracking results (txt).")
     parser.add_argument(

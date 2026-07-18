@@ -343,7 +343,6 @@ cspresnet_CSPResNet_0:
       use_large_stem: False
       width_mult: 1.0
       depth_mult: 1.0
-      trt: False
       use_checkpoint: False
       use_alpha: False
   DataGenerator:

@@ -79,8 +79,7 @@ INFER(){
            --config ${config} \
            --model_file inference/${model}/${model}.pdmodel \
            --params_file inference/${model}/${model}.pdiparams \
-           --use_gpu=True \
-           --use_tensorrt=False >log/${model}/${model}_infer.log 2>&1
+           --use_gpu=True >log/${model}/${model}_infer.log 2>&1
     print_result
 }
 model_list='TSM ppTSN'

@@ -327,7 +327,6 @@ class PaddleClas_Collect(object):
                             and (
                                 tag_value["name"] == "trained"
                                 or tag_value["name"] == "trained_mkldnn"
-                                or tag_value["name"] == "trained_trt"
                             )
                         ):
                             try:  # 增加尝试方式报错，定死指标为class_ids 变成退出码 exit_code

@@ -321,13 +321,13 @@ class TestClassModel:
         cmd_gpu = (
             "cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
                 -o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 -o Global.use_gpu=True \
-                    -o Global.use_tensorrt=False -o Global.enable_mkldnn=False"
+                    -o Global.enable_mkldnn=False"
             % self.model
         )
         cmd_cpu = (
             "cd PaddleClas; cd deploy; python python/predict_cls.py -c configs/inference_cls.yaml \
                 -o Global.inference_model_dir=../inference/%s -o Global.batch_size=1 -o Global.use_gpu=False \
-                -o Global.use_tensorrt=False -o Global.enable_mkldnn=False"
+                -o Global.enable_mkldnn=False"
             % self.model
         )
         for cmd in [cmd_gpu, cmd_cpu]:

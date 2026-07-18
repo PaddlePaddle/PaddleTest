@@ -146,7 +146,6 @@ predict:
       - --image_dir=doc/imgs_en/img_10.jpg
       - --det_algorithm=${algorithm}
       - --use_gpu=${use_gpu}
-      - --use_tensorrt=False
       - --enable_mkldnn=False
       - --det_model_dir=./models_inference/${qa_yaml_name}
   -
@@ -156,7 +155,6 @@ predict:
       - --image_dir=doc/imgs_en/img_10.jpg
       - --det_algorithm=${algorithm}
       - --use_gpu=False
-      - --use_tensorrt=False
       - --enable_mkldnn=True
       - --det_model_dir=./models_inference/${qa_yaml_name}
   -
@@ -166,7 +164,6 @@ predict:
       - --image_dir=doc/imgs_en/img_10.jpg
       - --det_algorithm=${algorithm}
       - --use_gpu=${use_gpu}
-      - --use_tensorrt=False
       - --enable_mkldnn=False
       - --det_model_dir=./models_inference/${model}
   -
@@ -176,7 +173,6 @@ predict:
       - --image_dir=doc/imgs_en/img_10.jpg
       - --det_algorithm=${algorithm}
       - --use_gpu=False
-      - --use_tensorrt=False
       - --enable_mkldnn=True
       - --det_model_dir=./models_inference/${model}
 api:

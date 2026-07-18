@@ -35,7 +35,6 @@ class Config:
             prior_prob=0.01,
             nms_pre=1000,
             use_inside_anchor=False,
-            trt=False,
             exclude_nms=False,
         )
         self.net.eval()

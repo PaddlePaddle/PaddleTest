@@ -168,7 +168,6 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
         LIB_DIR = os.environ.get("paddle_inference_LIB_DIR")
         CUDA_LIB_DIR = os.environ.get("CUDA_LIB_DI")
         CUDNN_LIB_DIR = os.environ.get("CUDNN_LIB_DIR")
-        TENSORRT_DIR = os.environ.get("TENSORRT_DIR")
 
         os.chdir("Paddle3D/deploy/smoke/cpp")
         # paddle_inference
@@ -186,9 +185,9 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
 
         cmd = (
             "export OpenCV_DIR=%s; cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=infer -DWITH_GPU=OFF \
-    -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF  -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib \
-    -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s"
-            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+    -DWITH_STATIC_LIB=OFF -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib \
+    -DCUDNN_LIB=%s -DCUDA_LIB=%s"
+            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR)
         )
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
@@ -208,11 +207,11 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
 
         cmd = (
             "cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main -DWITH_GPU=OFF \
-    -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF  -DWITH_ROCM=OFF \
-    -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s \
+    -DWITH_STATIC_LIB=OFF -DWITH_ROCM=OFF \
+    -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s \
     -DCUSTOM_OPERATOR_FILES='custom_ops/iou3d_cpu.cpp;custom_ops/\
     iou3d_nms_api.cpp;custom_ops/iou3d_nms.cpp;custom_ops/iou3d_nms_kernel.cu'"
-            % (LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+            % (LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR)
         )
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
@@ -233,10 +232,10 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
 
         cmd = (
             "cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main -DWITH_GPU=OFF  -DWITH_STATIC_LIB=OFF \
-    -DUSE_TENSORRT=OFF -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s \
+    -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s \
     -DCUSTOM_OPERATOR_FILES='custom_ops/voxelize_op.cu;custom_ops/voxelize_op.cc;\
     custom_ops/iou3d_nms_kernel.cu;custom_ops/postprocess.cc;custom_ops/postprocess.cu'"
-            % (LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+            % (LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR)
         )
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
@@ -256,10 +255,10 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
 
         cmd = (
             "cmake .. -DOPENCV_DIR=%s -DPADDLE_LIB=%s -DWITH_MKL=ON -DDEMO_NAME=main \
-    -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF \
+    -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF \
     -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s \
-    -DCUDA_LIB=%s -DTENSORRT_ROOT=%s -DCUSTOM_OPERATOR_FILES=''"
-            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+    -DCUDA_LIB=%s -DCUSTOM_OPERATOR_FILES=''"
+            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR)
         )
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)
@@ -279,10 +278,10 @@ https://paddle-qa.bj.bcebos.com/baidu/cloud/lap-0.5.dev0-cp311-cp311-linux_x86_6
 
         cmd = (
             "cmake .. -DOPENCV_DIR=%s -DPADDLE_LIB=%s -DWITH_MKL=ON \
-    -DDEMO_NAME=main -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF -DUSE_TENSORRT=OFF \
-    -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_ROOT=%s \
+    -DDEMO_NAME=main -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF \
+    -DWITH_ROCM=OFF -DROCM_LIB=/opt/rocm/lib -DCUDNN_LIB=%s -DCUDA_LIB=%s \
     -DCUSTOM_OPERATOR_FILES='custom_ops/iou3d_nms.cpp;custom_ops/iou3d_nms_api.cpp;custom_ops/iou3d_nms_kernel.cu'"
-            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+            % (OPENCV_DIR, LIB_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR)
         )
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)

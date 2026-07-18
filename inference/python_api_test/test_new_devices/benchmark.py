@@ -184,7 +184,6 @@ def parse_args():
     parser.add_argument("--enable_paddleort", type=str2bool, default=False)
     parser.add_argument("--enable_gpu", type=str2bool, default=False)
     parser.add_argument("--enable_pir", type=str2bool, default=False)
-    parser.add_argument("--enable_trt", type=str2bool, default=False)
     parser.add_argument("--enable_dynamic_shape", type=str2bool, default=True)
     parser.add_argument("--enable_tune", type=str2bool, default=False)
     parser.add_argument("--gen_calib", type=str2bool, default=False)
@@ -194,7 +193,6 @@ def parse_args():
     parser.add_argument("--return_result", type=str2bool, default=False)
     parser.add_argument("--enable_debug", type=str2bool, default=False)
     parser.add_argument("--enable_fd_paddle", type=str2bool, default=False)
-    parser.add_argument("--enable_fd_trt", type=str2bool, default=False)
     parser.add_argument("--enable_fd_ort", type=str2bool, default=False)
     parser.add_argument("--enable_fd_openvino", type=str2bool, default=False)
 
@@ -470,7 +468,6 @@ class BenchmarkRunner:
         result["enable_mkldnn"] = self.conf.enable_mkldnn
         result["enable_gpu"] = self.conf.enable_gpu
         result["enable_pir"] = self.conf.enable_pir
-        result["enable_trt"] = self.conf.enable_trt
         result["input_shape"] = get_shape_str(self.conf.yaml_config["input_shape"], self.conf.test_num)
         print(result)
         with open("result.txt", "a+") as f:

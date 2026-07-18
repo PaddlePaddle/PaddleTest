@@ -58,13 +58,7 @@ class Detector(object):
         pred_config (object): config of model, defined by `Config(model_dir)`
         model_dir (str): root path of model.pdiparams, model.pdmodel and infer_cfg.yml
         device (str): Choose the device you want to run, it can be: CPU/GPU/XPU, default is CPU
-        run_mode (str): mode of running(paddle/trt_fp32/trt_fp16)
         batch_size (int): size of pre batch in inference
-        trt_min_shape (int): min shape for dynamic shape in trt
-        trt_max_shape (int): max shape for dynamic shape in trt
-        trt_opt_shape (int): opt shape for dynamic shape in trt
-        trt_calib_mode (bool): If the model is produced by TRT offline quantitative
-            calibration, trt_calib_mode need to set True
         cpu_threads (int): cpu threads
         enable_mkldnn (bool): whether to open MKLDNN
     """
@@ -74,12 +68,7 @@ class Detector(object):
         pred_config,
         model_dir,
         device="CPU",
-        run_mode="paddle",
         batch_size=1,
-        trt_min_shape=1,
-        trt_max_shape=1280,
-        trt_opt_shape=640,
-        trt_calib_mode=False,
         cpu_threads=1,
         enable_mkldnn=False,
     ):
@@ -87,17 +76,10 @@ class Detector(object):
         default
         """
         self.pred_config = pred_config
+        self.batch_size = batch_size
         self.predictor, self.config = load_predictor(
             model_dir,
-            run_mode=run_mode,
-            batch_size=batch_size,
-            min_subgraph_size=self.pred_config.min_subgraph_size,
             device=device,
-            use_dynamic_shape=self.pred_config.use_dynamic_shape,
-            trt_min_shape=trt_min_shape,
-            trt_max_shape=trt_max_shape,
-            trt_opt_shape=trt_opt_shape,
-            trt_calib_mode=trt_calib_mode,
             cpu_threads=cpu_threads,
             enable_mkldnn=enable_mkldnn,
         )
@@ -211,13 +193,7 @@ class DetectorSOLOv2(Detector):
         config (object): config of model, defined by `Config(model_dir)`
         model_dir (str): root path of model.pdiparams, model.pdmodel and infer_cfg.yml
         device (str): Choose the device you want to run, it can be: CPU/GPU/XPU, default is CPU
-        run_mode (str): mode of running(paddle/trt_fp32/trt_fp16)
         batch_size (int): size of pre batch in inference
-        trt_min_shape (int): min shape for dynamic shape in trt
-        trt_max_shape (int): max shape for dynamic shape in trt
-        trt_opt_shape (int): opt shape for dynamic shape in trt
-        trt_calib_mode (bool): If the model is produced by TRT offline quantitative
-            calibration, trt_calib_mode need to set True
         cpu_threads (int): cpu threads
         enable_mkldnn (bool): whether to open MKLDNN
     """
@@ -227,12 +203,7 @@ class DetectorSOLOv2(Detector):
         pred_config,
         model_dir,
         device="CPU",
-        run_mode="paddle",
         batch_size=1,
-        trt_min_shape=1,
-        trt_max_shape=1280,
-        trt_opt_shape=640,
-        trt_calib_mode=False,
         cpu_threads=1,
         enable_mkldnn=False,
     ):
@@ -242,15 +213,7 @@ class DetectorSOLOv2(Detector):
         self.pred_config = pred_config
         self.predictor, self.config = load_predictor(
             model_dir,
-            run_mode=run_mode,
-            batch_size=batch_size,
-            min_subgraph_size=self.pred_config.min_subgraph_size,
             device=device,
-            use_dynamic_shape=self.pred_config.use_dynamic_shape,
-            trt_min_shape=trt_min_shape,
-            trt_max_shape=trt_max_shape,
-            trt_opt_shape=trt_opt_shape,
-            trt_calib_mode=trt_calib_mode,
             cpu_threads=cpu_threads,
             enable_mkldnn=enable_mkldnn,
         )
@@ -301,13 +264,7 @@ class DetectorPicoDet(Detector):
         config (object): config of model, defined by `Config(model_dir)`
         model_dir (str): root path of model.pdiparams, model.pdmodel and infer_cfg.yml
         device (str): Choose the device you want to run, it can be: CPU/GPU/XPU, default is CPU
-        run_mode (str): mode of running(paddle/trt_fp32/trt_fp16)
         batch_size (int): size of pre batch in inference
-        trt_min_shape (int): min shape for dynamic shape in trt
-        trt_max_shape (int): max shape for dynamic shape in trt
-        trt_opt_shape (int): opt shape for dynamic shape in trt
-        trt_calib_mode (bool): If the model is produced by TRT offline quantitative
-            calibration, trt_calib_mode need to set True
         cpu_threads (int): cpu threads
         enable_mkldnn (bool): whether to open MKLDNN
     """
@@ -317,12 +274,7 @@ class DetectorPicoDet(Detector):
         pred_config,
         model_dir,
         device="CPU",
-        run_mode="paddle",
         batch_size=1,
-        trt_min_shape=1,
-        trt_max_shape=1280,
-        trt_opt_shape=640,
-        trt_calib_mode=False,
         cpu_threads=1,
         enable_mkldnn=False,
     ):
@@ -332,15 +284,7 @@ class DetectorPicoDet(Detector):
         self.pred_config = pred_config
         self.predictor, self.config = load_predictor(
             model_dir,
-            run_mode=run_mode,
-            batch_size=batch_size,
-            min_subgraph_size=self.pred_config.min_subgraph_size,
             device=device,
-            use_dynamic_shape=self.pred_config.use_dynamic_shape,
-            trt_min_shape=trt_min_shape,
-            trt_max_shape=trt_max_shape,
-            trt_opt_shape=trt_opt_shape,
-            trt_calib_mode=trt_calib_mode,
             cpu_threads=cpu_threads,
             enable_mkldnn=enable_mkldnn,
         )
@@ -461,10 +405,8 @@ class PredictConfig:
         self.check_model(yml_conf)
         self.arch = yml_conf["arch"]
         self.preprocess_infos = yml_conf["Preprocess"]
-        self.min_subgraph_size = yml_conf["min_subgraph_size"]
         self.labels = yml_conf["label_list"]
         self.mask = False
-        self.use_dynamic_shape = yml_conf["use_dynamic_shape"]
         if "mask" in yml_conf:
             self.mask = yml_conf["mask"]
         self.tracker = None
@@ -500,15 +442,7 @@ class PredictConfig:
 
 def load_predictor(
     model_dir,
-    run_mode="paddle",
-    batch_size=1,
     device="CPU",
-    min_subgraph_size=3,
-    use_dynamic_shape=False,
-    trt_min_shape=1,
-    trt_max_shape=1280,
-    trt_opt_shape=640,
-    trt_calib_mode=False,
     cpu_threads=1,
     enable_mkldnn=False,
 ):
@@ -516,22 +450,9 @@ def load_predictor(
     Args:
         model_dir (str): root path of __model__ and __params__
         device (str): Choose the device you want to run, it can be: CPU/GPU/XPU, default is CPU
-        run_mode (str): mode of running(paddle/trt_fp32/trt_fp16/trt_int8)
-        use_dynamic_shape (bool): use dynamic shape or not
-        trt_min_shape (int): min shape for dynamic shape in trt
-        trt_max_shape (int): max shape for dynamic shape in trt
-        trt_opt_shape (int): opt shape for dynamic shape in trt
-        trt_calib_mode (bool): If the model is produced by TRT offline quantitative
-            calibration, trt_calib_mode need to set True
     Returns:
         predictor (PaddlePredictor): AnalysisPredictor
-    Raises:
-        ValueError: predict by TensorRT need device == 'GPU'.
     """
-    if device != "GPU" and run_mode != "paddle":
-        raise ValueError(
-            "Predict by TensorRT mode: {}, expect device=='GPU', but device == {}".format(run_mode, device)
-        )
     config = Config(os.path.join(model_dir, "model.pdmodel"), os.path.join(model_dir, "model.pdiparams"))
     if device == "GPU":
         # initial GPU memory(M), device ID
@@ -552,28 +473,6 @@ def load_predictor(
             except Exception:
                 print("The current environment does not support `mkldnn`, so disable mkldnn.")
                 pass
-
-    precision_map = {
-        "trt_int8": Config.Precision.Int8,
-        "trt_fp32": Config.Precision.Float32,
-        "trt_fp16": Config.Precision.Half,
-    }
-    if run_mode in precision_map.keys():
-        config.enable_tensorrt_engine(
-            workspace_size=1 << 25,
-            max_batch_size=batch_size,
-            min_subgraph_size=min_subgraph_size,
-            precision_mode=precision_map[run_mode],
-            use_static=False,
-            use_calib_mode=trt_calib_mode,
-        )
-
-        if use_dynamic_shape:
-            min_input_shape = {"image": [batch_size, 3, trt_min_shape, trt_min_shape]}
-            max_input_shape = {"image": [batch_size, 3, trt_max_shape, trt_max_shape]}
-            opt_input_shape = {"image": [batch_size, 3, trt_opt_shape, trt_opt_shape]}
-            config.set_trt_dynamic_shape_info(min_input_shape, max_input_shape, opt_input_shape)
-            print("trt set dynamic shape done!")
 
     # disable print log when predict
     config.disable_glog_info()
@@ -738,12 +637,7 @@ def main():
         pred_config,
         FLAGS.model_dir,
         device=FLAGS.device,
-        run_mode=FLAGS.run_mode,
         batch_size=FLAGS.batch_size,
-        trt_min_shape=FLAGS.trt_min_shape,
-        trt_max_shape=FLAGS.trt_max_shape,
-        trt_opt_shape=FLAGS.trt_opt_shape,
-        trt_calib_mode=FLAGS.trt_calib_mode,
         cpu_threads=FLAGS.cpu_threads,
         enable_mkldnn=FLAGS.enable_mkldnn,
     )
@@ -768,8 +662,7 @@ def main():
 
             perf_info = detector.det_times.report(average=True)
             model_dir = FLAGS.model_dir
-            mode = FLAGS.run_mode
-            model_info = {"model_name": model_dir.strip("/").split("/")[-1], "precision": mode.split("_")[-1]}
+            model_info = {"model_name": model_dir.strip("/").split("/")[-1], "precision": "fp32"}
             data_info = {"batch_size": FLAGS.batch_size, "shape": "dynamic_shape", "data_num": perf_info["img_num"]}
             det_log = PaddleInferBenchmark(detector.config, model_info, data_info, perf_info, mems)
             det_log("Det")

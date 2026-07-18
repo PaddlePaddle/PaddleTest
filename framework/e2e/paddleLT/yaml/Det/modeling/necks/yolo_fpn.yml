@@ -565,7 +565,6 @@ yolo_fpn_YOLOCSPPAN_0:
       depthwise: False
       data_format: 'NCHW'
       act: 'silu'
-      trt: False
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:

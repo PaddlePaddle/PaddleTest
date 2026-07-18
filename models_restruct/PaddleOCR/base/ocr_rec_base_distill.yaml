@@ -143,7 +143,6 @@ predict:
       - --rec_char_dict_path=${rec_dict}
       - --use_space_char=False
       - --use_gpu=${use_gpu}
-      - --use_tensorrt=False
       - --enable_mkldnn=False
   -
     name: trained_mkldnn
@@ -156,5 +155,4 @@ predict:
       - --rec_char_dict_path=${rec_dict}
       - --use_space_char=False
       - --use_gpu=False
-      - --use_tensorrt=False
       - --enable_mkldnn=True

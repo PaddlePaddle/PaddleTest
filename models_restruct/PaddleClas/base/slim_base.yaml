@@ -1,4 +1,3 @@
-#230207 修改slim为默认开启trt模式 skipped
 train:
   -
     name: function

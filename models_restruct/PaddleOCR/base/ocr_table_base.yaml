@@ -143,7 +143,6 @@ predict:
       - --table_max_len=488
       - --vis_font_path=./doc/fonts/simfang.ttf
       - --use_gpu=${use_gpu}
-      - --use_tensorrt=False
       - --enable_mkldnn=False
   -
     name: trained_mkldnn
@@ -155,5 +154,4 @@ predict:
       - --table_max_len=488
       - --vis_font_path=./doc/fonts/simfang.ttf
       - --use_gpu=False
-      - --use_tensorrt=False
       - --enable_mkldnn=True

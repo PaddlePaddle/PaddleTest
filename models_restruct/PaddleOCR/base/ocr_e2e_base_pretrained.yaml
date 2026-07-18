@@ -173,7 +173,6 @@ predict:
       - --e2e_model_dir="./models_inference/"${qa_yaml_name}
       - --e2e_algorithm=PGNet
       - --use_gpu=${use_gpu}
-      - --use_tensorrt=False
       - --enable_mkldnn=False
   -
     name: trained_mkldnn
@@ -183,7 +182,6 @@ predict:
       - --e2e_model_dir="./models_inference/"${qa_yaml_name}
       - --e2e_algorithm=PGNet
       - --use_gpu=False
-      - --use_tensorrt=False
       - --enable_mkldnn=True
   -
     name: pretrained
@@ -193,7 +191,6 @@ predict:
       - --e2e_model_dir="./models_inference/"${model}
       - --e2e_algorithm=PGNet
       - --use_gpu=${use_gpu}
-      - --use_tensorrt=False
       - --enable_mkldnn=False
   -
     name: pretrained_mkldnn
@@ -203,5 +200,4 @@ predict:
       - --e2e_model_dir="./models_inference/"${model}
       - --e2e_algorithm=PGNet
       - --use_gpu=$False
-      - --use_tensorrt=False
       - --enable_mkldnn=True
