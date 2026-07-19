@@ -177,6 +177,26 @@ def test_ocr_accuracy_predict_mkl(yml_name, enable_mkldnn):
     model.test_ocr_rec_predict(False, enable_mkldnn)
 
 
+@allure.story("predict")
+@pytest.mark.parametrize("yml_name", get_model_list())
+def test_ocr_accuracy_predict_gpu(yml_name):
+    """
+    test_ocr_accuracy_predict_gpu
+    """
+    model_name = os.path.splitext(os.path.basename(yml_name))[0]
+    allure.dynamic.title(model_name + "_GPU_predict")
+    allure.dynamic.description("预测库预测")
+
+    if model_name == "re_vi_layoutxlm_xfund_zh":
+        pytest.skip("not supported")
+
+    r = re.search("/(.*)/", yml_name)
+    category = r.group(1)
+    print(category)
+    model = TestOcrModelFunction(model=model_name, yml=yml_name, category=category)
+    model.test_ocr_rec_predict(True, False)
+
+
 def test_ocr_accuracy_predict_recovery():
     """
     test_ocr_accuracy_predict_recovery
