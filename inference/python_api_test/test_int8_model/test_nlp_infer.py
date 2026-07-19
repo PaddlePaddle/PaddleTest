@@ -114,6 +114,7 @@ def argsparser():
         "--deploy_backend",
         type=str,
         default="paddle_inference",
+        choices=["paddle_inference", "onnxruntime"],
         help="deploy backend, it can be: `paddle_inference`, `onnxruntime`",
     )
     parser.add_argument("--model_name", type=str, default="", help="model_name for benchmark")
