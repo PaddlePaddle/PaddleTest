@@ -271,11 +271,6 @@ wget https://paddleocr.bj.bcebos.com/dygraph_v2.1/en_det/ResNet50_dcn_asf_syntht
         exit_code = repo_result[0]
         output = repo_result[1]
         assert exit_code == 0, "pretrain_models configure failed!   log information:%s" % output
-        if (platform.system() == "Windows") or (platform.system() == "Linux"):
-            repo_result = subprocess.getstatusoutput(cmd)
-            exit_code = repo_result[0]
-            output = repo_result[1]
-            assert exit_code == 0, "tensorRT dynamic shape configure  failed!   log information:%s" % output
 
 
 class TestOcrModelFunction:
@@ -541,7 +536,7 @@ configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layo
         allure_step(cmd, output)
         exit_check_fucntion(exit_code, output, "export_model")
 
-    def test_ocr_rec_predict(self, use_gpu, use_tensorrt, enable_mkldnn):
+    def test_ocr_rec_predict(self, use_gpu, enable_mkldnn):
         """
         test_ocr_rec_predict
         """
@@ -558,7 +553,7 @@ configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layo
                 algorithm,
                 rec_char_dict_path,
                 use_gpu,
-                use_tensorrt,
+                False,
                 enable_mkldnn,
             )
         elif self.category == "det":
@@ -568,14 +563,14 @@ configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layo
                 self.model,
                 algorithm,
                 use_gpu,
-                use_tensorrt,
+                False,
                 enable_mkldnn,
             )
         elif self.category == "table":
             cmd = self.testcase_yml["cmd"][self.category]["predict"] % (
                 self.model,
                 use_gpu,
-                use_tensorrt,
+                False,
                 enable_mkldnn,
             )
         elif self.category == "sr":
@@ -584,14 +579,14 @@ configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layo
                 self.model,
                 sr_image_shape,
                 use_gpu,
-                use_tensorrt,
+                False,
                 enable_mkldnn,
             )
         elif (self.category == "kie/vi_layoutxlm") or (self.category == "e2e"):
             cmd = self.testcase_yml["cmd"][self.category]["predict"] % (
                 self.model,
                 use_gpu,
-                use_tensorrt,
+                False,
                 enable_mkldnn,
             )
         elif self.category == "picodet/legacy_model/application/layout_analysis":
@@ -605,7 +600,7 @@ configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x2_5_layo
             cmd = self.testcase_yml["cmd"][self.category]["predict_SLANet"] % (
                 self.model,
                 use_gpu,
-                use_tensorrt,
+                False,
                 enable_mkldnn,
             )
 
@@ -810,7 +805,7 @@ wget https://bj.bcebos.com/paddle3d/models/centerpoint//centerpoint_pillars_02vo
         allure_step(cmd, output)
         exit_check_fucntion(exit_code, output, "export_model")
 
-    def test_3D_predict_python(self, use_gpu, use_trt):
+    def test_3D_predict_python(self, use_gpu):
         """
         test_3D_predict_python
         """
@@ -823,17 +818,6 @@ wget https://bj.bcebos.com/paddle3d/models/centerpoint//centerpoint_pillars_02vo
                  --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu"
                 % (self.model, self.model, infer_image)
             )
-            if use_trt is True:
-                cmd = (
-                    "cd Paddle3D; python deploy/smoke/python/infer.py \
-                     --model_file exported_model/%s/inference.pdmodel\
-                     --params_file exported_model/%s/inference.pdiparams --image %s --collect_dynamic_shape_info \
-                     --dynamic_shape_file %s/shape_info.txt; \
-                     python deploy/smoke/python/infer.py --model_file exported_model/%s/inference.pdmodel \
-                     --params_file exported_model/%s/inference.pdiparams --image %s --use_gpu \
-                     --use_trt --dynamic_shape_file %s/shape_info.txt;"
-                    % (self.model, self.model, infer_image, self.model, self.model, self.model, infer_image, self.model)
-                )
             if paddle.is_compiled_with_cuda() is False:
                 cmd = (
                     "cd Paddle3D; python deploy/smoke/python/infer.py \

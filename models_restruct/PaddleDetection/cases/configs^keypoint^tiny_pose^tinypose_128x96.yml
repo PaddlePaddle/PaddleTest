@@ -41,10 +41,6 @@ case:
         name: python
       -
         name: mkldnn
-      # -
-      #   name: trt_fp32
-      # -
-      #   name: trt_fp16
       -
         name: paddle2onnx
       -

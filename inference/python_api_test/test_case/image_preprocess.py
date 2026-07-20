@@ -176,7 +176,7 @@ def sig_fig_compare(array1, array2, delta=5, det_top_bbox=False, need_sort=False
                 array1 = array1[:top_count, :]
                 array2 = array2[:top_count, :]
         elif len(array1.shape) == 1:
-            # 部分检测模型输出检测框数量，在trt fp16下可能与关闭优化的检测框数量不同，跳过，只关注高置信度检测框
+            # 部分fp16检测模型输出检测框数量可能与关闭优化时不同，跳过，只关注高置信度检测框
             return
     if np.any(abs(array2) > 100):
         normalize_func = np.vectorize(normalize)

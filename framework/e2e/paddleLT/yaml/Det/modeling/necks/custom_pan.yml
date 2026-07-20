@@ -131,7 +131,6 @@ custom_pan_CustomCSPPAN_0:
       data_format: 'NCHW'
       width_mult: 1.0
       depth_mult: 1.0
-      trt: False
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:
@@ -210,7 +209,6 @@ custom_pan_CustomCSPPAN_1:
       data_format: 'NCHW'
       width_mult: 1.0
       depth_mult: 1.0
-      trt: False
   DataGenerator:
     DataGenerator_name: "diy.data.single_img_dataset.SingleImageWithoutLabel"
     data:

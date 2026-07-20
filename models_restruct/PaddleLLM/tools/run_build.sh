@@ -10,7 +10,6 @@ rm -rf PaddleNLP && tar xf PaddleNLP.tar && rm -rf PaddleNLP.tar
 sed -i '/from transformer_engine import transformer_engine_paddle as tex/,/^    }/d' PaddleNLP/paddlenlp/quantization/qat_utils.py
 unset http_proxy && unset https_proxy
 
-# python -m pip install https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-TagBuild-Training-Linux-Gpu-Cuda12.8-Cudnn9.7-Trt10.5-Mkl-Avx-Gcc11-SelfBuiltPypiUse/3b5fe1f4e5b4bd71f1c0b8e33d459f2f4caff554/paddlepaddle_gpu-3.0.0.dev20250423-cp310-cp310-linux_x86_64.whl --force-reinstall --no-dependencies
 ####    for cuda12.8 pdc image    #####
 export LD_LIBRARY_PATH=/usr/local/lib/python3.10/dist-packages/nvidia/cusparse/lib/:${LD_LIBRARY_PATH}
 

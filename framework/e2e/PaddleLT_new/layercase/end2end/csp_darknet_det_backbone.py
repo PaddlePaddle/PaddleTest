@@ -282,7 +282,7 @@ class LayerCase(nn.Layer):
         return_idx (list): Index of stages whose feature maps are returned.
     """
 
-    __shared__ = ['depth_mult', 'width_mult', 'act', 'trt']
+    __shared__ = ['depth_mult', 'width_mult', 'act']
 
     # in_channels, out_channels, num_blocks, add_shortcut, use_spp(use_sppf)
     # 'X' means setting used in YOLOX, 'P5/P6' means setting used in YOLOv5.
@@ -302,7 +302,6 @@ class LayerCase(nn.Layer):
                  width_mult=1.0,
                  depthwise=False,
                  act='silu',
-                 trt=False,
                  return_idx=[2, 3, 4]):
         super(LayerCase, self).__init__()
         self.arch = arch

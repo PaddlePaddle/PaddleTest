@@ -1,9 +1,6 @@
 export FLAGS_call_stack_level=2
 cases=`find . -name "test*.py" | sort`
-ignore="test_swin_transformer_gpu.py \
-        test_swin_transformer_trt_fp16.py \
-        test_swin_transformer_trt_fp32.py
-        "
+ignore="test_swin_transformer_gpu.py"
 bug=0
 
 echo "============ failed cases =============" >> result.txt

@@ -65,8 +65,6 @@ def process_log(file_name: str, iden: str) -> list:
                     output_dict["QPS"] = line_lists[-1].strip()
                 if "cpu_math_library_num_threads:" in line_lists:
                     output_dict["cpu_math_library_num_threads"] = line_lists[-1].strip()
-                if "trt_precision:" in line_lists:
-                    output_dict["trt_precision"] = line_lists[-1].strip()
         except Exception:
             output_dict = {}
         output_list.append(output_dict)
@@ -107,7 +105,7 @@ def main():
     args = parse_args()
     # create empty DataFrame
     origin_df = pd.DataFrame(
-        columns=["frame_work", "model_name", "batch_size", "device", "trt_precision", "Average_latency(ms)", "QPS"]
+        columns=["frame_work", "model_name", "batch_size", "device", "Average_latency(ms)", "QPS"]
     )
 
     iden = "----------------------- Model info ----------------------"
@@ -117,7 +115,7 @@ def main():
             if dict_log != {}:
                 origin_df = origin_df.append(dict_log, ignore_index=True)
 
-    raw_df = origin_df.sort_values(by=["frame_work", "model_name", "batch_size", "device", "trt_precision"])
+    raw_df = origin_df.sort_values(by=["frame_work", "model_name", "batch_size", "device"])
     raw_df.to_excel(args.output_name)
     set_style(args.output_name)
 

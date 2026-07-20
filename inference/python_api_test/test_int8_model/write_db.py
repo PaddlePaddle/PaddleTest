@@ -48,13 +48,13 @@ def write(res):
     # cases
     sql_str = "insert into SlimResult \
                         (task_dt, \
-                         model_name, batch_size, fp_mode, use_trt, use_mkldnn, \
+                         model_name, batch_size, fp_mode, use_mkldnn, \
                          ips, ips_unit, cpu_mem, gpu_mem, \
                          frame, frame_branch, frame_commit, frame_version, \
-                         docker_image, python_version, cuda_version, cudnn_version, trt_version, \
+                         docker_image, python_version, cuda_version, cudnn_version, \
                          device_type, thread_num, jingdu, jingdu_unit) \
                         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, \
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     val = []
     for item in res:
         val.append(
@@ -63,7 +63,6 @@ def write(res):
                 item["model_name"],
                 item["batch_size"],
                 item["fp_mode"],
-                item["use_trt"],
                 item["use_mkldnn"],
                 item["ips"],
                 item["ips_unit"],
@@ -77,7 +76,6 @@ def write(res):
                 item["python_version"],
                 item["cuda_version"],
                 item["cudnn_version"],
-                item["trt_version"],
                 item["device"],
                 item["thread_num"],
                 item["jingdu"],

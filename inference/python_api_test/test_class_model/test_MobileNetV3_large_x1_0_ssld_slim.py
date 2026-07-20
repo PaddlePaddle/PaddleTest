@@ -69,77 +69,7 @@ def test_disable_gpu():
     test_suite.disable_gpu_test(input_data_dict)
 
 
-@pytest.mark.win
-@pytest.mark.server
-@pytest.mark.slim
-@pytest.mark.trt_int8
-def test_trt_int8_more_bz():
-    """
-    compared trt_int8 batch_size=1 MobileNetV3_large_x1_0_ssld_act_qat outputs with true val
-    """
-    check_model_exist()
 
-    file_path = "./case_image_data"
-    images_size = 224
-    batch_size_pool = [1]
-    max_batch_size = 1
-    for batch_size in batch_size_pool:
-        test_suite = InferenceTest()
-        if "win" in sys.platform:
-            test_suite.load_config(
-                model_file=".\\MobileNetV3_large_x1_0_ssld_act_qat\\inference.pdmodel",
-                params_file=".\\MobileNetV3_large_x1_0_ssld_act_qat\\inference.pdiparams",
-            )
-        else:
-            test_suite.load_config(
-                model_file="./MobileNetV3_large_x1_0_ssld_act_qat/inference.pdmodel",
-                params_file="./MobileNetV3_large_x1_0_ssld_act_qat/inference.pdiparams",
-            )
-        images_list, npy_list = test_suite.get_images_npy(file_path, images_size)
-        fake_input = np.array(images_list[0:batch_size]).astype("float32")
-        input_data_dict = {"inputs": fake_input}
-        output_data_dict = test_suite.get_truth_val(input_data_dict, device="gpu")
-
-        del test_suite
-
-        test_suite = InferenceTest()
-        test_suite.load_config(
-            model_file="./MobileNetV3_large_x1_0_ssld_act_qat/inference.pdmodel",
-            params_file="./MobileNetV3_large_x1_0_ssld_act_qat/inference.pdiparams",
-        )
-        test_suite.collect_shape_info(
-            model_path="./MobileNetV3_large_x1_0_ssld_act_qat/", input_data_dict=input_data_dict, device="gpu"
-        )
-        del test_suite
-
-        test_suite = InferenceTest()
-        if "win" in sys.platform:
-            test_suite.load_config(
-                model_file=".\\MobileNetV3_large_x1_0_ssld_act_qat\\inference.pdmodel",
-                params_file=".\\MobileNetV3_large_x1_0_ssld_act_qat\\inference.pdiparams",
-            )
-        else:
-            test_suite.load_config(
-                model_file="./MobileNetV3_large_x1_0_ssld_act_qat/inference.pdmodel",
-                params_file="./MobileNetV3_large_x1_0_ssld_act_qat/inference.pdiparams",
-            )
-        test_suite.trt_bz1_slim_test(
-            input_data_dict,
-            output_data_dict,
-            repeat=100,
-            delta=3e-1,
-            max_batch_size=max_batch_size,
-            precision="trt_int8",
-            min_subgraph_size=30,
-            dynamic=True,
-            shape_range_file="./MobileNetV3_large_x1_0_ssld_act_qat/shape_range.pbtxt",
-            # use_calib_mode=True,
-            with_benchmark=True,
-            base_latency_ms=1.24,
-            benchmark_threshold=5e-2,
-        )
-
-        del test_suite  # destroy class to save memory
 
 
 @pytest.mark.win

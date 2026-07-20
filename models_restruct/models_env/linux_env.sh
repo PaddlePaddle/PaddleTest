@@ -105,11 +105,9 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Py
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp36-cp36m-linux_x86_64.whl"}
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.1.3.4"}
     else
         export paddle_whl=${paddle_whl:-"https://paddle-wheel.bj.bcebos.com/develop/linux/linux-gpu-cuda10.2-cudnn7-mkl-gcc8.2-avx/paddlepaddle_gpu-0.0.0.post102-cp36-cp36m-linux_x86_64.whl"}
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.1.3.4"}
 
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python37" ]];then
@@ -117,7 +115,6 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         linux_env_info_main get_wheel_url Cuda102 Python37 Develop
         # cudnn7用的是cudnn8的预测库的包
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.0.0.11"}
 
         #230223 stride test
         # export paddle_whl=${paddle_whl:-"https://paddle-qa.bj.bcebos.com/xieyunshen/TempPRBuild/50444/paddlepaddle_gpu-0.0.0-cp37-cp37m-linux_x86_64.whl"}
@@ -125,86 +122,55 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "
         linux_env_info_main get_wheel_url Cuda102 Python37 Release
         # cudnn7用的是cudnn8的预测库的包
         export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda102-Cudnn81-Trt7234-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-7.0.0.11"}
 
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python38" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda112 Python38 Develop ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     else
         linux_env_info_main get_wheel_url Cuda112 Python38 Release ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python311" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda112 Python311 Develop ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     else
         linux_env_info_main get_wheel_url Cuda112 Python311 Release ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-Centos-Gcc82-Cuda112-Cudnn82-Trt8034-Py38-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python312" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda112 Python312 Develop ON
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     else
         linux_env_info_main get_wheel_url Cuda112 Python312 Release ON
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.0.3.4"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python39" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda116 Python39 Develop ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/develop/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
     else
         linux_env_info_main get_wheel_url Cuda116 Python39 Release ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/release/2.5/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda116" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url_covall Cuda116 Python310 Develop ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/develop/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
     else
         linux_env_info_main get_wheel_url_covall Cuda116 Python310 Release ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-inference-lib.bj.bcebos.com/release/2.5/cxx_c/Linux/GPU/x86-64_gcc8.2_avx_mkl_cuda11.6_cudnn8.4.0-trt8.4.0.6/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.0.6"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda117" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda117 Python310 Develop ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.2.4"}
     else
         linux_env_info_main get_wheel_url Cuda117 Python310 Release ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.4.2.4"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda118" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python310" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda118 Python310 Develop ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.5.1.7"}
     else
         linux_env_info_main get_wheel_url Cuda118 Python310 Release ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.5.1.7"}
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]] && [[ ${AGILE_PIPELINE_NAME} =~ "Python311" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Develop" ]];then
         linux_env_info_main get_wheel_url Cuda120 Python311 Develop ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Develop-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
     else
         linux_env_info_main get_wheel_url Cuda120 Python311 Release ON
-        # export paddle_inference=${paddle_inference:-"https://paddle-qa.bj.bcebos.com/paddle-pipeline/Release-GpuAll-LinuxCentos-Gcc82-Cuda117-Cudnn84-Trt84-Py39-Compile/latest/paddle_inference.tgz"}
-        export TENSORRT_DIR=${TENSORRT_DIR:-"/usr/local/TensorRT-8.6.1.6"}
     fi
 else
     if [[ ${paddle_whl} ]];then
@@ -312,7 +278,6 @@ echo "@@@use_data_cfs: ${use_data_cfs}"
 echo "@@@plot: ${plot}"
 echo "@@@c_plus_plus_predict: ${c_plus_plus_predict}"
 echo "@@@paddle_inference: ${paddle_inference}"
-echo "@@@TENSORRT_DIR: ${TENSORRT_DIR}"
 
 echo "@@@FLAGS_use_cinn: ${FLAGS_use_cinn}"
 echo "@@@FLAGS_prim_all: ${FLAGS_prim_all}"
@@ -455,7 +420,6 @@ if [[ "${docker_flag}" == "" ]]; then
         -e get_repo=${get_repo} \
         -e paddle_whl=${paddle_whl} \
         -e paddle_inference=${paddle_inference} \
-        -e TENSORRT_DIR=${TENSORRT_DIR} \
         -e dataset_org=${dataset_org} \
         -e dataset_target=${dataset_target} \
         -e set_cuda=${set_cuda} \
@@ -602,7 +566,7 @@ if [[ "${docker_flag}" == "" ]]; then
         python -m pip install --ignore-installed six -i https://pypi.tuna.tsinghua.edu.cn/simple
         python -m pip uninstall -y opencv-python
         python -m pip config list
-        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
+        python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --PaddleX=${PaddleX:-None}
     ' &
     wait $!
     docker start ce_${AGILE_PIPELINE_NAME}_${AGILE_JOB_BUILD_ID}
@@ -730,5 +694,5 @@ else
     python -m pip install --ignore-installed six -i https://mirror.baidu.com/pypi/simple
     python -m pip uninstall -y opencv-python
     python -m pip config list
-    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --TENSORRT_DIR=${TENSORRT_DIR:-None} --PaddleX=${PaddleX:-None}
+    python main.py --models_list=${models_list:-None} --models_file=${models_file:-None} --system=${system:-linux} --step=${step:-train} --reponame=${reponame:-PaddleClas} --mode=${mode:-function} --use_build=${use_build:-yes} --branch=${branch:-develop} --get_repo=${get_repo:-wget} --paddle_whl=${paddle_whl:-None} --dataset_org=${dataset_org:-None} --dataset_target=${dataset_target:-None} --set_cuda=${set_cuda:-0,1} --timeout=${timeout:-3600} --binary_search_flag=${binary_search_flag:-False} --use_data_cfs=${use_data_cfs:-False} --plot=${plot:-False} --c_plus_plus_predict=${c_plus_plus_predict:-False} --paddle_inference=${paddle_inference:-None} --PaddleX=${PaddleX:-None}
 fi

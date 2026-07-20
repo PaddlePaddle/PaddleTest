@@ -47,8 +47,6 @@ case:
       -
         name: trained_mkldnn
       -
-        name: trained_trt
-      -
         name: pretrained
 
   linux_convergence:
@@ -104,8 +102,6 @@ case:
         name: function
       -
         name: function_mkldnn
-      -
-        name: function_trt
       -
         name: pretrained
 

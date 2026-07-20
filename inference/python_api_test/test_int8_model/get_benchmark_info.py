@@ -13,10 +13,6 @@ from openpyxl.styles import Alignment
 
 import base_mkldnn_fp32
 import base_mkldnn_int8
-import base_trt_fp16
-import base_trt_int8
-import base_nv_trt_fp16
-import base_nv_trt_int8
 import mail_report
 import write_db
 
@@ -51,17 +47,9 @@ def get_runtime_info(log_file):
 def get_base_info(mode):
     """
     从base文件中读取base数据
-    mode: trt_int8 trt_fp16 mkldnn_int8 mkldnn_fp32
+    mode: mkldnn_int8 mkldnn_fp32
     """
-    if mode == "trt_int8":
-        base_res = base_trt_int8.trt_int8
-    elif mode == "trt_fp16":
-        base_res = base_trt_fp16.trt_fp16
-    elif mode == "nv_trt_int8":
-        base_res = base_nv_trt_int8.nv_trt_int8
-    elif mode == "nv_trt_fp16":
-        base_res = base_nv_trt_fp16.nv_trt_fp16
-    elif mode == "mkldnn_int8":
+    if mode == "mkldnn_int8":
         base_res = base_mkldnn_int8.mkldnn_int8
     elif mode == "mkldnn_fp32":
         base_res = base_mkldnn_fp32.mkldnn_fp32
@@ -350,8 +338,7 @@ def res2db(env, benchmark_res, mode_list, metric_list):
                 "model_name": model,
                 "batch_size": info["batch_size"],
                 "fp_mode": "int8",
-                "use_trt": True,
-                "use_mkldnn": False,
+                "use_mkldnn": True,
                 "jingdu": info["jingdu"]["value"],
                 "jingdu_unit": info["jingdu"]["unit"],
                 "ips": info["xingneng"]["value"],
@@ -366,7 +353,6 @@ def res2db(env, benchmark_res, mode_list, metric_list):
                 "python_version": env["python_version"],
                 "cuda_version": env["cuda_version"],
                 "cudnn_version": env["cudnn_version"],
-                "trt_version": env["trt_version"],
                 "device": env["device"],
                 "thread_num": 1,
             }
@@ -388,11 +374,10 @@ def run():
     python_version = sys.argv[6]
     cuda_version = sys.argv[7]
     cudnn_version = sys.argv[8]
-    trt_version = sys.argv[9]
-    device = sys.argv[10]
-    modes = sys.argv[11]
-    metrics = sys.argv[12]
-    save_file = sys.argv[13]
+    device = sys.argv[9]
+    modes = sys.argv[10]
+    metrics = sys.argv[11]
+    save_file = sys.argv[12]
 
     mode_list = modes.split(",")
     metric_list = metrics.split(",")
@@ -407,14 +392,12 @@ def run():
         "python_version": python_version,
         "cuda_version": cuda_version,
         "cudnn_version": cudnn_version,
-        "trt_version": trt_version,
         "device": device,
         "threshold": "时延/内存/显存 0.05，精度 0.01",
     }
 
     benchmark_res = {}
     diff_res = {}
-    diff_res_nv = {}
     for mode in mode_list:
         log_file = "eval_{}_acc.log".format(mode)
         _current = get_runtime_info(log_file)
@@ -422,24 +405,15 @@ def run():
         _base = get_base_info(mode)
         _diff = compare_diff(_base, _current, metric_list)
         diff_res.setdefault(mode, _diff)
-        if mode in ["trt_int8", "trt_fp16"]:
-            _base_nv = get_base_info("nv_" + mode)
-            _diff_nv = compare_diff(_base_nv, _current, metric_list)
-            diff_res_nv.setdefault(mode, _diff_nv)
 
     res_base, tongji_base = res_summary(diff_res, mode_list, metric_list)
-    res_nv, tongji_nv = res_summary(diff_res_nv, list(diff_res_nv.keys()), metric_list)
     res = {
         "base": res_base,
-        "NV-TRT": res_nv,
     }
     tongji = {
         "base": tongji_base,
-        "NV-TRT": tongji_nv,
     }
     jingping_list = ["base"]
-    if "trt_int8" in mode_list:
-        jingping_list.append("NV-TRT")
 
     env_str = "环境: "
     env_str += "docker: "

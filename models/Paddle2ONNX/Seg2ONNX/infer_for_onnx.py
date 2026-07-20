@@ -16,26 +16,13 @@ sys.path.append(os.path.join(LOCAL_PATH, "..", ".."))
 
 import yaml
 import numpy as np
-from paddle.inference import create_predictor, PrecisionType
+from paddle.inference import create_predictor
 from paddle.inference import Config as PredictConfig
 
 import paddleseg.transforms as T
 from paddleseg.cvlibs import manager
 from paddleseg.utils import get_sys_env, logger, get_image_list
 from paddleseg.utils.visualize import get_pseudo_color_map
-
-
-def use_auto_tune(args):
-    """
-    base
-    """
-    return (
-        hasattr(PredictConfig, "collect_shape_range_info")
-        and hasattr(PredictConfig, "enable_tuned_tensorrt_dynamic_shape")
-        and args.device == "gpu"
-        and args.use_trt
-        and args.enable_auto_tune
-    )
 
 
 class DeployConfig:
@@ -85,55 +72,6 @@ class DeployConfig:
             transforms.append(com[ctype](**t))
 
         return T.Compose(transforms)
-
-
-def auto_tune(args, imgs, img_nums):
-    """
-    Use images to auto tune the dynamic shape for trt sub graph.
-    The tuned shape saved in args.auto_tuned_shape_file.
-    Args:
-        args(dict): input args.
-        imgs(str, list[str]): the path for images.
-        img_nums(int): the nums of images used for auto tune.
-    Returns:
-        None
-    """
-    logger.info("Auto tune the dynamic shape for GPU TRT.")
-
-    assert use_auto_tune(args)
-
-    if not isinstance(imgs, (list, tuple)):
-        imgs = [imgs]
-    num = min(len(imgs), img_nums)
-
-    cfg = DeployConfig(args.cfg)
-    pred_cfg = PredictConfig(cfg.model, cfg.params)
-    pred_cfg.enable_use_gpu(100, 0)
-    if not args.print_detail:
-        pred_cfg.disable_glog_info()
-    pred_cfg.collect_shape_range_info(args.auto_tuned_shape_file)
-
-    predictor = create_predictor(pred_cfg)
-    input_names = predictor.get_input_names()
-    input_handle = predictor.get_input_handle(input_names[0])
-
-    for i in range(0, num):
-        data = np.array([cfg.transforms(imgs[i])[0]])
-        input_handle.reshape(data.shape)
-        input_handle.copy_from_cpu(data)
-        try:
-            predictor.run()
-        except:
-            logger.info(
-                "Auto tune fail. Usually, the error is out of GPU memory, "
-                "because the model and image is too large. \n"
-            )
-            del predictor
-            if os.path.exists(args.auto_tuned_shape_file):
-                os.remove(args.auto_tuned_shape_file)
-            return
-
-    logger.info("Auto tune success.\n")
 
 
 class Predictor:
@@ -188,32 +126,6 @@ class Predictor:
         """
         logger.info("Use GPU")
         self.pred_cfg.enable_use_gpu(100, 0)
-        precision_map = {"fp16": PrecisionType.Half, "fp32": PrecisionType.Float32, "int8": PrecisionType.Int8}
-        precision_mode = precision_map[self.args.precision]
-
-        if self.args.use_trt:
-            logger.info("Use TRT")
-            self.pred_cfg.enable_tensorrt_engine(
-                workspace_size=1 << 30,
-                max_batch_size=1,
-                min_subgraph_size=50,
-                precision_mode=precision_mode,
-                use_static=False,
-                use_calib_mode=False,
-            )
-
-            if use_auto_tune(self.args) and os.path.exists(self.args.auto_tuned_shape_file):
-                logger.info("Use auto tuned dynamic shape")
-                allow_build_at_runtime = True
-                self.pred_cfg.enable_tuned_tensorrt_dynamic_shape(
-                    self.args.auto_tuned_shape_file, allow_build_at_runtime
-                )
-            else:
-                logger.info("Use manual set dynamic shape")
-                min_input_shape = {"x": [1, 3, 100, 100]}
-                max_input_shape = {"x": [1, 3, 2000, 3000]}
-                opt_input_shape = {"x": [1, 3, 512, 1024]}
-                self.pred_cfg.set_trt_dynamic_shape_info(min_input_shape, max_input_shape, opt_input_shape)
 
     def run(self, imgs):
         """
@@ -323,31 +235,6 @@ def parse_args():
         "--device", choices=["cpu", "gpu"], default="gpu", help="Select which device to inference, defaults to gpu."
     )
 
-    parser.add_argument(
-        "--use_trt",
-        default=False,
-        type=eval,
-        choices=[True, False],
-        help="Whether to use Nvidia TensorRT to accelerate prediction.",
-    )
-    parser.add_argument(
-        "--precision", default="fp32", type=str, choices=["fp32", "fp16", "int8"], help="The tensorrt precision."
-    )
-    parser.add_argument(
-        "--enable_auto_tune",
-        default=False,
-        type=eval,
-        choices=[True, False],
-        help="Whether to enable tuned dynamic shape. We uses some images to collect "
-        "the dynamic shape for trt sub graph, which avoids setting dynamic shape manually.",
-    )
-    parser.add_argument(
-        "--auto_tuned_shape_file",
-        type=str,
-        default="auto_tune_tmp.pbtxt",
-        help="The temp file to save tuned dynamic shape.",
-    )
-
     parser.add_argument("--cpu_threads", default=10, type=int, help="Number of threads to predict when using cpu.")
     parser.add_argument(
         "--enable_mkldnn",
@@ -382,15 +269,8 @@ def main(args):
     """
     imgs_list, _ = get_image_list(args.image_path)
 
-    if use_auto_tune(args):
-        tune_img_nums = 10
-        auto_tune(args, imgs_list, tune_img_nums)
-
     predictor = Predictor(args)
     predictor.run(imgs_list)
-
-    if use_auto_tune(args) and os.path.exists(args.auto_tuned_shape_file):
-        os.remove(args.auto_tuned_shape_file)
 
     if args.benchmark:
         predictor.autolog.report()

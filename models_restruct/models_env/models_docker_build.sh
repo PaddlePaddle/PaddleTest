@@ -12,7 +12,6 @@ if [[ ${AGILE_PIPELINE_NAME} =~ "Cuda102" ]];then
         linux_env_info_main get_docker_images Centos Cuda102
     else
         linux_env_info_main get_docker_images Ubuntu Cuda102
-        #230320 change registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev for add trt
     fi
 elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda112" ]];then
     if [[ ${AGILE_PIPELINE_NAME} =~ "Centos" ]];then
@@ -45,7 +44,7 @@ elif [[ ${AGILE_PIPELINE_NAME} =~ "Cuda120" ]];then
         linux_env_info_main get_docker_images Ubuntu Cuda120
     fi
 else
-    Image_version="registry.baidubce.com/paddlepaddle/paddleqa:latest-dev-cuda10.2-cudnn7.6-trt7.0-gcc8.2"
+    Image_version="registry.baidubce.com/paddlepaddle/paddle:latest-gpu-cuda10.2-cudnn7-dev"
 fi
 
 echo "Image_version: ${Image_version}"

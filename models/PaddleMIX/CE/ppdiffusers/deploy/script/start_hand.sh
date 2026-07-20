@@ -26,8 +26,6 @@ for subdir in */; do
     cp -f ../test_*.sh .
     bash test_paddle.sh > ${log_dir}/${subdir}_paddle.log 2>&1
     exit_code=$((exit_code + $?))
-    bash test_paddle_tensorrt.sh > ${log_dir}/${subdir}_paddle_tensorrt.log 2>&1
-    exit_code=$((exit_code + $?))
     cd ..
   fi
 done
@@ -40,8 +38,6 @@ for subdir in */; do
     echo "Copying test scripts to $subdir"
     cp -f ../test_*.sh . 
     bash test_paddle.sh > ${log_dir}/ipadapter_${subdir}_paddle.log 2>&1
-    exit_code=$((exit_code + $?))
-    bash test_paddle_tensorrt.sh > ${log_dir}/ipadapter_${subdir}_paddle_tensorrt.log 2>&1
     exit_code=$((exit_code + $?))
     cd ..
   fi

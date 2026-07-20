@@ -25,7 +25,7 @@ from tqdm import tqdm
 import paddle
 from paddle.inference import create_predictor, PrecisionType
 from paddle.inference import Config as PredictConfig
-from backend import PaddleInferenceEngine, TensorRTEngine, Monitor
+from backend import PaddleInferenceEngine, Monitor
 
 from ppocr.data import create_operators, transform, build_dataloader
 from ppocr.postprocess import build_post_process
@@ -112,19 +112,7 @@ def resize_norm_img_svtr(image_file, image_shape=[3, 48, 320]):
     return resized_image
 
 
-def reader_wrapper(reader, input_field="image"):
-    """
-    reader wrapper func
-    """
-
-    def gen():
-        for data in reader:
-            yield np.array(data[0]).astype(np.float32)
-
-    return gen
-
-
-def predict_image(predictor, rerun_flag=False):
+def predict_image(predictor):
     """
     predict image func
     """
@@ -147,9 +135,6 @@ def predict_image(predictor, rerun_flag=False):
 
     for i in range(warmup):
         predictor.run()
-
-    if rerun_flag:
-        return
 
     monitor = Monitor(0)
     monitor.start()
@@ -210,7 +195,7 @@ def predict_image(predictor, rerun_flag=False):
 
 
 # eval is not correct
-def eval(args, predictor, rerun_flag=False):
+def eval(args, predictor):
     """
     eval func
     """
@@ -224,8 +209,7 @@ def eval(args, predictor, rerun_flag=False):
     repeats = len(val_loader)
 
     monitor = Monitor(0)
-    if not rerun_flag:
-        monitor.start()
+    monitor.start()
     predict_time = 0.0
     time_min = float("inf")
     time_max = float("-inf")
@@ -244,9 +228,6 @@ def eval(args, predictor, rerun_flag=False):
             time_min = min(time_min, timed)
             time_max = max(time_max, timed)
             predict_time += timed
-
-            if rerun_flag:
-                return
 
             batch_numpy = []
             for item in batch:
@@ -318,64 +299,19 @@ def main(args):
     """
     main func
     """
-
-    val_loader = None
+    predictor = PaddleInferenceEngine(
+        model_dir=args.model_path,
+        model_filename=args.model_filename,
+        params_filename=args.params_filename,
+        precision=args.precision,
+        use_mkldnn=args.use_mkldnn,
+        device=args.device,
+        cpu_threads=args.cpu_threads,
+    )
     if args.image_file:
-        if args.model_type == "det":
-            data = preprocess_det(args.image_file, args.det_limit_side_len, args.det_limit_type)
-            img, shape_list = data
-        else:
-            img = resize_norm_img_svtr(args.image_file)
-        img = np.expand_dims(img, axis=0)
-        val_loader = [[img]]
+        predict_image(predictor)
     else:
-        # DataLoader need run on cpu
-        config = load_config(args.dataset_config)
-        devices = paddle.set_device("cpu")
-        val_loader = build_dataloader(config, "Eval", devices, logger)
-
-    predictor = None
-    if args.deploy_backend == "paddle_inference":
-        predictor = PaddleInferenceEngine(
-            model_dir=args.model_path,
-            model_filename=args.model_filename,
-            params_filename=args.params_filename,
-            precision=args.precision,
-            use_trt=args.use_trt,
-            use_mkldnn=args.use_mkldnn,
-            batch_size=args.batch_size,
-            device=args.device,
-            min_subgraph_size=3,
-            use_dynamic_shape=args.use_dynamic_shape,
-            cpu_threads=args.cpu_threads,
-        )
-    elif args.deploy_backend == "tensorrt":
-        model_name = os.path.join(args.model_path, args.model_filename)
-        print(model_name)
-        engine_file = "{}_{}.trt".format(args.precision, args.batch_size)
-        predictor = TensorRTEngine(
-            onnx_model_file=model_name,
-            shape_info={
-                "x": [[1, 3, 100, 100], [1, 3, 800, 800], [1, 3, 1600, 1600]],
-            },
-            max_batch_size=args.batch_size,
-            precision=args.precision,
-            engine_file_path=engine_file,
-            calibration_cache_file=args.calibration_file,
-            calibration_loader=reader_wrapper(val_loader),
-            verbose=False,
-        )
-    if predictor is None:
-        return
-    rerun_flag = True if hasattr(predictor, "rerun_flag") and predictor.rerun_flag else False
-
-    if args.image_file:
-        predict_image(predictor, rerun_flag)
-    else:
-        eval(args, predictor, rerun_flag)
-
-    if rerun_flag:
-        print("***** Collect dynamic shape done, Please rerun the program to get correct results. *****")
+        eval(args, predictor)
 
 
 if __name__ == "__main__":
@@ -386,7 +322,6 @@ if __name__ == "__main__":
     parser.add_argument("--image_file", type=str, default=None, help="Image path to be processed.")
     parser.add_argument("--dataset_config", type=str, default=None, help="path of dataset config.")
     parser.add_argument("--benchmark", type=bool, default=False, help="Whether to run benchmark or not.")
-    parser.add_argument("--use_trt", type=bool, default=False, help="Whether to use tensorrt engine or not.")
     parser.add_argument(
         "--device",
         type=str,
@@ -401,22 +336,11 @@ if __name__ == "__main__":
         choices=["fp32", "fp16", "int8"],
         help="The precision of inference. It can be 'fp32', 'fp16' or 'int8'. Default is 'fp16'.",
     )
-    parser.add_argument(
-        "--deploy_backend",
-        type=str,
-        default="paddle_inference",
-        choices=["paddle_inference", "tensorrt"],
-        help="deploy backend, it can be: `paddle`, `tensorrt`, `onnxruntime`",
-    )
-    parser.add_argument("--calibration_file", type=str, default="calibration.cache")
-    parser.add_argument("--use_dynamic_shape", type=bool, default=True, help="Whether use dynamic shape or not.")
     parser.add_argument("--batch_size", type=int, default=1, help="Batch size of model input.")
     parser.add_argument("--use_mkldnn", type=bool, default=False, help="Whether use mkldnn or not.")
     parser.add_argument("--cpu_threads", type=int, default=1, help="Num of cpu threads.")
     parser.add_argument("--det_limit_side_len", type=float, default=960)
     parser.add_argument("--det_limit_type", type=str, default="max")
-    parser.add_argument("--max_batch_size", type=int, default=10)
-    parser.add_argument("--min_subgraph_size", type=int, default=15)
     parser.add_argument("--model_type", type=str, default="det")
     parser.add_argument("--model_name", type=str, default="", help="model name for benchmark")
     args = parser.parse_args()

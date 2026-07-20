@@ -42,7 +42,6 @@ inference:null
 --enable_mkldnn:False
 --cpu_threads:1|6
 --batchsize:10
---enable_tensorRT:False
 --precision:fp32
 --model_dir:
 --data_dir:test_tipc/data/infer

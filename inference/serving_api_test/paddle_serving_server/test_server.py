@@ -154,7 +154,6 @@ class TestServer(object):
         assert model_engine_0.enable_batch_align == 1
         assert model_engine_0.enable_memory_optimization is False
         assert model_engine_0.enable_ir_optimization is False
-        assert model_engine_0.use_trt is False
         assert model_engine_0.use_lite is False
         assert model_engine_0.use_xpu is False
         assert model_engine_0.use_gpu is True

@@ -39,7 +39,7 @@ def setup_module():
 
 @allure.story("paddlecv_gpu_predict")
 @pytest.mark.parametrize("model_name", get_model_list())
-@pytest.mark.parametrize("run_mode", ["paddle", "trt_fp32", "trt_fp16", "trt_int8"])
+@pytest.mark.parametrize("run_mode", ["paddle"])
 def test_paddlecv_gpu_predict(model_name, run_mode):
     """
     test_paddlecv_gpu_predict

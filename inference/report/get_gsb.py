@@ -112,9 +112,7 @@ def select_compute(db_res, gsb, main_clas):
         # item is dict
         model_name = item["model_name"]
         mode = ""
-        if item["use_trt"] == 1:
-            mode = "trt"
-        elif item["use_mkldnn"] == 1:
+        if item["use_mkldnn"] == 1:
             mode = "mkldnn"
         else:
             mode = "native"

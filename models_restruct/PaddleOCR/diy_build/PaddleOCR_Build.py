@@ -200,7 +200,6 @@ class PaddleOCR_Build(Model_Build):
         LIB_DIR = os.environ.get("paddle_inference_LIB_DIR")
         CUDA_LIB_DIR = os.environ.get("CUDA_LIB_DI")
         CUDNN_LIB_DIR = os.environ.get("CUDNN_LIB_DIR")
-        TENSORRT_DIR = os.environ.get("TENSORRT_DIR")
 
         if os.path.exists("build"):
             shutil.rmtree("build")
@@ -208,9 +207,9 @@ class PaddleOCR_Build(Model_Build):
         os.chdir("build")
         print(os.getcwd())
         cmd = (
-            "cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF -DWITH_TENSORRT=OFF \
-    -DOPENCV_DIR=%s -DCUDNN_LIB=%s -DCUDA_LIB=%s -DTENSORRT_DIR=%s"
-            % (LIB_DIR, OPENCV_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR, TENSORRT_DIR)
+            "cmake .. -DPADDLE_LIB=%s -DWITH_MKL=ON -DWITH_GPU=OFF -DWITH_STATIC_LIB=OFF \
+    -DOPENCV_DIR=%s -DCUDNN_LIB=%s -DCUDA_LIB=%s"
+            % (LIB_DIR, OPENCV_DIR, CUDNN_LIB_DIR, CUDA_LIB_DIR)
         )
         print(cmd)
         repo_result = subprocess.getstatusoutput(cmd)

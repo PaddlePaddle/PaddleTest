@@ -28,7 +28,6 @@ class Config:
             stacked_convs=3,
             act="relu",
             fpn_strides=[4, 8, 16],
-            trt=False,
             loss_weight={"class": 1.0, "probiou": 1.0},
             norm_cfg={"name": "gn", "num_groups": 1},
             assigner="FCOSRAssigner",

@@ -48,9 +48,6 @@ case:
         name: trained_mkldnn
         cmd: python python/predict_cls.py -c configs/inference_cls_ch4.yaml
       -
-        name: trained_trt
-        cmd: python python/predict_cls.py -c configs/inference_cls_ch4.yaml
-      -
         name: pretrained
         cmd: python python/predict_cls.py -c configs/inference_cls_ch4.yaml
 

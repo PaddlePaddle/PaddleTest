@@ -12,7 +12,6 @@ import logging
 import numpy as np
 import tensorflow as tf  # tf version should greater than 2.3.0
 
-from tensorflow.python.compiler.tensorrt import trt_convert as trt
 from tensorflow.python.saved_model import tag_constants
 
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -28,9 +27,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, help="model name")
     parser.add_argument(
-        "--trt_precision", type=str, default="fp32", help="trt precision, choice = ['fp32', 'fp16', 'int8']"
-    )
-    parser.add_argument(
         "--image_shape",
         type=str,
         default="3,224,224",
@@ -38,7 +34,6 @@ def parse_args():
     )
 
     parser.add_argument("--use_gpu", dest="use_gpu", action="store_true")
-    parser.add_argument("--use_trt", dest="use_trt", action="store_true")
     parser.add_argument("--use_xla", dest="use_xla", action="store_true")
 
     parser.add_argument("--batch_size", type=int, default=1, help="batch size")
@@ -64,62 +59,7 @@ def prepare_model(args):
     else:
         sys.exit(0)
 
-    if args.use_trt and args.trt_precision == "fp32":
-        # convert model to trt fp32
-        logger.info("Converting to TF-TRT FP32...")
-        conversion_params = trt.DEFAULT_TRT_CONVERSION_PARAMS._replace(
-            precision_mode=trt.TrtPrecisionMode.FP32, max_workspace_size_bytes=8000000000
-        )
-
-        converter = trt.TrtGraphConverterV2(
-            input_saved_model_dir="{}_saved_model".format(args.model_name), conversion_params=conversion_params
-        )
-        converter.convert()
-        converter.save(output_saved_model_dir="{}_saved_model_TFTRT_FP32".format(args.model_name))
-        logger.info("Done Converting to TF-TRT FP32")
-    elif args.use_trt and args.trt_precision == "fp16":
-        logger.info("Converting to TF-TRT FP16...")
-        conversion_params = trt.DEFAULT_TRT_CONVERSION_PARAMS._replace(
-            precision_mode=trt.TrtPrecisionMode.FP16, max_workspace_size_bytes=8000000000
-        )
-        converter = trt.TrtGraphConverterV2(
-            input_saved_model_dir="{}_saved_model".format(args.model_name), conversion_params=conversion_params
-        )
-        converter.convert()
-        converter.save(output_saved_model_dir="{}_saved_model_TFTRT_FP16".format(args.model_name))
-        logger.info("Done Converting to TF-TRT FP16")
-    elif args.use_trt and args.trt_precision == "int8":
-        # convert model to trt int8
-        logger.info("Converting to TF-TRT INT8...")
-        conversion_params = trt.DEFAULT_TRT_CONVERSION_PARAMS._replace(
-            precision_mode=trt.TrtPrecisionMode.INT8, max_workspace_size_bytes=8000000000, use_calibration=True
-        )
-        converter = trt.TrtGraphConverterV2(
-            input_saved_model_dir="{}_saved_model".format(args.model_name), conversion_params=conversion_params
-        )
-
-        channels = int(args.image_shape.split(",")[0])
-        height = int(args.image_shape.split(",")[1])
-        width = int(args.image_shape.split(",")[2])
-        logger.info("channels: {0}, height: {1}, width: {2}".format(channels, height, width))
-        input_shape = (args.batch_size, height, width, channels)
-
-        def calibration_input_fn(input_shape):
-            batched_input = tf.constant(np.ones(input_shape).astype("float"))
-            batched_input = tf.cast(batched_input, dtype="float")
-            yield (batched_input,)
-
-        converter.convert(calibration_input_fn=calibration_input_fn(input_shape))
-        converter.save(output_saved_model_dir="{}_saved_model_TFTRT_INT8".format(args.model_name))
-        logger.info("Done Converting to TF-TRT INT8")
-    else:
-        logger.warn("No TensorRT precision was input, will not convert TensorRT graph to saved model")
-
-
-def benchmark_tftrt(args, input_saved_model):
-    """
-    trt inference
-    """
+def benchmark(args, input_saved_model):
     saved_model_loaded = tf.saved_model.load(input_saved_model, tags=[tag_constants.SERVING])
     infer = saved_model_loaded.signatures["serving_default"]
 
@@ -162,10 +102,6 @@ def summary_config(args, infer_time: float):
     logger.info("Batch size: {0}, Num of samples: {1}".format(args.batch_size, args.repeats))
     logger.info("----------------------- Conf info -----------------------")
     logger.info("device: {0}".format("gpu" if args.use_gpu else "cpu"))
-    if args.use_gpu:
-        logger.info("enable_tensorrt: {0}".format(args.use_trt))
-        if args.use_trt:
-            logger.info("trt_precision: {0}".format(args.trt_precision))
     logger.info("enable_xla: {0}".format(args.use_xla))
     logger.info("----------------------- Perf info -----------------------")
     logger.info(
@@ -181,15 +117,7 @@ def run_demo():
     """
     args = parse_args()
     prepare_model(args)
-    if args.use_trt:
-        if args.trt_precision == "fp32":
-            total_time = benchmark_tftrt(args, "{}_saved_model_TFTRT_FP32".format(args.model_name))
-        elif args.trt_precision == "fp16":
-            total_time = benchmark_tftrt(args, "{}_saved_model_TFTRT_FP16".format(args.model_name))
-        elif args.trt_precision == "int8":
-            total_time = benchmark_tftrt(args, "{}_saved_model_TFTRT_INT8".format(args.model_name))
-    else:
-        total_time = benchmark_tftrt(args, "{}_saved_model".format(args.model_name))
+    total_time = benchmark(args, "{}_saved_model".format(args.model_name))
     summary_config(args, total_time)
 
 

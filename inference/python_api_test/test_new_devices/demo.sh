@@ -15,7 +15,6 @@ config_file=config.yaml
 gpu_id=12
 enable_gpu=false
 enable_pir=false
-enable_trt=false
 
 if [ $1 == "mask_rcnn_r50_fpn_1x_coco" ]; then
   subgraph_size_var=8
@@ -52,7 +51,7 @@ done
 
 #if [ $5 == "1" ];then
 #    # auto tune
-#    python benchmark.py --model_dir=${model_dir} --config_file ${config_file} --precision ${precision} --enable_gpu=${enable_gpu} --enable_pir=${enable_pir} --gpu_id=${gpu_id} --enable_trt=${enable_trt} --backend_type=${backend_type} --batch_size=${batch_size} --paddle_model_file "$model_file" --paddle_params_file "$params_file" --enable_tune=true --return_result=true
+#    python benchmark.py --model_dir=${model_dir} --config_file ${config_file} --precision ${precision} --enable_gpu=${enable_gpu} --enable_pir=${enable_pir} --gpu_id=${gpu_id} --backend_type=${backend_type} --batch_size=${batch_size} --paddle_model_file "$model_file" --paddle_params_file "$params_file" --enable_tune=true --return_result=true
 #fi
 # infer
-python benchmark.py --model_dir=${model_dir} --config_file ${config_file} --precision ${precision} --enable_gpu=${enable_gpu} --enable_pir=${enable_pir} --gpu_id=${gpu_id} --enable_trt=${enable_trt} --backend_type=${backend_type} --batch_size=${batch_size} --subgraph_size=${subgraph_size_var} --paddle_model_file "$model_file" --paddle_params_file "$params_file" --return_result=true
+python benchmark.py --model_dir=${model_dir} --config_file ${config_file} --precision ${precision} --enable_gpu=${enable_gpu} --enable_pir=${enable_pir} --gpu_id=${gpu_id} --backend_type=${backend_type} --batch_size=${batch_size} --subgraph_size=${subgraph_size_var} --paddle_model_file "$model_file" --paddle_params_file "$params_file" --return_result=true

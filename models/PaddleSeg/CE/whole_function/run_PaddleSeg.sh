@@ -41,7 +41,6 @@ wget ${paddle_inference}
 tar xvf paddle_inference.tgz
 WITH_MKL=ON
 WITH_GPU=ON
-USE_TENSORRT=OFF
 DEMO_NAME=test_seg
 work_path=$(dirname $(readlink -f $0))
 LIB_DIR="${work_path}/paddle_inference"
@@ -52,7 +51,6 @@ cmake .. \
   -DDEMO_NAME=${DEMO_NAME} \
   -DWITH_MKL=${WITH_MKL} \
   -DWITH_GPU=${WITH_GPU} \
-  -DUSE_TENSORRT=${USE_TENSORRT} \
   -DWITH_STATIC_LIB=OFF \
   -DPADDLE_LIB=${LIB_DIR}
 make -j

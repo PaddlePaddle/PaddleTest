@@ -71,7 +71,7 @@ def test_disable_gpu():
 @pytest.mark.gpu_more
 def test_gpu_more_bz():
     """
-    compared trt fp32 batch_size=1,2 ocr_det_mv3_db outputs with true val
+    compared gpu batch_size=1,2 ocr_det_mv3_db outputs with true val
     """
     check_model_exist()
 
@@ -115,7 +115,7 @@ def test_gpu_more_bz():
 @pytest.mark.gpu_more
 def test_gpu_mixed_precision_bz1():
     """
-    compared trt fp32 batch_size=1 ocr_det_mv3_db outputs with true val
+    compared gpu batch_size=1 ocr_det_mv3_db outputs with true val
     """
     check_model_exist()
 
@@ -159,7 +159,7 @@ def test_gpu_mixed_precision_bz1():
 @pytest.mark.gpu_more
 def test_jetson_gpu_more_bz():
     """
-    compared trt fp32 more batch_size ocr_det_mv3_db outputs with true val
+    compared gpu more batch_size ocr_det_mv3_db outputs with true val
     """
     check_model_exist()
 

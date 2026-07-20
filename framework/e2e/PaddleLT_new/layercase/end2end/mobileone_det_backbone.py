@@ -20,16 +20,10 @@ def silu(x):
     return F.silu(x)
 
 
-def swish(x):
-    return x * F.sigmoid(x)
-
-
-TRT_ACT_SPEC = {'swish': swish, 'silu': swish}
-
 ACT_SPEC = {'mish': mish, 'silu': silu}
 
 
-def get_act_fn(act=None, trt=False):
+def get_act_fn(act=None):
     assert act is None or isinstance(act, (
         str, dict)), 'name of activation should be str, dict or None'
     if not act:
@@ -43,9 +37,7 @@ def get_act_fn(act=None, trt=False):
         name = act
         kwargs = dict()
 
-    if trt and name in TRT_ACT_SPEC:
-        fn = TRT_ACT_SPEC[name]
-    elif name in ACT_SPEC:
+    if name in ACT_SPEC:
         fn = ACT_SPEC[name]
     else:
         fn = getattr(F, name)

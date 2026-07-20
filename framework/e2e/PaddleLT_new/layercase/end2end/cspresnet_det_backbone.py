@@ -21,16 +21,10 @@ def silu(x):
     return F.silu(x)
 
 
-def swish(x):
-    return x * F.sigmoid(x)
-
-
-TRT_ACT_SPEC = {'swish': swish, 'silu': swish}
-
 ACT_SPEC = {'mish': mish, 'silu': silu}
 
 
-def get_act_fn(act=None, trt=False):
+def get_act_fn(act=None):
     assert act is None or isinstance(act, (
         str, dict)), 'name of activation should be str, dict or None'
     if not act:
@@ -44,9 +38,7 @@ def get_act_fn(act=None, trt=False):
         name = act
         kwargs = dict()
 
-    if trt and name in TRT_ACT_SPEC:
-        fn = TRT_ACT_SPEC[name]
-    elif name in ACT_SPEC:
+    if name in ACT_SPEC:
         fn = ACT_SPEC[name]
     else:
         fn = getattr(F, name)
@@ -251,7 +243,7 @@ class CSPResStage(nn.Layer):
 
 
 class LayerCase(nn.Layer):
-    __shared__ = ['width_mult', 'depth_mult', 'trt']
+    __shared__ = ['width_mult', 'depth_mult']
 
     def __init__(self,
                  layers=[3, 6, 6, 3],
@@ -262,7 +254,6 @@ class LayerCase(nn.Layer):
                  use_large_stem=False,
                  width_mult=1.0,
                  depth_mult=1.0,
-                 trt=False,
                  use_checkpoint=False,
                  use_alpha=False,
                  **args):
@@ -270,9 +261,8 @@ class LayerCase(nn.Layer):
         self.use_checkpoint = use_checkpoint
         channels = [max(round(c * width_mult), 1) for c in channels]
         layers = [max(round(l * depth_mult), 1) for l in layers]
-        act = get_act_fn(
-            act, trt=trt) if act is None or isinstance(act,
-                                                       (str, dict)) else act
+        act = get_act_fn(act) if act is None or isinstance(act,
+                                                           (str, dict)) else act
 
         if use_large_stem:
             self.stem = nn.Sequential(
