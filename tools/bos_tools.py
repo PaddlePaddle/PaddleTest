@@ -22,12 +22,21 @@ secret_access_key = os.getenv("SK")
 config = BceClientConfiguration(credentials=BceCredentials(access_key_id, secret_access_key), endpoint=bos_host)
 bos_client = BosClient(config)
 
+
+def _get_put_super_object_from_file(bos_client):
+    """Return the multipart upload method supported by the installed BCE SDK."""
+    if hasattr(bos_client, "put_super_object_from_file"):
+        return bos_client.put_super_object_from_file
+    return bos_client.put_super_obejct_from_file
+
+
 def bos_upload(bucket_name, object_key, file_name):
-    result = bos_client.put_super_obejct_from_file(
+    result = _get_put_super_object_from_file(bos_client)(
         bucket_name, object_key, file_name, chunk_size=100, thread_num=multiprocessing.cpu_count()
     )
     if result:
         print("Upload success!")
+
 
 def bos_download_url(bucket_name, object_key):
     # 建议使用0.9.29版本的bce-python-sdk

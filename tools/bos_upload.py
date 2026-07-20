@@ -16,6 +16,13 @@ from baidubce.services.bos import canned_acl
 from baidubce.services.bos.bos_client import BosClient
 
 
+def _get_put_super_object_from_file(bos_client):
+    """Return the multipart upload method supported by the installed BCE SDK."""
+    if hasattr(bos_client, "put_super_object_from_file"):
+        return bos_client.put_super_object_from_file
+    return bos_client.put_super_obejct_from_file
+
+
 # 设置BosClient的Host，Access Key ID和Secret Access Key
 bos_host = "bj.bcebos.com"
 access_key_id = os.getenv("AK")
@@ -37,7 +44,7 @@ if fsize < 200:
 else:
     chunk_size = 100
 
-result = bos_client.put_super_obejct_from_file(
+result = _get_put_super_object_from_file(bos_client)(
     bucket_name, object_key, file_name, chunk_size=100, thread_num=multiprocessing.cpu_count()
 )
 if result:

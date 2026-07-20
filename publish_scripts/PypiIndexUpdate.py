@@ -15,6 +15,12 @@ from baidubce.auth.bce_credentials import BceCredentials
 from baidubce.services.bos.bos_client import BosClient
 
 
+def _get_put_super_object_from_file(bos_client):
+    """Return the multipart upload method supported by the installed BCE SDK."""
+    if hasattr(bos_client, "put_super_object_from_file"):
+        return bos_client.put_super_object_from_file
+    return bos_client.put_super_obejct_from_file
+
 
 def VersionVerification():
     """
@@ -94,7 +100,7 @@ def upload2bos(bucket_name, file_name):
     linux_path = path.as_posix()
     object_key = linux_path
 
-    result = bos_client.put_super_obejct_from_file(
+    result = _get_put_super_object_from_file(bos_client)(
         bucket_name, object_key, file_name, chunk_size=100, thread_num=multiprocessing.cpu_count()
     )
     if result:
