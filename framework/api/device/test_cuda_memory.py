@@ -9,6 +9,8 @@ import os
 import sys
 
 os.environ["FLAGS_allocator_strategy"] = "auto_growth"
+os.environ["FLAGS_use_virtual_memory_auto_growth"] = "0"
+os.environ["FLAGS_use_vmm_auto_growth_best_fit_allocator_v2"] = "0"
 print(os.environ.get("FLAGS_allocator_strategy"))
 sys.path.append("../../utils/")
 from interceptor import skip_not_compile_gpu
