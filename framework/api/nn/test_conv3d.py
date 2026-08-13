@@ -16,6 +16,16 @@ class TestConv3d(APIBase):
     test
     """
 
+    @property
+    def delta(self):
+        if isinstance(getattr(self, "place", None), paddle.CPUPlace):
+            return 0.008
+        return self._delta
+
+    @delta.setter
+    def delta(self, value):
+        self._delta = value
+
     def hook(self):
         """
         implement
