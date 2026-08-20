@@ -23,7 +23,17 @@ config = BceClientConfiguration(credentials=BceCredentials(access_key_id, secret
 bos_client = BosClient(config)
 
 def bos_upload(bucket_name, object_key, file_name):
-    result = bos_client.put_super_obejct_from_file(
+    # 不同版本的 bce-python-sdk 方法名不一致：新版本为 put_super_object_from_file,
+    # 旧版本存在拼写错误 put_super_obejct_from_file，这里兼容两种写法
+    put_super_object = getattr(bos_client, "put_super_object_from_file", None) or getattr(
+        bos_client, "put_super_obejct_from_file", None
+    )
+    if put_super_object is None:
+        raise AttributeError(
+            "BosClient 未提供 put_super_object_from_file 或 put_super_obejct_from_file 方法，"
+            "请检查 bce-python-sdk 版本"
+        )
+    result = put_super_object(
         bucket_name, object_key, file_name, chunk_size=100, thread_num=multiprocessing.cpu_count()
     )
     if result:
